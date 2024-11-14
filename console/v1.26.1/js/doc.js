@@ -57,7 +57,7 @@ function getCurrentProductAndVersion(pathname) {
     const version = pathParts[2]; // Assumes version is the second part after the product
 
     // Validate version format
-    if (version === "master" || /v\d+\.\d+(\.\d+)?/.test(version) || version === "latest") {
+    if (version === "master" || /v\d+\.\d+(\.\d+)?/.test(version) || version === "main") {
         return { product, version };
     }
 
