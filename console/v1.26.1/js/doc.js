@@ -96,7 +96,7 @@ function getPathAfterVersionName(location, version) {
                 // Include "latest" explicitly in the path if it’s the target version
                 const targetPath = targetVersion
                     ? `${basePath}${targetVersion}/${currentPath}`
-                    : `${basePath}latest/${currentPath}`;
+                    : `${basePath}main/${currentPath}`;
 
                 location.assign(targetPath);
             }
