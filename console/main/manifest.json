@@ -1,0 +1,15 @@
+{
+  "name": "INFINI Console",
+  "short_name": "INFINI Console",
+  "start_url": "/console/main/",
+  "scope": "/console/main/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/console/main/favicon.svg",
+      "sizes": "512x512"
+    }
+  ]
+}
