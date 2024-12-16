@@ -1,0 +1,15 @@
+{
+  "name": "INFINI Framework",
+  "short_name": "INFINI Framework",
+  "start_url": "/framework/main/",
+  "scope": "/framework/main/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/framework/main/favicon.svg",
+      "sizes": "512x512"
+    }
+  ]
+}
