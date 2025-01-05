@@ -1,0 +1,15 @@
+{
+  "name": "Coco Server",
+  "short_name": "Coco Server",
+  "start_url": "/coco-server/main/",
+  "scope": "/coco-server/main/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/coco-server/main/favicon.svg",
+      "sizes": "512x512"
+    }
+  ]
+}

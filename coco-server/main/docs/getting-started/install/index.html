@@ -1,0 +1,66 @@
+<!doctype html><html lang=en><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Getting Started #  Prerequisite #    Docker  Ollama  Easysearch  Quickstart Script #  Download the Server #  Get the appropriate executables for your platform.
+Run the Quick Setup #  Simply execute the installation script:
+./Install.sh Manual Installation #  Follow these steps for a manual setup:
+Ollama #  Install Ollama
+curl -fsSL https://ollama.com/install.sh | sh Start Ollama server
+OLLAMA_HOST=0.0.0.0:11434 ollama serve Pull the following models"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Installation"><meta property="og:description" content="Getting Started #  Prerequisite #    Docker  Ollama  Easysearch  Quickstart Script #  Download the Server #  Get the appropriate executables for your platform.
+Run the Quick Setup #  Simply execute the installation script:
+./Install.sh Manual Installation #  Follow these steps for a manual setup:
+Ollama #  Install Ollama
+curl -fsSL https://ollama.com/install.sh | sh Start Ollama server
+OLLAMA_HOST=0.0.0.0:11434 ollama serve Pull the following models"><meta property="og:type" content="article"><meta property="og:url" content="/coco-server/main/docs/getting-started/install/"><title>Installation | Coco Server</title><link rel=manifest href=/coco-server/main/manifest.json><link rel=icon href=/coco-server/main/favicon.png type=image/x-icon><link rel=stylesheet href=/coco-server/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/coco-server/main/css/asciinema-player.css><script defer src=/coco-server/main/js/jquery-2.x.min.js></script><script defer src=/coco-server/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/coco-server/main><img src=/coco-server/main/img/logo-en.svg alt=Logo></a></h2><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value></option></select></div><ul><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle checked>
+<label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>Getting Started</a>
+<span>▾</span></label><ul><li><a href=/coco-server/main/docs/getting-started/install/ class=active>Installation</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle>
+<label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a>References</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-652007e2ac8a5a5d33f9142e89a91dd4 class=toggle>
+<label for=section-652007e2ac8a5a5d33f9142e89a91dd4 class="flex justify-between"><a href=/coco-server/main/docs/references/api/>APIs</a>
+<span>▾</span></label><ul><li><a href=/coco-server/main/docs/references/api/assistant/>Assistant</a></li><li><a href=/coco-server/main/docs/references/api/document/>Document</a></li><li><a href=/coco-server/main/docs/references/api/profile/>Profile</a></li><li><a href=/coco-server/main/docs/references/api/search/>Search</a></li></ul></li><li><input type=checkbox id=section-6163ea64c3eeec962ea0b7215fc64522 class=toggle>
+<label for=section-6163ea64c3eeec962ea0b7215fc64522 class="flex justify-between"><a>Connectors</a>
+<span>▾</span></label><ul></ul></li></ul></li><li><a href=/coco-server/main/docs/release-notes/>Release Notes</a><ul></ul></li></ul><ul><li><a href=https://github.com/infinilabs/coco-server target=_blank rel=noopener>Github</a></li></ul><ul><a class=download-btn href=https://release.infinilabs.com/coco-server/>Download</a></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/coco-server/main/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>Installation</strong>
+<label for=toc-control><img src=/coco-server/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#getting-started>Getting Started</a><ul><li><a href=#prerequisite>Prerequisite</a></li><li><a href=#quickstart-script>Quickstart Script</a><ul><li><a href=#download-the-server>Download the Server</a></li><li><a href=#run-the-quick-setup>Run the Quick Setup</a></li></ul></li><li><a href=#manual-installation>Manual Installation</a><ul><li><a href=#ollama>Ollama</a></li><li><a href=#easysearch>Easysearch</a></li><li><a href=#coco-ai>Coco AI</a></li></ul></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=getting-started>Getting Started
+<a class=anchor href=#getting-started>#</a></h1><h2 id=prerequisite>Prerequisite
+<a class=anchor href=#prerequisite>#</a></h2><ul><li><a href=https://docs.docker.com/engine/install/>Docker</a></li><li><a href=https://ollama.com/>Ollama</a></li><li><a href=https://hub.docker.com/r/infinilabs/easysearch/>Easysearch</a></li></ul><h2 id=quickstart-script>Quickstart Script
+<a class=anchor href=#quickstart-script>#</a></h2><h3 id=download-the-server>Download the Server
+<a class=anchor href=#download-the-server>#</a></h3><p>Get the appropriate
+<a href=https://github.com/infinilabs/coco-server/releases/>executables</a> for your platform.</p><h3 id=run-the-quick-setup>Run the Quick Setup
+<a class=anchor href=#run-the-quick-setup>#</a></h3><p>Simply execute the installation script:</p><pre><code>./Install.sh
+</code></pre><h2 id=manual-installation>Manual Installation
+<a class=anchor href=#manual-installation>#</a></h2><p>Follow these steps for a manual setup:</p><h3 id=ollama>Ollama
+<a class=anchor href=#ollama>#</a></h3><p>Install Ollama</p><pre><code>curl -fsSL https://ollama.com/install.sh | sh
+</code></pre><p>Start Ollama server</p><pre><code>OLLAMA_HOST=0.0.0.0:11434 ollama serve
+</code></pre><p>Pull the following models</p><pre><code>ollama pull llama3.2
+ollama pull llama3.2-vision
+ollama pull llama2-chinese:13b
+ollama pull mistral:latest
+ollama pull nomic-embed-text:latest
+</code></pre><h3 id=easysearch>Easysearch
+<a class=anchor href=#easysearch>#</a></h3><p>Install Easysearch</p><pre><code>docker run -itd --name easysearch -p 9200:9200 infinilabs/easysearch:1.8.3-265
+</code></pre><p>Get the bootstrap password of the Easysearch:</p><pre><code>docker logs easysearch | grep &quot;admin:&quot;
+</code></pre><h3 id=coco-ai>Coco AI
+<a class=anchor href=#coco-ai>#</a></h3><p>Modify <code>coco.yml</code> with correct <code>env</code> settings, or start the coco server with the correct environments like this:</p><pre><code>➜  coco git:(main) ✗ OLLAMA_MODEL=llama3.2:1b ES_PASSWORD=45ff432a5428ade77c7b  ./bin/coco
+   ___  ___  ___  ___     _     _____
+  / __\/___\/ __\/___\   /_\    \_   \
+ / /  //  // /  //  //  //_\\    / /\/
+/ /__/ \_// /__/ \_//  /  _  \/\/ /_
+\____|___/\____|___/   \_/ \_/\____/
+
+[COCO] Coco AI - search, connect, collaborate – all in one place.
+[COCO] 1.0.0_SNAPSHOT#001, 2024-10-23 08:37:05, 2025-12-31 10:10:10, 9b54198e04e905406db90d145f4c01fca0139861
+[10-23 17:17:36] [INF] [env.go:179] configuration auto reload enabled
+[10-23 17:17:36] [INF] [env.go:185] watching config: /Users/medcl/go/src/infini.sh/coco/config
+[10-23 17:17:36] [INF] [app.go:285] initializing coco, pid: 13764
+[10-23 17:17:36] [INF] [app.go:286] using config: /Users/medcl/go/src/infini.sh/coco/coco.yml
+[10-23 17:17:36] [INF] [api.go:196] local ips: 192.168.3.10
+[10-23 17:17:36] [INF] [api.go:360] api listen at: http://0.0.0.0:2900
+[10-23 17:17:36] [INF] [module.go:136] started module: api
+[10-23 17:17:36] [INF] [module.go:155] started plugin: statsd
+[10-23 17:17:36] [INF] [module.go:161] all modules are started
+[10-23 17:17:36] [INF] [instance.go:78] workspace: /Users/medcl/go/src/infini.sh/coco/data/coco/nodes/csai3njq50k2c4tcb4vg
+[10-23 17:17:36] [INF] [app.go:511] coco is up and running now.
+</code></pre><p>Enjoy~</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/infinilabs/coco-server/edit/main/docs/content.en/docs/getting-started/install.md target=_blank rel=noopener><img src=/coco-server/main/svg/edit.svg class=book-icon alt=Edit>
+<span>Edit this page</span></a></div><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script>(function(h,o,t,j,a,r){h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};h._hjSettings={hjid:2567416,hjsv:6};a=o.getElementsByTagName('head')[0];r=o.createElement('script');r.async=1;r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;a.appendChild(r);})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#getting-started>Getting Started</a><ul><li><a href=#prerequisite>Prerequisite</a></li><li><a href=#quickstart-script>Quickstart Script</a><ul><li><a href=#download-the-server>Download the Server</a></li><li><a href=#run-the-quick-setup>Run the Quick Setup</a></li></ul></li><li><a href=#manual-installation>Manual Installation</a><ul><li><a href=#ollama>Ollama</a></li><li><a href=#easysearch>Easysearch</a></li><li><a href=#coco-ai>Coco AI</a></li></ul></li></ul></li></ul></nav></aside></main><script src=/coco-server/main/js/asciinema-player.js></script></body></html>

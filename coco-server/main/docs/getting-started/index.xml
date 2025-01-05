@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Getting Started on Coco Server</title><link>/coco-server/main/docs/getting-started/</link><description>Recent content in Getting Started on Coco Server</description><generator>Hugo -- gohugo.io</generator><atom:link href="/coco-server/main/docs/getting-started/index.xml" rel="self" type="application/rss+xml"/><item><title>Installation</title><link>/coco-server/main/docs/getting-started/install/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/coco-server/main/docs/getting-started/install/</guid><description>Getting Started # Prerequisite # Docker Ollama Easysearch Quickstart Script # Download the Server # Get the appropriate executables for your platform.
+Run the Quick Setup # Simply execute the installation script:
+./Install.sh Manual Installation # Follow these steps for a manual setup:
+Ollama # Install Ollama
+curl -fsSL https://ollama.com/install.sh | sh Start Ollama server
+OLLAMA_HOST=0.0.0.0:11434 ollama serve Pull the following models</description></item></channel></rss>
