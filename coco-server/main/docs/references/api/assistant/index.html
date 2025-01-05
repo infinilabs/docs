@@ -57,7 +57,7 @@ curl -XGET http://localhost:2900/chat/csk30fjq50k7l4akku9g/_history
 <span style=color:#f92672>{</span><span style=color:#e6db74>&#34;took&#34;</span>:4,<span style=color:#e6db74>&#34;timed_out&#34;</span>:false,<span style=color:#e6db74>&#34;_shards&#34;</span>:<span style=color:#f92672>{</span><span style=color:#e6db74>&#34;total&#34;</span>:1,<span style=color:#e6db74>&#34;successful&#34;</span>:1,<span style=color:#e6db74>&#34;skipped&#34;</span>:0,<span style=color:#e6db74>&#34;failed&#34;</span>:0<span style=color:#f92672>}</span>,<span style=color:#e6db74>&#34;hits&#34;</span>:<span style=color:#f92672>{</span><span style=color:#e6db74>&#34;total&#34;</span>:<span style=color:#f92672>{</span><span style=color:#e6db74>&#34;value&#34;</span>:0,<span style=color:#e6db74>&#34;relation&#34;</span>:<span style=color:#e6db74>&#34;eq&#34;</span><span style=color:#f92672>}</span>,<span style=color:#e6db74>&#34;max_score&#34;</span>:null,<span style=color:#e6db74>&#34;hits&#34;</span>:<span style=color:#f92672>[]}}</span>
 </code></pre></div><h3 id=send-a-message>Send a Message
 <a class=anchor href=#send-a-message>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>//request
-curl  -H<span style=color:#e6db74>&#39;WEBSOCKET_SESSION_ID: csk88l3q50kb4hr5unn0&#39;</span>  -H <span style=color:#e6db74>&#39;Content-Type: application/json&#39;</span>   -XPOST http://localhost:2900/chat/csk30fjq50k7l4akku9g/_send -d <span style=color:#e6db74>&#39;{&#34;message&#34;:&#34;Hello&#34;}&#39;</span>
+curl  -H<span style=color:#e6db74>&#39;WEBSOCKET-SESSION-ID: csk88l3q50kb4hr5unn0&#39;</span>  -H <span style=color:#e6db74>&#39;Content-Type: application/json&#39;</span>   -XPOST http://localhost:2900/chat/csk30fjq50k7l4akku9g/_send -d <span style=color:#e6db74>&#39;{&#34;message&#34;:&#34;Hello&#34;}&#39;</span>
 
 //response
 <span style=color:#f92672>[{</span>
@@ -72,7 +72,7 @@ curl  -H<span style=color:#e6db74>&#39;WEBSOCKET_SESSION_ID: csk88l3q50kb4hr5unn
   <span style=color:#f92672>}</span>,
   <span style=color:#e6db74>&#34;result&#34;</span>: <span style=color:#e6db74>&#34;created&#34;</span>
 <span style=color:#f92672>}]</span>
-</code></pre></div><p>Tips: <code>WEBSOCKET_SESSION_ID</code> should be replaced with the actual WebSocket session ID. You will receive a message each time you connect to the Coco AI WebSocket server. For example: <code>ws://localhost:2900/ws</code> or <code>wss://localhost:2900/ws</code> if TLS is enabled.</p><p><img src="/img/websocket-on-connect.jpg?raw=true" alt></p><h3 id=close-a-chat-session>Close a Chat Session
+</code></pre></div><p>Tips: <code>WEBSOCKET-SESSION-ID</code> should be replaced with the actual WebSocket session ID. You will receive a message each time you connect to the Coco AI WebSocket server. For example: <code>ws://localhost:2900/ws</code> or <code>wss://localhost:2900/ws</code> if TLS is enabled.</p><p><img src="/img/websocket-on-connect.jpg?raw=true" alt></p><h3 id=close-a-chat-session>Close a Chat Session
 <a class=anchor href=#close-a-chat-session>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>//request
 curl  -H <span style=color:#e6db74>&#39;Content-Type: application/json&#39;</span>   -XPOST http://localhost:2900/chat/csk30fjq50k7l4akku9g/_close
 
