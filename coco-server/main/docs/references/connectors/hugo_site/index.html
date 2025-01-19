@@ -34,7 +34,25 @@
 </span><span style=color:#e6db74>        }
 </span><span style=color:#e6db74>    }
 </span><span style=color:#e6db74>}&#39;</span>
-</code></pre></div><blockquote><p>Use <code>hugo_site</code> as a unique identifier, as it is a builtin connector.</p></blockquote><h2 id=update-coco-servers-config>Update coco-server&rsquo;s config
+</code></pre></div><blockquote><p>Use <code>hugo_site</code> as a unique identifier, as it is a builtin connector.</p></blockquote><p>Make sure hugo generated the json format with this:</p><pre><code>[
+    {
+    &quot;category&quot;: &quot;Product&quot;,
+    &quot;content&quot;: &quot;INFINI Console v1.28 Released We’re excited to announce INFINI Console v1.28, the latest update from INFINI Labs! This release brings the powerful TopN feature to help you identify key metrics efficiently, alongside other performance improvements and bug fixes. Read on for all the details and enhancements in this release.\nWhat is INFINI Console? Great question! INFINI Console is a lightweight, cross-version, unified management platform designed specifically for search infrastructures. It empowers enterprises to:\nManage multiple search clusters across different versions seamlessly. Gain centralized control for efficient cluster monitoring and maintenance. INFINI Console – The Choice of Elasticsearch Professionals. Be an Elasticsearch Pro Today!\nWith INFINI Console, you can streamline the management of your search ecosystem like never before! 🚀\nLearn more here: &quot;,
+    &quot;created&quot;: &quot;2025-01-11T17:00:00+08:00&quot;,
+    &quot;lang&quot;: &quot;en&quot;,
+    &quot;subcategory&quot;: &quot;Released&quot;,
+    &quot;summary&quot;: &quot;Discover the new TopN feature and other enhancements in INFINI Console v1.28.&quot;,
+    &quot;tags&quot;: [
+        &quot;Console&quot;,
+        &quot;TopN&quot;,
+        &quot;Release&quot;
+    ],
+    &quot;title&quot;: &quot;INFINI Console v1.28 Released&quot;,
+    &quot;updated&quot;: null,
+    &quot;url&quot;: &quot;/posts/2025/01-11-produc-released-console-topn/&quot;
+    }
+]
+</code></pre><h2 id=update-coco-servers-config>Update coco-server&rsquo;s config
 <a class=anchor href=#update-coco-servers-config>#</a></h2><p>Below is an example configuration for enabling the Hugo Site Drive Connector in coco-server:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>connector:
   hugo_site:
     enabled: true
