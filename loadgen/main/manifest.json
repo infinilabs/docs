@@ -1,0 +1,15 @@
+{
+  "name": "INFINI Loadgen",
+  "short_name": "INFINI Loadgen",
+  "start_url": "/loadgen/main/",
+  "scope": "/loadgen/main/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/loadgen/main/favicon.svg",
+      "sizes": "512x512"
+    }
+  ]
+}
