@@ -55,7 +55,7 @@ English</a></li><li class=active><a href=/console/main/zh/ class="flex align-cen
 只要执行一键安装脚本即可在主机上完成探针的安装。我们推荐使用结合 Console 来安装探针，简单和方便管理。</p><h2 id=一键安装>一键安装
 <a class=anchor href=#%e4%b8%80%e9%94%ae%e5%ae%89%e8%a3%85>#</a></h2><h3 id=安装前准备>安装前准备
 <a class=anchor href=#%e5%ae%89%e8%a3%85%e5%89%8d%e5%87%86%e5%a4%87>#</a></h3><p>安装并运行
-<a href=../../../getting-started/install>INFINI Console</a></p><h3 id=复制一键安装脚本>复制一键安装脚本
+<a href=/console/main/zh/docs/getting-started/install/>INFINI Console</a></p><h3 id=复制一键安装脚本>复制一键安装脚本
 <a class=anchor href=#%e5%a4%8d%e5%88%b6%e4%b8%80%e9%94%ae%e5%ae%89%e8%a3%85%e8%84%9a%e6%9c%ac>#</a></h3><p>在 INFINI Console 左侧菜单 <code>资源管理>探针管理</code>，进入页面之后点击 <code>Install Agent</code> 按钮，即可复制类似如下一键安装脚本：</p><pre><code>curl -sSL http://localhost:9000/agent/install.sh?token=cjctdrms4us1c6fu04ag |sudo bash -s -- -u https://release.infinilabs.com/agent/stable -v 0.6.0-262 -t /opt/agent
 </code></pre><blockquote><p>-u和-v参数表示从指定的 URL 下载指定版本的 Agent，-t参数表示安装的路径，在联网的环境中，&ndash; 及后面的参数都可以忽略，默认情况下将从官网下载最新的 Agent 版本进行安装。</p></blockquote><p>将一键安装脚本粘贴到终端执行即可完成安装，安装之后该探针实例会被自动注册到 INFINI Console。具体操作步骤参考
 <a href=/console/main/zh/docs/reference/agent/manage/manage/#%e5%bf%ab%e9%80%9f%e5%ae%89%e8%a3%85%e6%8e%a2%e9%92%88>Agent 快速安装</a></p><h2 id=下载安装>下载安装
