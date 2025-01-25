@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>告警管理 on INFINI Console</title><link>/console/v1.27.0/zh/docs/reference/alerting/</link><description>Recent content in 告警管理 on INFINI Console</description><generator>Hugo -- gohugo.io</generator><atom:link href="/console/v1.27.0/zh/docs/reference/alerting/index.xml" rel="self" type="application/rss+xml"/><item><title>告警中心</title><link>/console/v1.27.0/zh/docs/reference/alerting/message/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/v1.27.0/zh/docs/reference/alerting/message/</guid><description>告警中心 # 简介 # 消息中心默认展示的是当前系统内正在发生的告警事件，方便管理人员快速预览系统的执行状态。
+事件消息列表 # 消息列表聚合了所有已触发的告警事件，如每个告警规则重复触发了多次告警消息，这里只会聚合显示一条，点击详情就可以去看更多的信息。
+消息详情 # 点击消息列表行列中的详情按钮可以查看当前告警事件消息的详细内容，包含事件消息的基本信息，事件触发周期内的时序曲线图，规则执行检测历史记录等，如下图所示：
+忽略告警消息 # 如认为告警事件不需要做处理或者不重要，可以进行忽略操作，忽略后告警消息将不默认展在消息列表中，不过可以通过状态筛选过滤进行查询。
+操作步骤：点击消息列表表格中的忽略按钮，进行二次确认，填写忽略原因，提交后执行忽略操作。</description></item><item><title>告警规则</title><link>/console/v1.27.0/zh/docs/reference/alerting/rule/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/v1.27.0/zh/docs/reference/alerting/rule/</guid><description>告警规则 # 简介 # 告警规则包括数据源，指标定义，触发条件，消息通知四个部分的配置
+告警规则列表 # 在告警规则列表中可以查询已经添加的告警规则
+新建告警规则 # 在告警规则列表中点击 新建 按钮进入新建告警规则页面
+配置数据源 # 选择集群（必选） 选择索引，支持输入索引 pattern （必填） 输入 elasticsearch query DSL 查询过滤条件（可选） 选择时间字段（必选） 选择统计周期（用于时间字段聚合，默认一分钟） 配置告警指标以及触发条件 # 输入规则名称 按需添加分组的字段以及分组大小，可以添加多个，用于 terms 聚合 选择指标聚合字段以及统计类型，可以配置多个，当配置多个时必须配置公式用于计算最终的指标 配置告警触发条件 选择执行检查周期 输入告警事件标题（模版，被模版变量中的 title 引用，点击这里了解 模版语法 ） 输入告警事件消息（模版，被模版变量中的 message 引用，点击这里了解 模版语法 ） 配置消息通知 # 配置通知渠道，可以重新配置，也可以通过添加按钮选择已经创建好的渠道作为模版快速填充，并支持添加多个 按需选择是否开启通知升级 选择沉默周期（通知消息发送频率） 配置通知发送时间段 点击保存按钮提交 更新告警规则 # 在告警规则列表中选择需要更新的告警规则点击编辑按钮进入更新告警规则页
+删除告警规则 # 点击告警规则列表表格中的删除按钮，进行二次确认，确认删除后执行删除操作。</description></item><item><title>告警渠道</title><link>/console/v1.27.0/zh/docs/reference/alerting/channel/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/v1.27.0/zh/docs/reference/alerting/channel/</guid><description>告警渠道 # 简介 # 告警渠道用于当告警规则触发之后，发送通知消息的通道配置，目前支持 webhook。
+渠道列表 # 在渠道列表中可以查询已经添加的渠道
+新建告警渠道 # 在渠道列表页面中点击 新建 按钮进入新建告警渠道页面
+输入渠道名称（必填） 选择渠道类型（当前仅支持 webhook ） 输入 webhook 地址 选择 HTTP 请求的方法，默认 POST 按需添加 HTTP 请求头 配置 webhook 请求体 点击保存按钮提交 更新渠道配置 # 在渠道列表中选择需要更新的渠道点击编辑按钮进入更新渠道配置页
+操作参考新建告警渠道
+删除告警渠道 # 点击告警渠道列表表格中的删除按钮，进行二次确认，确认删除后执行删除操作。</description></item><item><title>模板变量</title><link>/console/v1.27.0/zh/docs/reference/alerting/variables/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/v1.27.0/zh/docs/reference/alerting/variables/</guid><description>模板变量 # 简介 # 自定义告警触发事件内容时，除了自己撰写的固定文案外，事件标题、事件内容等也支持模板语法。可以使用事件中的字段实现文案的渲染。
+模板变量 # 用于渲染字段的语法为 {{ .字段名 }}，可用于模板内容渲染的变量字段如下：
+变量字段名 字段类型 说明 示例 rule_id string rule uuid c9f663tath2e5a0vksjg rule_name string rule name High CPU usage resource_id string resource uuid c9f663tath2e5a0vksjg resource_name string resource name es-v716 event_id string identifier for check details c9f663tath2e5a0vksjx timestamp number Millisecond timestamp 1654595042399 trigger_at number Millisecond timestamp 1654595042399 duration string Alarm duration &amp;ldquo;2m10s&amp;rdquo; objects string array resource index name [&amp;quot;.</description></item></channel></rss>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>数据工具 on INFINI Console</title><link>/console/v1.27.0/zh/docs/reference/migration/</link><description>Recent content in 数据工具 on INFINI Console</description><generator>Hugo -- gohugo.io</generator><atom:link href="/console/v1.27.0/zh/docs/reference/migration/index.xml" rel="self" type="application/rss+xml"/><item><title>数据比对</title><link>/console/v1.27.0/zh/docs/reference/migration/comparison/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/v1.27.0/zh/docs/reference/migration/comparison/</guid><description>数据比对 # 创建比对任务 # 点击 INFINI Console 中左侧菜单 数据工具 》数据比对，然后点击新建按钮创建比对任务，如下图所示：
+配置比对集群 # 然后在源集群列表中选择集群 opensearch-v1.0, 在目标集群列表中选择集群 sy_cluster：
+配置比对索引 # 点击选择比对索引按钮, 这里我们选择了索引 tv6-migration ,然后点击确认：
+然后我们可以选择需要比对的目标索引 tv6-sy：
+然后点击下一步。
+配置过滤条件和分区规则 # 如果需要过滤源索引和目标索引的数据，可以进行数据范围的设置，过滤条件对源索引和目标索引同时生效：
+我们可以对数据进行分区配置，分区比对可以方便我们后续定位差异数据的来源。分区规则也对源索引和目标索引同样生效：
+然后点击下一步。
+运行设置 # 我们设置任务运行的参数，通常情况下不需要调整。我们选择任务运行的节点，然后点击创建任务：
+配置增量数据比对 # 如果索引内的数据是持续写入的（日志等场景），可以配置增量比对任务，持续检测源集群和目标集群的数据差异。
+在配置索引时，对增量写入的索引配置增量字段（如 timestamp）和数据的写入延迟（默认 15 分钟）。配置写入延迟的目的是为了防止导出数据时有部分数据未落盘，导致数据比对异常：
+创建任务时，勾选 Detect Incremental Data，并设置检测间隔（默认 15 分钟）：
+任务开始后，会持续比对源集群和目标集群的增量数据。如果想要暂停数据比对，可以点击 Pause 按钮，暂停增量任务。点击 Resume 之后，任务暂停期间写入的数据会照常校验：
+启动比对任务 # 创建比对任务成功后会看到任务列表，我们可以在右侧选择 Start，启动新创建的任务：
+点击 Detail 按钮，我们可以查看任务的详细情况：
+我们可以点击索引列表右上方的刷新按钮，这样可以持续更新进度信息：
+如果数据比对成功，对应的分区方块会显示为绿色，否则为红色：
+如果比对过程中有方块变成了红色，则表示比对失败，这时候可以点击任务方块进度信息里面的 View Log 查看错误日志，定位具体错误原因。</description></item><item><title>数据迁移</title><link>/console/v1.27.0/zh/docs/reference/migration/migration/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/v1.27.0/zh/docs/reference/migration/migration/</guid><description>数据迁移 # 创建迁移任务 # 点击 INFINI Console 中左侧菜单 数据工具 》数据迁移，然后点击新建按钮创建迁移任务，如下图所示：
+配置迁移集群 # 在源集群列表中选择集群 es-v5616, 在目标集群列表中选择集群 es-v710
+配置迁移索引 # 点击选择迁移索引按钮, 如下图：
+这里我们选择了索引 test ,然后点击确认
+test 索引包含两个 type，系统自动按 type 拆分成两个索引
+表格右方可以设置目标索引名称和文档 type，按需修改即可。 选择完索引之后，点击下一步，进行索引的初始化操作，如下图：
+点击展开后，可以看到有 mappings 和 settings 设置，如图所示， mappings 设置左侧显示的是源集群索引的 mappings， 可以点击中间按钮复制到右侧， 然后点击 Auto Optimize 自动优化（兼容性优化）。设置完成后点击 Start 执行初始化 mappings 和 settings 操作，若没有设置，则自动跳过。
+如果已通过其他方式初始化索引 settings 和 mappings， 这里可以直接点击下一步跳过
+完成索引初始化之后，点击下一步，进行迁移任务的数据范围设置和分区设置，如下图：
+配置数据范围 # 如果需要过滤数据迁移，可以进行数据范围的设置，这里我们进行全量的数据迁移，就不设置了
+配置数据分区 # 如果一个索引数据量特别大，可以进行数据分区的设置。数据分区根据设置的字段，以及分区步长将数据拆成多段，系统最终会将一个分段的数据作为一个子任务去运行，迁移数据， 这样的话即使，一个分段迁移过程出现异常，只需要重跑这个子任务。</description></item></channel></rss>
