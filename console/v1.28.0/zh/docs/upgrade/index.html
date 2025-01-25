@@ -1,0 +1,1065 @@
+<!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="版本更新 #  这里是 INFINI Console 版本升级的相关说明。
+如果您在升级过程中遇到问题，欢迎前往 INFINI Labs Github（https://github.com/infinilabs/console/issues）Console 项目中提交 Issue。也可以通过 Discord 聊天室（https://discord.gg/4tKTMkkvVX）或添加微信小助手（INFINI-Labs）跟我们取得联系与反馈。
+从 v1.27.x 升级至 v1.28.0 #  Console v1.28.0 版本新增了 TopN 功能，用于快速识别排名前 N 的关键指标数据点。它通过强大的多维度指标分析能力，帮助用户更高效地进行性能优化与决策分析。
+如果您不是通过全新安装的 INFINI Console， 而是通过旧版本升级的，那么您需要如下额外操作才能正常使用：
+ 复制如下指标脚本 DSL 到 INFINI Console 开发工具里面。 将指标脚本 DSL 中字符串 $[[SETUP_INDEX_PREFIX]] 批量替换成实际的索引前缀，如果您未修改该配置，默认为 .infini_ 执行指标脚本 DSL   指标脚本 DSL ...  #shard level PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/bD2jH5QB7KvGccywNCH9 { &#34;id&#34;: &#34;bD2jH5QB7KvGccywNCH9&#34;, &#34;name&#34;: &#34;Indexing Rate&#34;, &#34;key&#34;: &#34;indexing_rate&#34;, &#34;level&#34;: &#34;shard&#34;, &#34;formula&#34;: &#34;bD2jH5QB7KvGccywNCH9/{{.bucket_size_in_second}}&#34;, &#34;items&#34;: [ { &#34;name&#34;: &#34;bD2jH5QB7KvGccywNCH9&#34;, &#34;field&#34;: &#34;payload."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="升级说明"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:url" content="/console/v1.28.0/zh/docs/upgrade/"><title>升级说明 | INFINI Console</title><link rel=manifest href=/console/v1.28.0/manifest.json><link rel=icon href=/console/v1.28.0/favicon.png type=image/x-icon><link rel=stylesheet href=/console/v1.28.0/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=alternate type=application/rss+xml href=/console/v1.28.0/zh/docs/upgrade/index.xml title="INFINI Console"><script defer src=/console/v1.28.0/js/jquery-2.x.min.js></script><script defer src=/console/v1.28.0/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/console/v1.28.0/zh><img src=/console/v1.28.0/img/logo-zh.svg alt=Logo></a></h2><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value=v1.27.0>v1.27.x</option>
+<option value=v1.26.1>v1.26.x</option></select></div><ul><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
+<label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>入门指南</a>
+<span>▾</span></label><ul><li><a href=/console/v1.28.0/zh/docs/getting-started/install/>下载安装</a></li><li><a href=/console/v1.28.0/zh/docs/getting-started/helm/>Helm 部署</a></li><li><a href=/console/v1.28.0/zh/docs/getting-started/docker/>容器部署</a></li></ul></li><li><input type=checkbox id=section-733eb6bf92c2240d3439f44b52d0e508 class=toggle>
+<label for=section-733eb6bf92c2240d3439f44b52d0e508 class="flex justify-between"><a href=/console/v1.28.0/zh/docs/configuration/>参数配置</a>
+<span>▾</span></label><ul><li><a href=/console/v1.28.0/zh/docs/configuration/keystore/>Keystore</a><ul></ul></li><li><a href=/console/v1.28.0/zh/docs/configuration/security/>LDAP 集成</a><ul></ul></li></ul></li><li><input type=checkbox id=section-084ba1dbb512652712ad881ff8045610 class=toggle>
+<label for=section-084ba1dbb512652712ad881ff8045610 class="flex justify-between"><a>操作手册</a>
+<span>▾</span></label><ul><li><a href=/console/v1.28.0/zh/docs/reference/setup/>安装向导</a><ul></ul></li><li><a href=/console/v1.28.0/zh/docs/reference/overview/>工作台</a><ul></ul></li><li><input type=checkbox id=section-dc19493497a0afff7833e4e9dc3568aa class=toggle>
+<label for=section-dc19493497a0afff7833e4e9dc3568aa class="flex justify-between"><a>平台管理</a>
+<span>▾</span></label><ul><li><a href=/console/v1.28.0/zh/docs/reference/platform/overview/>平台概览</a></li><li><a href=/console/v1.28.0/zh/docs/reference/platform/monitoring/>集群监控</a></li><li><a href=/console/v1.28.0/zh/docs/reference/platform/infini-metrics-fields-description/>指标说明</a></li><li><a href=/console/v1.28.0/zh/docs/reference/platform/activities/>集群动态</a></li></ul></li><li><input type=checkbox id=section-77e7dc04d6c2293e5fe55f48c5b1a96d class=toggle>
+<label for=section-77e7dc04d6c2293e5fe55f48c5b1a96d class="flex justify-between"><a href=/console/v1.28.0/zh/docs/reference/data/>数据管理</a>
+<span>▾</span></label><ul><li><a href=/console/v1.28.0/zh/docs/reference/data/indices/>索引管理</a></li><li><a href=/console/v1.28.0/zh/docs/reference/data/alias/>别名管理</a></li><li><a href=/console/v1.28.0/zh/docs/reference/data/view/>数据视图</a></li></ul></li><li><input type=checkbox id=section-1f2a999bd81c4d3893f4d18a1b6bee8a class=toggle>
+<label for=section-1f2a999bd81c4d3893f4d18a1b6bee8a class="flex justify-between"><a>数据分析</a>
+<span>▾</span></label><ul><li><a href=/console/v1.28.0/zh/docs/reference/data-insight/dashboard/>数据看板</a></li><li><a href=/console/v1.28.0/zh/docs/reference/data-insight/discover/>数据探索</a></li></ul></li><li><input type=checkbox id=section-5e5111152017c79ed39a34209990dab7 class=toggle>
+<label for=section-5e5111152017c79ed39a34209990dab7 class="flex justify-between"><a>告警管理</a>
+<span>▾</span></label><ul><li><a href=/console/v1.28.0/zh/docs/reference/alerting/message/>告警中心</a></li><li><a href=/console/v1.28.0/zh/docs/reference/alerting/rule/>告警规则</a></li><li><a href=/console/v1.28.0/zh/docs/reference/alerting/channel/>告警渠道</a></li><li><a href=/console/v1.28.0/zh/docs/reference/alerting/variables/>模板变量</a></li></ul></li><li><input type=checkbox id=section-9d29fb1eabf25b6edd736a2b92f0b4fe class=toggle>
+<label for=section-9d29fb1eabf25b6edd736a2b92f0b4fe class="flex justify-between"><a>开发工具</a>
+<span>▾</span></label><ul><li><a href=/console/v1.28.0/zh/docs/reference/dev-tools/dev-tools/>开发工具</a></li><li><a href=/console/v1.28.0/zh/docs/reference/dev-tools/command/>常用命令</a></li></ul></li><li><input type=checkbox id=section-9b62d84ee4a467c77c95c7cc15b0a09e class=toggle>
+<label for=section-9b62d84ee4a467c77c95c7cc15b0a09e class="flex justify-between"><a>数据工具</a>
+<span>▾</span></label><ul><li><a href=/console/v1.28.0/zh/docs/reference/migration/comparison/>数据比对</a></li><li><a href=/console/v1.28.0/zh/docs/reference/migration/migration/>数据迁移</a></li></ul></li><li><input type=checkbox id=section-9a37092c3581f4c91275ae58f0fb21f2 class=toggle>
+<label for=section-9a37092c3581f4c91275ae58f0fb21f2 class="flex justify-between"><a>资源管理</a>
+<span>▾</span></label><ul><li><a href=/console/v1.28.0/zh/docs/reference/resource/gateway/>网关管理</a></li><li><a href=/console/v1.28.0/zh/docs/reference/resource/cluster/>集群管理</a></li></ul></li><li><input type=checkbox id=section-4d372e275e589511fb7282b1f9f3f20f class=toggle>
+<label for=section-4d372e275e589511fb7282b1f9f3f20f class="flex justify-between"><a>系统管理</a>
+<span>▾</span></label><ul><li><a href=/console/v1.28.0/zh/docs/reference/system/credential/>凭据管理</a><ul></ul></li><li><input type=checkbox id=section-89e2a3b5192ba2e5bd11dc7aab78be3d class=toggle>
+<label for=section-89e2a3b5192ba2e5bd11dc7aab78be3d class="flex justify-between"><a href=/console/v1.28.0/zh/docs/reference/system/security/>安全设置</a>
+<span>▾</span></label><ul><li><a href=/console/v1.28.0/zh/docs/reference/system/security/user/>用户管理</a></li><li><a href=/console/v1.28.0/zh/docs/reference/system/security/role/>角色管理</a></li></ul></li></ul></li><li><input type=checkbox id=section-5860fb455fea11f0ed079673fd767cda class=toggle>
+<label for=section-5860fb455fea11f0ed079673fd767cda class="flex justify-between"><a>探针管理</a>
+<span>▾</span></label><ul><li><a href=/console/v1.28.0/zh/docs/reference/agent/manage/manage/>功能介绍</a></li><li><a href=/console/v1.28.0/zh/docs/reference/agent/install/>下载安装</a></li><li><a href=/console/v1.28.0/zh/docs/reference/agent/docker/>容器部署</a></li></ul></li></ul></li><li><a href=/console/v1.28.0/zh/docs/screenshot/>系统截图</a><ul></ul></li><li><input type=checkbox id=section-7dd85575c84e6825eb9419e748eb5977 class=toggle>
+<label for=section-7dd85575c84e6825eb9419e748eb5977 class="flex justify-between"><a>动手教程</a>
+<span>▾</span></label><ul><li><a href=/console/v1.28.0/zh/docs/tutorials/create_readonly_account/>如何轻松创建一个 Elasticsearch “游客” 用户</a></li><li><a href=/console/v1.28.0/zh/docs/tutorials/role_with_different_rights/>如何给不同 INFINI Console 账户分配不同 Elasticsearch 集群访问权限</a></li><li><a href=/console/v1.28.0/zh/docs/tutorials/role_with_index_limit/>如何给 INFINI Console 账户分配 Elasticsearch 索引级别权限</a></li><li><a href=/console/v1.28.0/zh/docs/tutorials/cluster_slow_request/>如何监控 Elasticsearch 里面的慢查询请求</a></li><li><a href=/console/v1.28.0/zh/docs/tutorials/cluster_health_change/>如何监控 Elasticsearch 集群健康状态</a></li><li><a href=/console/v1.28.0/zh/docs/tutorials/cluster_node_disk_usage/>如何监控 Elasticsearch 集群节点磁盘使用率</a></li><li><a href=/console/v1.28.0/zh/docs/tutorials/cluster_node_cpu_usage/>如何监控 Elasticsearch 集群节点的 CPU 使用率</a></li><li><a href=/console/v1.28.0/zh/docs/tutorials/cluster_node_jvm_usage/>如何监控 Elasticsearch 集群节点的 JVM 使用率</a></li><li><a href=/console/v1.28.0/zh/docs/tutorials/data_migration/>如何使用 INFINI 迁移功能</a></li><li><a href=/console/v1.28.0/zh/docs/tutorials/integrate-sso-login-with-github-users/>为 Console 集成 Github 单点登录</a></li><li><a href=/console/v1.28.0/zh/docs/tutorials/view-real-time-logs/>如何使用 Console 查看 INFINI 组件实时日志</a></li><li><a href=/console/v1.28.0/zh/docs/tutorials/use-env-variable-in-alert-template/>如何在 Console 告警功能中使用环境变量</a></li></ul></li><li><a href=/console/v1.28.0/zh/docs/user-cases/>用户案例</a><ul></ul></li><li><a href=/console/v1.28.0/zh/docs/troubleshooting/>常见问题</a><ul></ul></li><li><a href=/console/v1.28.0/zh/docs/upgrade/ class=active>升级说明</a><ul></ul></li><li><a href=/console/v1.28.0/zh/docs/release-notes/>版本历史</a><ul></ul></li><li><a href=/console/v1.28.0/zh/docs/resources/>其它资源</a><ul></ul></li></ul><ul><li><a href=https://github.com/infinilabs/console target=_blank rel=noopener>Github</a></li></ul><div class=book-languages tabindex=0 aria-haspopup=true><ul><li class="flex align-center"><img src=/console/v1.28.0/svg/translate.svg class=book-icon alt=Languages>
+简体中文</li></ul><ul class=book-languages-list><li><a href=/console/v1.28.0/ class="flex align-center"><img src=/console/v1.28.0/svg/translate.svg class=book-icon alt=Languages>
+English</a></li><li class=active><a href=/console/v1.28.0/zh/ class="flex align-center"><img src=/console/v1.28.0/svg/translate.svg class=book-icon alt=Languages>
+简体中文</a></li></ul></div></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/console/v1.28.0/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>升级说明</strong>
+<label for=toc-control><img src=/console/v1.28.0/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#版本更新>版本更新</a><ul><li><a href=#从-v127x-升级至-v1280>从 v1.27.x 升级至 v1.28.0</a></li><li><a href=#从-v17-升级至-v127x>从 v1.7 升级至 v1.27.x</a></li><li><a href=#从-v15-升级至-v17>从 v1.5 升级至 v1.7</a></li><li><a href=#从-v10-升级至-v15>从 v1.0 升级至 v1.5</a></li><li><a href=#从低版本升级至-v10>从低版本升级至 v1.0</a><ul><li><a href=#新环境安装部署>新环境安装部署</a></li><li><a href=#格式化覆盖升级>格式化覆盖升级</a></li></ul></li><li><a href=#从-v02-升级至-v03>从 v0.2 升级至 v0.3</a><ul><li><a href=#更新索引-infini-template>更新索引 <code>.infini</code> template</a></li><li><a href=#关闭索引-infini_cluster>关闭索引 <code>.infini_cluster</code></a></li><li><a href=#更新索引-infini_cluster-settings>更新索引 <code>.infini_cluster</code> settings</a></li><li><a href=#更新索引-infini_cluster-mappings>更新索引 <code>.infini_cluster</code> mappings</a></li><li><a href=#打开索引-infini_cluster>打开索引 <code>.infini_cluster</code></a></li><li><a href=#update-consoleyml>Update console.yml</a></li><li><a href=#给索引-infini_alert-history-配置生命周期>给索引 .infini_alert-history 配置生命周期</a></li></ul></li><li><a href=#升级常见问题>升级常见问题</a><ul><li></li></ul></li><li><a href=#反馈>反馈</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=版本更新>版本更新
+<a class=anchor href=#%e7%89%88%e6%9c%ac%e6%9b%b4%e6%96%b0>#</a></h1><p>这里是 INFINI Console 版本升级的相关说明。</p><p>如果您在升级过程中遇到问题，欢迎前往 INFINI Labs Github（<a href=https://github.com/infinilabs/console/issues>https://github.com/infinilabs/console/issues</a>）Console 项目中提交 Issue。也可以通过 Discord 聊天室（<a href=https://discord.gg/4tKTMkkvVX>https://discord.gg/4tKTMkkvVX</a>）或添加微信小助手（INFINI-Labs）跟我们取得联系与反馈。</p><h2 id=从-v127x-升级至-v1280>从 v1.27.x 升级至 v1.28.0
+<a class=anchor href=#%e4%bb%8e-v127x-%e5%8d%87%e7%ba%a7%e8%87%b3-v1280>#</a></h2><p>Console v1.28.0 版本新增了 TopN 功能，用于快速识别排名前 N 的关键指标数据点。它通过强大的多维度指标分析能力，帮助用户更高效地进行性能优化与决策分析。</p><p>如果您不是通过全新安装的 <strong>INFINI Console</strong>， 而是通过旧版本升级的，那么您需要如下额外操作才能正常使用：</p><ol><li>复制如下指标脚本 DSL 到 <strong>INFINI Console</strong> 开发工具里面。</li><li>将指标脚本 DSL 中字符串 <code>$[[SETUP_INDEX_PREFIX]]</code> 批量替换成实际的索引前缀，如果您未修改该配置，默认为 <code>.infini_</code></li><li>执行指标脚本 DSL</li></ol><div class=book-expand><label><div class="book-expand-head flex justify-between"><span>指标脚本 DSL</span>
+<span>...</span></div><input type=checkbox class=hidden><div class="book-expand-content markdown-inner"><pre><code class=language-dsl data-lang=dsl>#shard level
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/bD2jH5QB7KvGccywNCH9
+{
+  &quot;id&quot;: &quot;bD2jH5QB7KvGccywNCH9&quot;,
+  &quot;name&quot;: &quot;Indexing Rate&quot;,
+  &quot;key&quot;: &quot;indexing_rate&quot;,
+  &quot;level&quot;: &quot;shard&quot;,
+  &quot;formula&quot;: &quot;bD2jH5QB7KvGccywNCH9/{{.bucket_size_in_second}}&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;bD2jH5QB7KvGccywNCH9&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.shard_stats.indexing.index_total&quot;,
+      &quot;statistic&quot;: &quot;rate&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;rate&quot;],
+  &quot;format&quot;: &quot;number&quot;,
+  &quot;unit&quot;: &quot;doc/s&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/bD2jH5QB7KvGccywNCH1
+{
+  &quot;id&quot;: &quot;bD2jH5QB7KvGccywNCH1&quot;,
+  &quot;name&quot;: &quot;Shard Storage&quot;,
+  &quot;key&quot;: &quot;shard_storage&quot;,
+  &quot;level&quot;: &quot;shard&quot;,
+  &quot;formula&quot;: &quot;bD2jH5QB7KvGccywNCH1&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;bD2jH5QB7KvGccywNCH1&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.shard_stats.store.size_in_bytes&quot;,
+      &quot;statistic&quot;: &quot;max&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;max&quot;, &quot;min&quot;, &quot;sum&quot;, &quot;avg&quot;, &quot;p99&quot;, &quot;medium&quot;],
+  &quot;format&quot;: &quot;bytes&quot;,
+  &quot;unit&quot;: &quot;&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/bD2jH5QB7KvGccywNCH5
+{
+  &quot;id&quot;: &quot;bD2jH5QB7KvGccywNCH5&quot;,
+  &quot;name&quot;: &quot;Document Count&quot;,
+  &quot;key&quot;: &quot;doc_count&quot;,
+  &quot;level&quot;: &quot;shard&quot;,
+  &quot;formula&quot;: &quot;bD2jH5QB7KvGccywNCH5&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;bD2jH5QB7KvGccywNCH5&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.shard_stats.docs.count&quot;,
+      &quot;statistic&quot;: &quot;max&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;max&quot;, &quot;min&quot;, &quot;sum&quot;, &quot;avg&quot;, &quot;p99&quot;, &quot;medium&quot;],
+  &quot;format&quot;: &quot;number&quot;,
+  &quot;unit&quot;: &quot;&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/bD2jH5QB7KvGccywNCH2
+{
+  &quot;id&quot;: &quot;bD2jH5QB7KvGccywNCH2&quot;,
+  &quot;name&quot;: &quot;Search Rate&quot;,
+  &quot;key&quot;: &quot;search_rate&quot;,
+  &quot;level&quot;: &quot;shard&quot;,
+  &quot;formula&quot;: &quot;bD2jH5QB7KvGccywNCH2/{{.bucket_size_in_second}}&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;bD2jH5QB7KvGccywNCH2&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.shard_stats.search.query_total&quot;,
+      &quot;statistic&quot;: &quot;rate&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;rate&quot;],
+  &quot;format&quot;: &quot;number&quot;,
+  &quot;unit&quot;: &quot;doc/s&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/bD2jH5QB7KvGccywNCH3
+{
+  &quot;id&quot;: &quot;bD2jH5QB7KvGccywNCH3&quot;,
+  &quot;name&quot;: &quot;Indexing Latency&quot;,
+  &quot;key&quot;: &quot;indexing_latency&quot;,
+  &quot;level&quot;: &quot;shard&quot;,
+  &quot;formula&quot;: &quot;bD2jH5QB7KvGccywNCx3/bD2jH5QB7KvGccywNCH3&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;bD2jH5QB7KvGccywNCx3&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.shard_stats.indexing.index_total&quot;,
+      &quot;statistic&quot;: &quot;rate&quot;
+    },
+     {
+      &quot;name&quot;: &quot;bD2jH5QB7KvGccywNCH3&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.shard_stats.indexing.index_time_in_millis&quot;,
+      &quot;statistic&quot;: &quot;rate&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;rate&quot;],
+  &quot;format&quot;: &quot;number&quot;,
+  &quot;unit&quot;: &quot;ms&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/bD2jH5QB7KvGccywNCH4
+{
+  &quot;id&quot;: &quot;bD2jH5QB7KvGccywNCH4&quot;,
+  &quot;name&quot;: &quot;Search Latency&quot;,
+  &quot;key&quot;: &quot;search_latency&quot;,
+  &quot;level&quot;: &quot;shard&quot;,
+  &quot;formula&quot;: &quot;bD2jH5QB7KvGccywNCx4/bD2jH5QB7KvGccywNCH4&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;bD2jH5QB7KvGccywNCH4&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.shard_stats.search.query_total&quot;,
+      &quot;statistic&quot;: &quot;rate&quot;
+    },
+     {
+      &quot;name&quot;: &quot;bD2jH5QB7KvGccywNCx4&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.shard_stats.search.query_time_in_millis&quot;,
+      &quot;statistic&quot;: &quot;rate&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;rate&quot;],
+  &quot;format&quot;: &quot;number&quot;,
+  &quot;unit&quot;: &quot;ms&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/bD2jH5QB7KvGccywNCH6
+{
+  &quot;id&quot;: &quot;bD2jH5QB7KvGccywNCH6&quot;,
+  &quot;name&quot;: &quot;Segment Count&quot;,
+  &quot;key&quot;: &quot;segment_count&quot;,
+  &quot;level&quot;: &quot;shard&quot;,
+  &quot;formula&quot;: &quot;bD2jH5QB7KvGccywNCH6&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;bD2jH5QB7KvGccywNCH6&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.shard_stats.segments.count&quot;,
+      &quot;statistic&quot;: &quot;max&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;max&quot;, &quot;min&quot;, &quot;sum&quot;, &quot;avg&quot;, &quot;p99&quot;, &quot;medium&quot;],
+  &quot;format&quot;: &quot;number&quot;,
+  &quot;unit&quot;: &quot;&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/bD2jH5QB7KvGccywNCH7
+{
+  &quot;id&quot;: &quot;bD2jH5QB7KvGccywNCH7&quot;,
+  &quot;name&quot;: &quot;Segment memory&quot;,
+  &quot;key&quot;: &quot;segment_memory&quot;,
+  &quot;level&quot;: &quot;shard&quot;,
+  &quot;formula&quot;: &quot;bD2jH5QB7KvGccywNCH7&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;bD2jH5QB7KvGccywNCH7&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.shard_stats.segments.memory_in_bytes&quot;,
+      &quot;statistic&quot;: &quot;max&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;max&quot;, &quot;min&quot;, &quot;sum&quot;, &quot;avg&quot;, &quot;p99&quot;, &quot;medium&quot;],
+  &quot;format&quot;: &quot;number&quot;,
+  &quot;unit&quot;: &quot;&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+
+#indices level
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/aD2jH5QB7KvGccywNCH9
+{
+  &quot;id&quot;: &quot;aD2jH5QB7KvGccywNCH9&quot;,
+  &quot;name&quot;: &quot;Indexing Rate&quot;,
+  &quot;key&quot;: &quot;indexing_rate&quot;,
+  &quot;level&quot;: &quot;indices&quot;,
+  &quot;formula&quot;: &quot;aD2jH5QB7KvGccywNCH9/{{.bucket_size_in_second}}&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;aD2jH5QB7KvGccywNCH9&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.index_stats.primaries.indexing.index_total&quot;,
+      &quot;statistic&quot;: &quot;rate&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;rate&quot;],
+  &quot;format&quot;: &quot;number&quot;,
+  &quot;unit&quot;: &quot;doc/s&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/aD2jH5QB7KvGccywNCH1
+{
+  &quot;id&quot;: &quot;aD2jH5QB7KvGccywNCH1&quot;,
+  &quot;name&quot;: &quot;Index Storage&quot;,
+  &quot;key&quot;: &quot;index_storage&quot;,
+  &quot;level&quot;: &quot;indices&quot;,
+  &quot;formula&quot;: &quot;aD2jH5QB7KvGccywNCH1&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;aD2jH5QB7KvGccywNCH1&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.index_stats.total.store.size_in_bytes&quot;,
+      &quot;statistic&quot;: &quot;max&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;max&quot;, &quot;min&quot;, &quot;sum&quot;, &quot;avg&quot;, &quot;p99&quot;, &quot;medium&quot;],
+  &quot;format&quot;: &quot;bytes&quot;,
+  &quot;unit&quot;: &quot;&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/aD2jH5QB7KvGccywNCH5
+{
+  &quot;id&quot;: &quot;aD2jH5QB7KvGccywNCH5&quot;,
+  &quot;name&quot;: &quot;Document Count&quot;,
+  &quot;key&quot;: &quot;doc_count&quot;,
+  &quot;level&quot;: &quot;indices&quot;,
+  &quot;formula&quot;: &quot;aD2jH5QB7KvGccywNCH5&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;aD2jH5QB7KvGccywNCH5&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.index_stats.total.docs.count&quot;,
+      &quot;statistic&quot;: &quot;max&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;max&quot;, &quot;min&quot;, &quot;sum&quot;, &quot;avg&quot;, &quot;p99&quot;, &quot;medium&quot;],
+  &quot;format&quot;: &quot;number&quot;,
+  &quot;unit&quot;: &quot;&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/aD2jH5QB7KvGccywNCH2
+{
+  &quot;id&quot;: &quot;aD2jH5QB7KvGccywNCH2&quot;,
+  &quot;name&quot;: &quot;Search Rate&quot;,
+  &quot;key&quot;: &quot;search_rate&quot;,
+  &quot;level&quot;: &quot;indices&quot;,
+  &quot;formula&quot;: &quot;aD2jH5QB7KvGccywNCH2/{{.bucket_size_in_second}}&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;aD2jH5QB7KvGccywNCH2&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.index_stats.total.search.query_total&quot;,
+      &quot;statistic&quot;: &quot;rate&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;rate&quot;],
+  &quot;format&quot;: &quot;number&quot;,
+  &quot;unit&quot;: &quot;doc/s&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/aD2jH5QB7KvGccywNCH3
+{
+  &quot;id&quot;: &quot;aD2jH5QB7KvGccywNCH3&quot;,
+  &quot;name&quot;: &quot;Indexing Latency&quot;,
+  &quot;key&quot;: &quot;indexing_latency&quot;,
+  &quot;level&quot;: &quot;indices&quot;,
+  &quot;formula&quot;: &quot;aD2jH5QB7KvGccywNCx3/aD2jH5QB7KvGccywNCH3&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;aD2jH5QB7KvGccywNCH3&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.index_stats.primaries.indexing.index_total&quot;,
+      &quot;statistic&quot;: &quot;rate&quot;
+    },
+     {
+      &quot;name&quot;: &quot;aD2jH5QB7KvGccywNCx3&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.index_stats.primaries.indexing.index_time_in_millis&quot;,
+      &quot;statistic&quot;: &quot;rate&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;rate&quot;],
+  &quot;format&quot;: &quot;number&quot;,
+  &quot;unit&quot;: &quot;ms&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/aD2jH5QB7KvGccywNCH4
+{
+  &quot;id&quot;: &quot;aD2jH5QB7KvGccywNCH4&quot;,
+  &quot;name&quot;: &quot;Search Latency&quot;,
+  &quot;key&quot;: &quot;search_latency&quot;,
+  &quot;level&quot;: &quot;indices&quot;,
+  &quot;formula&quot;: &quot;aD2jH5QB7KvGccywNCx4/aD2jH5QB7KvGccywNCH4&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;aD2jH5QB7KvGccywNCH4&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.index_stats.total.search.query_total&quot;,
+      &quot;statistic&quot;: &quot;rate&quot;
+    },
+     {
+      &quot;name&quot;: &quot;aD2jH5QB7KvGccywNCx4&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.index_stats.total.search.query_time_in_millis&quot;,
+      &quot;statistic&quot;: &quot;rate&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;rate&quot;],
+  &quot;format&quot;: &quot;number&quot;,
+  &quot;unit&quot;: &quot;ms&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/aD2jH5QB7KvGccywNCH6
+{
+  &quot;id&quot;: &quot;aD2jH5QB7KvGccywNCH6&quot;,
+  &quot;name&quot;: &quot;Segment Count&quot;,
+  &quot;key&quot;: &quot;segment_count&quot;,
+  &quot;level&quot;: &quot;indices&quot;,
+  &quot;formula&quot;: &quot;aD2jH5QB7KvGccywNCH6&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;aD2jH5QB7KvGccywNCH6&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.index_stats.total.segments.count&quot;,
+      &quot;statistic&quot;: &quot;max&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;max&quot;, &quot;min&quot;, &quot;sum&quot;, &quot;avg&quot;, &quot;p99&quot;, &quot;medium&quot;],
+  &quot;format&quot;: &quot;number&quot;,
+  &quot;unit&quot;: &quot;&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/aD2jH5QB7KvGccywNCH7
+{
+  &quot;id&quot;: &quot;aD2jH5QB7KvGccywNCH7&quot;,
+  &quot;name&quot;: &quot;Segment memory&quot;,
+  &quot;key&quot;: &quot;segment_memory&quot;,
+  &quot;level&quot;: &quot;indices&quot;,
+  &quot;formula&quot;: &quot;aD2jH5QB7KvGccywNCH7&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;aD2jH5QB7KvGccywNCH7&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.index_stats.total.segments.memory_in_bytes&quot;,
+      &quot;statistic&quot;: &quot;max&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;max&quot;, &quot;min&quot;, &quot;sum&quot;, &quot;avg&quot;, &quot;p99&quot;, &quot;medium&quot;],
+  &quot;format&quot;: &quot;bytes&quot;,
+  &quot;unit&quot;: &quot;&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+
+#node level
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/jD2jH5QB7KvGccywNCH9
+{
+  &quot;id&quot;: &quot;jD2jH5QB7KvGccywNCH9&quot;,
+  &quot;name&quot;: &quot;Indexing Rate&quot;,
+  &quot;key&quot;: &quot;indexing_rate&quot;,
+  &quot;level&quot;: &quot;node&quot;,
+  &quot;formula&quot;: &quot;jD2jH5QB7KvGccywH9/{{.bucket_size_in_second}}&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;jD2jH5QB7KvGccywH9&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.node_stats.indices.indexing.index_total&quot;,
+      &quot;statistic&quot;: &quot;derivative&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;rate&quot;],
+  &quot;format&quot;: &quot;number&quot;,
+  &quot;unit&quot;: &quot;doc/s&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+
+
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/jD2jH5QB7KvGccywNCH4
+{
+  &quot;id&quot;: &quot;jD2jH5QB7KvGccywNCH4&quot;,
+  &quot;name&quot;: &quot;Process CPU Usage&quot;,
+  &quot;key&quot;: &quot;process_cpu_used&quot;,
+  &quot;level&quot;: &quot;node&quot;,
+  &quot;formula&quot;: &quot;jD2jH5QB7KvGccywNCH4&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;jD2jH5QB7KvGccywNCH4&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.node_stats.process.cpu.percent&quot;,
+      &quot;statistic&quot;: &quot;avg&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;max&quot;, &quot;min&quot;, &quot;sum&quot;, &quot;avg&quot;, &quot;p99&quot;, &quot;medium&quot;],
+  &quot;format&quot;: &quot;&quot;,
+  &quot;unit&quot;: &quot;%&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/jD2jH5QB7KvGccywNCH3
+{
+  &quot;id&quot;: &quot;jD2jH5QB7KvGccywNCH3&quot;,
+  &quot;name&quot;: &quot;JVM Heap Usage&quot;,
+  &quot;key&quot;: &quot;jvm_heap_used&quot;,
+  &quot;level&quot;: &quot;node&quot;,
+  &quot;formula&quot;: &quot;jD2jH5QB7KvGccywNCH3&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;jD2jH5QB7KvGccywNCH3&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.node_stats.jvm.mem.heap_used_in_bytes&quot;,
+      &quot;statistic&quot;: &quot;max&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;max&quot;, &quot;min&quot;, &quot;sum&quot;, &quot;avg&quot;, &quot;p99&quot;, &quot;medium&quot;],
+  &quot;format&quot;: &quot;bytes&quot;,
+  &quot;unit&quot;: &quot;&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/jD2jH5QB7KvGccywNCH1
+{
+  &quot;id&quot;: &quot;jD2jH5QB7KvGccywNCH1&quot;,
+  &quot;name&quot;: &quot;Indexing Latency&quot;,
+  &quot;key&quot;: &quot;indexing_latency&quot;,
+  &quot;level&quot;: &quot;node&quot;,
+  &quot;formula&quot;: &quot;jD2jH5QB7KvGccywNCx1/jD2jH5QB7KvGccywNCH1&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;jD2jH5QB7KvGccywNCH1&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.node_stats.indices.indexing.index_total&quot;,
+      &quot;statistic&quot;: &quot;rate&quot;
+    },
+     {
+      &quot;name&quot;: &quot;jD2jH5QB7KvGccywNCx1&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.node_stats.indices.indexing.index_time_in_millis&quot;,
+      &quot;statistic&quot;: &quot;rate&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;rate&quot;],
+  &quot;format&quot;: &quot;number&quot;,
+  &quot;unit&quot;: &quot;ms&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/jD2jH5QB7KvGccywNCH0
+{
+  &quot;id&quot;: &quot;jD2jH5QB7KvGccywNCH0&quot;,
+  &quot;name&quot;: &quot;Search Rate&quot;,
+  &quot;key&quot;: &quot;search_rate&quot;,
+  &quot;level&quot;: &quot;node&quot;,
+  &quot;formula&quot;: &quot;jD2jH5QB7KvGccywH0/{{.bucket_size_in_second}}&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;jD2jH5QB7KvGccywH0&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.node_stats.indices.search.query_total&quot;,
+      &quot;statistic&quot;: &quot;derivative&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;rate&quot;],
+  &quot;format&quot;: &quot;number&quot;,
+  &quot;unit&quot;: &quot;query/s&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/jD2jH5QB7KvGccywNCH9
+{
+  &quot;id&quot;: &quot;jD2jH5QB7KvGccywNCH9&quot;,
+  &quot;name&quot;: &quot;Indexing Rate&quot;,
+  &quot;key&quot;: &quot;indexing_rate&quot;,
+  &quot;level&quot;: &quot;node&quot;,
+  &quot;formula&quot;: &quot;jD2jH5QB7KvGccywH9/{{.bucket_size_in_second}}&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;jD2jH5QB7KvGccywH9&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.node_stats.indices.indexing.index_total&quot;,
+      &quot;statistic&quot;: &quot;rate&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;rate&quot;],
+  &quot;format&quot;: &quot;number&quot;,
+  &quot;unit&quot;: &quot;doc/s&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/jD2jH5QB7KvGccywNCH5
+{
+  &quot;id&quot;: &quot;jD2jH5QB7KvGccywNCH5&quot;,
+  &quot;name&quot;: &quot;Search Latency&quot;,
+  &quot;key&quot;: &quot;search_latency&quot;,
+  &quot;level&quot;: &quot;node&quot;,
+  &quot;formula&quot;: &quot;jD2jH5QB7KvGccywNCx5/jD2jH5QB7KvGccywNCH5&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;jD2jH5QB7KvGccywNCH5&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.node_stats.indices.search.query_total&quot;,
+      &quot;statistic&quot;: &quot;rate&quot;
+    },
+     {
+      &quot;name&quot;: &quot;jD2jH5QB7KvGccywNCx5&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.node_stats.indices.search.query_time_in_millis&quot;,
+      &quot;statistic&quot;: &quot;rate&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;rate&quot;],
+  &quot;format&quot;: &quot;number&quot;,
+  &quot;unit&quot;: &quot;ms&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/jD2jH5QB7KvGccywNCH6
+{
+  &quot;id&quot;: &quot;jD2jH5QB7KvGccywNCH6&quot;,
+  &quot;name&quot;: &quot;Indices Storage&quot;,
+  &quot;key&quot;: &quot;indices_storage&quot;,
+  &quot;level&quot;: &quot;node&quot;,
+  &quot;formula&quot;: &quot;jD2jH5QB7KvGccywNCH6&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;jD2jH5QB7KvGccywNCH6&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.node_stats.indices.store.size_in_bytes&quot;,
+      &quot;statistic&quot;: &quot;max&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;max&quot;, &quot;min&quot;, &quot;sum&quot;, &quot;avg&quot;, &quot;p99&quot;, &quot;medium&quot;],
+  &quot;format&quot;: &quot;bytes&quot;,
+  &quot;unit&quot;: &quot;&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+PUT $[[SETUP_INDEX_PREFIX]]metric/_doc/jD2jH5QB7KvGccywNCH7
+{
+  &quot;id&quot;: &quot;jD2jH5QB7KvGccywNCH7&quot;,
+  &quot;name&quot;: &quot;Document Count&quot;,
+  &quot;key&quot;: &quot;doc_count&quot;,
+  &quot;level&quot;: &quot;node&quot;,
+  &quot;formula&quot;: &quot;jD2jH5QB7KvGccywNCH7&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;jD2jH5QB7KvGccywNCH7&quot;,
+      &quot;field&quot;: &quot;payload.elasticsearch.node_stats.indices.docs.count&quot;,
+      &quot;statistic&quot;: &quot;max&quot;
+    }
+  ],
+  &quot;statistics&quot;: [&quot;max&quot;, &quot;min&quot;, &quot;sum&quot;, &quot;avg&quot;, &quot;p99&quot;, &quot;medium&quot;],
+  &quot;format&quot;: &quot;number&quot;,
+  &quot;unit&quot;: &quot;&quot;,
+  &quot;builtin&quot;: true,
+  &quot;created&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;,
+  &quot;updated&quot;: &quot;2025-01-09T14:30:56.63155+08:00&quot;
+}
+</code></pre></div></label></div><h2 id=从-v17-升级至-v127x>从 v1.7 升级至 v1.27.x
+<a class=anchor href=#%e4%bb%8e-v17-%e5%8d%87%e7%ba%a7%e8%87%b3-v127x>#</a></h2><p>下载新版版安装包并解压覆盖旧版本，重启 Console 即可完成升级。</p><h2 id=从-v15-升级至-v17>从 v1.5 升级至 v1.7
+<a class=anchor href=#%e4%bb%8e-v15-%e5%8d%87%e7%ba%a7%e8%87%b3-v17>#</a></h2><p>由于 Console v1.7 版本对告警模块做了改版优化，系统内置规则模板和告警渠道等，更新功能比较多，从低版本升级时，建议先自行备份低版本程序和后端存储数据，然后下载新版本安装包并解压后覆盖旧版本进行升级。</p><h2 id=从-v10-升级至-v15>从 v1.0 升级至 v1.5
+<a class=anchor href=#%e4%bb%8e-v10-%e5%8d%87%e7%ba%a7%e8%87%b3-v15>#</a></h2><p>下载 Console v1.5 安装包并解压覆盖旧版本，重启 Console 即可完成升级，后端存储引擎无需变动。</p><h2 id=从低版本升级至-v10>从低版本升级至 v1.0
+<a class=anchor href=#%e4%bb%8e%e4%bd%8e%e7%89%88%e6%9c%ac%e5%8d%87%e7%ba%a7%e8%87%b3-v10>#</a></h2><p>由于 Console v1.0 版本更新功能比较多，从低版本升级时，建议先自行备份低版本程序和后端存储数据，然后下载新版本安装包并解压后覆盖旧版本进行升级。</p><p>两种升级方式：</p><ul><li>新环境安装部署</li><li>格式化覆盖升级</li></ul><h3 id=新环境安装部署>新环境安装部署
+<a class=anchor href=#%e6%96%b0%e7%8e%af%e5%a2%83%e5%ae%89%e8%a3%85%e9%83%a8%e7%bd%b2>#</a></h3><p>新环境是指将 Console 安装部署至新的磁盘目录，并且使用新的后端存储 Easysearch 或 Elasticsearch。部署安装说明参考：
+<a href=/console/v1.28.0/zh/docs/getting-started/install/>下载安装</a>。</p><h3 id=格式化覆盖升级>格式化覆盖升级
+<a class=anchor href=#%e6%a0%bc%e5%bc%8f%e5%8c%96%e8%a6%86%e7%9b%96%e5%8d%87%e7%ba%a7>#</a></h3><p>格式化覆盖升级是指在原有旧版本基础上进行覆盖升级，并删除旧版 Console 数据。</p><blockquote><p>提示：如有重要数据请先备份，删除操作造成数据丢失后果自负，请谨慎操作。</p></blockquote><p>操作步骤如下：</p><p>1、先切换到 Console 安装目录 <code>/xxx/console</code> ，请根据实际情况自行修改。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>cd /xxx/console
+</code></pre></div><p>2、停止 Console 服务</p><p>如果是 <code>-service</code> 方式启动，则可以通过以下方式停止。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>./console -service stop
+</code></pre></div><p>如果非 <code>-service</code> 方式启动，则自行解决停止服务。</p><p>3、删除 Console 数据</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>rm -rif data/ log/ config/
+</code></pre></div><p>4、删除 Easysearch 或 Elasticsearch 中的 Console 系统索引和模板</p><p>删除 <code>.infini</code> 模板</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>curl -XDELETE http://localhost:9200/_template/.infini
+</code></pre></div><p>删除所有 <code>.infini</code> 开头的 Console 系统索引</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>curl -XDELETE http://localhost:9200/.infini*
+</code></pre></div><p>5、下载 Console 新版安装包并解压覆盖</p><p>此过程不再详细描述，请自行操作。</p><p>6、重新启动 Console 服务</p><p>本示例以 <code>-service</code> 启动。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>./console -service install
+Success
+./console -service start
+Success
+</code></pre></div><p>7、完成</p><p>到此为止，格式化覆盖升级已完成。可以使用浏览器打开 http://localhost:9000 访问验证系统是否正常。</p><h2 id=从-v02-升级至-v03>从 v0.2 升级至 v0.3
+<a class=anchor href=#%e4%bb%8e-v02-%e5%8d%87%e7%ba%a7%e8%87%b3-v03>#</a></h2><h3 id=更新索引-infini-template>更新索引 <code>.infini</code> template
+<a class=anchor href=#%e6%9b%b4%e6%96%b0%e7%b4%a2%e5%bc%95-infini-template>#</a></h3><pre><code>PUT _template/.infini
+{
+    &quot;order&quot;: 0,
+    &quot;index_patterns&quot;: [
+      &quot;.infini_*&quot;
+    ],
+    &quot;settings&quot;: {
+      &quot;index&quot;: {
+        &quot;max_result_window&quot;: &quot;10000000&quot;,
+        &quot;mapping&quot;: {
+          &quot;total_fields&quot;: {
+            &quot;limit&quot;: &quot;20000&quot;
+          }
+        },
+        &quot;analysis&quot;: {
+          &quot;analyzer&quot;: {
+            &quot;suggest_text_search&quot;: {
+              &quot;filter&quot;: [
+                &quot;word_delimiter&quot;
+              ],
+              &quot;tokenizer&quot;: &quot;classic&quot;
+            }
+          }
+        },
+        &quot;number_of_shards&quot;: &quot;1&quot;
+      }
+    },
+    &quot;mappings&quot;: {
+      &quot;dynamic_templates&quot;: [
+        {
+          &quot;strings&quot;: {
+            &quot;mapping&quot;: {
+              &quot;ignore_above&quot;: 256,
+              &quot;type&quot;: &quot;keyword&quot;
+            },
+            &quot;match_mapping_type&quot;: &quot;string&quot;
+          }
+        }
+      ]
+    },
+    &quot;aliases&quot;: {}
+}
+</code></pre><h3 id=关闭索引-infini_cluster>关闭索引 <code>.infini_cluster</code>
+<a class=anchor href=#%e5%85%b3%e9%97%ad%e7%b4%a2%e5%bc%95-infini_cluster>#</a></h3><pre><code>POST .infini_cluster/_close
+</code></pre><h3 id=更新索引-infini_cluster-settings>更新索引 <code>.infini_cluster</code> settings
+<a class=anchor href=#%e6%9b%b4%e6%96%b0%e7%b4%a2%e5%bc%95-infini_cluster-settings>#</a></h3><pre><code>PUT .infini_cluster/_settings
+{
+     &quot;analysis&quot;: {
+          &quot;analyzer&quot;: {
+            &quot;suggest_text_search&quot;: {
+              &quot;filter&quot;: [
+                &quot;word_delimiter&quot;
+              ],
+              &quot;tokenizer&quot;: &quot;classic&quot;
+            }
+          }
+        }
+}
+</code></pre><h3 id=更新索引-infini_cluster-mappings>更新索引 <code>.infini_cluster</code> mappings
+<a class=anchor href=#%e6%9b%b4%e6%96%b0%e7%b4%a2%e5%bc%95-infini_cluster-mappings>#</a></h3><pre><code>PUT .infini_cluster/_mapping
+{
+      &quot;dynamic_templates&quot;: [
+        {
+          &quot;strings&quot;: {
+            &quot;match_mapping_type&quot;: &quot;string&quot;,
+            &quot;mapping&quot;: {
+              &quot;ignore_above&quot;: 256,
+              &quot;type&quot;: &quot;keyword&quot;
+            }
+          }
+        }
+      ],
+      &quot;properties&quot;: {
+        &quot;basic_auth&quot;: {
+          &quot;properties&quot;: {
+            &quot;password&quot;: {
+              &quot;type&quot;: &quot;keyword&quot;
+            },
+            &quot;username&quot;: {
+              &quot;type&quot;: &quot;keyword&quot;
+            }
+          }
+        },
+        &quot;created&quot;: {
+          &quot;type&quot;: &quot;date&quot;
+        },
+        &quot;description&quot;: {
+          &quot;type&quot;: &quot;text&quot;
+        },
+        &quot;discovery&quot;: {
+          &quot;properties&quot;: {
+            &quot;refresh&quot;: {
+              &quot;type&quot;: &quot;object&quot;
+            }
+          }
+        },
+        &quot;enabled&quot;: {
+          &quot;type&quot;: &quot;boolean&quot;
+        },
+        &quot;endpoint&quot;: {
+          &quot;type&quot;: &quot;keyword&quot;
+        },
+        &quot;endpoints&quot;: {
+          &quot;type&quot;: &quot;keyword&quot;
+        },
+        &quot;host&quot;: {
+          &quot;type&quot;: &quot;keyword&quot;,
+          &quot;copy_to&quot;: [
+            &quot;search_text&quot;
+          ]
+        },
+        &quot;hosts&quot;: {
+          &quot;type&quot;: &quot;keyword&quot;
+        },
+        &quot;labels&quot;: {
+          &quot;properties&quot;: {
+            &quot;health_status&quot;: {
+              &quot;type&quot;: &quot;keyword&quot;,
+              &quot;ignore_above&quot;: 256
+            }
+          }
+        },
+        &quot;location&quot;: {
+          &quot;properties&quot;: {
+            &quot;dc&quot;: {
+              &quot;type&quot;: &quot;keyword&quot;
+            },
+            &quot;provider&quot;: {
+              &quot;type&quot;: &quot;keyword&quot;
+            },
+            &quot;rack&quot;: {
+              &quot;type&quot;: &quot;keyword&quot;
+            },
+            &quot;region&quot;: {
+              &quot;type&quot;: &quot;keyword&quot;
+            }
+          }
+        },
+        &quot;monitored&quot;: {
+          &quot;type&quot;: &quot;boolean&quot;
+        },
+        &quot;name&quot;: {
+          &quot;type&quot;: &quot;keyword&quot;,
+          &quot;fields&quot;: {
+            &quot;text&quot;: {
+              &quot;type&quot;: &quot;text&quot;
+            }
+          }
+        },
+        &quot;order&quot;: {
+          &quot;type&quot;: &quot;integer&quot;
+        },
+        &quot;owner&quot;: {
+          &quot;properties&quot;: {
+            &quot;department&quot;: {
+              &quot;type&quot;: &quot;keyword&quot;,
+              &quot;copy_to&quot;: [
+                &quot;search_text&quot;
+              ]
+            },
+            &quot;id&quot;: {
+              &quot;type&quot;: &quot;keyword&quot;
+            },
+            &quot;name&quot;: {
+              &quot;type&quot;: &quot;keyword&quot;,
+              &quot;copy_to&quot;: [
+                &quot;search_text&quot;
+              ]
+            }
+          }
+        },
+        &quot;project&quot;: {
+          &quot;type&quot;: &quot;keyword&quot;,
+          &quot;copy_to&quot;: [
+            &quot;search_text&quot;
+          ]
+        },
+        &quot;schema&quot;: {
+          &quot;type&quot;: &quot;keyword&quot;
+        },
+        &quot;search_text&quot;: {
+          &quot;type&quot;: &quot;text&quot;,
+          &quot;analyzer&quot;: &quot;suggest_text_search&quot;,
+          &quot;index_prefixes&quot;: {
+            &quot;min_chars&quot;: 2,
+            &quot;max_chars&quot;: 5
+          },
+          &quot;index_phrases&quot;: true
+        },
+        &quot;tags&quot;: {
+          &quot;type&quot;: &quot;keyword&quot;,
+          &quot;copy_to&quot;: [
+            &quot;search_text&quot;
+          ]
+        },
+        &quot;traffic_control&quot;: {
+          &quot;properties&quot;: {
+            &quot;max_bytes_per_node&quot;: {
+              &quot;type&quot;: &quot;keyword&quot;
+            },
+            &quot;max_connection_per_node&quot;: {
+              &quot;type&quot;: &quot;keyword&quot;
+            },
+            &quot;max_qps_per_node&quot;: {
+              &quot;type&quot;: &quot;keyword&quot;
+            },
+            &quot;max_wait_time_in_ms&quot;: {
+              &quot;type&quot;: &quot;keyword&quot;
+            }
+          }
+        },
+        &quot;updated&quot;: {
+          &quot;type&quot;: &quot;date&quot;
+        },
+        &quot;version&quot;: {
+          &quot;type&quot;: &quot;keyword&quot;,
+          &quot;copy_to&quot;: [
+            &quot;search_text&quot;
+          ]
+        }
+      }
+}
+</code></pre><h3 id=打开索引-infini_cluster>打开索引 <code>.infini_cluster</code>
+<a class=anchor href=#%e6%89%93%e5%bc%80%e7%b4%a2%e5%bc%95-infini_cluster>#</a></h3><pre><code>POST .infini_cluster/_open
+</code></pre><h3 id=update-consoleyml>Update console.yml
+<a class=anchor href=#update-consoleyml>#</a></h3><p>v0.3 版本在 v0.2 版本上新增了 pipeline 配置：</p><pre><code>- name: metadata_ingest
+    auto_start: true
+    keep_running: true
+    processor:
+      - metadata:
+          bulk_size_in_mb: 10
+          bulk_max_docs_count: 5000
+          fetch_max_messages: 1000
+          elasticsearch: &quot;default&quot;
+          queues:
+            type: metadata
+            category: elasticsearch
+          when:
+            cluster_available: [ &quot;default&quot; ]
+- name: activity_ingest
+    auto_start: true
+    keep_running: true
+    processor:
+      - activity:
+          bulk_size_in_mb: 10
+          bulk_max_docs_count: 5000
+          fetch_max_messages: 1000
+          elasticsearch: &quot;default&quot;
+          queues:
+            category: elasticsearch
+            activity: true
+          consumer:
+            group: activity
+          when:
+            cluster_available: [ &quot;default&quot; ]
+</code></pre><p>先停止 Console 程序，再在<code>console.yml</code> 配置文件中的 pipeline 模块下添加上面面的配置，然后再启动 Console 程序。</p><h3 id=给索引-infini_alert-history-配置生命周期>给索引 .infini_alert-history 配置生命周期
+<a class=anchor href=#%e7%bb%99%e7%b4%a2%e5%bc%95-infini_alert-history-%e9%85%8d%e7%bd%ae%e7%94%9f%e5%91%bd%e5%91%a8%e6%9c%9f>#</a></h3><p>v0.3 新增了告警功能，告警功能存储执行记录的索引数据量很大，所以需要配置一下 ILM 如下：</p><pre><code class=language-aidl data-lang=aidl>PUT _template/.infini_alert-history-rollover
+{
+    &quot;order&quot; : 100000,
+    &quot;index_patterns&quot; : [
+      &quot;.infini_alert-history*&quot;
+    ],
+    &quot;settings&quot; : {
+      &quot;index&quot; : {
+        &quot;format&quot; : &quot;7&quot;,
+        &quot;lifecycle&quot; : {
+          &quot;name&quot; : &quot;infini_metrics-30days-retention&quot;,
+          &quot;rollover_alias&quot; : &quot;.infini_alert-history&quot;
+        },
+        &quot;codec&quot; : &quot;best_compression&quot;,
+        &quot;number_of_shards&quot; : &quot;1&quot;,
+        &quot;translog.durability&quot;:&quot;async&quot;
+      }
+    },
+    &quot;mappings&quot; : {
+      &quot;dynamic_templates&quot; : [
+        {
+          &quot;strings&quot; : {
+            &quot;mapping&quot; : {
+              &quot;ignore_above&quot; : 256,
+              &quot;type&quot; : &quot;keyword&quot;
+            },
+            &quot;match_mapping_type&quot; : &quot;string&quot;
+          }
+        }
+      ]
+    },
+    &quot;aliases&quot; : { }
+  }
+
+DELETE .infini_alert-history
+
+DELETE .infini_alert-history-00001
+PUT .infini_alert-history-00001
+{
+  &quot;settings&quot;: {
+    &quot;index.lifecycle.rollover_alias&quot;:&quot;.infini_alert-history&quot;
+    , &quot;refresh_interval&quot;: &quot;5s&quot;
+  },
+  &quot;aliases&quot;:{
+    &quot;.infini_alert-history&quot;:{
+      &quot;is_write_index&quot;:true
+    }
+  },
+  &quot;mappings&quot;: {
+    &quot;properties&quot; : {
+        &quot;condition&quot; : {
+          &quot;properties&quot; : {
+            &quot;items&quot; : {
+              &quot;properties&quot; : {
+                &quot;expression&quot; : {
+                  &quot;type&quot; : &quot;keyword&quot;,
+                  &quot;ignore_above&quot; : 256
+                },
+                &quot;minimum_period_match&quot; : {
+                  &quot;type&quot; : &quot;long&quot;
+                },
+                &quot;operator&quot; : {
+                  &quot;type&quot; : &quot;keyword&quot;,
+                  &quot;ignore_above&quot; : 256
+                },
+                &quot;severity&quot; : {
+                  &quot;type&quot; : &quot;keyword&quot;,
+                  &quot;ignore_above&quot; : 256
+                },
+                &quot;values&quot; : {
+                  &quot;type&quot; : &quot;keyword&quot;,
+                  &quot;ignore_above&quot; : 256
+                }
+              }
+            },
+            &quot;operator&quot; : {
+              &quot;type&quot; : &quot;keyword&quot;,
+              &quot;ignore_above&quot; : 256
+            }
+          }
+        },
+        &quot;condition_result&quot; : {
+          &quot;type&quot; : &quot;object&quot;,
+          &quot;enabled&quot; : false
+        },
+        &quot;context&quot; : {
+          &quot;type&quot; : &quot;keyword&quot;,
+          &quot;copy_to&quot; : [
+            &quot;search_text&quot;
+          ]
+        },
+        &quot;created&quot; : {
+          &quot;type&quot; : &quot;date&quot;
+        },
+        &quot;expression&quot; : {
+          &quot;type&quot; : &quot;keyword&quot;,
+          &quot;copy_to&quot; : [
+            &quot;search_text&quot;
+          ]
+        },
+        &quot;id&quot; : {
+          &quot;type&quot; : &quot;keyword&quot;
+        },
+        &quot;is_escalated&quot; : {
+          &quot;type&quot; : &quot;boolean&quot;
+        },
+        &quot;is_notified&quot; : {
+          &quot;type&quot; : &quot;boolean&quot;
+        },
+        &quot;message&quot; : {
+          &quot;type&quot; : &quot;keyword&quot;,
+          &quot;ignore_above&quot; : 256
+        },
+        &quot;objects&quot; : {
+          &quot;type&quot; : &quot;keyword&quot;,
+          &quot;copy_to&quot; : [
+            &quot;search_text&quot;
+          ]
+        },
+        &quot;resource_id&quot; : {
+          &quot;type&quot; : &quot;keyword&quot;
+        },
+        &quot;resource_name&quot; : {
+          &quot;type&quot; : &quot;keyword&quot;
+        },
+        &quot;rule_id&quot; : {
+          &quot;type&quot; : &quot;keyword&quot;
+        },
+        &quot;rule_name&quot; : {
+          &quot;type&quot; : &quot;keyword&quot;
+        },
+        &quot;search_text&quot; : {
+          &quot;type&quot; : &quot;text&quot;,
+          &quot;analyzer&quot; : &quot;suggest_text_search&quot;,
+          &quot;index_prefixes&quot; : {
+            &quot;min_chars&quot; : 2,
+            &quot;max_chars&quot; : 5
+          },
+          &quot;index_phrases&quot; : true
+        },
+        &quot;severity&quot; : {
+          &quot;type&quot; : &quot;keyword&quot;
+        },
+        &quot;state&quot; : {
+          &quot;type&quot; : &quot;keyword&quot;,
+          &quot;ignore_above&quot; : 256
+        },
+        &quot;title&quot; : {
+          &quot;type&quot; : &quot;keyword&quot;
+        },
+        &quot;updated&quot; : {
+          &quot;type&quot; : &quot;date&quot;
+        }
+      }
+    }
+}
+</code></pre><h2 id=升级常见问题>升级常见问题
+<a class=anchor href=#%e5%8d%87%e7%ba%a7%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98>#</a></h2><h4 id=问题描述-1>问题描述 1
+<a class=anchor href=#%e9%97%ae%e9%a2%98%e6%8f%8f%e8%bf%b0-1>#</a></h4><p>重复的索引 index 数据</p><p><img src=/console/v1.28.0/img/troubleshooting/v0.3_duplicated_indices.png alt=重复的索引index数据></p><h4 id=解决方案>解决方案
+<a class=anchor href=#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88>#</a></h4><ul><li>停止 Console</li><li>删除索引<code>.infini_index</code></li><li>启动 Console</li></ul><h4 id=问题描述-2>问题描述 2
+<a class=anchor href=#%e9%97%ae%e9%a2%98%e6%8f%8f%e8%bf%b0-2>#</a></h4><p>重复的节点 node 数据</p><p><img src=/console/v1.28.0/img/troubleshooting/v0.3_duplicated_nodes.png alt=重复的节点node数据></p><h4 id=解决方案-1>解决方案
+<a class=anchor href=#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88-1>#</a></h4><ul><li>停止 Console</li><li>删除索引 <code>.infini_node</code></li><li>启动 Console</li></ul><h4 id=问题描述-3>问题描述 3
+<a class=anchor href=#%e9%97%ae%e9%a2%98%e6%8f%8f%e8%bf%b0-3>#</a></h4><p>data 节点有监控数据，非 data 节点（master、client 等）没有监控数据，如下图非 data 节点所示：</p><p><img src=/console/v1.28.0/img/troubleshooting/v0.3_nodes_monitor_no_data.jpg alt=重复的节点node数据></p><h4 id=解决方案-2>解决方案
+<a class=anchor href=#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88-2>#</a></h4><p>建议升级到最新版。</p><h4 id=问题描述-4>问题描述 4
+<a class=anchor href=#%e9%97%ae%e9%a2%98%e6%8f%8f%e8%bf%b0-4>#</a></h4><p>页面出现空白，JS 报错。</p><h4 id=解决方案-3>解决方案
+<a class=anchor href=#%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88-3>#</a></h4><p>建议升级到最新版，并将具体报错信息反馈给我们。</p><h2 id=反馈>反馈
+<a class=anchor href=#%e5%8f%8d%e9%a6%88>#</a></h2><p>如有其他任何问题和建议，请通过右侧的反馈功能或点击
+<a href=https://github.com/infinilabs/console/issues/new>这里</a>提交给我们，我们将持续优化，感谢您的支持！</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class=book-languages tabindex=0 aria-haspopup=true><ul><li class="flex align-center"><img src=/console/v1.28.0/svg/translate.svg class=book-icon alt=Languages>
+简体中文</li></ul><ul class=book-languages-list><li><a href=/console/v1.28.0/ class="flex align-center"><img src=/console/v1.28.0/svg/translate.svg class=book-icon alt=Languages>
+English</a></li><li class=active><a href=/console/v1.28.0/zh/ class="flex align-center"><img src=/console/v1.28.0/svg/translate.svg class=book-icon alt=Languages>
+简体中文</a></li></ul></div><div><a class="flex align-center" href=https://github.com/infinilabs/console/edit/v1.28.0/docs/content.zh/docs/upgrade/_index.md target=_blank rel=noopener><img src=/console/v1.28.0/svg/edit.svg class=book-icon alt=Edit>
+<span>编辑本页</span></a></div><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script>(function(h,o,t,j,a,r){h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};h._hjSettings={hjid:2567416,hjsv:6};a=o.getElementsByTagName('head')[0];r=o.createElement('script');r.async=1;r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;a.appendChild(r);})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#版本更新>版本更新</a><ul><li><a href=#从-v127x-升级至-v1280>从 v1.27.x 升级至 v1.28.0</a></li><li><a href=#从-v17-升级至-v127x>从 v1.7 升级至 v1.27.x</a></li><li><a href=#从-v15-升级至-v17>从 v1.5 升级至 v1.7</a></li><li><a href=#从-v10-升级至-v15>从 v1.0 升级至 v1.5</a></li><li><a href=#从低版本升级至-v10>从低版本升级至 v1.0</a><ul><li><a href=#新环境安装部署>新环境安装部署</a></li><li><a href=#格式化覆盖升级>格式化覆盖升级</a></li></ul></li><li><a href=#从-v02-升级至-v03>从 v0.2 升级至 v0.3</a><ul><li><a href=#更新索引-infini-template>更新索引 <code>.infini</code> template</a></li><li><a href=#关闭索引-infini_cluster>关闭索引 <code>.infini_cluster</code></a></li><li><a href=#更新索引-infini_cluster-settings>更新索引 <code>.infini_cluster</code> settings</a></li><li><a href=#更新索引-infini_cluster-mappings>更新索引 <code>.infini_cluster</code> mappings</a></li><li><a href=#打开索引-infini_cluster>打开索引 <code>.infini_cluster</code></a></li><li><a href=#update-consoleyml>Update console.yml</a></li><li><a href=#给索引-infini_alert-history-配置生命周期>给索引 .infini_alert-history 配置生命周期</a></li></ul></li><li><a href=#升级常见问题>升级常见问题</a><ul><li></li></ul></li><li><a href=#反馈>反馈</a></li></ul></li></ul></nav></aside></main></body></html>
