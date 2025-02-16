@@ -32,16 +32,12 @@ OLLAMA_HOST=0.0.0.0:11434 ollama serve Pull the following models"><meta property
 <a class=anchor href=#manual-installation>#</a></h2><p>Follow these steps for a manual setup:</p><h3 id=ollama>Ollama
 <a class=anchor href=#ollama>#</a></h3><p>Install Ollama</p><pre><code>curl -fsSL https://ollama.com/install.sh | sh
 </code></pre><p>Start Ollama server</p><pre><code>OLLAMA_HOST=0.0.0.0:11434 ollama serve
-</code></pre><p>Pull the following models</p><pre><code>ollama pull llama3.2
-ollama pull llama3.2-vision
-ollama pull llama2-chinese:13b
-ollama pull mistral:latest
-ollama pull nomic-embed-text:latest
+</code></pre><p>Pull the following models</p><pre><code>ollama pull deepseek-r1:1.5b 
 </code></pre><h3 id=easysearch>Easysearch
 <a class=anchor href=#easysearch>#</a></h3><p>Install Easysearch</p><pre><code>docker run -itd --name easysearch -p 9200:9200 infinilabs/easysearch:1.8.3-265
 </code></pre><p>Get the bootstrap password of the Easysearch:</p><pre><code>docker logs easysearch | grep &quot;admin:&quot;
 </code></pre><h3 id=coco-ai>Coco AI
-<a class=anchor href=#coco-ai>#</a></h3><p>Modify <code>coco.yml</code> with correct <code>env</code> settings, or start the coco server with the correct environments like this:</p><pre><code>➜  coco git:(main) ✗ OLLAMA_MODEL=llama3.2:1b ES_PASSWORD=45ff432a5428ade77c7b  ./bin/coco
+<a class=anchor href=#coco-ai>#</a></h3><p>Modify <code>coco.yml</code> with correct <code>env</code> settings, or start the coco server with the correct environments like this:</p><pre><code>➜  coco git:(main) ✗ OLLAMA_MODEL=deepseek-r1:1.5b ES_PASSWORD=45ff432a5428ade77c7b  ./bin/coco
    ___  ___  ___  ___     _     _____
   / __\/___\/ __\/___\   /_\    \_   \
  / /  //  // /  //  //  //_\\    / /\/
