@@ -1,0 +1,75 @@
+<!doctype html><html lang=en><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="logs_processor #  Description #  Collect the local log files.
+Configuration Example #  The elasticsearch log files as an example.
+pipeline: - name: log_collect auto_start: true keep_running: true retry_delay_in_ms: 3000 processor: - logs_processor: queue_name: &#34;logs&#34; logs_path: &#34;/opt/es/elasticsearch-7.7.1/logs&#34; # metadata for all log items metadata: category: elasticsearch patterns: - pattern: &#34;.*_server.json$&#34; type: json metadata: name: server timestamp_fields: [&#34;timestamp&#34;, &#34;@timestamp&#34;] remove_fields: [ &#34;type&#34;, &#34;cluster.name&#34;, &#34;cluster.uuid&#34;, &#34;node.name&#34;, &#34;node.id&#34;, &#34;timestamp&#34;, &#34;@timestamp&#34;, ] - pattern: &#34;gc."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="logs_processor"><meta property="og:description" content="logs_processor #  Description #  Collect the local log files.
+Configuration Example #  The elasticsearch log files as an example.
+pipeline: - name: log_collect auto_start: true keep_running: true retry_delay_in_ms: 3000 processor: - logs_processor: queue_name: &#34;logs&#34; logs_path: &#34;/opt/es/elasticsearch-7.7.1/logs&#34; # metadata for all log items metadata: category: elasticsearch patterns: - pattern: &#34;.*_server.json$&#34; type: json metadata: name: server timestamp_fields: [&#34;timestamp&#34;, &#34;@timestamp&#34;] remove_fields: [ &#34;type&#34;, &#34;cluster.name&#34;, &#34;cluster.uuid&#34;, &#34;node.name&#34;, &#34;node.id&#34;, &#34;timestamp&#34;, &#34;@timestamp&#34;, ] - pattern: &#34;gc."><meta property="og:type" content="article"><meta property="og:url" content="/agent/v1.28.2/docs/configuration/processors/logs_processor/"><title>logs_processor | INFINI Agent</title><link rel=manifest href=/agent/v1.28.2/manifest.json><link rel=icon href=/agent/v1.28.2/favicon.png type=image/x-icon><link rel=alternate hreflang=zh href=/agent/v1.28.2/zh/docs/configuration/processors/logs_processor/ title=logs_processor><link rel=stylesheet href=/agent/v1.28.2/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><script defer src=/agent/v1.28.2/js/jquery-2.x.min.js></script><script defer src=/agent/v1.28.2/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/agent/v1.28.2><img src=/agent/v1.28.2/img/logo-en.svg alt=Logo></a></h2><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value=v1.28.2>v1.28.x</option>
+<option value=v1.28.0>v1.28.x</option>
+<option value=v1.27.0>v1.27.x</option></select></div><ul><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
+<label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>Getting Started</a>
+<span>▾</span></label><ul><li><a href=/agent/v1.28.2/docs/getting-started/install/>Installing the Agent</a></li></ul></li><li><input type=checkbox id=section-733eb6bf92c2240d3439f44b52d0e508 class=toggle checked>
+<label for=section-733eb6bf92c2240d3439f44b52d0e508 class="flex justify-between"><a href=/agent/v1.28.2/docs/configuration/>References</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-2bd946ffabdea5fb05f4c577a1cb9655 class=toggle checked>
+<label for=section-2bd946ffabdea5fb05f4c577a1cb9655 class="flex justify-between"><a href=/agent/v1.28.2/docs/configuration/processors/>Offline Processor</a>
+<span>▾</span></label><ul><li><a href=/agent/v1.28.2/docs/configuration/processors/es_cluster_health/>es_cluster_health</a></li><li><a href=/agent/v1.28.2/docs/configuration/processors/es_cluster_stats/>es_cluster_stats</a></li><li><a href=/agent/v1.28.2/docs/configuration/processors/es_index_stats/>es_index_stats</a></li><li><a href=/agent/v1.28.2/docs/configuration/processors/es_logs_processor/>es_logs_processor</a></li><li><a href=/agent/v1.28.2/docs/configuration/processors/es_node_stats/>es_node_stats</a></li><li><a href=/agent/v1.28.2/docs/configuration/processors/logs_processor/ class=active>logs_processor</a></li></ul></li></ul></li><li><a href=/agent/v1.28.2/docs/release-notes/>Release Notes</a><ul></ul></li></ul><ul><li><a href=https://github.com/infinilabs/agent target=_blank rel=noopener>Github</a></li></ul><div class=book-languages tabindex=0 aria-haspopup=true><ul><li class="flex align-center"><img src=/agent/v1.28.2/svg/translate.svg class=book-icon alt=Languages>
+English</li></ul><ul class=book-languages-list><li class=active><a href=/agent/v1.28.2/ class="flex align-center"><img src=/agent/v1.28.2/svg/translate.svg class=book-icon alt=Languages>
+English</a></li><li><a href=/agent/v1.28.2/zh/docs/configuration/processors/logs_processor/ class="flex align-center"><img src=/agent/v1.28.2/svg/translate.svg class=book-icon alt=Languages>
+简体中文</a></li></ul></div></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/agent/v1.28.2/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>logs_processor</strong>
+<label for=toc-control><img src=/agent/v1.28.2/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#logs_processor>logs_processor</a><ul><li><a href=#description>Description</a></li><li><a href=#configuration-example>Configuration Example</a></li><li><a href=#parameter-description>Parameter Description</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=logs_processor>logs_processor
+<a class=anchor href=#logs_processor>#</a></h1><h2 id=description>Description
+<a class=anchor href=#description>#</a></h2><p>Collect the local log files.</p><h2 id=configuration-example>Configuration Example
+<a class=anchor href=#configuration-example>#</a></h2><p>The elasticsearch log files as an example.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>pipeline</span>:
+  - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>log_collect</span>
+    <span style=color:#f92672>auto_start</span>: <span style=color:#66d9ef>true</span>
+    <span style=color:#f92672>keep_running</span>: <span style=color:#66d9ef>true</span>
+    <span style=color:#f92672>retry_delay_in_ms</span>: <span style=color:#ae81ff>3000</span>
+    <span style=color:#f92672>processor</span>:
+      - <span style=color:#f92672>logs_processor</span>:
+          <span style=color:#f92672>queue_name</span>: <span style=color:#e6db74>&#34;logs&#34;</span>
+          <span style=color:#f92672>logs_path</span>: <span style=color:#e6db74>&#34;/opt/es/elasticsearch-7.7.1/logs&#34;</span>
+          <span style=color:#75715e># metadata for all log items</span>
+          <span style=color:#f92672>metadata</span>:
+            <span style=color:#f92672>category</span>: <span style=color:#ae81ff>elasticsearch</span>
+          <span style=color:#f92672>patterns</span>:
+            - <span style=color:#f92672>pattern</span>: <span style=color:#e6db74>&#34;.*_server.json$&#34;</span>
+              <span style=color:#f92672>type</span>: <span style=color:#ae81ff>json</span>
+              <span style=color:#f92672>metadata</span>:
+                <span style=color:#f92672>name</span>: <span style=color:#ae81ff>server</span>
+              <span style=color:#f92672>timestamp_fields</span>: [<span style=color:#e6db74>&#34;timestamp&#34;</span>, <span style=color:#e6db74>&#34;@timestamp&#34;</span>]
+              <span style=color:#f92672>remove_fields</span>:
+                [
+                  <span style=color:#e6db74>&#34;type&#34;</span>,
+                  <span style=color:#e6db74>&#34;cluster.name&#34;</span>,
+                  <span style=color:#e6db74>&#34;cluster.uuid&#34;</span>,
+                  <span style=color:#e6db74>&#34;node.name&#34;</span>,
+                  <span style=color:#e6db74>&#34;node.id&#34;</span>,
+                  <span style=color:#e6db74>&#34;timestamp&#34;</span>,
+                  <span style=color:#e6db74>&#34;@timestamp&#34;</span>,
+                ]
+            - <span style=color:#f92672>pattern</span>: <span style=color:#e6db74>&#34;gc.log$&#34;</span>
+              <span style=color:#f92672>type</span>: <span style=color:#ae81ff>text</span>
+              <span style=color:#f92672>metadata</span>:
+                <span style=color:#f92672>name</span>: <span style=color:#ae81ff>gc</span>
+              <span style=color:#f92672>timestamp_patterns</span>:
+                - <span style=color:#e6db74>&#34;\\d{4}-\\d{1,2}-\\d{1,2}T\\d{1,2}:\\d{1,2}:\\d{1,2}.\\d{3}\\+\\d{4}&#34;</span>
+                - <span style=color:#e6db74>&#34;\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2},\\d{3}&#34;</span>
+                - <span style=color:#e6db74>&#34;\\d{4}-\\d{1,2}-\\d{1,2}T\\d{1,2}:\\d{1,2}:\\d{1,2},\\d{3}&#34;</span>
+            - <span style=color:#f92672>pattern</span>: <span style=color:#e6db74>&#34;.*.log$&#34;</span>
+              <span style=color:#f92672>type</span>: <span style=color:#ae81ff>multiline</span>
+              <span style=color:#f92672>line_pattern</span>: <span style=color:#e6db74>&#39;^\[&#39;</span>
+              <span style=color:#f92672>metadata</span>:
+                <span style=color:#f92672>name</span>: <span style=color:#ae81ff>server</span>
+              <span style=color:#f92672>timestamp_patterns</span>:
+                - <span style=color:#e6db74>&#34;\\d{4}-\\d{1,2}-\\d{1,2}T\\d{1,2}:\\d{1,2}:\\d{1,2}.\\d{3}\\+\\d{4}&#34;</span>
+                - <span style=color:#e6db74>&#34;\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2},\\d{3}&#34;</span>
+                - <span style=color:#e6db74>&#34;\\d{4}-\\d{1,2}-\\d{1,2}T\\d{1,2}:\\d{1,2}:\\d{1,2},\\d{3}&#34;</span>
+</code></pre></div><h2 id=parameter-description>Parameter Description
+<a class=anchor href=#parameter-description>#</a></h2><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>queue_name</td><td>string</td><td>Log files collection queue name</td></tr><tr><td>logs_path</td><td>string</td><td>Log files path</td></tr><tr><td>metadata</td><td>map</td><td>Configure the metadata for the log files</td></tr><tr><td>patterns</td><td>object</td><td>Patterns configuration for log files</td></tr><tr><td>patterns.pattern</td><td>string</td><td>Pattern for log files</td></tr><tr><td>patterns.metadata</td><td>map</td><td>Configure the metadata for the log files which matched</td></tr><tr><td>patterns.type</td><td>string</td><td>Log type, support <code>json</code>，<code>text</code>，<code>multiline</code></td></tr><tr><td>patterns.line_pattern</td><td>string</td><td>When the log type is multiline, the pattern for a new line</td></tr><tr><td>patterns.remove_fields</td><td>[]string</td><td>Fields that need to be removed (available when the log type is <code>json</code>)</td></tr><tr><td>patterns.timestamp_fields</td><td>[]string</td><td>Timestamp field (available when the log type is <code>json</code>)</td></tr><tr><td>patterns.timestamp_patterns</td><td>[]string</td><td>Timestamp pattern (available when the log type is <code>text</code> and <code>multiline</code> )</td></tr></tbody></table></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class=book-languages tabindex=0 aria-haspopup=true><ul><li class="flex align-center"><img src=/agent/v1.28.2/svg/translate.svg class=book-icon alt=Languages>
+English</li></ul><ul class=book-languages-list><li class=active><a href=/agent/v1.28.2/ class="flex align-center"><img src=/agent/v1.28.2/svg/translate.svg class=book-icon alt=Languages>
+English</a></li><li><a href=/agent/v1.28.2/zh/docs/configuration/processors/logs_processor/ class="flex align-center"><img src=/agent/v1.28.2/svg/translate.svg class=book-icon alt=Languages>
+简体中文</a></li></ul></div><div><a class="flex align-center" href=https://github.com/infinilabs/agent/edit/v1.28.2/docs/content.en/docs/configuration/processors/logs_processor.md target=_blank rel=noopener><img src=/agent/v1.28.2/svg/edit.svg class=book-icon alt=Edit>
+<span>Edit this page</span></a></div><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script>(function(h,o,t,j,a,r){h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};h._hjSettings={hjid:2567416,hjsv:6};a=o.getElementsByTagName('head')[0];r=o.createElement('script');r.async=1;r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;a.appendChild(r);})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#logs_processor>logs_processor</a><ul><li><a href=#description>Description</a></li><li><a href=#configuration-example>Configuration Example</a></li><li><a href=#parameter-description>Parameter Description</a></li></ul></li></ul></nav></aside></main></body></html>
