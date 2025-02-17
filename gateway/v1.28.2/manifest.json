@@ -1,0 +1,15 @@
+{
+  "name": "INFINI Gateway",
+  "short_name": "INFINI Gateway",
+  "start_url": "/gateway/v1.28.2/",
+  "scope": "/gateway/v1.28.2/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/gateway/v1.28.2/favicon.svg",
+      "sizes": "512x512"
+    }
+  ]
+}
