@@ -7,6 +7,7 @@
 为什么需要浮动 IP #  在一个配置好浮动 IP 的典型切换场景是，当出现当前绑定浮动 IP 的机器出现故障的时候，浮动 IP 地址会飘到网络中的另一台设备。新设备无延迟的接替当掉的设备，并对外提供服务。 从而实现网络服务的高可用，对应业务的消费方来说，只需要指定浮动 IP 就可以了。 浮动 IP 非常有用，在某些特定的场景，比如客户端或者 SDK 只允许配置一个服务 IP 地址，所以这个 IP 一定要是高可用的，而极限网关正好解决了这个问题。 使用两个独立的极限网关服务器，最好部署在独立的物理服务器上，两台极限网关构成一组双机热备的状态，任意网关出现故障都能保障前端业务的正常访问。"><meta property="og:type" content="article"><meta property="og:url" content="/gateway/main/zh/docs/references/modules/floating_ip/"><title>浮动 IP | INFINI Gateway</title><link rel=manifest href=/gateway/main/manifest.json><link rel=icon href=/gateway/main/favicon.png type=image/x-icon><link rel=alternate hreflang=en href=/gateway/main/docs/references/modules/floating_ip/ title="Floating IP"><link rel=stylesheet href=/gateway/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><script defer src=/gateway/main/js/jquery-2.x.min.js></script><script defer src=/gateway/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/gateway/main/zh><img src=/gateway/main/img/logo-zh.svg alt=Logo></a></h2><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
+<option value=v1.29.0>v1.29.0</option>
 <option value=v1.28.2>v1.28.2</option>
 <option value=v1.28.0>v1.28.0</option>
 <option value=v1.27.0>v1.27.0</option>
