@@ -1,14 +1,4 @@
-<!doctype html><html lang=en><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Getting Started #  Prerequisite #    Docker  Ollama  Easysearch  Quickstart Script #  Download the Server #  Get the appropriate executables for your platform.
-Run the Quick Setup #  Simply execute the installation script:
-./Install.sh Manual Installation #  Follow these steps for a manual setup:
-Ollama #  Install Ollama
-curl -fsSL https://ollama.com/install.sh | sh Start Ollama server
-OLLAMA_HOST=0.0.0.0:11434 ollama serve Pull the following models"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Installation"><meta property="og:description" content="Getting Started #  Prerequisite #    Docker  Ollama  Easysearch  Quickstart Script #  Download the Server #  Get the appropriate executables for your platform.
-Run the Quick Setup #  Simply execute the installation script:
-./Install.sh Manual Installation #  Follow these steps for a manual setup:
-Ollama #  Install Ollama
-curl -fsSL https://ollama.com/install.sh | sh Start Ollama server
-OLLAMA_HOST=0.0.0.0:11434 ollama serve Pull the following models"><meta property="og:type" content="article"><meta property="og:url" content="/coco-server/main/docs/getting-started/install/"><title>Installation | Coco Server</title><link rel=manifest href=/coco-server/main/manifest.json><link rel=icon href=/coco-server/main/favicon.png type=image/x-icon><link rel=stylesheet href=/coco-server/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/coco-server/main/css/asciinema-player.css><script defer src=/coco-server/main/js/jquery-2.x.min.js></script><script defer src=/coco-server/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<!doctype html><html lang=en><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Getting Started #  Prerequisite #    Docker  Ollama  Easysearch  Quickstart Script #  # -------------------------------------------------- # Coco Server Docker 部署脚本及相关命令 # -------------------------------------------------- # 快速启动 Coco Server (使用默认配置) # # 命令解释: # docker run: 创建并运行一个新的 Docker 容器 # -d: 在后台运行容器 (detached mode) # --name cocoserver: 为容器指定一个名称 (cocoserver) # -p 9000:9000: 将容器的 9000 端口映射到主机的 9000 端口 (Web UI 端口) # infinilabs/coco:0.2.0-1992: 使用的 Docker 镜像名称和标签 (版本号) docker run -d --name cocoserver -p 9000:9000 infinilabs/coco:0."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Installation"><meta property="og:description" content="Getting Started #  Prerequisite #    Docker  Ollama  Easysearch  Quickstart Script #  # -------------------------------------------------- # Coco Server Docker 部署脚本及相关命令 # -------------------------------------------------- # 快速启动 Coco Server (使用默认配置) # # 命令解释: # docker run: 创建并运行一个新的 Docker 容器 # -d: 在后台运行容器 (detached mode) # --name cocoserver: 为容器指定一个名称 (cocoserver) # -p 9000:9000: 将容器的 9000 端口映射到主机的 9000 端口 (Web UI 端口) # infinilabs/coco:0.2.0-1992: 使用的 Docker 镜像名称和标签 (版本号) docker run -d --name cocoserver -p 9000:9000 infinilabs/coco:0."><meta property="og:type" content="article"><meta property="og:url" content="/coco-server/main/docs/getting-started/install/"><title>Installation | Coco Server</title><link rel=manifest href=/coco-server/main/manifest.json><link rel=icon href=/coco-server/main/favicon.png type=image/x-icon><link rel=stylesheet href=/coco-server/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/coco-server/main/css/asciinema-player.css><script defer src=/coco-server/main/js/jquery-2.x.min.js></script><script defer src=/coco-server/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/coco-server/main><img src=/coco-server/main/img/logo-en.svg alt=Logo></a></h2><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
 <option value></option></select></div><ul><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle checked>
@@ -24,7 +14,73 @@ OLLAMA_HOST=0.0.0.0:11434 ollama serve Pull the following models"><meta property
 <label for=toc-control><img src=/coco-server/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#getting-started>Getting Started</a><ul><li><a href=#prerequisite>Prerequisite</a></li><li><a href=#quickstart-script>Quickstart Script</a><ul><li><a href=#download-the-server>Download the Server</a></li><li><a href=#run-the-quick-setup>Run the Quick Setup</a></li></ul></li><li><a href=#manual-installation>Manual Installation</a><ul><li><a href=#ollama>Ollama</a></li><li><a href=#easysearch>Easysearch</a></li><li><a href=#coco-ai>Coco AI</a></li></ul></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=getting-started>Getting Started
 <a class=anchor href=#getting-started>#</a></h1><h2 id=prerequisite>Prerequisite
 <a class=anchor href=#prerequisite>#</a></h2><ul><li><a href=https://docs.docker.com/engine/install/>Docker</a></li><li><a href=https://ollama.com/>Ollama</a></li><li><a href=https://hub.docker.com/r/infinilabs/easysearch/>Easysearch</a></li></ul><h2 id=quickstart-script>Quickstart Script
-<a class=anchor href=#quickstart-script>#</a></h2><h3 id=download-the-server>Download the Server
+<a class=anchor href=#quickstart-script>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># --------------------------------------------------</span>
+<span style=color:#75715e># Coco Server Docker 部署脚本及相关命令</span>
+<span style=color:#75715e># --------------------------------------------------</span>
+
+<span style=color:#75715e># 快速启动 Coco Server (使用默认配置)</span>
+<span style=color:#75715e>#</span>
+<span style=color:#75715e># 命令解释:</span>
+<span style=color:#75715e>#   docker run:       创建并运行一个新的 Docker 容器</span>
+<span style=color:#75715e>#   -d:               在后台运行容器 (detached mode)</span>
+<span style=color:#75715e>#   --name cocoserver:  为容器指定一个名称 (cocoserver)</span>
+<span style=color:#75715e>#   -p 9000:9000:     将容器的 9000 端口映射到主机的 9000 端口 (Web UI 端口)</span>
+<span style=color:#75715e>#   infinilabs/coco:0.2.0-1992:  使用的 Docker 镜像名称和标签 (版本号)</span>
+docker run -d --name cocoserver -p 9000:9000 infinilabs/coco:0.2.0-1992
+
+<span style=color:#75715e># 停止并删除 Coco Server 容器</span>
+<span style=color:#75715e>#</span>
+<span style=color:#75715e># 命令解释:</span>
+<span style=color:#75715e>#   docker stop cocoserver:   停止名为 cocoserver 的容器</span>
+<span style=color:#75715e>#   &amp;&amp;:                     逻辑与操作符，确保前一个命令成功执行后才执行下一个命令</span>
+<span style=color:#75715e>#   docker rm cocoserver:     删除名为 cocoserver 的容器 (只有停止的容器才能被删除)</span>
+docker stop cocoserver <span style=color:#f92672>&amp;&amp;</span> docker rm cocoserver
+
+<span style=color:#75715e># 删除 Coco Server Docker 镜像</span>
+<span style=color:#75715e>#</span>
+<span style=color:#75715e># 命令解释:</span>
+<span style=color:#75715e>#   docker rmi infinilabs/coco:0.2.0-1992: 删除名为 infinilabs/coco，标签为 0.2.0-1992 的镜像</span>
+<span style=color:#75715e>#   注意: 只有当没有容器使用该镜像时，才能删除镜像。如果有容器正在使用，需要先停止并删除容器。</span>
+docker rmi infinilabs/coco:0.2.0-1992
+
+<span style=color:#75715e># --------------------------------------------------</span>
+<span style=color:#75715e># 个性化自定义配置启动 Coco Server</span>
+<span style=color:#75715e># (根据需求自行调整参数)</span>
+<span style=color:#75715e># --------------------------------------------------</span>
+
+<span style=color:#75715e># 命令解释:</span>
+<span style=color:#75715e>#   docker run:       创建并运行一个新的 Docker 容器</span>
+<span style=color:#75715e>#   -d:               在后台运行容器 (detached mode)</span>
+<span style=color:#75715e>#   --name cocoserver:  为容器指定一个名称 (cocoserver)</span>
+<span style=color:#75715e>#   --hostname coco-server: 设置容器的主机名为 coco-server</span>
+<span style=color:#75715e>#   --restart unless-stopped:  设置容器的重启策略为 &#34;除非手动停止，否则自动重启&#34;</span>
+<span style=color:#75715e>#   -m 4g:            限制容器的内存使用量为 4GB</span>
+<span style=color:#75715e>#   --cpus=&#34;2&#34;:       限制容器可以使用的 CPU 核心数为 2</span>
+<span style=color:#75715e>#   -p 9000:9000:     将容器的 9000 端口映射到主机的 9000 端口 (Web UI 端口)</span>
+<span style=color:#75715e>#   -v $(pwd)/cocoserver/data:/app/easysearch/data:  将主机的 ./cocoserver/data 目录挂载到容器的 /app/easysearch/data 目录 (用于持久化数据)</span>
+<span style=color:#75715e>#        - $(pwd) 获取当前目录的绝对路径</span>
+<span style=color:#75715e>#        - 确保 ./cocoserver/data 目录存在。  你可以手动创建，或者使用 mkdir -p cocoserver/data 命令创建。</span>
+<span style=color:#75715e>#   -v $(pwd)/cocoserver/logs:/app/easysearch/logs:  将主机的 ./cocoserver/logs 目录挂载到容器的 /app/easysearch/logs 目录 (用于存储日志)</span>
+<span style=color:#75715e>#        - 确保 ./cocoserver/logs 目录存在。 你可以手动创建，或者使用 mkdir -p cocoserver/logs 命令创建。</span>
+<span style=color:#75715e>#   -e EASYSEARCH_INITIAL_ADMIN_PASSWORD=coco-server: 设置 Easysearch 管理员的初始密码为 coco-server (重要: 建议修改为强密码)</span>
+<span style=color:#75715e>#   -e ES_JAVA_OPTS=&#34;-Xms2g -Xmx2g&#34;:  设置 Easysearch 的 JVM 参数:</span>
+<span style=color:#75715e>#        - -Xms2g:  设置 JVM 初始堆内存大小为 2GB</span>
+<span style=color:#75715e>#        - -Xmx2g:  设置 JVM 最大堆内存大小为 2GB</span>
+<span style=color:#75715e>#   infinilabs/coco:0.2.0-1992: 使用的 Docker 镜像名称和标签</span>
+
+docker run -d <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           --name cocoserver <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           --hostname coco-server <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           --restart unless-stopped <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           -m 4g <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           --cpus<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;2&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           -p 9000:9000 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           -v <span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span>/cocoserver/data:/app/easysearch/data <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           -v <span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span>/cocoserver/logs:/app/easysearch/logs <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           -e EASYSEARCH_INITIAL_ADMIN_PASSWORD<span style=color:#f92672>=</span>coco-server <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           -e ES_JAVA_OPTS<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;-Xms2g -Xmx2g&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           infinilabs/coco:0.2.0-1992
+</code></pre></div><h3 id=download-the-server>Download the Server
 <a class=anchor href=#download-the-server>#</a></h3><p>Get the appropriate
 <a href=https://coco.rs/>executables</a> for your platform.</p><h3 id=run-the-quick-setup>Run the Quick Setup
 <a class=anchor href=#run-the-quick-setup>#</a></h3><p>Simply execute the installation script:</p><pre><code>./Install.sh
