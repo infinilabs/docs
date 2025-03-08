@@ -25,8 +25,8 @@
 <span style=color:#75715e>#   -d:               Run the container in the background (detached mode)</span>
 <span style=color:#75715e>#   --name cocoserver:  Assign a name to the container (cocoserver)</span>
 <span style=color:#75715e>#   -p 9000:9000:     Map the container&#39;s port 9000 to the host&#39;s port 9000 (Web UI port)</span>
-<span style=color:#75715e>#   infinilabs/coco:0.2.0-1992:  The Docker image name and tag (version) to use</span>
-docker run -d --name cocoserver -p 9000:9000 infinilabs/coco:0.2.0-1992
+<span style=color:#75715e>#   infinilabs/coco:0.2.1-1998:  The Docker image name and tag (version) to use</span>
+docker run -d --name cocoserver -p 9000:9000 infinilabs/coco:0.2.1-1998
 
 <span style=color:#75715e># Stop and Remove Coco Server Container</span>
 <span style=color:#75715e>#</span>
@@ -39,9 +39,9 @@ docker stop cocoserver <span style=color:#f92672>&amp;&amp;</span> docker rm coc
 <span style=color:#75715e># Remove Coco Server Docker Image</span>
 <span style=color:#75715e>#</span>
 <span style=color:#75715e># Command Explanation:</span>
-<span style=color:#75715e>#   docker rmi infinilabs/coco:0.2.0-1992: Remove the image named infinilabs/coco with the tag 0.2.0-1992</span>
+<span style=color:#75715e>#   docker rmi infinilabs/coco:0.2.1-1998: Remove the image named infinilabs/coco with the tag 0.2.1-1998</span>
 <span style=color:#75715e>#   Note: You can only remove an image if no containers are using it.  If a container is using the image, you must first stop and remove the container.</span>
-docker rmi infinilabs/coco:0.2.0-1992
+docker rmi infinilabs/coco:0.2.1-1998
 
 <span style=color:#75715e># --------------------------------------------------</span>
 <span style=color:#75715e># Customized Configuration to Start Coco Server</span>
@@ -70,7 +70,7 @@ sudo chown -R 602:602 <span style=color:#66d9ef>$(</span>pwd<span style=color:#6
 <span style=color:#75715e>#   -e ES_JAVA_OPTS=&#34;-Xms2g -Xmx2g&#34;:  Set the JVM parameters for Easysearch:</span>
 <span style=color:#75715e>#        - -Xms2g:  Set the initial JVM heap size to 2GB</span>
 <span style=color:#75715e>#        - -Xmx2g:  Set the maximum JVM heap size to 2GB</span>
-<span style=color:#75715e>#   infinilabs/coco:0.2.0-1992: The Docker image name and tag to use</span>
+<span style=color:#75715e>#   infinilabs/coco:0.2.1-1998: The Docker image name and tag to use</span>
 
 docker run -d <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>           --name cocoserver <span style=color:#ae81ff>\
@@ -83,7 +83,7 @@ docker run -d <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>           -v <span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span>/cocoserver/logs:/app/easysearch/logs <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>           -e EASYSEARCH_INITIAL_ADMIN_PASSWORD<span style=color:#f92672>=</span>coco-server <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>           -e ES_JAVA_OPTS<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;-Xms2g -Xmx2g&#34;</span> <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>           infinilabs/coco:0.2.0-1992
+</span><span style=color:#ae81ff></span>           infinilabs/coco:0.2.1-1998
 </code></pre></div><h3 id=download-the-server>Download the Server
 <a class=anchor href=#download-the-server>#</a></h3><p>Get the appropriate
 <a href=https://coco.rs/>executables</a> for your platform.</p><h3 id=run-the-quick-setup>Run the Quick Setup
