@@ -4,7 +4,7 @@ Installation Demo # Downloading # Automatic install</description></item><item><t
 Downloading an Image # The images of INFINI Console are published at the official repository of Docker. The URL is as follows:
 https://hub.docker.com/r/infinilabs/console
 Use the following command to obtain the latest container image:
-docker pull infinilabs/console:1.27.0-1936 Verifying the Image # After downloading the image locally, you will notice that the container image of INFINI Console is very small, with a size less than 30 MB.</description></item><item><title>Kubernetes</title><link>/console/main/docs/getting-started/helm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/docs/getting-started/helm/</guid><description>Kubernetes Deployment # INFINI Console supports deployment on Kubernetes using Helm charts.
+docker pull infinilabs/console:1.29.1-2000 Verifying the Image # After downloading the image locally, you will notice that the container image of INFINI Console is very small, with a size less than 30 MB.</description></item><item><title>Kubernetes</title><link>/console/main/docs/getting-started/helm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/docs/getting-started/helm/</guid><description>Kubernetes Deployment # INFINI Console supports deployment on Kubernetes using Helm charts.
 The Chart Repository # Chart repository: https://helm.infinilabs.com.
 Use the follow command add the repository:
 helm repo add infinilabs https://helm.infinilabs.com Prerequisites # K8S StorageClass The default StorageClass of the Chart package is local-path, you can install it through here.
