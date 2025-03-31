@@ -7,7 +7,7 @@ config: Specifies the name of a configuration file.</description></item><item><t
 Installation Demo # Downloading an Image # The images of INFINI Gateway are published at the official repository of Docker. The URL is as follows:
 https://hub.docker.com/r/infinilabs/gateway
 Use the following command to obtain the latest container image:
-docker pull infinilabs/gateway:1.29.1-2000 Verifying the Image # After downloading the image locally, you will notice that the container image of INFINI Gateway is very small, with a size less than 25 MB.</description></item><item><title>Kubernetes Deployment</title><link>/gateway/main/docs/getting-started/helm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/gateway/main/docs/getting-started/helm/</guid><description>Helm Charts # INFINI Gateway supports deployment on K8s by using helm chart .
+docker pull infinilabs/gateway:1.29.2-2008 Verifying the Image # After downloading the image locally, you will notice that the container image of INFINI Gateway is very small, with a size less than 25 MB.</description></item><item><title>Kubernetes Deployment</title><link>/gateway/main/docs/getting-started/helm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/gateway/main/docs/getting-started/helm/</guid><description>Helm Charts # INFINI Gateway supports deployment on K8s by using helm chart .
 The Chart Repository # Chart repository: https://helm.infinilabs.com.
 Use the follow command add the repository:
 helm repo add infinilabs https://helm.infinilabs.com Prerequisites # K8S StorageClass The default StorageClass of the Chart package is local-path, you can install it through here.
