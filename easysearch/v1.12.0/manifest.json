@@ -1,0 +1,15 @@
+{
+  "name": "INFINI Easysearch",
+  "short_name": "INFINI Easysearch",
+  "start_url": "/easysearch/v1.12.0/",
+  "scope": "/easysearch/v1.12.0/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/easysearch/v1.12.0/favicon.svg",
+      "sizes": "512x512"
+    }
+  ]
+}
