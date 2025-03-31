@@ -1,0 +1,123 @@
+<!doctype html><html lang=en><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Getting Started #  Quickstart with Docker #  # -------------------------------------------------- # Coco Server Docker Deployment Script and Commands # -------------------------------------------------- # Quick Start Coco Server (using default configuration) # # Command Explanation: # docker run: Create and run a new Docker container # -d: Run the container in the background (detached mode) # --name cocoserver: Assign a name to the container (cocoserver) # -p 9000:9000: Map the container's port 9000 to the host's port 9000 (Web UI port) # infinilabs/coco:0."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Installation"><meta property="og:description" content="Getting Started #  Quickstart with Docker #  # -------------------------------------------------- # Coco Server Docker Deployment Script and Commands # -------------------------------------------------- # Quick Start Coco Server (using default configuration) # # Command Explanation: # docker run: Create and run a new Docker container # -d: Run the container in the background (detached mode) # --name cocoserver: Assign a name to the container (cocoserver) # -p 9000:9000: Map the container's port 9000 to the host's port 9000 (Web UI port) # infinilabs/coco:0."><meta property="og:type" content="article"><meta property="og:url" content="/coco-server/v0.3.0/docs/getting-started/install/"><title>Installation | Coco Server</title><link rel=manifest href=/coco-server/v0.3.0/manifest.json><link rel=icon href=/coco-server/v0.3.0/favicon.png type=image/x-icon><link rel=stylesheet href=/coco-server/v0.3.0/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/coco-server/v0.3.0/css/asciinema-player.css><script defer src=/coco-server/v0.3.0/js/jquery-2.x.min.js></script><script defer src=/coco-server/v0.3.0/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/coco-server/v0.3.0><img src=/coco-server/v0.3.0/img/logo-en.svg alt=Logo></a></h2><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value=v0.3.0>v0.3.0</option>
+<option value=v0.2.2>v0.2.2</option></select></div><ul><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle checked>
+<label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>Getting Started</a>
+<span>▾</span></label><ul><li><a href=/coco-server/v0.3.0/docs/getting-started/install/ class=active>Installation</a></li><li><a href=/coco-server/v0.3.0/docs/getting-started/setup/>Setup Wizard</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle>
+<label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a href=/coco-server/v0.3.0/docs/references/>References</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-97bb467845ddef2c28eba43b4c87ba98 class=toggle>
+<label for=section-97bb467845ddef2c28eba43b4c87ba98 class="flex justify-between"><a>System</a>
+<span>▾</span></label><ul><li><a href=/coco-server/v0.3.0/docs/references/system/install/>System Initialization</a></li><li><a href=/coco-server/v0.3.0/docs/references/system/settings/>System Settings</a></li></ul></li><li><input type=checkbox id=section-830be57e26216c4b31d75f7e80eea5a9 class=toggle>
+<label for=section-830be57e26216c4b31d75f7e80eea5a9 class="flex justify-between"><a>Account</a>
+<span>▾</span></label><ul><li><a href=/coco-server/v0.3.0/docs/references/account/authentication/>Authentication</a></li><li><a href=/coco-server/v0.3.0/docs/references/account/access_token/>API Token</a></li><li><a href=/coco-server/v0.3.0/docs/references/account/password/>Modify Password</a></li><li><a href=/coco-server/v0.3.0/docs/references/account/profile/>Profile</a></li><li><a href=/coco-server/v0.3.0/docs/references/account/logout/>Logout</a></li></ul></li><li><a href=/coco-server/v0.3.0/docs/references/assistant/>Assistant</a></li><li><a href=/coco-server/v0.3.0/docs/references/document/>Document</a></li><li><a href=/coco-server/v0.3.0/docs/references/search/>Search</a></li><li><a href=/coco-server/v0.3.0/docs/references/datasource/>Datasource</a></li><li><a href=/coco-server/v0.3.0/docs/references/integration/>Integration</a></li><li><a href=/coco-server/v0.3.0/docs/references/attachment/>Attachment</a></li><li><input type=checkbox id=section-6163ea64c3eeec962ea0b7215fc64522 class=toggle>
+<label for=section-6163ea64c3eeec962ea0b7215fc64522 class="flex justify-between"><a href=/coco-server/v0.3.0/docs/references/connectors/>Connectors</a>
+<span>▾</span></label><ul><li><a href=/coco-server/v0.3.0/docs/references/connectors/google_drive/>Google Drive</a></li><li><a href=/coco-server/v0.3.0/docs/references/connectors/hugo_site/>Hugo Site</a></li><li><a href=/coco-server/v0.3.0/docs/references/connectors/notion/>Notion</a></li><li><a href=/coco-server/v0.3.0/docs/references/connectors/yuque/>Yuque</a></li></ul></li></ul></li><li><input type=checkbox id=section-7dd85575c84e6825eb9419e748eb5977 class=toggle>
+<label for=section-7dd85575c84e6825eb9419e748eb5977 class="flex justify-between"><a href=/coco-server/v0.3.0/docs/tutorials/>Tutorials</a>
+<span>▾</span></label><ul><li><a href=/coco-server/v0.3.0/docs/tutorials/howto_create_your_own_datasource/>How to integrate Coco AI with your own datasource</a></li></ul></li><li><a href=/coco-server/v0.3.0/docs/release-notes/>Release Notes</a><ul></ul></li></ul><ul><li><a href=https://github.com/infinilabs/coco-server target=_blank rel=noopener>Github</a></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/coco-server/v0.3.0/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>Installation</strong>
+<label for=toc-control><img src=/coco-server/v0.3.0/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#getting-started>Getting Started</a><ul><li><a href=#quickstart-with-docker>Quickstart with Docker</a></li><li><a href=#manual-installation>Manual Installation</a><ul><li><a href=#ollama>Ollama</a></li><li><a href=#easysearch>Easysearch</a></li><li><a href=#coco-ai>Coco AI</a></li></ul></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=getting-started>Getting Started
+<a class=anchor href=#getting-started>#</a></h1><h2 id=quickstart-with-docker>Quickstart with Docker
+<a class=anchor href=#quickstart-with-docker>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># --------------------------------------------------</span>
+<span style=color:#75715e># Coco Server Docker Deployment Script and Commands</span>
+<span style=color:#75715e># --------------------------------------------------</span>
+
+<span style=color:#75715e># Quick Start Coco Server (using default configuration)</span>
+<span style=color:#75715e>#</span>
+<span style=color:#75715e># Command Explanation:</span>
+<span style=color:#75715e>#   docker run:       Create and run a new Docker container</span>
+<span style=color:#75715e>#   -d:               Run the container in the background (detached mode)</span>
+<span style=color:#75715e>#   --name cocoserver:  Assign a name to the container (cocoserver)</span>
+<span style=color:#75715e>#   -p 9000:9000:     Map the container&#39;s port 9000 to the host&#39;s port 9000 (Web UI port)</span>
+<span style=color:#75715e>#   infinilabs/coco:0.2.1-1998:  The Docker image name and tag (version) to use</span>
+docker run -d --name cocoserver -p 9000:9000 infinilabs/coco:0.2.1-1998
+
+<span style=color:#75715e># Stop and Remove Coco Server Container</span>
+<span style=color:#75715e>#</span>
+<span style=color:#75715e># Command Explanation:</span>
+<span style=color:#75715e>#   docker stop cocoserver:   Stop the container named cocoserver</span>
+<span style=color:#75715e>#   &amp;&amp;:                     Logical AND operator, ensures the previous command succeeds before executing the next</span>
+<span style=color:#75715e>#   docker rm cocoserver:     Remove the container named cocoserver (only stopped containers can be removed)</span>
+docker stop cocoserver <span style=color:#f92672>&amp;&amp;</span> docker rm cocoserver
+
+<span style=color:#75715e># Remove Coco Server Docker Image</span>
+<span style=color:#75715e>#</span>
+<span style=color:#75715e># Command Explanation:</span>
+<span style=color:#75715e>#   docker rmi infinilabs/coco:0.2.1-1998: Remove the image named infinilabs/coco with the tag 0.2.1-1998</span>
+<span style=color:#75715e>#   Note: You can only remove an image if no containers are using it.  If a container is using the image, you must first stop and remove the container.</span>
+docker rmi infinilabs/coco:0.2.1-1998
+
+<span style=color:#75715e># --------------------------------------------------</span>
+<span style=color:#75715e># Customized Configuration to Start Coco Server</span>
+<span style=color:#75715e># (Adjust parameters according to your needs)</span>
+<span style=color:#75715e># --------------------------------------------------</span>
+
+<span style=color:#75715e># Create data and logs directories and set ownership for the Easysearch user (UID/GID 602).</span>
+mkdir -p <span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span>/cocoserver/<span style=color:#f92672>{</span>data,logs<span style=color:#f92672>}</span>
+sudo chown -R 602:602 <span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span>/cocoserver
+
+<span style=color:#75715e># Command Explanation:</span>
+<span style=color:#75715e>#   docker run:       Create and run a new Docker container</span>
+<span style=color:#75715e>#   -d:               Run the container in the background (detached mode)</span>
+<span style=color:#75715e>#   --name cocoserver:  Assign a name to the container (cocoserver)</span>
+<span style=color:#75715e>#   --hostname coco-server: Set the container&#39;s hostname to coco-server</span>
+<span style=color:#75715e>#   --restart unless-stopped:  Set the container&#39;s restart policy to &#34;restart unless manually stopped&#34;</span>
+<span style=color:#75715e>#   -m 4g:            Limit the container&#39;s memory usage to 4GB</span>
+<span style=color:#75715e>#   --cpus=&#34;2&#34;:       Limit the number of CPU cores the container can use to 2</span>
+<span style=color:#75715e>#   -p 9000:9000:     Map the container&#39;s port 9000 to the host&#39;s port 9000 (Web UI port)</span>
+<span style=color:#75715e>#   -v $(pwd)/cocoserver/data:/app/easysearch/data:  Mount the host&#39;s ./cocoserver/data directory to the container&#39;s /app/easysearch/data directory (for data persistence)</span>
+<span style=color:#75715e>#        - $(pwd) gets the absolute path of the current directory.</span>
+<span style=color:#75715e>#        - Make sure the ./cocoserver/data directory exists. You can create it manually or use the `mkdir -p cocoserver/data` command.</span>
+<span style=color:#75715e>#   -v $(pwd)/cocoserver/logs:/app/easysearch/logs:  Mount the host&#39;s ./cocoserver/logs directory to the container&#39;s /app/easysearch/logs directory (for storing logs)</span>
+<span style=color:#75715e>#        - Make sure the ./cocoserver/logs directory exists. You can create it manually or use the `mkdir -p cocoserver/logs` command.</span>
+<span style=color:#75715e>#   -e EASYSEARCH_INITIAL_ADMIN_PASSWORD=coco-server: Set the initial password for the Easysearch administrator to coco-server (Important: Change this to a strong password)</span>
+<span style=color:#75715e>#   -e ES_JAVA_OPTS=&#34;-Xms2g -Xmx2g&#34;:  Set the JVM parameters for Easysearch:</span>
+<span style=color:#75715e>#        - -Xms2g:  Set the initial JVM heap size to 2GB</span>
+<span style=color:#75715e>#        - -Xmx2g:  Set the maximum JVM heap size to 2GB</span>
+<span style=color:#75715e>#   infinilabs/coco:0.2.1-1998: The Docker image name and tag to use</span>
+
+docker run -d <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           --name cocoserver <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           --hostname coco-server <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           --restart unless-stopped <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           -m 4g <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           --cpus<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;2&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           -p 9000:9000 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           -v <span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span>/cocoserver/data:/app/easysearch/data <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           -v <span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span>/cocoserver/logs:/app/easysearch/logs <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           -e EASYSEARCH_INITIAL_ADMIN_PASSWORD<span style=color:#f92672>=</span>coco-server <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           -e ES_JAVA_OPTS<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;-Xms2g -Xmx2g&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>           infinilabs/coco:0.2.1-1998
+</code></pre></div><h2 id=manual-installation>Manual Installation
+<a class=anchor href=#manual-installation>#</a></h2><p>Follow these steps for a manual setup:</p><h3 id=ollama>Ollama
+<a class=anchor href=#ollama>#</a></h3><p>Install Ollama</p><pre><code>curl -fsSL https://ollama.com/install.sh | sh
+</code></pre><p>Start Ollama server</p><pre><code>OLLAMA_HOST=0.0.0.0:11434 ollama serve
+</code></pre><p>Pull the following models</p><pre><code>ollama pull deepseek-r1:1.5b 
+</code></pre><blockquote><p>Ollama is not required, you may use other online LLM services as you wish.</p></blockquote><h3 id=easysearch>Easysearch
+<a class=anchor href=#easysearch>#</a></h3><p>Install Easysearch</p><pre><code>docker run -itd --name easysearch -p 9200:9200 infinilabs/easysearch:1.8.3-265
+</code></pre><p>Get the bootstrap password of the Easysearch:</p><pre><code>docker logs easysearch | grep &quot;admin:&quot;
+</code></pre><h3 id=coco-ai>Coco AI
+<a class=anchor href=#coco-ai>#</a></h3><p>Modify <code>coco.yml</code> with correct <code>env</code> settings, or start the coco server with the correct environments like this:</p><pre><code>➜  coco git:(main) ✗ OLLAMA_MODEL=deepseek-r1:1.5b ES_PASSWORD=45ff432a5428ade77c7b  ./bin/coco
+   ___  ___  ___  ___     _     _____
+  / __\/___\/ __\/___\   /_\    \_   \
+ / /  //  // /  //  //  //_\\    / /\/
+/ /__/ \_// /__/ \_//  /  _  \/\/ /_
+\____|___/\____|___/   \_/ \_/\____/
+
+[COCO] Coco AI - search, connect, collaborate – all in one place.
+[COCO] 1.0.0_SNAPSHOT#001, 2024-10-23 08:37:05, 2025-12-31 10:10:10, 9b54198e04e905406db90d145f4c01fca0139861
+[10-23 17:17:36] [INF] [env.go:179] configuration auto reload enabled
+[10-23 17:17:36] [INF] [env.go:185] watching config: /Users/medcl/go/src/infini.sh/coco/config
+[10-23 17:17:36] [INF] [app.go:285] initializing coco, pid: 13764
+[10-23 17:17:36] [INF] [app.go:286] using config: /Users/medcl/go/src/infini.sh/coco/coco.yml
+[10-23 17:17:36] [INF] [api.go:196] local ips: 192.168.3.10
+[10-23 17:17:36] [INF] [api.go:360] api listen at: http://0.0.0.0:2900
+[10-23 17:17:36] [INF] [module.go:136] started module: api
+[10-23 17:17:36] [INF] [module.go:155] started plugin: statsd
+[10-23 17:17:36] [INF] [module.go:161] all modules are started
+[10-23 17:17:36] [INF] [instance.go:78] workspace: /Users/medcl/go/src/infini.sh/coco/data/coco/nodes/csai3njq50k2c4tcb4vg
+[10-23 17:17:36] [INF] [app.go:511] coco is up and running now.
+</code></pre><p>Once the Coco Server is running, you are ready to
+<a href=/coco-server/v0.3.0/docs/getting-started/setup/>setup it up</a> through UI based management console.</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/infinilabs/coco-server/edit/v0.3.0/docs/content.en/docs/getting-started/install.md target=_blank rel=noopener><img src=/coco-server/v0.3.0/svg/edit.svg class=book-icon alt=Edit>
+<span>Edit this page</span></a></div><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script>(function(h,o,t,j,a,r){h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};h._hjSettings={hjid:2567416,hjsv:6};a=o.getElementsByTagName('head')[0];r=o.createElement('script');r.async=1;r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;a.appendChild(r);})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#getting-started>Getting Started</a><ul><li><a href=#quickstart-with-docker>Quickstart with Docker</a></li><li><a href=#manual-installation>Manual Installation</a><ul><li><a href=#ollama>Ollama</a></li><li><a href=#easysearch>Easysearch</a></li><li><a href=#coco-ai>Coco AI</a></li></ul></li></ul></li></ul></nav></aside></main><script src=/coco-server/v0.3.0/js/asciinema-player.js></script></body></html>
