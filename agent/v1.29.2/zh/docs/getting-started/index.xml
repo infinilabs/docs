@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>入门指南 on INFINI Agent</title><link>/agent/v1.29.2/zh/docs/getting-started/</link><description>Recent content in 入门指南 on INFINI Agent</description><generator>Hugo -- gohugo.io</generator><atom:link href="/agent/v1.29.2/zh/docs/getting-started/index.xml" rel="self" type="application/rss+xml"/><item><title>下载安装</title><link>/agent/v1.29.2/zh/docs/getting-started/install/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/agent/v1.29.2/zh/docs/getting-started/install/</guid><description>安装 INFINI Agent # INFINI Agent 支持主流的操作系统和平台，程序包很小，没有任何额外的外部依赖，安装起来应该是很快的 ：）
+下载安装 # 自动安装
+curl -sSL http://get.infini.cloud | bash -s -- -p agent 通过以上脚本可自动下载相应平台的 agent 最新版本并解压到/opt/agent
+脚本的可选参数如下：
+ -v [版本号]（默认采用最新版本号）
+ -d [安装目录]（默认安装到/opt/agent）
+手动安装
+根据您所在的操作系统和平台选择下面相应的下载地址：
+https://release.infinilabs.com/agent/
+配置服务后台运行 # 如果希望将 INFINI Agent 以后台服务任务的方式运行，如下：
+➜ ./agent -service install Success ➜ ./agent -service start Success 卸载服务也很简单，如下：
+➜ ./agent -service stop Success ➜ ./agent -service uninstall Success</description></item></channel></rss>
