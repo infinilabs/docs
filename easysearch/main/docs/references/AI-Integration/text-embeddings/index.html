@@ -1,5 +1,14 @@
-<!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="安全模块 #  Easysearch 内置了完善的鉴权和授权能力，帮助您保护 Easysearch 集群内重要的数据。
-   功能 说明     节点间传输加密 基于 TLS 的传输层数据加密，避免明文数据传输造成的内网数据窃取。   HTTP 基础身份认证 为 HTTP 接口提供基于用户名和密码的基本身份认证。   基于角色的访问控制 角色定义用户可以执行的操作：他们可以读取的数据、可以修改的集群设置、可以写入的索引等。角色可在用户之间复用，用户可以具有多个角色。   索引、文档和字段级别的安全控制 限制对整个索引、索引中的某些文档或文档中某些字段的访问。   跨集群搜索查询 使用协调节点安全地将搜索请求分发到远程的 Easysearch 集群，实现安全的跨集群检索能力。"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="安全模块"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:url" content="/easysearch/main/docs/references/security/"><title>安全模块 | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=alternate type=application/rss+xml href=/easysearch/main/docs/references/security/index.xml title="INFINI Easysearch"><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="文本向量化 #  本文档介绍如何在 Easysearch 中集成和使用预先部署的 Ollama 服务来生成文本嵌入向量。
+先决条件 #  需要预先部署好 Ollama 服务，现阶段集成的服务版本是 0.5.4。
+可以用以下命令测试服务是否正常：
+curl http://localhost:11434/api/embed -d '{ &#34;model&#34;: &#34;nomic-embed-text:latest&#34;, &#34;input&#34;: &#34;Why is the sky blue?&#34; }' 配置 Ollama 服务 #  可以通过 ollama_url 配置项指定 Ollama 服务的地址。您可以通过以下 API 查看当前配置：
+GET _cluster/settings?flat_settings=true&include_defaults=true&filter_path=*.ollama_url 如果没有修改，会输出默认值：
+{ &#34;defaults&#34;: { &#34;ollama_url&#34;: &#34;http://localhost:11434&#34; } } REST API #  POST /_ai/embed { &#34;model&#34;: &#34;模型名称&#34;, &#34;input&#34;: &#34;文本内容&#34; } 请求示例 #  POST /_ai/embed { &#34;model&#34;: &#34;nomic-embed-text:latest&#34;, &#34;input&#34;: &#34;Llamas are members of the camelid family&#34; } 批量生成 Embeddings #  可以一次为多个文本生成嵌入向量。"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="文本向量化"><meta property="og:description" content="文本向量化 #  本文档介绍如何在 Easysearch 中集成和使用预先部署的 Ollama 服务来生成文本嵌入向量。
+先决条件 #  需要预先部署好 Ollama 服务，现阶段集成的服务版本是 0.5.4。
+可以用以下命令测试服务是否正常：
+curl http://localhost:11434/api/embed -d '{ &#34;model&#34;: &#34;nomic-embed-text:latest&#34;, &#34;input&#34;: &#34;Why is the sky blue?&#34; }' 配置 Ollama 服务 #  可以通过 ollama_url 配置项指定 Ollama 服务的地址。您可以通过以下 API 查看当前配置：
+GET _cluster/settings?flat_settings=true&include_defaults=true&filter_path=*.ollama_url 如果没有修改，会输出默认值：
+{ &#34;defaults&#34;: { &#34;ollama_url&#34;: &#34;http://localhost:11434&#34; } } REST API #  POST /_ai/embed { &#34;model&#34;: &#34;模型名称&#34;, &#34;input&#34;: &#34;文本内容&#34; } 请求示例 #  POST /_ai/embed { &#34;model&#34;: &#34;nomic-embed-text:latest&#34;, &#34;input&#34;: &#34;Llamas are members of the camelid family&#34; } 批量生成 Embeddings #  可以一次为多个文本生成嵌入向量。"><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/main/docs/references/AI-Integration/text-embeddings/"><title>文本向量化 | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/easysearch/main/css/asciinema-player.css><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/easysearch/main><img src=/easysearch/main/img/logo-zh.svg alt=Logo></a></h2><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
 <option value=v1.12.0>v1.12.0</option>
@@ -55,8 +64,8 @@
 <label for=section-69a0462c4990a8b0bf6189289fb56e8a class="flex justify-between"><a href=/easysearch/main/docs/references/aggregation/>聚合操作</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/aggregation/metric-agg/>指标聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-agg/>分桶聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-agg/>管道聚合</a></li></ul></li><li><input type=checkbox id=section-86e828ca7e30e9d2e35881b956319411 class=toggle>
 <label for=section-86e828ca7e30e9d2e35881b956319411 class="flex justify-between"><a>SQL 查询</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/sql/sql-jdbc/>SQL-JDBC</a></li><li><a href=/easysearch/main/docs/references/sql/aggregations/>聚合查询</a></li><li><a href=/easysearch/main/docs/references/sql/fulltext/>全文搜索</a></li><li><a href=/easysearch/main/docs/references/sql/complex/>复杂查询</a></li><li><a href=/easysearch/main/docs/references/sql/basics/>基础查询</a></li></ul></li><li><input type=checkbox id=section-1c80046b8a7d2b6f02509e78096b1388 class=toggle checked>
-<label for=section-1c80046b8a7d2b6f02509e78096b1388 class="flex justify-between"><a href=/easysearch/main/docs/references/security/ class=active>安全模块</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/sql/sql-jdbc/>SQL-JDBC</a></li><li><a href=/easysearch/main/docs/references/sql/aggregations/>聚合查询</a></li><li><a href=/easysearch/main/docs/references/sql/fulltext/>全文搜索</a></li><li><a href=/easysearch/main/docs/references/sql/complex/>复杂查询</a></li><li><a href=/easysearch/main/docs/references/sql/basics/>基础查询</a></li></ul></li><li><input type=checkbox id=section-1c80046b8a7d2b6f02509e78096b1388 class=toggle>
+<label for=section-1c80046b8a7d2b6f02509e78096b1388 class="flex justify-between"><a href=/easysearch/main/docs/references/security/>安全模块</a>
 <span>▾</span></label><ul><li><input type=checkbox id=section-4c0acfad57ce0b1db83571ad903a192e class=toggle>
 <label for=section-4c0acfad57ce0b1db83571ad903a192e class="flex justify-between"><a href=/easysearch/main/docs/references/security/configuration/>配置说明</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/security/configuration/yaml/>本地配置</a></li><li><a href=/easysearch/main/docs/references/security/configuration/backend/>后端配置</a></li><li><a href=/easysearch/main/docs/references/security/configuration/tls/>证书配置</a></li><li><a href=/easysearch/main/docs/references/security/configuration/system-indices/>系统索引</a></li></ul></li><li><input type=checkbox id=section-4854412a16ac224d9851d23b7bf6bdea class=toggle>
@@ -65,13 +74,64 @@
 <label for=section-52d7e2e9abce80d3dc7a6a56a0089b77 class="flex justify-between"><a>管理模块</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/management/cluster/>搭建集群</a></li><li><a href=/easysearch/main/docs/references/management/catapis/>CAT API</a></li><li><a href=/easysearch/main/docs/references/management/logs/>系统日志</a></li><li><a href=/easysearch/main/docs/references/management/index-templates/>索引模板</a></li><li><a href=/easysearch/main/docs/references/management/reindex-data/>重建数据</a></li><li><a href=/easysearch/main/docs/references/management/tasksapis/>任务管理</a></li><li><a href=/easysearch/main/docs/references/management/slm_api/>快照生命周期管理</a></li><li><a href=/easysearch/main/docs/references/management/ilm_api/>索引生命周期管理</a></li><li><a href=/easysearch/main/docs/references/management/ccr_api/>跨集群复制</a></li><li><a href=/easysearch/main/docs/references/management/snapshot-restore/>备份还原</a></li><li><a href=/easysearch/main/docs/references/management/throttling/>写入限流</a></li><li><a href=/easysearch/main/docs/references/management/searchable_snapshot/>可搜索快照</a></li><li><a href=/easysearch/main/docs/references/management/rollup_api/>数据汇总</a></li><li><a href=/easysearch/main/docs/references/management/popular-api/>其它常用 API</a></li></ul></li><li><input type=checkbox id=section-b34adbce31bce6650a0099282b315617 class=toggle>
 <label for=section-b34adbce31bce6650a0099282b315617 class="flex justify-between"><a>客户端</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/client/java-client/>快速开始</a></li><li><a href=/easysearch/main/docs/references/client/client-api/>API 使用</a></li></ul></li><li><input type=checkbox id=section-c1faee20470feef7857c444179fe54aa class=toggle>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/client/java-client/>快速开始</a></li><li><a href=/easysearch/main/docs/references/client/client-api/>API 使用</a></li></ul></li><li><input type=checkbox id=section-c1faee20470feef7857c444179fe54aa class=toggle checked>
 <label for=section-c1faee20470feef7857c444179fe54aa class="flex justify-between"><a>AI 集成</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/AI-Integration/text-embeddings/>文本向量化</a></li></ul></li></ul></li><li><input type=checkbox id=section-1adc738e7351809ea378ec7e9730bd1f class=toggle>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/AI-Integration/text-embeddings/ class=active>文本向量化</a></li></ul></li></ul></li><li><input type=checkbox id=section-1adc738e7351809ea378ec7e9730bd1f class=toggle>
 <label for=section-1adc738e7351809ea378ec7e9730bd1f class="flex justify-between"><a>版本历史</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/release-notes/client/>Easysearch-client</a></li><li><a href=/easysearch/main/docs/release-notes/easysearch/>Easysearch</a></li></ul></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/easysearch/main/svg/menu.svg class=book-icon alt=Menu></label>
-<strong>安全模块</strong>
-<label for=toc-control><img src=/easysearch/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#安全模块>安全模块</a></li></ul></nav></aside></header><article class=markdown><h1 id=安全模块>安全模块
-<a class=anchor href=#%e5%ae%89%e5%85%a8%e6%a8%a1%e5%9d%97>#</a></h1><p>Easysearch 内置了完善的鉴权和授权能力，帮助您保护 Easysearch 集群内重要的数据。</p><table><thead><tr><th style=text-align:left>功能</th><th style=text-align:left>说明</th></tr></thead><tbody><tr><td style=text-align:left>节点间传输加密</td><td style=text-align:left>基于 TLS 的传输层数据加密，避免明文数据传输造成的内网数据窃取。</td></tr><tr><td style=text-align:left>HTTP 基础身份认证</td><td style=text-align:left>为 HTTP 接口提供基于用户名和密码的基本身份认证。</td></tr><tr><td style=text-align:left>基于角色的访问控制</td><td style=text-align:left>角色定义用户可以执行的操作：他们可以读取的数据、可以修改的集群设置、可以写入的索引等。角色可在用户之间复用，用户可以具有多个角色。</td></tr><tr><td style=text-align:left>索引、文档和字段级别的安全控制</td><td style=text-align:left>限制对整个索引、索引中的某些文档或文档中某些字段的访问。</td></tr><tr><td style=text-align:left>跨集群搜索查询</td><td style=text-align:left>使用协调节点安全地将搜索请求分发到远程的 Easysearch 集群，实现安全的跨集群检索能力。</td></tr></tbody></table></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/infinilabs/loadgen/edit/master/docs/content.zh/docs/references/security/_index.md target=_blank rel=noopener><img src=/easysearch/main/svg/edit.svg class=book-icon alt=Edit>
+<strong>文本向量化</strong>
+<label for=toc-control><img src=/easysearch/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#文本向量化>文本向量化</a><ul><li><a href=#先决条件>先决条件</a></li><li><a href=#配置-ollama-服务>配置 Ollama 服务</a></li><li><a href=#rest-api>REST API</a><ul><li></li></ul></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=文本向量化>文本向量化
+<a class=anchor href=#%e6%96%87%e6%9c%ac%e5%90%91%e9%87%8f%e5%8c%96>#</a></h1><p>本文档介绍如何在 Easysearch 中集成和使用预先部署的 Ollama 服务来生成文本嵌入向量。</p><h2 id=先决条件>先决条件
+<a class=anchor href=#%e5%85%88%e5%86%b3%e6%9d%a1%e4%bb%b6>#</a></h2><p>需要预先部署好 Ollama 服务，现阶段集成的服务版本是 0.5.4。</p><p>可以用以下命令测试服务是否正常：</p><pre><code class=language-auto data-lang=auto>curl http://localhost:11434/api/embed -d '{
+  &quot;model&quot;: &quot;nomic-embed-text:latest&quot;,
+  &quot;input&quot;: &quot;Why is the sky blue?&quot;
+}'
+</code></pre><h2 id=配置-ollama-服务>配置 Ollama 服务
+<a class=anchor href=#%e9%85%8d%e7%bd%ae-ollama-%e6%9c%8d%e5%8a%a1>#</a></h2><p>可以通过 ollama_url 配置项指定 Ollama 服务的地址。您可以通过以下 API 查看当前配置：</p><pre><code class=language-auto data-lang=auto>GET _cluster/settings?flat_settings=true&amp;include_defaults=true&amp;filter_path=*.ollama_url
+</code></pre><p>如果没有修改，会输出默认值：</p><pre><code class=language-auto data-lang=auto>{
+  &quot;defaults&quot;: {
+    &quot;ollama_url&quot;: &quot;http://localhost:11434&quot;
+  }
+}
+</code></pre><h2 id=rest-api>REST API
+<a class=anchor href=#rest-api>#</a></h2><pre><code class=language-auto data-lang=auto>POST /_ai/embed
+{
+  &quot;model&quot;: &quot;模型名称&quot;,
+  &quot;input&quot;: &quot;文本内容&quot;
+}
+</code></pre><h4 id=请求示例>请求示例
+<a class=anchor href=#%e8%af%b7%e6%b1%82%e7%a4%ba%e4%be%8b>#</a></h4><pre><code class=language-auto data-lang=auto>POST /_ai/embed
+{
+  &quot;model&quot;: &quot;nomic-embed-text:latest&quot;,
+  &quot;input&quot;: &quot;Llamas are members of the camelid family&quot;
+}
+</code></pre><h4 id=批量生成-embeddings>批量生成 Embeddings
+<a class=anchor href=#%e6%89%b9%e9%87%8f%e7%94%9f%e6%88%90-embeddings>#</a></h4><p>可以一次为多个文本生成嵌入向量。</p><p>请求格式：</p><pre><code class=language-auto data-lang=auto>POST /_ai/embed
+{
+  &quot;model&quot;: &quot;模型名称&quot;,
+  &quot;input&quot;: [&quot;文本1&quot;, &quot;文本2&quot;, ...]
+}
+</code></pre><h4 id=示例响应>示例响应
+<a class=anchor href=#%e7%a4%ba%e4%be%8b%e5%93%8d%e5%ba%94>#</a></h4><pre><code class=language-auto data-lang=auto>{
+  &quot;embeddings&quot;: [
+    [
+      0.00971285,
+      0.04449268,
+      -0.14063065,
+      0.0013162489,
+      ......
+    ],
+    [
+      0.010429025,
+      0.014321253,
+      -0.12902334,
+      -0.03530379,
+      0.046050403,
+      0.04550423,
+      ......
+    ]
+  ]
+}
+</code></pre><p>对于批量处理，建议一次发送多个文本而不是多次调用。</p><p>如果收到连接错误，请检查 ollama_url 配置是否正确。</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/infinilabs/loadgen/edit/master/docs/content.zh/docs/references/AI-Integration/text-embeddings.md target=_blank rel=noopener><img src=/easysearch/main/svg/edit.svg class=book-icon alt=Edit>
 <span>编辑本页</span></a></div><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script>(function(h,o,t,j,a,r){h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};h._hjSettings={hjid:2567416,hjsv:6};a=o.getElementsByTagName('head')[0];r=o.createElement('script');r.async=1;r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;a.appendChild(r);})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
-gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#安全模块>安全模块</a></li></ul></nav></aside></main></body></html>
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#文本向量化>文本向量化</a><ul><li><a href=#先决条件>先决条件</a></li><li><a href=#配置-ollama-服务>配置 Ollama 服务</a></li><li><a href=#rest-api>REST API</a><ul><li></li></ul></li></ul></li></ul></nav></aside></main><script src=/easysearch/main/js/asciinema-player.js></script></body></html>
