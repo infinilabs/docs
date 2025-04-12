@@ -1,13 +1,11 @@
 <!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="索引生命周期管理 #  使用索引状态管理操作，以编程方式处理策略和托管索引。
  创建策略 #  引入版本 1.0
 创建一个策略。
-请求示例 #  PUT _ilm/policy/ilm_test { &#34;policy&#34;: { &#34;phases&#34;: { &#34;hot&#34;: { &#34;min_age&#34;: &#34;0ms&#34;, &#34;actions&#34;: { &#34;rollover&#34;: { &#34;max_age&#34;: &#34;10m&#34;, &#34;max_size&#34;: &#34;1mb&#34;, &#34;max_docs&#34;: 100 }, &#34;set_priority&#34;: { &#34;priority&#34;: 100 } } }, &#34;delete&#34;: { &#34;min_age&#34;: &#34;15m&#34;, &#34;actions&#34;: { &#34;delete&#34;: { } } } } } } 示例响应 #  { &#34;acknowledged&#34;: true } 应用生命周期策略到索引模板
-要让策略生效，需要在索引模板中指定策略名称和滚动索引的别名。
+请求示例 #  PUT _ilm/policy/ilm_test { &#34;policy&#34;: { &#34;phases&#34;: { &#34;hot&#34;: { &#34;min_age&#34;: &#34;0ms&#34;, &#34;actions&#34;: { &#34;rollover&#34;: { &#34;max_age&#34;: &#34;10m&#34;, &#34;max_size&#34;: &#34;1mb&#34;, &#34;max_docs&#34;: 100 }, &#34;set_priority&#34;: { &#34;priority&#34;: 100 } } }, &#34;delete&#34;: { &#34;min_age&#34;: &#34;15m&#34;, &#34;actions&#34;: { &#34;delete&#34;: { } } } } } } 示例响应 #  { &#34;acknowledged&#34;: true } 应用生命周期策略到索引模板 要让策略生效，需要在索引模板中指定策略名称和滚动索引的别名。
 请求示例 #  PUT /_index_template/my_template?"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="索引生命周期管理"><meta property="og:description" content="索引生命周期管理 #  使用索引状态管理操作，以编程方式处理策略和托管索引。
  创建策略 #  引入版本 1.0
 创建一个策略。
-请求示例 #  PUT _ilm/policy/ilm_test { &#34;policy&#34;: { &#34;phases&#34;: { &#34;hot&#34;: { &#34;min_age&#34;: &#34;0ms&#34;, &#34;actions&#34;: { &#34;rollover&#34;: { &#34;max_age&#34;: &#34;10m&#34;, &#34;max_size&#34;: &#34;1mb&#34;, &#34;max_docs&#34;: 100 }, &#34;set_priority&#34;: { &#34;priority&#34;: 100 } } }, &#34;delete&#34;: { &#34;min_age&#34;: &#34;15m&#34;, &#34;actions&#34;: { &#34;delete&#34;: { } } } } } } 示例响应 #  { &#34;acknowledged&#34;: true } 应用生命周期策略到索引模板
-要让策略生效，需要在索引模板中指定策略名称和滚动索引的别名。
+请求示例 #  PUT _ilm/policy/ilm_test { &#34;policy&#34;: { &#34;phases&#34;: { &#34;hot&#34;: { &#34;min_age&#34;: &#34;0ms&#34;, &#34;actions&#34;: { &#34;rollover&#34;: { &#34;max_age&#34;: &#34;10m&#34;, &#34;max_size&#34;: &#34;1mb&#34;, &#34;max_docs&#34;: 100 }, &#34;set_priority&#34;: { &#34;priority&#34;: 100 } } }, &#34;delete&#34;: { &#34;min_age&#34;: &#34;15m&#34;, &#34;actions&#34;: { &#34;delete&#34;: { } } } } } } 示例响应 #  { &#34;acknowledged&#34;: true } 应用生命周期策略到索引模板 要让策略生效，需要在索引模板中指定策略名称和滚动索引的别名。
 请求示例 #  PUT /_index_template/my_template?"><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/main/docs/references/management/ilm_api/"><title>索引生命周期管理 | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/easysearch/main/css/asciinema-player.css><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/easysearch/main><img src=/easysearch/main/img/logo-zh.svg alt=Logo></a></h2><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
@@ -114,25 +112,28 @@
 <a class=anchor href=#%e7%a4%ba%e4%be%8b%e5%93%8d%e5%ba%94>#</a></h4><pre><code class=language-auto data-lang=auto>{
   &quot;acknowledged&quot;: true
 }
-</code></pre><p>应用生命周期策略到索引模板<br>要让策略生效，需要在索引模板中指定策略名称和滚动索引的别名。</p><h4 id=请求示例-1>请求示例
+</code></pre><p>应用生命周期策略到索引模板
+要让策略生效，需要在索引模板中指定策略名称和滚动索引的别名。</p><h4 id=请求示例-1>请求示例
 <a class=anchor href=#%e8%af%b7%e6%b1%82%e7%a4%ba%e4%be%8b-1>#</a></h4><pre><code class=language-auto data-lang=auto>PUT /_index_template/my_template?pretty
 {
-  &quot;index_patterns&quot;: [&quot;log-test-*&quot;], 
+  &quot;index_patterns&quot;: [&quot;log-test-*&quot;],
   &quot;template&quot;: {
     &quot;settings&quot;: {
       &quot;number_of_shards&quot;: 1,
       &quot;number_of_replicas&quot;: 1,
-      &quot;index.lifecycle.name&quot;: &quot;ilm_test&quot;, 
-      &quot;index.lifecycle.rollover_alias&quot;: &quot;log-test&quot; 
+      &quot;index.lifecycle.name&quot;: &quot;ilm_test&quot;,
+      &quot;index.lifecycle.rollover_alias&quot;: &quot;log-test&quot;
     }
   }
 }
-</code></pre><p>创建初始托管索引<br>当您为自己的滚动索引设置策略时，您需要手动创建第一个由策略管理的索引，并将其指定为写入索引。<br>索引的名称必须与索引模板中定义的模式匹配，并以数字结尾。该数字增加以生成通过rollover操作创建的索引名称。</p><h4 id=请求示例-2>请求示例
+</code></pre><p>创建初始托管索引
+当您为自己的滚动索引设置策略时，您需要手动创建第一个由策略管理的索引，并将其指定为写入索引。
+索引的名称必须与索引模板中定义的模式匹配，并以数字结尾。该数字增加以生成通过rollover操作创建的索引名称。</p><h4 id=请求示例-2>请求示例
 <a class=anchor href=#%e8%af%b7%e6%b1%82%e7%a4%ba%e4%be%8b-2>#</a></h4><pre><code class=language-auto data-lang=auto>PUT /log-test-000001
 {
   &quot;aliases&quot;: {
     &quot;log-test&quot;:{
-      &quot;is_write_index&quot;: true 
+      &quot;is_write_index&quot;: true
     }
   }
 }
@@ -399,7 +400,36 @@
 </code></pre><h3 id=close>close
 <a class=anchor href=#close>#</a></h3><p>关闭托管索引。</p><p>关闭的索引仍然存在于磁盘上，但不会消耗 CPU 或内存。关闭的索引不能读取、写入或搜索。</p><p>如果您需要保留数据的时间长于需要主动搜索它的时间，并且在数据节点上有足够的磁盘空间，则关闭索引是一个不错的选择。如果需要再次搜索数据，则重新打开关闭的索引比从快照中恢复索引更简单。</p><h3 id=open>open
 <a class=anchor href=#open>#</a></h3><p>打开一个托管索引。</p><h3 id=delete>delete
-<a class=anchor href=#delete>#</a></h3><p>删除一个托管索引。</p><h3 id=rollover>rollover
+<a class=anchor href=#delete>#</a></h3><p>删除一个托管索引，将其从集群中完全移除。</p><table><thead><tr><th>Parameter</th><th>Description</th><th>Type</th><th>Required</th></tr></thead><tbody><tr><td><code>timestamp_field</code></td><td>用于判断索引数据年龄的时间戳字段名称。如果指定了此参数，则必须同时指定<code>min_data_age</code>参数。</td><td><code>string</code></td><td>No</td></tr><tr><td><code>min_data_age</code></td><td>索引中最新数据的最小年龄要求，只有当最新数据的年龄大于此值时才会执行删除操作。必须以天为单位（例如"7d"），并且最小值为1天。</td><td><code>string</code></td><td>No</td></tr></tbody></table><p>当<code>timestamp_field</code>和<code>min_data_age</code>同时指定时，系统会执行以下检查：</p><ol><li>查询索引中按照指定时间戳字段排序的最新文档</li><li>计算最新文档的时间与当前时间的差值</li><li>只有当差值大于或等于<code>min_data_age</code>指定的时间时，才会执行删除操作</li></ol><p>这种机制可以防止意外删除还在活跃使用的索引数据。</p><p><strong>基本用法示例：</strong></p><pre><code class=language-auto data-lang=auto>PUT _ilm/policy/my_policy
+{
+  &quot;policy&quot;: {
+    &quot;phases&quot;: {
+      &quot;delete&quot;: {
+        &quot;min_age&quot;: &quot;30d&quot;,
+        &quot;actions&quot;: {
+          &quot;delete&quot;: {}
+        }
+      }
+    }
+  }
+}
+</code></pre><p><strong>带条件检查的删除示例：</strong></p><pre><code class=language-auto data-lang=auto>PUT _ilm/policy/conditional_delete_policy
+{
+  &quot;policy&quot;: {
+    &quot;phases&quot;: {
+      &quot;delete&quot;: {
+        &quot;min_age&quot;: &quot;30d&quot;,
+        &quot;actions&quot;: {
+          &quot;delete&quot;: {
+            &quot;timestamp_field&quot;: &quot;@timestamp&quot;,
+            &quot;min_data_age&quot;: &quot;90d&quot;
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre><p>在上面的示例中，即使索引满足了30天的<code>min_age</code>条件进入删除阶段，也只有当索引中最新的文档（基于<code>@timestamp</code>字段）已经至少90天未更新时，才会执行实际的删除操作。</p><h3 id=rollover>rollover
 <a class=anchor href=#rollover>#</a></h3><p>当现有索引满足指定的滚动条件时，该操作会将目标切换到新索引。</p><p>滚动目标可以是数据流或索引别名。当目标为数据流时，新索引将变为数据流的写索引，并且其代数将递增。</p><p>如果要滚动索引别名，别名及其写索引必须满足以下条件：</p><ul><li>索引名称必须符合模式 <code>^.\*-\d+$</code>，例如（my-index-000001）。</li><li>必须将 index.lifecycle.rollover_alias 配置为要滚动的别名。</li><li>索引必须是别名的写索引。</li></ul><table><thead><tr><th>参数</th><th>描述</th><th>类型</th><th>示例</th><th>是否必需</th></tr></thead><tbody><tr><td><code>max_size</code></td><td>（可选，字节单位）当索引达到一定大小时触发滚动。这是索引中所有主分片的总大小。副本不计算在最大索引大小内。</td><td><code>string</code></td><td><code>20gb</code> or <code>5mb</code></td><td>No</td></tr><tr><td><code>max_docs</code></td><td>（可选，整数）在达到指定的最大文档数后触发滚动。自上次刷新后添加的文档不包括在文档计数中。文档计数不包括副本分片中的文档。</td><td><code>number</code></td><td><code>2000000</code></td><td>No</td></tr><tr><td><code>max_age</code></td><td>（可选，时间单位）在达到自索引创建开始的最大经过时间后触发滚动。经过的时间始终是从索引创建时间开始计算的，即使索引起始日期被配置为自定义日期. 支持的单位 <code>d</code> (days), <code>h</code> (hours), <code>m</code> (minutes), <code>s</code> (seconds), <code>ms</code> (milliseconds), and <code>micros</code> (microseconds)。</td><td><code>string</code></td><td><code>5d</code> or <code>7h</code></td><td>No</td></tr></tbody></table><pre><code class=language-auto data-lang=auto>PUT _ilm/policy/my_policy
 {
   &quot;policy&quot;: {
