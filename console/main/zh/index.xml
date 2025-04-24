@@ -1,75 +1,38 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>INFINI Console</title><link>/console/main/zh/</link><description>Recent content on INFINI Console</description><generator>Hugo -- gohugo.io</generator><atom:link href="/console/main/zh/index.xml" rel="self" type="application/rss+xml"/><item><title>告警中心</title><link>/console/main/zh/docs/reference/alerting/message/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/alerting/message/</guid><description>告警中心 # 简介 # 消息中心默认展示的是当前系统内正在发生的告警事件，方便管理人员快速预览系统的执行状态。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>INFINI Console</title><link>/console/main/zh/</link><description>Recent content on INFINI Console</description><generator>Hugo -- gohugo.io</generator><atom:link href="/console/main/zh/index.xml" rel="self" type="application/rss+xml"/><item><title>Runtime 管理</title><link>/console/main/zh/docs/reference/resource/runtime/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/resource/runtime/</guid><description>Runtime 管理 # 简介 # Runtime 管理可以快速方便地帮助我们纳管多个运行时实例（gateway、console、agent 等）。
+实例列表 # 在列表中可以查询创建的实例
+创建实例 # 第一步填写实例地址，按需开启 TLS 和 身份验证（开启身份验证后需要输入用户名和密码）。
+第二步，信息确认，按需修改实例名称，标签，描述。
+更新实例配置 # 点击实例列表行中的编辑按钮，进入编辑界面
+按需修改配置，然后点击保存按钮提交
+删除实例 # 点击实例列表行中的删除按钮，进行二次确认，确认删除后将执行删除操作。</description></item><item><title>告警中心</title><link>/console/main/zh/docs/reference/alerting/message/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/alerting/message/</guid><description>告警中心 # 简介 # 消息中心默认展示的是当前系统内正在发生的告警事件，方便管理人员快速预览系统的执行状态。
 事件消息列表 # 消息列表聚合了所有已触发的告警事件，如每个告警规则重复触发了多次告警消息，这里只会聚合显示一条，点击详情就可以去看更多的信息。
 消息详情 # 点击消息列表行列中的详情按钮可以查看当前告警事件消息的详细内容，包含事件消息的基本信息，事件触发周期内的时序曲线图，规则执行检测历史记录等，如下图所示：
 忽略告警消息 # 如认为告警事件不需要做处理或者不重要，可以进行忽略操作，忽略后告警消息将不默认展在消息列表中，不过可以通过状态筛选过滤进行查询。
-操作步骤：点击消息列表表格中的忽略按钮，进行二次确认，填写忽略原因，提交后执行忽略操作。</description></item><item><title>平台概览</title><link>/console/main/zh/docs/reference/platform/overview/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/platform/overview/</guid><description>平台概览 # 简介 # 在平台概览里，可以查看集群、节点、索引、主机层面的主要指标，了解各层面的运行状态。
-集群 # 节点 # 索引 # 主机 # 主机数据来源于 INFINI Agent 数据上报和 Elasticsearch 节点发现。
-发现主机 # 点击主机列表右侧的按钮&amp;quot;Discover host&amp;quot;，勾选后，点击按钮&amp;quot;add hosts&amp;quot;即可添加主机到主机列表。</description></item><item><title>开发工具</title><link>/console/main/zh/docs/reference/dev-tools/dev-tools/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/dev-tools/dev-tools/</guid><description>开发工具 # 简介 # 使用开发工具可以快速地编写和执行 Elasticsearch 查询以及其他的 elasticsearch API。 当开启安装验证后，所有的请求都会经过 API 级别权限校验
+操作步骤：点击消息列表表格中的忽略按钮，进行二次确认，填写忽略原因，提交后执行忽略操作。</description></item><item><title>平台概览</title><link>/console/main/zh/docs/reference/platform/overview/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/platform/overview/</guid><description>平台概览 # 简介 # 在平台概览里，可以查看集群、节点、索引的主要指标，了解各层面的运行状态。
+集群 # 通过列表和卡片两种切换模式，多角度展示集群状态信息。
+1. 列表模式 # 2. 卡片模式 # 点击单行可快速预览集群主要指标以及查看更多集群信息。
+节点 # 索引 #</description></item><item><title>开发工具</title><link>/console/main/zh/docs/reference/dev-tools/dev-tools/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/dev-tools/dev-tools/</guid><description>开发工具 # 简介 # 使用开发工具可以快速地编写和执行 Elasticsearch 查询以及其他的 elasticsearch API。 当开启安装验证后，所有的请求都会经过 API 级别权限校验
 打开开发工具 # 使用 Ctrl+Shift+O 快捷键打开或者在 console 右上角图标打开。
 执行请求快捷键 # Command+Enter 或者 Ctrl+Enter
 多集群多 Tab 页支持 # 开发工具支持使用 Tab 页同时打开多个集群，即使是同一个集群，也可以打开多个，Tab 页之间状态是独立的。 Tab 页默认使用集群名称作为标题，双击 Tab 页标题可以修改。 开发工具下方是一个状态栏，左侧是当前集群的健康状态、http 地址、版本信息， 右侧是 elasticsearch 接口请求的响应状态以及时长。
-查看请求头信息 # 当使用开发工具执行 elasticsearch 请求之后，可以在右侧点击 headers Tab 页查看请求头信息。</description></item><item><title>数据比对</title><link>/console/main/zh/docs/reference/migration/comparison/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/migration/comparison/</guid><description>数据比对 # 创建比对任务 # 点击 INFINI Console 中左侧菜单 数据工具 》数据比对，然后点击新建按钮创建比对任务，如下图所示：
-配置比对集群 # 然后在源集群列表中选择集群 opensearch-v1.0, 在目标集群列表中选择集群 sy_cluster：
-配置比对索引 # 点击选择比对索引按钮, 这里我们选择了索引 tv6-migration ,然后点击确认：
-然后我们可以选择需要比对的目标索引 tv6-sy：
-然后点击下一步。
-配置过滤条件和分区规则 # 如果需要过滤源索引和目标索引的数据，可以进行数据范围的设置，过滤条件对源索引和目标索引同时生效：
-我们可以对数据进行分区配置，分区比对可以方便我们后续定位差异数据的来源。分区规则也对源索引和目标索引同样生效：
-然后点击下一步。
-运行设置 # 我们设置任务运行的参数，通常情况下不需要调整。我们选择任务运行的节点，然后点击创建任务：
-配置增量数据比对 # 如果索引内的数据是持续写入的（日志等场景），可以配置增量比对任务，持续检测源集群和目标集群的数据差异。
-在配置索引时，对增量写入的索引配置增量字段（如 timestamp）和数据的写入延迟（默认 15 分钟）。配置写入延迟的目的是为了防止导出数据时有部分数据未落盘，导致数据比对异常：
-创建任务时，勾选 Detect Incremental Data，并设置检测间隔（默认 15 分钟）：
-任务开始后，会持续比对源集群和目标集群的增量数据。如果想要暂停数据比对，可以点击 Pause 按钮，暂停增量任务。点击 Resume 之后，任务暂停期间写入的数据会照常校验：
-启动比对任务 # 创建比对任务成功后会看到任务列表，我们可以在右侧选择 Start，启动新创建的任务：
-点击 Detail 按钮，我们可以查看任务的详细情况：
-我们可以点击索引列表右上方的刷新按钮，这样可以持续更新进度信息：
-如果数据比对成功，对应的分区方块会显示为绿色，否则为红色：
-如果比对过程中有方块变成了红色，则表示比对失败，这时候可以点击任务方块进度信息里面的 View Log 查看错误日志，定位具体错误原因。</description></item><item><title>数据看板</title><link>/console/main/zh/docs/reference/data-insight/dashboard/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/data-insight/dashboard/</guid><description>数据看板 # Workspace 列表 # 点击 标签页+，可查看已创建的 workspace 列表：
-创建 Workspace # 点击 workspace 列表中的 Create New，进入创建界面：
-设置 Wrokspace # 点击 Setting，进入配置抽屉框，可配置名称、描述、数据来源条件等信息：
-删除 Workspace # 点击 workspace 列表中的删除图标，在弹出的确认框中点击 ok，即可删除 workspace
-保存 Workspace # 点击 Save，即可保存当前 workspace 的所有配置信息
-添加 Workspace 到标签栏 # 在 workspace 列表中，点击 workspace，即可添加到标签页
-从标签栏移除 workspace # 点击标签栏最右侧的编辑按钮，进入编辑模式：
-点击标签页上的 X 图标，即可移除该标签页
-添加 Widget # 创建 widget 点击 Add Widget，在弹出的抽屉框中，选择 widget 类型，点击 add 即可创建对应类型的 widget：</description></item><item><title>数据迁移</title><link>/console/main/zh/docs/reference/migration/migration/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/migration/migration/</guid><description>数据迁移 # 创建迁移任务 # 点击 INFINI Console 中左侧菜单 数据工具 》数据迁移，然后点击新建按钮创建迁移任务，如下图所示：
-配置迁移集群 # 在源集群列表中选择集群 es-v5616, 在目标集群列表中选择集群 es-v710
-配置迁移索引 # 点击选择迁移索引按钮, 如下图：
-这里我们选择了索引 test ,然后点击确认
-test 索引包含两个 type，系统自动按 type 拆分成两个索引
-表格右方可以设置目标索引名称和文档 type，按需修改即可。 选择完索引之后，点击下一步，进行索引的初始化操作，如下图：
-点击展开后，可以看到有 mappings 和 settings 设置，如图所示， mappings 设置左侧显示的是源集群索引的 mappings， 可以点击中间按钮复制到右侧， 然后点击 Auto Optimize 自动优化（兼容性优化）。设置完成后点击 Start 执行初始化 mappings 和 settings 操作，若没有设置，则自动跳过。
-如果已通过其他方式初始化索引 settings 和 mappings， 这里可以直接点击下一步跳过
-完成索引初始化之后，点击下一步，进行迁移任务的数据范围设置和分区设置，如下图：
-配置数据范围 # 如果需要过滤数据迁移，可以进行数据范围的设置，这里我们进行全量的数据迁移，就不设置了
-配置数据分区 # 如果一个索引数据量特别大，可以进行数据分区的设置。数据分区根据设置的字段，以及分区步长将数据拆成多段，系统最终会将一个分段的数据作为一个子任务去运行，迁移数据， 这样的话即使，一个分段迁移过程出现异常，只需要重跑这个子任务。</description></item><item><title>索引管理</title><link>/console/main/zh/docs/reference/data/indices/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/data/indices/</guid><description>索引管理 # 索引列表 # 索引列表包括对索引的增删改查操作。
+查看请求头信息 # 当使用开发工具执行 elasticsearch 请求之后，可以在右侧点击 headers Tab 页查看请求头信息。</description></item><item><title>索引管理</title><link>/console/main/zh/docs/reference/data/indices/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/data/indices/</guid><description>索引管理 # 索引列表 # 索引列表包括对索引的增删改查操作。
 新建索引 # 输入新索引名称及索引设置即可完成添加。
-索引详情 # 可以查看索引健康状态、分片数、文档数、存储大小等详情，以及 Mappings、Edit settings 的查看和修改。</description></item><item><title>网关管理</title><link>/console/main/zh/docs/reference/resource/gateway/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/resource/gateway/</guid><description>网关管理 # 简介 # 网关管理可以快速方便地帮助我们纳管多个网关实例。
-网关列表 # 在网关列表中可以查询创建的网关实例
-创建网关 # 第一步填写网关地址，按需开启 TLS 和 身份验证（开启身份验证后需要输入用户名和密码）。
-第二步，信息确认，按需修改网关名称，网关标签，网关描述。
-更新网关配置 # 点击网关列表表格中的编辑按钮，进入更新界面
-按需修改配置，然后点击保存按钮提交
-删除网关 # 点击网关列表表格中的删除按钮，进行二次确认，确认删除后执行删除操作。</description></item><item><title>别名管理</title><link>/console/main/zh/docs/reference/data/alias/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/data/alias/</guid><description>别名管理 # 别名列表 # 别名列表包括对别名的增删改查操作。
-新建别名 # 别名：输入别名名称 索引：选择别名对应的目标索引，支持使用 (*) 来绑定多个索引。 是否为写索引：指定选择的索引是否可写，如果别名只绑定一个索引，则默认该索引可写；如果是通过 (*) 绑定多个索引，最需要指定其中一个索引为可写。 别名与索引关系列表 # 点开别名列表行首的+号按钮，会展开显示该别名对应绑定的索引列表，同时可以对索引进行关系绑定更新设置和删除。</description></item><item><title>告警规则</title><link>/console/main/zh/docs/reference/alerting/rule/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/alerting/rule/</guid><description>告警规则 # 简介 # 告警规则包括数据源，指标定义，触发条件，消息通知四个部分的配置
-告警规则列表 # 在告警规则列表中可以查询已经添加的告警规则
-新建告警规则 # 在告警规则列表中点击 新建 按钮进入新建告警规则页面
-配置数据源 # 选择集群（必选） 选择索引，支持输入索引 pattern （必填） 输入 elasticsearch query DSL 查询过滤条件（可选） 选择时间字段（必选） 选择统计周期（用于时间字段聚合，默认一分钟） 配置告警指标以及触发条件 # 输入规则名称 按需添加分组的字段以及分组大小，可以添加多个，用于 terms 聚合 选择指标聚合字段以及统计类型，可以配置多个，当配置多个时必须配置公式用于计算最终的指标 配置告警触发条件 选择指标数值 选择分桶对比 选择基于文档差异数或者内容差异数 文档差异数：相邻两个时间桶内命中文档数量的差值
+索引详情 # 可以查看索引健康状态、分片数、文档数、存储大小等详情，以及 Mappings、Edit settings 的查看和修改。</description></item><item><title>别名管理</title><link>/console/main/zh/docs/reference/data/alias/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/data/alias/</guid><description>别名管理 # 别名列表 # 别名列表包括对别名的增删改查操作。
+新建别名 # 别名：输入别名名称 索引：选择别名对应的目标索引，支持使用 (*) 来绑定多个索引。 是否为写索引：指定选择的索引是否可写，如果别名只绑定一个索引，则默认该索引可写；如果是通过 (*) 绑定多个索引，最需要指定其中一个索引为可写。 别名与索引关系列表 # 点开别名列表行首的+号按钮，会展开显示该别名对应绑定的索引列表，同时可以对索引进行关系绑定更新设置和删除。</description></item><item><title>告警规则</title><link>/console/main/zh/docs/reference/alerting/rule/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/alerting/rule/</guid><description>告警规则 # 简介 # 告警规则包括数据源，指标定义，触发条件，消息通知四个部分的配置。
+告警规则列表 # 在告警规则列表中可以查询已经添加的告警规则。
+新建告警规则 # 在告警规则列表中点击 新建 按钮进入新建告警规则页面。
+配置数据源 # 选择集群（必选） 选择索引，支持输入索引 pattern （必填） 输入 elasticsearch query DSL 查询过滤条件（可选） 选择时间字段（必选） 选择统计周期（用于时间字段聚合，默认一分钟） 配置告警指标以及触发条件 # 输入规则名称 按需添加分组的字段以及分组大小，可以添加多个，用于 terms 聚合 选择指标聚合字段以及统计类型，可以配置多个，当配置多个时必须配置公式用于计算最终的指标 配置告警触发条件 选择指标数值 选择分桶对比 - 选择基于文档差异数或者内容差异数 文档差异数：相邻两个时间桶内命中文档数量的差值
 内容差异数：相邻两个时间桶内某个分组是否有变化，差异值为 1 表示增加，-1 表示减少，0 表示无变化
 选择执行检查周期 输入告警事件标题（模版，被模版变量中的 title 引用，点击这里了解 模版语法 ） 输入告警事件消息（模版，被模版变量中的 message 引用，点击这里了解 模版语法 ） 分桶对比是 INFINI Console 1.</description></item><item><title>常用命令</title><link>/console/main/zh/docs/reference/dev-tools/command/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/dev-tools/command/</guid><description>常用命令 # 简介 # 常用命令用于在开发工具中将高频使用的 Elasticsearch 请求保存, 这样后续如果需要使用， 只需要在开发工具中使用 LOAD 命令加载，即可快速使用。
 保存常用命令 # 打开 console 右上角的开发工具(Ctrl+shift+o)， 在开发工具中选择需要保存的 Elasticsearch 请求 （支持一次选中多个请求保存为常用命令），选中之后点击工具栏里面的 Save As Command 提交。
 加载常用命令 # 在开发工具里，输入 LOAD + 保存的命令名称关键字 会自动提示相关已保存的常用命令， 选中要加载的命令后，按回车键即可自动加载相应的常用命令。
 常用命令列表 # 在常用命令列表中可以查询已经保存的常用命令
 点击在列表中常用命令名称一栏可以查看常用命令具体信息, 也可以修改名称和 tag 信息
-删除常用命令 # 点击常用命令列表中的删除按钮，进行二次确认，确认之后执行删除操作。</description></item><item><title>数据探索</title><link>/console/main/zh/docs/reference/data-insight/discover/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/data-insight/discover/</guid><description>数据探索 # 简介 # 在数据探索里，可以根据时间、字段等条件对索引或者视图下的数据进行搜索查询，数据展示方式有常规模式和 Insight 模式。
-搜索工具栏 # 索引(视图) # 搜索语句 # 时间范围 # 字段过滤 # 保存搜索 # 保存的搜索列表 # Insight 模式 # Insight 配置 # 常规模式 # 常规模式下用多功能图表灵活地添加字段来展示数据
-可对文档数据进行编辑、删除等操作
-Insight 模式 # Insight 模式下会根据数据特征推送可视化图表来展示数据
-可通过推送列表添加图表
-可对图表进行编辑、删除</description></item><item><title>集群监控</title><link>/console/main/zh/docs/reference/platform/monitoring/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/platform/monitoring/</guid><description>集群监控 # 简介 # 当注册的集群开启了监控之后，INFINI Console 会根据相应配置去目标集群定期采集数据， 包括集群、节点、索引层面的一些指标（ 指标字段说明介绍）。然后在集群监控里面可以观测到这些指标，从而了解目标集群的运行状态。
-监控所需 Elasticsearch API 权限清单 # _cluster/health，_cluster/stats，_cat/shards, /_nodes/&amp;lt;node_id&amp;gt;/stats _cat/indices, _stats, _cluster/state, _nodes, _alias, _cluster/settings
-开启集群监控 # 在集群注册或者修改集群配置的时候，可以看到如下界面
+删除常用命令 # 点击常用命令列表中的删除按钮，进行二次确认，确认之后执行删除操作。</description></item><item><title>数据探索</title><link>/console/main/zh/docs/reference/data-insight/discover/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/data-insight/discover/</guid><description>数据探索 # 简介 # 在数据探索里，可以根据时间、字段等条件对索引或者视图下的数据进行搜索查询。
+搜索工具栏 # 索引(视图) # 搜索语句 # 时间范围 # 字段过滤 # 保存搜索 # 文档详情 # 点击单行文档左侧的 &amp;quot; &amp;gt; &amp;quot; 按钮可展开查看文档的详细信息，并支持 Table 和 JSON 两中方式查看。
+同时可对文档数据进行编辑、删除等操作。</description></item><item><title>集群监控</title><link>/console/main/zh/docs/reference/platform/monitoring/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/platform/monitoring/</guid><description>集群监控 # 简介 # 当注册的集群开启了监控之后，INFINI Console 会根据相应配置去目标集群定期采集数据， 包括集群、节点、索引层面的一些指标（ 指标字段说明介绍）。然后在集群监控里面可以观测到这些指标，从而了解目标集群的运行状态。
+监控所需 Elasticsearch API 权限清单：
+_cluster/health _cluster/stats _cat/shards _nodes/&amp;lt;node_id&amp;gt;/stats _cat/indices _stats _cluster/state _nodes _alias _cluster/settings 开启集群监控 # 在集群注册或者修改集群配置的时候，可以看到如下界面：
 可以看到有一个 Monitored 的开关，当这个开关打开时，代表当前集群是开启监控的。 集群注册的时候，默认是开启监控的。监控配置里面包括集群健康指标、集群指标、节点指标和索引指标， 并且可以分别设置是否开启和采集时间间隔。
 以上是对单个集群的设置，在配置文件console.yaml中可以设置对所有集群的监控启停，默认情况下可以看到配置文件中有如下配置：
 metrics: enabled: true major_ip_pattern: &amp;quot;192.*&amp;quot; queue: metrics elasticsearch: enabled: true cluster_stats: true node_stats: true index_stats: true 如果 metrics&amp;gt;enable 设置为 false, 那么所有的集群监控都是没有开启的； 如果 metrics&amp;gt;elasticsearch&amp;gt;cluster_stats&amp;gt;enabled 设置为 false，那么所有的 集群就不会采集集群层面的相关指标。
@@ -82,14 +45,15 @@ metrics: enabled: true major_ip_pattern: &amp;quot;192.*&amp;quot; queue: metric
 删除集群 # 点击集群列表表格中的删除按钮，进行二次确认，确认删除后执行删除操作。</description></item><item><title>告警渠道</title><link>/console/main/zh/docs/reference/alerting/channel/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/alerting/channel/</guid><description>告警渠道 # 简介 # 告警渠道用于当告警规则触发之后，发送通知消息的通道配置，目前支持 webhook。
 渠道列表 # 在渠道列表中可以查询已经添加的渠道
 新建告警渠道 # 在渠道列表页面中点击 新建 按钮进入新建告警渠道页面
-输入渠道名称（必填） 选择渠道类型（当前仅支持 webhook ） 输入 webhook 地址 选择 HTTP 请求的方法，默认 POST 按需添加 HTTP 请求头 配置 webhook 请求体 点击保存按钮提交 更新渠道配置 # 在渠道列表中选择需要更新的渠道点击编辑按钮进入更新渠道配置页
+输入渠道名称（必填） 选择渠道类型（支持 Email、Slack、钉钉、飞书、企微、自定义 webhook 等多种类型 ） 输入 webhook 地址 选择 HTTP 请求的方法，默认 POST 按需添加 HTTP 请求头 配置 webhook 请求体 点击保存按钮提交 更新渠道配置 # 在渠道列表中选择需要更新的渠道点击编辑按钮进入更新渠道配置页
 操作参考新建告警渠道
 删除告警渠道 # 点击告警渠道列表表格中的删除按钮，进行二次确认，确认删除后执行删除操作。</description></item><item><title>指标说明</title><link>/console/main/zh/docs/reference/platform/infini-metrics-fields-description/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/platform/infini-metrics-fields-description/</guid><description>.infini_metrics 监控指标字段说明 # agent # 字段名 说明 agent.hostname 主机名称 agent.id 实例 ID agent.ips 主机 IP 列表 agent.major_ip 主 IP（配置文件 metrics.major_ip_pattern 指定） metadata # 字段名 说明 metadata.category 指标分类 metadata.datatype 指标数据类型 metadata.name 指标名称 metadata.version 指标所属实例的版本号 metadata.labels.cluster_id 集群 ID metadata.</description></item><item><title>数据视图</title><link>/console/main/zh/docs/reference/data/view/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/data/view/</guid><description>数据视图 # 视图列表 # 创建和管理数据视图可以帮助您更好地从 Elasticsearch 获取数据。
 创建视图 # 步骤 1 定义数据视图 # 输入数据视图名称 匹配规则：匹配相应索引，也可以使用 (*) 来匹配多个索引。 步骤 2 配置 # 为数据视图索引选择时间字段作为时间过滤
 创建完成
 编辑数据视图 # 页面列出匹配索引的所有字段，可以对字段的 Format、Popularity 等做相关设置。</description></item><item><title>模板变量</title><link>/console/main/zh/docs/reference/alerting/variables/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/alerting/variables/</guid><description>模板变量 # 简介 # 自定义告警触发事件内容时，除了自己撰写的固定文案外，事件标题、事件内容等也支持模板语法。可以使用事件中的字段实现文案的渲染。
 模板变量 # 用于渲染字段的语法为 {{ .字段名 }}，可用于模板内容渲染的变量字段如下：
-变量字段名 字段类型 说明 示例 rule_id string rule uuid c9f663tath2e5a0vksjg rule_name string rule name High CPU usage resource_id string resource uuid c9f663tath2e5a0vksjg resource_name string resource name es-v716 event_id string identifier for check details c9f663tath2e5a0vksjx timestamp number Millisecond timestamp 1654595042399 trigger_at number Millisecond timestamp 1654595042399 duration string Alarm duration &amp;ldquo;2m10s&amp;rdquo; objects string array resource index name [&amp;quot;.</description></item><item><title>集群动态</title><link>/console/main/zh/docs/reference/platform/activities/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/platform/activities/</guid><description>集群动态 # 简介 # 当注册的集群后，在集群动态里面可以观测到集群的动态。</description></item><item><title>下载安装</title><link>/console/main/zh/docs/getting-started/install/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/getting-started/install/</guid><description>安装 INFINI Console # INFINI Console 支持主流的操作系统和平台，程序包很小，没有任何额外的外部依赖，安装起来应该是很快的 :)
+变量字段名 字段类型 说明 示例 rule_id string rule uuid c9f663tath2e5a0vksjg rule_name string rule name High CPU usage resource_id string resource uuid c9f663tath2e5a0vksjg resource_name string resource name es-v716 event_id string identifier for check details c9f663tath2e5a0vksjx timestamp number Millisecond timestamp 1654595042399 trigger_at number Millisecond timestamp 1654595042399 duration string Alarm duration &amp;ldquo;2m10s&amp;rdquo; objects string array resource index name [&amp;quot;.</description></item><item><title>集群动态</title><link>/console/main/zh/docs/reference/platform/activities/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/platform/activities/</guid><description>集群动态 # 简介 # 当注册的集群后，在集群动态里面可以观测到集群的动态。</description></item><item><title>审计日志</title><link>/console/main/zh/docs/reference/system/audit/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/system/audit/</guid><description>审计日志 # 简介 # 审计日志主要是为了满足合规要求、保障安全防护、支持事故调查以及辅助风险管理等。审计日志能够记录系统操作行为，帮助发现异常、定位问题根源，并识别潜在风险，从而确保企业信息系统安全、稳定运行，同时满足法规监管需求。
+日志列表 # 审计日志列表中展示了操作时间、操作人、操作类型、操作的资源类型等。</description></item><item><title>下载安装</title><link>/console/main/zh/docs/getting-started/install/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/getting-started/install/</guid><description>安装 INFINI Console # INFINI Console 支持主流的操作系统和平台，程序包很小，没有任何额外的外部依赖，安装起来应该是很快的 :)
 安装前准备 # 准备一个可以存储数据的 Elasticsearch 集群，要求为 5.3 及以上版本，用于 INFINI Console 存储相关数据。
 推荐使用 INFINI Easysearch 来作存储，可通过配置开启 ZSTD 来节约存储空间。安装操作如如下
 查看完整操作代码 # 使用 root 用户操作 whoami &amp;amp;&amp;amp; cat /etc/redhat-release &amp;amp;&amp;amp; uptime # 安装 jdk yum -y install java-11 # 创建 infini 用户 groupadd -g 602 infini useradd -u 602 -g infini -m -d /home/infini -c &amp;#39;infini&amp;#39; -s /bin/bash infini # 安装 Easysearch &amp;amp; Console curl -sSL http://get.</description></item><item><title>功能介绍</title><link>/console/main/zh/docs/reference/agent/manage/manage/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/main/zh/docs/reference/agent/manage/manage/</guid><description>功能介绍 # 简介 # INFINI Agent 是 INFINI Console 的一个可选组件，负责采集和上传 Elasticsearch, Easysearch, Opensearch 集群的日志和指标信息，通过 INFINI Console 管理。INFINI Agent 支持主流操作系统和平台，安装包轻量且无任何外部依赖，可以快速方便地安装。
