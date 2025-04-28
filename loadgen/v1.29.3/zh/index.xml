@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>INFINI Loadgen</title><link>/loadgen/v1.29.3/zh/</link><description>Recent content on INFINI Loadgen</description><generator>Hugo -- gohugo.io</generator><atom:link href="/loadgen/v1.29.3/zh/index.xml" rel="self" type="application/rss+xml"/><item><title>下载安装</title><link>/loadgen/v1.29.3/zh/docs/getting-started/install/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/loadgen/v1.29.3/zh/docs/getting-started/install/</guid><description>安装 INFINI Loadgen # INFINI Loadgen 支持主流的操作系统和平台，程序包很小，没有任何额外的外部依赖，安装起来应该是很快的 ：）
+下载安装 # 自动安装
+curl -sSL http://get.infini.cloud | bash -s -- -p loadgen 通过以上脚本可自动下载相应平台的 loadgen 最新版本并解压到/opt/loadgen
+脚本的可选参数如下：
+-v [版本号]（默认采用最新版本号）
+-d [安装目录]（默认安装到/opt/loadgen）
+➜ /tmp mkdir loadgen ➜ /tmp curl -sSL http://get.infini.cloud | bash -s -- -p loadgen -d /tmp/loadgen @@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@&amp;amp;@@@ #@@@@@@@@@@@@@ @@@ @@@@@@@@@@@@@ &amp;amp;@@@@@@@ &amp;amp;@@@@@@@@@@@@@ @&amp;amp;@@@@@@@&amp;amp;@ @@@&amp;amp;@@@@@@@&amp;amp;@ @@@@@@@@@@@@@@@@ @@@@@@@@@@@@@@ @@@@@@@@@@@@@@@@@@&amp;amp; @@@@@@@@@@@@@ %@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ @@@@@@@@@@@@&amp;amp;@@@@@@@@@@@@@@@ @@ ,@@@@@@@@@@@@@@@@@@@@@@@&amp;amp; @@@@@. @@@@@&amp;amp;@@@@@@@@@@@@@@ @@@@@@@@@@ @@@@@@@@@@@@@@@# @&amp;amp;@@@&amp;amp;@@@&amp;amp;@@@ &amp;amp;@&amp;amp;@@@&amp;amp;@@@&amp;amp;@ @@@@@@@@@@@@@.</description></item><item><title>性能测试</title><link>/loadgen/v1.29.3/zh/docs/getting-started/benchmark/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/loadgen/v1.29.3/zh/docs/getting-started/benchmark/</guid><description>性能测试 # INFINI Loadgen 是一款专为 Easysearch、Elasticsearch、OpenSearch 设计的轻量级性能测试工具。
+Loadgen 的特点：
+性能强劲 轻量级无依赖 支持模板化参数随机 支持高并发 支持压测端均衡流量控制 支持服务端返回值校验 下载地址：https://release.infinilabs.com/loadgen/
+Loadgen # Loadgen 使用非常简单，下载解压之后会得到三个文件，一个可执行程序、一个配置文件 loadgen.yml 以及用于运行测试的 loadgen.dsl，配置文件样例如下：
+env: ES_USERNAME: elastic ES_PASSWORD: elastic ES_ENDPOINT: http://localhost:8000 测试文件样例如下：
+# runner: { # // total_rounds: 1 # no_warm: false, # // Whether to log all requests # log_requests: false, # // Whether to log all requests with the specified response status # log_status_codes: [0, 500], # assert_invalid: false, # assert_error: false, # }, # variables: [ # { # name: &amp;#34;ip&amp;#34;, # type: &amp;#34;file&amp;#34;, # path: &amp;#34;dict/ip.</description></item></channel></rss>
