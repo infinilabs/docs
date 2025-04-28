@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>入门指南 on INFINI Gateway</title><link>/gateway/v1.29.3/zh/docs/getting-started/</link><description>Recent content in 入门指南 on INFINI Gateway</description><generator>Hugo -- gohugo.io</generator><atom:link href="/gateway/v1.29.3/zh/docs/getting-started/index.xml" rel="self" type="application/rss+xml"/><item><title>安装网关</title><link>/gateway/v1.29.3/zh/docs/getting-started/install/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/gateway/v1.29.3/zh/docs/getting-started/install/</guid><description>安装网关 # 极限网关支持主流的操作系统和平台，程序包很小，没有任何额外的外部依赖，安装起来应该是很快的 ：）
+安装演示 # 下载安装 # 自动安装
+curl -sSL http://get.infini.cloud | bash -s -- -p gateway 通过以上脚本可自动下载相应平台的 gateway 最新版本并解压到/opt/gateway
+脚本的可选参数如下：
+ -v [版本号]（默认采用最新版本号）
+ -d [安装目录]（默认安装到/opt/gateway）
+手动安装
+根据您所在的操作系统和平台选择下面相应的下载地址：
+https://release.infinilabs.com/
+容器部署 # 极限网关也支持 Docker 容器方式部署。
+了解更多 验证安装 # 极限网关下载解压之后，我们可以执行这个命令来验证安装包是否有效，如下：
+✗ ./bin/gateway -v gateway 1.0.0_SNAPSHOT 2021-01-03 22:45:28 6a54bb2 如果能够正常看到上面的版本信息，说明网关程序本身一切正常。
+启动网关 # 以管理员身份直接运行网关程序即可启动极限网关了，如下：</description></item><item><title>配置网关</title><link>/gateway/v1.29.3/zh/docs/getting-started/configuration/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/gateway/v1.29.3/zh/docs/getting-started/configuration/</guid><description>配置 # 极限网关支持多种方式来修改配置。
+命令行参数 # 极限网关提供了命令行参数如下：
+✗ ./bin/gateway --help Usage of ./bin/gateway: -config string the location of config file, default: gateway.yml (default &amp;quot;gateway.yml&amp;quot;) -debug run in debug mode, gateway will quit with panic error -log string the log level,options:trace,debug,info,warn,error (default &amp;quot;info&amp;quot;) -v version 常用的说明如下：
+config，指定配置文件名，默认的配置文件名为当前执行命令所在目录的 gateway.yml，如果你的配置文件放置在其他地方，可以通过指定参数来进行选择。 daemon，将网关切换到后台执行，一般还需要结合 pidfile 来保存进程号，方便后续的进程操作。 配置文件 # 极限网关的大部分配置都可以通过 gateway.yml 来进行配置，配置修改完成之后，需要重启网关程序才能生效。
+定义入口 # 每一个网关都至少要对外暴露一个服务的入口，用来接收业务的操作请求，这个在极限网关里面叫做 entry，通过下面的参数即可定义：
+entry: - name: es_gateway enabled: true router: default network: binding: 0.</description></item><item><title>容器部署</title><link>/gateway/v1.29.3/zh/docs/getting-started/docker/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/gateway/v1.29.3/zh/docs/getting-started/docker/</guid><description>容器部署 # 极限网关支持容器方式部署。
+安装演示 # 下载镜像 # 极限网关的镜像发布在 Docker 的官方仓库，地址如下：
+https://hub.docker.com/r/infinilabs/gateway
+使用下面的命令即可获取最新的容器镜像：
+docker pull infinilabs/gateway:1.29.3-2018 验证镜像 # 将镜像下载到本地之后，可以看到极限网关的容器镜像非常小，只有不到 25MB，所以下载的速度应该是非常快的。
+✗ docker images |grep &amp;quot;gateway&amp;quot; |grep &amp;quot;1.29.3-2018&amp;quot; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/gateway 1.29.3-2018 fdae74b64e1a 47 minutes ago 23.5MB 创建配置 # 现在需要创建一个配置文件 gateway.yml，来进行基本的配置，如下：
+path.data: data path.logs: log entry: - name: my_es_entry enabled: true router: my_router max_concurrency: 200000 network: binding: 0.0.0.0:8000 flow: - name: simple_flow filter: - elasticsearch: elasticsearch: dev router: - name: my_router default_flow: simple_flow elasticsearch: - name: dev enabled: true endpoint: http://localhost:9200 basic_auth: username: test password: testtest Note: 上面配置里面的 Elasticsearch 的相关配置，请改成实际的服务器连接地址和认证信息。</description></item><item><title>Helm 部署</title><link>/gateway/v1.29.3/zh/docs/getting-started/helm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/gateway/v1.29.3/zh/docs/getting-started/helm/</guid><description>Helm 部署 # INFINI Gateway 支持 Helm 方式部署。
+添加仓库 # Chart 仓库地址在这里 https://helm.infinilabs.com。
+使用下面的命令添加仓库：
+helm repo add infinilabs https://helm.infinilabs.com 前提 # K8S StorageClass Chart 包中默认配置的 StorageClass 是 local-path，可参考 这里安装。
+如果想使用其他已安装的 StorageClass, 可以创建一个 YAML 文件（例如：values.yaml），添加如下配置：
+storageClassName: &amp;lt;storageClassName&amp;gt; 创建的时候使用 -f 参数指定，替换默认值。
+存储集群 Chart 包中配置的默认存储集群是 Easysearch，可参考 这里安装。
+注：Chart 包中配置的用户名和密码也是默认的，如有变动，可参照下面修改集群连接地址方法进行调整。 Gateway 也支持其他集群（如 Elasticsearch、Opensearch）连接，需手动创建一个 YAML 文件（例如：values.yaml），添加如下配置：
+env: # 请求记录存储集群 loggingEsEndpoint: ****** # 请求记录存储集群用户 loggingEsUser: ****** # 请求记录存储集群用户密码 loggingEsPass: ****** # 业务存储集群 prodEsEndpoint: ****** # 业务存储集群用户 prodEsUser: ****** # 业务存储集群用户密码 prodEsPass: ****** 创建的时候使用 -f 参数指定，替换默认值。</description></item><item><title>系统调优</title><link>/gateway/v1.29.3/zh/docs/getting-started/optimization/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/gateway/v1.29.3/zh/docs/getting-started/optimization/</guid><description>系统调优 # 要保证极限网关运行在最佳状态，其所在服务器的操作系统也需要进行相应的调优，以 Linux 为例。
+系统参数 # sudo tee /etc/security/limits.d/21-infini.conf &amp;lt;&amp;lt;-'EOF' * soft nofile 1048576 * hard nofile 1048576 * soft memlock unlimited * hard memlock unlimited root soft nofile 1048576 root hard nofile 1048576 root soft memlock unlimited root hard memlock unlimited EOF 内核调优 # cat &amp;lt;&amp;lt; SETTINGS | sudo tee /etc/sysctl.d/70-infini.conf fs.file-max=10485760 fs.nr_open=10485760 vm.max_map_count=262144 net.core.somaxconn=65535 net.core.netdev_max_backlog=65535 net.core.rmem_default = 262144 net.core.wmem_default = 262144 net.core.rmem_max=4194304 net.core.wmem_max=4194304 net.ipv4.ip_forward = 1 net.</description></item><item><title>性能测试</title><link>/gateway/v1.29.3/zh/docs/getting-started/benchmark/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/gateway/v1.29.3/zh/docs/getting-started/benchmark/</guid><description>性能测试 # 推荐使用 Elasticsearch 专属压测工具 Loadgen 来对网关进行性能压测。
+Loadgen 的特点：
+性能强劲 轻量级无依赖 支持模板化参数随机 支持高并发 支持压测端均衡流量控制 支持服务端返回值校验 下载地址：https://release.infinilabs.com/loadgen/
+Loadgen # Loadgen 使用非常简单，下载解压之后会得到三个文件，一个可执行程序、一个配置文件 loadgen.yml 以及用于运行测试的 loadgen.dsl，配置文件样例如下：
+env: ES_USERNAME: elastic ES_PASSWORD: elastic ES_ENDPOINT: http://localhost:8000 测试文件样例如下：
+# runner: { # // total_rounds: 1 # no_warm: false, # // Whether to log all requests # log_requests: false, # // Whether to log all requests with the specified response status # log_status_codes: [0, 500], # assert_invalid: false, # assert_error: false, # }, # variables: [ # { # name: &amp;#34;ip&amp;#34;, # type: &amp;#34;file&amp;#34;, # path: &amp;#34;dict/ip.</description></item></channel></rss>

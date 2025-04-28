@@ -1,0 +1,299 @@
+<!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="在 Kibana 里统一访问来自不同集群的索引 #  现在有这么一个需求，客户根据需要将数据按照业务维度划分，将索引分别存放在了不同的三个集群， 将一个大集群拆分成多个小集群有很多好处，比如降低了耦合，带来了集群可用性和稳定性方面的好处，也避免了单个业务的热点访问造成其他业务的影响， 尽管拆分集群是很常见的玩法，但是管理起来不是那么方便了，尤其是在查询的时候，可能要分别访问三套集群各自的 API，甚至要切换三套不同的 Kibana 来访问集群的数据， 那么有没有办法将他们无缝的联合在一起呢？
+极限网关! #  答案自然是有的，通过将 Kibana 访问 Elasticsearch 的地址切换为极限网关的地址，我们可以将请求按照索引来进行智能的路由， 也就是当访问不同的业务索引时会智能的路由到不同的集群，如下图：
+上图，我们分别有 3 个不同的索引：
+ apm-* erp-* mall-*  分别对应不同的三套 Elasticsearch 集群:
+ ES1-APM ES2-ERP ES3-MALL  接下来我们来看如何在极限网关里面进行相应的配置来满足这个业务需求。
+配置集群信息 #  首先配置 3 个集群的连接信息。
+elasticsearch: - name: es1-apm enabled: true endpoints: - http://192.168.3.188:9206 - name: es2-erp enabled: true endpoints: - http://192.168.3.188:9207 - name: es3-mall enabled: true endpoints: - http://192.168.3.188:9208 配置服务 Flow #  然后，我们定义 3 个 Flow，分别对应用来访问 3 个不同的 Elasticsearch 集群，如下："><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="在 Kibana 里统一访问来自不同集群的索引"><meta property="og:description" content="在 Kibana 里统一访问来自不同集群的索引 #  现在有这么一个需求，客户根据需要将数据按照业务维度划分，将索引分别存放在了不同的三个集群， 将一个大集群拆分成多个小集群有很多好处，比如降低了耦合，带来了集群可用性和稳定性方面的好处，也避免了单个业务的热点访问造成其他业务的影响， 尽管拆分集群是很常见的玩法，但是管理起来不是那么方便了，尤其是在查询的时候，可能要分别访问三套集群各自的 API，甚至要切换三套不同的 Kibana 来访问集群的数据， 那么有没有办法将他们无缝的联合在一起呢？
+极限网关! #  答案自然是有的，通过将 Kibana 访问 Elasticsearch 的地址切换为极限网关的地址，我们可以将请求按照索引来进行智能的路由， 也就是当访问不同的业务索引时会智能的路由到不同的集群，如下图：
+上图，我们分别有 3 个不同的索引：
+ apm-* erp-* mall-*  分别对应不同的三套 Elasticsearch 集群:
+ ES1-APM ES2-ERP ES3-MALL  接下来我们来看如何在极限网关里面进行相应的配置来满足这个业务需求。
+配置集群信息 #  首先配置 3 个集群的连接信息。
+elasticsearch: - name: es1-apm enabled: true endpoints: - http://192.168.3.188:9206 - name: es2-erp enabled: true endpoints: - http://192.168.3.188:9207 - name: es3-mall enabled: true endpoints: - http://192.168.3.188:9208 配置服务 Flow #  然后，我们定义 3 个 Flow，分别对应用来访问 3 个不同的 Elasticsearch 集群，如下："><meta property="og:type" content="article"><meta property="og:url" content="/gateway/v1.29.3/zh/docs/tutorial/routing_to_cluser_by_index/"><title>在 Kibana 里统一访问来自不同集群的索引 | INFINI Gateway</title><link rel=manifest href=/gateway/v1.29.3/manifest.json><link rel=icon href=/gateway/v1.29.3/favicon.png type=image/x-icon><link rel=alternate hreflang=en href=/gateway/v1.29.3/docs/tutorial/routing_to_cluser_by_index/ title="Unified access indexes from different clusters in Kibana"><link rel=stylesheet href=/gateway/v1.29.3/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><script defer src=/gateway/v1.29.3/js/jquery-2.x.min.js></script><script defer src=/gateway/v1.29.3/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/gateway/v1.29.3/zh><img src=/gateway/v1.29.3/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px></div><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value=v1.29.3>v1.29.3</option>
+<option value=v1.29.2>v1.29.2</option>
+<option value=v1.29.1>v1.29.1</option>
+<option value=v1.29.0>v1.29.0</option>
+<option value=v1.28.2>v1.28.2</option>
+<option value=v1.28.0>v1.28.0</option>
+<option value=v1.27.0>v1.27.0</option>
+<option value=v1.26.1>v1.26.1</option></select></div><ul><li><a href=/gateway/v1.29.3/zh/docs/overview/>产品概述</a><ul></ul></li><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
+<label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>入门指南</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.29.3/zh/docs/getting-started/install/>安装网关</a></li><li><a href=/gateway/v1.29.3/zh/docs/getting-started/configuration/>配置网关</a></li><li><a href=/gateway/v1.29.3/zh/docs/getting-started/docker/>容器部署</a></li><li><a href=/gateway/v1.29.3/zh/docs/getting-started/helm/>Helm 部署</a></li><li><a href=/gateway/v1.29.3/zh/docs/getting-started/optimization/>系统调优</a></li><li><a href=/gateway/v1.29.3/zh/docs/getting-started/benchmark/>性能测试</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle>
+<label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a>功能手册</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.29.3/zh/docs/references/entry/>服务入口</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/router/>服务路由</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/flow/>处理流程</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/elasticsearch/>Elasticsearch</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/context/>请求上下文</a></li><li><input type=checkbox id=section-a53d1bd91095fa28aef70cee327a5121 class=toggle>
+<label for=section-a53d1bd91095fa28aef70cee327a5121 class="flex justify-between"><a href=/gateway/v1.29.3/zh/docs/references/filters/>在线过滤器</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.29.3/zh/docs/references/filters/echo/>echo</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/auto_generate_doc_id/>auto_generate_doc_id</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/basic_auth/>basic_auth</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/bulk_request_mutate/>bulk_request_mutate</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/bulk_request_throttle/>bulk_request_throttle</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/bulk_reshuffle/>bulk_reshuffle</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/bulk_response_process/>bulk_response_process</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/cache/>cache</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/clone/>clone</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/context_filter/>context_filter</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/context_limiter/>context_limiter</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/context_parse/>context_parse</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/context_regex_replace/>context_regex_replace</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/context_switch/>context_switch</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/date_range_precision_tuning/>date_range_precision_tuning</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/drop/>drop</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/dump/>dump</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/elasticsearch/>elasticsearch</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/elasticsearch_health_check/>elasticsearch_health_check</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/flow/>flow</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/hash_mod/>hash_mod</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/http/>http</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/javascript/>javascript</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/ldap_auth/>ldap_auth</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/logging/>logging</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/queue/>queue</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/ratio/>ratio</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/record/>record</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/redirect/>redirect</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/redis_pubsub/>redis_pubsub</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/request_api_key_filter/>request_api_key_filter</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/request_api_key_limiter/>request_api_key_limiter</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/request_body_json_del/>request_body_json_del</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/request_body_json_set/>request_body_json_set</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/request_body_regex_replace/>request_body_regex_replace</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/request_client_ip_filter/>request_client_ip_filter</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/request_client_ip_limiter/>request_client_ip_limiter</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/request_header_filter/>request_header_filter</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/request_host_filter/>request_host_filter</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/request_host_limiter/>request_host_limiter</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/request_method_filter/>request_method_filter</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/request_path_filter/>request_path_filter</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/request_path_limiter/>request_path_limiter</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/request_reshuffle/>request_reshuffle</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/request_user_filter/>request_user_filter</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/request_user_limiter/>request_user_limiter</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/response_body_regex_replace/>response_body_regex_replace</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/response_header_filter/>response_header_filter</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/response_header_format/>response_header_format</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/response_status_filter/>response_status_filter</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/retry_limiter/>retry_limiter</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/rewrite_to_bulk/>rewrite_to_bulk</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/sample/>sample</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/security/>security</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/set_basic_auth/>set_basic_auth</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/set_context/>set_context</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/set_hostname/>set_hostname</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/set_request_header/>set_request_header</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/set_request_query_args/>set_request_query_args</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/set_response/>set_response</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/set_response_header/>set_response_header</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/sleep/>sleep</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/switch/>switch</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/filters/translog/>translog</a></li></ul></li><li><input type=checkbox id=section-82db29a871579194764c352cfff582f2 class=toggle>
+<label for=section-82db29a871579194764c352cfff582f2 class="flex justify-between"><a href=/gateway/v1.29.3/zh/docs/references/processors/>离线处理器</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.29.3/zh/docs/references/processors/bulk_indexing/>bulk_indexing</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/processors/consumer/>consumer</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/processors/dag/>dag</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/processors/dump_hash/>dump_hash</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/processors/flow_replay/>flow_replay</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/processors/flow_runner/>flow_runner</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/processors/index_diff/>index_diff</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/processors/indexing_merge/>indexing_merge</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/processors/json_indexing/>json_indexing</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/processors/merge_to_bulk/>merge_to_bulk</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/processors/queue_consumer/>queue_consumer</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/processors/replay/>replay</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/processors/smtp/>smtp</a></li></ul></li><li><input type=checkbox id=section-3de6688eceb9f20db2f0270adccf76e2 class=toggle>
+<label for=section-3de6688eceb9f20db2f0270adccf76e2 class="flex justify-between"><a>功能组件</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.29.3/zh/docs/references/modules/floating_ip/>浮动 IP</a></li><li><a href=/gateway/v1.29.3/zh/docs/references/modules/force_merge/>索引段合并</a></li></ul></li><li><a href=/gateway/v1.29.3/zh/docs/references/config/>其它配置</a></li></ul></li><li><input type=checkbox id=section-391bcaab6cc03bd87e3373752bfd390e class=toggle checked>
+<label for=section-391bcaab6cc03bd87e3373752bfd390e class="flex justify-between"><a>动手教程</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.29.3/zh/docs/tutorial/log4j2_filtering/>Apache Log4j 漏洞处置</a></li><li><a href=/gateway/v1.29.3/zh/docs/tutorial/online_query_rewrite/>在线查询修复的实现</a></li><li><a href=/gateway/v1.29.3/zh/docs/tutorial/request-logging/>查询请求流量日志分析</a></li><li><a href=/gateway/v1.29.3/zh/docs/tutorial/index_diff/>索引文档级别差异对比</a></li><li><a href=/gateway/v1.29.3/zh/docs/tutorial/es-hadoop_integration/>与 Elasticsearch-Hadoop 集成</a></li><li><a href=/gateway/v1.29.3/zh/docs/tutorial/prometheus_integration/>与 Prometheus 集成</a></li><li><a href=/gateway/v1.29.3/zh/docs/tutorial/proxy_elasticsearch/>为 Elasticsearch 无缝添加代理和基础安全</a></li><li><a href=/gateway/v1.29.3/zh/docs/tutorial/proxy_kibana/>为 Kibana 添加代理和基础安全</a></li><li><a href=/gateway/v1.29.3/zh/docs/tutorial/path_rewrite_by_javascript/>使用 JavaScript 脚本来进行复杂的查询改写</a></li><li><a href=/gateway/v1.29.3/zh/docs/tutorial/fix_count_in_search_response/>兼容不同版本的响应 Count 结构</a></li><li><a href=/gateway/v1.29.3/zh/docs/tutorial/routing_to_cluser_by_index/ class=active>在 Kibana 里统一访问来自不同集群的索引</a></li></ul></li><li><input type=checkbox id=section-7e4e95606453deb85437b78d9c3f2d72 class=toggle>
+<label for=section-7e4e95606453deb85437b78d9c3f2d72 class="flex justify-between"><a href=/gateway/v1.29.3/zh/docs/user-cases/>用户案例</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.29.3/zh/docs/user-cases/stories/a_cross_region_cluster_access_locality/>作业帮跨云集群的就近本地访问</a></li><li><a href=/gateway/v1.29.3/zh/docs/user-cases/stories/indexing_speedup_for_big_index_rebuild/>某保险业务索引速度百倍提升</a></li></ul></li><li><a href=/gateway/v1.29.3/zh/docs/troubleshooting/>常见问题</a><ul></ul></li><li><a href=/gateway/v1.29.3/zh/docs/release-notes/>版本历史</a><ul></ul></li><li><a href=/gateway/v1.29.3/zh/docs/resources/>其它资源</a><ul></ul></li></ul><ul><li><a href=https://github.com/infinilabs/gateway target=_blank rel=noopener>Github</a></li></ul><div class=book-languages tabindex=0 aria-haspopup=true><ul><li class="flex align-center"><img src=/gateway/v1.29.3/svg/translate.svg class=book-icon alt=Languages>
+简体中文</li></ul><ul class=book-languages-list><li><a href=/gateway/v1.29.3/docs/tutorial/routing_to_cluser_by_index/ class="flex align-center"><img src=/gateway/v1.29.3/svg/translate.svg class=book-icon alt=Languages>
+English</a></li><li class=active><a href=/gateway/v1.29.3/zh/ class="flex align-center"><img src=/gateway/v1.29.3/svg/translate.svg class=book-icon alt=Languages>
+简体中文</a></li></ul></div></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/gateway/v1.29.3/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>在 Kibana 里统一访问来自不同集群的索引</strong>
+<label for=toc-control><img src=/gateway/v1.29.3/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#在-kibana-里统一访问来自不同集群的索引>在 Kibana 里统一访问来自不同集群的索引</a><ul><li><a href=#极限网关>极限网关!</a></li><li><a href=#配置集群信息>配置集群信息</a></li><li><a href=#配置服务-flow>配置服务 Flow</a></li><li><a href=#配置路由信息>配置路由信息</a></li><li><a href=#定义服务及关联路由>定义服务及关联路由</a></li><li><a href=#完整配置>完整配置</a></li><li><a href=#启动网关>启动网关</a></li><li><a href=#测试访问>测试访问</a></li><li><a href=#其他方式>其他方式</a></li><li><a href=#修改-kibana-配置>修改 Kibana 配置</a></li><li><a href=#效果如下>效果如下</a></li><li><a href=#展望>展望</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=在-kibana-里统一访问来自不同集群的索引>在 Kibana 里统一访问来自不同集群的索引
+<a class=anchor href=#%e5%9c%a8-kibana-%e9%87%8c%e7%bb%9f%e4%b8%80%e8%ae%bf%e9%97%ae%e6%9d%a5%e8%87%aa%e4%b8%8d%e5%90%8c%e9%9b%86%e7%be%a4%e7%9a%84%e7%b4%a2%e5%bc%95>#</a></h1><p>现在有这么一个需求，客户根据需要将数据按照业务维度划分，将索引分别存放在了不同的三个集群，
+将一个大集群拆分成多个小集群有很多好处，比如降低了耦合，带来了集群可用性和稳定性方面的好处，也避免了单个业务的热点访问造成其他业务的影响，
+尽管拆分集群是很常见的玩法，但是管理起来不是那么方便了，尤其是在查询的时候，可能要分别访问三套集群各自的 API，甚至要切换三套不同的 Kibana 来访问集群的数据，
+那么有没有办法将他们无缝的联合在一起呢？</p><h2 id=极限网关>极限网关!
+<a class=anchor href=#%e6%9e%81%e9%99%90%e7%bd%91%e5%85%b3>#</a></h2><p>答案自然是有的，通过将 Kibana 访问 Elasticsearch 的地址切换为极限网关的地址，我们可以将请求按照索引来进行智能的路由，
+也就是当访问不同的业务索引时会智能的路由到不同的集群，如下图：</p><p><img src=/gateway/v1.29.3/img/smart_route_by_index.png alt></p><p>上图，我们分别有 3 个不同的索引：</p><ul><li>apm-*</li><li>erp-*</li><li>mall-*</li></ul><p>分别对应不同的三套 Elasticsearch 集群:</p><ul><li>ES1-APM</li><li>ES2-ERP</li><li>ES3-MALL</li></ul><p>接下来我们来看如何在极限网关里面进行相应的配置来满足这个业务需求。</p><h2 id=配置集群信息>配置集群信息
+<a class=anchor href=#%e9%85%8d%e7%bd%ae%e9%9b%86%e7%be%a4%e4%bf%a1%e6%81%af>#</a></h2><p>首先配置 3 个集群的连接信息。</p><pre><code>elasticsearch:
+  - name: es1-apm
+    enabled: true
+    endpoints:
+     - http://192.168.3.188:9206
+  - name: es2-erp
+    enabled: true
+    endpoints:
+     - http://192.168.3.188:9207
+  - name: es3-mall
+    enabled: true
+    endpoints:
+     - http://192.168.3.188:9208
+</code></pre><h2 id=配置服务-flow>配置服务 Flow
+<a class=anchor href=#%e9%85%8d%e7%bd%ae%e6%9c%8d%e5%8a%a1-flow>#</a></h2><p>然后，我们定义 3 个 Flow，分别对应用来访问 3 个不同的 Elasticsearch 集群，如下：</p><pre><code>flow:
+  - name: es1-flow
+    filter:
+      - elasticsearch:
+          elasticsearch: es1-apm
+  - name: es2-flow
+    filter:
+      - elasticsearch:
+          elasticsearch: es2-erp
+  - name: es3-flow
+    filter:
+      - elasticsearch:
+          elasticsearch: es3-mall
+</code></pre><p>然后再定义一个 flow 用来进行路径的判断和转发，如下：</p><pre><code>  - name: default-flow
+    filter:
+      - switch:
+          remove_prefix: false
+          path_rules:
+            - prefix: &quot;apm-&quot;
+              flow: es1-flow
+            - prefix: &quot;erp-&quot;
+              flow: es2-flow
+            - prefix: &quot;mall-&quot;
+              flow: es3-flow
+      - flow: #default flow
+          flows:
+            - es1-flow
+</code></pre><p>根据请求路径里面的索引前缀来匹配不同的索引，并转发到不同的 Flow。</p><h2 id=配置路由信息>配置路由信息
+<a class=anchor href=#%e9%85%8d%e7%bd%ae%e8%b7%af%e7%94%b1%e4%bf%a1%e6%81%af>#</a></h2><p>接下来，我们定义路由信息，具体配置如下：</p><pre><code>router:
+  - name: my_router
+    default_flow: default-flow
+</code></pre><p>指向上面定义的默认 flow 来统一请求的处理。</p><h2 id=定义服务及关联路由>定义服务及关联路由
+<a class=anchor href=#%e5%ae%9a%e4%b9%89%e6%9c%8d%e5%8a%a1%e5%8f%8a%e5%85%b3%e8%81%94%e8%b7%af%e7%94%b1>#</a></h2><p>最后，我们定义一个监听为 8000 端口的服务，用来提供给 Kibana 来进行统一的入口访问，如下：</p><pre><code>entry:
+  - name: es_entry
+    enabled: true
+    router: my_router
+    max_concurrency: 10000
+    network:
+      binding: 0.0.0.0:8000
+</code></pre><h2 id=完整配置>完整配置
+<a class=anchor href=#%e5%ae%8c%e6%95%b4%e9%85%8d%e7%bd%ae>#</a></h2><p>最后的完整配置如下：</p><pre><code>path.data: data
+path.logs: log
+
+entry:
+  - name: es_entry
+    enabled: true
+    router: my_router
+    max_concurrency: 10000
+    network:
+      binding: 0.0.0.0:8000
+
+flow:
+  - name: default-flow
+    filter:
+      - switch:
+          remove_prefix: false
+          path_rules:
+            - prefix: &quot;apm-&quot;
+              flow: es1-flow
+            - prefix: &quot;erp-&quot;
+              flow: es2-flow
+            - prefix: &quot;mall-&quot;
+              flow: es3-flow
+      - flow: #default flow
+          flows:
+            - es1-flow
+  - name: es1-flow
+    filter:
+      - elasticsearch:
+          elasticsearch: es1-apm
+  - name: es2-flow
+    filter:
+      - elasticsearch:
+          elasticsearch: es2-erp
+  - name: es3-flow
+    filter:
+      - elasticsearch:
+          elasticsearch: es3-mall
+
+router:
+  - name: my_router
+    default_flow: default-flow
+
+elasticsearch:
+  - name: es1-apm
+    enabled: true
+    endpoints:
+     - http://192.168.3.188:9206
+  - name: es2-erp
+    enabled: true
+    endpoints:
+     - http://192.168.3.188:9207
+  - name: es3-mall
+    enabled: true
+    endpoints:
+     - http://192.168.3.188:9208
+</code></pre><h2 id=启动网关>启动网关
+<a class=anchor href=#%e5%90%af%e5%8a%a8%e7%bd%91%e5%85%b3>#</a></h2><p>直接启动网关，如下：</p><pre><code>➜  gateway git:(master) ✗ ./bin/gateway -config sample-configs/elasticsearch-route-by-index.yml
+
+   ___   _   _____  __  __    __  _
+  / _ \ /_\ /__   \/__\/ / /\ \ \/_\ /\_/\
+ / /_\///_\\  / /\/_\  \ \/  \/ //_\\\_ _/
+/ /_\\/  _  \/ / //__   \  /\  /  _  \/ \
+\____/\_/ \_/\/  \__/    \/  \/\_/ \_/\_/
+
+[GATEWAY] A light-weight, powerful and high-performance elasticsearch gateway.
+[GATEWAY] 1.0.0_SNAPSHOT, 2022-04-20 08:23:56, 2023-12-31 10:10:10, 51650a5c3d6aaa436f3c8a8828ea74894c3524b9
+[04-21 13:41:21] [INF] [app.go:174] initializing gateway.
+[04-21 13:41:21] [INF] [app.go:175] using config: /Users/medcl/go/src/infini.sh/gateway/sample-configs/elasticsearch-route-by-index.yml.
+[04-21 13:41:21] [INF] [instance.go:72] workspace: /Users/medcl/go/src/infini.sh/gateway/data/gateway/nodes/c9bpg0ai4h931o4ngs3g
+[04-21 13:41:21] [INF] [app.go:283] gateway is up and running now.
+[04-21 13:41:21] [INF] [api.go:262] api listen at: http://0.0.0.0:2900
+[04-21 13:41:21] [INF] [reverseproxy.go:255] elasticsearch [es1-apm] hosts: [] =&gt; [192.168.3.188:9206]
+[04-21 13:41:21] [INF] [reverseproxy.go:255] elasticsearch [es2-erp] hosts: [] =&gt; [192.168.3.188:9207]
+[04-21 13:41:21] [INF] [reverseproxy.go:255] elasticsearch [es3-mall] hosts: [] =&gt; [192.168.3.188:9208]
+[04-21 13:41:21] [INF] [actions.go:349] elasticsearch [es2-erp] is available
+[04-21 13:41:21] [INF] [actions.go:349] elasticsearch [es1-apm] is available
+[04-21 13:41:21] [INF] [entry.go:312] entry [es_entry] listen at: http://0.0.0.0:8000
+[04-21 13:41:21] [INF] [module.go:116] all modules are started
+[04-21 13:41:21] [INF] [actions.go:349] elasticsearch [es3-mall] is available
+[04-21 13:41:55] [INF] [reverseproxy.go:255] elasticsearch [es1-apm] hosts: [] =&gt; [192.168.3.188:9206]
+</code></pre><p>网关启动成功之后，就可以通过网关的 IP+8000 端口来访问目标 Elasticsearch 集群了。</p><h2 id=测试访问>测试访问
+<a class=anchor href=#%e6%b5%8b%e8%af%95%e8%ae%bf%e9%97%ae>#</a></h2><p>首先通过 API 来访问测试一下，如下：</p><pre><code>➜  ~ curl http://localhost:8000/apm-2022/_search -v
+*   Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to localhost (127.0.0.1) port 8000 (#0)
+&gt; GET /apm-2022/_search HTTP/1.1
+&gt; Host: localhost:8000
+&gt; User-Agent: curl/7.54.0
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 200 OK
+&lt; Date: Thu, 21 Apr 2022 05:45:44 GMT
+&lt; content-type: application/json; charset=UTF-8
+&lt; Content-Length: 162
+&lt; X-elastic-product: Elasticsearch
+&lt; X-Backend-Cluster: es1-apm
+&lt; X-Backend-Server: 192.168.3.188:9206
+&lt; X-Filters: filters-&gt;elasticsearch
+&lt;
+* Connection #0 to host localhost left intact
+{&quot;took&quot;:142,&quot;timed_out&quot;:false,&quot;_shards&quot;:{&quot;total&quot;:1,&quot;successful&quot;:1,&quot;skipped&quot;:0,&quot;failed&quot;:0},&quot;hits&quot;:{&quot;total&quot;:{&quot;value&quot;:0,&quot;relation&quot;:&quot;eq&quot;},&quot;max_score&quot;:null,&quot;hits&quot;:[]}}%
+</code></pre><p>可以看到 apm-2022 指向了后端的 <code>es1-apm</code> 集群。</p><p>继续测试，erp 索引的访问，如下：</p><pre><code>➜  ~ curl http://localhost:8000/erp-2022/_search -v
+*   Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to localhost (127.0.0.1) port 8000 (#0)
+&gt; GET /erp-2022/_search HTTP/1.1
+&gt; Host: localhost:8000
+&gt; User-Agent: curl/7.54.0
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 200 OK
+&lt; Date: Thu, 21 Apr 2022 06:24:46 GMT
+&lt; content-type: application/json; charset=UTF-8
+&lt; Content-Length: 161
+&lt; X-Backend-Cluster: es2-erp
+&lt; X-Backend-Server: 192.168.3.188:9207
+&lt; X-Filters: filters-&gt;switch-&gt;filters-&gt;elasticsearch-&gt;skipped
+&lt;
+* Connection #0 to host localhost left intact
+{&quot;took&quot;:12,&quot;timed_out&quot;:false,&quot;_shards&quot;:{&quot;total&quot;:1,&quot;successful&quot;:1,&quot;skipped&quot;:0,&quot;failed&quot;:0},&quot;hits&quot;:{&quot;total&quot;:{&quot;value&quot;:0,&quot;relation&quot;:&quot;eq&quot;},&quot;max_score&quot;:null,&quot;hits&quot;:[]}}%
+</code></pre><p>继续测试，mall 索引的访问，如下：</p><pre><code>➜  ~ curl http://localhost:8000/mall-2022/_search -v
+*   Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to localhost (127.0.0.1) port 8000 (#0)
+&gt; GET /mall-2022/_search HTTP/1.1
+&gt; Host: localhost:8000
+&gt; User-Agent: curl/7.54.0
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 200 OK
+&lt; Date: Thu, 21 Apr 2022 06:25:08 GMT
+&lt; content-type: application/json; charset=UTF-8
+&lt; Content-Length: 134
+&lt; X-Backend-Cluster: es3-mall
+&lt; X-Backend-Server: 192.168.3.188:9208
+&lt; X-Filters: filters-&gt;switch-&gt;filters-&gt;elasticsearch-&gt;skipped
+&lt;
+* Connection #0 to host localhost left intact
+{&quot;took&quot;:8,&quot;timed_out&quot;:false,&quot;_shards&quot;:{&quot;total&quot;:5,&quot;successful&quot;:5,&quot;skipped&quot;:0,&quot;failed&quot;:0},&quot;hits&quot;:{&quot;total&quot;:0,&quot;max_score&quot;:null,&quot;hits&quot;:[]}}%
+</code></pre><p>完美转发。</p><h2 id=其他方式>其他方式
+<a class=anchor href=#%e5%85%b6%e4%bb%96%e6%96%b9%e5%bc%8f>#</a></h2><p>除了使用 <code>switch</code> 过滤器，使用路由本身的规则也是可以实现，具体示例配置如下：</p><pre><code>flow:
+  - name: default_flow
+    filter:
+      - echo:
+          message: &quot;hello world&quot;
+  - name: mall_flow
+    filter:
+      - echo:
+          message: &quot;hello mall indices&quot;
+  - name: apm_flow
+    filter:
+      - echo:
+          message: &quot;hello apm indices&quot;
+  - name: erp_flow
+    filter:
+      - echo:
+          message: &quot;hello erp indices&quot;
+router:
+  - name: my_router
+    default_flow: default_flow
+    rules:
+      - method:
+          - &quot;*&quot;
+        pattern:
+          - &quot;/apm-{suffix:.*}/&quot;
+          - &quot;/apm-{suffix:.*}/{any:.*}&quot;
+        flow:
+          - apm_flow
+      - method:
+          - &quot;*&quot;
+        pattern:
+          - &quot;/erp-{suffix:.*}/&quot;
+          - &quot;/erp-{suffix:.*}/{any:.*}&quot;
+        flow:
+          - erp_flow
+      - method:
+          - &quot;*&quot;
+        pattern:
+          - &quot;/mall-{suffix:.*}/&quot;
+          - &quot;/mall-{suffix:.*}/{any:.*}&quot;
+        flow:
+          - mall_flow
+
+</code></pre><p>极限网关功能强大，实现一个功能的方式可以有很多种，这里暂不展开。</p><h2 id=修改-kibana-配置>修改 Kibana 配置
+<a class=anchor href=#%e4%bf%ae%e6%94%b9-kibana-%e9%85%8d%e7%bd%ae>#</a></h2><p>修改 Kibana 的配置文件: <code>kibana.yml</code>，替换 Elasticsearch 的地址为网关地址(<code>http://192.168.3.200:8000</code>)，如下：</p><pre><code>elasticsearch.hosts: [&quot;http://192.168.3.200:8000&quot;]
+</code></pre><p>重启 Kibana 让配置生效。</p><h2 id=效果如下>效果如下
+<a class=anchor href=#%e6%95%88%e6%9e%9c%e5%a6%82%e4%b8%8b>#</a></h2><p><img src=/gateway/v1.29.3/img/kibana-clusters-dev.jpg alt></p><p>可以看到，在一个 Kibana 的开发者工具里面，我们已经可以像操作一个集群一样来同时读写实际上来自三个不同集群的索引数据了。</p><h2 id=展望>展望
+<a class=anchor href=#%e5%b1%95%e6%9c%9b>#</a></h2><p>通过极限网关，我们还可以非常灵活的进行在线请求的流量编辑，动态组合不同集群的操作。</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class=book-languages tabindex=0 aria-haspopup=true><ul><li class="flex align-center"><img src=/gateway/v1.29.3/svg/translate.svg class=book-icon alt=Languages>
+简体中文</li></ul><ul class=book-languages-list><li><a href=/gateway/v1.29.3/docs/tutorial/routing_to_cluser_by_index/ class="flex align-center"><img src=/gateway/v1.29.3/svg/translate.svg class=book-icon alt=Languages>
+English</a></li><li class=active><a href=/gateway/v1.29.3/zh/ class="flex align-center"><img src=/gateway/v1.29.3/svg/translate.svg class=book-icon alt=Languages>
+简体中文</a></li></ul></div><div><a class="flex align-center" href=https://github.com/infinilabs/gateway/edit/v1.29.3/docs/content.zh/docs/tutorial/routing_to_cluser_by_index.md target=_blank rel=noopener><img src=/gateway/v1.29.3/svg/edit.svg class=book-icon alt=Edit>
+<span>编辑本页</span></a></div><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script>(function(h,o,t,j,a,r){h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};h._hjSettings={hjid:2567416,hjsv:6};a=o.getElementsByTagName('head')[0];r=o.createElement('script');r.async=1;r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;a.appendChild(r);})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
+    import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
+    searchbox({container: "#searchbox"});
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#在-kibana-里统一访问来自不同集群的索引>在 Kibana 里统一访问来自不同集群的索引</a><ul><li><a href=#极限网关>极限网关!</a></li><li><a href=#配置集群信息>配置集群信息</a></li><li><a href=#配置服务-flow>配置服务 Flow</a></li><li><a href=#配置路由信息>配置路由信息</a></li><li><a href=#定义服务及关联路由>定义服务及关联路由</a></li><li><a href=#完整配置>完整配置</a></li><li><a href=#启动网关>启动网关</a></li><li><a href=#测试访问>测试访问</a></li><li><a href=#其他方式>其他方式</a></li><li><a href=#修改-kibana-配置>修改 Kibana 配置</a></li><li><a href=#效果如下>效果如下</a></li><li><a href=#展望>展望</a></li></ul></li></ul></nav></aside></main></body></html>
