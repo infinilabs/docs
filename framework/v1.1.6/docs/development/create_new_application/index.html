@@ -1,0 +1,127 @@
+<!doctype html><html lang=en><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Create New Application #  Let&rsquo;s use the NewAPP as the new project for example.
+Create the project folder #  Use the name new_app as the project id, and create the project folder as below:
+cd ~/go/src/infini.sh/ mkdir new_app  Note: Ensure that new_app is located in the same directory as the framework folder. This structure is required for the Makefile to function correctly.
+ Create the main file #  Create a empty main."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Create New Application"><meta property="og:description" content="Create New Application #  Let&rsquo;s use the NewAPP as the new project for example.
+Create the project folder #  Use the name new_app as the project id, and create the project folder as below:
+cd ~/go/src/infini.sh/ mkdir new_app  Note: Ensure that new_app is located in the same directory as the framework folder. This structure is required for the Makefile to function correctly.
+ Create the main file #  Create a empty main."><meta property="og:type" content="article"><meta property="og:url" content="/framework/v1.1.6/docs/development/create_new_application/"><title>Create New Application | INFINI Framework</title><link rel=manifest href=/framework/v1.1.6/manifest.json><link rel=icon href=/framework/v1.1.6/favicon.png type=image/x-icon><link rel=stylesheet href=/framework/v1.1.6/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><script defer src=/framework/v1.1.6/js/jquery-2.x.min.js></script><script defer src=/framework/v1.1.6/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/framework/v1.1.6><img src=/framework/v1.1.6/img/logo-en.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px></div><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value=v1.1.6>v1.1.6</option>
+<option value=v1.1.5>v1.1.5</option>
+<option value=v1.1.4>v1.1.4</option>
+<option value=v1.1.3>v1.1.3</option>
+<option value=v1.1.2>v1.1.2</option>
+<option value=v1.1.0>v1.1.0</option>
+<option value=v1.0.0>v1.0.0</option></select></div><ul><li><a href=/framework/v1.1.6/docs/development/>Development</a><ul><li><a href=/framework/v1.1.6/docs/development/setup_golang_environment/>Setting Up the Golang Environment</a></li><li><a href=/framework/v1.1.6/docs/development/setup_intellij_idea/>Setup IntelliJ IDEA</a></li><li><a href=/framework/v1.1.6/docs/development/create_new_application/ class=active>Create New Application</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle>
+<label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a>References</a>
+<span>▾</span></label><ul><li><a href=/framework/v1.1.6/docs/references/makefile/>Makefile</a></li><li><a href=/framework/v1.1.6/docs/references/http_client/>Http Client</a></li></ul></li><li><a href=/framework/v1.1.6/docs/troubleshooting/>FAQs</a><ul></ul></li><li><a href=/framework/v1.1.6/docs/release-notes/>Release Notes</a><ul></ul></li></ul><ul><li><a href=https://github.com/infinilabs/framework target=_blank rel=noopener>Github</a></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/framework/v1.1.6/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>Create New Application</strong>
+<label for=toc-control><img src=/framework/v1.1.6/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#create-new-application>Create New Application</a><ul><li><a href=#create-the-project-folder>Create the project folder</a></li><li><a href=#create-the-main-file>Create the main file</a></li><li><a href=#create-the-config-file>Create the config file</a></li><li><a href=#create-the-makefile>Create the makefile</a></li><li><a href=#build-the-application>Build the application</a></li><li><a href=#run-the-application>Run the application</a></li><li><a href=#conclusion>Conclusion</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=create-new-application>Create New Application
+<a class=anchor href=#create-new-application>#</a></h1><p>Let&rsquo;s use the <code>NewAPP</code> as the new project for example.</p><h2 id=create-the-project-folder>Create the project folder
+<a class=anchor href=#create-the-project-folder>#</a></h2><p>Use the name <code>new_app</code> as the project id, and create the project folder as below:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>cd ~/go/src/infini.sh/
+mkdir new_app
+</code></pre></div><blockquote><p>Note: Ensure that <code>new_app</code> is located in the same directory as the <code>framework</code> folder. This structure is required for the Makefile to function correctly.</p></blockquote><h2 id=create-the-main-file>Create the main file
+<a class=anchor href=#create-the-main-file>#</a></h2><p>Create a empty <code>main.go</code> file, and paste the code as below:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>package main
+
+import <span style=color:#f92672>(</span>
+        <span style=color:#e6db74>&#34;infini.sh/framework&#34;</span>
+        <span style=color:#e6db74>&#34;infini.sh/framework/core/module&#34;</span>
+        <span style=color:#e6db74>&#34;infini.sh/framework/core/util&#34;</span>
+        <span style=color:#e6db74>&#34;infini.sh/framework/modules/api&#34;</span>
+        <span style=color:#e6db74>&#34;infini.sh/new_app/config&#34;</span>
+<span style=color:#f92672>)</span>
+
+func main<span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+
+        terminalHeader :<span style=color:#f92672>=</span> <span style=color:#f92672>(</span><span style=color:#e6db74>&#34;     __               _      ___  ___ \n&#34;</span><span style=color:#f92672>)</span>
+        terminalHeader <span style=color:#f92672>+=</span> <span style=color:#f92672>(</span><span style=color:#e6db74>&#34;  /\\ \\ \\_____      __/_\\    / _ \\/ _ \\\n&#34;</span><span style=color:#f92672>)</span>
+        terminalHeader <span style=color:#f92672>+=</span> <span style=color:#f92672>(</span><span style=color:#e6db74>&#34; /  \\/ / _ \\ \\ /\\ / //_\\\\  / /_)/ /_)/\n&#34;</span><span style=color:#f92672>)</span>
+        terminalHeader <span style=color:#f92672>+=</span> <span style=color:#f92672>(</span><span style=color:#e6db74>&#34;/ /\\  /  __/\\ V  V /  _  \\/ ___/ ___/ \n&#34;</span><span style=color:#f92672>)</span>
+        terminalHeader <span style=color:#f92672>+=</span> <span style=color:#f92672>(</span><span style=color:#e6db74>&#34;\\_\\ \\/ \\___| \\_/\\_/\\_/ \\_/\\/   \\/     \n\n&#34;</span><span style=color:#f92672>)</span>
+
+        terminalFooter :<span style=color:#f92672>=</span> <span style=color:#f92672>(</span><span style=color:#e6db74>&#34;Goodbye~&#34;</span><span style=color:#f92672>)</span>
+        app :<span style=color:#f92672>=</span> framework.NewApp<span style=color:#f92672>(</span><span style=color:#e6db74>&#34;new_app&#34;</span>, <span style=color:#e6db74>&#34;Make a golang application is such easy~.&#34;</span>,
+                util.TrimSpaces<span style=color:#f92672>(</span>config.Version<span style=color:#f92672>)</span>, util.TrimSpaces<span style=color:#f92672>(</span>config.BuildNumber<span style=color:#f92672>)</span>, util.TrimSpaces<span style=color:#f92672>(</span>config.LastCommitLog<span style=color:#f92672>)</span>, util.TrimSpaces<span style=color:#f92672>(</span>config.BuildDate<span style=color:#f92672>)</span>, util.TrimSpaces<span style=color:#f92672>(</span>config.EOLDate<span style=color:#f92672>)</span>, terminalHeader, terminalFooter<span style=color:#f92672>)</span>
+        app.IgnoreMainConfigMissing<span style=color:#f92672>()</span>
+        app.Init<span style=color:#f92672>(</span>nil<span style=color:#f92672>)</span>
+        defer app.Shutdown<span style=color:#f92672>()</span>
+        <span style=color:#66d9ef>if</span> app.Setup<span style=color:#f92672>(</span>func<span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+                module.RegisterSystemModule<span style=color:#f92672>(</span>&amp;api.APIModule<span style=color:#f92672>{})</span>
+                module.Start<span style=color:#f92672>()</span>
+        <span style=color:#f92672>}</span>, func<span style=color:#f92672>()</span> <span style=color:#f92672>{</span>
+        <span style=color:#f92672>}</span>, nil<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+                app.Run<span style=color:#f92672>()</span>
+        <span style=color:#f92672>}</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><blockquote><p>You may use this online tool to generate your beauty ASCII based terminal header:
+<a href="http://patorjk.com/software/taag/#p=display&h=2&v=1&f=Ogre&t=NewAPP">http://patorjk.com/software/taag/#p=display&h=2&v=1&f=Ogre&t=NewAPP</a></p></blockquote><h2 id=create-the-config-file>Create the config file
+<a class=anchor href=#create-the-config-file>#</a></h2><pre><code>touch new_app.yml
+</code></pre><h2 id=create-the-makefile>Create the makefile
+<a class=anchor href=#create-the-makefile>#</a></h2><p>create a empty <code>Makefile</code>, and paste the code as below:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>SHELL<span style=color:#f92672>=</span>/bin/bash
+
+<span style=color:#75715e># APP info</span>
+APP_NAME :<span style=color:#f92672>=</span> new_app
+APP_VERSION :<span style=color:#f92672>=</span> 1.0.0_SNAPSHOT
+APP_CONFIG :<span style=color:#f92672>=</span> <span style=color:#66d9ef>$(</span>APP_NAME<span style=color:#66d9ef>)</span>.yml
+APP_EOLDate ?<span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;2025-12-31T10:10:10Z&#34;</span>
+APP_STATIC_FOLDER :<span style=color:#f92672>=</span> .public
+APP_STATIC_PACKAGE :<span style=color:#f92672>=</span> public
+APP_UI_FOLDER :<span style=color:#f92672>=</span> ui
+APP_PLUGIN_FOLDER :<span style=color:#f92672>=</span> plugins
+PREFER_MANAGED_VENDOR<span style=color:#f92672>=</span>fase
+
+include ../framework/Makefile
+</code></pre></div><h2 id=build-the-application>Build the application
+<a class=anchor href=#build-the-application>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>➜  new_app OFFLINE_BUILD<span style=color:#f92672>=</span>true make build
+building new_app 1.0.0_SNAPSHOT main
+/Users/medcl/go/src/infini.sh/new_app
+framework path:  /Users/medcl/go/src/infini.sh/framework
+fatal: not a git repository <span style=color:#f92672>(</span>or any of the parent directories<span style=color:#f92672>)</span>: .git
+update generated info
+update configs
+<span style=color:#f92672>(</span>cd ../framework/  <span style=color:#f92672>&amp;&amp;</span> make update-plugins<span style=color:#f92672>)</span> <span style=color:#f92672>||</span> true <span style=color:#75715e># build plugins in framework</span>
+GOPATH<span style=color:#f92672>=</span>~/go:~/go/src/infini.sh/framework/../vendor/ CGO_ENABLED<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span> GRPC_GO_REQUIRE_HANDSHAKE<span style=color:#f92672>=</span>off  GO15VENDOREXPERIMENT<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;1&#34;</span> GO111MODULE<span style=color:#f92672>=</span>off go build -a  -gcflags<span style=color:#f92672>=</span>all<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;-l -B&#34;</span>  -ldflags <span style=color:#e6db74>&#39;-static&#39;</span> -ldflags<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;-s -w&#39;</span> -gcflags <span style=color:#e6db74>&#34;-m&#34;</span>  --work  -o /Users/medcl/go/src/infini.sh/new_app/bin/new_app
+WORK<span style=color:#f92672>=</span>/var/folders/j5/qd4qt3n55dz053d93q2mswfr0000gn/T/go-build435280758
+<span style=color:#75715e># infini.sh/new_app</span>
+./main.go:17:9: can inline main.deferwrap1
+./main.go:21:12: can inline main.func2
+./main.go:18:22: func literal does not escape
+./main.go:19:45: &amp;api.APIModule<span style=color:#f92672>{}</span> escapes to heap
+./main.go:21:12: func literal escapes to heap
+restore generated info
+</code></pre></div><h2 id=run-the-application>Run the application
+<a class=anchor href=#run-the-application>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>➜  new_app git:<span style=color:#f92672>(</span>main<span style=color:#f92672>)</span> ✗ ./bin/new_app
+     __               _      ___  ___
+  /<span style=color:#ae81ff>\ \ \_</span>____      __/_<span style=color:#ae81ff>\ </span>   / _ <span style=color:#ae81ff>\/</span> _ <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span> /  <span style=color:#ae81ff>\/</span> / _ <span style=color:#ae81ff>\ \ </span>/<span style=color:#ae81ff>\ </span>/ //_<span style=color:#ae81ff>\\</span>  / /_<span style=color:#f92672>)</span>/ /_<span style=color:#f92672>)</span>/
+/ /<span style=color:#ae81ff>\ </span> /  __/<span style=color:#ae81ff>\ </span>V  V /  _  <span style=color:#ae81ff>\/</span> ___/ ___/
+<span style=color:#ae81ff>\_\ \/</span> <span style=color:#ae81ff>\_</span>__| <span style=color:#ae81ff>\_</span>/<span style=color:#ae81ff>\_</span>/<span style=color:#ae81ff>\_</span>/ <span style=color:#ae81ff>\_</span>/<span style=color:#ae81ff>\/</span>   <span style=color:#ae81ff>\/</span>
+
+<span style=color:#f92672>[</span>NEW_APP<span style=color:#f92672>]</span> Make a golang application is such easy~.
+<span style=color:#f92672>[</span>NEW_APP<span style=color:#f92672>]</span> 1.0.0_SNAPSHOT#001, 2024-12-16 06:15:10, 2025-12-31 10:10:10, HEAD
+<span style=color:#f92672>[</span>12-16 14:15:19<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>env.go:203<span style=color:#f92672>]</span> configuration auto reload enabled
+<span style=color:#f92672>[</span>12-16 14:15:19<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>env.go:209<span style=color:#f92672>]</span> watching config: /Users/medcl/go/src/infini.sh/new_app/config
+<span style=color:#f92672>[</span>12-16 14:15:19<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>app.go:311<span style=color:#f92672>]</span> initializing new_app, pid: <span style=color:#ae81ff>64426</span>
+<span style=color:#f92672>[</span>12-16 14:15:19<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>app.go:312<span style=color:#f92672>]</span> using config: /Users/medcl/go/src/infini.sh/new_app/new_app.yml
+<span style=color:#f92672>[</span>12-16 14:15:19<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>api.go:214<span style=color:#f92672>]</span> local ips: 192.168.3.17
+<span style=color:#f92672>[</span>12-16 14:15:19<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>api.go:312<span style=color:#f92672>]</span> api server listen at: http://0.0.0.0:2900
+<span style=color:#f92672>[</span>12-16 14:15:19<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>module.go:159<span style=color:#f92672>]</span> started module: api
+<span style=color:#f92672>[</span>12-16 14:15:19<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>module.go:184<span style=color:#f92672>]</span> all modules are started
+<span style=color:#f92672>[</span>12-16 14:15:19<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>instance.go:101<span style=color:#f92672>]</span> workspace: /Users/medcl/go/src/infini.sh/new_app/data/new_app/nodes/ctfs8hbq50kevmkb3m6g
+<span style=color:#f92672>[</span>12-16 14:15:19<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>app.go:537<span style=color:#f92672>]</span> new_app is up and running now.
+^C
+<span style=color:#f92672>[</span>NEW_APP<span style=color:#f92672>]</span> got signal: interrupt, start shutting down
+<span style=color:#f92672>[</span>12-16 14:15:23<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>module.go:213<span style=color:#f92672>]</span> all modules are stopped
+<span style=color:#f92672>[</span>12-16 14:15:23<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>app.go:410<span style=color:#f92672>]</span> new_app now terminated.
+<span style=color:#f92672>[</span>NEW_APP<span style=color:#f92672>]</span> 1.0.0_SNAPSHOT, uptime: 4.13334s
+
+Goodbye~
+</code></pre></div><h2 id=conclusion>Conclusion
+<a class=anchor href=#conclusion>#</a></h2><p>By leveraging the INFINI Framework, creating a Go application becomes significantly simpler and more efficient.
+The framework provides built-in commands and modules, streamlining the development process and enabling you to focus on building your application&rsquo;s core functionality.</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/infinilabs/framework/edit/v1.1.6/docs/content.en/docs/development/create_new_application.md target=_blank rel=noopener><img src=/framework/v1.1.6/svg/edit.svg class=book-icon alt=Edit>
+<span>Edit this page</span></a></div><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script>(function(h,o,t,j,a,r){h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};h._hjSettings={hjid:2567416,hjsv:6};a=o.getElementsByTagName('head')[0];r=o.createElement('script');r.async=1;r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;a.appendChild(r);})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
+    import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
+    searchbox({container: "#searchbox"});
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#create-new-application>Create New Application</a><ul><li><a href=#create-the-project-folder>Create the project folder</a></li><li><a href=#create-the-main-file>Create the main file</a></li><li><a href=#create-the-config-file>Create the config file</a></li><li><a href=#create-the-makefile>Create the makefile</a></li><li><a href=#build-the-application>Build the application</a></li><li><a href=#run-the-application>Run the application</a></li><li><a href=#conclusion>Conclusion</a></li></ul></li></ul></nav></aside></main></body></html>
