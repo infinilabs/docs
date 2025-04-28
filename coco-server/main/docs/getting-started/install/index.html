@@ -11,7 +11,7 @@
 <label for=section-97bb467845ddef2c28eba43b4c87ba98 class="flex justify-between"><a>System</a>
 <span>▾</span></label><ul><li><a href=/coco-server/main/docs/references/system/install/>System Initialization</a></li><li><a href=/coco-server/main/docs/references/system/settings/>System Settings</a></li></ul></li><li><input type=checkbox id=section-830be57e26216c4b31d75f7e80eea5a9 class=toggle>
 <label for=section-830be57e26216c4b31d75f7e80eea5a9 class="flex justify-between"><a>Account</a>
-<span>▾</span></label><ul><li><a href=/coco-server/main/docs/references/account/authentication/>Authentication</a></li><li><a href=/coco-server/main/docs/references/account/access_token/>API Token</a></li><li><a href=/coco-server/main/docs/references/account/password/>Modify Password</a></li><li><a href=/coco-server/main/docs/references/account/profile/>Profile</a></li><li><a href=/coco-server/main/docs/references/account/logout/>Logout</a></li></ul></li><li><a href=/coco-server/main/docs/references/assistant/>Assistant</a></li><li><a href=/coco-server/main/docs/references/document/>Document</a></li><li><a href=/coco-server/main/docs/references/search/>Search</a></li><li><a href=/coco-server/main/docs/references/datasource/>Datasource</a></li><li><a href=/coco-server/main/docs/references/integration/>Integration</a></li><li><a href=/coco-server/main/docs/references/model_provider/>Model Provider</a></li><li><a href=/coco-server/main/docs/references/attachment/>Attachment</a></li><li><input type=checkbox id=section-6163ea64c3eeec962ea0b7215fc64522 class=toggle>
+<span>▾</span></label><ul><li><a href=/coco-server/main/docs/references/account/authentication/>Authentication</a></li><li><a href=/coco-server/main/docs/references/account/access_token/>API Token</a></li><li><a href=/coco-server/main/docs/references/account/password/>Modify Password</a></li><li><a href=/coco-server/main/docs/references/account/profile/>Profile</a></li><li><a href=/coco-server/main/docs/references/account/logout/>Logout</a></li></ul></li><li><a href=/coco-server/main/docs/references/assistant/>Assistant</a></li><li><a href=/coco-server/main/docs/references/document/>Document</a></li><li><a href=/coco-server/main/docs/references/search/>Search</a></li><li><a href=/coco-server/main/docs/references/datasource/>Datasource</a></li><li><a href=/coco-server/main/docs/references/integration/>Integration</a></li><li><a href=/coco-server/main/docs/references/mcp_server/>MCP Server</a></li><li><a href=/coco-server/main/docs/references/model_provider/>Model Provider</a></li><li><a href=/coco-server/main/docs/references/attachment/>Attachment</a></li><li><input type=checkbox id=section-6163ea64c3eeec962ea0b7215fc64522 class=toggle>
 <label for=section-6163ea64c3eeec962ea0b7215fc64522 class="flex justify-between"><a href=/coco-server/main/docs/references/connectors/>Connectors</a>
 <span>▾</span></label><ul><li><a href=/coco-server/main/docs/references/connectors/google_drive/>Google Drive</a></li><li><a href=/coco-server/main/docs/references/connectors/hugo_site/>Hugo Site</a></li><li><a href=/coco-server/main/docs/references/connectors/notion/>Notion</a></li><li><a href=/coco-server/main/docs/references/connectors/yuque/>Yuque</a></li></ul></li></ul></li><li><input type=checkbox id=section-7dd85575c84e6825eb9419e748eb5977 class=toggle>
 <label for=section-7dd85575c84e6825eb9419e748eb5977 class="flex justify-between"><a href=/coco-server/main/docs/tutorials/>Tutorials</a>
@@ -30,8 +30,8 @@
 <span style=color:#75715e>#   -d:               Run the container in the background (detached mode)</span>
 <span style=color:#75715e>#   --name cocoserver:  Assign a name to the container (cocoserver)</span>
 <span style=color:#75715e>#   -p 9000:9000:     Map the container&#39;s port 9000 to the host&#39;s port 9000 (Web UI port)</span>
-<span style=color:#75715e>#   infinilabs/coco:0.2.1-1998:  The Docker image name and tag (version) to use</span>
-docker run -d --name cocoserver -p 9000:9000 infinilabs/coco:0.2.1-1998
+<span style=color:#75715e>#   infinilabs/coco:0.4.0-2008:  The Docker image name and tag (version) to use</span>
+docker run -d --name cocoserver -p 9000:9000 infinilabs/coco:0.4.0-2008
 
 <span style=color:#75715e># Stop and Remove Coco Server Container</span>
 <span style=color:#75715e>#</span>
@@ -44,9 +44,9 @@ docker stop cocoserver <span style=color:#f92672>&amp;&amp;</span> docker rm coc
 <span style=color:#75715e># Remove Coco Server Docker Image</span>
 <span style=color:#75715e>#</span>
 <span style=color:#75715e># Command Explanation:</span>
-<span style=color:#75715e>#   docker rmi infinilabs/coco:0.2.1-1998: Remove the image named infinilabs/coco with the tag 0.2.1-1998</span>
+<span style=color:#75715e>#   docker rmi infinilabs/coco:0.4.0-2008: Remove the image named infinilabs/coco with the tag 0.4.0-2008</span>
 <span style=color:#75715e>#   Note: You can only remove an image if no containers are using it.  If a container is using the image, you must first stop and remove the container.</span>
-docker rmi infinilabs/coco:0.2.1-1998
+docker rmi infinilabs/coco:0.4.0-2008
 
 <span style=color:#75715e># --------------------------------------------------</span>
 <span style=color:#75715e># Customized Configuration to Start Coco Server</span>
@@ -75,7 +75,7 @@ sudo chown -R 602:602 <span style=color:#66d9ef>$(</span>pwd<span style=color:#6
 <span style=color:#75715e>#   -e ES_JAVA_OPTS=&#34;-Xms2g -Xmx2g&#34;:  Set the JVM parameters for Easysearch:</span>
 <span style=color:#75715e>#        - -Xms2g:  Set the initial JVM heap size to 2GB</span>
 <span style=color:#75715e>#        - -Xmx2g:  Set the maximum JVM heap size to 2GB</span>
-<span style=color:#75715e>#   infinilabs/coco:0.2.1-1998: The Docker image name and tag to use</span>
+<span style=color:#75715e>#   infinilabs/coco:0.4.0-2008: The Docker image name and tag to use</span>
 
 docker run -d <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>           --name cocoserver <span style=color:#ae81ff>\
@@ -88,7 +88,7 @@ docker run -d <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>           -v <span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span>/cocoserver/logs:/app/easysearch/logs <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>           -e EASYSEARCH_INITIAL_ADMIN_PASSWORD<span style=color:#f92672>=</span>coco-server <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>           -e ES_JAVA_OPTS<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;-Xms2g -Xmx2g&#34;</span> <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>           infinilabs/coco:0.2.1-1998
+</span><span style=color:#ae81ff></span>           infinilabs/coco:0.4.0-2008
 </code></pre></div><h2 id=manual-installation>Manual Installation
 <a class=anchor href=#manual-installation>#</a></h2><p>Follow these steps for a manual setup:</p><h3 id=easysearch>Easysearch
 <a class=anchor href=#easysearch>#</a></h3><p>Install Easysearch</p><pre><code>docker run -itd --name easysearch -p 9200:9200 infinilabs/easysearch:1.8.3-265
