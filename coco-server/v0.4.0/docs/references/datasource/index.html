@@ -1,0 +1,85 @@
+<!doctype html><html lang=en><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Datasource #  Work with Datasource #  Datasource defines where the data comes from, usually we can use a specify connector to fetch data from a specify datasource.
+Create a Datasource #  We can use the connector to connect specify datasource.
+//request curl -H 'Content-Type: application/json' -XPOST http://localhost:9000/datasource/ -d' { &#34;name&#34;:&#34;My Hugo Site&#34;, &#34;type&#34;:&#34;connector&#34;, &#34;connector&#34;:{ &#34;id&#34;:&#34;hugo_site&#34;, &#34;config&#34;:{ &#34;urls&#34;: [ &#34;https://pizza.rs/index.json&#34; ] } } }' //response { &#34;_id&#34;: &#34;cu1rf03q50k43nn2pi6g&#34;, &#34;result&#34;: &#34;created&#34; }  config specifies the necessary configurations for this connector."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Datasource"><meta property="og:description" content="Datasource #  Work with Datasource #  Datasource defines where the data comes from, usually we can use a specify connector to fetch data from a specify datasource.
+Create a Datasource #  We can use the connector to connect specify datasource.
+//request curl -H 'Content-Type: application/json' -XPOST http://localhost:9000/datasource/ -d' { &#34;name&#34;:&#34;My Hugo Site&#34;, &#34;type&#34;:&#34;connector&#34;, &#34;connector&#34;:{ &#34;id&#34;:&#34;hugo_site&#34;, &#34;config&#34;:{ &#34;urls&#34;: [ &#34;https://pizza.rs/index.json&#34; ] } } }' //response { &#34;_id&#34;: &#34;cu1rf03q50k43nn2pi6g&#34;, &#34;result&#34;: &#34;created&#34; }  config specifies the necessary configurations for this connector."><meta property="og:type" content="article"><meta property="og:url" content="/coco-server/v0.4.0/docs/references/datasource/"><title>Datasource | Coco Server</title><link rel=manifest href=/coco-server/v0.4.0/manifest.json><link rel=icon href=/coco-server/v0.4.0/favicon.png type=image/x-icon><link rel=stylesheet href=/coco-server/v0.4.0/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><script defer src=/coco-server/v0.4.0/js/jquery-2.x.min.js></script><script defer src=/coco-server/v0.4.0/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/coco-server/v0.4.0><img src=/coco-server/v0.4.0/img/logo-en.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px></div><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value=v0.4.0>v0.4.0</option>
+<option value=v0.3.0>v0.3.0</option>
+<option value=v0.2.2>v0.2.2</option></select></div><ul><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
+<label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>Getting Started</a>
+<span>▾</span></label><ul><li><a href=/coco-server/v0.4.0/docs/getting-started/install/>Installation</a></li><li><a href=/coco-server/v0.4.0/docs/getting-started/setup/>Setup Wizard</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle checked>
+<label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a href=/coco-server/v0.4.0/docs/references/>References</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-97bb467845ddef2c28eba43b4c87ba98 class=toggle>
+<label for=section-97bb467845ddef2c28eba43b4c87ba98 class="flex justify-between"><a>System</a>
+<span>▾</span></label><ul><li><a href=/coco-server/v0.4.0/docs/references/system/install/>System Initialization</a></li><li><a href=/coco-server/v0.4.0/docs/references/system/settings/>System Settings</a></li></ul></li><li><input type=checkbox id=section-830be57e26216c4b31d75f7e80eea5a9 class=toggle>
+<label for=section-830be57e26216c4b31d75f7e80eea5a9 class="flex justify-between"><a>Account</a>
+<span>▾</span></label><ul><li><a href=/coco-server/v0.4.0/docs/references/account/authentication/>Authentication</a></li><li><a href=/coco-server/v0.4.0/docs/references/account/access_token/>API Token</a></li><li><a href=/coco-server/v0.4.0/docs/references/account/password/>Modify Password</a></li><li><a href=/coco-server/v0.4.0/docs/references/account/profile/>Profile</a></li><li><a href=/coco-server/v0.4.0/docs/references/account/logout/>Logout</a></li></ul></li><li><a href=/coco-server/v0.4.0/docs/references/assistant/>Assistant</a></li><li><a href=/coco-server/v0.4.0/docs/references/document/>Document</a></li><li><a href=/coco-server/v0.4.0/docs/references/search/>Search</a></li><li><a href=/coco-server/v0.4.0/docs/references/datasource/ class=active>Datasource</a></li><li><a href=/coco-server/v0.4.0/docs/references/integration/>Integration</a></li><li><a href=/coco-server/v0.4.0/docs/references/model_provider/>Model Provider</a></li><li><a href=/coco-server/v0.4.0/docs/references/attachment/>Attachment</a></li><li><input type=checkbox id=section-6163ea64c3eeec962ea0b7215fc64522 class=toggle>
+<label for=section-6163ea64c3eeec962ea0b7215fc64522 class="flex justify-between"><a href=/coco-server/v0.4.0/docs/references/connectors/>Connectors</a>
+<span>▾</span></label><ul><li><a href=/coco-server/v0.4.0/docs/references/connectors/google_drive/>Google Drive</a></li><li><a href=/coco-server/v0.4.0/docs/references/connectors/hugo_site/>Hugo Site</a></li><li><a href=/coco-server/v0.4.0/docs/references/connectors/notion/>Notion</a></li><li><a href=/coco-server/v0.4.0/docs/references/connectors/yuque/>Yuque</a></li></ul></li></ul></li><li><input type=checkbox id=section-7dd85575c84e6825eb9419e748eb5977 class=toggle>
+<label for=section-7dd85575c84e6825eb9419e748eb5977 class="flex justify-between"><a href=/coco-server/v0.4.0/docs/tutorials/>Tutorials</a>
+<span>▾</span></label><ul><li><a href=/coco-server/v0.4.0/docs/tutorials/howto_create_your_own_datasource/>How to integrate Coco AI with your own datasource</a></li></ul></li><li><a href=/coco-server/v0.4.0/docs/release-notes/>Release Notes</a><ul></ul></li></ul><ul><li><a href=https://github.com/infinilabs/coco-server target=_blank rel=noopener>Github</a></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/coco-server/v0.4.0/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>Datasource</strong>
+<label for=toc-control><img src=/coco-server/v0.4.0/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#datasource>Datasource</a><ul><li><a href=#work-with-datasource>Work with <em>Datasource</em></a><ul><li><a href=#create-a-datasource>Create a Datasource</a></li><li><a href=#view-a-datasource>View a Datasource</a></li><li><a href=#delete-the-datasource>Delete the Datasource</a></li><li><a href=#update-a-datasource>Update a Datasource</a></li><li><a href=#search-datasources>Search Datasources</a></li><li><a href=#insert-document-to-this-datasource>Insert Document to this Datasource</a></li></ul></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=datasource>Datasource
+<a class=anchor href=#datasource>#</a></h1><h2 id=work-with-datasource>Work with <em>Datasource</em>
+<a class=anchor href=#work-with-datasource>#</a></h2><p>Datasource defines where the data comes from, usually we can use a specify connector to fetch data from a specify datasource.</p><h3 id=create-a-datasource>Create a Datasource
+<a class=anchor href=#create-a-datasource>#</a></h3><p>We can use the connector to connect specify datasource.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>//request
+curl  -H <span style=color:#e6db74>&#39;Content-Type: application/json&#39;</span>   -XPOST http://localhost:9000/datasource/ -d<span style=color:#e6db74>&#39;
+</span><span style=color:#e6db74>{
+</span><span style=color:#e6db74>    &#34;name&#34;:&#34;My Hugo Site&#34;,
+</span><span style=color:#e6db74>    &#34;type&#34;:&#34;connector&#34;,
+</span><span style=color:#e6db74>    &#34;connector&#34;:{
+</span><span style=color:#e6db74>        &#34;id&#34;:&#34;hugo_site&#34;,
+</span><span style=color:#e6db74>         &#34;config&#34;:{
+</span><span style=color:#e6db74>            &#34;urls&#34;: [ &#34;https://pizza.rs/index.json&#34; ]
+</span><span style=color:#e6db74>        }
+</span><span style=color:#e6db74>    }
+</span><span style=color:#e6db74>}&#39;</span>
+
+//response
+<span style=color:#f92672>{</span>
+  <span style=color:#e6db74>&#34;_id&#34;</span>: <span style=color:#e6db74>&#34;cu1rf03q50k43nn2pi6g&#34;</span>,
+  <span style=color:#e6db74>&#34;result&#34;</span>: <span style=color:#e6db74>&#34;created&#34;</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><blockquote><p><code>config</code> specifies the necessary configurations for this connector. For detailed information, refer to the
+<a href=/coco-server/v0.4.0/docs/references/connectors/>connector reference documentation</a>.</p></blockquote><h3 id=view-a-datasource>View a Datasource
+<a class=anchor href=#view-a-datasource>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>curl -XGET http://localhost:9000/datasource/cu1rf03q50k43nn2pi6g
+</code></pre></div><h3 id=delete-the-datasource>Delete the Datasource
+<a class=anchor href=#delete-the-datasource>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>//request
+curl  -H <span style=color:#e6db74>&#39;Content-Type: application/json&#39;</span>   -XDELETE http://localhost:9000/datasource/cu1rf03q50k43nn2pi6g -d<span style=color:#e6db74>&#39;
+</span><span style=color:#e6db74>{
+</span><span style=color:#e6db74>  &#34;_id&#34;: &#34;cu1rf03q50k43nn2pi6g&#34;,
+</span><span style=color:#e6db74>  &#34;result&#34;: &#34;deleted&#34;
+</span><span style=color:#e6db74>}&#39;</span>
+</code></pre></div><h3 id=update-a-datasource>Update a Datasource
+<a class=anchor href=#update-a-datasource>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>curl -XPUT http://localhost:9000/datasource/cu1rf03q50k43nn2pi6g?replace<span style=color:#f92672>=</span>true -d <span style=color:#e6db74>&#39;{
+</span><span style=color:#e6db74>    &#34;name&#34;:&#34;My Hugo Site&#34;,
+</span><span style=color:#e6db74>    &#34;type&#34;:&#34;connector&#34;,
+</span><span style=color:#e6db74>    &#34;connector&#34;:{
+</span><span style=color:#e6db74>        &#34;id&#34;:&#34;hugo_site&#34;,
+</span><span style=color:#e6db74>         &#34;config&#34;:{
+</span><span style=color:#e6db74>            &#34;urls&#34;: [ &#34;https://pizza.rs/index.json&#34; ]
+</span><span style=color:#e6db74>        }
+</span><span style=color:#e6db74>    }
+</span><span style=color:#e6db74>}&#39;</span>
+
+//response
+<span style=color:#f92672>{</span>
+  <span style=color:#e6db74>&#34;_id&#34;</span>: <span style=color:#e6db74>&#34;cxx9vr3q50k38nobvmcg&#34;</span>,
+  <span style=color:#e6db74>&#34;result&#34;</span>: <span style=color:#e6db74>&#34;updated&#34;</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><blockquote><p><code>?replace=true</code> can safely ignore errors for non-existent items.</p></blockquote><h3 id=search-datasources>Search Datasources
+<a class=anchor href=#search-datasources>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>curl -XGET http://localhost:9000/datasource/_search
+</code></pre></div><h3 id=insert-document-to-this-datasource>Insert Document to this Datasource
+<a class=anchor href=#insert-document-to-this-datasource>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>curl -H <span style=color:#e6db74>&#39;Content-Type: application/json&#39;</span>   -XPOST http://localhost:9000/datasource/cu1rf03q50k43nn2pi6g/_doc -d<span style=color:#e6db74>&#39;
+</span><span style=color:#e6db74>{
+</span><span style=color:#e6db74>   &#34;title&#34;: &#34;Your title&#34;,
+</span><span style=color:#e6db74>   ...OMITTED...
+</span><span style=color:#e6db74>}&#39;</span>
+</code></pre></div></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/infinilabs/coco-server/edit/v0.4.0/docs/content.en/docs/references/datasource.md target=_blank rel=noopener><img src=/coco-server/v0.4.0/svg/edit.svg class=book-icon alt=Edit>
+<span>Edit this page</span></a></div><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script>(function(h,o,t,j,a,r){h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};h._hjSettings={hjid:2567416,hjsv:6};a=o.getElementsByTagName('head')[0];r=o.createElement('script');r.async=1;r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;a.appendChild(r);})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
+    import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
+    searchbox({container: "#searchbox"});
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#datasource>Datasource</a><ul><li><a href=#work-with-datasource>Work with <em>Datasource</em></a><ul><li><a href=#create-a-datasource>Create a Datasource</a></li><li><a href=#view-a-datasource>View a Datasource</a></li><li><a href=#delete-the-datasource>Delete the Datasource</a></li><li><a href=#update-a-datasource>Update a Datasource</a></li><li><a href=#search-datasources>Search Datasources</a></li><li><a href=#insert-document-to-this-datasource>Insert Document to this Datasource</a></li></ul></li></ul></li></ul></nav></aside></main></body></html>
