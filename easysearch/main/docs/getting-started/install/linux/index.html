@@ -121,6 +121,32 @@ wget -N https://release.infinilabs.com/easysearch/archive/java.sh -P /etc/profil
 </code></pre></div><ol start=15><li>运行 Easysearch</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /opt/easysearch <span style=color:#f92672>&amp;&amp;</span> bin/easysearch
 </code></pre></div><h2 id=将-easysearch-配置为服务>将 Easysearch 配置为服务
 <a class=anchor href=#%e5%b0%86-easysearch-%e9%85%8d%e7%bd%ae%e4%b8%ba%e6%9c%8d%e5%8a%a1>#</a></h2><blockquote><p>如果您想通过服务的方式来运行 Easysearch，可手工配置 Easysearch 服务文件</p></blockquote><ol><li>下载服务文件</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>wget -N https://release.infinilabs.com/easysearch/archive/easysearch.service -P /usr/lib/systemd/system
+</code></pre></div><p>或者直接编辑和执行下面的脚本:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo tee /usr/lib/systemd/system/easysearch.service <span style=color:#e6db74>&lt;&lt;-&#39;EOF&#39;
+</span><span style=color:#e6db74>[Unit]
+</span><span style=color:#e6db74>Description=easysearch
+</span><span style=color:#e6db74>Documentation=https://www.infinilabs.com
+</span><span style=color:#e6db74>After=network.target
+</span><span style=color:#e6db74>
+</span><span style=color:#e6db74>[Service]
+</span><span style=color:#e6db74>Type=forking
+</span><span style=color:#e6db74>User=easysearch
+</span><span style=color:#e6db74>Environment=&#34;PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/jdk/bin&#34;
+</span><span style=color:#e6db74>ExecStart=/opt/easysearch/bin/easysearch -d
+</span><span style=color:#e6db74>PrivateTmp=true
+</span><span style=color:#e6db74>LimitNOFILE=65536
+</span><span style=color:#e6db74>LimitNPROC=65536
+</span><span style=color:#e6db74>LimitAS=infinity
+</span><span style=color:#e6db74>LimitFSIZE=infinity
+</span><span style=color:#e6db74>LimitMEMLOCK=infinity
+</span><span style=color:#e6db74>TimeoutStopSec=0
+</span><span style=color:#e6db74>KillSignal=SIGTERM
+</span><span style=color:#e6db74>KillMode=process
+</span><span style=color:#e6db74>SendSIGKILL=no
+</span><span style=color:#e6db74>SuccessExitStatus=143
+</span><span style=color:#e6db74>
+</span><span style=color:#e6db74>[Install]
+</span><span style=color:#e6db74>WantedBy=multi-user.target
+</span><span style=color:#e6db74>EOF</span>
 </code></pre></div><blockquote><p>如果您的 Easysearch 运行用户及安装目录不同，请修改服务文件中的 User 及 ExecStart。</p></blockquote><ol start=2><li>重新加载服务配置文件</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>systemctl daemon-reload
 </code></pre></div><ol start=3><li>启动 Easysearch 服务</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>systemctl start easysearch
 </code></pre></div><ol start=4><li>检查 Easysearch 服务状态</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>systemctl status easysearch
