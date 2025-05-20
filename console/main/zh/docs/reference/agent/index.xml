@@ -13,6 +13,6 @@ https://release.infinilabs.com/agent/
 下载镜像 # 探针(INFINI Agent) 的镜像发布在 Docker 的官方仓库，地址如下：
 https://hub.docker.com/r/infinilabs/agent
 使用下面的命令即可获取最新的容器镜像：
-docker pull infinilabs/agent:1.29.3-2018 验证镜像 # 将镜像下载到本地之后，可以看到 探针 (INFINI Agent) 的容器镜像非常小，只有不到 20MB，所以下载是非常快的。
-✗ docker images |grep &amp;quot;agent&amp;quot; |grep &amp;quot;1.29.3-2018&amp;quot; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/agent latest 1.29.3-2018 4 days ago 13.8MB 创建配置 # 现在需要创建一个配置文件 agent.yml，来进行基本的配置，如下：
+docker pull infinilabs/agent:1.29.4 验证镜像 # 将镜像下载到本地之后，可以看到 探针 (INFINI Agent) 的容器镜像非常小，只有不到 20MB，所以下载是非常快的。
+✗ docker images |grep &amp;quot;agent&amp;quot; |grep &amp;quot;1.29.4&amp;quot; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/agent latest 1.29.4 4 days ago 13.8MB 创建配置 # 现在需要创建一个配置文件 agent.yml，来进行基本的配置，如下：
 api: enabled: true network: binding: 0.0.0.0:8080 metrics: enabled: true queue: metrics network: enabled: true summary: true details: true memory: metrics: - swap - memory disk: metrics: - ioqs - usage cpu: metrics: - idle - system - user - iowait - load elasticsearch: enabled: true agent_mode: true node_stats: true index_stats: true cluster_stats: true elasticsearch: - name: default enabled: true endpoint: http://192.</description></item></channel></rss>
