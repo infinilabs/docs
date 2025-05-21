@@ -1,0 +1,168 @@
+<!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="处理流程 #  流程定义 #  每一个网关接收到的请求都会通过一系列的流程处理，最后才返回给客户端，流程的定义在极限网关里面叫做 flow，以下面的这个例子为例：
+flow: - name: hello_world filter: - echo: message: &#34;hello gateway\n&#34; repeat: 1 - name: not_found filter: - echo: message: '404 not found\n' repeat: 1 上面的例子定义了两个 flow hello_world 和 not_found， 每个 flow 都使用了一个名为 echo 的过滤器，用来输出一段字符串，每个 flow 下面可以定义一系列 filter，他们按照定义的顺序依次执行。
+语法说明 #  极限网关采用约定的格式来定义流程，并且支持灵活的条件参数来进行逻辑判断，具体的格式定义如下：
+flow: - name: <flow_name> filter: - <filter_name>: when: <condition> <parameters> - <filter_name>: when: <condition> <parameters> ... 上面的 filter_name 代表具体的某个过滤器名称，用来执行特定的任务，when 下面的 condition 用来定义特定的满足执行该任务的条件参数，不满足条件的情况下会跳过该过滤器任务的执行，parameters 里面设置的该过滤器相关的参数，如果多个参数依次换行即可。"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="处理流程"><meta property="og:description" content="处理流程 #  流程定义 #  每一个网关接收到的请求都会通过一系列的流程处理，最后才返回给客户端，流程的定义在极限网关里面叫做 flow，以下面的这个例子为例：
+flow: - name: hello_world filter: - echo: message: &#34;hello gateway\n&#34; repeat: 1 - name: not_found filter: - echo: message: '404 not found\n' repeat: 1 上面的例子定义了两个 flow hello_world 和 not_found， 每个 flow 都使用了一个名为 echo 的过滤器，用来输出一段字符串，每个 flow 下面可以定义一系列 filter，他们按照定义的顺序依次执行。
+语法说明 #  极限网关采用约定的格式来定义流程，并且支持灵活的条件参数来进行逻辑判断，具体的格式定义如下：
+flow: - name: <flow_name> filter: - <filter_name>: when: <condition> <parameters> - <filter_name>: when: <condition> <parameters> ... 上面的 filter_name 代表具体的某个过滤器名称，用来执行特定的任务，when 下面的 condition 用来定义特定的满足执行该任务的条件参数，不满足条件的情况下会跳过该过滤器任务的执行，parameters 里面设置的该过滤器相关的参数，如果多个参数依次换行即可。"><meta property="og:type" content="article"><meta property="og:url" content="/gateway/v1.29.4/zh/docs/references/flow/"><title>处理流程 | INFINI Gateway</title><link rel=manifest href=/gateway/v1.29.4/manifest.json><link rel=icon href=/gateway/v1.29.4/favicon.png type=image/x-icon><link rel=alternate hreflang=en href=/gateway/v1.29.4/docs/references/flow/ title="Handling Flow"><link rel=stylesheet href=/gateway/v1.29.4/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><script defer src=/gateway/v1.29.4/js/jquery-2.x.min.js></script><script defer src=/gateway/v1.29.4/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/gateway/v1.29.4/zh><img src=/gateway/v1.29.4/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value=v1.29.4>v1.29.4</option>
+<option value=v1.29.3>v1.29.3</option>
+<option value=v1.29.2>v1.29.2</option>
+<option value=v1.29.1>v1.29.1</option>
+<option value=v1.29.0>v1.29.0</option>
+<option value=v1.28.2>v1.28.2</option>
+<option value=v1.28.0>v1.28.0</option>
+<option value=v1.27.0>v1.27.0</option>
+<option value=v1.26.1>v1.26.1</option></select></div><ul><li><a href=/gateway/v1.29.4/zh/docs/overview/>产品概述</a><ul></ul></li><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
+<label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>入门指南</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.29.4/zh/docs/getting-started/install/>安装网关</a></li><li><a href=/gateway/v1.29.4/zh/docs/getting-started/configuration/>配置网关</a></li><li><a href=/gateway/v1.29.4/zh/docs/getting-started/docker/>容器部署</a></li><li><a href=/gateway/v1.29.4/zh/docs/getting-started/helm/>Helm 部署</a></li><li><a href=/gateway/v1.29.4/zh/docs/getting-started/optimization/>系统调优</a></li><li><a href=/gateway/v1.29.4/zh/docs/getting-started/benchmark/>性能测试</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle checked>
+<label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a>功能手册</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.29.4/zh/docs/references/entry/>服务入口</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/router/>服务路由</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/flow/ class=active>处理流程</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/elasticsearch/>Elasticsearch</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/context/>请求上下文</a></li><li><input type=checkbox id=section-a53d1bd91095fa28aef70cee327a5121 class=toggle>
+<label for=section-a53d1bd91095fa28aef70cee327a5121 class="flex justify-between"><a href=/gateway/v1.29.4/zh/docs/references/filters/>在线过滤器</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.29.4/zh/docs/references/filters/echo/>echo</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/auto_generate_doc_id/>auto_generate_doc_id</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/basic_auth/>basic_auth</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/bulk_request_mutate/>bulk_request_mutate</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/bulk_request_throttle/>bulk_request_throttle</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/bulk_reshuffle/>bulk_reshuffle</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/bulk_response_process/>bulk_response_process</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/cache/>cache</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/clone/>clone</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/context_filter/>context_filter</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/context_limiter/>context_limiter</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/context_parse/>context_parse</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/context_regex_replace/>context_regex_replace</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/context_switch/>context_switch</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/date_range_precision_tuning/>date_range_precision_tuning</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/drop/>drop</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/dump/>dump</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/elasticsearch/>elasticsearch</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/elasticsearch_health_check/>elasticsearch_health_check</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/flow/>flow</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/hash_mod/>hash_mod</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/http/>http</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/javascript/>javascript</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/ldap_auth/>ldap_auth</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/logging/>logging</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/queue/>queue</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/ratio/>ratio</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/record/>record</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/redirect/>redirect</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/redis_pubsub/>redis_pubsub</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/request_api_key_filter/>request_api_key_filter</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/request_api_key_limiter/>request_api_key_limiter</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/request_body_json_del/>request_body_json_del</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/request_body_json_set/>request_body_json_set</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/request_body_regex_replace/>request_body_regex_replace</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/request_client_ip_filter/>request_client_ip_filter</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/request_client_ip_limiter/>request_client_ip_limiter</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/request_header_filter/>request_header_filter</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/request_host_filter/>request_host_filter</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/request_host_limiter/>request_host_limiter</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/request_method_filter/>request_method_filter</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/request_path_filter/>request_path_filter</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/request_path_limiter/>request_path_limiter</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/request_reshuffle/>request_reshuffle</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/request_user_filter/>request_user_filter</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/request_user_limiter/>request_user_limiter</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/response_body_regex_replace/>response_body_regex_replace</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/response_header_filter/>response_header_filter</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/response_header_format/>response_header_format</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/response_status_filter/>response_status_filter</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/retry_limiter/>retry_limiter</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/rewrite_to_bulk/>rewrite_to_bulk</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/sample/>sample</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/security/>security</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/set_basic_auth/>set_basic_auth</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/set_context/>set_context</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/set_hostname/>set_hostname</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/set_request_header/>set_request_header</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/set_request_query_args/>set_request_query_args</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/set_response/>set_response</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/set_response_header/>set_response_header</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/sleep/>sleep</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/switch/>switch</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/filters/translog/>translog</a></li></ul></li><li><input type=checkbox id=section-82db29a871579194764c352cfff582f2 class=toggle>
+<label for=section-82db29a871579194764c352cfff582f2 class="flex justify-between"><a href=/gateway/v1.29.4/zh/docs/references/processors/>离线处理器</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.29.4/zh/docs/references/processors/bulk_indexing/>bulk_indexing</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/processors/consumer/>consumer</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/processors/dag/>dag</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/processors/dump_hash/>dump_hash</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/processors/flow_replay/>flow_replay</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/processors/flow_runner/>flow_runner</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/processors/index_diff/>index_diff</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/processors/indexing_merge/>indexing_merge</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/processors/json_indexing/>json_indexing</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/processors/merge_to_bulk/>merge_to_bulk</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/processors/queue_consumer/>queue_consumer</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/processors/replay/>replay</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/processors/smtp/>smtp</a></li></ul></li><li><input type=checkbox id=section-3de6688eceb9f20db2f0270adccf76e2 class=toggle>
+<label for=section-3de6688eceb9f20db2f0270adccf76e2 class="flex justify-between"><a>功能组件</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.29.4/zh/docs/references/modules/floating_ip/>浮动 IP</a></li><li><a href=/gateway/v1.29.4/zh/docs/references/modules/force_merge/>索引段合并</a></li></ul></li><li><a href=/gateway/v1.29.4/zh/docs/references/config/>其它配置</a></li></ul></li><li><input type=checkbox id=section-391bcaab6cc03bd87e3373752bfd390e class=toggle>
+<label for=section-391bcaab6cc03bd87e3373752bfd390e class="flex justify-between"><a>动手教程</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.29.4/zh/docs/tutorial/log4j2_filtering/>Apache Log4j 漏洞处置</a></li><li><a href=/gateway/v1.29.4/zh/docs/tutorial/online_query_rewrite/>在线查询修复的实现</a></li><li><a href=/gateway/v1.29.4/zh/docs/tutorial/request-logging/>查询请求流量日志分析</a></li><li><a href=/gateway/v1.29.4/zh/docs/tutorial/index_diff/>索引文档级别差异对比</a></li><li><a href=/gateway/v1.29.4/zh/docs/tutorial/es-hadoop_integration/>与 Elasticsearch-Hadoop 集成</a></li><li><a href=/gateway/v1.29.4/zh/docs/tutorial/prometheus_integration/>与 Prometheus 集成</a></li><li><a href=/gateway/v1.29.4/zh/docs/tutorial/proxy_elasticsearch/>为 Elasticsearch 无缝添加代理和基础安全</a></li><li><a href=/gateway/v1.29.4/zh/docs/tutorial/proxy_kibana/>为 Kibana 添加代理和基础安全</a></li><li><a href=/gateway/v1.29.4/zh/docs/tutorial/path_rewrite_by_javascript/>使用 JavaScript 脚本来进行复杂的查询改写</a></li><li><a href=/gateway/v1.29.4/zh/docs/tutorial/fix_count_in_search_response/>兼容不同版本的响应 Count 结构</a></li><li><a href=/gateway/v1.29.4/zh/docs/tutorial/routing_to_cluser_by_index/>在 Kibana 里统一访问来自不同集群的索引</a></li></ul></li><li><input type=checkbox id=section-7e4e95606453deb85437b78d9c3f2d72 class=toggle>
+<label for=section-7e4e95606453deb85437b78d9c3f2d72 class="flex justify-between"><a href=/gateway/v1.29.4/zh/docs/user-cases/>用户案例</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.29.4/zh/docs/user-cases/stories/a_cross_region_cluster_access_locality/>作业帮跨云集群的就近本地访问</a></li><li><a href=/gateway/v1.29.4/zh/docs/user-cases/stories/indexing_speedup_for_big_index_rebuild/>某保险业务索引速度百倍提升</a></li></ul></li><li><a href=/gateway/v1.29.4/zh/docs/troubleshooting/>常见问题</a><ul></ul></li><li><a href=/gateway/v1.29.4/zh/docs/release-notes/>版本历史</a><ul></ul></li><li><a href=/gateway/v1.29.4/zh/docs/resources/>其它资源</a><ul></ul></li></ul><ul><li><a href=https://github.com/infinilabs/gateway target=_blank rel=noopener>Github</a></li></ul><div class=book-languages tabindex=0 aria-haspopup=true><ul><li class="flex align-center"><img src=/gateway/v1.29.4/svg/translate.svg class=book-icon alt=Languages>
+简体中文</li></ul><ul class=book-languages-list><li><a href=/gateway/v1.29.4/docs/references/flow/ class="flex align-center"><img src=/gateway/v1.29.4/svg/translate.svg class=book-icon alt=Languages>
+English</a></li><li class=active><a href=/gateway/v1.29.4/zh/ class="flex align-center"><img src=/gateway/v1.29.4/svg/translate.svg class=book-icon alt=Languages>
+简体中文</a></li></ul></div></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/gateway/v1.29.4/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>处理流程</strong>
+<label for=toc-control><img src=/gateway/v1.29.4/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#处理流程>处理流程</a><ul><li><a href=#流程定义>流程定义</a><ul><li><a href=#语法说明>语法说明</a></li></ul></li><li><a href=#条件判断>条件判断</a><ul><li><a href=#参数说明>参数说明</a></li></ul></li><li><a href=#条件类型>条件类型</a><ul><li><a href=#equals>equals</a></li><li><a href=#contains>contains</a></li><li><a href=#prefix>prefix</a></li><li><a href=#suffix>suffix</a></li><li><a href=#regexp>regexp</a></li><li><a href=#range>range</a></li><li><a href=#network>network</a></li><li><a href=#exists>exists</a></li><li><a href=#in>in</a></li><li><a href=#queue_has_lag>queue_has_lag</a></li><li><a href=#consumer_has_lag>consumer_has_lag</a></li><li><a href=#cluster_available>cluster_available</a></li><li><a href=#or>or</a></li><li><a href=#and>and</a></li><li><a href=#not>not</a></li></ul></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=处理流程>处理流程
+<a class=anchor href=#%e5%a4%84%e7%90%86%e6%b5%81%e7%a8%8b>#</a></h1><h2 id=流程定义>流程定义
+<a class=anchor href=#%e6%b5%81%e7%a8%8b%e5%ae%9a%e4%b9%89>#</a></h2><p>每一个网关接收到的请求都会通过一系列的流程处理，最后才返回给客户端，流程的定义在极限网关里面叫做 <code>flow</code>，以下面的这个例子为例：</p><pre><code>flow:
+  - name: hello_world
+    filter:
+      - echo:
+          message: &quot;hello gateway\n&quot;
+          repeat: 1
+  - name: not_found
+    filter:
+      - echo:
+          message: '404 not found\n'
+          repeat: 1
+</code></pre><p>上面的例子定义了两个 flow <code>hello_world</code> 和 <code>not_found</code>，
+每个 flow 都使用了一个名为 <code>echo</code> 的过滤器，用来输出一段字符串，每个 flow 下面可以定义一系列 filter，他们按照定义的顺序依次执行。</p><h3 id=语法说明>语法说明
+<a class=anchor href=#%e8%af%ad%e6%b3%95%e8%af%b4%e6%98%8e>#</a></h3><p>极限网关采用约定的格式来定义流程，并且支持灵活的条件参数来进行逻辑判断，具体的格式定义如下：</p><pre><code>flow:
+  - name: &lt;flow_name&gt;
+    filter:
+      - &lt;filter_name&gt;:
+          when:
+            &lt;condition&gt;
+          &lt;parameters&gt;
+      - &lt;filter_name&gt;:
+          when:
+            &lt;condition&gt;
+          &lt;parameters&gt;
+    ...
+</code></pre><p>上面的 <code>filter_name</code> 代表具体的某个过滤器名称，用来执行特定的任务，<code>when</code> 下面的 <code>condition</code> 用来定义特定的满足执行该任务的条件参数，不满足条件的情况下会跳过该过滤器任务的执行，<code>parameters</code> 里面设置的该过滤器相关的参数，如果多个参数依次换行即可。</p><h2 id=条件判断>条件判断
+<a class=anchor href=#%e6%9d%a1%e4%bb%b6%e5%88%a4%e6%96%ad>#</a></h2><p>极限网关的流程定义支持复杂的逻辑判断，可以让特定的过滤器只有在满足某种条件下才会执行，举例如下：</p><pre><code>filter:
+  - if:
+      &lt;condition&gt;
+    then:
+      - &lt;filter_name&gt;:
+          &lt;parameters&gt;
+      - &lt;filter_name&gt;:
+          &lt;parameters&gt;
+      ...
+    else:
+      - &lt;filter_name&gt;:
+          &lt;parameters&gt;
+      - &lt;filter_name&gt;:
+          &lt;parameters&gt;
+      ...
+</code></pre><h3 id=参数说明>参数说明
+<a class=anchor href=#%e5%8f%82%e6%95%b0%e8%af%b4%e6%98%8e>#</a></h3><table><thead><tr><th>名称</th><th>类型</th><th>说明</th></tr></thead><tbody><tr><td>then</td><td>array</td><td>表示满足 <code>condition</code> 条件定义后才会执行的一系列过滤器定义</td></tr><tr><td>else</td><td>array</td><td>不满足条件才会执行的一系列过滤器定义，可不设置</td></tr></tbody></table><p>使用 <code>if</code> 可以对多个 filter 来进行条件判断进行逻辑选择，使用 <code>when</code> 来对单个过滤器进行判断是否执行。</p><h2 id=条件类型>条件类型
+<a class=anchor href=#%e6%9d%a1%e4%bb%b6%e7%b1%bb%e5%9e%8b>#</a></h2><p>在流程里面定义的各种 <code>condition</code> 条件可以使用当前
+<a href=/gateway/v1.29.4/zh/docs/references/context/>请求上下文</a> 来判断是否满足特定条件，从而实现逻辑处理，支持布尔表达式（AND、NOT、OR）来进行组合，完整的条件类型如下：</p><ul><li>equals</li><li>contains</li><li>prefix</li><li>suffix</li><li>regexp</li><li>range</li><li>network</li><li>exists</li><li>in</li><li>queue_has_lag</li><li>consumer_has_lag</li><li>cluster_available</li><li>or</li><li>and</li><li>not</li></ul><h3 id=equals>equals
+<a class=anchor href=#equals>#</a></h3><p>使用 <code>equals</code> 条件来判断字段的内容是否为指定的值，用于字符和数字类型的精确匹配。</p><p>如下面的例子判断是否请求的方法是否为 GET 类型，<code>_ctx</code> 是访问请求上下文的特定关键字：</p><pre><code>equals:
+  _ctx.request.method: GET
+</code></pre><h3 id=contains>contains
+<a class=anchor href=#contains>#</a></h3><p>使用 <code>contains</code> 条件来判断字段的内容是否包含特定的字符值，仅支持字符字段类型。</p><p>如下面的例子为判断返回的请求体里面是否包含错误关键字：</p><pre><code>contains:
+  _ctx.response.body: &quot;error&quot;
+</code></pre><h3 id=prefix>prefix
+<a class=anchor href=#prefix>#</a></h3><p>使用 <code>prefix</code> 条件来判断字段的内容是否由特定的字符值开头，仅支持字符字段类型。</p><p>如下面的例子为判断返回的请求路径为特定索引名称开头：</p><pre><code>prefix:
+  _ctx.request.path: &quot;/filebeat&quot;
+</code></pre><h3 id=suffix>suffix
+<a class=anchor href=#suffix>#</a></h3><p>使用 <code>suffix</code> 条件来判断字段的内容是否由特定的字符值结尾，仅支持字符字段类型。</p><p>如下面的例子为判断返回的请求是否为搜索请求：</p><pre><code>suffix:
+  _ctx.request.path: &quot;/_search&quot;
+</code></pre><h3 id=regexp>regexp
+<a class=anchor href=#regexp>#</a></h3><p>使用 <code>regexp</code> 条件可以用来判断某个字段的内容是否满足正则表达式的匹配规则，仅支持字符字段类型。</p><p>如下面的例子判断请求的 uri 是否为查询请求：</p><pre><code>regexp:
+  _ctx.request.uri: &quot;.*/_search&quot;
+</code></pre><h3 id=range>range
+<a class=anchor href=#range>#</a></h3><p>使用 <code>range</code> 条件用来判断字段的值是否满足特定的范围，支持 <code>lt</code>、<code>lte</code>、<code>gt</code> 和 <code>gte</code> 几种类型，仅支持数字字段类型。</p><p>如下面判断状态码范围的例子：</p><pre><code>range:
+  _ctx.response.code:
+    gte: 400
+</code></pre><p>以及如下组合来判断响应字节大小范围的例子：</p><pre><code>range:
+  _ctx.request.body_length.gte: 100
+  _ctx.request.body_length.lt: 5000
+</code></pre><h3 id=network>network
+<a class=anchor href=#network>#</a></h3><p>如果某个字段的值为 IP 字段类型，可以使用 <code>network</code> 条件可以判断该字段是否满足某个特定的网络范围，支持标准的 IPv4 和 IPv6，支持 CIDR 的表达方式，或者是以下范围别名：</p><table><thead><tr><th>名称</th><th>说明</th></tr></thead><tbody><tr><td>loopback</td><td>匹配本地回环网络地址，范围：<code>127.0.0.0/8</code> 或者 <code>::1/128</code>。</td></tr><tr><td>unicast</td><td>匹配 RFC 1122、RFC 4632 和 RFC 4291 中定义的全球单播地址，但 IPv4 广播地址 (255.255.255.255) 除外。包括私有地址范围。</td></tr><tr><td>multicast</td><td>匹配广播地址。</td></tr><tr><td>interface_local_multicast</td><td>匹配 IPv6 接口本地组播地址。</td></tr><tr><td>link_local_unicast</td><td>匹配链路本地单播地址。</td></tr><tr><td>link_local_multicast</td><td>匹配链路本地广播地址。</td></tr><tr><td>private</td><td>匹配 RFC 1918 (IPv4) 和 RFC 4193 (IPv6) 中定义的私有地址范围。</td></tr><tr><td>public</td><td>匹配除了本机、未指定、IPv4 广播、链路本地单播、链路本地多播、接口本地多播或私有地址以外的公网地址。</td></tr><tr><td>unspecified</td><td>匹配未指定的地址（IPv4 地址 <code>0.0.0.0</code> 或 IPv6 地址 <code>::</code> ）。</td></tr></tbody></table><p>如下面的例子匹配本机网络地址：</p><pre><code>network:
+  _ctx.request.client_ip: private
+</code></pre><p>或者指定一个子网：</p><pre><code>network:
+  _ctx.request.client_ip: '192.168.3.0/24'
+</code></pre><p>支持数组，任意满足即可：</p><pre><code>network:
+  _ctx.request.client_ip: ['192.168.3.0/24', '10.1.0.0/8', loopback]
+</code></pre><h3 id=exists>exists
+<a class=anchor href=#exists>#</a></h3><p>如果要判断某个字段是否存在，可以使用 <code>exists</code>，支持一个或者多个字符字段，如下：</p><pre><code>exists: ['_ctx.request.user']
+</code></pre><h3 id=in>in
+<a class=anchor href=#in>#</a></h3><p>如果要判断某个字段是否存在指定数组的任意值，可以使用 <code>in</code>，支持单个字段的判断，仅支持字符和数值类型。</p><p>如下判断返回状态码：</p><pre><code>in:
+  _ctx.response.status: [ 403,404,200,201 ]
+</code></pre><h3 id=queue_has_lag>queue_has_lag
+<a class=anchor href=#queue_has_lag>#</a></h3><p>使用 <code>queue_has_lag</code> 可以来判断某个或多个本地磁盘队列是否存在堆积的情况，如下：</p><pre><code>queue_has_lag: [ &quot;prod&quot;, &quot;prod-500&quot; ]
+</code></pre><p>当队列类型为 FIFO 时，如果希望设置队列大于指定深度可以在队列的名称后面加上 <code>>队列深度</code>，如：</p><pre><code>queue_has_lag: [ &quot;prod&gt;10&quot;, &quot;prod-500&gt;10&quot; ]
+</code></pre><p>上面的例子表示，只有当队列深度超过 <code>10</code> 的情况下才满足条件。</p><h3 id=consumer_has_lag>consumer_has_lag
+<a class=anchor href=#consumer_has_lag>#</a></h3><p>使用 <code>consumer_has_lag</code> 可以来判断某个队列的消费者是否存在延迟堆积的情况，如下：</p><pre><code>consumer_has_lag:
+  queue: &quot;primary-partial-success_bulk_requests&quot;
+  group: &quot;my-group&quot;
+  name: &quot;my-consumer-1&quot;
+</code></pre><h3 id=cluster_available>cluster_available
+<a class=anchor href=#cluster_available>#</a></h3><p>使用 <code>cluster_available</code> 可以判断某个或多个 Elasticsearch 集群的服务可用性，如下：</p><pre><code>cluster_available: [&quot;prod&quot;]
+</code></pre><h3 id=or>or
+<a class=anchor href=#or>#</a></h3><p>使用 <code>or</code> 来组合多个任意可选条件，格式如下：</p><pre><code>or:
+  - &lt;condition1&gt;
+  - &lt;condition2&gt;
+  - &lt;condition3&gt;
+  ...
+</code></pre><p>举例如下：</p><pre><code>or:
+  - equals:
+      _ctx.response.code: 304
+  - equals:
+      _ctx.response.code: 404
+</code></pre><h3 id=and>and
+<a class=anchor href=#and>#</a></h3><p>使用 <code>and</code> 来组合多个必要条件，格式如下：</p><pre><code>and:
+  - &lt;condition1&gt;
+  - &lt;condition2&gt;
+  - &lt;condition3&gt;
+  ...
+</code></pre><p>举例如下：</p><pre><code>and:
+  - equals:
+      _ctx.response.code: 200
+  - equals:
+      _ctx.status: OK
+</code></pre><p>还可以对 <code>and</code> 和 <code>or</code> 条件进行灵活组合，如下：</p><pre><code>or:
+  - &lt;condition1&gt;
+  - and:
+    - &lt;condition2&gt;
+    - &lt;condition3&gt;
+</code></pre><h3 id=not>not
+<a class=anchor href=#not>#</a></h3><p>如果要对某个条件取反，使用 <code>not</code> 即可，格式如下：</p><pre><code>not:
+  &lt;condition&gt;
+</code></pre><p>举例如下：</p><pre><code>not:
+  equals:
+    _ctx.status: OK
+</code></pre></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class=book-languages tabindex=0 aria-haspopup=true><ul><li class="flex align-center"><img src=/gateway/v1.29.4/svg/translate.svg class=book-icon alt=Languages>
+简体中文</li></ul><ul class=book-languages-list><li><a href=/gateway/v1.29.4/docs/references/flow/ class="flex align-center"><img src=/gateway/v1.29.4/svg/translate.svg class=book-icon alt=Languages>
+English</a></li><li class=active><a href=/gateway/v1.29.4/zh/ class="flex align-center"><img src=/gateway/v1.29.4/svg/translate.svg class=book-icon alt=Languages>
+简体中文</a></li></ul></div><div><a class="flex align-center" href=https://github.com/infinilabs/gateway/edit/v1.29.4/docs/content.zh/docs/references/flow.md target=_blank rel=noopener><img src=/gateway/v1.29.4/svg/edit.svg class=book-icon alt=Edit>
+<span>编辑本页</span></a></div><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
+    import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
+    searchbox({container: "#searchbox"});
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#处理流程>处理流程</a><ul><li><a href=#流程定义>流程定义</a><ul><li><a href=#语法说明>语法说明</a></li></ul></li><li><a href=#条件判断>条件判断</a><ul><li><a href=#参数说明>参数说明</a></li></ul></li><li><a href=#条件类型>条件类型</a><ul><li><a href=#equals>equals</a></li><li><a href=#contains>contains</a></li><li><a href=#prefix>prefix</a></li><li><a href=#suffix>suffix</a></li><li><a href=#regexp>regexp</a></li><li><a href=#range>range</a></li><li><a href=#network>network</a></li><li><a href=#exists>exists</a></li><li><a href=#in>in</a></li><li><a href=#queue_has_lag>queue_has_lag</a></li><li><a href=#consumer_has_lag>consumer_has_lag</a></li><li><a href=#cluster_available>cluster_available</a></li><li><a href=#or>or</a></li><li><a href=#and>and</a></li><li><a href=#not>not</a></li></ul></li></ul></li></ul></nav></aside></main></body></html>
