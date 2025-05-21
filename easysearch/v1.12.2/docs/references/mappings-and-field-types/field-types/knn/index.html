@@ -1,0 +1,316 @@
+<!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="k-NN 向量字段类型 #  关于向量 #  在索引文档和运行查询时都需要指定向量类型。在这两种情况下，您都使用相同的 JSON 结构来定义向量类型。每个向量类型还有一个简写形式，这在使用不支持嵌套文档的工具时会很方便。以下示例展示了如何在索引向量时指定它们。
+knn_dense_float_vector 密集向量类型 #  假设您已经定义了一个映射，其中 my_vec 的类型为 knn_dense_float_vector。
+POST /my-index/_doc { &#34;my_vec&#34;: { &#34;values&#34;: [0.1, 0.2, 0.3, ...] # 1 } } POST /my-index/_doc { &#34;my_vec&#34;: [0.1, 0.2, 0.3, ...] # 2 } 说明 #  1	向量中所有浮点值的 JSON 列表。长度应与映射中的dims匹配。 2	#1 的简写形式。
+knn_sparse_bool_vector 稀疏向量类型 #  假设您已经定义了一个映射，其中 my_vec 的类型为 knn_sparse_bool_vector。
+POST /my-index/_doc { &#34;my_vec&#34;: { &#34;true_indices&#34;: [1, 3, 5, ."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="向量字段类型"><meta property="og:description" content="k-NN 向量字段类型 #  关于向量 #  在索引文档和运行查询时都需要指定向量类型。在这两种情况下，您都使用相同的 JSON 结构来定义向量类型。每个向量类型还有一个简写形式，这在使用不支持嵌套文档的工具时会很方便。以下示例展示了如何在索引向量时指定它们。
+knn_dense_float_vector 密集向量类型 #  假设您已经定义了一个映射，其中 my_vec 的类型为 knn_dense_float_vector。
+POST /my-index/_doc { &#34;my_vec&#34;: { &#34;values&#34;: [0.1, 0.2, 0.3, ...] # 1 } } POST /my-index/_doc { &#34;my_vec&#34;: [0.1, 0.2, 0.3, ...] # 2 } 说明 #  1	向量中所有浮点值的 JSON 列表。长度应与映射中的dims匹配。 2	#1 的简写形式。
+knn_sparse_bool_vector 稀疏向量类型 #  假设您已经定义了一个映射，其中 my_vec 的类型为 knn_sparse_bool_vector。
+POST /my-index/_doc { &#34;my_vec&#34;: { &#34;true_indices&#34;: [1, 3, 5, ."><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/knn/"><title>向量字段类型 | INFINI Easysearch</title><link rel=manifest href=/easysearch/v1.12.2/manifest.json><link rel=icon href=/easysearch/v1.12.2/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/v1.12.2/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/easysearch/v1.12.2/css/asciinema-player.css><script defer src=/easysearch/v1.12.2/js/jquery-2.x.min.js></script><script defer src=/easysearch/v1.12.2/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/easysearch/v1.12.2><img src=/easysearch/v1.12.2/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value=v1.12.2>v1.12.2</option>
+<option value=v1.12.1>v1.12.1</option>
+<option value=v1.12.0>v1.12.0</option>
+<option value=v1.11.1>v1.11.1</option>
+<option value=v1.11.0>v1.11.0</option>
+<option value=v1.9.1>v1.9.1</option>
+<option value=v1.8.3>v1.8.3</option>
+<option value=v1.8.2>v1.8.2</option>
+<option value=v1.8.0>v1.8.0</option>
+<option value=v1.7.1>v1.7.1</option>
+<option value=v1.7.0>v1.7.0</option>
+<option value=v1.6.2>v1.6.2</option>
+<option value=v1.6.1>v1.6.1</option>
+<option value=v1.6.0>v1.6.0</option>
+<option value=v1.5.0>v1.5.0</option>
+<option value=v1.4.0>v1.4.0</option>
+<option value=v1.3.0>v1.3.0</option>
+<option value=v1.2.0>v1.2.0</option>
+<option value=v1.1.1>v1.1.1</option>
+<option value=v1.1.0>v1.1.0</option>
+<option value=v1.0.1>v1.0.1</option>
+<option value=v1.0.0>v1.0.0</option></select></div><ul><li><a href=/easysearch/v1.12.2/docs/overview/>产品概述</a><ul></ul></li><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
+<label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>入门指南</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-e622c8a7dea0dd02f82a836e861475c5 class=toggle>
+<label for=section-e622c8a7dea0dd02f82a836e861475c5 class="flex justify-between"><a href=/easysearch/v1.12.2/docs/getting-started/install/>安装指南</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/getting-started/install/docker/>Docker</a></li><li><a href=/easysearch/v1.12.2/docs/getting-started/install/docker-compose/>Docker Compose</a></li><li><a href=/easysearch/v1.12.2/docs/getting-started/install/helm/>Helm Chart</a></li><li><a href=/easysearch/v1.12.2/docs/getting-started/install/linux/>Linux</a></li><li><a href=/easysearch/v1.12.2/docs/getting-started/install/windows/>Windows</a></li><li><input type=checkbox id=section-8df7e740f0b8d44e94e2d5f3851aef83 class=toggle>
+<label for=section-8df7e740f0b8d44e94e2d5f3851aef83 class="flex justify-between"><a href=/easysearch/v1.12.2/docs/getting-started/install/operator/>Operator</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/getting-started/install/operator/deploy_operator/>部署 Operator</a></li><li><a href=/easysearch/v1.12.2/docs/getting-started/install/operator/deploy_easysearch/>部署 Easysearch</a></li><li><a href=/easysearch/v1.12.2/docs/getting-started/install/operator/resource_manager/>资源扩容</a></li><li><a href=/easysearch/v1.12.2/docs/getting-started/install/operator/node_scale/>节点扩容</a></li><li><a href=/easysearch/v1.12.2/docs/getting-started/install/operator/update_password/>密码修改</a></li><li><a href=/easysearch/v1.12.2/docs/getting-started/install/operator/upgrade/>版本升级</a></li><li><a href=/easysearch/v1.12.2/docs/getting-started/install/operator/cert_manager/>证书管理</a></li><li><a href=/easysearch/v1.12.2/docs/getting-started/install/operator/s3_snapshot/>s3 备份</a></li><li><a href=/easysearch/v1.12.2/docs/getting-started/install/operator/FAQ/>FAQ</a></li></ul></li></ul></li><li><a href=/easysearch/v1.12.2/docs/getting-started/settings/>系统调优</a></li><li><a href=/easysearch/v1.12.2/docs/getting-started/configuration/>常用配置</a></li><li><a href=/easysearch/v1.12.2/docs/getting-started/configuration_file/>配置说明</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle checked>
+<label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a>功能手册</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-dd5a2f6dc33fa990f542566f7a908106 class=toggle checked>
+<label for=section-dd5a2f6dc33fa990f542566f7a908106 class="flex justify-between"><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/>文档建模</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-7d4ce65a4422588ac64ff568cfa9eb9e class=toggle>
+<label for=section-7d4ce65a4422588ac64ff568cfa9eb9e class="flex justify-between"><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/mapping-parameters/>文档映射</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/mapping-parameters/analyzer/>分词器参数</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/mapping-parameters/dynamic/>动态映射参数</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/mapping-parameters/copy_to/>字段复制参数</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/mapping-parameters/coerce/>强制类型转换参数</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/mapping-parameters/doc_values/>文档列值参数</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/mapping-parameters/enabled/>是否启用参数</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/mapping-parameters/boost/>权重参数设置</a></li></ul></li><li><input type=checkbox id=section-f879c6c2aa847411ec53259bcf512a91 class=toggle checked>
+<label for=section-f879c6c2aa847411ec53259bcf512a91 class="flex justify-between"><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/>字段类型</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/rank/>Rank 字段类型</a></li><li><input type=checkbox id=section-cd8ebeffb1e1eb5dcc529f4edbad93fc class=toggle>
+<label for=section-cd8ebeffb1e1eb5dcc529f4edbad93fc class="flex justify-between"><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/geo-filed-type/>地理字段类型</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/geo-filed-type/geo-point/>Geopoint 地理点字段类型</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/geo-filed-type/geo-shape/>Geoshape 地理形状字段类型</a></li></ul></li><li><input type=checkbox id=section-f94b121fac5f49bed5028d50034cc3cf class=toggle>
+<label for=section-f94b121fac5f49bed5028d50034cc3cf class="flex justify-between"><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/string-field-type/>字符串字段类型</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/string-field-type/keyword/>Keyword 字段类型</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/string-field-type/text/>Text 字段类型</a></li></ul></li><li><input type=checkbox id=section-37ac2b2e61a91ff3354b11d860ec66cf class=toggle>
+<label for=section-37ac2b2e61a91ff3354b11d860ec66cf class="flex justify-between"><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/object-field-type/>对象字段类型</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/object-field-type/flattened/>Flat 对象字段类型</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/object-field-type/flattened_text/>Flat 对象字段类型</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/object-field-type/join/>Join 字段类型</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/object-field-type/nested/>Nested 字段类型</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/object-field-type/object/>Object 对象字段类型</a></li></ul></li><li><input type=checkbox id=section-4f4e977370cb5a089a66f2d06c0cf2fc class=toggle>
+<label for=section-4f4e977370cb5a089a66f2d06c0cf2fc class="flex justify-between"><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/date-field-type/>日期字段类型</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/date-field-type/date-nanos/>Date nanoseconds 字段类型</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/date-field-type/date/>Date 字段类型</a></li></ul></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/ip/>IP 地址字段类型</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/match_only_text/>match_only_text 字段类型</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/percolator/>Percolator 过滤器字段类型</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/binary/>二进制字段类型</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/alias/>别名字段类型</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/knn/ class=active>向量字段类型</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/boolean/>布尔字段类型</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/numeric-field/>数值字段类型</a></li><li><input type=checkbox id=section-d087fbeb67c721ac6618bf4ae5f3be20 class=toggle>
+<label for=section-d087fbeb67c721ac6618bf4ae5f3be20 class="flex justify-between"><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/autocomplete-field-type/>自动补全字段类型</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/autocomplete-field-type/search-as-you-type/>Search-as-you-type 字段类型</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/autocomplete-field-type/completion/>自动补全字段类型</a></li></ul></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/range-field-type/>范围字段类型</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/field-types/wildcard/>Wildcard 字段类型</a></li></ul></li><li><input type=checkbox id=section-92a866d9a34e707f209ba1cdbeaba985 class=toggle>
+<label for=section-92a866d9a34e707f209ba1cdbeaba985 class="flex justify-between"><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/metadata-field/>元数据字段</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/metadata-field/id/>ID 属性</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/metadata-field/meta/>元数据属性</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/metadata-field/field-names/>字段名称</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/metadata-field/ignored/>忽略属性</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/metadata-field/source/>源文档属性</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/metadata-field/>索引属性</a></li><li><a href=/easysearch/v1.12.2/docs/references/mappings-and-field-types/metadata-field/routing/>路由属性</a></li></ul></li></ul></li><li><input type=checkbox id=section-232f0668f3be6ea64e1c220baec34dfc class=toggle>
+<label for=section-232f0668f3be6ea64e1c220baec34dfc class="flex justify-between"><a>文档操作</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/document/index-data/>增删改查</a></li><li><a href=/easysearch/v1.12.2/docs/references/document/index-alias/>别名操作</a></li><li><a href=/easysearch/v1.12.2/docs/references/document/index-compression/>索引压缩</a></li></ul></li><li><input type=checkbox id=section-6b02990358c7382bac3f39043e5fd437 class=toggle>
+<label for=section-6b02990358c7382bac3f39043e5fd437 class="flex justify-between"><a>搜索操作</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/search/term/>词项查询</a></li><li><a href=/easysearch/v1.12.2/docs/references/search/full-text/>全文查询</a></li><li><a href=/easysearch/v1.12.2/docs/references/search/knn_api/>向量查询</a></li><li><a href=/easysearch/v1.12.2/docs/references/search/bool/>布尔查询</a></li><li><a href=/easysearch/v1.12.2/docs/references/search/search-template/>查询模版</a></li><li><a href=/easysearch/v1.12.2/docs/references/search/async_search/>异步搜索</a></li><li><a href=/easysearch/v1.12.2/docs/references/search/pit_api/>定点查询</a></li></ul></li><li><input type=checkbox id=section-69a0462c4990a8b0bf6189289fb56e8a class=toggle>
+<label for=section-69a0462c4990a8b0bf6189289fb56e8a class="flex justify-between"><a href=/easysearch/v1.12.2/docs/references/aggregation/>聚合操作</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/aggregation/metric-agg/>指标聚合</a></li><li><a href=/easysearch/v1.12.2/docs/references/aggregation/bucket-agg/>分桶聚合</a></li><li><a href=/easysearch/v1.12.2/docs/references/aggregation/pipeline-agg/>管道聚合</a></li></ul></li><li><input type=checkbox id=section-86e828ca7e30e9d2e35881b956319411 class=toggle>
+<label for=section-86e828ca7e30e9d2e35881b956319411 class="flex justify-between"><a>SQL 查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/sql/sql-jdbc/>SQL-JDBC</a></li><li><a href=/easysearch/v1.12.2/docs/references/sql/aggregations/>聚合查询</a></li><li><a href=/easysearch/v1.12.2/docs/references/sql/fulltext/>全文搜索</a></li><li><a href=/easysearch/v1.12.2/docs/references/sql/complex/>复杂查询</a></li><li><a href=/easysearch/v1.12.2/docs/references/sql/basics/>基础查询</a></li></ul></li><li><input type=checkbox id=section-1c80046b8a7d2b6f02509e78096b1388 class=toggle>
+<label for=section-1c80046b8a7d2b6f02509e78096b1388 class="flex justify-between"><a href=/easysearch/v1.12.2/docs/references/security/>安全模块</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-4c0acfad57ce0b1db83571ad903a192e class=toggle>
+<label for=section-4c0acfad57ce0b1db83571ad903a192e class="flex justify-between"><a href=/easysearch/v1.12.2/docs/references/security/configuration/>配置说明</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/security/configuration/yaml/>本地配置</a></li><li><a href=/easysearch/v1.12.2/docs/references/security/configuration/backend/>后端配置</a></li><li><a href=/easysearch/v1.12.2/docs/references/security/configuration/tls/>证书配置</a></li><li><a href=/easysearch/v1.12.2/docs/references/security/configuration/system-indices/>系统索引</a></li></ul></li><li><input type=checkbox id=section-4854412a16ac224d9851d23b7bf6bdea class=toggle>
+<label for=section-4854412a16ac224d9851d23b7bf6bdea class="flex justify-between"><a href=/easysearch/v1.12.2/docs/references/security/access-control/>权限控制</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/security/access-control/users-roles/>用户角色</a></li><li><a href=/easysearch/v1.12.2/docs/references/security/access-control/document-level-security/>文档权限</a></li><li><a href=/easysearch/v1.12.2/docs/references/security/access-control/field-level-security/>字段权限</a></li><li><a href=/easysearch/v1.12.2/docs/references/security/access-control/field-masking/>数据脱敏</a></li><li><a href=/easysearch/v1.12.2/docs/references/security/access-control/run-as/>身份模拟</a></li><li><a href=/easysearch/v1.12.2/docs/references/security/access-control/cross-cluster-search/>跨集群搜索</a></li><li><a href=/easysearch/v1.12.2/docs/references/security/access-control/api/>API 接口</a></li><li><a href=/easysearch/v1.12.2/docs/references/security/access-control/permissions/>权限列表</a></li></ul></li></ul></li><li><input type=checkbox id=section-4632348aa5cba7d33c080167da2f13b6 class=toggle>
+<label for=section-4632348aa5cba7d33c080167da2f13b6 class="flex justify-between"><a>文本分词</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-13c9df598f113d7537eff14f9f5147e3 class=toggle>
+<label for=section-13c9df598f113d7537eff14f9f5147e3 class="flex justify-between"><a href=/easysearch/v1.12.2/docs/references/text-analysis/analyzers/>分词器</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/analyzers/ik-analyzer/>IK 分词器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/analyzers/stop-analyzer/>停用词分词器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/analyzers/keyword-analyzer/>关键词分词器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/analyzers/creating-a-custom-analyzer/>创建一个自定义分词器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/analyzers/pattern-analyzer/>匹配模式分词器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/analyzers/language-analyzer/>各类语种分词器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/analyzers/fingerprint-analyzer/>指纹分词器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/analyzers/search-analyzers/>搜索分词器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/analyzers/standard-analyzer/>标准分词器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/analyzers/whitespace-analyzer/>空格分词器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/analyzers/simple-analyzer/>简单分词器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/analyzers/index-analyzers/>索引分词器</a></li></ul></li><li><input type=checkbox id=section-8066f3918cdd51465da4720002ab0bb5 class=toggle>
+<label for=section-8066f3918cdd51465da4720002ab0bb5 class="flex justify-between"><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/>分词过滤器</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/ascii-folding/>ASCII 折叠分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/cjk-bigram/>CJK 二元分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/cjk-width/>CJK 宽度分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/kstem/>KStem 分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/kuromoji-completion/>Kuromoji 补全分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/n-gram/>n-gram 分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/keep-types/>保留类型分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/trim/>修剪词元过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/stop/>停用词词元过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/keyword-marker/>关键词标记分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/keyword-repeat/>关键词重复分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/delimited-payload/>分隔式负载分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/pattern-replace/>匹配替换词元过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/decimal-digit/>十进制数字分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/word-delimiter-graph/>单词分隔符图词元过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/word-delimiter/>单词分隔符词元过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/remove-duplicates/>去重词元过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/reverse/>反转词元过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/synonym-graph/>同义词图词元过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/synonym/>同义词词元过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/unique/>唯一词元过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/multiplexer/>多路复用分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/uppercase/>大写词元过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/lowercase/>小写分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/common-grams/>常用词组分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/flatten-graph/>平图化分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/normalization/>归一化词元过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/truncate/>截断词元过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/fingerprint/>指纹分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/pattern-capture/>捕获匹配词元过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/min-hash/>最小哈希分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/condition/>条件分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/porter-stem/>波特词干词元过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/apostrophe/>省略符号分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/elision/>省略词分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/classic/>经典分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/keep-words/>词保留分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/dictionary-decompounder/>词典复合词分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/stemmer/>词干提取词元过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/stemmer-override/>词干覆盖词元过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/shingle/>词片词元过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/predicate-token-filter/>谓词词元过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/edge-n-gram/>边缘 n 元分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/length/>长度分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/limit/>限制分词过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/token-filters/snowball/>雪球算法词元过滤器</a></li></ul></li><li><input type=checkbox id=section-d6e4a0d07abe0df202540482628fd24b class=toggle>
+<label for=section-d6e4a0d07abe0df202540482628fd24b class="flex justify-between"><a href=/easysearch/v1.12.2/docs/references/text-analysis/character-filters/>字符过滤器</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/character-filters/html-strip/>HTML 剥离字符过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/character-filters/pattern-replace/>匹配替换字符过滤器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/character-filters/mapping/>映射字符过滤器</a></li></ul></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/normalizers/>规范化</a></li><li><input type=checkbox id=section-71b540c4dd821da562660864e8601756 class=toggle>
+<label for=section-71b540c4dd821da562660864e8601756 class="flex justify-between"><a href=/easysearch/v1.12.2/docs/references/text-analysis/tokenizers/>词元生成器</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/tokenizers/n-gram/>N-gram 词元生成器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/tokenizers/uax-url-email/>UAX URL 邮件词元生成器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/tokenizers/keyword/>关键词词元生成器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/tokenizers/edge-n-gram/>前缀 n 元词元生成器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/tokenizers/pattern/>匹配词元生成器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/tokenizers/letter/>字母词元生成器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/tokenizers/character-group/>字符组词元生成器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/tokenizers/lowercase/>小写词元生成器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/tokenizers/standard/>标准词元生成器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/tokenizers/whitespace/>空格词元生成器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/tokenizers/simple-pattern-split/>简单分割匹配词元生成器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/tokenizers/classic/>经典词元生成器</a></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/tokenizers/path-hierarchy/>路径词元分词器</a></li></ul></li><li><a href=/easysearch/v1.12.2/docs/references/text-analysis/stemming/>词干提取</a></li></ul></li><li><input type=checkbox id=section-52d7e2e9abce80d3dc7a6a56a0089b77 class=toggle>
+<label for=section-52d7e2e9abce80d3dc7a6a56a0089b77 class="flex justify-between"><a>管理模块</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/management/cluster/>搭建集群</a></li><li><a href=/easysearch/v1.12.2/docs/references/management/catapis/>CAT API</a></li><li><a href=/easysearch/v1.12.2/docs/references/management/logs/>系统日志</a></li><li><a href=/easysearch/v1.12.2/docs/references/management/index-templates/>索引模板</a></li><li><a href=/easysearch/v1.12.2/docs/references/management/reindex-data/>重建数据</a></li><li><a href=/easysearch/v1.12.2/docs/references/management/tasksapis/>任务管理</a></li><li><a href=/easysearch/v1.12.2/docs/references/management/slm_api/>快照生命周期管理</a></li><li><a href=/easysearch/v1.12.2/docs/references/management/ilm_api/>索引生命周期管理</a></li><li><a href=/easysearch/v1.12.2/docs/references/management/ccr_api/>跨集群复制</a></li><li><a href=/easysearch/v1.12.2/docs/references/management/snapshot-restore/>备份还原</a></li><li><a href=/easysearch/v1.12.2/docs/references/management/throttling/>写入限流</a></li><li><a href=/easysearch/v1.12.2/docs/references/management/searchable_snapshot/>可搜索快照</a></li><li><a href=/easysearch/v1.12.2/docs/references/management/time-series-Index-optimization/>使用时间范围合并策略优化时序索引</a></li><li><a href=/easysearch/v1.12.2/docs/references/management/rollup_api/>数据汇总</a></li><li><a href=/easysearch/v1.12.2/docs/references/management/popular-api/>其它常用 API</a></li></ul></li><li><input type=checkbox id=section-b34adbce31bce6650a0099282b315617 class=toggle>
+<label for=section-b34adbce31bce6650a0099282b315617 class="flex justify-between"><a>客户端</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/client/java-client/>快速开始</a></li><li><a href=/easysearch/v1.12.2/docs/references/client/client-api/>API 使用</a></li></ul></li><li><input type=checkbox id=section-c1faee20470feef7857c444179fe54aa class=toggle>
+<label for=section-c1faee20470feef7857c444179fe54aa class="flex justify-between"><a>AI 集成</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/references/AI-Integration/text-embeddings/>文本向量化</a></li></ul></li></ul></li><li><input type=checkbox id=section-1adc738e7351809ea378ec7e9730bd1f class=toggle>
+<label for=section-1adc738e7351809ea378ec7e9730bd1f class="flex justify-between"><a>版本历史</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.12.2/docs/release-notes/client/>Easysearch-client</a></li><li><a href=/easysearch/v1.12.2/docs/release-notes/easysearch/>Easysearch</a></li></ul></li><li><a href=/easysearch/v1.12.2/docs/resources/>其它资源</a><ul></ul></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/easysearch/v1.12.2/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>向量字段类型</strong>
+<label for=toc-control><img src=/easysearch/v1.12.2/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#k-nn-向量字段类型>k-NN 向量字段类型</a><ul><li><a href=#关于向量>关于向量</a><ul><li><a href=#knn_dense_float_vector-密集向量类型>knn_dense_float_vector 密集向量类型</a></li><li><a href=#knn_sparse_bool_vector-稀疏向量类型>knn_sparse_bool_vector 稀疏向量类型</a></li></ul></li><li><a href=#映射>映射</a><ul><li><a href=#基本结构>基本结构</a></li><li><a href=#knn_sparse_bool_vector-数据类型>knn_sparse_bool_vector 数据类型</a></li><li><a href=#knn_dense_float_vector-数据类型>knn_dense_float_vector 数据类型</a></li><li><a href=#特定模型映射>特定模型映射</a></li><li><a href=#jaccard-lsh-映射>Jaccard LSH 映射</a></li><li><a href=#汉明-lsh-映射>汉明 LSH 映射</a></li><li><a href=#余弦-lsh-映射>余弦 LSH 映射</a></li><li><a href=#l2-lsh-映射>L2 LSH 映射</a></li><li><a href=#排列-lsh-映射>排列 LSH 映射</a></li></ul></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=k-nn-向量字段类型>k-NN 向量字段类型
+<a class=anchor href=#k-nn-%e5%90%91%e9%87%8f%e5%ad%97%e6%ae%b5%e7%b1%bb%e5%9e%8b>#</a></h1><h2 id=关于向量>关于向量
+<a class=anchor href=#%e5%85%b3%e4%ba%8e%e5%90%91%e9%87%8f>#</a></h2><p>在索引文档和运行查询时都需要指定向量类型。在这两种情况下，您都使用相同的 JSON 结构来定义向量类型。每个向量类型还有一个简写形式，这在使用不支持嵌套文档的工具时会很方便。以下示例展示了如何在索引向量时指定它们。</p><h3 id=knn_dense_float_vector-密集向量类型>knn_dense_float_vector 密集向量类型
+<a class=anchor href=#knn_dense_float_vector-%e5%af%86%e9%9b%86%e5%90%91%e9%87%8f%e7%b1%bb%e5%9e%8b>#</a></h3><p>假设您已经定义了一个映射，其中 my_vec 的类型为 knn_dense_float_vector。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>POST</span> <span style=color:#960050;background-color:#1e0010>/my-index/_doc</span>
+{
+    <span style=color:#f92672>&#34;my_vec&#34;</span>: {
+        <span style=color:#f92672>&#34;values&#34;</span>: [<span style=color:#ae81ff>0.1</span>, <span style=color:#ae81ff>0.2</span>, <span style=color:#ae81ff>0.3</span>, <span style=color:#960050;background-color:#1e0010>...</span>]    <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#ae81ff>1</span>
+    }
+}
+<span style=color:#960050;background-color:#1e0010>POST</span> <span style=color:#960050;background-color:#1e0010>/my-index/_doc</span>
+{
+    <span style=color:#f92672>&#34;my_vec&#34;</span>: [<span style=color:#ae81ff>0.1</span>, <span style=color:#ae81ff>0.2</span>, <span style=color:#ae81ff>0.3</span>, <span style=color:#960050;background-color:#1e0010>...</span>]        <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#ae81ff>2</span>
+}
+</code></pre></div><h4 id=说明>说明
+<a class=anchor href=#%e8%af%b4%e6%98%8e>#</a></h4><p>1 向量中所有浮点值的 JSON 列表。长度应与映射中的<code>dims</code>匹配。
+2 #1 的简写形式。</p><h3 id=knn_sparse_bool_vector-稀疏向量类型>knn_sparse_bool_vector 稀疏向量类型
+<a class=anchor href=#knn_sparse_bool_vector-%e7%a8%80%e7%96%8f%e5%90%91%e9%87%8f%e7%b1%bb%e5%9e%8b>#</a></h3><p>假设您已经定义了一个映射，其中 my_vec 的类型为 knn_sparse_bool_vector。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>POST</span> <span style=color:#960050;background-color:#1e0010>/my-index/_doc</span>
+{
+    <span style=color:#f92672>&#34;my_vec&#34;</span>: {
+       <span style=color:#f92672>&#34;true_indices&#34;</span>: [<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>5</span>, <span style=color:#960050;background-color:#1e0010>...</span>],   <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>1</span>
+       <span style=color:#f92672>&#34;total_indices&#34;</span>: <span style=color:#ae81ff>100</span>,             <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>2</span>
+    }
+}
+<span style=color:#960050;background-color:#1e0010>POST</span> <span style=color:#960050;background-color:#1e0010>/my-index/_doc</span>
+{
+    <span style=color:#f92672>&#34;my_vec&#34;</span>: [[<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>5</span>, <span style=color:#960050;background-color:#1e0010>...</span>], <span style=color:#ae81ff>100</span>]      <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#ae81ff>3</span>
+}
+</code></pre></div><h4 id=说明-1>说明
+<a class=anchor href=#%e8%af%b4%e6%98%8e-1>#</a></h4><p>1 向量中为 <code>true</code> 的索引的 JSON 列表。
+2 索引的向量总数。这应该与映射中的<code>dims</code>匹配。
+3 #1 和 #2 的简写形式。一个包含两个项目的列表，第一个项目是 <code>true_indices</code>，第二个是 <code>total_indices</code>。</p><h2 id=映射>映射
+<a class=anchor href=#%e6%98%a0%e5%b0%84>#</a></h2><p>在索引向量数据之前，您需要先定义一个映射，指定向量数据类型、索引模型和模型参数。这决定了索引向量支持哪些查询。</p><h3 id=基本结构>基本结构
+<a class=anchor href=#%e5%9f%ba%e6%9c%ac%e7%bb%93%e6%9e%84>#</a></h3><p>基本映射结构如下：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>/my-index/_mapping</span>
+{
+  <span style=color:#f92672>&#34;properties&#34;</span>: {                               <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>1</span>
+    <span style=color:#f92672>&#34;my_vec&#34;</span>: {                                 <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>2</span> 
+      <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;knn_sparse_bool_vector&#34;</span>,         <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>3</span>
+      <span style=color:#f92672>&#34;knn&#34;</span>: {                            <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>4</span>
+        <span style=color:#f92672>&#34;dims&#34;</span>: <span style=color:#ae81ff>100</span>,                            <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>5</span>
+        <span style=color:#f92672>&#34;model&#34;</span>: <span style=color:#e6db74>&#34;exact&#34;</span>,                       <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>6</span>
+        <span style=color:#960050;background-color:#1e0010>...</span>                                     <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>7</span>
+      }
+    }
+  }
+}
+</code></pre></div><h4 id=说明-2>说明
+<a class=anchor href=#%e8%af%b4%e6%98%8e-2>#</a></h4><p>1 文档字段的字典。与 PUT Mapping API 相同。
+2 向量的字段名称。
+3 要存储的向量类型。
+4 knn 的设置。
+5 向量的维度。存储在此字段 <code>my_vec</code> 中的所有向量必须具有相同的维度。
+6 模型类型。这和模型参数将决定您可以运行什么样的搜索。请参见下面的模型部分。
+7 额外的模型参数。请参见下面的模型部分。</p><h3 id=knn_sparse_bool_vector-数据类型>knn_sparse_bool_vector 数据类型
+<a class=anchor href=#knn_sparse_bool_vector-%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b>#</a></h3><p>这种类型针对每个索引为 <code>true</code> 或 <code>false</code> 的向量进行了优化,大部分的情况为 <code>false</code>。例如，您可以表示文档的词袋编码，其中每个索引对应词汇表中的一个词，而任何单个文档只包含所有词的很小一部分。在内部，Knn 通过只存储 true 的数据来节省空间。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>/my-index/_mapping</span>
+{
+    <span style=color:#f92672>&#34;properties&#34;</span>: {
+        <span style=color:#f92672>&#34;my_vec&#34;</span>: {
+            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;knn_sparse_bool_vector&#34;</span>,        <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>1</span>
+            <span style=color:#f92672>&#34;knn&#34;</span>: {
+                <span style=color:#f92672>&#34;dims&#34;</span>: <span style=color:#ae81ff>25000</span>,                       <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>2</span>
+                <span style=color:#960050;background-color:#1e0010>...</span>                                  <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>3</span>
+            }
+        }
+    }
+}
+</code></pre></div><h4 id=说明-3>说明
+<a class=anchor href=#%e8%af%b4%e6%98%8e-3>#</a></h4><p>1 类型名称。
+2 向量的维度。
+3 额外的模型参数。请参见下面的模型部分。</p><h3 id=knn_dense_float_vector-数据类型>knn_dense_float_vector 数据类型
+<a class=anchor href=#knn_dense_float_vector-%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b>#</a></h3><p>这种类型针对每个向量都是浮点数、所有索引都有值且维度通常不超过约 1000 的向量进行了优化。例如，您可以存储词嵌入或图像向量。在内部，Knn 使用 Java Float 类型来存储值。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>/my-index/_mapping</span>
+{
+    <span style=color:#f92672>&#34;properties&#34;</span>: {
+        <span style=color:#f92672>&#34;my_vec&#34;</span>: {
+            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;knn_dense_float_vector&#34;</span>,        <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>1</span>
+            <span style=color:#f92672>&#34;knn&#34;</span>: {
+                <span style=color:#f92672>&#34;dims&#34;</span>: <span style=color:#ae81ff>100</span>,                         <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>2</span>
+                <span style=color:#960050;background-color:#1e0010>...</span>                                  <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>3</span>
+            }
+        }
+    }
+}
+</code></pre></div><h4 id=说明-4>说明
+<a class=anchor href=#%e8%af%b4%e6%98%8e-4>#</a></h4><p>1 类型名称。
+2 向量的维度。不应超过几千。如果超过，请考虑进行某种维度降低。
+3 额外的模型参数。请参见下面的模型部分。</p><h3 id=特定模型映射>特定模型映射
+<a class=anchor href=#%e7%89%b9%e5%ae%9a%e6%a8%a1%e5%9e%8b%e6%98%a0%e5%b0%84>#</a></h3><p>特定模型映射允许您运行特定模型的搜索。这些搜索不利用任何索引结构，运行时间复杂度为 <code>O(n^2)</code>，其中 <code>n</code> 是文档总数。</p><p>使用此配置时，您不需要提供任何 <code>"model": "..."</code> 值或任何模型参数。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>/my-index/_mapping</span>
+{
+    <span style=color:#f92672>&#34;properties&#34;</span>: {
+        <span style=color:#f92672>&#34;my_vec&#34;</span>: {
+            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;knn_(dense_float | sparse_bool)_vector&#34;</span>,        <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>1</span>
+            <span style=color:#f92672>&#34;knn&#34;</span>: {
+                <span style=color:#f92672>&#34;dims&#34;</span>: <span style=color:#ae81ff>100</span>,                                         <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>2</span>
+            }
+        }
+    }
+}
+</code></pre></div><h4 id=说明-5>说明
+<a class=anchor href=#%e8%af%b4%e6%98%8e-5>#</a></h4><p>1 向量数据类型。支持 dense float 和 sparse bool 两种类型
+2 向量维度。</p><h3 id=jaccard-lsh-映射>Jaccard LSH 映射
+<a class=anchor href=#jaccard-lsh-%e6%98%a0%e5%b0%84>#</a></h3><p>使用
+<a href=https://en.wikipedia.org/wiki/MinHash>Minhash 算法</a>对稀疏布尔向量进行哈希和存储，以支持近似 Jaccard 相似度查询。</p><p>该实现受到
+<a href=http://www.mmds.org/>《Mining Massive Datasets》</a>第 3 章、Spark MinHash 实现、
+<a href=https://github.com/tdebatty/java-LSH>tdebatty/java-LSH</a> Github 项目和
+<a href=http://matthewcasperson.blogspot.com/2013/11/minhash-for-dummies.html>Minhash for Dummies</a> 博客文章的影响。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>/my-index/_mapping</span>
+{
+    <span style=color:#f92672>&#34;properties&#34;</span>: {
+        <span style=color:#f92672>&#34;my_vec&#34;</span>: {
+            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;knn_sparse_bool_vector&#34;</span>,       <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>1</span>
+            <span style=color:#f92672>&#34;knn&#34;</span>: {
+                <span style=color:#f92672>&#34;dims&#34;</span>: <span style=color:#ae81ff>25000</span>,                      <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>2</span>
+                <span style=color:#f92672>&#34;model&#34;</span>: <span style=color:#e6db74>&#34;lsh&#34;</span>,                     <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>3</span>
+                <span style=color:#f92672>&#34;similarity&#34;</span>: <span style=color:#e6db74>&#34;jaccard&#34;</span>,            <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>4</span>
+                <span style=color:#f92672>&#34;L&#34;</span>: <span style=color:#ae81ff>99</span>,                            <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>5</span>
+                <span style=color:#f92672>&#34;k&#34;</span>: <span style=color:#ae81ff>1</span>                              <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#ae81ff>6</span>
+            }
+        }
+    }
+}
+</code></pre></div><h4 id=说明-6>说明
+<a class=anchor href=#%e8%af%b4%e6%98%8e-6>#</a></h4><p>1 向量数据类型。必须是稀疏布尔向量。
+2 向量维度。
+3 模型类型。
+4 相似度度量。
+5 哈希表的数量。通常增加这个值会提高召回率。
+6 组合形成单个哈希值的哈希函数数量。通常，增加这个值会提高精确度。</p><h3 id=汉明-lsh-映射>汉明 LSH 映射
+<a class=anchor href=#%e6%b1%89%e6%98%8e-lsh-%e6%98%a0%e5%b0%84>#</a></h3><p>使用
+<a href=http://mlwiki.org/index.php/Bit_Sampling_LSH>位采样算法</a>对稀疏布尔向量进行哈希和存储，以支持近似汉明相似度查询。</p><p>与标准位采样方法的唯一区别是它采样并组合 <code>k</code> 个位来形成单个哈希值。例如，如果设置 <code>L = 100</code>，<code>k = 3</code>，它会从向量中采样 <code>100 * 3 = 300</code> 个位，并将每 3 个位连接起来形成每个哈希值，总共生成 100 个哈希值。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>/my-index/_mapping</span>
+{
+    <span style=color:#f92672>&#34;properties&#34;</span>: {
+        <span style=color:#f92672>&#34;my_vec&#34;</span>: {
+            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;knn_sparse_bool_vector&#34;</span>,       <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>1</span>
+            <span style=color:#f92672>&#34;knn&#34;</span>: {
+                <span style=color:#f92672>&#34;dims&#34;</span>: <span style=color:#ae81ff>25000</span>,                      <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>2</span>
+                <span style=color:#f92672>&#34;model&#34;</span>: <span style=color:#e6db74>&#34;lsh&#34;</span>,                     <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>3</span>
+                <span style=color:#f92672>&#34;similarity&#34;</span>: <span style=color:#e6db74>&#34;hamming&#34;</span>,            <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>4</span>
+                <span style=color:#f92672>&#34;L&#34;</span>: <span style=color:#ae81ff>99</span>,                            <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>5</span>
+                <span style=color:#f92672>&#34;k&#34;</span>: <span style=color:#ae81ff>2</span>                              <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#ae81ff>6</span>
+            }
+        }
+    }
+}
+</code></pre></div><h4 id=说明-7>说明
+<a class=anchor href=#%e8%af%b4%e6%98%8e-7>#</a></h4><p>1 向量数据类型。必须是稀疏布尔向量。
+2 向量维度。
+3 模型类型。
+4 相似度度量。
+5 哈希表的数量。通常增加这个值会提高召回率。
+6 组合形成单个哈希值的哈希函数数量。通常增加这个值会提高精确度。</p><h3 id=余弦-lsh-映射>余弦 LSH 映射
+<a class=anchor href=#%e4%bd%99%e5%bc%a6-lsh-%e6%98%a0%e5%b0%84>#</a></h3><p>使用
+<a href=https://en.wikipedia.org/wiki/Locality-sensitive_hashing#Random_projection>随机投影算法</a>对密集浮点向量进行哈希和存储，以支持近似余弦相似度查询。</p><p>参考
+<a href=https://en.wikipedia.org/wiki/Locality-sensitive_hashing#Random_projection>Mining Massive Datasets</a>第三章</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>/my-index/_mapping</span>
+{
+    <span style=color:#f92672>&#34;properties&#34;</span>: {
+        <span style=color:#f92672>&#34;my_vec&#34;</span>: {
+            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;knn_dense_float_vector&#34;</span>,       <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>1</span>
+            <span style=color:#f92672>&#34;knn&#34;</span>: {
+                <span style=color:#f92672>&#34;dims&#34;</span>: <span style=color:#ae81ff>100</span>,                        <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>2</span>
+                <span style=color:#f92672>&#34;model&#34;</span>: <span style=color:#e6db74>&#34;lsh&#34;</span>,                     <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>3</span>
+                <span style=color:#f92672>&#34;similarity&#34;</span>: <span style=color:#e6db74>&#34;cosine&#34;</span>,             <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>4</span>
+                <span style=color:#f92672>&#34;L&#34;</span>: <span style=color:#ae81ff>99</span>,                            <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>5</span>
+                <span style=color:#f92672>&#34;k&#34;</span>: <span style=color:#ae81ff>1</span>                              <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#ae81ff>6</span>
+            }
+        }
+    }
+}
+</code></pre></div><h4 id=说明-8>说明
+<a class=anchor href=#%e8%af%b4%e6%98%8e-8>#</a></h4><p>1 向量数据类型。必须是密集浮点向量。
+2 向量维度。
+3 模型类型。
+4 相似度度量。
+5 哈希表的数量。通常增加这个值会提高召回率。
+6 组合形成单个哈希值的哈希函数数量。通常，增加这个值会提高精确度。</p><h3 id=l2-lsh-映射>L2 LSH 映射
+<a class=anchor href=#l2-lsh-%e6%98%a0%e5%b0%84>#</a></h3><p>使用
+<a href=https://en.wikipedia.org/wiki/Locality-sensitive_hashing#Stable_distributions>稳定分布方法</a>对密集浮点向量进行哈希和存储，以支持近似 L2（欧几里得）相似度查询。</p><p>参考
+<a href=https://en.wikipedia.org/wiki/Locality-sensitive_hashing#Random_projection>Mining Massive Datasets</a>第三章</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>/my-index/_mapping</span>
+{
+    <span style=color:#f92672>&#34;properties&#34;</span>: {
+        <span style=color:#f92672>&#34;my_vec&#34;</span>: {
+            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;knn_dense_float_vector&#34;</span>,       <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>1</span>
+            <span style=color:#f92672>&#34;knn&#34;</span>: {
+                <span style=color:#f92672>&#34;dims&#34;</span>: <span style=color:#ae81ff>100</span>,                        <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>2</span>
+                <span style=color:#f92672>&#34;model&#34;</span>: <span style=color:#e6db74>&#34;lsh&#34;</span>,                     <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>3</span>
+                <span style=color:#f92672>&#34;similarity&#34;</span>: <span style=color:#e6db74>&#34;l2&#34;</span>,                 <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>4</span>
+                <span style=color:#f92672>&#34;L&#34;</span>: <span style=color:#ae81ff>99</span>,                            <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>5</span>
+                <span style=color:#f92672>&#34;k&#34;</span>: <span style=color:#ae81ff>1</span>,                             <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>6</span>
+                <span style=color:#f92672>&#34;w&#34;</span>: <span style=color:#ae81ff>3</span>                              <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#ae81ff>7</span>
+            }
+        }
+    }
+}
+</code></pre></div><h4 id=说明-9>说明
+<a class=anchor href=#%e8%af%b4%e6%98%8e-9>#</a></h4><p>1 向量数据类型。必须是密集浮点向量。
+2 向量维度。
+3 模型类型。
+4 相似度度量。
+5 哈希表的数量。通常增加这个值会提高召回率。
+6 组合形成单个哈希值的哈希函数数量。通常增加这个值会提高精确度。
+7 整数桶宽度。这决定了两个向量在投影到第三个公共向量上时必须多么接近，才能共享一个哈希值。典型值是低位整数。</p><h3 id=排列-lsh-映射>排列 LSH 映射
+<a class=anchor href=#%e6%8e%92%e5%88%97-lsh-%e6%98%a0%e5%b0%84>#</a></h3><p>使用 Amato 等人在
+<a href=https://dl.acm.org/doi/10.1145/3209978.3210089>《Large-Scale Image Retrieval with Elasticsearch》</a>中描述的模型。</p><p>该模型通过向量中绝对值最大的 <code>k</code> 个索引（向量中的位置）来描述向量。直觉是，每个索引对应于某个潜在概念，绝对值高的索引比绝对值低的索引携带更多关于其各自概念的信息。该方法的研究主要集中在余弦相似度上，尽管实现也支持 L1 和 L2。</p><h4 id=例子>例子
+<a class=anchor href=#%e4%be%8b%e5%ad%90>#</a></h4><p>向量 <code>[10, -2, 0, 99, 0.1, -8, 42, -13, 6, 0.1]</code> 中 <code>k = 4</code> 的索引为 <code>[4, 7, -8, 1]</code>。索引是 1 索引的，负值的索引被否定（因此 -8）。索引可以根据其排名可选地重复。在本例中，索引将被重复 <code>[4, 4, 4, 4, 7, 7, 7, -8, -8, 1]</code>。索引 4 具有最高的绝对值，因此它被重复 <code>k - 0 = 4</code> 次。索引 7 具有第二高的绝对值，因此它被重复 <code>k - 1 = 3</code> 次，依此类推。搜索算法将得分计算为存储向量表示和查询向量表示的交集的大小。因此，对于表示为 <code>[2, 2, 2, 2, 7, 7, 7, 4, 4, 5]</code> 的查询向量，交集为 <code>[7, 7, 7, 4, 4]</code>，得分为 5。在一些实验中，重复实际上降低了召回率，因此建议您尝试使用和不使用重复。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>/my-index/_mapping</span>
+{
+    <span style=color:#f92672>&#34;properties&#34;</span>: {
+        <span style=color:#f92672>&#34;my_vec&#34;</span>: {
+            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;knn_dense_float_vector&#34;</span>,       <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>1</span>
+            <span style=color:#f92672>&#34;knn&#34;</span>: {
+                <span style=color:#f92672>&#34;dims&#34;</span>: <span style=color:#ae81ff>100</span>,                        <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>2</span>
+                <span style=color:#f92672>&#34;model&#34;</span>: <span style=color:#e6db74>&#34;permutation_lsh&#34;</span>,         <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>3</span>
+                <span style=color:#f92672>&#34;k&#34;</span>: <span style=color:#ae81ff>10</span>,                            <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>4</span>
+                <span style=color:#f92672>&#34;repeating&#34;</span>: <span style=color:#66d9ef>true</span>                   <span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#ae81ff>5</span>
+            }
+        }
+    }
+}
+</code></pre></div><h4 id=说明-10>说明
+<a class=anchor href=#%e8%af%b4%e6%98%8e-10>#</a></h4><p>1 向量数据类型。必须是密集浮点向量。
+2 向量维度。
+3 模型类型。
+4 选择的顶部索引数量。
+5 是否根据其排名重复索引。请参见上面的重复注释。</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
+    import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
+    searchbox({container: "#searchbox"});
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#k-nn-向量字段类型>k-NN 向量字段类型</a><ul><li><a href=#关于向量>关于向量</a><ul><li><a href=#knn_dense_float_vector-密集向量类型>knn_dense_float_vector 密集向量类型</a></li><li><a href=#knn_sparse_bool_vector-稀疏向量类型>knn_sparse_bool_vector 稀疏向量类型</a></li></ul></li><li><a href=#映射>映射</a><ul><li><a href=#基本结构>基本结构</a></li><li><a href=#knn_sparse_bool_vector-数据类型>knn_sparse_bool_vector 数据类型</a></li><li><a href=#knn_dense_float_vector-数据类型>knn_dense_float_vector 数据类型</a></li><li><a href=#特定模型映射>特定模型映射</a></li><li><a href=#jaccard-lsh-映射>Jaccard LSH 映射</a></li><li><a href=#汉明-lsh-映射>汉明 LSH 映射</a></li><li><a href=#余弦-lsh-映射>余弦 LSH 映射</a></li><li><a href=#l2-lsh-映射>L2 LSH 映射</a></li><li><a href=#排列-lsh-映射>排列 LSH 映射</a></li></ul></li></ul></li></ul></nav></aside></main><script src=/easysearch/v1.12.2/js/asciinema-player.js></script></body></html>

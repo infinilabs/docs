@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>安装指南 on INFINI Easysearch</title><link>/easysearch/v1.12.2/docs/getting-started/install/</link><description>Recent content in 安装指南 on INFINI Easysearch</description><generator>Hugo -- gohugo.io</generator><atom:link href="/easysearch/v1.12.2/docs/getting-started/install/index.xml" rel="self" type="application/rss+xml"/><item><title>Docker</title><link>/easysearch/v1.12.2/docs/getting-started/install/docker/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/v1.12.2/docs/getting-started/install/docker/</guid><description>Docker 环境下使用 Easysearch # 在使用 Docker 运行 Easysearch 之前，请确保已进行 系统调优并安装好 Docker 服务，且 Docker 服务正常运行。
+最快方式：启动临时的 docker 容器，可以从前台查看到 admin 随机生成的初始密码
+docker run --name easysearch -p 9200:9200 infinilabs/easysearch:1.12.2 #如果要自定义密码，可以使用环境变量配置，从 1.8.2 版本开始支持 echo EASYSEARCH_INITIAL_ADMIN_PASSWORD=you_complex_pass &amp;gt; .env docker run --name easysearch --env-file ./.env -p 9200:9200 infinilabs/easysearch:1.12.2 个性配置 # 从宿主机挂载数据目录及日志目录，并配置 jvm 内存为 512m。
+在宿主机上创建目录 sudo mkdir -p /data/easysearch/{data,logs} 修改目录权限 #容器内es用户的uid为602，通过调整宿主机的目录权限，确保在容器内部es用户有权限读写挂载的数据卷 sudo chown -R 602.602 /data/easysearch 后台运行容器 #后台启动容器，并指定内存大小及挂载数据、日志目录，设定好容器名称及容器主机名称 #如需调整配置文件，可以通过 -v 参数挂载自定义文件来覆盖，容器内的路径如下 # 1.</description></item><item><title>Docker Compose</title><link>/easysearch/v1.12.2/docs/getting-started/install/docker-compose/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/v1.12.2/docs/getting-started/install/docker-compose/</guid><description>Docker Compose 环境下使用 Easysearch # 在使用 docker-compose 运行 Easysearch 集群之前，请确保已进行 系统调优并安装好 Docker 服务，且 Docker 服务正常运行。
+# 安装docker-compose curl -L &amp;#34;https://ghproxy.com/github.com/docker/compose/releases/download/v2.6.1/docker-compose-$(uname -s)-$(uname -m)&amp;#34; -o /usr/local/bin/docker-compose # 增加执行权限 chmod +x /usr/local/bin/docker-compose # 检查版本信息 docker-compose -v 运行 2 节点 docker compose 项目 # 从官网下载文件并解压，然后运行初始化脚本，最后运行启动脚本。
+在宿主机上创建工作目录 sudo mkdir -p /opt/docker/compose 下载文件并解压 curl -sSL https://release.infinilabs.com/easysearch/archive/compose/2node.tar.gz | sudo tar -xzC /opt/docker/compose --strip-components=1 # 如需测试 3 节点，只需把上面的下载文件名改为 3node.tar.gz 注意：解压之后，请把镜像的 latest 版本手工更新成具体的版本，可参考下面的命令</description></item><item><title>Helm Chart</title><link>/easysearch/v1.12.2/docs/getting-started/install/helm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/v1.12.2/docs/getting-started/install/helm/</guid><description>Helm Chart 部署 # INFINI Easysearch 从 1.5.0 版本开始支持 Helm Chart 方式部署。
+仓库信息 # INFINI Easysearch Helm Chart 仓库地址: https://helm.infinilabs.com。
+可以使用以下命令添加仓库
+helm repo add infinilabs https://helm.infinilabs.com 依赖项 # StorageClass INFINI Easysearch Helm Chart 包中默认使用 local-path 进行数据持久化存储，可参考 local-path官方文档进行安装。
+如果使用其他 StorageClass，请修改 Chart 包中的 storageClassName: local-path配置项。
+Secret INFINI Easysearch Helm Chart 默认使用 cert-manager 进行自签 CA 证书创建及分发, 可参考 cert-manager 官方文档进行安装。
+安装示例 # cat &amp;lt;&amp;lt; EOF | kubectl apply -n &amp;lt;namespace&amp;gt; -f - apiVersion: cert-manager.</description></item><item><title>Linux</title><link>/easysearch/v1.12.2/docs/getting-started/install/linux/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/v1.12.2/docs/getting-started/install/linux/</guid><description>Linux 环境下使用 Easysearch # 为了安全起见，Easysearch 不支持通过 root 身份来运行，需要新建普通用户，如 easysearch 用户来快速运行 Easysearch。
+一键安装 # 通过我们提供的自动安装脚本可自动下载最新版本的 easysearch 进行解压安装，默认解压到 /opt/easysearch
+curl -sSL http://get.infini.cloud | bash -s -- -p easysearch 脚本的可选参数如下：
+-v [版本号]（默认采用最新版本号）
+-d [安装目录]（默认安装到/opt/easysearch）
+bundle 包运行 # bundle 是内置 JDK 的安装包，不需要额外下载 JDK，可直接解压运行。
+# 创建 easysearch 用户 groupadd -g 602 easysearch useradd -u 602 -g easysearch -m -d /home/easysearch -c &amp;#39;easysearch&amp;#39; -s /bin/bash easysearch # 创建 easysearch 安装目录 mkdir -p /opt/easysearch # 下载 bundle 包并解压到安装目录 wget -O - https://release.</description></item><item><title>Windows</title><link>/easysearch/v1.12.2/docs/getting-started/install/windows/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/v1.12.2/docs/getting-started/install/windows/</guid><description>Windows 环境下使用 Easysearch # 目前，有多种方案可以在 Windows 下体验 Easysearch。
+方案一 # 如果您的 Windows 环境上有 Docker，请查看 Docker 环境下使用 Easysearch
+方案二 # 使用非 https 方式的 Easysearch
+手工下载 Easysearch，并解压安装。 手工下载 JDK 将 JDK 解压到 Easysearch 安装目录下，并将目录的名称修改为 jdk。 由于 Windows 环境下默认没有 openssl，生成证书不太方便，您可以通过其他方式来生成证书，如在 Linux 环境提前生成证书。
+#用记事本打开 config/easysearch.yml，并修改配置。 security.enabled: false 方案三 # 通过安装 git-for-windows 来执行 bash 操作。
+注意：以下操作在 git-bash 中执行
+通过在线脚本进行 Easysearch 安装 curl -sSL http://get.</description></item></channel></rss>

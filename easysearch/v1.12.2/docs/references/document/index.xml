@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>文档操作 on INFINI Easysearch</title><link>/easysearch/v1.12.2/docs/references/document/</link><description>Recent content in 文档操作 on INFINI Easysearch</description><generator>Hugo -- gohugo.io</generator><atom:link href="/easysearch/v1.12.2/docs/references/document/index.xml" rel="self" type="application/rss+xml"/><item><title>增删改查</title><link>/easysearch/v1.12.2/docs/references/document/index-data/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/v1.12.2/docs/references/document/index-data/</guid><description>增删改查 # 您可以使用 REST API 对数据进行索引。存在两个 API：索引 API 和 _bulk API。
+对于新数据增量到达的情况（例如，来自小型企业的客户订单），您可以使用索引 API 在文档到达时单独添加文档。对于数据流不太频繁的情况（例如，每周更新一次营销网站），您可能更希望生成一个文件并将其发送到 _bulk API。对于大量文档，将请求汇总在一起并使用 _bulk API 可提供优异的性能。然而，如果您的文档非常庞大，您可能需要单独对它们进行索引。
+索引介绍 # 在搜索数据之前，必须对其进行索引。索引是搜索引擎组织数据以便快速检索的方法。生成的结构称为索引。
+在 Easysearch 中，数据的基本单位是 JSON 文档。在索引中，Easysearch 使用唯一的 ID 标识每个文档。
+对索引 API 的请求如下所示：
+PUT &amp;lt;index&amp;gt;/_doc/&amp;lt;id&amp;gt; { &amp;#34;A JSON&amp;#34;: &amp;#34;document&amp;#34; } 对 _bulk API 的请求看起来有点不同，因为您在批量数据中指定了索引和 ID：
+POST _bulk { &amp;#34;index&amp;#34;: { &amp;#34;_index&amp;#34;: &amp;#34;&amp;lt;index&amp;gt;&amp;#34;, &amp;#34;_id&amp;#34;: &amp;#34;&amp;lt;id&amp;gt;&amp;#34; } } { &amp;#34;A JSON&amp;#34;: &amp;#34;document&amp;#34; } 批量数据采用 _bulk API 操作必须符合特定的格式，该格式要求在每行（包括最后一行）的末尾都有一个换行符（ \n ）。这是基本格式：
+Action and metadata\n Optional document\n Action and metadata\n Optional document\n 文档是可选的，因为 删除 操作不需要文档。其他操作（ 索引 、 创建 和 更新 ）都需要文档。如果您特别希望在文档已存在的情况下操作失败，请使用 创建 操作而不是 索引 操作。</description></item><item><title>别名操作</title><link>/easysearch/v1.12.2/docs/references/document/index-alias/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/v1.12.2/docs/references/document/index-alias/</guid><description>索引别名 # 别名是可以指向一个或多个索引的虚拟索引名称。
+如果数据分布在多个索引中，而不是跟踪要查询的索引，则可以创建别名并进行查询。
+例如，如果要将日志存储到基于月份的索引中，并且经常查询前两个月的日志，则可以创建一个 last_2_months 别名，并每月更新其指向的索引。
+您可以随时更改别名指向的索引，所以在应用程序中使用别名引用索引可以让您在不停机的情况下重新索引数据。
+创建索引别名 # 要创建索引别名，请使用 POST 请求:
+POST _aliases 使用 actions 方法指定要执行的操作列表。此命令创建名为 alias1 的别名，并将 index-1 添加到此别名：
+POST _aliases { &amp;#34;actions&amp;#34;: [ { &amp;#34;add&amp;#34;: { &amp;#34;index&amp;#34;: &amp;#34;index-1&amp;#34;, &amp;#34;alias&amp;#34;: &amp;#34;alias1&amp;#34; } } ] } 您应该看到以下响应:
+{ &amp;#34;acknowledged&amp;#34;: true } 如果此请求失败，请确保要添加到别名的索引已存在.
+要检查 alias1 是否引用 index-1 ，请运行以下命令
+GET alias1 索引别名添加与删除操作 # 您可以在同一 别名 操作中执行多个操作。
+例如，以下命令删除 index-1 并将 index-2 添加到 alias1 ：
+POST _aliases { &amp;#34;actions&amp;#34;: [ { &amp;#34;remove&amp;#34;: { &amp;#34;index&amp;#34;: &amp;#34;index-1&amp;#34;, &amp;#34;alias&amp;#34;: &amp;#34;alias1&amp;#34; } }, { &amp;#34;add&amp;#34;: { &amp;#34;index&amp;#34;: &amp;#34;index-2&amp;#34;, &amp;#34;alias&amp;#34;: &amp;#34;alias1&amp;#34; } } ] } add 和 remove 操作以原子方式发生，这意味着 alias1 不会同时指向 index-1 和 index-2 .</description></item><item><title>索引压缩</title><link>/easysearch/v1.12.2/docs/references/document/index-compression/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/v1.12.2/docs/references/document/index-compression/</guid><description>索引压缩 # 索引编码 # 索引编码决定索引的存储字段如何被压缩和存储在磁盘上。索引编码由静态的 index.codec 设置来控制，该设置指定压缩算法。这个设置会影响索引分片的大小和索引操作的性能。
+Easysearch 提供了多种基于索引编码的压缩方案，以降低索引的存储成本。
+default – 该编码使用LZ4算法和预设字典，优先考虑性能而非压缩比。与best_compression相比，它提供更快的索引和搜索操作，但可能导致更大的索引/分片大小。如果在索引设置中未提供编码，则默认使用LZ4作为压缩算法。
+best_compression – 该编码底层使用zlib算法进行压缩。它能实现高压缩比，从而减小索引大小。然而，这可能会增加索引操作期间的额外CPU使用，并可能随后导致较高的索引和搜索延迟。
+从 Easysearch 1.1 开始，增加了基于 Zstandard 压缩算法的新编码方式。这种算法在压缩比和速度之间提供了良好的平衡。
+ZSTD 与默认编解码器相比，该编解码器提供了与best_compression编解码器相当的压缩比，CPU使用合理，索引和搜索性能也有所提高。
+source 复用 # source_reuse： 启用 source_reuse 配置项能够去除 _source 字段中与 doc_values 或倒排索引重复的部分，从而有效减小索引总体大小，这个功能对日志类索引效果尤其明显。
+source_reuse 支持对以下数据类型进行压缩：keyword，integer，long，short，boolean，float，half_float，double，geo_point，ip， 如果是 text 类型，需要默认启用 keyword 类型的 multi-field 映射。 以上类型必须启用 doc_values 映射（默认启用）才能压缩。
+使用限制 # 当索引里包含 nested 类型映射，或插件额外提供的数据类型时，不能启用 source_reuse，例如 knn 索引。
+压缩效果对比 # Easysearch 压缩效果对比如下
+使用 Nginx 日志作为数据样本 就 Elasticsearch 6.4.3 和 Easysearch 1.</description></item></channel></rss>
