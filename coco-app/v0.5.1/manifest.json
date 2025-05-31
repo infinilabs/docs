@@ -1,0 +1,15 @@
+{
+  "name": "Coco AI App",
+  "short_name": "Coco AI App",
+  "start_url": "/coco-app/v0.5.1/",
+  "scope": "/coco-app/v0.5.1/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/coco-app/v0.5.1/favicon.svg",
+      "sizes": "512x512"
+    }
+  ]
+}
