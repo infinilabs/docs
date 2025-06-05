@@ -6,6 +6,7 @@ Perform hybrid searches across multiple data sources, including personal and com
 Chat with Your AI Assistant
 Interact with the AI assistant, which leverages your personal knowledge base to provide detailed and intelligent answers.</description></item><item><title>Ubuntu</title><link>/coco-app/main/docs/getting-started/installation/ubuntu/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/coco-app/main/docs/getting-started/installation/ubuntu/</guid><description>Ubuntu # NOTE: Coco app only works fully under X11.
 Don&amp;rsquo;t know if you running X11 or not? take a look at this question!
-Goto https://coco.rs/ # Download the package # Download the package of your architecture, it should be put in your Downloads directory and look like this:
+Go to the download page # Download page: link
+Download the package # Download the package of your architecture, it should be put in your Downloads directory and look like this:
 $ cd ~/Downloads $ ls Coco-AI-x.y.z-bbbb-deb-linux-amd64.zip # or Coco-AI-x.y.z-bbbb-deb-linux-arm64.zip depending on your architecture Install it # Unzip and install it</description></item><item><title>Windows</title><link>/coco-app/main/docs/getting-started/installation/windows/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/coco-app/main/docs/getting-started/installation/windows/</guid><description>Windows # Download Coco AI # Goto https://coco.rs/
 Install Wizard #</description></item></channel></rss>
