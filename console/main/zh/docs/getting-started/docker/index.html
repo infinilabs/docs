@@ -2,17 +2,13 @@
 下载镜像 #  INFINI Console 的镜像发布在 Docker 的官方仓库，地址如下：
 https://hub.docker.com/r/infinilabs/console
 使用下面的命令即可获取最新的容器镜像：
-docker pull infinilabs/console:1.29.4 验证镜像 #  将镜像下载到本地之后，可以看到 INFINI Console 平台的容器镜像非常小，只有不到 30MB，所以下载的速度应该是非常快的。
-➜ docker images |grep &#34;console&#34; |grep &#34;1.29.4&#34; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/console latest 8c27cd334e4c 47 minutes ago 26.4MB 启动平台 #  使用如下命令启动极限网关容器：
-docker run -p 9000:9000 infinilabs/console:1.29.4 Docker Compose #  还可以使用 docker compose 来管理容器实例，新建一个 docker-compose.yml 文件如下：
-version: &#34;3.5&#34; services: infini-console: image: infinilabs/console:1."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="容器部署"><meta property="og:description" content="容器部署 #  INFINI Console 支持容器方式部署。
+mkdir -p ~/infinilabs && cd ~/infinilabs docker pull infinilabs/console:1.29.4 验证镜像 #  将镜像下载到本地之后，可以看到 INFINI Console 平台的容器镜像非常小，只有不到 30MB，所以下载的速度应该是非常快的。
+➜ docker images |grep &#34;console&#34; |grep &#34;1.29.4&#34; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/console latest 8c27cd334e4c 47 minutes ago 26.4MB 从镜像初始化 config 目录 #  docker run --rm -v $PWD/console:/work infinilabs/console:1.29.4 cp -rf /config /work 启动平台 #  使用如下命令启动极限网关容器："><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="容器部署"><meta property="og:description" content="容器部署 #  INFINI Console 支持容器方式部署。
 下载镜像 #  INFINI Console 的镜像发布在 Docker 的官方仓库，地址如下：
 https://hub.docker.com/r/infinilabs/console
 使用下面的命令即可获取最新的容器镜像：
-docker pull infinilabs/console:1.29.4 验证镜像 #  将镜像下载到本地之后，可以看到 INFINI Console 平台的容器镜像非常小，只有不到 30MB，所以下载的速度应该是非常快的。
-➜ docker images |grep &#34;console&#34; |grep &#34;1.29.4&#34; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/console latest 8c27cd334e4c 47 minutes ago 26.4MB 启动平台 #  使用如下命令启动极限网关容器：
-docker run -p 9000:9000 infinilabs/console:1.29.4 Docker Compose #  还可以使用 docker compose 来管理容器实例，新建一个 docker-compose.yml 文件如下：
-version: &#34;3.5&#34; services: infini-console: image: infinilabs/console:1."><meta property="og:type" content="article"><meta property="og:url" content="/console/main/zh/docs/getting-started/docker/"><title>容器部署 | INFINI Console</title><link rel=manifest href=/console/main/manifest.json><link rel=icon href=/console/main/favicon.png type=image/x-icon><link rel=alternate hreflang=en href=/console/main/docs/getting-started/docker/ title=Docker><link rel=stylesheet href=/console/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/console/main/css/asciinema-player.css><script defer src=/console/main/js/jquery-2.x.min.js></script><script defer src=/console/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+mkdir -p ~/infinilabs && cd ~/infinilabs docker pull infinilabs/console:1.29.4 验证镜像 #  将镜像下载到本地之后，可以看到 INFINI Console 平台的容器镜像非常小，只有不到 30MB，所以下载的速度应该是非常快的。
+➜ docker images |grep &#34;console&#34; |grep &#34;1.29.4&#34; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/console latest 8c27cd334e4c 47 minutes ago 26.4MB 从镜像初始化 config 目录 #  docker run --rm -v $PWD/console:/work infinilabs/console:1.29.4 cp -rf /config /work 启动平台 #  使用如下命令启动极限网关容器："><meta property="og:type" content="article"><meta property="og:url" content="/console/main/zh/docs/getting-started/docker/"><title>容器部署 | INFINI Console</title><link rel=manifest href=/console/main/manifest.json><link rel=icon href=/console/main/favicon.png type=image/x-icon><link rel=alternate hreflang=en href=/console/main/docs/getting-started/docker/ title=Docker><link rel=stylesheet href=/console/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/console/main/css/asciinema-player.css><script defer src=/console/main/js/jquery-2.x.min.js></script><script defer src=/console/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/console/main/zh><img src=/console/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
 <option value=v1.29.4>v1.29.4</option>
@@ -54,24 +50,37 @@ version: &#34;3.5&#34; services: infini-console: image: infinilabs/console:1."><
 English</a></li><li class=active><a href=/console/main/zh/ class="flex align-center"><img src=/console/main/svg/translate.svg class=book-icon alt=Languages>
 简体中文</a></li></ul></div></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/console/main/svg/menu.svg class=book-icon alt=Menu></label>
 <strong>容器部署</strong>
-<label for=toc-control><img src=/console/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#容器部署>容器部署</a><ul><li><a href=#下载镜像>下载镜像</a></li><li><a href=#验证镜像>验证镜像</a></li><li><a href=#启动平台>启动平台</a></li><li><a href=#docker-compose>Docker Compose</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=容器部署>容器部署
+<label for=toc-control><img src=/console/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#容器部署>容器部署</a><ul><li><a href=#下载镜像>下载镜像</a></li><li><a href=#验证镜像>验证镜像</a></li><li><a href=#从镜像初始化-config-目录>从镜像初始化 config 目录</a></li><li><a href=#启动平台>启动平台</a></li><li><a href=#docker-compose>Docker Compose</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=容器部署>容器部署
 <a class=anchor href=#%e5%ae%b9%e5%99%a8%e9%83%a8%e7%bd%b2>#</a></h1><p>INFINI Console 支持容器方式部署。</p><h2 id=下载镜像>下载镜像
-<a class=anchor href=#%e4%b8%8b%e8%bd%bd%e9%95%9c%e5%83%8f>#</a></h2><p>INFINI Console 的镜像发布在 Docker 的官方仓库，地址如下：</p><p><a href=https://hub.docker.com/r/infinilabs/console>https://hub.docker.com/r/infinilabs/console</a></p><p>使用下面的命令即可获取最新的容器镜像：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker pull infinilabs/console:1.29.4
+<a class=anchor href=#%e4%b8%8b%e8%bd%bd%e9%95%9c%e5%83%8f>#</a></h2><p>INFINI Console 的镜像发布在 Docker 的官方仓库，地址如下：</p><p><a href=https://hub.docker.com/r/infinilabs/console>https://hub.docker.com/r/infinilabs/console</a></p><p>使用下面的命令即可获取最新的容器镜像：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>mkdir -p ~/infinilabs <span style=color:#f92672>&amp;&amp;</span> cd ~/infinilabs
+docker pull infinilabs/console:1.29.4
 </code></pre></div><h2 id=验证镜像>验证镜像
 <a class=anchor href=#%e9%aa%8c%e8%af%81%e9%95%9c%e5%83%8f>#</a></h2><p>将镜像下载到本地之后，可以看到 INFINI Console 平台的容器镜像非常小，只有不到 30MB，所以下载的速度应该是非常快的。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>➜ docker images |grep &#34;console&#34; |grep &#34;1.29.4&#34;
 REPOSITORY             TAG      IMAGE ID       CREATED          SIZE
 infinilabs/console   latest   8c27cd334e4c   47 minutes ago   26.4MB
+</code></pre></div><h2 id=从镜像初始化-config-目录>从镜像初始化 config 目录
+<a class=anchor href=#%e4%bb%8e%e9%95%9c%e5%83%8f%e5%88%9d%e5%a7%8b%e5%8c%96-config-%e7%9b%ae%e5%bd%95>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker run --rm -v $PWD/console:/work infinilabs/console:1.29.4 cp -rf /config /work
 </code></pre></div><h2 id=启动平台>启动平台
-<a class=anchor href=#%e5%90%af%e5%8a%a8%e5%b9%b3%e5%8f%b0>#</a></h2><p>使用如下命令启动极限网关容器：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker run -p 9000:9000 infinilabs/console:1.29.4
+<a class=anchor href=#%e5%90%af%e5%8a%a8%e5%b9%b3%e5%8f%b0>#</a></h2><p>使用如下命令启动极限网关容器：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker run -p 9000:9000 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    -v $PWD/console/config:/config <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    -v $PWD/console/data:/data <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    -v $PWD/console/logs:/log <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    --name infini-console <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>    infinilabs/console:1.29.4
 </code></pre></div><h2 id=docker-compose>Docker Compose
-<a class=anchor href=#docker-compose>#</a></h2><p>还可以使用 docker compose 来管理容器实例，新建一个 <code>docker-compose.yml</code> 文件如下：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>version</span>: <span style=color:#e6db74>&#34;3.5&#34;</span>
-
-<span style=color:#f92672>services</span>:
-  <span style=color:#f92672>infini-console</span>:
-    <span style=color:#f92672>image</span>: <span style=color:#ae81ff>infinilabs/console:1.29.4</span>
-    <span style=color:#f92672>ports</span>:
-      - <span style=color:#ae81ff>9000</span>:<span style=color:#ae81ff>9000</span>
-    <span style=color:#f92672>container_name</span>: <span style=color:#e6db74>&#34;infini-console&#34;</span>
+<a class=anchor href=#docker-compose>#</a></h2><p>还可以使用 docker compose 来管理容器实例，新建一个 <code>docker-compose.yml</code> 文件如下：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cat <span style=color:#e6db74>&lt;&lt;EOF &gt; docker-compose.yml
+</span><span style=color:#e6db74>services:
+</span><span style=color:#e6db74>  infini-console:
+</span><span style=color:#e6db74>    image: infinilabs/console:1.29.4
+</span><span style=color:#e6db74>    ports:
+</span><span style=color:#e6db74>      - 9000:9000
+</span><span style=color:#e6db74>    volumes:
+</span><span style=color:#e6db74>      - ./console/config:/config
+</span><span style=color:#e6db74>      - ./console/data:/data
+</span><span style=color:#e6db74>      - ./console/logs:/log
+</span><span style=color:#e6db74>    container_name: &#34;infini-console&#34;
+</span><span style=color:#e6db74>    restart: unless-stopped
+</span><span style=color:#e6db74>EOF</span>
 </code></pre></div><p>在配置文件所在目录，执行如下命令即可启动，如下：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker-compose up
 </code></pre></div></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class=book-languages tabindex=0 aria-haspopup=true><ul><li class="flex align-center"><img src=/console/main/svg/translate.svg class=book-icon alt=Languages>
 简体中文</li></ul><ul class=book-languages-list><li><a href=/console/main/docs/getting-started/docker/ class="flex align-center"><img src=/console/main/svg/translate.svg class=book-icon alt=Languages>
@@ -81,4 +90,4 @@ English</a></li><li class=active><a href=/console/main/zh/ class="flex align-cen
 gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
     import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
     searchbox({container: "#searchbox"});
-</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#容器部署>容器部署</a><ul><li><a href=#下载镜像>下载镜像</a></li><li><a href=#验证镜像>验证镜像</a></li><li><a href=#启动平台>启动平台</a></li><li><a href=#docker-compose>Docker Compose</a></li></ul></li></ul></nav></aside></main><script src=/console/main/js/asciinema-player.js></script></body></html>
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#容器部署>容器部署</a><ul><li><a href=#下载镜像>下载镜像</a></li><li><a href=#验证镜像>验证镜像</a></li><li><a href=#从镜像初始化-config-目录>从镜像初始化 config 目录</a></li><li><a href=#启动平台>启动平台</a></li><li><a href=#docker-compose>Docker Compose</a></li></ul></li></ul></nav></aside></main><script src=/console/main/js/asciinema-player.js></script></body></html>
