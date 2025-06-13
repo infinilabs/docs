@@ -1,0 +1,1088 @@
+<!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="分桶聚合 #  Bucket aggregations 将文件集归类为桶。桶聚合的类型决定了一个给定的文档是否落入一个桶中
+你可以使用桶聚合来实现分面导航（通常作为侧边栏放在搜索结果页面），以帮助你的用户缩小搜索结果范围。
+terms #  terms 聚合为字段的每个唯一 term 动态地创建一个桶。
+下面的例子使用 terms 聚合来查找网络日志数据中每个响应码的文档数量:
+GET kibana_sample_data_logs/_search { &#34;size&#34;: 0, &#34;aggs&#34;: { &#34;response_codes&#34;: { &#34;terms&#34;: { &#34;field&#34;: &#34;response.keyword&#34;, &#34;size&#34;: 10 } } } } Sample Response #  ... &#34;aggregations&#34; : { &#34;response_codes&#34; : { &#34;doc_count_error_upper_bound&#34; : 0, &#34;sum_other_doc_count&#34; : 0, &#34;buckets&#34; : [ { &#34;key&#34; : &#34;200&#34;, &#34;doc_count&#34; : 12832 }, { &#34;key&#34; : &#34;404&#34;, &#34;doc_count&#34; : 801 }, { &#34;key&#34; : &#34;503&#34;, &#34;doc_count&#34; : 441 } ] } } ."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="分桶聚合"><meta property="og:description" content="分桶聚合 #  Bucket aggregations 将文件集归类为桶。桶聚合的类型决定了一个给定的文档是否落入一个桶中
+你可以使用桶聚合来实现分面导航（通常作为侧边栏放在搜索结果页面），以帮助你的用户缩小搜索结果范围。
+terms #  terms 聚合为字段的每个唯一 term 动态地创建一个桶。
+下面的例子使用 terms 聚合来查找网络日志数据中每个响应码的文档数量:
+GET kibana_sample_data_logs/_search { &#34;size&#34;: 0, &#34;aggs&#34;: { &#34;response_codes&#34;: { &#34;terms&#34;: { &#34;field&#34;: &#34;response.keyword&#34;, &#34;size&#34;: 10 } } } } Sample Response #  ... &#34;aggregations&#34; : { &#34;response_codes&#34; : { &#34;doc_count_error_upper_bound&#34; : 0, &#34;sum_other_doc_count&#34; : 0, &#34;buckets&#34; : [ { &#34;key&#34; : &#34;200&#34;, &#34;doc_count&#34; : 12832 }, { &#34;key&#34; : &#34;404&#34;, &#34;doc_count&#34; : 801 }, { &#34;key&#34; : &#34;503&#34;, &#34;doc_count&#34; : 441 } ] } } ."><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/v1.13.0/docs/references/aggregation/bucket-agg/"><title>分桶聚合 | INFINI Easysearch</title><link rel=manifest href=/easysearch/v1.13.0/manifest.json><link rel=icon href=/easysearch/v1.13.0/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/v1.13.0/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/easysearch/v1.13.0/css/asciinema-player.css><script defer src=/easysearch/v1.13.0/js/jquery-2.x.min.js></script><script defer src=/easysearch/v1.13.0/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/easysearch/v1.13.0><img src=/easysearch/v1.13.0/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value=v1.13.0>v1.13.0</option>
+<option value=v1.12.2>v1.12.2</option>
+<option value=v1.12.1>v1.12.1</option>
+<option value=v1.12.0>v1.12.0</option>
+<option value=v1.11.1>v1.11.1</option>
+<option value=v1.11.0>v1.11.0</option>
+<option value=v1.9.1>v1.9.1</option>
+<option value=v1.8.3>v1.8.3</option>
+<option value=v1.8.2>v1.8.2</option>
+<option value=v1.8.0>v1.8.0</option>
+<option value=v1.7.1>v1.7.1</option>
+<option value=v1.7.0>v1.7.0</option>
+<option value=v1.6.2>v1.6.2</option>
+<option value=v1.6.1>v1.6.1</option>
+<option value=v1.6.0>v1.6.0</option>
+<option value=v1.5.0>v1.5.0</option>
+<option value=v1.4.0>v1.4.0</option>
+<option value=v1.3.0>v1.3.0</option>
+<option value=v1.2.0>v1.2.0</option>
+<option value=v1.1.1>v1.1.1</option>
+<option value=v1.1.0>v1.1.0</option>
+<option value=v1.0.1>v1.0.1</option>
+<option value=v1.0.0>v1.0.0</option></select></div><ul><li><a href=/easysearch/v1.13.0/docs/overview/>产品概述</a><ul></ul></li><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
+<label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>入门指南</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-e622c8a7dea0dd02f82a836e861475c5 class=toggle>
+<label for=section-e622c8a7dea0dd02f82a836e861475c5 class="flex justify-between"><a href=/easysearch/v1.13.0/docs/getting-started/install/>安装指南</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/getting-started/install/docker/>Docker</a></li><li><a href=/easysearch/v1.13.0/docs/getting-started/install/docker-compose/>Docker Compose</a></li><li><a href=/easysearch/v1.13.0/docs/getting-started/install/helm/>Helm Chart</a></li><li><a href=/easysearch/v1.13.0/docs/getting-started/install/linux/>Linux</a></li><li><a href=/easysearch/v1.13.0/docs/getting-started/install/windows/>Windows</a></li><li><input type=checkbox id=section-8df7e740f0b8d44e94e2d5f3851aef83 class=toggle>
+<label for=section-8df7e740f0b8d44e94e2d5f3851aef83 class="flex justify-between"><a href=/easysearch/v1.13.0/docs/getting-started/install/operator/>Operator</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/getting-started/install/operator/deploy_operator/>部署 Operator</a></li><li><a href=/easysearch/v1.13.0/docs/getting-started/install/operator/deploy_easysearch/>部署 Easysearch</a></li><li><a href=/easysearch/v1.13.0/docs/getting-started/install/operator/resource_manager/>资源扩容</a></li><li><a href=/easysearch/v1.13.0/docs/getting-started/install/operator/node_scale/>节点扩容</a></li><li><a href=/easysearch/v1.13.0/docs/getting-started/install/operator/update_password/>密码修改</a></li><li><a href=/easysearch/v1.13.0/docs/getting-started/install/operator/upgrade/>版本升级</a></li><li><a href=/easysearch/v1.13.0/docs/getting-started/install/operator/cert_manager/>证书管理</a></li><li><a href=/easysearch/v1.13.0/docs/getting-started/install/operator/s3_snapshot/>s3 备份</a></li><li><a href=/easysearch/v1.13.0/docs/getting-started/install/operator/FAQ/>FAQ</a></li></ul></li></ul></li><li><a href=/easysearch/v1.13.0/docs/getting-started/settings/>系统调优</a></li><li><a href=/easysearch/v1.13.0/docs/getting-started/configuration/>常用配置</a></li><li><a href=/easysearch/v1.13.0/docs/getting-started/configuration_file/>配置说明</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle checked>
+<label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a>功能手册</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-dd5a2f6dc33fa990f542566f7a908106 class=toggle>
+<label for=section-dd5a2f6dc33fa990f542566f7a908106 class="flex justify-between"><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/>文档建模</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-7d4ce65a4422588ac64ff568cfa9eb9e class=toggle>
+<label for=section-7d4ce65a4422588ac64ff568cfa9eb9e class="flex justify-between"><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/mapping-parameters/>文档映射</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/mapping-parameters/analyzer/>分词器参数</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/mapping-parameters/dynamic/>动态映射参数</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/mapping-parameters/copy_to/>字段复制参数</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/mapping-parameters/coerce/>强制类型转换参数</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/mapping-parameters/doc_values/>文档列值参数</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/mapping-parameters/enabled/>是否启用参数</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/mapping-parameters/boost/>权重参数设置</a></li></ul></li><li><input type=checkbox id=section-f879c6c2aa847411ec53259bcf512a91 class=toggle>
+<label for=section-f879c6c2aa847411ec53259bcf512a91 class="flex justify-between"><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/>字段类型</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/rank/>Rank 字段类型</a></li><li><input type=checkbox id=section-cd8ebeffb1e1eb5dcc529f4edbad93fc class=toggle>
+<label for=section-cd8ebeffb1e1eb5dcc529f4edbad93fc class="flex justify-between"><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/geo-filed-type/>地理字段类型</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/geo-filed-type/geo-point/>Geopoint 地理点字段类型</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/geo-filed-type/geo-shape/>Geoshape 地理形状字段类型</a></li></ul></li><li><input type=checkbox id=section-f94b121fac5f49bed5028d50034cc3cf class=toggle>
+<label for=section-f94b121fac5f49bed5028d50034cc3cf class="flex justify-between"><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/string-field-type/>字符串字段类型</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/string-field-type/keyword/>Keyword 字段类型</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/string-field-type/text/>Text 字段类型</a></li></ul></li><li><input type=checkbox id=section-37ac2b2e61a91ff3354b11d860ec66cf class=toggle>
+<label for=section-37ac2b2e61a91ff3354b11d860ec66cf class="flex justify-between"><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/object-field-type/>对象字段类型</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/object-field-type/flattened/>Flat 对象字段类型</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/object-field-type/flattened_text/>Flat 对象字段类型</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/object-field-type/join/>Join 字段类型</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/object-field-type/nested/>Nested 字段类型</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/object-field-type/object/>Object 对象字段类型</a></li></ul></li><li><input type=checkbox id=section-4f4e977370cb5a089a66f2d06c0cf2fc class=toggle>
+<label for=section-4f4e977370cb5a089a66f2d06c0cf2fc class="flex justify-between"><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/date-field-type/>日期字段类型</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/date-field-type/date-nanos/>Date nanoseconds 字段类型</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/date-field-type/date/>Date 字段类型</a></li></ul></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/ip/>IP 地址字段类型</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/match_only_text/>match_only_text 字段类型</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/percolator/>Percolator 过滤器字段类型</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/binary/>二进制字段类型</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/alias/>别名字段类型</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/knn/>向量字段类型</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/boolean/>布尔字段类型</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/numeric-field/>数值字段类型</a></li><li><input type=checkbox id=section-d087fbeb67c721ac6618bf4ae5f3be20 class=toggle>
+<label for=section-d087fbeb67c721ac6618bf4ae5f3be20 class="flex justify-between"><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/autocomplete-field-type/>自动补全字段类型</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/autocomplete-field-type/search-as-you-type/>Search-as-you-type 字段类型</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/autocomplete-field-type/completion/>自动补全字段类型</a></li></ul></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/range-field-type/>范围字段类型</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/field-types/wildcard/>Wildcard 字段类型</a></li></ul></li><li><input type=checkbox id=section-92a866d9a34e707f209ba1cdbeaba985 class=toggle>
+<label for=section-92a866d9a34e707f209ba1cdbeaba985 class="flex justify-between"><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/metadata-field/>元数据字段</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/metadata-field/id/>ID 属性</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/metadata-field/meta/>元数据属性</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/metadata-field/field-names/>字段名称</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/metadata-field/ignored/>忽略属性</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/metadata-field/source/>源文档属性</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/metadata-field/>索引属性</a></li><li><a href=/easysearch/v1.13.0/docs/references/mappings-and-field-types/metadata-field/routing/>路由属性</a></li></ul></li></ul></li><li><input type=checkbox id=section-232f0668f3be6ea64e1c220baec34dfc class=toggle>
+<label for=section-232f0668f3be6ea64e1c220baec34dfc class="flex justify-between"><a>文档操作</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/document/index-data/>增删改查</a></li><li><a href=/easysearch/v1.13.0/docs/references/document/index-alias/>别名操作</a></li><li><a href=/easysearch/v1.13.0/docs/references/document/index-compression/>索引压缩</a></li></ul></li><li><input type=checkbox id=section-6b02990358c7382bac3f39043e5fd437 class=toggle>
+<label for=section-6b02990358c7382bac3f39043e5fd437 class="flex justify-between"><a>搜索操作</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/search/term/>词项查询</a></li><li><a href=/easysearch/v1.13.0/docs/references/search/full-text/>全文查询</a></li><li><a href=/easysearch/v1.13.0/docs/references/search/knn_api/>向量查询</a></li><li><a href=/easysearch/v1.13.0/docs/references/search/bool/>布尔查询</a></li><li><a href=/easysearch/v1.13.0/docs/references/search/search-template/>查询模版</a></li><li><a href=/easysearch/v1.13.0/docs/references/search/async_search/>异步搜索</a></li><li><a href=/easysearch/v1.13.0/docs/references/search/pit_api/>定点查询</a></li></ul></li><li><input type=checkbox id=section-69a0462c4990a8b0bf6189289fb56e8a class=toggle checked>
+<label for=section-69a0462c4990a8b0bf6189289fb56e8a class="flex justify-between"><a href=/easysearch/v1.13.0/docs/references/aggregation/>聚合操作</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/aggregation/metric-agg/>指标聚合</a></li><li><a href=/easysearch/v1.13.0/docs/references/aggregation/bucket-agg/ class=active>分桶聚合</a></li><li><a href=/easysearch/v1.13.0/docs/references/aggregation/pipeline-agg/>管道聚合</a></li></ul></li><li><input type=checkbox id=section-86e828ca7e30e9d2e35881b956319411 class=toggle>
+<label for=section-86e828ca7e30e9d2e35881b956319411 class="flex justify-between"><a>SQL 查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/sql/sql-jdbc/>SQL-JDBC</a></li><li><a href=/easysearch/v1.13.0/docs/references/sql/aggregations/>聚合查询</a></li><li><a href=/easysearch/v1.13.0/docs/references/sql/fulltext/>全文搜索</a></li><li><a href=/easysearch/v1.13.0/docs/references/sql/complex/>复杂查询</a></li><li><a href=/easysearch/v1.13.0/docs/references/sql/basics/>基础查询</a></li></ul></li><li><input type=checkbox id=section-1c80046b8a7d2b6f02509e78096b1388 class=toggle>
+<label for=section-1c80046b8a7d2b6f02509e78096b1388 class="flex justify-between"><a href=/easysearch/v1.13.0/docs/references/security/>安全模块</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-4c0acfad57ce0b1db83571ad903a192e class=toggle>
+<label for=section-4c0acfad57ce0b1db83571ad903a192e class="flex justify-between"><a href=/easysearch/v1.13.0/docs/references/security/configuration/>配置说明</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/security/configuration/yaml/>本地配置</a></li><li><a href=/easysearch/v1.13.0/docs/references/security/configuration/backend/>后端配置</a></li><li><a href=/easysearch/v1.13.0/docs/references/security/configuration/tls/>证书配置</a></li><li><a href=/easysearch/v1.13.0/docs/references/security/configuration/system-indices/>系统索引</a></li></ul></li><li><input type=checkbox id=section-4854412a16ac224d9851d23b7bf6bdea class=toggle>
+<label for=section-4854412a16ac224d9851d23b7bf6bdea class="flex justify-between"><a href=/easysearch/v1.13.0/docs/references/security/access-control/>权限控制</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/security/access-control/users-roles/>用户角色</a></li><li><a href=/easysearch/v1.13.0/docs/references/security/access-control/document-level-security/>文档权限</a></li><li><a href=/easysearch/v1.13.0/docs/references/security/access-control/field-level-security/>字段权限</a></li><li><a href=/easysearch/v1.13.0/docs/references/security/access-control/field-masking/>数据脱敏</a></li><li><a href=/easysearch/v1.13.0/docs/references/security/access-control/run-as/>身份模拟</a></li><li><a href=/easysearch/v1.13.0/docs/references/security/access-control/cross-cluster-search/>跨集群搜索</a></li><li><a href=/easysearch/v1.13.0/docs/references/security/access-control/api/>API 接口</a></li><li><a href=/easysearch/v1.13.0/docs/references/security/access-control/permissions/>权限列表</a></li></ul></li></ul></li><li><input type=checkbox id=section-4632348aa5cba7d33c080167da2f13b6 class=toggle>
+<label for=section-4632348aa5cba7d33c080167da2f13b6 class="flex justify-between"><a>文本分词</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-13c9df598f113d7537eff14f9f5147e3 class=toggle>
+<label for=section-13c9df598f113d7537eff14f9f5147e3 class="flex justify-between"><a href=/easysearch/v1.13.0/docs/references/text-analysis/analyzers/>分词器</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/analyzers/ik-analyzer/>IK 分词器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/analyzers/stop-analyzer/>停用词分词器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/analyzers/keyword-analyzer/>关键词分词器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/analyzers/creating-a-custom-analyzer/>创建一个自定义分词器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/analyzers/pattern-analyzer/>匹配模式分词器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/analyzers/language-analyzer/>各类语种分词器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/analyzers/fingerprint-analyzer/>指纹分词器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/analyzers/search-analyzers/>搜索分词器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/analyzers/standard-analyzer/>标准分词器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/analyzers/whitespace-analyzer/>空格分词器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/analyzers/simple-analyzer/>简单分词器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/analyzers/index-analyzers/>索引分词器</a></li></ul></li><li><input type=checkbox id=section-8066f3918cdd51465da4720002ab0bb5 class=toggle>
+<label for=section-8066f3918cdd51465da4720002ab0bb5 class="flex justify-between"><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/>分词过滤器</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/ascii-folding/>ASCII 折叠分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/cjk-bigram/>CJK 二元分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/cjk-width/>CJK 宽度分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/kstem/>KStem 分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/kuromoji-completion/>Kuromoji 补全分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/n-gram/>n-gram 分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/keep-types/>保留类型分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/trim/>修剪词元过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/stop/>停用词词元过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/keyword-marker/>关键词标记分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/keyword-repeat/>关键词重复分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/delimited-payload/>分隔式负载分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/pattern-replace/>匹配替换词元过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/decimal-digit/>十进制数字分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/word-delimiter-graph/>单词分隔符图词元过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/word-delimiter/>单词分隔符词元过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/remove-duplicates/>去重词元过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/reverse/>反转词元过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/synonym-graph/>同义词图词元过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/synonym/>同义词词元过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/unique/>唯一词元过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/multiplexer/>多路复用分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/uppercase/>大写词元过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/lowercase/>小写分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/common-grams/>常用词组分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/flatten-graph/>平图化分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/normalization/>归一化词元过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/truncate/>截断词元过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/fingerprint/>指纹分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/pattern-capture/>捕获匹配词元过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/min-hash/>最小哈希分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/condition/>条件分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/porter-stem/>波特词干词元过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/apostrophe/>省略符号分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/elision/>省略词分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/classic/>经典分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/keep-words/>词保留分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/dictionary-decompounder/>词典复合词分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/stemmer/>词干提取词元过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/stemmer-override/>词干覆盖词元过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/shingle/>词片词元过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/predicate-token-filter/>谓词词元过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/edge-n-gram/>边缘 n 元分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/length/>长度分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/limit/>限制分词过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/token-filters/snowball/>雪球算法词元过滤器</a></li></ul></li><li><input type=checkbox id=section-d6e4a0d07abe0df202540482628fd24b class=toggle>
+<label for=section-d6e4a0d07abe0df202540482628fd24b class="flex justify-between"><a href=/easysearch/v1.13.0/docs/references/text-analysis/character-filters/>字符过滤器</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/character-filters/html-strip/>HTML 剥离字符过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/character-filters/pattern-replace/>匹配替换字符过滤器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/character-filters/mapping/>映射字符过滤器</a></li></ul></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/normalizers/>规范化</a></li><li><input type=checkbox id=section-71b540c4dd821da562660864e8601756 class=toggle>
+<label for=section-71b540c4dd821da562660864e8601756 class="flex justify-between"><a href=/easysearch/v1.13.0/docs/references/text-analysis/tokenizers/>词元生成器</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/tokenizers/n-gram/>N-gram 词元生成器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/tokenizers/uax-url-email/>UAX URL 邮件词元生成器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/tokenizers/keyword/>关键词词元生成器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/tokenizers/edge-n-gram/>前缀 n 元词元生成器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/tokenizers/pattern/>匹配词元生成器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/tokenizers/letter/>字母词元生成器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/tokenizers/character-group/>字符组词元生成器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/tokenizers/lowercase/>小写词元生成器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/tokenizers/standard/>标准词元生成器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/tokenizers/whitespace/>空格词元生成器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/tokenizers/simple-pattern-split/>简单分割匹配词元生成器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/tokenizers/classic/>经典词元生成器</a></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/tokenizers/path-hierarchy/>路径词元分词器</a></li></ul></li><li><a href=/easysearch/v1.13.0/docs/references/text-analysis/stemming/>词干提取</a></li></ul></li><li><input type=checkbox id=section-52d7e2e9abce80d3dc7a6a56a0089b77 class=toggle>
+<label for=section-52d7e2e9abce80d3dc7a6a56a0089b77 class="flex justify-between"><a>管理模块</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/management/cluster/>搭建集群</a></li><li><a href=/easysearch/v1.13.0/docs/references/management/catapis/>CAT API</a></li><li><a href=/easysearch/v1.13.0/docs/references/management/logs/>系统日志</a></li><li><a href=/easysearch/v1.13.0/docs/references/management/index-templates/>索引模板</a></li><li><a href=/easysearch/v1.13.0/docs/references/management/reindex-data/>重建数据</a></li><li><a href=/easysearch/v1.13.0/docs/references/management/tasksapis/>任务管理</a></li><li><a href=/easysearch/v1.13.0/docs/references/management/slm_api/>快照生命周期管理</a></li><li><a href=/easysearch/v1.13.0/docs/references/management/ilm_api/>索引生命周期管理</a></li><li><a href=/easysearch/v1.13.0/docs/references/management/ccr_api/>跨集群复制</a></li><li><a href=/easysearch/v1.13.0/docs/references/management/snapshot-restore/>备份还原</a></li><li><a href=/easysearch/v1.13.0/docs/references/management/throttling/>写入限流</a></li><li><a href=/easysearch/v1.13.0/docs/references/management/searchable_snapshot/>可搜索快照</a></li><li><a href=/easysearch/v1.13.0/docs/references/management/time-series-Index-optimization/>使用时间范围合并策略优化时序索引</a></li><li><a href=/easysearch/v1.13.0/docs/references/management/rollup_api/>数据汇总</a></li><li><a href=/easysearch/v1.13.0/docs/references/management/popular-api/>其它常用 API</a></li></ul></li><li><input type=checkbox id=section-b34adbce31bce6650a0099282b315617 class=toggle>
+<label for=section-b34adbce31bce6650a0099282b315617 class="flex justify-between"><a>客户端</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/client/java-client/>快速开始</a></li><li><a href=/easysearch/v1.13.0/docs/references/client/client-api/>API 使用</a></li></ul></li><li><input type=checkbox id=section-c1faee20470feef7857c444179fe54aa class=toggle>
+<label for=section-c1faee20470feef7857c444179fe54aa class="flex justify-between"><a>AI 集成</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/references/AI-Integration/text-embeddings/>文本向量化</a></li></ul></li></ul></li><li><input type=checkbox id=section-1adc738e7351809ea378ec7e9730bd1f class=toggle>
+<label for=section-1adc738e7351809ea378ec7e9730bd1f class="flex justify-between"><a>版本历史</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v1.13.0/docs/release-notes/client/>Easysearch-client</a></li><li><a href=/easysearch/v1.13.0/docs/release-notes/easysearch/>Easysearch</a></li></ul></li><li><a href=/easysearch/v1.13.0/docs/resources/>其它资源</a><ul></ul></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/easysearch/v1.13.0/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>分桶聚合</strong>
+<label for=toc-control><img src=/easysearch/v1.13.0/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#分桶聚合>分桶聚合</a><ul><li><a href=#terms>terms</a><ul><li></li></ul></li><li><a href=#sampler-diversified_sampler>sampler, diversified_sampler</a><ul><li></li></ul></li><li><a href=#significant_terms-significant_text>significant_terms, significant_text</a><ul><li></li></ul></li><li><a href=#missing>missing</a><ul><li></li></ul></li><li><a href=#histogram-date_histogram>histogram, date_histogram</a><ul><li></li></ul></li><li><a href=#range-date_range-ip_range>range, date_range, ip_range</a><ul><li></li></ul></li><li><a href=#filter-filters>filter, filters</a><ul><li></li></ul></li><li><a href=#global>global</a><ul><li></li></ul></li><li><a href=#geo_distance-geohash_grid>geo_distance, geohash_grid</a><ul><li></li></ul></li><li><a href=#adjacency_matrix>adjacency_matrix</a><ul><li></li></ul></li><li><a href=#nested-reverse_nested>nested, reverse_nested</a><ul><li></li></ul></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=分桶聚合>分桶聚合
+<a class=anchor href=#%e5%88%86%e6%a1%b6%e8%81%9a%e5%90%88>#</a></h1><p>Bucket aggregations 将文件集归类为桶。桶聚合的类型决定了一个给定的文档是否落入一个桶中</p><p>你可以使用桶聚合来实现分面导航（通常作为侧边栏放在搜索结果页面），以帮助你的用户缩小搜索结果范围。</p><h2 id=terms>terms
+<a class=anchor href=#terms>#</a></h2><p><code>terms</code> 聚合为字段的每个唯一 term 动态地创建一个桶。</p><p>下面的例子使用 <code>terms</code> 聚合来查找网络日志数据中每个响应码的文档数量:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>kibana_sample_data_logs/_search</span>
+{
+  <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>0</span>,
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;response_codes&#34;</span>: {
+      <span style=color:#f92672>&#34;terms&#34;</span>: {
+        <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;response.keyword&#34;</span>,
+        <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>10</span>
+      }
+    }
+  }
+}
+</code></pre></div><h4 id=sample-response>Sample Response
+<a class=anchor href=#sample-response>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>...</span>
+<span style=color:#e6db74>&#34;aggregations&#34;</span> <span style=color:#960050;background-color:#1e0010>:</span> {
+  <span style=color:#f92672>&#34;response_codes&#34;</span> : {
+    <span style=color:#f92672>&#34;doc_count_error_upper_bound&#34;</span> : <span style=color:#ae81ff>0</span>,
+    <span style=color:#f92672>&#34;sum_other_doc_count&#34;</span> : <span style=color:#ae81ff>0</span>,
+    <span style=color:#f92672>&#34;buckets&#34;</span> : [
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;200&#34;</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>12832</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;404&#34;</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>801</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;503&#34;</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>441</span>
+      }
+    ]
+  }
+}
+<span style=color:#960050;background-color:#1e0010>...</span>
+</code></pre></div><p>值以 <code>key</code> 为键返回。
+<code>doc_count</code> 指定每个桶中的文档数量。默认情况下，桶是按照 <code>doc_count</code> 的降序排序的。</p><p>响应还包括 2 个键 <code>doc_count_error_upper_bound</code> 和 <code>sum_other_doc_count</code> 。</p><p><code>term</code> 聚合返回排名靠前的唯一 term 。因此，如果数据有许多唯一的 term，那么其中一些可能不会出现在结果中。 <code>sum_other_doc_count</code> 字段是被遗漏在响应外的文档的总和。在这种情况下，这个数字是 0，因为所有的唯一值都出现在响应中。</p><p><code>doc_count_error_upper_bound</code> 字段表示最终结果中遗漏的唯一值的最大可能计数。使用此字段可以估计计数的误差范围。</p><p>计数可能不准确。负责聚合的协调节点会提示每个分片输入其最重要的唯一 term 。假设“size”参数为 3。
+<code>terms</code> 聚合请求每个 shard 的前 3 个唯一 term 。协调节点获取每个结果并聚合它们以计算最终结果。如果一个 shard 包含的结果不属于前 3 个，则它不会显示在响应中。</p><p>如果 `size' 被设置为一个较低的数字，这一点尤其正确。因为默认的大小是 10 ，不太可能发生错误。如果你不需要很高的精度，想提高性能，你可以调低 size 。</p><h2 id=sampler-diversified_sampler>sampler, diversified_sampler
+<a class=anchor href=#sampler-diversified_sampler>#</a></h2><p>如果你要对数以百万计的文档进行聚合，你可以使用 <code>sampler</code> 聚合，将范围缩小到一小部分文档的样本，以获得更快的响应。 <code>sampler</code> 聚合通过得分最高的文档来选择样本。</p><p>其结果是近似的，但几乎代表真实数据的分布。 <code>sampler</code> 聚合明显提高了查询性能，但估计的响应并不完全可靠。</p><p>基础语法:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>“aggs”:</span> {
+  <span style=color:#f92672>&#34;SAMPLE&#34;</span>: {
+    <span style=color:#f92672>&#34;sampler&#34;</span>: {
+      <span style=color:#f92672>&#34;shard_size&#34;</span>: <span style=color:#ae81ff>100</span>
+    },
+    <span style=color:#f92672>&#34;aggs&#34;</span>: {<span style=color:#960050;background-color:#1e0010>...</span>}
+  }
+}
+</code></pre></div><p>The <code>shard_size</code> 属性告诉 Easysearch 从每个分片收集多少文档（最多）。</p><p>下面的例子将每个分片上收集的文档数量限制为 1,000 ，然后通过 <code>terms</code> 聚合对文档进行分类。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>kibana_sample_data_logs/_search</span>
+{
+  <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>0</span>,
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;sample&#34;</span>: {
+      <span style=color:#f92672>&#34;sampler&#34;</span>: {
+        <span style=color:#f92672>&#34;shard_size&#34;</span>: <span style=color:#ae81ff>1000</span>
+      },
+      <span style=color:#f92672>&#34;aggs&#34;</span>: {
+        <span style=color:#f92672>&#34;terms&#34;</span>: {
+          <span style=color:#f92672>&#34;terms&#34;</span>: {
+            <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;agent.keyword&#34;</span>
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre></div><h4 id=响应示例>响应示例
+<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>...</span>
+<span style=color:#e6db74>&#34;aggregations&#34;</span> <span style=color:#960050;background-color:#1e0010>:</span> {
+  <span style=color:#f92672>&#34;sample&#34;</span> : {
+    <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>1000</span>,
+    <span style=color:#f92672>&#34;terms&#34;</span> : {
+      <span style=color:#f92672>&#34;doc_count_error_upper_bound&#34;</span> : <span style=color:#ae81ff>0</span>,
+      <span style=color:#f92672>&#34;sum_other_doc_count&#34;</span> : <span style=color:#ae81ff>0</span>,
+      <span style=color:#f92672>&#34;buckets&#34;</span> : [
+        {
+          <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;Mozilla/5.0 (X11; Linux x86_64; rv:6.0a1) Gecko/20110421 Firefox/6.0a1&#34;</span>,
+          <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>368</span>
+        },
+        {
+          <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;Mozilla/5.0 (X11; Linux i686) AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.50 Safari/534.24&#34;</span>,
+          <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>329</span>
+        },
+        {
+          <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322)&#34;</span>,
+          <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>303</span>
+        }
+      ]
+    }
+  }
+}
+<span style=color:#960050;background-color:#1e0010>...</span>
+</code></pre></div><p><code>diversified_sampler</code> 聚合让你减少样本池分布的偏差。你可以使用 <code>field</code> 设置来控制在任何一个分片上收集到的共享一个共同值的文件的最大数量。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>kibana_sample_data_logs/_search</span>
+{
+  <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>0</span>,
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;sample&#34;</span>: {
+      <span style=color:#f92672>&#34;diversified_sampler&#34;</span>: {
+        <span style=color:#f92672>&#34;shard_size&#34;</span>: <span style=color:#ae81ff>1000</span>,
+        <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;response.keyword&#34;</span>
+      },
+      <span style=color:#f92672>&#34;aggs&#34;</span>: {
+        <span style=color:#f92672>&#34;terms&#34;</span>: {
+          <span style=color:#f92672>&#34;terms&#34;</span>: {
+            <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;agent.keyword&#34;</span>
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre></div><h4 id=响应示例-1>响应示例
+<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b-1>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>...</span>
+<span style=color:#e6db74>&#34;aggregations&#34;</span> <span style=color:#960050;background-color:#1e0010>:</span> {
+  <span style=color:#f92672>&#34;sample&#34;</span> : {
+    <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>3</span>,
+    <span style=color:#f92672>&#34;terms&#34;</span> : {
+      <span style=color:#f92672>&#34;doc_count_error_upper_bound&#34;</span> : <span style=color:#ae81ff>0</span>,
+      <span style=color:#f92672>&#34;sum_other_doc_count&#34;</span> : <span style=color:#ae81ff>0</span>,
+      <span style=color:#f92672>&#34;buckets&#34;</span> : [
+        {
+          <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;Mozilla/5.0 (X11; Linux x86_64; rv:6.0a1) Gecko/20110421 Firefox/6.0a1&#34;</span>,
+          <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>2</span>
+        },
+        {
+          <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322)&#34;</span>,
+          <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>1</span>
+        }
+      ]
+    }
+  }
+}
+<span style=color:#960050;background-color:#1e0010>...</span>
+</code></pre></div><h2 id=significant_terms-significant_text>significant_terms, significant_text
+<a class=anchor href=#significant_terms-significant_text>#</a></h2><p><code>significant_terms</code> 聚合让你发现相对于索引中的其他数据，过滤后的子集中出现的不寻常或有趣的 term 。</p><p>前台集合是你所过滤的文档集。背景集合是一个索引中所有文档的集合。
+<code>significant_terms</code> 聚合检查前台集合中的所有文档，并找到一个与后台集合中的文档相对应的重要出现的分数。</p><p>在样本网络日志数据中，每个文档都有一个包含访问者的客户端的字段。这个例子搜索了所有来自 iOS 操作系统的请求。对这个前台集合进行常规的 <code>terms</code> 聚合，会返回 Firefox，因为它在这个桶中拥有最多的文档。另一方面，<code>significant_terms</code> 聚合返回 Internet Explorer（IE），因为 IE 在前台集合中的出现次数明显高于后台集合。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>kibana_sample_data_logs/_search</span>
+{
+  <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>0</span>,
+  <span style=color:#f92672>&#34;query&#34;</span>: {
+    <span style=color:#f92672>&#34;terms&#34;</span>: {
+      <span style=color:#f92672>&#34;machine.os.keyword&#34;</span>: [
+        <span style=color:#e6db74>&#34;ios&#34;</span>
+      ]
+    }
+  },
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;significant_response_codes&#34;</span>: {
+      <span style=color:#f92672>&#34;significant_terms&#34;</span>: {
+        <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;agent.keyword&#34;</span>
+      }
+    }
+  }
+}
+</code></pre></div><h4 id=响应示例-2>响应示例
+<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b-2>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>...</span>
+<span style=color:#e6db74>&#34;aggregations&#34;</span> <span style=color:#960050;background-color:#1e0010>:</span> {
+  <span style=color:#f92672>&#34;significant_response_codes&#34;</span> : {
+    <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>2737</span>,
+    <span style=color:#f92672>&#34;bg_count&#34;</span> : <span style=color:#ae81ff>14074</span>,
+    <span style=color:#f92672>&#34;buckets&#34;</span> : [
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322)&#34;</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>818</span>,
+        <span style=color:#f92672>&#34;score&#34;</span> : <span style=color:#ae81ff>0.01462731514608217</span>,
+        <span style=color:#f92672>&#34;bg_count&#34;</span> : <span style=color:#ae81ff>4010</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;Mozilla/5.0 (X11; Linux x86_64; rv:6.0a1) Gecko/20110421 Firefox/6.0a1&#34;</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>1067</span>,
+        <span style=color:#f92672>&#34;score&#34;</span> : <span style=color:#ae81ff>0.009062566630410223</span>,
+        <span style=color:#f92672>&#34;bg_count&#34;</span> : <span style=color:#ae81ff>5362</span>
+      }
+    ]
+  }
+}
+<span style=color:#960050;background-color:#1e0010>...</span>
+</code></pre></div><p>如果 <code>significant_terms</code> 聚合没有返回任何结果，你可能没有用查询来过滤结果。另外，前景集的术语分布可能与背景集相同，这意味着前景集没有任何异常。</p><p><code>significant_text</code> 聚合与 <code>significant_terms</code> 聚合类似，但它是针对原始文本字段。
+Significant text 使用统计分析来衡量前景和背景集之间测得的受欢迎程度变化。例如，当您寻找其股票首字母缩略词 TSLA 时，它可能会建议 Tesla 。</p><p><code>significant_text</code> 聚合动态重新分析源文本，过滤干扰数据，如重复段落、样板页眉和页脚等，否则可能会扭曲结果。</p><p>重新分析高基数数据集可能是一项 CPU 密集型操作。我们建议在采样器聚合中使用 <code>significant_text</code> 聚合，以将分析限制在一小部分最匹配的文档中，例如 200 个。</p><p>您可以设置以下参数：</p><ul><li><code>min_doc_count</code> - 返回匹配超过配置的热门命中数的结果。 我们建议不要将 <code>min_doc_count</code> 设置为 1，因为它往往会返回拼写错误或拼写错误的术语。 找到一个术语的多个实例有助于强化其重要性不是一次性事故的结果。 默认值 3 用于提供最小证据权重。</li><li><code>shard_size</code> - 设置较高的值会以牺牲计算性能为代价提高稳定性（和准确性）。</li><li><code>shard_min_doc_count</code> - 如果您的文本包含许多低频词并且您对这些不感兴趣（例如拼写错误），那么您可以设置 <code>shard_min_doc_count</code> 参数以合理确定不会达到要求的分片级别过滤掉候选词 <code>min_doc_count</code> 即使在合并本地重要文本频率之后。 默认值为 1，除非您明确设置它，否则它不会产生任何影响。 我们建议将此值设置为远低于 <code>min_doc_count</code> 的值。</li></ul><p>假设您在 Easysearch 集群中索引了莎士比亚的全集。您可以在 <code>text_entry</code> 字段中找到与 &ldquo;breathe&rdquo; 一词相关的重要文本：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>shakespeare/_search</span>
+{
+  <span style=color:#f92672>&#34;query&#34;</span>: {
+    <span style=color:#f92672>&#34;match&#34;</span>: {
+      <span style=color:#f92672>&#34;text_entry&#34;</span>: <span style=color:#e6db74>&#34;breathe&#34;</span>
+    }
+  },
+  <span style=color:#f92672>&#34;aggregations&#34;</span>: {
+    <span style=color:#f92672>&#34;my_sample&#34;</span>: {
+      <span style=color:#f92672>&#34;sampler&#34;</span>: {
+        <span style=color:#f92672>&#34;shard_size&#34;</span>: <span style=color:#ae81ff>100</span>
+      },
+      <span style=color:#f92672>&#34;aggregations&#34;</span>: {
+        <span style=color:#f92672>&#34;keywords&#34;</span>: {
+          <span style=color:#f92672>&#34;significant_text&#34;</span>: {
+            <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;text_entry&#34;</span>,
+            <span style=color:#f92672>&#34;min_doc_count&#34;</span>: <span style=color:#ae81ff>4</span>
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre></div><h4 id=响应示例-3>响应示例
+<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b-3>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>...</span>
+<span style=color:#e6db74>&#34;aggregations&#34;</span> <span style=color:#960050;background-color:#1e0010>:</span> {
+  <span style=color:#f92672>&#34;my_sample&#34;</span> : {
+    <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>59</span>,
+    <span style=color:#f92672>&#34;keywords&#34;</span> : {
+      <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>59</span>,
+      <span style=color:#f92672>&#34;bg_count&#34;</span> : <span style=color:#ae81ff>111396</span>,
+      <span style=color:#f92672>&#34;buckets&#34;</span> : [
+        {
+          <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;breathe&#34;</span>,
+          <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>59</span>,
+          <span style=color:#f92672>&#34;score&#34;</span> : <span style=color:#ae81ff>1887.0677966101694</span>,
+          <span style=color:#f92672>&#34;bg_count&#34;</span> : <span style=color:#ae81ff>59</span>
+        },
+        {
+          <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;air&#34;</span>,
+          <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>4</span>,
+          <span style=color:#f92672>&#34;score&#34;</span> : <span style=color:#ae81ff>2.641295376716233</span>,
+          <span style=color:#f92672>&#34;bg_count&#34;</span> : <span style=color:#ae81ff>189</span>
+        },
+        {
+          <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;dead&#34;</span>,
+          <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>4</span>,
+          <span style=color:#f92672>&#34;score&#34;</span> : <span style=color:#ae81ff>0.9665839666414213</span>,
+          <span style=color:#f92672>&#34;bg_count&#34;</span> : <span style=color:#ae81ff>495</span>
+        },
+        {
+          <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;life&#34;</span>,
+          <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>5</span>,
+          <span style=color:#f92672>&#34;score&#34;</span> : <span style=color:#ae81ff>0.9090787433467572</span>,
+          <span style=color:#f92672>&#34;bg_count&#34;</span> : <span style=color:#ae81ff>805</span>
+        }
+      ]
+    }
+  }
+}
+<span style=color:#960050;background-color:#1e0010>...</span>
+</code></pre></div><p>与 <code>breathe</code> 相关的最重要的文本是 <code>air</code> , <code>dead</code> , 和 <code>life</code>。</p><p><code>significant_text</code> 聚合有以下限制：</p><ul><li>不支持子聚合，因为子聚合的内存成本很高。作为解决方法，您可以使用带有 include 子句和子聚合的 <code>terms</code> 聚合来添加后续查询。</li><li>不支持嵌套对象，因为它适用于文档 JSON 源。</li><li>文档计数可能有一些（通常很小）不准确，因为它基于对从每个分片返回的样本求和。您可以使用 <code>shard_size</code> 参数来微调准确性和性能之间的权衡。默认情况下，<code>shard_size</code> 设置为 -1 以自动估计分片数量和 <code>size</code> 参数。</li></ul><p>对于 <code>significant_terms</code> 和 <code>significant_text</code> 聚合，背景词频率的默认统计信息源是整个索引。您可以使用背景过滤器缩小此范围以获得更多焦点：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>shakespeare/_search</span>
+{
+  <span style=color:#f92672>&#34;query&#34;</span>: {
+    <span style=color:#f92672>&#34;match&#34;</span>: {
+      <span style=color:#f92672>&#34;text_entry&#34;</span>: <span style=color:#e6db74>&#34;breathe&#34;</span>
+    }
+  },
+  <span style=color:#f92672>&#34;aggregations&#34;</span>: {
+    <span style=color:#f92672>&#34;my_sample&#34;</span>: {
+      <span style=color:#f92672>&#34;sampler&#34;</span>: {
+        <span style=color:#f92672>&#34;shard_size&#34;</span>: <span style=color:#ae81ff>100</span>
+      },
+      <span style=color:#f92672>&#34;aggregations&#34;</span>: {
+        <span style=color:#f92672>&#34;keywords&#34;</span>: {
+          <span style=color:#f92672>&#34;significant_text&#34;</span>: {
+            <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;text_entry&#34;</span>,
+            <span style=color:#f92672>&#34;background_filter&#34;</span>: {
+              <span style=color:#f92672>&#34;term&#34;</span>: {
+                <span style=color:#f92672>&#34;speaker&#34;</span>: <span style=color:#e6db74>&#34;JOHN OF GAUNT&#34;</span>
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre></div><h2 id=missing>missing
+<a class=anchor href=#missing>#</a></h2><p>如果索引中的文档根本不包含聚合字段或聚合字段的值为 NULL，请使用 <code>missing</code> 参数指定应放置此类文档的存储桶的名称。</p><p>以下示例将任何缺失值添加到名为 &ldquo;N/A&rdquo; 的存储桶中：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>kibana_sample_data_logs/_search</span>
+{
+  <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>0</span>,
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;response_codes&#34;</span>: {
+      <span style=color:#f92672>&#34;terms&#34;</span>: {
+        <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;response.keyword&#34;</span>,
+        <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>10</span>,
+        <span style=color:#f92672>&#34;missing&#34;</span>: <span style=color:#e6db74>&#34;N/A&#34;</span>
+      }
+    }
+  }
+}
+</code></pre></div><p>因为 <code>min_doc_count</code> 参数的默认值为 1，所以 <code>missing</code> 参数不会在其响应中返回任何桶。将 <code>min_doc_count</code> 参数设置为 0 以查看响应中的 &ldquo;N/A&rdquo; 存储桶：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>kibana_sample_data_logs/_search</span>
+{
+  <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>0</span>,
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;response_codes&#34;</span>: {
+      <span style=color:#f92672>&#34;terms&#34;</span>: {
+        <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;response.keyword&#34;</span>,
+        <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>10</span>,
+        <span style=color:#f92672>&#34;missing&#34;</span>: <span style=color:#e6db74>&#34;N/A&#34;</span>,
+        <span style=color:#f92672>&#34;min_doc_count&#34;</span>: <span style=color:#ae81ff>0</span>
+      }
+    }
+  }
+}
+</code></pre></div><h4 id=响应示例-4>响应示例
+<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b-4>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>...</span>
+<span style=color:#e6db74>&#34;aggregations&#34;</span> <span style=color:#960050;background-color:#1e0010>:</span> {
+  <span style=color:#f92672>&#34;response_codes&#34;</span> : {
+    <span style=color:#f92672>&#34;doc_count_error_upper_bound&#34;</span> : <span style=color:#ae81ff>0</span>,
+    <span style=color:#f92672>&#34;sum_other_doc_count&#34;</span> : <span style=color:#ae81ff>0</span>,
+    <span style=color:#f92672>&#34;buckets&#34;</span> : [
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;200&#34;</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>12832</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;404&#34;</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>801</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;503&#34;</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>441</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;N/A&#34;</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>0</span>
+      }
+    ]
+  }
+}
+<span style=color:#960050;background-color:#1e0010>...</span>
+</code></pre></div><h2 id=histogram-date_histogram>histogram, date_histogram
+<a class=anchor href=#histogram-date_histogram>#</a></h2><p><code>histogram</code> 聚合桶文档基于指定的间隔。</p><p>使用 <code>histogram</code> 聚合，您可以非常轻松地可视化给定文档范围内值的分布。现在，Easysearch 当然不会返回实际图表，这就是 Kibana 的用途。但它会给你 JSON 响应，你可以用它来构建你自己的图。</p><p>以下示例按 10,000 间隔对 <code>number_of_bytes</code> 字段进行存储：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>kibana_sample_data_logs/_search</span>
+{
+  <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>0</span>,
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;number_of_bytes&#34;</span>: {
+      <span style=color:#f92672>&#34;histogram&#34;</span>: {
+        <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;bytes&#34;</span>,
+        <span style=color:#f92672>&#34;interval&#34;</span>: <span style=color:#ae81ff>10000</span>
+      }
+    }
+  }
+}
+</code></pre></div><h4 id=响应示例-5>响应示例
+<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b-5>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>...</span>
+<span style=color:#e6db74>&#34;aggregations&#34;</span> <span style=color:#960050;background-color:#1e0010>:</span> {
+  <span style=color:#f92672>&#34;number_of_bytes&#34;</span> : {
+    <span style=color:#f92672>&#34;buckets&#34;</span> : [
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#ae81ff>0.0</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>13372</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#ae81ff>10000.0</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>702</span>
+      }
+    ]
+  }
+}
+<span style=color:#960050;background-color:#1e0010>...</span>
+</code></pre></div><p>The <code>date_histogram</code> 聚合使用日期数学为时间序列数据生成直方图。</p><p>例如，您可以找到您的网站每月获得的点击次数：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>kibana_sample_data_logs/_search</span>
+{
+  <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>0</span>,
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;logs_per_month&#34;</span>: {
+      <span style=color:#f92672>&#34;date_histogram&#34;</span>: {
+        <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;@timestamp&#34;</span>,
+        <span style=color:#f92672>&#34;interval&#34;</span>: <span style=color:#e6db74>&#34;month&#34;</span>
+      }
+    }
+  }
+}
+</code></pre></div><h4 id=响应示例-6>响应示例
+<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b-6>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>...</span>
+<span style=color:#e6db74>&#34;aggregations&#34;</span> <span style=color:#960050;background-color:#1e0010>:</span> {
+  <span style=color:#f92672>&#34;logs_per_month&#34;</span> : {
+    <span style=color:#f92672>&#34;buckets&#34;</span> : [
+      {
+        <span style=color:#f92672>&#34;key_as_string&#34;</span> : <span style=color:#e6db74>&#34;2020-10-01T00:00:00.000Z&#34;</span>,
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#ae81ff>1601510400000</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>1635</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key_as_string&#34;</span> : <span style=color:#e6db74>&#34;2020-11-01T00:00:00.000Z&#34;</span>,
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#ae81ff>1604188800000</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>6844</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key_as_string&#34;</span> : <span style=color:#e6db74>&#34;2020-12-01T00:00:00.000Z&#34;</span>,
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#ae81ff>1606780800000</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>5595</span>
+      }
+    ]
+  }
+}
+<span style=color:#960050;background-color:#1e0010>...</span>
+</code></pre></div><p>T 响应包含三个月的日志。如果将这些值绘制成图表，您可以逐月查看网站请求流量的峰值和谷值。</p><h2 id=range-date_range-ip_range>range, date_range, ip_range
+<a class=anchor href=#range-date_range-ip_range>#</a></h2><p>The <code>range</code> 聚合允许您定义每个桶的范围。</p><p>例如，您可以找到 1000 和 2000、2000 和 3000、3000 和 4000 之间的字节数。
+在 <code>range</code> 参数中，您可以将范围定义为数组里的对象。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>kibana_sample_data_logs/_search</span>
+{
+  <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>0</span>,
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;number_of_bytes_distribution&#34;</span>: {
+      <span style=color:#f92672>&#34;range&#34;</span>: {
+        <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;bytes&#34;</span>,
+        <span style=color:#f92672>&#34;ranges&#34;</span>: [
+          {
+            <span style=color:#f92672>&#34;from&#34;</span>: <span style=color:#ae81ff>1000</span>,
+            <span style=color:#f92672>&#34;to&#34;</span>: <span style=color:#ae81ff>2000</span>
+          },
+          {
+            <span style=color:#f92672>&#34;from&#34;</span>: <span style=color:#ae81ff>2000</span>,
+            <span style=color:#f92672>&#34;to&#34;</span>: <span style=color:#ae81ff>3000</span>
+          },
+          {
+            <span style=color:#f92672>&#34;from&#34;</span>: <span style=color:#ae81ff>3000</span>,
+            <span style=color:#f92672>&#34;to&#34;</span>: <span style=color:#ae81ff>4000</span>
+          }
+        ]
+      }
+    }
+  }
+}
+</code></pre></div><p>响应包括 <code>from</code> 键值并排除 <code>to</code> 键值：</p><h4 id=sample-response-1>Sample response
+<a class=anchor href=#sample-response-1>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>...</span>
+<span style=color:#e6db74>&#34;aggregations&#34;</span> <span style=color:#960050;background-color:#1e0010>:</span> {
+  <span style=color:#f92672>&#34;number_of_bytes_distribution&#34;</span> : {
+    <span style=color:#f92672>&#34;buckets&#34;</span> : [
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;1000.0-2000.0&#34;</span>,
+        <span style=color:#f92672>&#34;from&#34;</span> : <span style=color:#ae81ff>1000.0</span>,
+        <span style=color:#f92672>&#34;to&#34;</span> : <span style=color:#ae81ff>2000.0</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>805</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;2000.0-3000.0&#34;</span>,
+        <span style=color:#f92672>&#34;from&#34;</span> : <span style=color:#ae81ff>2000.0</span>,
+        <span style=color:#f92672>&#34;to&#34;</span> : <span style=color:#ae81ff>3000.0</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>1369</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;3000.0-4000.0&#34;</span>,
+        <span style=color:#f92672>&#34;from&#34;</span> : <span style=color:#ae81ff>3000.0</span>,
+        <span style=color:#f92672>&#34;to&#34;</span> : <span style=color:#ae81ff>4000.0</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>1422</span>
+      }
+    ]
+  }
+}
+<span style=color:#960050;background-color:#1e0010>...</span>
+</code></pre></div><p><code>date_range</code> 聚合在概念上与 <code>range</code> 聚合相同，只是它允许您执行日期数学运算
+例如，您可以获取最近 10 天的所有文档。为了使日期更具可读性，请在格式中包含一个 <code>format</code> 参数：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>kibana_sample_data_logs/_search</span>
+{
+  <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>0</span>,
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;number_of_bytes&#34;</span>: {
+      <span style=color:#f92672>&#34;date_range&#34;</span>: {
+        <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;@timestamp&#34;</span>,
+        <span style=color:#f92672>&#34;format&#34;</span>: <span style=color:#e6db74>&#34;MM-yyyy&#34;</span>,
+        <span style=color:#f92672>&#34;ranges&#34;</span>: [
+          {
+            <span style=color:#f92672>&#34;from&#34;</span>: <span style=color:#e6db74>&#34;now-10d/d&#34;</span>,
+            <span style=color:#f92672>&#34;to&#34;</span>: <span style=color:#e6db74>&#34;now&#34;</span>
+          }
+        ]
+      }
+    }
+  }
+}
+</code></pre></div><h4 id=响应示例-7>响应示例
+<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b-7>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>...</span>
+<span style=color:#e6db74>&#34;aggregations&#34;</span> <span style=color:#960050;background-color:#1e0010>:</span> {
+  <span style=color:#f92672>&#34;number_of_bytes&#34;</span> : {
+    <span style=color:#f92672>&#34;buckets&#34;</span> : [
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;03-2021-03-2021&#34;</span>,
+        <span style=color:#f92672>&#34;from&#34;</span> : <span style=color:#ae81ff>1.6145568E12</span>,
+        <span style=color:#f92672>&#34;from_as_string&#34;</span> : <span style=color:#e6db74>&#34;03-2021&#34;</span>,
+        <span style=color:#f92672>&#34;to&#34;</span> : <span style=color:#ae81ff>1.615451329043E12</span>,
+        <span style=color:#f92672>&#34;to_as_string&#34;</span> : <span style=color:#e6db74>&#34;03-2021&#34;</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>0</span>
+      }
+    ]
+  }
+}
+<span style=color:#960050;background-color:#1e0010>...</span>
+</code></pre></div><p><code>ip_range</code> 聚合用于 IP 地址。
+它适用于 <code>ip</code> 类型字段。您可以在
+<a href=http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing>CIDR</a> 表示法中定义 IP 范围和掩码。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>kibana_sample_data_logs/_search</span>
+{
+  <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>0</span>,
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;access&#34;</span>: {
+      <span style=color:#f92672>&#34;ip_range&#34;</span>: {
+        <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;ip&#34;</span>,
+        <span style=color:#f92672>&#34;ranges&#34;</span>: [
+          {
+            <span style=color:#f92672>&#34;from&#34;</span>: <span style=color:#e6db74>&#34;1.0.0.0&#34;</span>,
+            <span style=color:#f92672>&#34;to&#34;</span>: <span style=color:#e6db74>&#34;126.158.155.183&#34;</span>
+          },
+          {
+            <span style=color:#f92672>&#34;mask&#34;</span>: <span style=color:#e6db74>&#34;1.0.0.0/8&#34;</span>
+          }
+        ]
+      }
+    }
+  }
+}
+</code></pre></div><h4 id=响应示例-8>响应示例
+<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b-8>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>...</span>
+<span style=color:#e6db74>&#34;aggregations&#34;</span> <span style=color:#960050;background-color:#1e0010>:</span> {
+  <span style=color:#f92672>&#34;access&#34;</span> : {
+    <span style=color:#f92672>&#34;buckets&#34;</span> : [
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;1.0.0.0/8&#34;</span>,
+        <span style=color:#f92672>&#34;from&#34;</span> : <span style=color:#e6db74>&#34;1.0.0.0&#34;</span>,
+        <span style=color:#f92672>&#34;to&#34;</span> : <span style=color:#e6db74>&#34;2.0.0.0&#34;</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>98</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;1.0.0.0-126.158.155.183&#34;</span>,
+        <span style=color:#f92672>&#34;from&#34;</span> : <span style=color:#e6db74>&#34;1.0.0.0&#34;</span>,
+        <span style=color:#f92672>&#34;to&#34;</span> : <span style=color:#e6db74>&#34;126.158.155.183&#34;</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>7184</span>
+      }
+    ]
+  }
+}
+<span style=color:#960050;background-color:#1e0010>...</span>
+</code></pre></div><h2 id=filter-filters>filter, filters
+<a class=anchor href=#filter-filters>#</a></h2><p><code>filter</code> 聚合是一个查询子句，与搜索查询（<code>match</code> 或 <code>term</code> 或 <code>range</code>）完全一样。在创建存储桶之前，您可以使用 <code>filter</code> 聚合将整个文档集缩小到特定的集合。</p><p>以下示例显示了在过滤器上下文中运行的 <code>avg</code> 聚合。 <code>avg</code> 聚合仅聚合与 <code>range</code> 查询匹配的文档：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>kibana_sample_data_ecommerce/_search</span>
+{
+  <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>0</span>,
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;low_value&#34;</span>: {
+      <span style=color:#f92672>&#34;filter&#34;</span>: {
+        <span style=color:#f92672>&#34;range&#34;</span>: {
+          <span style=color:#f92672>&#34;taxful_total_price&#34;</span>: {
+            <span style=color:#f92672>&#34;lte&#34;</span>: <span style=color:#ae81ff>50</span>
+          }
+        }
+      },
+      <span style=color:#f92672>&#34;aggs&#34;</span>: {
+        <span style=color:#f92672>&#34;avg_amount&#34;</span>: {
+          <span style=color:#f92672>&#34;avg&#34;</span>: {
+            <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;taxful_total_price&#34;</span>
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre></div><h4 id=响应示例-9>响应示例
+<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b-9>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>...</span>
+<span style=color:#e6db74>&#34;aggregations&#34;</span> <span style=color:#960050;background-color:#1e0010>:</span> {
+  <span style=color:#f92672>&#34;low_value&#34;</span> : {
+    <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>1633</span>,
+    <span style=color:#f92672>&#34;avg_amount&#34;</span> : {
+      <span style=color:#f92672>&#34;value&#34;</span> : <span style=color:#ae81ff>38.363175998928355</span>
+    }
+  }
+ }
+<span style=color:#960050;background-color:#1e0010>}</span>
+</code></pre></div><p><code>filters</code> 聚合与 <code>filter</code> 聚合相同，只是它允许您使用多个过滤器聚合。
+<code>filter</code> 聚合产生单个桶，而 <code>filters</code> 聚合返回多个桶，每个桶对应一个定义的过滤器。</p><p>要为所有与任何过滤器查询都不匹配的文档创建一个存储桶，请将 <code>other_bucket</code> 属性设置为 <code>true</code> ：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>kibana_sample_data_logs/_search</span>
+{
+  <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>0</span>,
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;200_os&#34;</span>: {
+      <span style=color:#f92672>&#34;filters&#34;</span>: {
+        <span style=color:#f92672>&#34;other_bucket&#34;</span>: <span style=color:#66d9ef>true</span>,
+        <span style=color:#f92672>&#34;filters&#34;</span>: [
+          {
+            <span style=color:#f92672>&#34;term&#34;</span>: {
+              <span style=color:#f92672>&#34;response.keyword&#34;</span>: <span style=color:#e6db74>&#34;200&#34;</span>
+            }
+          },
+          {
+            <span style=color:#f92672>&#34;term&#34;</span>: {
+              <span style=color:#f92672>&#34;machine.os.keyword&#34;</span>: <span style=color:#e6db74>&#34;osx&#34;</span>
+            }
+          }
+        ]
+      },
+      <span style=color:#f92672>&#34;aggs&#34;</span>: {
+        <span style=color:#f92672>&#34;avg_amount&#34;</span>: {
+          <span style=color:#f92672>&#34;avg&#34;</span>: {
+            <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;bytes&#34;</span>
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre></div><h4 id=响应示例-10>响应示例
+<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b-10>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>...</span>
+<span style=color:#e6db74>&#34;aggregations&#34;</span> <span style=color:#960050;background-color:#1e0010>:</span> {
+  <span style=color:#f92672>&#34;200_os&#34;</span> : {
+    <span style=color:#f92672>&#34;buckets&#34;</span> : [
+      {
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>12832</span>,
+        <span style=color:#f92672>&#34;avg_amount&#34;</span> : {
+          <span style=color:#f92672>&#34;value&#34;</span> : <span style=color:#ae81ff>5897.852711970075</span>
+        }
+      },
+      {
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>2825</span>,
+        <span style=color:#f92672>&#34;avg_amount&#34;</span> : {
+          <span style=color:#f92672>&#34;value&#34;</span> : <span style=color:#ae81ff>5620.347256637168</span>
+        }
+      },
+      {
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>1017</span>,
+        <span style=color:#f92672>&#34;avg_amount&#34;</span> : {
+          <span style=color:#f92672>&#34;value&#34;</span> : <span style=color:#ae81ff>3247.0963618485744</span>
+        }
+      }
+    ]
+  }
+}
+<span style=color:#960050;background-color:#1e0010>...</span>
+</code></pre></div><h2 id=global>global
+<a class=anchor href=#global>#</a></h2><p><code>global</code> 聚合让您可以脱离过滤器聚合的聚合上下文。即使您包含了一个筛选查询来缩小一组文档的范围， <code>global</code> 聚合也会对所有文档进行聚合，就好像筛选查询不存在一样。它忽略 <code>filter</code> 聚合并隐式假设 <code>match_all</code> 查询。</p><p>以下示例返回索引中所有文档的 <code>taxful_total_price</code> 字段的 <code>avg</code> 值：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>kibana_sample_data_ecommerce/_search</span>
+{
+  <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>0</span>,
+  <span style=color:#f92672>&#34;query&#34;</span>: {
+    <span style=color:#f92672>&#34;range&#34;</span>: {
+      <span style=color:#f92672>&#34;taxful_total_price&#34;</span>: {
+        <span style=color:#f92672>&#34;lte&#34;</span>: <span style=color:#ae81ff>50</span>
+      }
+    }
+  },
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;total_avg_amount&#34;</span>: {
+      <span style=color:#f92672>&#34;global&#34;</span>: {},
+      <span style=color:#f92672>&#34;aggs&#34;</span>: {
+        <span style=color:#f92672>&#34;avg_price&#34;</span>: {
+          <span style=color:#f92672>&#34;avg&#34;</span>: {
+            <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;taxful_total_price&#34;</span>
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre></div><h4 id=响应示例-11>响应示例
+<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b-11>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>...</span>
+<span style=color:#e6db74>&#34;aggregations&#34;</span> <span style=color:#960050;background-color:#1e0010>:</span> {
+  <span style=color:#f92672>&#34;total_avg_amount&#34;</span> : {
+    <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>4675</span>,
+    <span style=color:#f92672>&#34;avg_price&#34;</span> : {
+      <span style=color:#f92672>&#34;value&#34;</span> : <span style=color:#ae81ff>75.05542864304813</span>
+    }
+  }
+}
+<span style=color:#960050;background-color:#1e0010>...</span>
+</code></pre></div><p>您可以看到，当查询匹配时，<code>taxful_total_price</code> 字段的平均值为 75.05 而不是 <code>filter</code> 示例中看到的 38.36。</p><h2 id=geo_distance-geohash_grid>geo_distance, geohash_grid
+<a class=anchor href=#geo_distance-geohash_grid>#</a></h2><p><code>geo_distance</code> 聚合根据与原始 <code>geo_point</code> 字段的距离将文档分组为同心圆。
+它与 <code>range</code> 聚合相同，只是它适用于地理位置。</p><p>例如，您可以使用 <code>geo_distance</code> 聚合来查找距离您 1 公里以内的所有披萨店。搜索结果仅限于您指定的 1 公里半径范围内，但您可以添加在 2 公里范围内找到的其他结果。</p><p>您只能在映射为 geo_point 的字段上使用 geo_distance 聚合</p><p>一个点是一个单一的地理坐标，例如您的智能手机显示的当前位置。 Easysearch 中的一个点表示如下：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;location&#34;</span>: {
+    <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;point&#34;</span>,
+    <span style=color:#f92672>&#34;coordinates&#34;</span>: {
+      <span style=color:#f92672>&#34;lat&#34;</span>: <span style=color:#ae81ff>83.76</span>,
+      <span style=color:#f92672>&#34;lon&#34;</span>: <span style=color:#ae81ff>-81.2</span>
+    }
+  }
+}
+</code></pre></div><p>您还可以将纬度和经度指定为数组 <code>[-81.20, 83.76]</code> 或字符串 <code>"83.76, -81.20"</code></p><p>此表列出了 <code>geo_distance</code> 聚合的相关字段：</p><table><thead><tr><th style=text-align:left>字段</th><th style=text-align:left>描述</th><th style=text-align:left>是否必需</th></tr></thead><tbody><tr><td style=text-align:left><code>field</code></td><td style=text-align:left>指定您要处理的地理点字段。</td><td style=text-align:left>Yes</td></tr><tr><td style=text-align:left><code>origin</code></td><td style=text-align:left>指定用于计算距离的地理点。</td><td style=text-align:left>Yes</td></tr><tr><td style=text-align:left><code>ranges</code></td><td style=text-align:left>根据文档与目标点的距离，指定一个范围列表来收集文档。</td><td style=text-align:left>Yes</td></tr><tr><td style=text-align:left><code>unit</code></td><td style=text-align:left>定义“范围”数组中使用的单位。 <code>unit</code> 默认为 <code>m</code>（米），但您可以切换为其他单位，例如 <code>km</code>（千米）、<code>mi</code>（英里）、<code>in</code>（英寸）、<code>yd</code>（码）、<code> cm</code>（厘米）和 <code>mm</code>（毫米）。</td><td style=text-align:left>No</td></tr><tr><td style=text-align:left><code>distance_type</code></td><td style=text-align:left>指定 Easysearch 如何计算距离。默认值为 <code>sloppy_arc</code>（更快但不太准确），但也可以设置为 <code>arc</code>（较慢但最准确）或 <code>plane</code>（最快但最不准确）。由于误差幅度大，请仅对小地理区域使用 <code>plane</code>。</td><td style=text-align:left>No</td></tr></tbody></table><p>语法如下：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;aggregation_name&#34;</span>: {
+      <span style=color:#f92672>&#34;geo_distance&#34;</span>: {
+        <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;field_1&#34;</span>,
+        <span style=color:#f92672>&#34;origin&#34;</span>: <span style=color:#e6db74>&#34;x, y&#34;</span>,
+        <span style=color:#f92672>&#34;ranges&#34;</span>: [
+          {
+            <span style=color:#f92672>&#34;to&#34;</span>: <span style=color:#e6db74>&#34;value_1&#34;</span>
+          },
+          {
+            <span style=color:#f92672>&#34;from&#34;</span>: <span style=color:#e6db74>&#34;value_2&#34;</span>,
+            <span style=color:#f92672>&#34;to&#34;</span>: <span style=color:#e6db74>&#34;value_3&#34;</span>
+          },
+          {
+            <span style=color:#f92672>&#34;from&#34;</span>: <span style=color:#e6db74>&#34;value_4&#34;</span>
+          }
+        ]
+      }
+    }
+  }
+}
+</code></pre></div><p>此示例根据距 <code>geo-point</code> 字段的以下距离形成桶：</p><ul><li>少于 10 公里</li><li>从 10 到 20 公里</li><li>从 20 到 50 公里</li><li>从 50 到 100 公里</li><li>100 公里以上</li></ul><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>kibana_sample_data_logs/_search</span>
+{
+  <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>0</span>,
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;position&#34;</span>: {
+      <span style=color:#f92672>&#34;geo_distance&#34;</span>: {
+        <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;geo.coordinates&#34;</span>,
+        <span style=color:#f92672>&#34;origin&#34;</span>: {
+          <span style=color:#f92672>&#34;lat&#34;</span>: <span style=color:#ae81ff>83.76</span>,
+          <span style=color:#f92672>&#34;lon&#34;</span>: <span style=color:#ae81ff>-81.2</span>
+        },
+        <span style=color:#f92672>&#34;ranges&#34;</span>: [
+          {
+            <span style=color:#f92672>&#34;to&#34;</span>: <span style=color:#ae81ff>10</span>
+          },
+          {
+            <span style=color:#f92672>&#34;from&#34;</span>: <span style=color:#ae81ff>10</span>,
+            <span style=color:#f92672>&#34;to&#34;</span>: <span style=color:#ae81ff>20</span>
+          },
+          {
+            <span style=color:#f92672>&#34;from&#34;</span>: <span style=color:#ae81ff>20</span>,
+            <span style=color:#f92672>&#34;to&#34;</span>: <span style=color:#ae81ff>50</span>
+          },
+          {
+            <span style=color:#f92672>&#34;from&#34;</span>: <span style=color:#ae81ff>50</span>,
+            <span style=color:#f92672>&#34;to&#34;</span>: <span style=color:#ae81ff>100</span>
+          },
+          {
+            <span style=color:#f92672>&#34;from&#34;</span>: <span style=color:#ae81ff>100</span>
+          }
+        ]
+      }
+    }
+  }
+}
+</code></pre></div><h4 id=响应示例-12>响应示例
+<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b-12>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>...</span>
+<span style=color:#e6db74>&#34;aggregations&#34;</span> <span style=color:#960050;background-color:#1e0010>:</span> {
+  <span style=color:#f92672>&#34;position&#34;</span> : {
+    <span style=color:#f92672>&#34;buckets&#34;</span> : [
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;*-10.0&#34;</span>,
+        <span style=color:#f92672>&#34;from&#34;</span> : <span style=color:#ae81ff>0.0</span>,
+        <span style=color:#f92672>&#34;to&#34;</span> : <span style=color:#ae81ff>10.0</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>0</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;10.0-20.0&#34;</span>,
+        <span style=color:#f92672>&#34;from&#34;</span> : <span style=color:#ae81ff>10.0</span>,
+        <span style=color:#f92672>&#34;to&#34;</span> : <span style=color:#ae81ff>20.0</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>0</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;20.0-50.0&#34;</span>,
+        <span style=color:#f92672>&#34;from&#34;</span> : <span style=color:#ae81ff>20.0</span>,
+        <span style=color:#f92672>&#34;to&#34;</span> : <span style=color:#ae81ff>50.0</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>0</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;50.0-100.0&#34;</span>,
+        <span style=color:#f92672>&#34;from&#34;</span> : <span style=color:#ae81ff>50.0</span>,
+        <span style=color:#f92672>&#34;to&#34;</span> : <span style=color:#ae81ff>100.0</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>0</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;100.0-*&#34;</span>,
+        <span style=color:#f92672>&#34;from&#34;</span> : <span style=color:#ae81ff>100.0</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>14074</span>
+      }
+    ]
+  }
+}
+<span style=color:#960050;background-color:#1e0010>...</span>
+</code></pre></div><p>用于地理分析的 <code>geohash_grid</code> 聚合存储桶文档。它将一个地理区域组织成一个由不同大小或精度的较小区域组成的网格。较低的精度值表示较大的地理区域，较高的值表示较小、更精确的地理区域。</p><p>查询返回的结果数量可能太多，无法在地图上单独显示每个地理点。 <code>geohash_grid</code> 聚合通过计算每个点的 Geohash，以您定义的精度级别（在 1 到 12 之间；默认值为 5）将附近的地理点聚集在一起。要了解有关 Geohash 的更多信息，请参阅
+<a href=http://en.wikipedia.org/wiki/Geohash>维基百科</a>。</p><p>Web 日志示例数据分布在较大的地理区域，因此您可以使用较低的精度值。您可以通过增加精度值来放大此地图：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>kibana_sample_data_logs/_search</span>
+{
+  <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>0</span>,
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;geo_hash&#34;</span>: {
+      <span style=color:#f92672>&#34;geohash_grid&#34;</span>: {
+        <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;geo.coordinates&#34;</span>,
+        <span style=color:#f92672>&#34;precision&#34;</span>: <span style=color:#ae81ff>4</span>
+      }
+    }
+  }
+}
+</code></pre></div><h4 id=响应示例-13>响应示例
+<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b-13>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>...</span>
+<span style=color:#e6db74>&#34;aggregations&#34;</span> <span style=color:#960050;background-color:#1e0010>:</span> {
+  <span style=color:#f92672>&#34;geo_hash&#34;</span> : {
+    <span style=color:#f92672>&#34;buckets&#34;</span> : [
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;c1cg&#34;</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>104</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;dr5r&#34;</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>26</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;9q5b&#34;</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>20</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;c20g&#34;</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>19</span>
+      },
+      {
+        <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;dr70&#34;</span>,
+        <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>18</span>
+      }
+      <span style=color:#960050;background-color:#1e0010>...</span>
+    ]
+  }
+}
+<span style=color:#960050;background-color:#1e0010>...</span>
+</code></pre></div><p>您可以使用 Kibana 在地图上可视化聚合响应。</p><p>您希望聚合越准确，Easysearch 消耗的资源就越多，因为聚合必须计算的桶数。默认情况下，Easysearch 不会生成超过 10,000 个桶。您可以使用 <code>size</code> 属性更改此行为，但请记住，对于包含数千个存储桶的非常宽的查询，性能可能会受到影响。</p><h2 id=adjacency_matrix>adjacency_matrix
+<a class=anchor href=#adjacency_matrix>#</a></h2><p><code>adjacency_matrix</code> 聚合允许您定义过滤器表达式并返回相交过滤器的矩阵，其中矩阵中的每个非空单元格代表一个桶。您可以找到有多少文档属于任何过滤器组合。</p><p>使用 <code>adjacency_matrix</code> 聚合通过将数据可视化为图形来发现概念之间的关系。</p><p>例如，在示例电子商务数据集中，分析不同制造公司之间的关系：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>kibana_sample_data_ecommerce/_search</span>
+{
+  <span style=color:#f92672>&#34;size&#34;</span>: <span style=color:#ae81ff>0</span>,
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;interactions&#34;</span>: {
+      <span style=color:#f92672>&#34;adjacency_matrix&#34;</span>: {
+        <span style=color:#f92672>&#34;filters&#34;</span>: {
+          <span style=color:#f92672>&#34;grpA&#34;</span>: {
+            <span style=color:#f92672>&#34;match&#34;</span>: {
+              <span style=color:#f92672>&#34;manufacturer.keyword&#34;</span>: <span style=color:#e6db74>&#34;Low Tide Media&#34;</span>
+            }
+          },
+          <span style=color:#f92672>&#34;grpB&#34;</span>: {
+            <span style=color:#f92672>&#34;match&#34;</span>: {
+              <span style=color:#f92672>&#34;manufacturer.keyword&#34;</span>: <span style=color:#e6db74>&#34;Elitelligence&#34;</span>
+            }
+          },
+          <span style=color:#f92672>&#34;grpC&#34;</span>: {
+            <span style=color:#f92672>&#34;match&#34;</span>: {
+              <span style=color:#f92672>&#34;manufacturer.keyword&#34;</span>: <span style=color:#e6db74>&#34;Oceanavigations&#34;</span>
+            }
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre></div><h4 id=响应示例-14>响应示例
+<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b-14>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json> {
+   <span style=color:#960050;background-color:#1e0010>...</span>
+   <span style=color:#f92672>&#34;aggregations&#34;</span> : {
+     <span style=color:#f92672>&#34;interactions&#34;</span> : {
+       <span style=color:#f92672>&#34;buckets&#34;</span> : [
+         {
+           <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;grpA&#34;</span>,
+           <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>1553</span>
+         },
+         {
+           <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;grpA&amp;grpB&#34;</span>,
+           <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>590</span>
+         },
+         {
+           <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;grpA&amp;grpC&#34;</span>,
+           <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>329</span>
+         },
+         {
+           <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;grpB&#34;</span>,
+           <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>1370</span>
+         },
+         {
+           <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;grpB&amp;grpC&#34;</span>,
+           <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>299</span>
+         },
+         {
+           <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#e6db74>&#34;grpC&#34;</span>,
+           <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>1218</span>
+         }
+       ]
+     }
+   }
+ }
+</code></pre></div><p>让我们仔细看看结果：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;key&#34;</span>: <span style=color:#e6db74>&#34;grpA&amp;grpB&#34;</span>,
+  <span style=color:#f92672>&#34;doc_count&#34;</span>: <span style=color:#ae81ff>590</span>
+}
+</code></pre></div><ul><li><code>grpA</code>: 由 Low Tide Media 制造的产品。</li><li><code>grpB</code>: Elitelligence 制造的产品。</li><li><code>590</code>: 双方生产的产品数量。</li></ul><p>您可以使用 Kibana 通过网络图来表示此数据。</p><h2 id=nested-reverse_nested>nested, reverse_nested
+<a class=anchor href=#nested-reverse_nested>#</a></h2><p><code>nested</code> 聚合允许您聚合嵌套对象内的字段。 <code>nested</code> 类型是对象数据类型的特殊版本，它允许对象数组以一种可以彼此独立查询的方式进行索引</p><p>使用 <code>object</code> 类型，所有数据都存储在同一个文档中，因此搜索匹配可以跨越子文档。例如，假设一个带有 <code>pages</code> 的 <code>logs</code> 索引被映射为 <code>object</code> 数据类型：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>logs/_doc/</span><span style=color:#ae81ff>0</span>
+{
+  <span style=color:#f92672>&#34;response&#34;</span>: <span style=color:#e6db74>&#34;200&#34;</span>,
+  <span style=color:#f92672>&#34;pages&#34;</span>: [
+    {
+      <span style=color:#f92672>&#34;page&#34;</span>: <span style=color:#e6db74>&#34;landing&#34;</span>,
+      <span style=color:#f92672>&#34;load_time&#34;</span>: <span style=color:#ae81ff>200</span>
+    },
+    {
+      <span style=color:#f92672>&#34;page&#34;</span>: <span style=color:#e6db74>&#34;blog&#34;</span>,
+      <span style=color:#f92672>&#34;load_time&#34;</span>: <span style=color:#ae81ff>500</span>
+    }
+  ]
+}
+</code></pre></div><p>Easysearch 合并实体关系的所有子属性，看起来像这样：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;logs&#34;</span>: {
+    <span style=color:#f92672>&#34;pages&#34;</span>: [<span style=color:#e6db74>&#34;landing&#34;</span>, <span style=color:#e6db74>&#34;blog&#34;</span>],
+    <span style=color:#f92672>&#34;load_time&#34;</span>: [<span style=color:#e6db74>&#34;200&#34;</span>, <span style=color:#e6db74>&#34;500&#34;</span>]
+  }
+}
+</code></pre></div><p>因此，如果您想使用 <code>pages=landing</code> 和 <code>load_time=500</code> 搜索此索引，即使着陆的 <code>load_time</code> 值为 200，此文档也符合条件。</p><p>如果您想确保不会发生此类跨对象匹配，请将字段映射为“嵌套”类型：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>logs</span>
+{
+  <span style=color:#f92672>&#34;mappings&#34;</span>: {
+    <span style=color:#f92672>&#34;properties&#34;</span>: {
+      <span style=color:#f92672>&#34;pages&#34;</span>: {
+        <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;nested&#34;</span>,
+        <span style=color:#f92672>&#34;properties&#34;</span>: {
+          <span style=color:#f92672>&#34;page&#34;</span>: { <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;text&#34;</span> },
+          <span style=color:#f92672>&#34;load_time&#34;</span>: { <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;double&#34;</span> }
+        }
+      }
+    }
+  }
+}
+</code></pre></div><p>嵌套文档允许您索引相同的 JSON 文档，但会将您的页面保存在单独的 Lucene 文档中，从而只进行诸如 <code>pages=landing</code> 和 <code>load_time=200</code> 之类的搜索返回预期结果。在内部，嵌套对象将数组中的每个对象作为单独的隐藏文档进行索引，这意味着每个嵌套对象都可以独立于其他对象进行查询。</p><p>您必须指定相对于包含嵌套文档的父级的嵌套路径：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>logs/_search</span>
+{
+  <span style=color:#f92672>&#34;query&#34;</span>: {
+    <span style=color:#f92672>&#34;match&#34;</span>: { <span style=color:#f92672>&#34;response&#34;</span>: <span style=color:#e6db74>&#34;200&#34;</span> }
+  },
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;pages&#34;</span>: {
+      <span style=color:#f92672>&#34;nested&#34;</span>: {
+        <span style=color:#f92672>&#34;path&#34;</span>: <span style=color:#e6db74>&#34;pages&#34;</span>
+      },
+      <span style=color:#f92672>&#34;aggs&#34;</span>: {
+        <span style=color:#f92672>&#34;min_load_time&#34;</span>: { <span style=color:#f92672>&#34;min&#34;</span>: { <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;pages.load_time&#34;</span> } }
+      }
+    }
+  }
+}
+</code></pre></div><h4 id=响应示例-15>响应示例
+<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b-15>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>...</span>
+<span style=color:#e6db74>&#34;aggregations&#34;</span> <span style=color:#960050;background-color:#1e0010>:</span> {
+  <span style=color:#f92672>&#34;pages&#34;</span> : {
+    <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>2</span>,
+    <span style=color:#f92672>&#34;min_price&#34;</span> : {
+      <span style=color:#f92672>&#34;value&#34;</span> : <span style=color:#ae81ff>200.0</span>
+    }
+  }
+}
+<span style=color:#960050;background-color:#1e0010>...</span>
+</code></pre></div><p>您还可以将嵌套文档中的值聚合到它们的父文档中；此聚合称为 <code>reverse_nested</code> 。
+在按嵌套对象中的字段分组后，您可以使用 <code>reverse_nested</code> 聚合父文档中的字段。 <code>reverse_nested</code> 聚合返回根页面并获取每个变量的 <code>load_time</code> 。</p><p><code>reverse_nested</code> 聚合是嵌套聚合内的子聚合。它接受一个名为 <code>path</code> 的选项。此选项定义 Easysearch 在文档层次结构中向后计算聚合所需的步数。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>logs/_search</span>
+{
+  <span style=color:#f92672>&#34;query&#34;</span>: {
+    <span style=color:#f92672>&#34;match&#34;</span>: { <span style=color:#f92672>&#34;response&#34;</span>: <span style=color:#e6db74>&#34;200&#34;</span> }
+  },
+  <span style=color:#f92672>&#34;aggs&#34;</span>: {
+    <span style=color:#f92672>&#34;pages&#34;</span>: {
+      <span style=color:#f92672>&#34;nested&#34;</span>: {
+        <span style=color:#f92672>&#34;path&#34;</span>: <span style=color:#e6db74>&#34;pages&#34;</span>
+      },
+      <span style=color:#f92672>&#34;aggs&#34;</span>: {
+        <span style=color:#f92672>&#34;top_pages_per_load_time&#34;</span>: {
+          <span style=color:#f92672>&#34;terms&#34;</span>: {
+            <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;pages.load_time&#34;</span>
+          },
+          <span style=color:#f92672>&#34;aggs&#34;</span>: {
+            <span style=color:#f92672>&#34;comment_to_logs&#34;</span>: {
+              <span style=color:#f92672>&#34;reverse_nested&#34;</span>: {},
+              <span style=color:#f92672>&#34;aggs&#34;</span>: {
+                <span style=color:#f92672>&#34;min_load_time&#34;</span>: {
+                  <span style=color:#f92672>&#34;min&#34;</span>: {
+                    <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;pages.load_time&#34;</span>
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre></div><h4 id=响应示例-16>响应示例
+<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b-16>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>...</span>
+<span style=color:#e6db74>&#34;aggregations&#34;</span> <span style=color:#960050;background-color:#1e0010>:</span> {
+  <span style=color:#f92672>&#34;pages&#34;</span> : {
+    <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>2</span>,
+    <span style=color:#f92672>&#34;top_pages_per_load_time&#34;</span> : {
+      <span style=color:#f92672>&#34;doc_count_error_upper_bound&#34;</span> : <span style=color:#ae81ff>0</span>,
+      <span style=color:#f92672>&#34;sum_other_doc_count&#34;</span> : <span style=color:#ae81ff>0</span>,
+      <span style=color:#f92672>&#34;buckets&#34;</span> : [
+        {
+          <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#ae81ff>200.0</span>,
+          <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>1</span>,
+          <span style=color:#f92672>&#34;comment_to_logs&#34;</span> : {
+            <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>1</span>,
+            <span style=color:#f92672>&#34;min_load_time&#34;</span> : {
+              <span style=color:#f92672>&#34;value&#34;</span> : <span style=color:#66d9ef>null</span>
+            }
+          }
+        },
+        {
+          <span style=color:#f92672>&#34;key&#34;</span> : <span style=color:#ae81ff>500.0</span>,
+          <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>1</span>,
+          <span style=color:#f92672>&#34;comment_to_logs&#34;</span> : {
+            <span style=color:#f92672>&#34;doc_count&#34;</span> : <span style=color:#ae81ff>1</span>,
+            <span style=color:#f92672>&#34;min_load_time&#34;</span> : {
+              <span style=color:#f92672>&#34;value&#34;</span> : <span style=color:#66d9ef>null</span>
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+<span style=color:#960050;background-color:#1e0010>...</span>
+</code></pre></div><p>响应显示日志索引有一页的 <code>load_time</code> 为 200，另一页的 <code>load_time</code> 为 500。</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
+    import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
+    searchbox({container: "#searchbox"});
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#分桶聚合>分桶聚合</a><ul><li><a href=#terms>terms</a><ul><li></li></ul></li><li><a href=#sampler-diversified_sampler>sampler, diversified_sampler</a><ul><li></li></ul></li><li><a href=#significant_terms-significant_text>significant_terms, significant_text</a><ul><li></li></ul></li><li><a href=#missing>missing</a><ul><li></li></ul></li><li><a href=#histogram-date_histogram>histogram, date_histogram</a><ul><li></li></ul></li><li><a href=#range-date_range-ip_range>range, date_range, ip_range</a><ul><li></li></ul></li><li><a href=#filter-filters>filter, filters</a><ul><li></li></ul></li><li><a href=#global>global</a><ul><li></li></ul></li><li><a href=#geo_distance-geohash_grid>geo_distance, geohash_grid</a><ul><li></li></ul></li><li><a href=#adjacency_matrix>adjacency_matrix</a><ul><li></li></ul></li><li><a href=#nested-reverse_nested>nested, reverse_nested</a><ul><li></li></ul></li></ul></li></ul></nav></aside></main><script src=/easysearch/v1.13.0/js/asciinema-player.js></script></body></html>
