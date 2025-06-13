@@ -1,0 +1,380 @@
+<!doctype html><html lang=en><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Assistant #  Assistant API Reference #  Create an AI assistant #  //request curl -XPOST http://localhost:9000/assistant/ -d'{ &#34;name&#34; : &#34;deault&#34;, &#34;description&#34; : &#34;default AI chat assistant&#34;, &#34;icon&#34; : &#34;font_Google-video&#34;, &#34;type&#34; : &#34;deep_think&#34;, &#34;config&#34; : { &#34;intent_analysis_model&#34; : { &#34;name&#34; : &#34;tongyi-intent-detect-v3&#34;, &#34;provider_id&#34; : &#34;cvuai3dath2dlgqqpc2g&#34;, &#34;settings&#34;: { &#34;temperature&#34; : 0.8, &#34;top_p&#34; : 0.5, &#34;presence_penalty&#34; : 0, &#34;frequency_penalty&#34; : 0, &#34;max_tokens&#34; : 1024 } }, &#34;picking_doc_model&#34; : { &#34;name&#34; : &#34;deepseek-r1-distill-qwen-32b&#34;, &#34;provider_id&#34; : &#34;cvuai3dath2dlgqqpc2g&#34;, &#34;settings&#34;: { &#34;temperature&#34; : 0."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Assistant"><meta property="og:description" content="Assistant #  Assistant API Reference #  Create an AI assistant #  //request curl -XPOST http://localhost:9000/assistant/ -d'{ &#34;name&#34; : &#34;deault&#34;, &#34;description&#34; : &#34;default AI chat assistant&#34;, &#34;icon&#34; : &#34;font_Google-video&#34;, &#34;type&#34; : &#34;deep_think&#34;, &#34;config&#34; : { &#34;intent_analysis_model&#34; : { &#34;name&#34; : &#34;tongyi-intent-detect-v3&#34;, &#34;provider_id&#34; : &#34;cvuai3dath2dlgqqpc2g&#34;, &#34;settings&#34;: { &#34;temperature&#34; : 0.8, &#34;top_p&#34; : 0.5, &#34;presence_penalty&#34; : 0, &#34;frequency_penalty&#34; : 0, &#34;max_tokens&#34; : 1024 } }, &#34;picking_doc_model&#34; : { &#34;name&#34; : &#34;deepseek-r1-distill-qwen-32b&#34;, &#34;provider_id&#34; : &#34;cvuai3dath2dlgqqpc2g&#34;, &#34;settings&#34;: { &#34;temperature&#34; : 0."><meta property="og:type" content="article"><meta property="og:url" content="/coco-server/v0.5.0/docs/references/assistant/"><title>Assistant | Coco Server</title><link rel=manifest href=/coco-server/v0.5.0/manifest.json><link rel=icon href=/coco-server/v0.5.0/favicon.png type=image/x-icon><link rel=stylesheet href=/coco-server/v0.5.0/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><script defer src=/coco-server/v0.5.0/js/jquery-2.x.min.js></script><script defer src=/coco-server/v0.5.0/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/coco-server/v0.5.0><img src=/coco-server/v0.5.0/img/logo-en.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value=v0.5.0>v0.5.0</option>
+<option value=v0.4.0>v0.4.0</option>
+<option value=v0.3.0>v0.3.0</option>
+<option value=v0.2.2>v0.2.2</option></select></div><ul><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
+<label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>Getting Started</a>
+<span>▾</span></label><ul><li><a href=/coco-server/v0.5.0/docs/getting-started/install/>Installation</a></li><li><a href=/coco-server/v0.5.0/docs/getting-started/setup/>Setup Wizard</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle checked>
+<label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a href=/coco-server/v0.5.0/docs/references/>References</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-97bb467845ddef2c28eba43b4c87ba98 class=toggle>
+<label for=section-97bb467845ddef2c28eba43b4c87ba98 class="flex justify-between"><a>System</a>
+<span>▾</span></label><ul><li><a href=/coco-server/v0.5.0/docs/references/system/install/>System Initialization</a></li><li><a href=/coco-server/v0.5.0/docs/references/system/settings/>System Settings</a></li></ul></li><li><input type=checkbox id=section-830be57e26216c4b31d75f7e80eea5a9 class=toggle>
+<label for=section-830be57e26216c4b31d75f7e80eea5a9 class="flex justify-between"><a>Account</a>
+<span>▾</span></label><ul><li><a href=/coco-server/v0.5.0/docs/references/account/authentication/>Authentication</a></li><li><a href=/coco-server/v0.5.0/docs/references/account/access_token/>API Token</a></li><li><a href=/coco-server/v0.5.0/docs/references/account/password/>Modify Password</a></li><li><a href=/coco-server/v0.5.0/docs/references/account/profile/>Profile</a></li><li><a href=/coco-server/v0.5.0/docs/references/account/logout/>Logout</a></li></ul></li><li><a href=/coco-server/v0.5.0/docs/references/assistant/ class=active>Assistant</a></li><li><a href=/coco-server/v0.5.0/docs/references/document/>Document</a></li><li><a href=/coco-server/v0.5.0/docs/references/search/>Search</a></li><li><a href=/coco-server/v0.5.0/docs/references/datasource/>Datasource</a></li><li><a href=/coco-server/v0.5.0/docs/references/integration/>Integration</a></li><li><a href=/coco-server/v0.5.0/docs/references/mcp_server/>MCP Server</a></li><li><a href=/coco-server/v0.5.0/docs/references/model_provider/>Model Provider</a></li><li><a href=/coco-server/v0.5.0/docs/references/attachment/>Attachment</a></li><li><input type=checkbox id=section-6163ea64c3eeec962ea0b7215fc64522 class=toggle>
+<label for=section-6163ea64c3eeec962ea0b7215fc64522 class="flex justify-between"><a href=/coco-server/v0.5.0/docs/references/connectors/>Connectors</a>
+<span>▾</span></label><ul><li><a href=/coco-server/v0.5.0/docs/references/connectors/google_drive/>Google Drive</a></li><li><a href=/coco-server/v0.5.0/docs/references/connectors/hugo_site/>Hugo Site</a></li><li><a href=/coco-server/v0.5.0/docs/references/connectors/notion/>Notion</a></li><li><a href=/coco-server/v0.5.0/docs/references/connectors/yuque/>Yuque</a></li></ul></li></ul></li><li><input type=checkbox id=section-7dd85575c84e6825eb9419e748eb5977 class=toggle>
+<label for=section-7dd85575c84e6825eb9419e748eb5977 class="flex justify-between"><a href=/coco-server/v0.5.0/docs/tutorials/>Tutorials</a>
+<span>▾</span></label><ul><li><a href=/coco-server/v0.5.0/docs/tutorials/howto_create_your_own_datasource/>How to integrate Coco AI with your own datasource</a></li></ul></li><li><a href=/coco-server/v0.5.0/docs/release-notes/>Release Notes</a><ul></ul></li></ul><ul><li><a href=https://github.com/infinilabs/coco-server target=_blank rel=noopener>Github</a></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/coco-server/v0.5.0/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>Assistant</strong>
+<label for=toc-control><img src=/coco-server/v0.5.0/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#assistant>Assistant</a><ul><li><a href=#assistant-api-reference>Assistant API Reference</a><ul><li><a href=#create-an-ai-assistant>Create an AI assistant</a></li><li><a href=#update-an-ai-assistant>Update an AI assistant</a></li><li><a href=#view-an-ai-assistant>View an AI assistant</a></li><li><a href=#delete-the-ai-assistant>Delete the AI assistant</a></li><li><a href=#search-ai-assistant>Search AI assistant</a></li><li><a href=#clone-an-ai-assistant>Clone an AI assistant</a></li><li><a href=#retrieve-chat-history-sessions>Retrieve Chat History (sessions)</a></li><li><a href=#open-a-existing-chat-session>Open a Existing Chat Session</a></li><li><a href=#create-a-chat-session>Create a Chat Session</a></li><li><a href=#get-chat-session-info>Get Chat Session Info</a></li><li><a href=#update-chat-session-info>Update Chat Session Info</a></li><li><a href=#delete-chat-session>Delete Chat Session</a></li><li><a href=#retrieve-a-chat-history>Retrieve a Chat History</a></li><li><a href=#send-a-message>Send a Message</a></li><li><a href=#close-a-chat-session>Close a Chat Session</a></li><li><a href=#cancel-a-message>Cancel a Message</a></li></ul></li><li><a href=#assistant-ui-management>Assistant UI Management</a><ul><li><a href=#search-assistant>Search Assistant</a></li><li><a href=#add-assistant>Add Assistant</a></li><li><a href=#delete-assistant>Delete Assistant</a></li><li><a href=#edit-assistant>Edit Assistant</a></li><li><a href=#clone-assistant>Clone Assistant</a></li></ul></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=assistant>Assistant
+<a class=anchor href=#assistant>#</a></h1><h2 id=assistant-api-reference>Assistant API Reference
+<a class=anchor href=#assistant-api-reference>#</a></h2><h3 id=create-an-ai-assistant>Create an AI assistant
+<a class=anchor href=#create-an-ai-assistant>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>//request
+curl -XPOST http://localhost:9000/assistant/ -d<span style=color:#e6db74>&#39;{
+</span><span style=color:#e6db74>  &#34;name&#34; : &#34;deault&#34;,
+</span><span style=color:#e6db74>  &#34;description&#34; : &#34;default AI chat assistant&#34;,
+</span><span style=color:#e6db74>  &#34;icon&#34; : &#34;font_Google-video&#34;,
+</span><span style=color:#e6db74>  &#34;type&#34; : &#34;deep_think&#34;,
+</span><span style=color:#e6db74>  &#34;config&#34; : {
+</span><span style=color:#e6db74>    &#34;intent_analysis_model&#34; : {
+</span><span style=color:#e6db74>      &#34;name&#34; : &#34;tongyi-intent-detect-v3&#34;,
+</span><span style=color:#e6db74>      &#34;provider_id&#34; : &#34;cvuai3dath2dlgqqpc2g&#34;,
+</span><span style=color:#e6db74>      &#34;settings&#34;: {
+</span><span style=color:#e6db74>        &#34;temperature&#34; : 0.8,
+</span><span style=color:#e6db74>        &#34;top_p&#34; : 0.5,
+</span><span style=color:#e6db74>        &#34;presence_penalty&#34; : 0,
+</span><span style=color:#e6db74>        &#34;frequency_penalty&#34; : 0,
+</span><span style=color:#e6db74>        &#34;max_tokens&#34; : 1024
+</span><span style=color:#e6db74>      }
+</span><span style=color:#e6db74>    },
+</span><span style=color:#e6db74>    &#34;picking_doc_model&#34; : {
+</span><span style=color:#e6db74>      &#34;name&#34; : &#34;deepseek-r1-distill-qwen-32b&#34;,
+</span><span style=color:#e6db74>      &#34;provider_id&#34; : &#34;cvuai3dath2dlgqqpc2g&#34;,
+</span><span style=color:#e6db74>      &#34;settings&#34;: {
+</span><span style=color:#e6db74>        &#34;temperature&#34; : 0.8,
+</span><span style=color:#e6db74>        &#34;top_p&#34; : 0.5,
+</span><span style=color:#e6db74>        &#34;presence_penalty&#34; : 0,
+</span><span style=color:#e6db74>        &#34;frequency_penalty&#34; : 0,
+</span><span style=color:#e6db74>        &#34;max_tokens&#34; : 1024
+</span><span style=color:#e6db74>      }
+</span><span style=color:#e6db74>    }
+</span><span style=color:#e6db74>  },
+</span><span style=color:#e6db74>  &#34;answering_model&#34; : {
+</span><span style=color:#e6db74>    &#34;provider_id&#34; : &#34;cvuai3dath2dlgqqpc2g&#34;,
+</span><span style=color:#e6db74>    &#34;name&#34; : &#34;deepseek-r1&#34;,
+</span><span style=color:#e6db74>    &#34;settings&#34; : {
+</span><span style=color:#e6db74>      &#34;temperature&#34; : 0.8,
+</span><span style=color:#e6db74>      &#34;top_p&#34; : 0.5,
+</span><span style=color:#e6db74>      &#34;presence_penalty&#34; : 0,
+</span><span style=color:#e6db74>      &#34;frequency_penalty&#34; : 0,
+</span><span style=color:#e6db74>      &#34;max_tokens&#34; : 1024
+</span><span style=color:#e6db74>    }
+</span><span style=color:#e6db74>  },
+</span><span style=color:#e6db74>  &#34;datasource&#34; : {
+</span><span style=color:#e6db74>    &#34;enabled&#34; : true,
+</span><span style=color:#e6db74>    &#34;ids&#34; : [
+</span><span style=color:#e6db74>      &#34;d895f22ed2ff25ad8c6080af1cc23a21&#34;
+</span><span style=color:#e6db74>    ],
+</span><span style=color:#e6db74>    &#34;visible&#34; : true,
+</span><span style=color:#e6db74>    &#34;filter&#34;: {&#34;term&#34;:{&#34;name&#34;: &#34;test&#34;}}
+</span><span style=color:#e6db74>  },
+</span><span style=color:#e6db74>  &#34;mcp_servers&#34; : {
+</span><span style=color:#e6db74>    &#34;enabled&#34; : true,
+</span><span style=color:#e6db74>    &#34;ids&#34; : [
+</span><span style=color:#e6db74>      &#34;*&#34;
+</span><span style=color:#e6db74>    ],
+</span><span style=color:#e6db74>    &#34;visible&#34; : true,
+</span><span style=color:#e6db74>    &#34;max_iterations&#34;: 3,
+</span><span style=color:#e6db74>    &#34;model&#34;: {
+</span><span style=color:#e6db74>      &#34;temperature&#34; : 0.8,
+</span><span style=color:#e6db74>      &#34;top_p&#34; : 0.5,
+</span><span style=color:#e6db74>      &#34;presence_penalty&#34; : 0,
+</span><span style=color:#e6db74>      &#34;frequency_penalty&#34; : 0,
+</span><span style=color:#e6db74>      &#34;max_tokens&#34; : 1024
+</span><span style=color:#e6db74>    }
+</span><span style=color:#e6db74>  },
+</span><span style=color:#e6db74>  &#34;tools&#34;: {
+</span><span style=color:#e6db74>    &#34;builtin&#34;: {
+</span><span style=color:#e6db74>      &#34;calculator&#34;: true, 
+</span><span style=color:#e6db74>      &#34;wikipedia: false, 
+</span><span style=color:#e6db74>      &#34;duckduckgo&#34;: false, 
+</span><span style=color:#e6db74>      &#34;scraper&#34;: false
+</span><span style=color:#e6db74>    },
+</span><span style=color:#e6db74>    &#34;enabled&#34;: true
+</span><span style=color:#e6db74>  },
+</span><span style=color:#e6db74>  &#34;keepalive&#34; : &#34;30m&#34;,
+</span><span style=color:#e6db74>  &#34;enabled&#34; : true,
+</span><span style=color:#e6db74>  &#34;chat_settings&#34; : {
+</span><span style=color:#e6db74>    &#34;greeting_message&#34; : &#34;Hi! I’m Coco, nice to meet you. I can help answer your questions by tapping into the internet and your data sources. How can I assist you today?&#34;,
+</span><span style=color:#e6db74>    &#34;suggested&#34; : {
+</span><span style=color:#e6db74>      &#34;enabled&#34; : false,
+</span><span style=color:#e6db74>      &#34;questions&#34; : [ ]
+</span><span style=color:#e6db74>    },
+</span><span style=color:#e6db74>    &#34;input_preprocess_tpl&#34; : &#34;&#34;,
+</span><span style=color:#e6db74>    &#34;history_message&#34; : {
+</span><span style=color:#e6db74>      &#34;number&#34; : 5,
+</span><span style=color:#e6db74>      &#34;compression_threshold&#34; : 1000,
+</span><span style=color:#e6db74>      &#34;summary&#34; : true
+</span><span style=color:#e6db74>    }
+</span><span style=color:#e6db74>  },
+</span><span style=color:#e6db74>  &#34;builtin&#34; : false,
+</span><span style=color:#e6db74>  &#34;role_prompt&#34; : &#34;&#34;
+</span><span style=color:#e6db74>}&#39;</span>
+//response
+<span style=color:#f92672>{</span>
+  <span style=color:#e6db74>&#34;_id&#34;</span>: <span style=color:#e6db74>&#34;cvuak1lath2dlgqqpcjg&#34;</span>,
+  <span style=color:#e6db74>&#34;result&#34;</span>: <span style=color:#e6db74>&#34;created&#34;</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><h3 id=update-an-ai-assistant>Update an AI assistant
+<a class=anchor href=#update-an-ai-assistant>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>//request
+curl -XPUT http://localhost:9000/assistant/cvuak1lath2dlgqqpcjg -d<span style=color:#e6db74>&#39;{
+</span><span style=color:#e6db74>   &#34;name&#34; : &#34;deault&#34;,
+</span><span style=color:#e6db74>  &#34;description&#34; : &#34;default AI chat assistant&#34;,
+</span><span style=color:#e6db74>  &#34;icon&#34; : &#34;font_Google-video&#34;,
+</span><span style=color:#e6db74>  &#34;type&#34; : &#34;deep_think&#34;,
+</span><span style=color:#e6db74>  &#34;config&#34; : {
+</span><span style=color:#e6db74>    &#34;intent_analysis_model&#34; : {
+</span><span style=color:#e6db74>      &#34;name&#34; : &#34;tongyi-intent-detect-v3&#34;,
+</span><span style=color:#e6db74>      &#34;provider_id&#34; : &#34;cvuai3dath2dlgqqpc2g&#34;,
+</span><span style=color:#e6db74>      &#34;settings&#34;: {
+</span><span style=color:#e6db74>        &#34;temperature&#34; : 0.8,
+</span><span style=color:#e6db74>        &#34;top_p&#34; : 0.5,
+</span><span style=color:#e6db74>        &#34;presence_penalty&#34; : 0,
+</span><span style=color:#e6db74>        &#34;frequency_penalty&#34; : 0,
+</span><span style=color:#e6db74>        &#34;max_tokens&#34; : 1024
+</span><span style=color:#e6db74>      }
+</span><span style=color:#e6db74>    },
+</span><span style=color:#e6db74>    &#34;picking_doc_model&#34; : {
+</span><span style=color:#e6db74>      &#34;name&#34; : &#34;deepseek-r1-distill-qwen-32b&#34;,
+</span><span style=color:#e6db74>      &#34;provider_id&#34; : &#34;cvuai3dath2dlgqqpc2g&#34;,
+</span><span style=color:#e6db74>      &#34;settings&#34;: {
+</span><span style=color:#e6db74>        &#34;temperature&#34; : 0.8,
+</span><span style=color:#e6db74>        &#34;top_p&#34; : 0.5,
+</span><span style=color:#e6db74>        &#34;presence_penalty&#34; : 0,
+</span><span style=color:#e6db74>        &#34;frequency_penalty&#34; : 0,
+</span><span style=color:#e6db74>        &#34;max_tokens&#34; : 1024
+</span><span style=color:#e6db74>      }
+</span><span style=color:#e6db74>    }
+</span><span style=color:#e6db74>  },
+</span><span style=color:#e6db74>  &#34;answering_model&#34; : {
+</span><span style=color:#e6db74>    &#34;provider_id&#34; : &#34;cvuai3dath2dlgqqpc2g&#34;,
+</span><span style=color:#e6db74>    &#34;name&#34; : &#34;deepseek-r1&#34;,
+</span><span style=color:#e6db74>    &#34;settings&#34; : {
+</span><span style=color:#e6db74>      &#34;temperature&#34; : 0.8,
+</span><span style=color:#e6db74>      &#34;top_p&#34; : 0.5,
+</span><span style=color:#e6db74>      &#34;presence_penalty&#34; : 0,
+</span><span style=color:#e6db74>      &#34;frequency_penalty&#34; : 0,
+</span><span style=color:#e6db74>      &#34;max_tokens&#34; : 1024
+</span><span style=color:#e6db74>    }
+</span><span style=color:#e6db74>  },
+</span><span style=color:#e6db74>  &#34;datasource&#34; : {
+</span><span style=color:#e6db74>    &#34;enabled&#34; : true,
+</span><span style=color:#e6db74>    &#34;ids&#34; : [
+</span><span style=color:#e6db74>      &#34;d895f22ed2ff25ad8c6080af1cc23a21&#34;
+</span><span style=color:#e6db74>    ],
+</span><span style=color:#e6db74>    &#34;visible&#34; : true,
+</span><span style=color:#e6db74>    &#34;filter&#34;: {&#34;term&#34;:{&#34;name&#34;: &#34;test&#34;}}
+</span><span style=color:#e6db74>  },
+</span><span style=color:#e6db74>  &#34;mcp_servers&#34; : {
+</span><span style=color:#e6db74>    &#34;enabled&#34; : true,
+</span><span style=color:#e6db74>    &#34;ids&#34; : [
+</span><span style=color:#e6db74>      &#34;*&#34;
+</span><span style=color:#e6db74>    ],
+</span><span style=color:#e6db74>    &#34;visible&#34; : true,
+</span><span style=color:#e6db74>    &#34;max_iterations&#34;: 3,
+</span><span style=color:#e6db74>    &#34;model&#34;: {
+</span><span style=color:#e6db74>      &#34;temperature&#34; : 0.8,
+</span><span style=color:#e6db74>      &#34;top_p&#34; : 0.5,
+</span><span style=color:#e6db74>      &#34;presence_penalty&#34; : 0,
+</span><span style=color:#e6db74>      &#34;frequency_penalty&#34; : 0,
+</span><span style=color:#e6db74>      &#34;max_tokens&#34; : 1024
+</span><span style=color:#e6db74>    }
+</span><span style=color:#e6db74>  },
+</span><span style=color:#e6db74>  &#34;tools&#34;: {
+</span><span style=color:#e6db74>    &#34;builtin&#34;: {
+</span><span style=color:#e6db74>      &#34;calculator&#34;: true, 
+</span><span style=color:#e6db74>      &#34;wikipedia: false, 
+</span><span style=color:#e6db74>      &#34;duckduckgo&#34;: false, 
+</span><span style=color:#e6db74>      &#34;scraper&#34;: false
+</span><span style=color:#e6db74>    },
+</span><span style=color:#e6db74>    &#34;enabled&#34;: true
+</span><span style=color:#e6db74>  },
+</span><span style=color:#e6db74>  &#34;keepalive&#34; : &#34;30m&#34;,
+</span><span style=color:#e6db74>  &#34;enabled&#34; : true,
+</span><span style=color:#e6db74>  &#34;chat_settings&#34; : {
+</span><span style=color:#e6db74>    &#34;greeting_message&#34; : &#34;Hi! I’m Coco, nice to meet you. I can help answer your questions by tapping into the internet and your data sources. How can I assist you today?&#34;,
+</span><span style=color:#e6db74>    &#34;suggested&#34; : {
+</span><span style=color:#e6db74>      &#34;enabled&#34; : false,
+</span><span style=color:#e6db74>      &#34;questions&#34; : [ ]
+</span><span style=color:#e6db74>    },
+</span><span style=color:#e6db74>    &#34;input_preprocess_tpl&#34; : &#34;&#34;,
+</span><span style=color:#e6db74>    &#34;history_message&#34; : {
+</span><span style=color:#e6db74>      &#34;number&#34; : 5,
+</span><span style=color:#e6db74>      &#34;compression_threshold&#34; : 1000,
+</span><span style=color:#e6db74>      &#34;summary&#34; : true
+</span><span style=color:#e6db74>    }
+</span><span style=color:#e6db74>  },
+</span><span style=color:#e6db74>  &#34;builtin&#34; : false,
+</span><span style=color:#e6db74>  &#34;role_prompt&#34; : &#34;&#34;
+</span><span style=color:#e6db74>}&#39;</span>
+//response
+<span style=color:#f92672>{</span>
+  <span style=color:#e6db74>&#34;_id&#34;</span>: <span style=color:#e6db74>&#34;cvuak1lath2dlgqqpcjg&#34;</span>,
+  <span style=color:#e6db74>&#34;result&#34;</span>: <span style=color:#e6db74>&#34;updated&#34;</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><h3 id=view-an-ai-assistant>View an AI assistant
+<a class=anchor href=#view-an-ai-assistant>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>curl -XGET http://localhost:9000/assistant/cvuak1lath2dlgqqpcjg
+</code></pre></div><h3 id=delete-the-ai-assistant>Delete the AI assistant
+<a class=anchor href=#delete-the-ai-assistant>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>//request
+curl  -H <span style=color:#e6db74>&#39;Content-Type: application/json&#39;</span>   -XDELETE http://localhost:9000/assistant/cvuak1lath2dlgqqpcjg 
+
+//response
+<span style=color:#f92672>{</span>
+  <span style=color:#e6db74>&#34;_id&#34;</span>: <span style=color:#e6db74>&#34;cvuak1lath2dlgqqpcjg&#34;</span>,
+  <span style=color:#e6db74>&#34;result&#34;</span>: <span style=color:#e6db74>&#34;deleted&#34;</span>
+<span style=color:#f92672>}</span><span style=color:#960050;background-color:#1e0010>&#39;</span>
+</code></pre></div><h3 id=search-ai-assistant>Search AI assistant
+<a class=anchor href=#search-ai-assistant>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>curl -X POST <span style=color:#e6db74>&#34;http://localhost:9000/assistant/_search&#34;</span> -d<span style=color:#e6db74>&#39;
+</span><span style=color:#e6db74>{
+</span><span style=color:#e6db74>&#34;from&#34;: 0,
+</span><span style=color:#e6db74>&#34;size&#34;: 10
+</span><span style=color:#e6db74>}&#39;</span>
+</code></pre></div><h3 id=clone-an-ai-assistant>Clone an AI assistant
+<a class=anchor href=#clone-an-ai-assistant>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>//request
+curl -XPOST http://localhost:9000/assistant/cvuak1lath2dlgqqpcjg/_clone
+//response
+<span style=color:#f92672>{</span>
+  <span style=color:#e6db74>&#34;_id&#34;</span>: <span style=color:#e6db74>&#34;d04r1gic7k812t6qg3n0&#34;</span>,
+  <span style=color:#e6db74>&#34;result&#34;</span>: <span style=color:#e6db74>&#34;created&#34;</span>
+<span style=color:#f92672>}</span><span style=color:#960050;background-color:#1e0010>&#39;</span>
+</code></pre></div><h3 id=retrieve-chat-history-sessions>Retrieve Chat History (sessions)
+<a class=anchor href=#retrieve-chat-history-sessions>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>//request
+curl -XGET http://localhost:9000/chat/_history?query<span style=color:#f92672>={</span>filter_keyword<span style=color:#f92672>}</span>
+
+//response
+<span style=color:#f92672>{</span><span style=color:#e6db74>&#34;took&#34;</span>:997,<span style=color:#e6db74>&#34;timed_out&#34;</span>:false,<span style=color:#e6db74>&#34;_shards&#34;</span>:<span style=color:#f92672>{</span><span style=color:#e6db74>&#34;total&#34;</span>:1,<span style=color:#e6db74>&#34;successful&#34;</span>:1,<span style=color:#e6db74>&#34;skipped&#34;</span>:0,<span style=color:#e6db74>&#34;failed&#34;</span>:0<span style=color:#f92672>}</span>,<span style=color:#e6db74>&#34;hits&#34;</span>:<span style=color:#f92672>{</span><span style=color:#e6db74>&#34;total&#34;</span>:<span style=color:#f92672>{</span><span style=color:#e6db74>&#34;value&#34;</span>:1,<span style=color:#e6db74>&#34;relation&#34;</span>:<span style=color:#e6db74>&#34;eq&#34;</span><span style=color:#f92672>}</span>,<span style=color:#e6db74>&#34;max_score&#34;</span>:1.0,<span style=color:#e6db74>&#34;hits&#34;</span>:<span style=color:#f92672>[{</span><span style=color:#e6db74>&#34;_index&#34;</span>:<span style=color:#e6db74>&#34;.infini_session&#34;</span>,<span style=color:#e6db74>&#34;_type&#34;</span>:<span style=color:#e6db74>&#34;_doc&#34;</span>,<span style=color:#e6db74>&#34;_id&#34;</span>:<span style=color:#e6db74>&#34;csk30fjq50k7l4akku9g&#34;</span>,<span style=color:#e6db74>&#34;_score&#34;</span>:1.0,<span style=color:#e6db74>&#34;_source&#34;</span>:<span style=color:#f92672>{</span><span style=color:#e6db74>&#34;id&#34;</span>:<span style=color:#e6db74>&#34;csk30fjq50k7l4akku9g&#34;</span>,<span style=color:#e6db74>&#34;created&#34;</span>:<span style=color:#e6db74>&#34;2024-11-04T10:23:58.980669+08:00&#34;</span>,<span style=color:#e6db74>&#34;updated&#34;</span>:<span style=color:#e6db74>&#34;2024-11-04T10:23:58.980678+08:00&#34;</span>,<span style=color:#e6db74>&#34;status&#34;</span>:<span style=color:#e6db74>&#34;active&#34;</span><span style=color:#f92672>}}]}}</span>
+</code></pre></div><h3 id=open-a-existing-chat-session>Open a Existing Chat Session
+<a class=anchor href=#open-a-existing-chat-session>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>//request
+curl  -H <span style=color:#e6db74>&#39;Content-Type: application/json&#39;</span>   -XPOST http://localhost:9000/chat/csk30fjq50k7l4akku9g/_open
+
+//response
+<span style=color:#f92672>{</span>
+  <span style=color:#e6db74>&#34;_id&#34;</span>: <span style=color:#e6db74>&#34;csk30fjq50k7l4akku9g&#34;</span>,
+  <span style=color:#e6db74>&#34;_source&#34;</span>: <span style=color:#f92672>{</span>
+    <span style=color:#e6db74>&#34;id&#34;</span>: <span style=color:#e6db74>&#34;csk30fjq50k7l4akku9g&#34;</span>,
+    <span style=color:#e6db74>&#34;created&#34;</span>: <span style=color:#e6db74>&#34;2024-11-04T10:23:58.980669+08:00&#34;</span>,
+    <span style=color:#e6db74>&#34;updated&#34;</span>: <span style=color:#e6db74>&#34;2024-11-04T10:25:20.541856+08:00&#34;</span>,
+    <span style=color:#e6db74>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;active&#34;</span>
+  <span style=color:#f92672>}</span>,
+  <span style=color:#e6db74>&#34;found&#34;</span>: true
+<span style=color:#f92672>}</span>
+</code></pre></div><h3 id=create-a-chat-session>Create a Chat Session
+<a class=anchor href=#create-a-chat-session>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>//request
+curl  -H<span style=color:#e6db74>&#39;WEBSOCKET-SESSION-ID: csk88l3q50kb4hr5unn0&#39;</span>  -H <span style=color:#e6db74>&#39;Content-Type: application/json&#39;</span>   -XPOST http://localhost:9000/chat/_new -d<span style=color:#e6db74>&#39;{
+</span><span style=color:#e6db74>  &#34;message&#34;:&#34;how are you doing?&#34;
+</span><span style=color:#e6db74>}&#39;</span>
+
+//response
+<span style=color:#f92672>{</span>
+  <span style=color:#e6db74>&#34;_id&#34;</span>: <span style=color:#e6db74>&#34;csk30fjq50k7l4akku9g&#34;</span>,
+  <span style=color:#e6db74>&#34;_source&#34;</span>: <span style=color:#f92672>{</span>
+    <span style=color:#e6db74>&#34;id&#34;</span>: <span style=color:#e6db74>&#34;csk30fjq50k7l4akku9g&#34;</span>,
+    <span style=color:#e6db74>&#34;created&#34;</span>: <span style=color:#e6db74>&#34;2024-11-04T10:23:58.980669+08:00&#34;</span>,
+    <span style=color:#e6db74>&#34;updated&#34;</span>: <span style=color:#e6db74>&#34;2024-11-04T10:23:58.980678+08:00&#34;</span>,
+    <span style=color:#e6db74>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;active&#34;</span>
+  <span style=color:#f92672>}</span>,
+  <span style=color:#e6db74>&#34;result&#34;</span>: <span style=color:#e6db74>&#34;created&#34;</span>
+  <span style=color:#e6db74>&#34;payload&#34;</span>: <span style=color:#f92672>{</span>
+    //first chat message
+  <span style=color:#f92672>}</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><p>Tips: <code>WEBSOCKET-SESSION-ID</code> should be replaced with the actual WebSocket session ID. You will receive a message each time you connect to the Coco AI WebSocket server. For example: <code>ws://localhost:2900/ws</code> or <code>wss://localhost:2900/ws</code> if TLS is enabled. Parse the websocket session id, save it and pass it each time you send message to Coco server.</p><blockquote><p>Note: If the Coco server doesn’t recognize your WebSocket ID, it won’t be able to process the reply, as it can’t send the response in a streaming manner.</p></blockquote><p><img src="/coco-server/v0.5.0/img/websocket-on-connect.jpg?raw=true" alt="WebSocket ID"></p><h3 id=get-chat-session-info>Get Chat Session Info
+<a class=anchor href=#get-chat-session-info>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>//request
+curl -XGET http://localhost:9000/chat/csk30fjq50k7l4akku9g
+
+//response
+<span style=color:#f92672>{</span>
+  <span style=color:#e6db74>&#34;_id&#34;</span>: <span style=color:#e6db74>&#34;csk30fjq50k7l4akku9g&#34;</span>,
+  <span style=color:#e6db74>&#34;_source&#34;</span>: <span style=color:#f92672>{</span>
+    <span style=color:#e6db74>&#34;id&#34;</span>: <span style=color:#e6db74>&#34;csk30fjq50k7l4akku9g&#34;</span>,
+    <span style=color:#e6db74>&#34;created&#34;</span>: <span style=color:#e6db74>&#34;2025-04-01T10:48:38.389295+08:00&#34;</span>,
+    <span style=color:#e6db74>&#34;updated&#34;</span>: <span style=color:#e6db74>&#34;2025-04-01T10:48:40.572748+08:00&#34;</span>,
+    <span style=color:#e6db74>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;active&#34;</span>,
+    <span style=color:#e6db74>&#34;title&#34;</span>: <span style=color:#e6db74>&#34;xx&#34;</span>
+  <span style=color:#f92672>}</span>,
+  <span style=color:#e6db74>&#34;found&#34;</span>: true
+<span style=color:#f92672>}</span>
+</code></pre></div><h3 id=update-chat-session-info>Update Chat Session Info
+<a class=anchor href=#update-chat-session-info>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>//request
+curl -XPUT http://localhost:9000/chat/csk30fjq50k7l4akku9g -d<span style=color:#e6db74>&#39;
+</span><span style=color:#e6db74>{
+</span><span style=color:#e6db74>    &#34;title&#34;:&#34;my title&#34;,
+</span><span style=color:#e6db74>    &#34;context&#34;:{
+</span><span style=color:#e6db74>        &#34;attachments&#34;:[]
+</span><span style=color:#e6db74>    }
+</span><span style=color:#e6db74>}&#39;</span>
+
+//response
+<span style=color:#f92672>{</span>
+  <span style=color:#e6db74>&#34;_id&#34;</span>: <span style=color:#e6db74>&#34;csk30fjq50k7l4akku9g&#34;</span>,
+  <span style=color:#e6db74>&#34;result&#34;</span>: <span style=color:#e6db74>&#34;updated&#34;</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><h3 id=delete-chat-session>Delete Chat Session
+<a class=anchor href=#delete-chat-session>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>//request
+curl -DELETE http://localhost:9000/chat/csk30fjq50k7l4akku9g
+
+//response
+<span style=color:#f92672>{</span>
+  <span style=color:#e6db74>&#34;_id&#34;</span>: <span style=color:#e6db74>&#34;csk30fjq50k7l4akku9g&#34;</span>,
+  <span style=color:#e6db74>&#34;result&#34;</span>: <span style=color:#e6db74>&#34;deleted&#34;</span>
+<span style=color:#f92672>}</span>
+</code></pre></div><h3 id=retrieve-a-chat-history>Retrieve a Chat History
+<a class=anchor href=#retrieve-a-chat-history>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>//request
+curl -XGET http://localhost:9000/chat/csk30fjq50k7l4akku9g/_history
+
+//response
+<span style=color:#f92672>{</span><span style=color:#e6db74>&#34;took&#34;</span>:4,<span style=color:#e6db74>&#34;timed_out&#34;</span>:false,<span style=color:#e6db74>&#34;_shards&#34;</span>:<span style=color:#f92672>{</span><span style=color:#e6db74>&#34;total&#34;</span>:1,<span style=color:#e6db74>&#34;successful&#34;</span>:1,<span style=color:#e6db74>&#34;skipped&#34;</span>:0,<span style=color:#e6db74>&#34;failed&#34;</span>:0<span style=color:#f92672>}</span>,<span style=color:#e6db74>&#34;hits&#34;</span>:<span style=color:#f92672>{</span><span style=color:#e6db74>&#34;total&#34;</span>:<span style=color:#f92672>{</span><span style=color:#e6db74>&#34;value&#34;</span>:0,<span style=color:#e6db74>&#34;relation&#34;</span>:<span style=color:#e6db74>&#34;eq&#34;</span><span style=color:#f92672>}</span>,<span style=color:#e6db74>&#34;max_score&#34;</span>:null,<span style=color:#e6db74>&#34;hits&#34;</span>:<span style=color:#f92672>[]}}</span>
+</code></pre></div><h3 id=send-a-message>Send a Message
+<a class=anchor href=#send-a-message>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>//request
+curl -H<span style=color:#e6db74>&#39;WEBSOCKET-SESSION-ID: csk88l3q50kb4hr5unn0&#39;</span> -H <span style=color:#e6db74>&#39;Content-Type: application/json&#39;</span> -XPOST http://localhost:9000/chat/csk30fjq50k7l4akku9g/_send -d <span style=color:#e6db74>&#39;{&#34;message&#34;:&#34;Hello&#34;}&#39;</span>
+
+//response
+<span style=color:#f92672>[{</span>
+  <span style=color:#e6db74>&#34;_id&#34;</span>: <span style=color:#e6db74>&#34;csk325rq50k85fc5u0j0&#34;</span>,
+  <span style=color:#e6db74>&#34;_source&#34;</span>: <span style=color:#f92672>{</span>
+    <span style=color:#e6db74>&#34;id&#34;</span>: <span style=color:#e6db74>&#34;csk325rq50k85fc5u0j0&#34;</span>,
+    <span style=color:#e6db74>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;user&#34;</span>,
+    <span style=color:#e6db74>&#34;created&#34;</span>: <span style=color:#e6db74>&#34;2024-11-04T10:27:35.211502+08:00&#34;</span>,
+    <span style=color:#e6db74>&#34;updated&#34;</span>: <span style=color:#e6db74>&#34;2024-11-04T10:27:35.211508+08:00&#34;</span>,
+    <span style=color:#e6db74>&#34;session_id&#34;</span>: <span style=color:#e6db74>&#34;csk30fjq50k7l4akku9g&#34;</span>,
+    <span style=color:#e6db74>&#34;message&#34;</span>: <span style=color:#e6db74>&#34;Hello&#34;</span>
+  <span style=color:#f92672>}</span>,
+  <span style=color:#e6db74>&#34;result&#34;</span>: <span style=color:#e6db74>&#34;created&#34;</span>
+<span style=color:#f92672>}]</span>
+</code></pre></div><h3 id=close-a-chat-session>Close a Chat Session
+<a class=anchor href=#close-a-chat-session>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>//request
+curl  -H <span style=color:#e6db74>&#39;Content-Type: application/json&#39;</span>   -XPOST http://localhost:9000/chat/csk30fjq50k7l4akku9g/_close
+
+//response
+<span style=color:#f92672>{</span>
+  <span style=color:#e6db74>&#34;_id&#34;</span>: <span style=color:#e6db74>&#34;csk30fjq50k7l4akku9g&#34;</span>,
+  <span style=color:#e6db74>&#34;_source&#34;</span>: <span style=color:#f92672>{</span>
+    <span style=color:#e6db74>&#34;id&#34;</span>: <span style=color:#e6db74>&#34;csk30fjq50k7l4akku9g&#34;</span>,
+    <span style=color:#e6db74>&#34;created&#34;</span>: <span style=color:#e6db74>&#34;2024-11-04T10:23:58.980669+08:00&#34;</span>,
+    <span style=color:#e6db74>&#34;updated&#34;</span>: <span style=color:#e6db74>&#34;2024-11-04T10:28:47.461033+08:00&#34;</span>,
+    <span style=color:#e6db74>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;closed&#34;</span>
+  <span style=color:#f92672>}</span>,
+  <span style=color:#e6db74>&#34;found&#34;</span>: true
+<span style=color:#f92672>}</span>
+</code></pre></div><h3 id=cancel-a-message>Cancel a Message
+<a class=anchor href=#cancel-a-message>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>//request
+curl   -H <span style=color:#e6db74>&#39;Content-Type: application/json&#39;</span>   -XPOST http://localhost:9000/chat/csk30fjq50k7l4akku9g/_cancel
+
+//response
+<span style=color:#f92672>{</span>
+  <span style=color:#e6db74>&#34;acknowledged&#34;</span>: true
+<span style=color:#f92672>}</span>
+</code></pre></div><h2 id=assistant-ui-management>Assistant UI Management
+<a class=anchor href=#assistant-ui-management>#</a></h2><h3 id=search-assistant>Search Assistant
+<a class=anchor href=#search-assistant>#</a></h3><p>Log in to the Coco-Server admin dashboard, click <code>AI Assistant</code> in the left menu to view all assistant lists, as shown below:</p><p><img src=/coco-server/v0.5.0/img/assistant/list.png alt="assistant list"></p><p>Enter keywords in the search box above the list and click the <code>Refresh</code> button to search for matching assistant, as shown below:</p><p><img src=/coco-server/v0.5.0/img/assistant/filter-list.png alt="assistant search"></p><h3 id=add-assistant>Add Assistant
+<a class=anchor href=#add-assistant>#</a></h3><p>Click <code>Add</code> in the top-right corner of the list to create a new assistant, as shown below:</p><p><img src=/coco-server/v0.5.0/img/assistant/add-1.png alt="add assistant"></p><p><img src=/coco-server/v0.5.0/img/assistant/add-2.png alt="add assistant"></p><p><img src=/coco-server/v0.5.0/img/assistant/add-3.png alt="add assistant"></p><p>The system provides default values for the assistant configuration. Modify these values as needed, then click the save button to complete the creation.</p><h3 id=delete-assistant>Delete Assistant
+<a class=anchor href=#delete-assistant>#</a></h3><p>Select the target assistant in the list, click <code>Delete</code> on the right side of the entry, and confirm in the pop-up dialog to complete the deletion. As shown below:</p><p><img src=/coco-server/v0.5.0/img/assistant/delete.png alt="delete assistant"></p><blockquote><p>The built-in assistant cannot be deleted, but it can be modified.</p></blockquote><h3 id=edit-assistant>Edit Assistant
+<a class=anchor href=#edit-assistant>#</a></h3><p>Select the target assistant in the list, click <code>Edit</code> on the right side to enter the editing page. Modify the configuration and click save to update. As shown below:</p><p><img src=/coco-server/v0.5.0/img/assistant/edit.png alt="edit assistant"></p><h3 id=clone-assistant>Clone Assistant
+<a class=anchor href=#clone-assistant>#</a></h3><p>Select the target assistant in the list, click <code>Clone</code> on the right side to clone a assistant and then you will enter the editing page. Just like the operation of <code>Edit Assistant</code>, Modify the configuration and click save to update.</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/infinilabs/coco-server/edit/v0.5.0/docs/content.en/docs/references/assistant.md target=_blank rel=noopener><img src=/coco-server/v0.5.0/svg/edit.svg class=book-icon alt=Edit>
+<span>Edit this page</span></a></div><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
+    import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
+    searchbox({container: "#searchbox"});
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#assistant>Assistant</a><ul><li><a href=#assistant-api-reference>Assistant API Reference</a><ul><li><a href=#create-an-ai-assistant>Create an AI assistant</a></li><li><a href=#update-an-ai-assistant>Update an AI assistant</a></li><li><a href=#view-an-ai-assistant>View an AI assistant</a></li><li><a href=#delete-the-ai-assistant>Delete the AI assistant</a></li><li><a href=#search-ai-assistant>Search AI assistant</a></li><li><a href=#clone-an-ai-assistant>Clone an AI assistant</a></li><li><a href=#retrieve-chat-history-sessions>Retrieve Chat History (sessions)</a></li><li><a href=#open-a-existing-chat-session>Open a Existing Chat Session</a></li><li><a href=#create-a-chat-session>Create a Chat Session</a></li><li><a href=#get-chat-session-info>Get Chat Session Info</a></li><li><a href=#update-chat-session-info>Update Chat Session Info</a></li><li><a href=#delete-chat-session>Delete Chat Session</a></li><li><a href=#retrieve-a-chat-history>Retrieve a Chat History</a></li><li><a href=#send-a-message>Send a Message</a></li><li><a href=#close-a-chat-session>Close a Chat Session</a></li><li><a href=#cancel-a-message>Cancel a Message</a></li></ul></li><li><a href=#assistant-ui-management>Assistant UI Management</a><ul><li><a href=#search-assistant>Search Assistant</a></li><li><a href=#add-assistant>Add Assistant</a></li><li><a href=#delete-assistant>Delete Assistant</a></li><li><a href=#edit-assistant>Edit Assistant</a></li><li><a href=#clone-assistant>Clone Assistant</a></li></ul></li></ul></li></ul></nav></aside></main></body></html>
