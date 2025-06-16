@@ -58,7 +58,7 @@ English</a></li><li class=active><a href=/gateway/main/zh/ class="flex align-cen
 <a class=anchor href=#%e5%a4%84%e7%90%86%e5%8a%9e%e6%b3%95>#</a></h2><p>如果 Elasticsearch 不能修改配置、或者替换 Log4j 的 jar 包和重启集群的，可以使用极限网关来进行拦截或者参数替换甚至是直接阻断请求。
 通过在网关层对发往 Elasticsearch 的请求统一进行参数检测，将包含的敏感关键词 <code>${</code> 进行替换或者直接拒绝，
 可以防止带攻击的请求到达 Elasticsearch 服务端而被 Log4j 打印相关日志的时候执行恶意攻击命令，从而避免被攻击。</p><h2 id=参考配置>参考配置
-<a class=anchor href=#%e5%8f%82%e8%80%83%e9%85%8d%e7%bd%ae>#</a></h2><p>下载最新的 <code>1.29.4</code> 版本
+<a class=anchor href=#%e5%8f%82%e8%80%83%e9%85%8d%e7%bd%ae>#</a></h2><p>下载最新的 <code>1.29.6</code> 版本
 <a href=https://release.infinilabs.com/gateway/stable/>https://release.infinilabs.com/gateway/stable/</a></p><p>使用极限网关的 <code>context_filter</code> 过滤器，对请求上下文 <code>_ctx.request.to_string</code> 进行关键字检测，过滤掉恶意流量，从而阻断攻击。</p><pre><code>path.data: data
 path.logs: log
 
