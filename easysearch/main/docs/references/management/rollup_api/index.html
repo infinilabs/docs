@@ -99,7 +99,7 @@ Rollup 查询 API 提供了 debug 参数，显示 Easysearch 内部执行的查�
 <label for=section-1adc738e7351809ea378ec7e9730bd1f class="flex justify-between"><a>版本历史</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/release-notes/client/>Easysearch-client</a></li><li><a href=/easysearch/main/docs/release-notes/easysearch/>Easysearch</a></li></ul></li><li><a href=/easysearch/main/docs/resources/>其它资源</a><ul></ul></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/easysearch/main/svg/menu.svg class=book-icon alt=Menu></label>
 <strong>数据汇总</strong>
-<label for=toc-control><img src=/easysearch/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#数据汇总>数据汇总</a><ul><li><a href=#支持的聚合类型>支持的聚合类型</a></li><li><a href=#使用汇总rollup的先决条件>使用汇总（rollup）的先决条件</a></li><li><a href=#全局启用或禁用-rollup-搜索的设置>全局启用或禁用 rollup 搜索的设置</a></li><li><a href=#通配符方式批量启动停止-rollup-job>通配符方式批量启动停止 rollup job</a></li><li><a href=#设置-rollup-索引自动滚动的条数>设置 rollup 索引自动滚动的条数</a></li><li><a href=#新增-rollup_search_max_count-配置>新增 <code>ROLLUP_SEARCH_MAX_COUNT</code> 配置</a></li><li><a href=#设置-rollup-查询的时间范围上限>设置 Rollup 查询的时间范围上限</a><ul><li></li></ul></li><li><a href=#汇总rollup-api>汇总（rollup） API：</a><ul><li><a href=#创建或更新索引汇总任务>创建或更新索引汇总任务</a></li><li><a href=#获取索引汇总任务>获取索引汇总任务</a></li><li><a href=#删除索引汇总任务>删除索引汇总任务</a></li><li><a href=#启动或停止索引汇总任务>启动或停止索引汇总任务</a></li><li><a href=#解释索引汇总任务>解释索引汇总任务</a></li></ul></li><li><a href=#如何使用-rollup-索引进行搜索>如何使用 rollup 索引进行搜索</a><ul><li><a href=#注意>注意</a></li></ul></li><li><a href=#为自定义用户赋予rollup-权限>为自定义用户赋予rollup 权限</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=数据汇总>数据汇总
+<label for=toc-control><img src=/easysearch/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#数据汇总>数据汇总</a><ul><li><a href=#支持的聚合类型>支持的聚合类型</a></li><li><a href=#使用汇总rollup的先决条件>使用汇总（rollup）的先决条件</a></li><li><a href=#全局启用或禁用-rollup-搜索的设置>全局启用或禁用 rollup 搜索的设置</a></li><li><a href=#通配符方式批量启动停止-rollup-job>通配符方式批量启动停止 rollup job</a></li><li><a href=#设置-rollup-索引自动滚动的条数>设置 rollup 索引自动滚动的条数</a></li><li><a href=#新增-rollup_search_max_count-配置>新增 <code>ROLLUP_SEARCH_MAX_COUNT</code> 配置</a></li><li><a href=#设置-rollup-查询的时间范围上限>设置 Rollup 查询的时间范围上限</a><ul><li></li></ul></li><li><a href=#汇总rollup-api>汇总（rollup） API：</a><ul><li><a href=#创建或更新索引汇总任务>创建或更新索引汇总任务</a></li><li><a href=#获取索引汇总任务>获取索引汇总任务</a></li><li><a href=#删除索引汇总任务>删除索引汇总任务</a></li><li><a href=#启动或停止索引汇总任务>启动或停止索引汇总任务</a></li><li><a href=#解释索引汇总任务>解释索引汇总任务</a></li><li><a href=#修改已经运行-job-的-interval-和-page_size-参数-1130>修改已经运行 Job 的 interval 和 page_size 参数 (1.13.0)</a></li></ul></li><li><a href=#如何使用-rollup-索引进行搜索>如何使用 rollup 索引进行搜索</a><ul><li><a href=#注意>注意</a></li></ul></li><li><a href=#为自定义用户赋予rollup-权限>为自定义用户赋予rollup 权限</a></li><li><a href=#断点续跑-1130>断点续跑 (1.13.0)</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=数据汇总>数据汇总
 <a class=anchor href=#%e6%95%b0%e6%8d%ae%e6%b1%87%e6%80%bb>#</a></h1><p>数据汇总或上卷（Rollup），对于时序场景类的数据，往往会有大量的非常详细的聚合指标，随着时间的图推移，存储将持续增长。汇总功能可以将旧的、细粒度的数据汇总为粗粒度格式以进行长期存储。通过将数据汇总到一个单一的文档中，可以大大降低历史数据的存储成本。<br>Easysearch 的 rollup 具备一些独特的优势，可以自动对 rollup 索引进行滚动而不用依赖其他 API 去单独设置，并且在进行聚合查询时支持直接搜索原始索引，做到了对业务端的搜索代码完全兼容，从而对用户无感知。</p><h2 id=支持的聚合类型>支持的聚合类型
 <a class=anchor href=#%e6%94%af%e6%8c%81%e7%9a%84%e8%81%9a%e5%90%88%e7%b1%bb%e5%9e%8b>#</a></h2><p>对数值类型字段支持的聚合</p><ul><li>avg</li><li>sum</li><li>max</li><li>min</li><li>value_count</li><li>percentiles</li></ul><p>对 keyword 类型字段提供 terms 聚合。</p><p>对 date 类型字段 除了 date_histogram 聚合，还支持 date_range 聚合。(v1.10.0)</p><p>查询 rollup 数据时，增加支持 Filter aggregation，某些场景可以用来替代 query 过滤数据。(v1.10.1)</p><p>增加针对个别字段自定义 special_metrics 指标的配置项。 (v1.10.1)</p><p>增加支持 Bucket sort aggregation。 (v1.10.1)</p><p>混合查询原始索引和 rollup 索引时，返回的 response 里增加了 <code>origin</code> 参数，表示包含 rollup 数据。(v1.10.1)</p><p>Rollup 查询 API 提供了 debug 参数，显示 Easysearch 内部执行的查询语句。(v1.10.1)</p><h2 id=使用汇总rollup的先决条件>使用汇总（rollup）的先决条件
 <a class=anchor href=#%e4%bd%bf%e7%94%a8%e6%b1%87%e6%80%bbrollup%e7%9a%84%e5%85%88%e5%86%b3%e6%9d%a1%e4%bb%b6>#</a></h2><p>必须安装索引生命周期管理插件，rollup 属于该插件功能的一部分。</p><p>要汇总的指标索引必须具备 date 类型的字段。</p><h2 id=全局启用或禁用-rollup-搜索的设置>全局启用或禁用 rollup 搜索的设置
@@ -156,8 +156,7 @@ green  open   rollup1_.infini_metrics-000008 xrfETulmT7OZnfcfVrIJTw   1   0     
 
 </code></pre><h2 id=汇总rollup-api>汇总（rollup） API：
 <a class=anchor href=#%e6%b1%87%e6%80%bbrollup-api>#</a></h2><ul><li>创建或替换索引汇总任务</li><li>获取索引汇总任务</li><li>删除索引汇总任务</li><li>启动或停止索引汇总任务</li><li>解释索引汇总任务</li></ul><h3 id=创建或更新索引汇总任务>创建或更新索引汇总任务
-<a class=anchor href=#%e5%88%9b%e5%bb%ba%e6%88%96%e6%9b%b4%e6%96%b0%e7%b4%a2%e5%bc%95%e6%b1%87%e6%80%bb%e4%bb%bb%e5%8a%a1>#</a></h3><p>创建或自动替换一个索引汇总任务</p><p>PUT _rollup/jobs/&lt;rollup_id>?replace</p><p>&lt;rollup_id>: 为您的 Rollup 任务指定一个唯一标识符。
-?replace: 如果已存在同名任务，此参数允许替换现有任务。</p><h4 id=请求示例>请求示例
+<a class=anchor href=#%e5%88%9b%e5%bb%ba%e6%88%96%e6%9b%b4%e6%96%b0%e7%b4%a2%e5%bc%95%e6%b1%87%e6%80%bb%e4%bb%bb%e5%8a%a1>#</a></h3><p>创建或自动替换一个索引汇总任务</p><p>PUT _rollup/jobs/&lt;rollup_id>?replace</p><p>&lt;rollup_id>: 为您的 Rollup 任务指定一个唯一标识符。</p><p>?replace: 如果携带此参数，将替换已存在的 Rollup 所有配置，请谨慎使用。</p><h4 id=请求示例>请求示例
 <a class=anchor href=#%e8%af%b7%e6%b1%82%e7%a4%ba%e4%be%8b>#</a></h4><p>下面的例子会创建一个自动滚动的 rollup 索引</p><pre><code class=language-auto data-lang=auto>PUT _rollup/jobs/rollup_node_stats
 {
   &quot;rollup&quot;: {
@@ -221,117 +220,126 @@ green  open   rollup1_.infini_metrics-000008 xrfETulmT7OZnfcfVrIJTw   1   0     
   }
 }
 </code></pre><h4 id=参数详细说明>参数详细说明
-<a class=anchor href=#%e5%8f%82%e6%95%b0%e8%af%a6%e7%bb%86%e8%af%b4%e6%98%8e>#</a></h4><table><thead><tr><th>参数</th><th>解释</th><th>示例值说明</th></tr></thead><tbody><tr><td><code>source_index</code></td><td>源索引，数据将从此索引中收集</td><td><code>.infini_metrics</code>: 表示从名为 .infini_metrics 的索引中收集数据</td></tr><tr><td><code>target_index</code></td><td>目标索引，汇总数据将存储在此索引中</td><td><code>rollup1_{{ctx.source_index}}</code>: 动态生成目标索引名，使用源索引名作为一部分</td></tr><tr><td><code>timestamp</code></td><td>用于时间聚合的时间戳字段</td><td><code>timestamp</code>: 指定用于时间聚合的字段名</td></tr><tr><td><code>continuous</code></td><td>设置为 true，表示这是一个连续的 rollup 作业，默认为false</td><td><code>true</code>: 任务将持续运行，而不是一次性执行</td></tr><tr><td><code>page_size</code></td><td>每次处理的文档数量</td><td><code>1000</code>: 每批处理1000个文档，可根据系统性能调整</td></tr><tr><td><code>cron</code></td><td>作业运行的调度表达式</td><td><code>*/10 1-23 * * *</code>: 每10分钟执行一次，在1点到23点之间</td></tr><tr><td><code>timezone</code></td><td>用于 cron 表达式的时区</td><td><code>UTC+8</code>: 使用UTC+8时区（如北京时间）</td></tr><tr><td><code>stats</code></td><td>要计算的统计信息</td><td>示例中计算最大值和计数，可根据需求添加其他统计如avg, min等</td></tr><tr><td><code>interval</code></td><td>时间聚合的间隔</td><td><code>1m</code>: 每分钟聚合一次数据</td></tr><tr><td><code>identity</code></td><td>标识字段，用于分组聚合</td><td>列出的字段将用于创建唯一的聚合组</td></tr><tr><td><code>attributes</code></td><td>要包含在 rollup 中的属性字段</td><td><code>agent.*</code>, <code>metadata.*</code>: 包含所有以agent和metadata开头的字段</td></tr><tr><td><code>metrics</code></td><td>要汇总的指标字段</td><td><code>payload.elasticsearch.index_stats.*</code>: 汇总所有index_stats下的指标</td></tr><tr><td><code>special_metrics</code></td><td>对特别关注的指标配置更丰富的统计方式</td><td>专门对 JVM 堆内存使用量这个字段计算 <code>avg max min percentiles</code> 4 个指标，不再计算 <code>stats</code> 里的默认指标</td></tr><tr><td><code>exclude</code></td><td>要排除的指标字段</td><td><code>payload.elasticsearch.index_stats.routing.*</code>: metrics 会排除符合模式的字段</td></tr><tr><td><code>filter</code></td><td>用于过滤源文档的条件</td><td><code>{"metadata.name": "index_stats"}</code>: 只处理metadata.name为index_stats的文档</td></tr><tr><td><code>write_optimization</code></td><td>启用后采用自动生成文档 ID 的策略，提升写入速度</td><td><code>true</code>: 启用写入优化</td></tr><tr><td><code>field_abbr</code></td><td>启用字段名缩写，可降低内存消耗</td><td><code>true</code>: 启用字段名缩写</td></tr></tbody></table><h4 id=注意事项>注意事项
+<a class=anchor href=#%e5%8f%82%e6%95%b0%e8%af%a6%e7%bb%86%e8%af%b4%e6%98%8e>#</a></h4><table><thead><tr><th>参数</th><th>解释</th><th>示例值说明</th></tr></thead><tbody><tr><td><code>source_index</code></td><td>源索引，数据将从此索引中收集</td><td><code>.infini_metrics</code>: 表示从名为 .infini_metrics 的索引中收集数据</td></tr><tr><td><code>target_index</code></td><td>目标索引，汇总数据将存储在此索引中</td><td><code>rollup1_{{ctx.source_index}}</code>: 动态生成目标索引名，使用源索引名作为一部分</td></tr><tr><td><code>timestamp</code></td><td>用于时间聚合的时间戳字段</td><td><code>timestamp</code>: 指定用于时间聚合的字段名</td></tr><tr><td><code>continuous</code></td><td>设置为 true，表示这是一个连续的 rollup 作业，默认为false</td><td><code>true</code>: 任务将持续运行，而不是一次性执行</td></tr><tr><td><code>page_size</code></td><td>每次处理的文档数量</td><td><code>1000</code>: 每批处理1000个文档，可根据系统性能调整</td></tr><tr><td><code>cron</code></td><td>作业运行的调度表达式</td><td><code>*/10 1-23 * * *</code>: 每10分钟执行一次，在1点到23点之间</td></tr><tr><td><code>timezone</code></td><td>用于 cron 表达式的时区</td><td><code>UTC+8</code>: 使用UTC+8时区（如北京时间）</td></tr><tr><td><code>stats</code></td><td>要计算的统计信息</td><td>示例中计算最大值和计数，可根据需求添加其他统计如avg, min等</td></tr><tr><td><code>interval</code></td><td>时间聚合的间隔</td><td><code>1m</code>: 每分钟聚合一次数据</td></tr><tr><td><code>identity</code></td><td>标识字段，用于分组聚合</td><td>列出的字段将用于创建唯一的聚合组</td></tr><tr><td><code>attributes</code></td><td>要包含在 rollup 中的属性字段</td><td><code>agent.*</code>, <code>metadata.*</code>: 包含所有以agent和metadata开头的字段</td></tr><tr><td><code>metrics</code></td><td>要汇总的指标字段</td><td><code>payload.elasticsearch.index_stats.*</code>: 汇总所有index_stats下的指标</td></tr><tr><td><code>special_metrics</code></td><td>对特别关注的指标配置更丰富的统计方式</td><td>专门对 JVM 堆内存使用量这个字段计算 <code>avg max min percentiles</code> 4 个指标，不再计算 <code>stats</code> 里的默认指标</td></tr><tr><td><code>exclude</code></td><td>要排除的指标字段</td><td><code>payload.elasticsearch.index_stats.routing.*</code>: metrics 会排除符合模式的字段</td></tr><tr><td><code>filter</code></td><td>用于过滤源文档的条件</td><td><code>{"metadata.name": "index_stats"}</code>: 只处理metadata.name为index_stats的文档</td></tr><tr><td><code>write_optimization</code></td><td>启用后采用自动生成文档 ID 的策略，提升写入速度</td><td><code>true</code>: 启用写入优化（1.12.0 版本增加）</td></tr><tr><td><code>field_abbr</code></td><td>启用字段名缩写，可降低内存消耗</td><td><code>true</code>: 启用字段名缩写（1.12.0 版本增加）</td></tr><tr><td><code>is_continue</code></td><td>当创建的 Rollup 已经有历史数据并要断点续跑时配置</td><td><code>true</code>: 启用断点续跑，默认不配置为 <code>false</code>（1.12.3 版本增加）</td></tr></tbody></table><h4 id=注意事项>注意事项
 <a class=anchor href=#%e6%b3%a8%e6%84%8f%e4%ba%8b%e9%a1%b9>#</a></h4><ol><li><code>cron</code> 表达式需要谨慎设置，确保不会对系统造成过大负担。</li><li><code>page_size</code> 应根据您的系统性能和数据量来调整。</li><li><code>identity</code> 字段的选择会影响聚合的粒度，请根据您的分析需求仔细选择。</li><li>使用通配符（如 <code>agent.*</code>）时要注意，这可能会包含大量字段，影响性能。</li><li><code>filter</code> 可以有效减少处理的数据量，提高效率。</li><li><code>write_optimization</code> 和 <code>field_abbr</code> 是从 1.12.0 新增的参数。</li></ol><h3 id=获取索引汇总任务>获取索引汇总任务
 <a class=anchor href=#%e8%8e%b7%e5%8f%96%e7%b4%a2%e5%bc%95%e6%b1%87%e6%80%bb%e4%bb%bb%e5%8a%a1>#</a></h3><p>请求</p><pre><code class=language-auto data-lang=auto>GET _rollup/jobs/&lt;rollup_id&gt;
-</code></pre><p>响应</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
-  <span style=color:#f92672>&#34;_id&#34;</span>: <span style=color:#e6db74>&#34;rollup4&#34;</span>,
-  <span style=color:#f92672>&#34;_version&#34;</span>: <span style=color:#ae81ff>3</span>,
-  <span style=color:#f92672>&#34;_seq_no&#34;</span>: <span style=color:#ae81ff>5</span>,
-  <span style=color:#f92672>&#34;_primary_term&#34;</span>: <span style=color:#ae81ff>1</span>,
-  <span style=color:#f92672>&#34;rollup&#34;</span>: {
-    <span style=color:#f92672>&#34;rollup_id&#34;</span>: <span style=color:#e6db74>&#34;rollup4&#34;</span>,
-    <span style=color:#f92672>&#34;enabled&#34;</span>: <span style=color:#66d9ef>false</span>,
-    <span style=color:#f92672>&#34;schedule&#34;</span>: {
-      <span style=color:#f92672>&#34;interval&#34;</span>: {
-        <span style=color:#f92672>&#34;start_time&#34;</span>: <span style=color:#ae81ff>1718105163766</span>,
-        <span style=color:#f92672>&#34;period&#34;</span>: <span style=color:#ae81ff>1</span>,
-        <span style=color:#f92672>&#34;unit&#34;</span>: <span style=color:#e6db74>&#34;Minutes&#34;</span>,
-        <span style=color:#f92672>&#34;schedule_delay&#34;</span>: <span style=color:#ae81ff>0</span>
+</code></pre><p>响应</p><pre><code class=language-auto data-lang=auto>{
+  &quot;_id&quot;: &quot;rollup4&quot;,
+  &quot;_version&quot;: 3,
+  &quot;_seq_no&quot;: 5,
+  &quot;_primary_term&quot;: 1,
+  &quot;rollup&quot;: {
+    &quot;rollup_id&quot;: &quot;rollup4&quot;,
+    &quot;enabled&quot;: false,
+    &quot;schedule&quot;: {
+      &quot;interval&quot;: {
+        &quot;start_time&quot;: 1718105163766,
+        &quot;period&quot;: 1,
+        &quot;unit&quot;: &quot;Minutes&quot;,
+        &quot;schedule_delay&quot;: 0
       }
     },
-    <span style=color:#f92672>&#34;last_updated_time&#34;</span>: <span style=color:#ae81ff>1718105163767</span>,
-    <span style=color:#f92672>&#34;enabled_time&#34;</span>: <span style=color:#66d9ef>null</span>,
-    <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;Example rollup job&#34;</span>,
-    <span style=color:#f92672>&#34;schema_version&#34;</span>: <span style=color:#ae81ff>17</span>,
-    <span style=color:#f92672>&#34;source_index&#34;</span>: <span style=color:#e6db74>&#34;test-data&#34;</span>,
-    <span style=color:#f92672>&#34;target_index&#34;</span>: <span style=color:#e6db74>&#34;rollup4-test&#34;</span>,
-    <span style=color:#f92672>&#34;metadata_id&#34;</span>: <span style=color:#e6db74>&#34;nuMNB5ABnvQbLaVPM5qO&#34;</span>,
-    <span style=color:#f92672>&#34;page_size&#34;</span>: <span style=color:#ae81ff>200</span>,
-    <span style=color:#f92672>&#34;delay&#34;</span>: <span style=color:#ae81ff>0</span>,
-    <span style=color:#f92672>&#34;continuous&#34;</span>: <span style=color:#66d9ef>false</span>,
-    <span style=color:#f92672>&#34;dimensions&#34;</span>: [
+    &quot;last_updated_time&quot;: 1718105163767,
+    &quot;enabled_time&quot;: null,
+    &quot;description&quot;: &quot;Example rollup job&quot;,
+    &quot;schema_version&quot;: 17,
+    &quot;source_index&quot;: &quot;test-data&quot;,
+    &quot;target_index&quot;: &quot;rollup4-test&quot;,
+    &quot;metadata_id&quot;: &quot;nuMNB5ABnvQbLaVPM5qO&quot;,
+    &quot;page_size&quot;: 200,
+    &quot;delay&quot;: 0,
+    &quot;continuous&quot;: false,
+    &quot;dimensions&quot;: [
       {
-        <span style=color:#f92672>&#34;date_histogram&#34;</span>: {
-          <span style=color:#f92672>&#34;fixed_interval&#34;</span>: <span style=color:#e6db74>&#34;1m&#34;</span>,
-          <span style=color:#f92672>&#34;source_field&#34;</span>: <span style=color:#e6db74>&#34;@timestamp&#34;</span>,
-          <span style=color:#f92672>&#34;target_field&#34;</span>: <span style=color:#e6db74>&#34;@timestamp&#34;</span>,
-          <span style=color:#f92672>&#34;timezone&#34;</span>: <span style=color:#e6db74>&#34;UTC&#34;</span>
+        &quot;date_histogram&quot;: {
+          &quot;fixed_interval&quot;: &quot;1m&quot;,
+          &quot;source_field&quot;: &quot;@timestamp&quot;,
+          &quot;target_field&quot;: &quot;@timestamp&quot;,
+          &quot;timezone&quot;: &quot;UTC&quot;
         }
       }
     ],
-    <span style=color:#f92672>&#34;metrics&#34;</span>: [
+    &quot;metrics&quot;: [
       {
-        <span style=color:#f92672>&#34;source_field&#34;</span>: <span style=color:#e6db74>&#34;passenger_count&#34;</span>,
-        <span style=color:#f92672>&#34;metrics&#34;</span>: [
+        &quot;source_field&quot;: &quot;passenger_count&quot;,
+        &quot;metrics&quot;: [
           {
-            <span style=color:#f92672>&#34;avg&#34;</span>: {}
+            &quot;avg&quot;: {}
           },
           {
-            <span style=color:#f92672>&#34;sum&#34;</span>: {}
+            &quot;sum&quot;: {}
           },
           {
-            <span style=color:#f92672>&#34;max&#34;</span>: {}
+            &quot;max&quot;: {}
           },
           {
-            <span style=color:#f92672>&#34;min&#34;</span>: {}
+            &quot;min&quot;: {}
           },
           {
-            <span style=color:#f92672>&#34;value_count&#34;</span>: {}
+            &quot;value_count&quot;: {}
           }
         ]
       }
     ]
   }
 }
-</code></pre></div><h3 id=删除索引汇总任务>删除索引汇总任务
+</code></pre><h3 id=删除索引汇总任务>删除索引汇总任务
 <a class=anchor href=#%e5%88%a0%e9%99%a4%e7%b4%a2%e5%bc%95%e6%b1%87%e6%80%bb%e4%bb%bb%e5%8a%a1>#</a></h3><p>请求</p><pre><code class=language-auto data-lang=auto>DELETE _rollup/jobs/&lt;rollup_id&gt;
-</code></pre><p>响应</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
-  <span style=color:#f92672>&#34;_index&#34;</span>: <span style=color:#e6db74>&#34;.easysearch-ilm-config&#34;</span>,
-  <span style=color:#f92672>&#34;_type&#34;</span>: <span style=color:#e6db74>&#34;_doc&#34;</span>,
-  <span style=color:#f92672>&#34;_id&#34;</span>: <span style=color:#e6db74>&#34;rollup4&#34;</span>,
-  <span style=color:#f92672>&#34;_version&#34;</span>: <span style=color:#ae81ff>7</span>,
-  <span style=color:#f92672>&#34;result&#34;</span>: <span style=color:#e6db74>&#34;deleted&#34;</span>,
-  <span style=color:#f92672>&#34;forced_refresh&#34;</span>: <span style=color:#66d9ef>true</span>,
-  <span style=color:#f92672>&#34;_shards&#34;</span>: {
-    <span style=color:#f92672>&#34;total&#34;</span>: <span style=color:#ae81ff>2</span>,
-    <span style=color:#f92672>&#34;successful&#34;</span>: <span style=color:#ae81ff>1</span>,
-    <span style=color:#f92672>&#34;failed&#34;</span>: <span style=color:#ae81ff>0</span>
+</code></pre><p>响应</p><pre><code class=language-auto data-lang=auto>{
+  &quot;_index&quot;: &quot;.easysearch-ilm-config&quot;,
+  &quot;_type&quot;: &quot;_doc&quot;,
+  &quot;_id&quot;: &quot;rollup4&quot;,
+  &quot;_version&quot;: 7,
+  &quot;result&quot;: &quot;deleted&quot;,
+  &quot;forced_refresh&quot;: true,
+  &quot;_shards&quot;: {
+    &quot;total&quot;: 2,
+    &quot;successful&quot;: 1,
+    &quot;failed&quot;: 0
   },
-  <span style=color:#f92672>&#34;_seq_no&#34;</span>: <span style=color:#ae81ff>23</span>,
-  <span style=color:#f92672>&#34;_primary_term&#34;</span>: <span style=color:#ae81ff>1</span>
+  &quot;_seq_no&quot;: 23,
+  &quot;_primary_term&quot;: 1
 }
-</code></pre></div><h3 id=启动或停止索引汇总任务>启动或停止索引汇总任务
+</code></pre><h3 id=启动或停止索引汇总任务>启动或停止索引汇总任务
 <a class=anchor href=#%e5%90%af%e5%8a%a8%e6%88%96%e5%81%9c%e6%ad%a2%e7%b4%a2%e5%bc%95%e6%b1%87%e6%80%bb%e4%bb%bb%e5%8a%a1>#</a></h3><p>请求</p><pre><code class=language-auto data-lang=auto>POST _rollup/jobs/&lt;rollup_id&gt;/_start
 POST _rollup/jobs/&lt;rollup_id&gt;/_stop
-</code></pre><p>响应</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
-  <span style=color:#f92672>&#34;acknowledged&#34;</span>: <span style=color:#66d9ef>true</span>
+</code></pre><p>响应</p><pre><code class=language-auto data-lang=auto>{
+  &quot;acknowledged&quot;: true
 }
-</code></pre></div><h3 id=解释索引汇总任务>解释索引汇总任务
+</code></pre><h3 id=解释索引汇总任务>解释索引汇总任务
 <a class=anchor href=#%e8%a7%a3%e9%87%8a%e7%b4%a2%e5%bc%95%e6%b1%87%e6%80%bb%e4%bb%bb%e5%8a%a1>#</a></h3><p>请求</p><pre><code class=language-auto data-lang=auto>GET _rollup/jobs/&lt;rollup_id&gt;/_explain
-</code></pre><p>响应</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
-  <span style=color:#f92672>&#34;rollup1&#34;</span>: {
-    <span style=color:#f92672>&#34;metadata_id&#34;</span>: <span style=color:#e6db74>&#34;VCAnj5IBQpC3NDmZwgL7&#34;</span>,
-    <span style=color:#f92672>&#34;rollup_metadata&#34;</span>: {
-      <span style=color:#f92672>&#34;rollup_id&#34;</span>: <span style=color:#e6db74>&#34;rollup1&#34;</span>,
-      <span style=color:#f92672>&#34;last_updated_time&#34;</span>: <span style=color:#ae81ff>1729151524871</span>,
-      <span style=color:#f92672>&#34;continuous&#34;</span>: {
-        <span style=color:#f92672>&#34;next_window_start_time&#34;</span>: <span style=color:#ae81ff>1728196860000</span>,
-        <span style=color:#f92672>&#34;next_window_end_time&#34;</span>: <span style=color:#ae81ff>1728196920000</span>
+</code></pre><p>响应</p><pre><code class=language-auto data-lang=auto>{
+  &quot;rollup1&quot;: {
+    &quot;metadata_id&quot;: &quot;VCAnj5IBQpC3NDmZwgL7&quot;,
+    &quot;rollup_metadata&quot;: {
+      &quot;rollup_id&quot;: &quot;rollup1&quot;,
+      &quot;last_updated_time&quot;: 1729151524871,
+      &quot;continuous&quot;: {
+        &quot;next_window_start_time&quot;: 1728196860000,
+        &quot;next_window_end_time&quot;: 1728196920000
       },
-      <span style=color:#f92672>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;started&#34;</span>,
-      <span style=color:#f92672>&#34;failure_reason&#34;</span>: <span style=color:#66d9ef>null</span>,
-      <span style=color:#f92672>&#34;stats&#34;</span>: {
-        <span style=color:#f92672>&#34;pages_processed&#34;</span>: <span style=color:#ae81ff>77014</span>,
-        <span style=color:#f92672>&#34;documents_processed&#34;</span>: <span style=color:#ae81ff>135026197</span>,
-        <span style=color:#f92672>&#34;rollups_indexed&#34;</span>: <span style=color:#ae81ff>26812185</span>,
-        <span style=color:#f92672>&#34;index_time_in_millis&#34;</span>: <span style=color:#ae81ff>38094616</span>,
-        <span style=color:#f92672>&#34;search_time_in_millis&#34;</span>: <span style=color:#ae81ff>88930100</span>
+      &quot;status&quot;: &quot;started&quot;,
+      &quot;failure_reason&quot;: null,
+      &quot;stats&quot;: {
+        &quot;pages_processed&quot;: 77014,
+        &quot;documents_processed&quot;: 135026197,
+        &quot;rollups_indexed&quot;: 26812185,
+        &quot;index_time_in_millis&quot;: 38094616,
+        &quot;search_time_in_millis&quot;: 88930100
       }
     }
   }
 }
-</code></pre></div><table><thead><tr><th>字段名</th><th>类型</th><th>描述</th></tr></thead><tbody><tr><td><code>metadata_id</code></td><td>string</td><td>rollup 元数据的唯一标识符</td></tr><tr><td><code>rollup_metadata.rollup_id</code></td><td>string</td><td>rollup 作业的 ID</td></tr><tr><td><code>rollup_metadata.last_updated_time</code></td><td>long</td><td>上次更新时间的 Unix 时间戳（毫秒）</td></tr><tr><td><code>rollup_metadata.continuous.next_window_start_time</code></td><td>long</td><td>下一个 rollup 窗口的开始时间（Unix 时间戳，毫秒）</td></tr><tr><td><code>rollup_metadata.continuous.next_window_end_time</code></td><td>long</td><td>下一个 rollup 窗口的结束时间（Unix 时间戳，毫秒）</td></tr><tr><td><code>rollup_metadata.status</code></td><td>string</td><td>rollup 作业当前的状态</td></tr><tr><td><code>rollup_metadata.failure_reason</code></td><td>string</td><td>null</td></tr><tr><td><code>rollup_metadata.stats.pages_processed</code></td><td>long</td><td>已处理的页面数</td></tr><tr><td><code>rollup_metadata.stats.documents_processed</code></td><td>long</td><td>已处理的文档数</td></tr><tr><td><code>rollup_metadata.stats.rollups_indexed</code></td><td>long</td><td>已索引的 rollup 文档数</td></tr><tr><td><code>rollup_metadata.stats.index_time_in_millis</code></td><td>long</td><td>索引所用的总时间（毫秒）</td></tr><tr><td><code>rollup_metadata.stats.search_time_in_millis</code></td><td>long</td><td>搜索所用的总时间（毫秒）</td></tr></tbody></table><h2 id=如何使用-rollup-索引进行搜索>如何使用 rollup 索引进行搜索
+</code></pre><table><thead><tr><th>字段名</th><th>类型</th><th>描述</th></tr></thead><tbody><tr><td><code>metadata_id</code></td><td>string</td><td>rollup 元数据的唯一标识符</td></tr><tr><td><code>rollup_metadata.rollup_id</code></td><td>string</td><td>rollup 作业的 ID</td></tr><tr><td><code>rollup_metadata.last_updated_time</code></td><td>long</td><td>上次更新时间的 Unix 时间戳（毫秒）</td></tr><tr><td><code>rollup_metadata.continuous.next_window_start_time</code></td><td>long</td><td>下一个 rollup 窗口的开始时间（Unix 时间戳，毫秒）</td></tr><tr><td><code>rollup_metadata.continuous.next_window_end_time</code></td><td>long</td><td>下一个 rollup 窗口的结束时间（Unix 时间戳，毫秒）</td></tr><tr><td><code>rollup_metadata.status</code></td><td>string</td><td>rollup 作业当前的状态</td></tr><tr><td><code>rollup_metadata.failure_reason</code></td><td>string</td><td>null</td></tr><tr><td><code>rollup_metadata.stats.pages_processed</code></td><td>long</td><td>已处理的页面数</td></tr><tr><td><code>rollup_metadata.stats.documents_processed</code></td><td>long</td><td>已处理的文档数</td></tr><tr><td><code>rollup_metadata.stats.rollups_indexed</code></td><td>long</td><td>已索引的 rollup 文档数</td></tr><tr><td><code>rollup_metadata.stats.index_time_in_millis</code></td><td>long</td><td>索引所用的总时间（毫秒）</td></tr><tr><td><code>rollup_metadata.stats.search_time_in_millis</code></td><td>long</td><td>搜索所用的总时间（毫秒）</td></tr></tbody></table><h3 id=修改已经运行-job-的-interval-和-page_size-参数-1130>修改已经运行 Job 的 interval 和 page_size 参数 (1.13.0)
+<a class=anchor href=#%e4%bf%ae%e6%94%b9%e5%b7%b2%e7%bb%8f%e8%bf%90%e8%a1%8c-job-%e7%9a%84-interval-%e5%92%8c-page_size-%e5%8f%82%e6%95%b0-1130>#</a></h3><p>在线上环境运行 Rollup 时会遇到这种情况：由于机器硬件资源或其他原因发现某个 Rollup 压力较大，需要调整最小时间区间或单次请求条数。</p><p>从 1.13.0 版本开始，可以使用 POST _rollup/jobs/&lt;rollup_id> API 进行更新，此操作内部会自动执行</p><ol><li>停止 Job</li><li>更新 参数</li><li>重启 Job</li><li>运行 Job 时 索引数据会增加 unique 字段标识当前 Job 批次的数据，方便数据排重</li></ol><p>请求</p><pre><code class=language-auto data-lang=auto>POST  _rollup/jobs/rollup_node_stats  
+{
+  &quot;page_size&quot;: 100,
+  &quot;interval&quot;: &quot;5m&quot;
+}
+</code></pre><p>响应</p><pre><code class=language-auto data-lang=auto>{
+  &quot;acknowledged&quot;: true
+}
+</code></pre><h2 id=如何使用-rollup-索引进行搜索>如何使用 rollup 索引进行搜索
 <a class=anchor href=#%e5%a6%82%e4%bd%95%e4%bd%bf%e7%94%a8-rollup-%e7%b4%a2%e5%bc%95%e8%bf%9b%e8%a1%8c%e6%90%9c%e7%b4%a2>#</a></h2><p>无需特意搜索 rollup 索引，只需使用标准的 search API 对原始目标索引进行搜索。查询时，请确保查询符合目标索引的约束条件。
 例如，如果你没有在某个字段上设置 terms 聚合，那么你不会收到该字段的 terms 聚合结果。如果你没有设置 maximum 聚合，也不会收到 maximum 聚合的结果。</p><p>无法访问目标索引中数据的内部结构，因为插件会在后台自动重写查询以适应目标索引。这是为了确保对源索引和目标索引使用相同的查询。</p><p>请求示例</p><pre><code class=language-auto data-lang=auto>GET target-test/_search
 {
@@ -350,39 +358,39 @@ POST _rollup/jobs/&lt;rollup_id&gt;/_stop
     }
   }
 }
-</code></pre><p>响应</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
-  <span style=color:#f92672>&#34;took&#34;</span>: <span style=color:#ae81ff>3</span>,
-  <span style=color:#f92672>&#34;timed_out&#34;</span>: <span style=color:#66d9ef>false</span>,
-  <span style=color:#f92672>&#34;_shards&#34;</span>: {
-    <span style=color:#f92672>&#34;total&#34;</span>: <span style=color:#ae81ff>1</span>,
-    <span style=color:#f92672>&#34;successful&#34;</span>: <span style=color:#ae81ff>1</span>,
-    <span style=color:#f92672>&#34;skipped&#34;</span>: <span style=color:#ae81ff>0</span>,
-    <span style=color:#f92672>&#34;failed&#34;</span>: <span style=color:#ae81ff>0</span>
+</code></pre><p>响应</p><pre><code class=language-auto data-lang=auto>{
+  &quot;took&quot;: 3,
+  &quot;timed_out&quot;: false,
+  &quot;_shards&quot;: {
+    &quot;total&quot;: 1,
+    &quot;successful&quot;: 1,
+    &quot;skipped&quot;: 0,
+    &quot;failed&quot;: 0
   },
-  <span style=color:#f92672>&#34;hits&#34;</span>: {
-    <span style=color:#f92672>&#34;total&#34;</span>: {
-      <span style=color:#f92672>&#34;value&#34;</span>: <span style=color:#ae81ff>2</span>,
-      <span style=color:#f92672>&#34;relation&#34;</span>: <span style=color:#e6db74>&#34;eq&#34;</span>
+  &quot;hits&quot;: {
+    &quot;total&quot;: {
+      &quot;value&quot;: 2,
+      &quot;relation&quot;: &quot;eq&quot;
     },
-    <span style=color:#f92672>&#34;max_score&#34;</span>: <span style=color:#66d9ef>null</span>,
-    <span style=color:#f92672>&#34;hits&#34;</span>: []
+    &quot;max_score&quot;: null,
+    &quot;hits&quot;: []
   },
-  <span style=color:#f92672>&#34;aggregations&#34;</span>: {
-    <span style=color:#f92672>&#34;a&#34;</span>: {
-      <span style=color:#f92672>&#34;buckets&#34;</span>: [
+  &quot;aggregations&quot;: {
+    &quot;a&quot;: {
+      &quot;buckets&quot;: [
         {
-          <span style=color:#f92672>&#34;key_as_string&#34;</span>: <span style=color:#e6db74>&#34;2023-08-01T10:00:00.000Z&#34;</span>,
-          <span style=color:#f92672>&#34;key&#34;</span>: <span style=color:#ae81ff>1690884000000</span>,
-          <span style=color:#f92672>&#34;doc_count&#34;</span>: <span style=color:#ae81ff>10</span>
+          &quot;key_as_string&quot;: &quot;2023-08-01T10:00:00.000Z&quot;,
+          &quot;key&quot;: 1690884000000,
+          &quot;doc_count&quot;: 10
         }
       ]
     },
-    <span style=color:#f92672>&#34;total_passenger_count&#34;</span>: {
-      <span style=color:#f92672>&#34;value&#34;</span>: <span style=color:#ae81ff>38</span>
+    &quot;total_passenger_count&quot;: {
+      &quot;value&quot;: 38
     }
   }
 }
-</code></pre></div><h3 id=注意>注意
+</code></pre><h3 id=注意>注意
 <a class=anchor href=#%e6%b3%a8%e6%84%8f>#</a></h3><p>不能在同一个搜索请求中同时搜索汇总索引和非汇总索引。</p><h2 id=为自定义用户赋予rollup-权限>为自定义用户赋予rollup 权限
 <a class=anchor href=#%e4%b8%ba%e8%87%aa%e5%ae%9a%e4%b9%89%e7%94%a8%e6%88%b7%e8%b5%8b%e4%ba%88rollup-%e6%9d%83%e9%99%90>#</a></h2><p>以下示例表示创建了一个自定义用户，这个用户只对 test 开头的索引具备所有权限，并赋予他 rollup 的权限，授权后，test_user将可以创建 rollup job，并对rollup 开头的索引有查询权限。</p><pre><code class=language-auto data-lang=auto>PUT /_security/role/test_role
 {
@@ -399,8 +407,10 @@ PUT /_security/user/test_user
   &quot;password&quot; : &quot;123456&quot;,
   &quot;roles&quot; : [ &quot;test_role&quot;,&quot;rollup_all&quot; ]
 }
-</code></pre></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+</code></pre><h2 id=断点续跑-1130>断点续跑 (1.13.0)
+<a class=anchor href=#%e6%96%ad%e7%82%b9%e7%bb%ad%e8%b7%91-1130>#</a></h2><p>创建Rollup 时如果检测到历史索引及元数据，会自动从中断的状态点继续处理，避免重复计算。</p><p>Rollup 配置增加了 window_start_time 字段，当重建 Rollup 时 会把历史 metadata 的最新时间戳自动写到 window_start_time 里，
+通过观察 window_start_time 字段的值可以判断当前 Job 开始的 ’断点时间‘。</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
 gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
     import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
     searchbox({container: "#searchbox"});
-</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#数据汇总>数据汇总</a><ul><li><a href=#支持的聚合类型>支持的聚合类型</a></li><li><a href=#使用汇总rollup的先决条件>使用汇总（rollup）的先决条件</a></li><li><a href=#全局启用或禁用-rollup-搜索的设置>全局启用或禁用 rollup 搜索的设置</a></li><li><a href=#通配符方式批量启动停止-rollup-job>通配符方式批量启动停止 rollup job</a></li><li><a href=#设置-rollup-索引自动滚动的条数>设置 rollup 索引自动滚动的条数</a></li><li><a href=#新增-rollup_search_max_count-配置>新增 <code>ROLLUP_SEARCH_MAX_COUNT</code> 配置</a></li><li><a href=#设置-rollup-查询的时间范围上限>设置 Rollup 查询的时间范围上限</a><ul><li></li></ul></li><li><a href=#汇总rollup-api>汇总（rollup） API：</a><ul><li><a href=#创建或更新索引汇总任务>创建或更新索引汇总任务</a></li><li><a href=#获取索引汇总任务>获取索引汇总任务</a></li><li><a href=#删除索引汇总任务>删除索引汇总任务</a></li><li><a href=#启动或停止索引汇总任务>启动或停止索引汇总任务</a></li><li><a href=#解释索引汇总任务>解释索引汇总任务</a></li></ul></li><li><a href=#如何使用-rollup-索引进行搜索>如何使用 rollup 索引进行搜索</a><ul><li><a href=#注意>注意</a></li></ul></li><li><a href=#为自定义用户赋予rollup-权限>为自定义用户赋予rollup 权限</a></li></ul></li></ul></nav></aside></main><script src=/easysearch/main/js/asciinema-player.js></script></body></html>
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#数据汇总>数据汇总</a><ul><li><a href=#支持的聚合类型>支持的聚合类型</a></li><li><a href=#使用汇总rollup的先决条件>使用汇总（rollup）的先决条件</a></li><li><a href=#全局启用或禁用-rollup-搜索的设置>全局启用或禁用 rollup 搜索的设置</a></li><li><a href=#通配符方式批量启动停止-rollup-job>通配符方式批量启动停止 rollup job</a></li><li><a href=#设置-rollup-索引自动滚动的条数>设置 rollup 索引自动滚动的条数</a></li><li><a href=#新增-rollup_search_max_count-配置>新增 <code>ROLLUP_SEARCH_MAX_COUNT</code> 配置</a></li><li><a href=#设置-rollup-查询的时间范围上限>设置 Rollup 查询的时间范围上限</a><ul><li></li></ul></li><li><a href=#汇总rollup-api>汇总（rollup） API：</a><ul><li><a href=#创建或更新索引汇总任务>创建或更新索引汇总任务</a></li><li><a href=#获取索引汇总任务>获取索引汇总任务</a></li><li><a href=#删除索引汇总任务>删除索引汇总任务</a></li><li><a href=#启动或停止索引汇总任务>启动或停止索引汇总任务</a></li><li><a href=#解释索引汇总任务>解释索引汇总任务</a></li><li><a href=#修改已经运行-job-的-interval-和-page_size-参数-1130>修改已经运行 Job 的 interval 和 page_size 参数 (1.13.0)</a></li></ul></li><li><a href=#如何使用-rollup-索引进行搜索>如何使用 rollup 索引进行搜索</a><ul><li><a href=#注意>注意</a></li></ul></li><li><a href=#为自定义用户赋予rollup-权限>为自定义用户赋予rollup 权限</a></li><li><a href=#断点续跑-1130>断点续跑 (1.13.0)</a></li></ul></li></ul></nav></aside></main><script src=/easysearch/main/js/asciinema-player.js></script></body></html>
