@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>探针管理 on INFINI Console</title><link>/console/v1.29.7/zh/docs/reference/agent/</link><description>Recent content in 探针管理 on INFINI Console</description><generator>Hugo -- gohugo.io</generator><atom:link href="/console/v1.29.7/zh/docs/reference/agent/index.xml" rel="self" type="application/rss+xml"/><item><title>功能介绍</title><link>/console/v1.29.7/zh/docs/reference/agent/manage/manage/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/v1.29.7/zh/docs/reference/agent/manage/manage/</guid><description>功能介绍 # 简介 # INFINI Agent 是 INFINI Console 的一个可选组件，负责采集和上传 Elasticsearch, Easysearch, Opensearch 集群的日志和指标信息，通过 INFINI Console 管理。INFINI Agent 支持主流操作系统和平台，安装包轻量且无任何外部依赖，可以快速方便地安装。
+Agent 功能特性：
+采集上传 Elasticsearch 等集群健康信息/集群 stats/索引 stats/节点 stats 信息 采集上传 Elasticsearch 等实例节点日志 采集主机指标信息 快速安装探针 # 进入菜单 资源管理 &amp;gt; 探针管理 点击按钮 Install Agent。 可以看到 Console 会自动生成一段安装脚本，然后只需要点击脚本右上方的复制 Icon， 就可以复制安装脚本了。
+将在 Console 中复制的安装脚本粘贴到目标主机上就可以实现一键快速安装了，生成的配置文件内容类似如下：
+path.configs: config configs.auto_reload: true env: API_BINDING: 0.0.0.0:8080 path.data: data path.logs: log api: enabled: true tls: enabled: true cert_file: config/client.</description></item><item><title>下载安装</title><link>/console/v1.29.7/zh/docs/reference/agent/install/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/v1.29.7/zh/docs/reference/agent/install/</guid><description>安装探针 # 探针支持两种方式安装，一种是手动下载安装配置，还有一种是结合新版本的 Console (&amp;gt;=1.3.0)，生成一键安装脚本。 只要执行一键安装脚本即可在主机上完成探针的安装。我们推荐使用结合 Console 来安装探针，简单和方便管理。
+一键安装 # 安装前准备 # 安装并运行 INFINI Console
+复制一键安装脚本 # 在 INFINI Console 左侧菜单 资源管理&amp;gt;探针管理，进入页面之后点击 Install Agent 按钮，即可复制类似如下一键安装脚本：
+curl -sSL http://localhost:9000/agent/install.sh?token=cjctdrms4us1c6fu04ag |sudo bash -s -- -u https://release.infinilabs.com/agent/stable -v 0.6.0-262 -t /opt/agent -u和-v参数表示从指定的 URL 下载指定版本的 Agent，-t参数表示安装的路径，在联网的环境中，&amp;ndash; 及后面的参数都可以忽略，默认情况下将从官网下载最新的 Agent 版本进行安装。
+将一键安装脚本粘贴到终端执行即可完成安装，安装之后该探针实例会被自动注册到 INFINI Console。具体操作步骤参考 Agent 快速安装
+下载安装 # 根据您所在的操作系统和平台选择下面相应的下载地址：
+https://release.infinilabs.com/agent/
+容器部署 # 探针(INFINI Agent) 也支持 Docker 容器方式部署。</description></item><item><title>容器部署</title><link>/console/v1.29.7/zh/docs/reference/agent/docker/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/v1.29.7/zh/docs/reference/agent/docker/</guid><description>容器部署 # 探针 (INFINI Agent) 支持容器方式部署。
+下载镜像 # 探针(INFINI Agent) 的镜像发布在 Docker 的官方仓库，地址如下：
+https://hub.docker.com/r/infinilabs/agent
+使用下面的命令即可获取最新的容器镜像：
+docker pull infinilabs/agent:1.29.6 验证镜像 # 将镜像下载到本地之后，可以看到 探针 (INFINI Agent) 的容器镜像非常小，只有不到 20MB，所以下载是非常快的。
+✗ docker images |grep &amp;quot;agent&amp;quot; |grep &amp;quot;1.29.6&amp;quot; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/agent latest 1.29.6 4 days ago 13.8MB 创建配置 # 现在需要创建一个配置文件 agent.yml，来进行基本的配置，如下：
+api: enabled: true network: binding: 0.0.0.0:8080 metrics: enabled: true queue: metrics network: enabled: true summary: true details: true memory: metrics: - swap - memory disk: metrics: - ioqs - usage cpu: metrics: - idle - system - user - iowait - load elasticsearch: enabled: true agent_mode: true node_stats: true index_stats: true cluster_stats: true elasticsearch: - name: default enabled: true endpoint: http://192.</description></item></channel></rss>
