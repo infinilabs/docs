@@ -51,7 +51,7 @@ English</a></li><li><a href=/console/main/zh/docs/getting-started/dcoker-easysea
 cat &lt;&lt; <span style=color:#e6db74>&#34;EOF&#34;</span> &gt; docker-compose.yml
 services:
 console:
-image: infinilabs/console:1.29.6
+image: infinilabs/console:1.29.7
 container_name: console
 hostname: console
 networks:
@@ -63,7 +63,7 @@ volumes:
 - $PWD/console/data:/data
 - $PWD/console/logs:/log
 easysearch:
-image: infinilabs/easysearch:1.13.0
+image: infinilabs/easysearch:1.13.1
 container_name: easysearch
 hostname: easysearch
 networks:
@@ -95,8 +95,8 @@ EOF
 </span><span style=color:#e6db74>EOF</span>
 </code></pre></div><h2 id=initialize-config-directory-from-image>Initialize Config Directory from Image
 <a class=anchor href=#initialize-config-directory-from-image>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd ~/infinilabs
-docker run --rm -v $PWD/console:/work infinilabs/console:1.29.6 cp -rf /config /work
-docker run --rm --entrypoint <span style=color:#e6db74>&#34;&#34;</span> -v $PWD/easysearch:/work infinilabs/easysearch:1.13.0 cp -rf /app/easysearch/config /work
+docker run --rm -v $PWD/console:/work infinilabs/console:1.29.7 cp -rf /config /work
+docker run --rm --entrypoint <span style=color:#e6db74>&#34;&#34;</span> -v $PWD/easysearch:/work infinilabs/easysearch:1.13.1 cp -rf /app/easysearch/config /work
 </code></pre></div><h2 id=start-services>Start Services
 <a class=anchor href=#start-services>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker-compose up -d
 </code></pre></div><h2 id=verifying-the-deployment>Verifying the Deployment
