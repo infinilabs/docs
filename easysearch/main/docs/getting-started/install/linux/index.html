@@ -117,7 +117,7 @@ su easysearch -c <span style=color:#e6db74>&#34;/opt/easysearch/bin/easysearch -
 kill -9 <span style=color:#66d9ef>$(</span>cat pid<span style=color:#66d9ef>)</span>
 </code></pre></div><h2 id=手动安装>手动安装
 <a class=anchor href=#%e6%89%8b%e5%8a%a8%e5%ae%89%e8%a3%85>#</a></h2><p>以 root 用户进行下面的操作</p><ol><li>下载 JDK</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e>#下载JDK并存储到/usr/src目录</span>
-wget -N https://release.infinilabs.com/easysearch/jdk/zulu17.40.19-ca-jdk17.0.6-linux_x64.tar.gz -P /usr/src
+wget -N https://cdn.azul.com/zulu/bin/zulu17.54.21-ca-jre17.0.13-linux_x64.tar.gz -P /usr/src
 </code></pre></div><ol start=2><li>创建 JDK 解压后存储路径</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>mkdir -p /usr/local/jdk
 </code></pre></div><ol start=3><li>解压文件到创建好的目录</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>tar -zxf /usr/src/zulu*.tar.gz -C /usr/local/jdk --strip-components <span style=color:#ae81ff>1</span>
 </code></pre></div><ol start=4><li>配置环境变量</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e>#下载文件到/etc/profile.d</span>
