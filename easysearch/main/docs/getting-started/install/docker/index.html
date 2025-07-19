@@ -1,10 +1,8 @@
 <!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Docker 环境下使用 Easysearch #  在使用 Docker 运行 Easysearch 之前，请确保已进行 系统调优并安装好 Docker 服务，且 Docker 服务正常运行。
  最快方式：启动临时的 docker 容器，可以从前台查看到 admin 随机生成的初始密码
- docker run --name easysearch -p 9200:9200 infinilabs/easysearch:1.13.1 #如果要自定义密码，可以使用环境变量配置，从 1.8.2 版本开始支持 echo EASYSEARCH_INITIAL_ADMIN_PASSWORD=you_complex_pass > .env docker run --name easysearch --env-file ./.env -p 9200:9200 infinilabs/easysearch:1.13.1 个性配置 #  从宿主机挂载数据目录及日志目录，并配置 jvm 内存为 512m。
- 在宿主机上创建目录  sudo mkdir -p /data/easysearch/{data,logs} 修改目录权限  #容器内es用户的uid为602，通过调整宿主机的目录权限，确保在容器内部es用户有权限读写挂载的数据卷 sudo chown -R 602.602 /data/easysearch 后台运行容器  #后台启动容器，并指定内存大小及挂载数据、日志目录，设定好容器名称及容器主机名称 #如需调整配置文件，可以通过 -v 参数挂载自定义文件来覆盖，容器内的路径如下 # 1."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Docker"><meta property="og:description" content="Docker 环境下使用 Easysearch #  在使用 Docker 运行 Easysearch 之前，请确保已进行 系统调优并安装好 Docker 服务，且 Docker 服务正常运行。
+ 注： Docker 环境一般用于临时验证，如需要长期使用请务必进行数据持久化   # 直接运行镜像使用随机密码（数据及配置未持久化） docker run --name easysearch --ulimit memlock=-1:-1 -p 9200:9200 infinilabs/easysearch:1.13.1 # 使用自定义密码，可以使用环境变量配置 （需要 1.8.2 及以后的版本才支持） echo EASYSEARCH_INITIAL_ADMIN_PASSWORD=you_complex_pass > .env # 通过从环境变量文件设置初始密码（数据及配置未持久化） docker run --name easysearch --env-file ./.env --ulimit memlock=-1:-1 -p 9200:9200 infinilabs/easysearch:1.13.1 # 使用自定义密码及命名卷 (数据持久化到命名卷) docker run -d --name easysearch \  --ulimit memlock=-1:-1 \  --env-file ."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Docker"><meta property="og:description" content="Docker 环境下使用 Easysearch #  在使用 Docker 运行 Easysearch 之前，请确保已进行 系统调优并安装好 Docker 服务，且 Docker 服务正常运行。
  最快方式：启动临时的 docker 容器，可以从前台查看到 admin 随机生成的初始密码
- docker run --name easysearch -p 9200:9200 infinilabs/easysearch:1.13.1 #如果要自定义密码，可以使用环境变量配置，从 1.8.2 版本开始支持 echo EASYSEARCH_INITIAL_ADMIN_PASSWORD=you_complex_pass > .env docker run --name easysearch --env-file ./.env -p 9200:9200 infinilabs/easysearch:1.13.1 个性配置 #  从宿主机挂载数据目录及日志目录，并配置 jvm 内存为 512m。
- 在宿主机上创建目录  sudo mkdir -p /data/easysearch/{data,logs} 修改目录权限  #容器内es用户的uid为602，通过调整宿主机的目录权限，确保在容器内部es用户有权限读写挂载的数据卷 sudo chown -R 602.602 /data/easysearch 后台运行容器  #后台启动容器，并指定内存大小及挂载数据、日志目录，设定好容器名称及容器主机名称 #如需调整配置文件，可以通过 -v 参数挂载自定义文件来覆盖，容器内的路径如下 # 1."><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/main/docs/getting-started/install/docker/"><title>Docker | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/easysearch/main/css/asciinema-player.css><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+ 注： Docker 环境一般用于临时验证，如需要长期使用请务必进行数据持久化   # 直接运行镜像使用随机密码（数据及配置未持久化） docker run --name easysearch --ulimit memlock=-1:-1 -p 9200:9200 infinilabs/easysearch:1.13.1 # 使用自定义密码，可以使用环境变量配置 （需要 1.8.2 及以后的版本才支持） echo EASYSEARCH_INITIAL_ADMIN_PASSWORD=you_complex_pass > .env # 通过从环境变量文件设置初始密码（数据及配置未持久化） docker run --name easysearch --env-file ./.env --ulimit memlock=-1:-1 -p 9200:9200 infinilabs/easysearch:1.13.1 # 使用自定义密码及命名卷 (数据持久化到命名卷) docker run -d --name easysearch \  --ulimit memlock=-1:-1 \  --env-file ."><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/main/docs/getting-started/install/docker/"><title>Docker | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/easysearch/main/css/asciinema-player.css><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/easysearch/main><img src=/easysearch/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
 <option value=v1.13.1>v1.13.1</option>
@@ -90,37 +88,55 @@
 <label for=section-1adc738e7351809ea378ec7e9730bd1f class="flex justify-between"><a>版本历史</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/release-notes/client/>Easysearch-client</a></li><li><a href=/easysearch/main/docs/release-notes/easysearch/>Easysearch</a></li></ul></li><li><a href=/easysearch/main/docs/resources/>其它资源</a><ul></ul></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/easysearch/main/svg/menu.svg class=book-icon alt=Menu></label>
 <strong>Docker</strong>
-<label for=toc-control><img src=/easysearch/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#docker-环境下使用-easysearch>Docker 环境下使用 Easysearch</a><ul><li><a href=#个性配置>个性配置</a></li><li><a href=#容器启停>容器启停</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=docker-环境下使用-easysearch>Docker 环境下使用 Easysearch
+<label for=toc-control><img src=/easysearch/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#docker-环境下使用-easysearch>Docker 环境下使用 Easysearch</a><ul><li><a href=#数据持久化到本地数据可长期使用>数据持久化到本地（数据可长期使用）</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=docker-环境下使用-easysearch>Docker 环境下使用 Easysearch
 <a class=anchor href=#docker-%e7%8e%af%e5%a2%83%e4%b8%8b%e4%bd%bf%e7%94%a8-easysearch>#</a></h1><p>在使用 Docker 运行 Easysearch 之前，请确保已进行
-<a href=/easysearch/main/docs/getting-started/settings/>系统调优</a>并安装好 Docker 服务，且 Docker 服务正常运行。</p><blockquote><p>最快方式：启动临时的 docker 容器，可以从前台查看到 admin 随机生成的初始密码</p></blockquote><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker run --name easysearch -p 9200:9200 infinilabs/easysearch:1.13.1
-<span style=color:#75715e>#如果要自定义密码，可以使用环境变量配置，从 1.8.2 版本开始支持</span>
+<a href=/easysearch/main/docs/getting-started/settings/>系统调优</a>并安装好 Docker 服务，且 Docker 服务正常运行。</p><blockquote><p>最快方式：启动临时的 docker 容器，可以从前台查看到 admin 随机生成的初始密码</p><ul><li>注： Docker 环境一般用于临时验证，如需要长期使用请务必进行<strong>数据持久化</strong></li></ul></blockquote><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 直接运行镜像使用随机密码（数据及配置未持久化）</span>
+docker run --name easysearch --ulimit memlock<span style=color:#f92672>=</span>-1:-1 -p 9200:9200 infinilabs/easysearch:1.13.1
+
+<span style=color:#75715e># 使用自定义密码，可以使用环境变量配置 （需要 1.8.2 及以后的版本才支持）</span>
 echo EASYSEARCH_INITIAL_ADMIN_PASSWORD<span style=color:#f92672>=</span>you_complex_pass &gt; .env
-docker run --name easysearch --env-file ./.env -p 9200:9200 infinilabs/easysearch:1.13.1
-</code></pre></div><h2 id=个性配置>个性配置
-<a class=anchor href=#%e4%b8%aa%e6%80%a7%e9%85%8d%e7%bd%ae>#</a></h2><p>从宿主机挂载数据目录及日志目录，并配置 jvm 内存为 512m。</p><ol><li>在宿主机上创建目录</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo mkdir -p /data/easysearch/<span style=color:#f92672>{</span>data,logs<span style=color:#f92672>}</span>
-</code></pre></div><ol start=2><li>修改目录权限</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e>#容器内es用户的uid为602，通过调整宿主机的目录权限，确保在容器内部es用户有权限读写挂载的数据卷</span>
-sudo chown -R 602.602 /data/easysearch
-</code></pre></div><ol start=3><li>后台运行容器</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e>#后台启动容器，并指定内存大小及挂载数据、日志目录，设定好容器名称及容器主机名称</span>
-<span style=color:#75715e>#如需调整配置文件，可以通过 -v 参数挂载自定义文件来覆盖，容器内的路径如下</span>
-<span style=color:#75715e># 1. /app/easysearch/config/easysearcy.yml</span>
-<span style=color:#75715e># 2. /app/easysearch/config/jvm.options</span>
-<span style=color:#75715e># 3. /app/easysearch/config/log4j2.properties</span>
+<span style=color:#75715e># 通过从环境变量文件设置初始密码（数据及配置未持久化）</span>
+docker run --name easysearch --env-file ./.env --ulimit memlock<span style=color:#f92672>=</span>-1:-1 -p 9200:9200 infinilabs/easysearch:1.13.1
+
+<span style=color:#75715e># 使用自定义密码及命名卷 (数据持久化到命名卷)</span>
+docker run -d --name easysearch <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --ulimit memlock<span style=color:#f92672>=</span>-1:-1 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --env-file ./.env -p 9200:9200 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -v ezs-data:/app/easysearch/data <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -v ezs-config:/app/easysearch/config <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -v ezs-logs:/app/easysearch/logs <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  infinilabs/easysearch:1.13.1
+</code></pre></div><h2 id=数据持久化到本地数据可长期使用>数据持久化到本地（数据可长期使用）
+<a class=anchor href=#%e6%95%b0%e6%8d%ae%e6%8c%81%e4%b9%85%e5%8c%96%e5%88%b0%e6%9c%ac%e5%9c%b0%e6%95%b0%e6%8d%ae%e5%8f%af%e9%95%bf%e6%9c%9f%e4%bd%bf%e7%94%a8>#</a></h2><p>设置自定义密码，并从宿主机挂载数据目录、配置目录及日志目录，配置 jvm 内存为 512m。</p><ol><li>在宿主机上创建目录</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 创建数据及日志存储目录</span>
+sudo mkdir -p /data/easysearch/<span style=color:#f92672>{</span>data,logs<span style=color:#f92672>}</span>
+<span style=color:#75715e># 进入操作目录</span>
+cd /data/easysearch
+<span style=color:#75715e># 根据自己的需求，设置成安全的密码</span>
+sudo echo EASYSEARCH_INITIAL_ADMIN_PASSWORD<span style=color:#f92672>=</span>you_complex_pass &gt; .env
+</code></pre></div><ol start=2><li>修改目录权限</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 注意：需要根据 Docker 运行环境判断是否需要调整权限，如在 MacOS 上使用 OrbStack 则不需要调整权限。</span>
+<span style=color:#75715e># 容器内 ezs 用户的 uid 为 602，通过调整宿主机的目录权限，确保在容器内部 ezs 用户有权限读写挂载的数据卷</span>
+sudo chown -R 602:602 /data/easysearch
+</code></pre></div><ol start=3><li>从镜像初始化 config 目录</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 将镜像中的 config 目录复制到本地目录</span>
+docker run --rm --env-file ./.env -v /data/easysearch:/work infinilabs/easysearch:1.13.1 cp -rf /app/easysearch/config /work
+</code></pre></div><ol start=4><li>后台运行容器</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e>#后台启动容器，并指定内存大小及挂载数据、日志目录，设定好容器名称及容器主机名称</span>
+<span style=color:#75715e>#如需调整配置文件，可以修改以下配置文件</span>
+<span style=color:#75715e># 1. /data/easysearch/config/easysearcy.yml</span>
+<span style=color:#75715e># 2. /data/easysearch/config/jvm.options</span>
+<span style=color:#75715e># 3. /data/easysearch/config/log4j2.properties</span>
 docker run -d --restart always -p 9200:9200 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>              --ulimit memlock<span style=color:#f92672>=</span>-1:-1 <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>              -e ES_JAVA_OPTS<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;-Xms512m -Xmx512m&#34;</span> <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>              -v /data/easysearch/data:/app/easysearch/data <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>              -v /data/easysearch/config:/app/easysearch/config <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>              -v /data/easysearch/logs:/app/easysearch/logs <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>              --name easysearch --hostname easysearch <span style=color:#ae81ff>\
 </span><span style=color:#ae81ff></span>              infinilabs/easysearch:1.13.1
-</code></pre></div><ol start=4><li>查看初始密码</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e>#由于以上容器是后台启动，需要通过日志找出admin的初始密码</span>
-docker logs easysearch 2&gt;/dev/null |grep -w Usage
-</code></pre></div><h2 id=容器启停>容器启停
-<a class=anchor href=#%e5%ae%b9%e5%99%a8%e5%90%af%e5%81%9c>#</a></h2><ol><li>启动容器</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e>#启动容器</span>
-docker start easysearch
-</code></pre></div><ol start=2><li>停止容器</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e>#停止容器</span>
-docker stop easysearch
+</code></pre></div><ol start=4><li>升级 Easysearch 版本</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 先停止并删除正在运行的容器</span>
+docker stop easysearch <span style=color:#f92672>&amp;&amp;</span> docker rm easyserach
+<span style=color:#75715e># 再修改第 3 步中镜像的版本，重新运行命令即可</span>
 </code></pre></div><p>后续验证工作，请继续查看
 <a href=/easysearch/main/docs/getting-started/install/#%e9%aa%8c%e8%af%81%e5%b7%a5%e4%bd%9c>安装指南</a></p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
 gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
     import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
     searchbox({container: "#searchbox"});
-</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#docker-环境下使用-easysearch>Docker 环境下使用 Easysearch</a><ul><li><a href=#个性配置>个性配置</a></li><li><a href=#容器启停>容器启停</a></li></ul></li></ul></nav></aside></main><script src=/easysearch/main/js/asciinema-player.js></script></body></html>
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#docker-环境下使用-easysearch>Docker 环境下使用 Easysearch</a><ul><li><a href=#数据持久化到本地数据可长期使用>数据持久化到本地（数据可长期使用）</a></li></ul></li></ul></nav></aside></main><script src=/easysearch/main/js/asciinema-player.js></script></body></html>
