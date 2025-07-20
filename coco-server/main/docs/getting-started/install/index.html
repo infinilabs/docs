@@ -1,4 +1,8 @@
-<!doctype html><html lang=en><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Getting Started #  Quickstart with Docker #  # -------------------------------------------------- # Coco Server Docker Deployment Script and Commands # -------------------------------------------------- # Quick Start Coco Server (using default configuration) # # Command Explanation: # docker run: Create and run a new Docker container # -d: Run the container in the background (detached mode) # --name cocoserver: Assign a name to the container (cocoserver) # -p 9000:9000: Map the container's port 9000 to the host's port 9000 (Web UI port) # infinilabs/coco:0."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Installation"><meta property="og:description" content="Getting Started #  Quickstart with Docker #  # -------------------------------------------------- # Coco Server Docker Deployment Script and Commands # -------------------------------------------------- # Quick Start Coco Server (using default configuration) # # Command Explanation: # docker run: Create and run a new Docker container # -d: Run the container in the background (detached mode) # --name cocoserver: Assign a name to the container (cocoserver) # -p 9000:9000: Map the container's port 9000 to the host's port 9000 (Web UI port) # infinilabs/coco:0."><meta property="og:type" content="article"><meta property="og:url" content="/coco-server/main/docs/getting-started/install/"><title>Installation | Coco Server</title><link rel=manifest href=/coco-server/main/manifest.json><link rel=icon href=/coco-server/main/favicon.png type=image/x-icon><link rel=stylesheet href=/coco-server/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/coco-server/main/css/asciinema-player.css><script defer src=/coco-server/main/js/jquery-2.x.min.js></script><script defer src=/coco-server/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<!doctype html><html lang=en><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Coco Server User Guide #   Run Coco Server with Docker Manual install Coco Server  1. Quick Start (Recommended for Most Users) #  This method is the simplest way to get Coco Server running. It uses Docker-managed volumes, which handles data persistence automatically without requiring manual directory setup on your host machine.
+Command:
+docker run -d \  --name cocoserver \  -p 9000:9000 \  -v ezs_data:/app/easysearch/data \  -v ezs_config:/app/easysearch/config \  -v ezs_logs:/app/easysearch/logs \  -e EASYSEARCH_INITIAL_ADMIN_PASSWORD=&#34;coco-server&#34; \  infinilabs/coco:0."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Installation"><meta property="og:description" content="Coco Server User Guide #   Run Coco Server with Docker Manual install Coco Server  1. Quick Start (Recommended for Most Users) #  This method is the simplest way to get Coco Server running. It uses Docker-managed volumes, which handles data persistence automatically without requiring manual directory setup on your host machine.
+Command:
+docker run -d \  --name cocoserver \  -p 9000:9000 \  -v ezs_data:/app/easysearch/data \  -v ezs_config:/app/easysearch/config \  -v ezs_logs:/app/easysearch/logs \  -e EASYSEARCH_INITIAL_ADMIN_PASSWORD=&#34;coco-server&#34; \  infinilabs/coco:0."><meta property="og:type" content="article"><meta property="og:url" content="/coco-server/main/docs/getting-started/install/"><title>Installation | Coco Server</title><link rel=manifest href=/coco-server/main/manifest.json><link rel=icon href=/coco-server/main/favicon.png type=image/x-icon><link rel=stylesheet href=/coco-server/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/coco-server/main/css/asciinema-player.css><script defer src=/coco-server/main/js/jquery-2.x.min.js></script><script defer src=/coco-server/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/coco-server/main><img src=/coco-server/main/img/logo-en.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
 <option value=v0.6.0>v0.6.0</option>
@@ -19,78 +23,50 @@
 <label for=section-7dd85575c84e6825eb9419e748eb5977 class="flex justify-between"><a href=/coco-server/main/docs/tutorials/>Tutorials</a>
 <span>▾</span></label><ul><li><a href=/coco-server/main/docs/tutorials/howto_create_your_own_datasource/>How to integrate Coco AI with your own datasource</a></li></ul></li><li><a href=/coco-server/main/docs/release-notes/>Release Notes</a><ul></ul></li></ul><ul><li><a href=https://github.com/infinilabs/coco-server target=_blank rel=noopener>Github</a></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/coco-server/main/svg/menu.svg class=book-icon alt=Menu></label>
 <strong>Installation</strong>
-<label for=toc-control><img src=/coco-server/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#getting-started>Getting Started</a><ul><li><a href=#quickstart-with-docker>Quickstart with Docker</a></li><li><a href=#manual-installation>Manual Installation</a><ul><li><a href=#easysearch>Easysearch</a></li><li><a href=#coco-ai>Coco AI</a></li></ul></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=getting-started>Getting Started
-<a class=anchor href=#getting-started>#</a></h1><h2 id=quickstart-with-docker>Quickstart with Docker
-<a class=anchor href=#quickstart-with-docker>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># --------------------------------------------------</span>
-<span style=color:#75715e># Coco Server Docker Deployment Script and Commands</span>
-<span style=color:#75715e># --------------------------------------------------</span>
+<label for=toc-control><img src=/coco-server/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#coco-server-user-guide>Coco Server User Guide</a><ul><li><a href=#1-quick-start-recommended-for-most-users>1. Quick Start (Recommended for Most Users)</a></li><li><a href=#2-advanced-start-using-host-directories>2. Advanced Start (Using Host Directories)</a></li><li><a href=#3-upgrading-coco-server>3. Upgrading Coco Server</a></li><li><a href=#4-full-cleanup-and-removal>4. Full Cleanup and Removal</a></li><li><a href=#manual-installation>Manual Installation</a><ul><li><a href=#easysearch>Easysearch</a></li><li><a href=#coco-ai>Coco AI</a></li></ul></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=coco-server-user-guide>Coco Server User Guide
+<a class=anchor href=#coco-server-user-guide>#</a></h1><ul><li>Run Coco Server with Docker</li><li>Manual install Coco Server</li></ul><h2 id=1-quick-start-recommended-for-most-users>1. Quick Start (Recommended for Most Users)
+<a class=anchor href=#1-quick-start-recommended-for-most-users>#</a></h2><p>This method is the simplest way to get Coco Server running. It uses Docker-managed volumes, which handles data persistence automatically without requiring manual directory setup on your host machine.</p><p><strong>Command:</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker run -d <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --name cocoserver <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -p 9000:9000 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -v ezs_data:/app/easysearch/data <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -v ezs_config:/app/easysearch/config <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -v ezs_logs:/app/easysearch/logs <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -e EASYSEARCH_INITIAL_ADMIN_PASSWORD<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;coco-server&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  infinilabs/coco:0.6.0
+</code></pre></div><blockquote><p>🔒 <strong>SECURITY WARNING</strong></p><p>For initial setup convenience, the password is set to <code>"coco-server"</code>. It is <strong>highly recommended</strong> to replace this with a strong, unique password before running the command for the first time.</p></blockquote><p><strong>After running the command:</strong></p><ul><li>Coco Server will be running in the background. Access the Web UI at <code>http://localhost:9000</code>.</li><li>Your data, configuration, and logs are safely stored in Docker volumes named <code>ezs_data</code>, <code>ezs_config</code>, and <code>ezs_logs</code>.</li></ul><hr><h2 id=2-advanced-start-using-host-directories>2. Advanced Start (Using Host Directories)
+<a class=anchor href=#2-advanced-start-using-host-directories>#</a></h2><p>This method provides direct access to the data, configuration, and log files on your host machine. It&rsquo;s suitable for users who want to easily edit configuration files or manage data directly.</p><p><strong>Step 1: Prepare Host Directories and Environment File</strong></p><p>First, create the necessary directories and a <code>.env</code> file for your password.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># Create the parent directory for all Coco Server files.</span>
+<span style=color:#75715e># We recommend using a standard location like /data/cocoserver.</span>
+sudo mkdir -p /data/cocoserver/<span style=color:#f92672>{</span>data,logs,config<span style=color:#f92672>}</span>
 
-<span style=color:#75715e># Quick Start Coco Server (using default configuration)</span>
-<span style=color:#75715e>#</span>
-<span style=color:#75715e># Command Explanation:</span>
-<span style=color:#75715e>#   docker run:       Create and run a new Docker container</span>
-<span style=color:#75715e>#   -d:               Run the container in the background (detached mode)</span>
-<span style=color:#75715e>#   --name cocoserver:  Assign a name to the container (cocoserver)</span>
-<span style=color:#75715e>#   -p 9000:9000:     Map the container&#39;s port 9000 to the host&#39;s port 9000 (Web UI port)</span>
-<span style=color:#75715e>#   infinilabs/coco:0.5.0-2236:  The Docker image name and tag (version) to use</span>
-docker run -d --name cocoserver -p 9000:9000 infinilabs/coco:0.5.0-2236
-
-<span style=color:#75715e># Stop and Remove Coco Server Container</span>
-<span style=color:#75715e>#</span>
-<span style=color:#75715e># Command Explanation:</span>
-<span style=color:#75715e>#   docker stop cocoserver:   Stop the container named cocoserver</span>
-<span style=color:#75715e>#   &amp;&amp;:                     Logical AND operator, ensures the previous command succeeds before executing the next</span>
-<span style=color:#75715e>#   docker rm cocoserver:     Remove the container named cocoserver (only stopped containers can be removed)</span>
-docker stop cocoserver <span style=color:#f92672>&amp;&amp;</span> docker rm cocoserver
-
-<span style=color:#75715e># Remove Coco Server Docker Image</span>
-<span style=color:#75715e>#</span>
-<span style=color:#75715e># Command Explanation:</span>
-<span style=color:#75715e>#   docker rmi infinilabs/coco:0.5.0-2236: Remove the image named infinilabs/coco with the tag 0.5.0-2236</span>
-<span style=color:#75715e>#   Note: You can only remove an image if no containers are using it.  If a container is using the image, you must first stop and remove the container.</span>
-docker rmi infinilabs/coco:0.5.0-2236
-
-<span style=color:#75715e># --------------------------------------------------</span>
-<span style=color:#75715e># Customized Configuration to Start Coco Server</span>
-<span style=color:#75715e># (Adjust parameters according to your needs)</span>
-<span style=color:#75715e># --------------------------------------------------</span>
-
-<span style=color:#75715e># Create data and logs directories and set ownership for the Easysearch user (UID/GID 602).</span>
-mkdir -p <span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span>/cocoserver/<span style=color:#f92672>{</span>data,logs<span style=color:#f92672>}</span>
-sudo chown -R 602:602 <span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span>/cocoserver
-
-<span style=color:#75715e># Command Explanation:</span>
-<span style=color:#75715e>#   docker run:       Create and run a new Docker container</span>
-<span style=color:#75715e>#   -d:               Run the container in the background (detached mode)</span>
-<span style=color:#75715e>#   --name cocoserver:  Assign a name to the container (cocoserver)</span>
-<span style=color:#75715e>#   --hostname coco-server: Set the container&#39;s hostname to coco-server</span>
-<span style=color:#75715e>#   --restart unless-stopped:  Set the container&#39;s restart policy to &#34;restart unless manually stopped&#34;</span>
-<span style=color:#75715e>#   -m 4g:            Limit the container&#39;s memory usage to 4GB</span>
-<span style=color:#75715e>#   --cpus=&#34;2&#34;:       Limit the number of CPU cores the container can use to 2</span>
-<span style=color:#75715e>#   -p 9000:9000:     Map the container&#39;s port 9000 to the host&#39;s port 9000 (Web UI port)</span>
-<span style=color:#75715e>#   -v $(pwd)/cocoserver/data:/app/easysearch/data:  Mount the host&#39;s ./cocoserver/data directory to the container&#39;s /app/easysearch/data directory (for data persistence)</span>
-<span style=color:#75715e>#        - $(pwd) gets the absolute path of the current directory.</span>
-<span style=color:#75715e>#        - Make sure the ./cocoserver/data directory exists. You can create it manually or use the `mkdir -p cocoserver/data` command.</span>
-<span style=color:#75715e>#   -v $(pwd)/cocoserver/logs:/app/easysearch/logs:  Mount the host&#39;s ./cocoserver/logs directory to the container&#39;s /app/easysearch/logs directory (for storing logs)</span>
-<span style=color:#75715e>#        - Make sure the ./cocoserver/logs directory exists. You can create it manually or use the `mkdir -p cocoserver/logs` command.</span>
-<span style=color:#75715e>#   -e EASYSEARCH_INITIAL_ADMIN_PASSWORD=coco-server: Set the initial password for the Easysearch administrator to coco-server (Important: Change this to a strong password)</span>
-<span style=color:#75715e>#   -e ES_JAVA_OPTS=&#34;-Xms2g -Xmx2g&#34;:  Set the JVM parameters for Easysearch:</span>
-<span style=color:#75715e>#        - -Xms2g:  Set the initial JVM heap size to 2GB</span>
-<span style=color:#75715e>#        - -Xmx2g:  Set the maximum JVM heap size to 2GB</span>
-<span style=color:#75715e>#   infinilabs/coco:0.5.0-2236: The Docker image name and tag to use</span>
-
-docker run -d <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>           --name cocoserver <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>           --hostname coco-server <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>           --restart unless-stopped <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>           -m 4g <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>           --cpus<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;2&#34;</span> <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>           -p 9000:9000 <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>           -v <span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span>/cocoserver/data:/app/easysearch/data <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>           -v <span style=color:#66d9ef>$(</span>pwd<span style=color:#66d9ef>)</span>/cocoserver/logs:/app/easysearch/logs <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>           -e EASYSEARCH_INITIAL_ADMIN_PASSWORD<span style=color:#f92672>=</span>coco-server <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>           -e ES_JAVA_OPTS<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;-Xms2g -Xmx2g&#34;</span> <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>           infinilabs/coco:0.5.0-2236
+<span style=color:#75715e># Create an environment file to store your password securely.</span>
+<span style=color:#75715e># Replace &#34;your-strong-password&#34; with a strong, secret password.</span>
+echo <span style=color:#e6db74>&#34;EASYSEARCH_INITIAL_ADMIN_PASSWORD=your-strong-password&#34;</span> | sudo tee /data/cocoserver/.env &gt; /dev/null
+</code></pre></div><p><strong>Step 2: Initialize Configuration from the Image (One-time Setup)</strong></p><p>This clever command runs a temporary container to copy the default configuration files from the image into your newly created local <code>config</code> directory.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker run --rm <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -v /data/cocoserver/config:/tmp/config <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  infinilabs/coco:0.6.0 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  cp -a /app/easysearch/config/. /tmp/config/
+</code></pre></div><ul><li><code>--rm</code>: Automatically removes the container after it exits.</li><li><code>-v /data/cocoserver/config:/tmp/config</code>: Mounts your local config directory into a temporary path inside the container.</li><li><code>cp -a ...</code>: The command executed inside the container. It copies all contents from the image&rsquo;s config directory to the mounted host directory.</li></ul><p><strong>Step 3: Set Directory Permissions</strong></p><p>The container runs with a specific user (UID 602). You must grant this user write permissions to the host directories.</p><blockquote><p><strong>Note:</strong> This step might be unnecessary on some Docker environments like Docker Desktop for Mac. Test without it first if you are unsure.</p></blockquote><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo chown -R 602:602 /data/cocoserver
+</code></pre></div><p><strong>Step 4: Run the Coco Server Container</strong></p><p>Now, start the main container, mounting your prepared host directories and using the <code>.env</code> file for the password.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker run -d <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --name cocoserver <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --hostname coco-server <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --restart unless-stopped <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --env-file /data/cocoserver/.env <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -m 4g --cpus<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;2&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -p 9000:9000 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -v /data/cocoserver/data:/app/easysearch/data <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -v /data/cocoserver/config:/app/easysearch/config <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -v /data/cocoserver/logs:/app/easysearch/logs <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -e ES_JAVA_OPTS<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;-Xms2g -Xmx2g&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  infinilabs/coco:0.6.0
+</code></pre></div><ul><li><code>--env-file</code>: Securely loads environment variables (like your password) from the <code>.env</code> file.</li></ul><hr><h2 id=3-upgrading-coco-server>3. Upgrading Coco Server
+<a class=anchor href=#3-upgrading-coco-server>#</a></h2><p>Follow these steps to upgrade to a new version while preserving all your data. The procedure is the same whether you used the Quick Start or Advanced Start method.</p><p><strong>Step 1: Pull the New Image</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># Replace &#39;0.7.0&#39; with the new version tag.</span>
+docker pull infinilabs/coco:0.7.0
+</code></pre></div><p><strong>Step 2: Stop and Remove the Old Container</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker stop cocoserver <span style=color:#f92672>&amp;&amp;</span> docker rm cocoserver
+</code></pre></div><p><strong>Step 3: Start a New Container with the Same Volumes/Mounts</strong></p><p>Re-run your original <code>docker run</code> command, but update the image tag to the new version. <strong>It is crucial to use the exact same <code>-v</code> volume or bind mount paths as before.</strong></p><ul><li><strong>If you used Quick Start</strong>, re-run the Quick Start command with the new image tag.</li><li><strong>If you used Advanced Start</strong>, re-run the Advanced Start command with the new image tag.</li></ul><hr><h2 id=4-full-cleanup-and-removal>4. Full Cleanup and Removal
+<a class=anchor href=#4-full-cleanup-and-removal>#</a></h2><p>These commands will completely remove the Coco Server container and its data.</p><blockquote><p><strong>🛑 DANGER ZONE 🛑</strong></p><p>The following commands will <strong>permanently delete all your Coco Server data</strong>. This action cannot be undone. Proceed with caution.</p></blockquote><p><strong>Step 1: Stop and Remove the Container</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker stop cocoserver <span style=color:#f92672>&amp;&amp;</span> docker rm cocoserver
+</code></pre></div><p><strong>Step 2: Remove Data, Config, and Logs</strong></p><ul><li><strong>If you used Quick Start (Docker Volumes):</strong><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker volume rm ezs_data ezs_config ezs_logs
+</code></pre></div></li><li><strong>If you used Advanced Start (Host Directories):</strong><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo rm -rf /data/cocoserver
+</code></pre></div></li></ul><p><strong>Step 3: Remove the Docker Image</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker rmi infinilabs/coco:0.6.0
 </code></pre></div><h2 id=manual-installation>Manual Installation
 <a class=anchor href=#manual-installation>#</a></h2><p>Follow these steps for a manual setup:</p><h3 id=easysearch>Easysearch
 <a class=anchor href=#easysearch>#</a></h3><p>Install Easysearch</p><pre><code>docker run -itd --name easysearch -p 9200:9200 infinilabs/easysearch:1.8.3-265
@@ -122,4 +98,4 @@ docker run -d <span style=color:#ae81ff>\
 gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
     import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
     searchbox({container: "#searchbox"});
-</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#getting-started>Getting Started</a><ul><li><a href=#quickstart-with-docker>Quickstart with Docker</a></li><li><a href=#manual-installation>Manual Installation</a><ul><li><a href=#easysearch>Easysearch</a></li><li><a href=#coco-ai>Coco AI</a></li></ul></li></ul></li></ul></nav></aside></main><script src=/coco-server/main/js/asciinema-player.js></script></body></html>
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#coco-server-user-guide>Coco Server User Guide</a><ul><li><a href=#1-quick-start-recommended-for-most-users>1. Quick Start (Recommended for Most Users)</a></li><li><a href=#2-advanced-start-using-host-directories>2. Advanced Start (Using Host Directories)</a></li><li><a href=#3-upgrading-coco-server>3. Upgrading Coco Server</a></li><li><a href=#4-full-cleanup-and-removal>4. Full Cleanup and Removal</a></li><li><a href=#manual-installation>Manual Installation</a><ul><li><a href=#easysearch>Easysearch</a></li><li><a href=#coco-ai>Coco AI</a></li></ul></li></ul></li></ul></nav></aside></main><script src=/coco-server/main/js/asciinema-player.js></script></body></html>
