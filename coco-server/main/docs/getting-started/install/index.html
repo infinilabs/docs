@@ -69,30 +69,30 @@ docker pull infinilabs/coco:0.7.0
 </code></pre></div></li></ul><p><strong>Step 3: Remove the Docker Image</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker rmi infinilabs/coco:0.6.0
 </code></pre></div><h2 id=manual-installation>Manual Installation
 <a class=anchor href=#manual-installation>#</a></h2><p>Follow these steps for a manual setup:</p><h3 id=easysearch>Easysearch
-<a class=anchor href=#easysearch>#</a></h3><p>Install Easysearch</p><pre><code>docker run -itd --name easysearch -p 9200:9200 infinilabs/easysearch:1.8.3-265
-</code></pre><p>Get the bootstrap password of the Easysearch:</p><pre><code>docker logs easysearch | grep &quot;admin:&quot;
-</code></pre><h3 id=coco-ai>Coco AI
-<a class=anchor href=#coco-ai>#</a></h3><p>Modify <code>coco.yml</code> with correct <code>env</code> settings, or start the coco server with the correct environments like this:</p><pre><code>➜  coco git:(main) ✗ OLLAMA_MODEL=deepseek-r1:1.5b ES_PASSWORD=45ff432a5428ade77c7b  ./bin/coco
+<a class=anchor href=#easysearch>#</a></h3><p>Install Easysearch</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker run -itd --name easysearch -p 9200:9200 infinilabs/easysearch:1.8.3-265
+</code></pre></div><p>Get the bootstrap password of the Easysearch:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker logs easysearch | grep <span style=color:#e6db74>&#34;admin:&#34;</span>
+</code></pre></div><h3 id=coco-ai>Coco AI
+<a class=anchor href=#coco-ai>#</a></h3><p>Modify <code>coco.yml</code> with correct <code>env</code> settings, or start the coco server with the correct environments like this:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>$ OLLAMA_MODEL<span style=color:#f92672>=</span>deepseek-r1:1.5b ES_PASSWORD<span style=color:#f92672>=</span>45ff432a5428ade77c7b  ./bin/coco
    ___  ___  ___  ___     _     _____
-  / __\/___\/ __\/___\   /_\    \_   \
- / /  //  // /  //  //  //_\\    / /\/
-/ /__/ \_// /__/ \_//  /  _  \/\/ /_
-\____|___/\____|___/   \_/ \_/\____/
+  / __<span style=color:#ae81ff>\/</span>___<span style=color:#ae81ff>\/</span> __<span style=color:#ae81ff>\/</span>___<span style=color:#ae81ff>\ </span>  /_<span style=color:#ae81ff>\ </span>   <span style=color:#ae81ff>\_</span>   <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span> / /  //  // /  //  //  //_<span style=color:#ae81ff>\\</span>    / /<span style=color:#ae81ff>\/</span>
+/ /__/ <span style=color:#ae81ff>\_</span>// /__/ <span style=color:#ae81ff>\_</span>//  /  _  <span style=color:#ae81ff>\/\/</span> /_
+<span style=color:#ae81ff>\_</span>___|___/<span style=color:#ae81ff>\_</span>___|___/   <span style=color:#ae81ff>\_</span>/ <span style=color:#ae81ff>\_</span>/<span style=color:#ae81ff>\_</span>___/
 
-[COCO] Coco AI - search, connect, collaborate – all in one place.
-[COCO] 1.0.0_SNAPSHOT#001, 2024-10-23 08:37:05, 2025-12-31 10:10:10, 9b54198e04e905406db90d145f4c01fca0139861
-[10-23 17:17:36] [INF] [env.go:179] configuration auto reload enabled
-[10-23 17:17:36] [INF] [env.go:185] watching config: /Users/medcl/go/src/infini.sh/coco/config
-[10-23 17:17:36] [INF] [app.go:285] initializing coco, pid: 13764
-[10-23 17:17:36] [INF] [app.go:286] using config: /Users/medcl/go/src/infini.sh/coco/coco.yml
-[10-23 17:17:36] [INF] [api.go:196] local ips: 192.168.3.10
-[10-23 17:17:36] [INF] [api.go:360] api listen at: http://0.0.0.0:2900
-[10-23 17:17:36] [INF] [module.go:136] started module: api
-[10-23 17:17:36] [INF] [module.go:155] started plugin: statsd
-[10-23 17:17:36] [INF] [module.go:161] all modules are started
-[10-23 17:17:36] [INF] [instance.go:78] workspace: /Users/medcl/go/src/infini.sh/coco/data/coco/nodes/csai3njq50k2c4tcb4vg
-[10-23 17:17:36] [INF] [app.go:511] coco is up and running now.
-</code></pre><p>Once the Coco Server is running, you are ready to
+<span style=color:#f92672>[</span>COCO<span style=color:#f92672>]</span> Coco AI - search, connect, collaborate – all in one place.
+<span style=color:#f92672>[</span>COCO<span style=color:#f92672>]</span> 1.0.0_SNAPSHOT#001, 2024-10-23 08:37:05, 2025-12-31 10:10:10, 9b54198e04e905406db90d145f4c01fca0139861
+<span style=color:#f92672>[</span>10-23 17:17:36<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>env.go:179<span style=color:#f92672>]</span> configuration auto reload enabled
+<span style=color:#f92672>[</span>10-23 17:17:36<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>env.go:185<span style=color:#f92672>]</span> watching config: /Users/medcl/go/src/infini.sh/coco/config
+<span style=color:#f92672>[</span>10-23 17:17:36<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>app.go:285<span style=color:#f92672>]</span> initializing coco, pid: <span style=color:#ae81ff>13764</span>
+<span style=color:#f92672>[</span>10-23 17:17:36<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>app.go:286<span style=color:#f92672>]</span> using config: /Users/medcl/go/src/infini.sh/coco/coco.yml
+<span style=color:#f92672>[</span>10-23 17:17:36<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>api.go:196<span style=color:#f92672>]</span> local ips: 192.168.3.10
+<span style=color:#f92672>[</span>10-23 17:17:36<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>api.go:360<span style=color:#f92672>]</span> api listen at: http://0.0.0.0:2900
+<span style=color:#f92672>[</span>10-23 17:17:36<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>module.go:136<span style=color:#f92672>]</span> started module: api
+<span style=color:#f92672>[</span>10-23 17:17:36<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>module.go:155<span style=color:#f92672>]</span> started plugin: statsd
+<span style=color:#f92672>[</span>10-23 17:17:36<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>module.go:161<span style=color:#f92672>]</span> all modules are started
+<span style=color:#f92672>[</span>10-23 17:17:36<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>instance.go:78<span style=color:#f92672>]</span> workspace: /Users/medcl/go/src/infini.sh/coco/data/coco/nodes/csai3njq50k2c4tcb4vg
+<span style=color:#f92672>[</span>10-23 17:17:36<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>INF<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>app.go:511<span style=color:#f92672>]</span> coco is up and running now.
+</code></pre></div><p>Once the Coco Server is running, you are ready to
 <a href=/coco-server/main/docs/getting-started/setup/>setup it up</a> through UI based management console.</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/infinilabs/coco-server/edit/main/docs/content.en/docs/getting-started/install.md target=_blank rel=noopener><img src=/coco-server/main/svg/edit.svg class=book-icon alt=Edit>
 <span>Edit this page</span></a></div><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
 gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
