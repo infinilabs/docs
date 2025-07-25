@@ -1,8 +1,8 @@
 <!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="使用 Docker Compose 部署 Console 和 Easysearch #  下面介绍 INFINI Console 和 INFINI Easysearch 进行容器部署及容器内开启 Agent 指标采集模式。
 前提 #   确保 Docker 已安装并运行正常。 确保 Docker Compose 已安装。  创建 Docker Compose 文件 #  创建一个名为 docker-compose.yml 的文件
-mkdir -p ~/infinilabs && cd ~/infinilabs cat << &#34;EOF&#34; > docker-compose.yml services: console: image: infinilabs/console:1.29.7 container_name: console hostname: console networks: - cluster_network ports: - &#34;9000:9000&#34; volumes: - $PWD/console/config:/config - $PWD/console/data:/data - $PWD/console/logs:/log easysearch: image: infinilabs/easysearch:1."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="使用 Docker Compose 部署 Console 和 Easysearch"><meta property="og:description" content="使用 Docker Compose 部署 Console 和 Easysearch #  下面介绍 INFINI Console 和 INFINI Easysearch 进行容器部署及容器内开启 Agent 指标采集模式。
+mkdir -p ~/infinilabs && cd ~/infinilabs cat << &#34;EOF&#34; > docker-compose.yml services: console: image: infinilabs/console:1.29.8 container_name: console hostname: console networks: - cluster_network ports: - &#34;9000:9000&#34; volumes: - $PWD/console/config:/config - $PWD/console/data:/data - $PWD/console/logs:/log easysearch: image: infinilabs/easysearch:1."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="使用 Docker Compose 部署 Console 和 Easysearch"><meta property="og:description" content="使用 Docker Compose 部署 Console 和 Easysearch #  下面介绍 INFINI Console 和 INFINI Easysearch 进行容器部署及容器内开启 Agent 指标采集模式。
 前提 #   确保 Docker 已安装并运行正常。 确保 Docker Compose 已安装。  创建 Docker Compose 文件 #  创建一个名为 docker-compose.yml 的文件
-mkdir -p ~/infinilabs && cd ~/infinilabs cat << &#34;EOF&#34; > docker-compose.yml services: console: image: infinilabs/console:1.29.7 container_name: console hostname: console networks: - cluster_network ports: - &#34;9000:9000&#34; volumes: - $PWD/console/config:/config - $PWD/console/data:/data - $PWD/console/logs:/log easysearch: image: infinilabs/easysearch:1."><meta property="og:type" content="article"><meta property="og:url" content="/console/main/zh/docs/getting-started/dcoker-easysearch/"><title>使用 Docker Compose 部署 Console 和 Easysearch | INFINI Console</title><link rel=manifest href=/console/main/manifest.json><link rel=icon href=/console/main/favicon.png type=image/x-icon><link rel=alternate hreflang=en href=/console/main/docs/getting-started/dcoker-easysearch/ title="Deploying Console and Easysearch with Docker Compose"><link rel=stylesheet href=/console/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/console/main/css/asciinema-player.css><script defer src=/console/main/js/jquery-2.x.min.js></script><script defer src=/console/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+mkdir -p ~/infinilabs && cd ~/infinilabs cat << &#34;EOF&#34; > docker-compose.yml services: console: image: infinilabs/console:1.29.8 container_name: console hostname: console networks: - cluster_network ports: - &#34;9000:9000&#34; volumes: - $PWD/console/config:/config - $PWD/console/data:/data - $PWD/console/logs:/log easysearch: image: infinilabs/easysearch:1."><meta property="og:type" content="article"><meta property="og:url" content="/console/main/zh/docs/getting-started/dcoker-easysearch/"><title>使用 Docker Compose 部署 Console 和 Easysearch | INFINI Console</title><link rel=manifest href=/console/main/manifest.json><link rel=icon href=/console/main/favicon.png type=image/x-icon><link rel=alternate hreflang=en href=/console/main/docs/getting-started/dcoker-easysearch/ title="Deploying Console and Easysearch with Docker Compose"><link rel=stylesheet href=/console/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/console/main/css/asciinema-player.css><script defer src=/console/main/js/jquery-2.x.min.js></script><script defer src=/console/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/console/main/zh><img src=/console/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
 <option value=v1.29.8>v1.29.8</option>
@@ -54,7 +54,7 @@ English</a></li><li class=active><a href=/console/main/zh/ class="flex align-cen
 cat &lt;&lt; <span style=color:#e6db74>&#34;EOF&#34;</span> &gt; docker-compose.yml
 services:
   console:
-    image: infinilabs/console:1.29.7
+    image: infinilabs/console:1.29.8
     container_name: console
     hostname: console
     networks:
@@ -66,7 +66,7 @@ services:
       - $PWD/console/data:/data
       - $PWD/console/logs:/log
   easysearch:
-    image: infinilabs/easysearch:1.13.1
+    image: infinilabs/easysearch:1.14.0
     container_name: easysearch
     hostname: easysearch
     networks:
@@ -98,8 +98,8 @@ EOF
 </span><span style=color:#e6db74>EOF</span>
 </code></pre></div><h2 id=从镜像初始化-config-目录>从镜像初始化 config 目录
 <a class=anchor href=#%e4%bb%8e%e9%95%9c%e5%83%8f%e5%88%9d%e5%a7%8b%e5%8c%96-config-%e7%9b%ae%e5%bd%95>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd ~/infinilabs
-docker run --rm -v $PWD/console:/work infinilabs/console:1.29.7 cp -rf /config /work
-docker run --rm --entrypoint <span style=color:#e6db74>&#34;&#34;</span> -v $PWD/easysearch:/work infinilabs/easysearch:1.13.1 cp -rf /app/easysearch/config /work
+docker run --rm -v $PWD/console:/work infinilabs/console:1.29.8 cp -rf /config /work
+docker run --rm --entrypoint <span style=color:#e6db74>&#34;&#34;</span> -v $PWD/easysearch:/work infinilabs/easysearch:1.14.0 cp -rf /app/easysearch/config /work
 </code></pre></div><h2 id=启动服务>启动服务
 <a class=anchor href=#%e5%90%af%e5%8a%a8%e6%9c%8d%e5%8a%a1>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker-compose up -d
 </code></pre></div><h2 id=验证部署>验证部署
