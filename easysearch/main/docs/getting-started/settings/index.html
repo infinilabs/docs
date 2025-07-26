@@ -1,11 +1,11 @@
 <!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="系统调优 #  芯片及操作系统兼容性 #  目前已在国产主流芯片及操作系统上进行了验证，分别为 openEuler、统信 UOS、麒麟、龙芯、申威、兆芯。同样也兼容 Windows、 MacOS、 CentOS、 Ubuntu、 RedHat 等常用操作系统。
 Java 兼容性 #  默认情况下 Easysearch 并不包含 JDK, 推荐使用 Java 15.0.1+9 或 Java 17.0.6+10, 最低版本要求为 Java 11, 要使用不同的 Java 安装，请将 JAVA_HOME 环境变量设置为 Java 安装位置或将 JDK 软链接到 Easysearch 安装目录下取名为 jdk。
 例如：
-#设置 JAVA_HOME 环境变量，可放入 ~/.bashrc 或 /etc/profile export JAVA_HOME=/usr/local/jdk #软链接 sudo ln -s /usr/local/jdk /opt/easysearch/jdk 网络要求 #  Easysearch 需要打开以下端口:
+#设置 JAVA_HOME 环境变量，可放入 ~/.bashrc 或 /etc/profile export JAVA_HOME=/usr/local/jdk #软链接 sudo ln -s /usr/local/jdk /data/easysearch/jdk 网络要求 #  Easysearch 需要打开以下端口:
    端口 模块说明     9200 REST API   9300 节点间通信    系统参数 #  要保证 Easysearch 运行在最佳状态，其所在服务器的操作系统也需要进行相应的调优，以 Linux 为例。"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="系统调优"><meta property="og:description" content="系统调优 #  芯片及操作系统兼容性 #  目前已在国产主流芯片及操作系统上进行了验证，分别为 openEuler、统信 UOS、麒麟、龙芯、申威、兆芯。同样也兼容 Windows、 MacOS、 CentOS、 Ubuntu、 RedHat 等常用操作系统。
 Java 兼容性 #  默认情况下 Easysearch 并不包含 JDK, 推荐使用 Java 15.0.1+9 或 Java 17.0.6+10, 最低版本要求为 Java 11, 要使用不同的 Java 安装，请将 JAVA_HOME 环境变量设置为 Java 安装位置或将 JDK 软链接到 Easysearch 安装目录下取名为 jdk。
 例如：
-#设置 JAVA_HOME 环境变量，可放入 ~/.bashrc 或 /etc/profile export JAVA_HOME=/usr/local/jdk #软链接 sudo ln -s /usr/local/jdk /opt/easysearch/jdk 网络要求 #  Easysearch 需要打开以下端口:
+#设置 JAVA_HOME 环境变量，可放入 ~/.bashrc 或 /etc/profile export JAVA_HOME=/usr/local/jdk #软链接 sudo ln -s /usr/local/jdk /data/easysearch/jdk 网络要求 #  Easysearch 需要打开以下端口:
    端口 模块说明     9200 REST API   9300 节点间通信    系统参数 #  要保证 Easysearch 运行在最佳状态，其所在服务器的操作系统也需要进行相应的调优，以 Linux 为例。"><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/main/docs/getting-started/settings/"><title>系统调优 | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/easysearch/main/css/asciinema-player.css><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/easysearch/main><img src=/easysearch/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
@@ -99,7 +99,7 @@ Java 兼容性 #  默认情况下 Easysearch 并不包含 JDK, 推荐使用 Java
 <a class=anchor href=#java-%e5%85%bc%e5%ae%b9%e6%80%a7>#</a></h2><p>默认情况下 Easysearch 并不包含 JDK, 推荐使用 Java 15.0.1+9 或 Java 17.0.6+10, 最低版本要求为 Java 11, 要使用不同的 Java 安装，请将 JAVA_HOME 环境变量设置为 Java 安装位置或将 JDK 软链接到 Easysearch 安装目录下取名为 <code>jdk</code>。</p><p>例如：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e>#设置 JAVA_HOME 环境变量，可放入 ~/.bashrc 或 /etc/profile</span>
 export JAVA_HOME<span style=color:#f92672>=</span>/usr/local/jdk
 <span style=color:#75715e>#软链接</span>
-sudo ln -s /usr/local/jdk /opt/easysearch/jdk
+sudo ln -s /usr/local/jdk /data/easysearch/jdk
 </code></pre></div><h2 id=网络要求>网络要求
 <a class=anchor href=#%e7%bd%91%e7%bb%9c%e8%a6%81%e6%b1%82>#</a></h2><p>Easysearch 需要打开以下端口:</p><table><thead><tr><th>端口</th><th>模块说明</th></tr></thead><tbody><tr><td>9200</td><td>REST API</td></tr><tr><td>9300</td><td>节点间通信</td></tr></tbody></table><h2 id=系统参数>系统参数
 <a class=anchor href=#%e7%b3%bb%e7%bb%9f%e5%8f%82%e6%95%b0>#</a></h2><p>要保证 Easysearch 运行在最佳状态，其所在服务器的操作系统也需要进行相应的调优，以 Linux 为例。</p><div class=book-expand><label><div class="book-expand-head flex justify-between"><span>展开查看完整代码</span>

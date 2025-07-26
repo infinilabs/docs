@@ -1,8 +1,10 @@
 <!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Docker Compose 环境下使用 Easysearch #  在使用 docker-compose 运行 Easysearch 集群之前，请确保已进行 系统调优并安装好 Docker 服务，且 Docker 服务正常运行。
-# 安装docker-compose curl -L &#34;https://ghproxy.com/github.com/docker/compose/releases/download/v2.6.1/docker-compose-$(uname -s)-$(uname -m)&#34; -o /usr/local/bin/docker-compose # 增加执行权限 chmod +x /usr/local/bin/docker-compose # 检查版本信息 docker-compose -v 运行 2 节点 docker compose 项目 #  从官网下载文件并解压，然后运行初始化脚本，最后运行启动脚本。
- 在宿主机上创建工作目录  sudo mkdir -p /opt/docker/compose 下载文件并解压  curl -sSL https://release.infinilabs.com/easysearch/archive/compose/2node.tar.gz | sudo tar -xzC /opt/docker/compose --strip-components=1 # 如需测试 3 节点，只需把上面的下载文件名改为 3node.tar.gz  注意：解压之后，请把镜像的 latest 版本手工更新成具体的版本，可参考下面的命令"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Docker Compose"><meta property="og:description" content="Docker Compose 环境下使用 Easysearch #  在使用 docker-compose 运行 Easysearch 集群之前，请确保已进行 系统调优并安装好 Docker 服务，且 Docker 服务正常运行。
-# 安装docker-compose curl -L &#34;https://ghproxy.com/github.com/docker/compose/releases/download/v2.6.1/docker-compose-$(uname -s)-$(uname -m)&#34; -o /usr/local/bin/docker-compose # 增加执行权限 chmod +x /usr/local/bin/docker-compose # 检查版本信息 docker-compose -v 运行 2 节点 docker compose 项目 #  从官网下载文件并解压，然后运行初始化脚本，最后运行启动脚本。
- 在宿主机上创建工作目录  sudo mkdir -p /opt/docker/compose 下载文件并解压  curl -sSL https://release.infinilabs.com/easysearch/archive/compose/2node.tar.gz | sudo tar -xzC /opt/docker/compose --strip-components=1 # 如需测试 3 节点，只需把上面的下载文件名改为 3node.tar.gz  注意：解压之后，请把镜像的 latest 版本手工更新成具体的版本，可参考下面的命令"><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/main/docs/getting-started/install/docker-compose/"><title>Docker Compose | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/easysearch/main/css/asciinema-player.css><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+# 安装docker-compose curl -L &#34;https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-$(uname -s)-$(uname -m)&#34; -o /usr/local/bin/docker-compose # 增加执行权限 chmod +x /usr/local/bin/docker-compose # 检查版本信息 docker-compose -v 运行 2 节点 docker compose 项目 #  从官网下载文件并解压，然后运行初始化脚本，最后运行启动脚本。
+ 在宿主机上创建工作目录  # 创建操作目录 sudo mkdir -p /data/docker/compose 下载文件并解压   如需测试 3 节点，只需把下面的下载文件名改为 3node.tar.gz 即可。
+ curl -sSL https://release.infinilabs.com/easysearch/archive/compose/2node.tar.gz | sudo tar -xzC /data/docker/compose --strip-components=1 # 调整目录权限 sudo chown -R ${USER} /data/docker/compose  注意：解压之后，请把镜像的 latest 版本手工更新成具体的版本，可参考下面的命令"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Docker Compose"><meta property="og:description" content="Docker Compose 环境下使用 Easysearch #  在使用 docker-compose 运行 Easysearch 集群之前，请确保已进行 系统调优并安装好 Docker 服务，且 Docker 服务正常运行。
+# 安装docker-compose curl -L &#34;https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-$(uname -s)-$(uname -m)&#34; -o /usr/local/bin/docker-compose # 增加执行权限 chmod +x /usr/local/bin/docker-compose # 检查版本信息 docker-compose -v 运行 2 节点 docker compose 项目 #  从官网下载文件并解压，然后运行初始化脚本，最后运行启动脚本。
+ 在宿主机上创建工作目录  # 创建操作目录 sudo mkdir -p /data/docker/compose 下载文件并解压   如需测试 3 节点，只需把下面的下载文件名改为 3node.tar.gz 即可。
+ curl -sSL https://release.infinilabs.com/easysearch/archive/compose/2node.tar.gz | sudo tar -xzC /data/docker/compose --strip-components=1 # 调整目录权限 sudo chown -R ${USER} /data/docker/compose  注意：解压之后，请把镜像的 latest 版本手工更新成具体的版本，可参考下面的命令"><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/main/docs/getting-started/install/docker-compose/"><title>Docker Compose | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/easysearch/main/css/asciinema-player.css><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/easysearch/main><img src=/easysearch/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
 <option value=v1.14.0>v1.14.0</option>
@@ -92,34 +94,38 @@
 <label for=toc-control><img src=/easysearch/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#docker-compose-环境下使用-easysearch>Docker Compose 环境下使用 Easysearch</a><ul><li><a href=#运行-2-节点-docker-compose-项目>运行 2 节点 docker compose 项目</a></li><li><a href=#未获取到最新镜像处理方法>未获取到最新镜像处理方法</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=docker-compose-环境下使用-easysearch>Docker Compose 环境下使用 Easysearch
 <a class=anchor href=#docker-compose-%e7%8e%af%e5%a2%83%e4%b8%8b%e4%bd%bf%e7%94%a8-easysearch>#</a></h1><p>在使用 docker-compose 运行 Easysearch 集群之前，请确保已进行
 <a href=/easysearch/main/docs/getting-started/settings/>系统调优</a>并安装好 Docker 服务，且 Docker 服务正常运行。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 安装docker-compose</span>
-curl -L <span style=color:#e6db74>&#34;https://ghproxy.com/github.com/docker/compose/releases/download/v2.6.1/docker-compose-</span><span style=color:#66d9ef>$(</span>uname -s<span style=color:#66d9ef>)</span><span style=color:#e6db74>-</span><span style=color:#66d9ef>$(</span>uname -m<span style=color:#66d9ef>)</span><span style=color:#e6db74>&#34;</span> -o /usr/local/bin/docker-compose
+curl -L <span style=color:#e6db74>&#34;https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-</span><span style=color:#66d9ef>$(</span>uname -s<span style=color:#66d9ef>)</span><span style=color:#e6db74>-</span><span style=color:#66d9ef>$(</span>uname -m<span style=color:#66d9ef>)</span><span style=color:#e6db74>&#34;</span> -o /usr/local/bin/docker-compose
 <span style=color:#75715e># 增加执行权限</span>
 chmod +x /usr/local/bin/docker-compose
 <span style=color:#75715e># 检查版本信息</span>
 docker-compose -v
 </code></pre></div><h2 id=运行-2-节点-docker-compose-项目>运行 2 节点 docker compose 项目
-<a class=anchor href=#%e8%bf%90%e8%a1%8c-2-%e8%8a%82%e7%82%b9-docker-compose-%e9%a1%b9%e7%9b%ae>#</a></h2><p>从官网下载文件并解压，然后运行初始化脚本，最后运行启动脚本。</p><ol><li>在宿主机上创建工作目录</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo mkdir -p /opt/docker/compose
-</code></pre></div><ol start=2><li>下载文件并解压</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>curl -sSL https://release.infinilabs.com/easysearch/archive/compose/2node.tar.gz | sudo tar -xzC /opt/docker/compose --strip-components<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>
-<span style=color:#75715e># 如需测试 3 节点，只需把上面的下载文件名改为 3node.tar.gz</span>
-</code></pre></div><blockquote><p>注意：解压之后，请把镜像的 latest 版本手工更新成具体的版本，可参考下面的命令</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /opt/docker/compose
-<span style=color:#75715e># 替换成具体的版本</span>
-sed -i <span style=color:#e6db74>&#34;s/easysearch:latest/easysearch:1.14.0/;s/console:latest/console:1.29.8/&#34;</span> docker-compose.yml
+<a class=anchor href=#%e8%bf%90%e8%a1%8c-2-%e8%8a%82%e7%82%b9-docker-compose-%e9%a1%b9%e7%9b%ae>#</a></h2><p>从官网下载文件并解压，然后运行初始化脚本，最后运行启动脚本。</p><ol><li>在宿主机上创建工作目录</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 创建操作目录</span>
+sudo mkdir -p /data/docker/compose
+</code></pre></div><ol start=2><li>下载文件并解压</li></ol><blockquote><p>如需测试 3 节点，只需把下面的下载文件名改为
+<a href=https://release.infinilabs.com/easysearch/archive/compose/3node.tar.gz>3node.tar.gz</a> 即可。</p></blockquote><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>curl -sSL https://release.infinilabs.com/easysearch/archive/compose/2node.tar.gz | sudo tar -xzC /data/docker/compose --strip-components<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>
+<span style=color:#75715e># 调整目录权限</span>
+sudo chown -R <span style=color:#e6db74>${</span>USER<span style=color:#e6db74>}</span> /data/docker/compose
+</code></pre></div><blockquote><p>注意：解压之后，请把镜像的 latest 版本手工更新成具体的版本，可参考下面的命令</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /data/docker/compose
+<span style=color:#75715e># 替换成具体的版本, 注：如果是 MacOS 请调整为 sudo sed -i &#39;&#39; &#34;s/easysearch:latest/easysearch:1.14.0/;s/console:latest/console:1.29.8/&#34; docker-compose.yml</span>
+sudo sed -i <span style=color:#e6db74>&#34;s/easysearch:latest/easysearch:1.14.0/;s/console:latest/console:1.29.8/&#34;</span> docker-compose.yml
 <span style=color:#75715e>#检查版本是否替换成功</span>
 grep image docker-compose.yml
-</code></pre></div></blockquote><ol start=3><li>运行 docker-compose 项目</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /opt/docker/compose
+</code></pre></div></blockquote><ol start=3><li>运行 docker-compose 项目</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /data/docker/compose
 <span style=color:#75715e># 调整目录权限</span>
 sudo ./init.sh
 <span style=color:#75715e># 下载镜像</span>
 docker-compose pull
 <span style=color:#75715e># 启动 docker-compose 项目</span>
 ./start.sh
-<span style=color:#75715e># 需要等待下载相关的镜像</span>
+<span style=color:#75715e># 如果启动失败，提示没权限，可进行权限调整，如 MacOS Docker 需要使用当前用户权限</span>
+sudo chown -R <span style=color:#e6db74>${</span>USER<span style=color:#e6db74>}</span>:staff /data/docker/compose
 </code></pre></div><ol start=4><li>停止 docker-compose 项目</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 停止项目</span>
 ./stop.sh
 </code></pre></div><ol start=4><li>清理 docker-compose 项目</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 清理项目，将清理 Easysearch 的 data 和 logs。</span>
 sudo ./reset.sh
 </code></pre></div><ol start=5><li>检查集群节点</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 集群默认的密码为admin</span>
-curl -ku admin:admin https://localhost:9201/_cat/nodes?v
+curl -ku admin:xxxxxxxxxxxx https://localhost:9201/_cat/nodes?v
 <span style=color:#75715e># 输出信息如下：</span>
 ip         heap.percent ram.percent cpu load_1m load_5m load_15m node.role master name
 172.24.0.3           <span style=color:#ae81ff>68</span>          <span style=color:#ae81ff>31</span>  <span style=color:#ae81ff>31</span>    1.67    0.57     0.21 dimr      -      easysearch-node1

@@ -154,7 +154,7 @@ threenodes-masters-2
 </code></pre></div><p>查看 pvc，对应到 3 个节点分别创建了 3 个 pvc:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>data-threenodes-masters-0
 data-threenodes-masters-1
 data-threenodes-masters-2
-</code></pre></div><p>如下图：</p><p>查看 secret，已经创建了 <code>threenodes-admin-password</code>，用于保存账号密码</p><p>进入 console-0，查看集群状态</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>curl -ku admin:admin https://threenodes.default.svc.cluster.local:9200
+</code></pre></div><p>如下图：</p><p>查看 secret，已经创建了 <code>threenodes-admin-password</code>，用于保存账号密码</p><p>进入 console-0，查看集群状态</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>curl -ku admin:xxxxxxxxxxxx https://threenodes.default.svc.cluster.local:9200
 
 <span style=color:#f92672>{</span>
   <span style=color:#e6db74>&#34;name&#34;</span> : <span style=color:#e6db74>&#34;threenodes-masters-0&#34;</span>,

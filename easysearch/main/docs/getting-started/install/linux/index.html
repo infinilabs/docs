@@ -1,16 +1,16 @@
 <!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Linux 环境下使用 Easysearch #   为了安全起见，Easysearch 不支持通过 root 身份来运行，需要新建普通用户，如 easysearch 用户来快速运行 Easysearch。
- 一键安装 #   通过我们提供的自动安装脚本可自动下载最新版本的 easysearch 进行解压安装，默认解压到 /opt/easysearch
+ 一键安装 #   通过我们提供的自动安装脚本可自动下载最新版本的 easysearch 进行解压安装，默认解压到 /data/easysearch
  curl -sSL http://get.infini.cloud | bash -s -- -p easysearch  脚本的可选参数如下：
 -v [版本号]（默认采用最新版本号）
--d [安装目录]（默认安装到/opt/easysearch）
+-d [安装目录]（默认安装到/data/easysearch）
  bundle 包运行 #   bundle 是内置 JDK 的安装包，不需要额外下载 JDK，可直接解压运行。
- # 创建 easysearch 用户 groupadd -g 602 easysearch useradd -u 602 -g easysearch -m -d /home/easysearch -c 'easysearch' -s /bin/bash easysearch # 创建 easysearch 安装目录 mkdir -p /opt/easysearch # 下载 bundle 包并解压到安装目录 wget -O - https://release."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Linux"><meta property="og:description" content="Linux 环境下使用 Easysearch #   为了安全起见，Easysearch 不支持通过 root 身份来运行，需要新建普通用户，如 easysearch 用户来快速运行 Easysearch。
- 一键安装 #   通过我们提供的自动安装脚本可自动下载最新版本的 easysearch 进行解压安装，默认解压到 /opt/easysearch
+ # 创建 easysearch 用户 groupadd -g 602 easysearch useradd -u 602 -g easysearch -m -d /home/easysearch -c 'easysearch' -s /bin/bash easysearch # 创建 easysearch 安装目录 mkdir -p /data/easysearch # 下载 bundle 包并解压到安装目录 wget -O - https://release."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Linux"><meta property="og:description" content="Linux 环境下使用 Easysearch #   为了安全起见，Easysearch 不支持通过 root 身份来运行，需要新建普通用户，如 easysearch 用户来快速运行 Easysearch。
+ 一键安装 #   通过我们提供的自动安装脚本可自动下载最新版本的 easysearch 进行解压安装，默认解压到 /data/easysearch
  curl -sSL http://get.infini.cloud | bash -s -- -p easysearch  脚本的可选参数如下：
 -v [版本号]（默认采用最新版本号）
--d [安装目录]（默认安装到/opt/easysearch）
+-d [安装目录]（默认安装到/data/easysearch）
  bundle 包运行 #   bundle 是内置 JDK 的安装包，不需要额外下载 JDK，可直接解压运行。
- # 创建 easysearch 用户 groupadd -g 602 easysearch useradd -u 602 -g easysearch -m -d /home/easysearch -c 'easysearch' -s /bin/bash easysearch # 创建 easysearch 安装目录 mkdir -p /opt/easysearch # 下载 bundle 包并解压到安装目录 wget -O - https://release."><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/main/docs/getting-started/install/linux/"><title>Linux | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/easysearch/main/css/asciinema-player.css><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+ # 创建 easysearch 用户 groupadd -g 602 easysearch useradd -u 602 -g easysearch -m -d /home/easysearch -c 'easysearch' -s /bin/bash easysearch # 创建 easysearch 安装目录 mkdir -p /data/easysearch # 下载 bundle 包并解压到安装目录 wget -O - https://release."><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/main/docs/getting-started/install/linux/"><title>Linux | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/easysearch/main/css/asciinema-player.css><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/easysearch/main><img src=/easysearch/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
 <option value=v1.14.0>v1.14.0</option>
@@ -99,21 +99,21 @@
 <strong>Linux</strong>
 <label for=toc-control><img src=/easysearch/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#linux-环境下使用-easysearch>Linux 环境下使用 Easysearch</a><ul><li><a href=#一键安装>一键安装</a></li><li><a href=#bundle-包运行>bundle 包运行</a></li><li><a href=#手动安装>手动安装</a></li><li><a href=#将-easysearch-配置为服务>将 Easysearch 配置为服务</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=linux-环境下使用-easysearch>Linux 环境下使用 Easysearch
 <a class=anchor href=#linux-%e7%8e%af%e5%a2%83%e4%b8%8b%e4%bd%bf%e7%94%a8-easysearch>#</a></h1><blockquote><p>为了安全起见，Easysearch 不支持通过 root 身份来运行，需要新建普通用户，如 <code>easysearch</code> 用户来快速运行 Easysearch。</p></blockquote><h2 id=一键安装>一键安装
-<a class=anchor href=#%e4%b8%80%e9%94%ae%e5%ae%89%e8%a3%85>#</a></h2><blockquote><p>通过我们提供的自动安装脚本可自动下载最新版本的 easysearch 进行解压安装，默认解压到 /opt/easysearch</p></blockquote><pre><code>curl -sSL http://get.infini.cloud | bash -s -- -p easysearch
-</code></pre><blockquote><p>脚本的可选参数如下：<br>    -v [版本号]（默认采用最新版本号）<br>    -d [安装目录]（默认安装到/opt/easysearch）</p></blockquote><h2 id=bundle-包运行>bundle 包运行
+<a class=anchor href=#%e4%b8%80%e9%94%ae%e5%ae%89%e8%a3%85>#</a></h2><blockquote><p>通过我们提供的自动安装脚本可自动下载最新版本的 easysearch 进行解压安装，默认解压到 /data/easysearch</p></blockquote><pre><code>curl -sSL http://get.infini.cloud | bash -s -- -p easysearch
+</code></pre><blockquote><p>脚本的可选参数如下：<br>    -v [版本号]（默认采用最新版本号）<br>    -d [安装目录]（默认安装到/data/easysearch）</p></blockquote><h2 id=bundle-包运行>bundle 包运行
 <a class=anchor href=#bundle-%e5%8c%85%e8%bf%90%e8%a1%8c>#</a></h2><blockquote><p>bundle 是内置 JDK 的安装包，不需要额外下载 JDK，可直接解压运行。</p></blockquote><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 创建 easysearch 用户</span>
 groupadd -g <span style=color:#ae81ff>602</span> easysearch
 useradd -u <span style=color:#ae81ff>602</span> -g easysearch -m -d /home/easysearch -c <span style=color:#e6db74>&#39;easysearch&#39;</span> -s /bin/bash easysearch
 <span style=color:#75715e># 创建 easysearch 安装目录</span>
-mkdir -p /opt/easysearch
+mkdir -p /data/easysearch
 <span style=color:#75715e># 下载 bundle 包并解压到安装目录</span>
-wget -O - https://release.infinilabs.com/easysearch/stable/bundle/easysearch-1.9.1-1950-linux-amd64-bundle.tar.gz | tar -zx -C /opt/easysearch
+wget -O - https://release.infinilabs.com/easysearch/stable/bundle/easysearch-1.14.0-2228-linux-amd64-bundle.tar.gz | tar -zx -C /data/easysearch
 <span style=color:#75715e># 初始化</span>
-cd /opt/easysearch <span style=color:#f92672>&amp;&amp;</span> bin/initialize.sh
+cd /data/easysearch <span style=color:#f92672>&amp;&amp;</span> bin/initialize.sh
 <span style=color:#75715e># 调整目录权限</span>
-chown -R easysearch:easysearch /opt/easysearch
+chown -R easysearch:easysearch /data/easysearch
 <span style=color:#75715e># 运行 Easysearch</span>
-su easysearch -c <span style=color:#e6db74>&#34;/opt/easysearch/bin/easysearch -d -p pid&#34;</span>
+su easysearch -c <span style=color:#e6db74>&#34;/data/easysearch/bin/easysearch -d -p pid&#34;</span>
 <span style=color:#75715e># 停止 Easysearch</span>
 kill -9 <span style=color:#66d9ef>$(</span>cat pid<span style=color:#66d9ef>)</span>
 </code></pre></div><h2 id=手动安装>手动安装
@@ -128,11 +128,11 @@ wget -N https://release.infinilabs.com/easysearch/archive/java.sh -P /etc/profil
 </code></pre></div><ol start=7><li>通过在线脚本进行 Easysearch 安装</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>curl -sSL http://get.infini.cloud |bash -s -- -p easysearch
 </code></pre></div><ol start=8><li>创建 easysearch 用户组</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>groupadd -g <span style=color:#ae81ff>602</span> easysearch
 </code></pre></div><ol start=9><li>创建 easysearch 用户，并添加到 easysearch 用户组</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>useradd -u <span style=color:#ae81ff>602</span> -g easysearch -m -d /home/easysearch -c <span style=color:#e6db74>&#34;Easysearch user&#34;</span> -s /bin/bash easysearch
-</code></pre></div><ol start=10><li>将 JDK 放置或通过软链接到 /opt/easysearch/jdk</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>ln -s /usr/local/jdk /opt/easysearch/jdk
-</code></pre></div><ol start=12><li>初始化证书，密码及插件</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /opt/easysearch <span style=color:#f92672>&amp;&amp;</span> bin/initialize.sh
-</code></pre></div><ol start=13><li>调整目录属主为 easysearch</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>chown -R easysearch:easysearch /opt/easysearch
+</code></pre></div><ol start=10><li>将 JDK 放置或通过软链接到 /data/easysearch/jdk</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>ln -s /usr/local/jdk /data/easysearch/jdk
+</code></pre></div><ol start=12><li>初始化证书，密码及插件</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /data/easysearch <span style=color:#f92672>&amp;&amp;</span> bin/initialize.sh
+</code></pre></div><ol start=13><li>调整目录属主为 easysearch</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>chown -R easysearch:easysearch /data/easysearch
 </code></pre></div><ol start=14><li>切换到 easysearch 用户</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>su - easysearch
-</code></pre></div><ol start=15><li>运行 Easysearch</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /opt/easysearch <span style=color:#f92672>&amp;&amp;</span> bin/easysearch
+</code></pre></div><ol start=15><li>运行 Easysearch</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /data/easysearch <span style=color:#f92672>&amp;&amp;</span> bin/easysearch
 </code></pre></div><h2 id=将-easysearch-配置为服务>将 Easysearch 配置为服务
 <a class=anchor href=#%e5%b0%86-easysearch-%e9%85%8d%e7%bd%ae%e4%b8%ba%e6%9c%8d%e5%8a%a1>#</a></h2><blockquote><p>如果您想通过服务的方式来运行 Easysearch，可手工配置 Easysearch 服务文件</p></blockquote><ol><li>下载服务文件</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>wget -N https://release.infinilabs.com/easysearch/archive/easysearch.service -P /usr/lib/systemd/system
 </code></pre></div><p>或者直接编辑和执行下面的脚本:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo tee /usr/lib/systemd/system/easysearch.service <span style=color:#e6db74>&lt;&lt;-&#39;EOF&#39;
@@ -145,7 +145,7 @@ wget -N https://release.infinilabs.com/easysearch/archive/java.sh -P /etc/profil
 </span><span style=color:#e6db74>Type=forking
 </span><span style=color:#e6db74>User=easysearch
 </span><span style=color:#e6db74>Environment=&#34;PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/jdk/bin&#34;
-</span><span style=color:#e6db74>ExecStart=/opt/easysearch/bin/easysearch -d
+</span><span style=color:#e6db74>ExecStart=/data/easysearch/bin/easysearch -d
 </span><span style=color:#e6db74>PrivateTmp=true
 </span><span style=color:#e6db74>LimitNOFILE=65536
 </span><span style=color:#e6db74>LimitNPROC=65536

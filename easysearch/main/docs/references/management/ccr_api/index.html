@@ -98,7 +98,7 @@
 例如 cat ca.crt ../../easysearch-1.0.0_2/config/ca.crt > trust-chain.pem</li><li>分别设置 security.ssl.transport.ca_file: trust-chain.pem</li></ul><hr><h2 id=设置跨集群复制>设置跨集群复制
 <a class=anchor href=#%e8%ae%be%e7%bd%ae%e8%b7%a8%e9%9b%86%e7%be%a4%e5%a4%8d%e5%88%b6>#</a></h2><h3 id=设置跨群集连接>设置跨群集连接
 <a class=anchor href=#%e8%ae%be%e7%bd%ae%e8%b7%a8%e7%be%a4%e9%9b%86%e8%bf%9e%e6%8e%a5>#</a></h3><p>跨集群复制采用“pull”模型，在 follower 集群上，添加每个种子节点的 IP 地址（端口 9300），
-为连接提供一个描述性名称，您将在请求中使用该名称来启动复制。以下是对应的 curl 命令：</p><pre><code class=language-auto data-lang=auto>curl -XPUT -k -H 'Content-Type: application/json' -u 'admin:admin' 'https://localhost:9201/_cluster/settings?pretty' -d '
+为连接提供一个描述性名称，您将在请求中使用该名称来启动复制。以下是对应的 curl 命令：</p><pre><code class=language-auto data-lang=auto>curl -XPUT -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'https://localhost:9201/_cluster/settings?pretty' -d '
 {
   &quot;persistent&quot;: {
     &quot;cluster&quot;: {
@@ -111,8 +111,8 @@
   }
 }'
 </code></pre><hr><h3 id=开始复制>开始复制
-<a class=anchor href=#%e5%bc%80%e5%a7%8b%e5%a4%8d%e5%88%b6>#</a></h3><p>首先，在 leader 集群创建 leader-01 索引, 并向索引写入数据。</p><pre><code class=language-auto data-lang=auto>curl -XPUT -k -H 'Content-Type: application/json' -u 'admin:admin' 'https://localhost:9200/leader-01?pretty'
-</code></pre><p>然后设置跟随者集群开始复制。在请求体中，提供你想要复制的连接名和领导者索引，以及你想要使用的安全角色：</p><pre><code class=language-auto data-lang=auto>curl -XPUT -k -H 'Content-Type: application/json' -u 'admin:admin' 'https://localhost:9201/_replication/follower-01/_start?pretty' -d '
+<a class=anchor href=#%e5%bc%80%e5%a7%8b%e5%a4%8d%e5%88%b6>#</a></h3><p>首先，在 leader 集群创建 leader-01 索引, 并向索引写入数据。</p><pre><code class=language-auto data-lang=auto>curl -XPUT -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'https://localhost:9200/leader-01?pretty'
+</code></pre><p>然后设置跟随者集群开始复制。在请求体中，提供你想要复制的连接名和领导者索引，以及你想要使用的安全角色：</p><pre><code class=language-auto data-lang=auto>curl -XPUT -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'https://localhost:9201/_replication/follower-01/_start?pretty' -d '
 {
    &quot;leader_alias&quot;: &quot;my-connection-alias&quot;,
    &quot;leader_index&quot;: &quot;leader-01&quot;,
@@ -122,7 +122,7 @@
    }
 }'
 </code></pre><h3 id=确认复制状态>确认复制状态
-<a class=anchor href=#%e7%a1%ae%e8%ae%a4%e5%a4%8d%e5%88%b6%e7%8a%b6%e6%80%81>#</a></h3><pre><code class=language-auto data-lang=auto>curl -XGET -k -u 'admin:admin' 'https://localhost:9201/_replication/follower-01/_status?pretty'
+<a class=anchor href=#%e7%a1%ae%e8%ae%a4%e5%a4%8d%e5%88%b6%e7%8a%b6%e6%80%81>#</a></h3><pre><code class=language-auto data-lang=auto>curl -XGET -k -u 'admin:xxxxxxxxxxxx' 'https://localhost:9201/_replication/follower-01/_status?pretty'
 </code></pre><p>响应</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
   <span style=color:#f92672>&#34;status&#34;</span> : <span style=color:#e6db74>&#34;SYNCING&#34;</span>,
   <span style=color:#f92672>&#34;reason&#34;</span> : <span style=color:#e6db74>&#34;User initiated&#34;</span>,
@@ -230,8 +230,8 @@
   }
 ]
 </code></pre></div><h3 id=暂停和恢复复制>暂停和恢复复制
-<a class=anchor href=#%e6%9a%82%e5%81%9c%e5%92%8c%e6%81%a2%e5%a4%8d%e5%a4%8d%e5%88%b6>#</a></h3><p>如果您需要修复问题或减轻主集群的负载，您可以暂时暂停索引的复制：</p><pre><code class=language-auto data-lang=auto>curl -XPOST -k -H 'Content-Type: application/json' -u 'admin:admin' 'https://localhost:9201/_replication/follower-01/_pause?pretty' -d '{}'
-</code></pre><p>恢复</p><pre><code class=language-auto data-lang=auto>curl -XPOST -ku 'admin:admin' -H 'Content-Type: application/json' 'https://localhost:9201/_replication/follower-01/_resume?pretty' -d '{}'
+<a class=anchor href=#%e6%9a%82%e5%81%9c%e5%92%8c%e6%81%a2%e5%a4%8d%e5%a4%8d%e5%88%b6>#</a></h3><p>如果您需要修复问题或减轻主集群的负载，您可以暂时暂停索引的复制：</p><pre><code class=language-auto data-lang=auto>curl -XPOST -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'https://localhost:9201/_replication/follower-01/_pause?pretty' -d '{}'
+</code></pre><p>恢复</p><pre><code class=language-auto data-lang=auto>curl -XPOST -ku 'admin:xxxxxxxxxxxx' -H 'Content-Type: application/json' 'https://localhost:9201/_replication/follower-01/_resume?pretty' -d '{}'
 </code></pre><h3 id=获取-leader-集群状态>获取 leader 集群状态
 <a class=anchor href=#%e8%8e%b7%e5%8f%96-leader-%e9%9b%86%e7%be%a4%e7%8a%b6%e6%80%81>#</a></h3><p>在 leader 集群执行</p><pre><code class=language-auto data-lang=auto>GET /_replication/leader_stats
 </code></pre><p>响应</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
@@ -283,7 +283,7 @@
   }
 }
 </code></pre></div><h3 id=获取-follower-集群状态为同步中的索引的信息>获取 follower 集群状态为同步中的索引的信息
-<a class=anchor href=#%e8%8e%b7%e5%8f%96-follower-%e9%9b%86%e7%be%a4%e7%8a%b6%e6%80%81%e4%b8%ba%e5%90%8c%e6%ad%a5%e4%b8%ad%e7%9a%84%e7%b4%a2%e5%bc%95%e7%9a%84%e4%bf%a1%e6%81%af>#</a></h3><pre><code class=language-auto data-lang=auto>curl -XGET -ku 'admin:admin' 'https://localhost:9200/_replication/follower_stats'
+<a class=anchor href=#%e8%8e%b7%e5%8f%96-follower-%e9%9b%86%e7%be%a4%e7%8a%b6%e6%80%81%e4%b8%ba%e5%90%8c%e6%ad%a5%e4%b8%ad%e7%9a%84%e7%b4%a2%e5%bc%95%e7%9a%84%e4%bf%a1%e6%81%af>#</a></h3><pre><code class=language-auto data-lang=auto>curl -XGET -ku 'admin:xxxxxxxxxxxx' 'https://localhost:9200/_replication/follower_stats'
 </code></pre><p>响应</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
   <span style=color:#f92672>&#34;num_syncing_indices&#34;</span>: <span style=color:#ae81ff>4</span>,
   <span style=color:#f92672>&#34;num_bootstrapping_indices&#34;</span>: <span style=color:#ae81ff>0</span>,
@@ -348,10 +348,10 @@
   }
 }
 </code></pre></div><h3 id=停止复制>停止复制
-<a class=anchor href=#%e5%81%9c%e6%ad%a2%e5%a4%8d%e5%88%b6>#</a></h3><p>在 follower 集群执行</p><pre><code class=language-auto data-lang=auto>curl -XPOST -k -H 'Content-Type: application/json' -u 'admin:admin' 'https://localhost:9201/_replication/follower-01/_stop?pretty' -d '{}'
+<a class=anchor href=#%e5%81%9c%e6%ad%a2%e5%a4%8d%e5%88%b6>#</a></h3><p>在 follower 集群执行</p><pre><code class=language-auto data-lang=auto>curl -XPOST -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'https://localhost:9201/_replication/follower-01/_stop?pretty' -d '{}'
 </code></pre><h2 id=跨集群复制的自动跟随>跨集群复制的自动跟随
 <a class=anchor href=#%e8%b7%a8%e9%9b%86%e7%be%a4%e5%a4%8d%e5%88%b6%e7%9a%84%e8%87%aa%e5%8a%a8%e8%b7%9f%e9%9a%8f>#</a></h2><p>自动开始对匹配指定模式的索引进行复制。如果领导者集群上的新索引匹配该模式，Easysearch 会自动创建一个跟随者索引。
-自动跟随让你可以根据匹配的模式自动复制在领导者集群上创建的索引。当你在领导者集群上创建一个名称与指定模式匹配的索引（例如，index-01*），在跟随者集群上会自动创建一个对应的跟随者索引。</p><p>你可以为单个集群配置多个复制规则。目前的模式只支持通配符匹配。</p><p>在启用自动跟随之前，确认在两个集群之间设置了跨集群连接。</p><p>如果启用了安全插件，确保非管理员用户被映射到适当的权限，以便他们可以执行复制操作。关于索引和集群级别的权限要求，请参阅跨集群复制权限。</p><p>复制规则是你针对单个跟随者集群创建的模式集合。当你创建一个复制规则时，它首先会自动复制任何匹配模式的现有索引。然后，它将继续复制你创建的任何新索引，只要这些新索引匹配该模式。</p><p>示例 在 follower 集群执行：</p><pre><code class=language-auto data-lang=auto>curl -XPOST -k -H 'Content-Type: application/json' -u 'admin:admin' 'https://localhost:9201/_replication/_autofollow?pretty' -d '
+自动跟随让你可以根据匹配的模式自动复制在领导者集群上创建的索引。当你在领导者集群上创建一个名称与指定模式匹配的索引（例如，index-01*），在跟随者集群上会自动创建一个对应的跟随者索引。</p><p>你可以为单个集群配置多个复制规则。目前的模式只支持通配符匹配。</p><p>在启用自动跟随之前，确认在两个集群之间设置了跨集群连接。</p><p>如果启用了安全插件，确保非管理员用户被映射到适当的权限，以便他们可以执行复制操作。关于索引和集群级别的权限要求，请参阅跨集群复制权限。</p><p>复制规则是你针对单个跟随者集群创建的模式集合。当你创建一个复制规则时，它首先会自动复制任何匹配模式的现有索引。然后，它将继续复制你创建的任何新索引，只要这些新索引匹配该模式。</p><p>示例 在 follower 集群执行：</p><pre><code class=language-auto data-lang=auto>curl -XPOST -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'https://localhost:9201/_replication/_autofollow?pretty' -d '
 {
    &quot;leader_alias&quot; : &quot;my-connection-alias&quot;,
    &quot;name&quot;: &quot;my-replication-rule&quot;,
@@ -365,9 +365,9 @@
 </code></pre><p>然后 创建 nginx 开头的索引并写入数据</p><h3 id=查看-follower-集群的索引状态>查看 follower 集群的索引状态
 <a class=anchor href=#%e6%9f%a5%e7%9c%8b-follower-%e9%9b%86%e7%be%a4%e7%9a%84%e7%b4%a2%e5%bc%95%e7%8a%b6%e6%80%81>#</a></h3><pre><code class=language-auto data-lang=auto>curl -kuadmin:admin 'https://localhost:9201/_cat/indices?v'
 </code></pre><p>如果发现文档数没变化可以执行 refresh 命令后再查看</p><h3 id=查看已设置的自动跟随规则>查看已设置的自动跟随规则
-<a class=anchor href=#%e6%9f%a5%e7%9c%8b%e5%b7%b2%e8%ae%be%e7%bd%ae%e7%9a%84%e8%87%aa%e5%8a%a8%e8%b7%9f%e9%9a%8f%e8%a7%84%e5%88%99>#</a></h3><pre><code class=language-auto data-lang=auto>curl -u 'admin:admin' -k 'https://localhost:9200/_replication/autofollow_stats'
+<a class=anchor href=#%e6%9f%a5%e7%9c%8b%e5%b7%b2%e8%ae%be%e7%bd%ae%e7%9a%84%e8%87%aa%e5%8a%a8%e8%b7%9f%e9%9a%8f%e8%a7%84%e5%88%99>#</a></h3><pre><code class=language-auto data-lang=auto>curl -u 'admin:xxxxxxxxxxxx' -k 'https://localhost:9200/_replication/autofollow_stats'
 </code></pre><h3 id=删除自动跟随规则>删除自动跟随规则
-<a class=anchor href=#%e5%88%a0%e9%99%a4%e8%87%aa%e5%8a%a8%e8%b7%9f%e9%9a%8f%e8%a7%84%e5%88%99>#</a></h3><p>可以通过在从集群上调用 API 来删除自动跟随。调用 API 仅停止任何新的自动跟随活动，并不会停止已由自动跟随启动的复制，要停止现有的复制活动并打开索引进行写入，请使用停止复制API操作。</p><p>示例</p><pre><code class=language-auto data-lang=auto>curl -XDELETE -k -H 'Content-Type: application/json' -u 'admin:admin' 'https://localhost:9201/_replication/_autofollow?pretty' -d '
+<a class=anchor href=#%e5%88%a0%e9%99%a4%e8%87%aa%e5%8a%a8%e8%b7%9f%e9%9a%8f%e8%a7%84%e5%88%99>#</a></h3><p>可以通过在从集群上调用 API 来删除自动跟随。调用 API 仅停止任何新的自动跟随活动，并不会停止已由自动跟随启动的复制，要停止现有的复制活动并打开索引进行写入，请使用停止复制API操作。</p><p>示例</p><pre><code class=language-auto data-lang=auto>curl -XDELETE -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'https://localhost:9201/_replication/_autofollow?pretty' -d '
 {
    &quot;leader_alias&quot; : &quot;my-connection-alias&quot;,
    &quot;name&quot;: &quot;my-replication-rule&quot;
@@ -375,7 +375,7 @@
 </code></pre><hr><h2 id=如何使用自定义用户>如何使用自定义用户
 <a class=anchor href=#%e5%a6%82%e4%bd%95%e4%bd%bf%e7%94%a8%e8%87%aa%e5%ae%9a%e4%b9%89%e7%94%a8%e6%88%b7>#</a></h2><p>如果不使用 admin 用户，必须将你自定义的用户绑定到
 cross_cluster_replication_leader_full_access，它在领导者集群上提供复制权限，
-cross_cluster_replication_follower_full_access，它在追随者集群上提供复制权限。</p><p>示例 分别在 leader 和 follower 集群执行创建 replication_user 用户的命令：</p><pre><code class=language-auto data-lang=auto>curl -XPUT -k -H 'Content-Type: application/json' -u 'admin:admin'  'https://xxxx:9xxx/_security/user/replication_user' -d '
+cross_cluster_replication_follower_full_access，它在追随者集群上提供复制权限。</p><p>示例 分别在 leader 和 follower 集群执行创建 replication_user 用户的命令：</p><pre><code class=language-auto data-lang=auto>curl -XPUT -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx'  'https://xxxx:9xxx/_security/user/replication_user' -d '
 {
   &quot;password&quot;: &quot;123456&quot;,
   &quot;roles&quot;: [&quot;cross_cluster_replication_leader_full_access&quot;, &quot;cross_cluster_replication_follower_full_access&quot;]
