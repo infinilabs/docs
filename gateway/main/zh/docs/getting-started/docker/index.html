@@ -2,14 +2,14 @@
 安装演示 #    下载镜像 #  极限网关的镜像发布在 Docker 的官方仓库，地址如下：
  https://hub.docker.com/r/infinilabs/gateway
 使用下面的命令即可获取最新的容器镜像：
-docker pull infinilabs/gateway:1.29.7 验证镜像 #  将镜像下载到本地之后，可以看到极限网关的容器镜像非常小，只有不到 25MB，所以下载的速度应该是非常快的。
-✗ docker images |grep &#34;gateway&#34; |grep &#34;1.29.7&#34; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/gateway 1.29.7 fdae74b64e1a 47 minutes ago 23.5MB 创建配置 #  现在需要创建一个配置文件 gateway.yml，来进行基本的配置，如下：
+docker pull infinilabs/gateway:1.29.8 验证镜像 #  将镜像下载到本地之后，可以看到极限网关的容器镜像非常小，只有不到 25MB，所以下载的速度应该是非常快的。
+✗ docker images |grep &#34;gateway&#34; |grep &#34;1.29.8&#34; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/gateway 1.29.8 fdae74b64e1a 47 minutes ago 23.5MB 创建配置 #  现在需要创建一个配置文件 gateway.yml，来进行基本的配置，如下：
 path.data: data path.logs: log entry: - name: my_es_entry enabled: true router: my_router max_concurrency: 200000 network: binding: 0.0.0.0:8000 flow: - name: simple_flow filter: - elasticsearch: elasticsearch: dev router: - name: my_router default_flow: simple_flow elasticsearch: - name: dev enabled: true endpoint: http://localhost:9200 basic_auth: username: test password: testtest Note: 上面配置里面的 Elasticsearch 的相关配置，请改成实际的服务器连接地址和认证信息。"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="容器部署"><meta property="og:description" content="容器部署 #  极限网关支持容器方式部署。
 安装演示 #    下载镜像 #  极限网关的镜像发布在 Docker 的官方仓库，地址如下：
  https://hub.docker.com/r/infinilabs/gateway
 使用下面的命令即可获取最新的容器镜像：
-docker pull infinilabs/gateway:1.29.7 验证镜像 #  将镜像下载到本地之后，可以看到极限网关的容器镜像非常小，只有不到 25MB，所以下载的速度应该是非常快的。
-✗ docker images |grep &#34;gateway&#34; |grep &#34;1.29.7&#34; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/gateway 1.29.7 fdae74b64e1a 47 minutes ago 23.5MB 创建配置 #  现在需要创建一个配置文件 gateway.yml，来进行基本的配置，如下：
+docker pull infinilabs/gateway:1.29.8 验证镜像 #  将镜像下载到本地之后，可以看到极限网关的容器镜像非常小，只有不到 25MB，所以下载的速度应该是非常快的。
+✗ docker images |grep &#34;gateway&#34; |grep &#34;1.29.8&#34; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/gateway 1.29.8 fdae74b64e1a 47 minutes ago 23.5MB 创建配置 #  现在需要创建一个配置文件 gateway.yml，来进行基本的配置，如下：
 path.data: data path.logs: log entry: - name: my_es_entry enabled: true router: my_router max_concurrency: 200000 network: binding: 0.0.0.0:8000 flow: - name: simple_flow filter: - elasticsearch: elasticsearch: dev router: - name: my_router default_flow: simple_flow elasticsearch: - name: dev enabled: true endpoint: http://localhost:9200 basic_auth: username: test password: testtest Note: 上面配置里面的 Elasticsearch 的相关配置，请改成实际的服务器连接地址和认证信息。"><meta property="og:type" content="article"><meta property="og:url" content="/gateway/main/zh/docs/getting-started/docker/"><title>容器部署 | INFINI Gateway</title><link rel=manifest href=/gateway/main/manifest.json><link rel=icon href=/gateway/main/favicon.png type=image/x-icon><link rel=alternate hreflang=en href=/gateway/main/docs/getting-started/docker/ title="Container Deployment"><link rel=stylesheet href=/gateway/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/gateway/main/css/asciinema-player.css><script defer src=/gateway/main/js/jquery-2.x.min.js></script><script defer src=/gateway/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/gateway/main/zh><img src=/gateway/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
@@ -46,11 +46,11 @@ English</a></li><li class=active><a href=/gateway/main/zh/ class="flex align-cen
 <label for=toc-control><img src=/gateway/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#容器部署>容器部署</a><ul><li><a href=#安装演示>安装演示</a></li><li><a href=#下载镜像>下载镜像</a></li><li><a href=#验证镜像>验证镜像</a></li><li><a href=#创建配置>创建配置</a></li><li><a href=#启动网关>启动网关</a></li><li><a href=#验证网关>验证网关</a></li><li><a href=#docker-compose>Docker Compose</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=容器部署>容器部署
 <a class=anchor href=#%e5%ae%b9%e5%99%a8%e9%83%a8%e7%bd%b2>#</a></h1><p>极限网关支持容器方式部署。</p><h2 id=安装演示>安装演示
 <a class=anchor href=#%e5%ae%89%e8%a3%85%e6%bc%94%e7%a4%ba>#</a></h2><p><asciinema-player src=/gateway/main/cast//gateway_on_docker.cast cols=640 rows=30 t=49 autoplay preload=1 start-at=49 speed=1></asciinema-player></p><h2 id=下载镜像>下载镜像
-<a class=anchor href=#%e4%b8%8b%e8%bd%bd%e9%95%9c%e5%83%8f>#</a></h2><p>极限网关的镜像发布在 Docker 的官方仓库，地址如下：</p><p><a href=https://hub.docker.com/r/infinilabs/gateway>https://hub.docker.com/r/infinilabs/gateway</a></p><p>使用下面的命令即可获取最新的容器镜像：</p><pre><code>docker pull infinilabs/gateway:1.29.7
+<a class=anchor href=#%e4%b8%8b%e8%bd%bd%e9%95%9c%e5%83%8f>#</a></h2><p>极限网关的镜像发布在 Docker 的官方仓库，地址如下：</p><p><a href=https://hub.docker.com/r/infinilabs/gateway>https://hub.docker.com/r/infinilabs/gateway</a></p><p>使用下面的命令即可获取最新的容器镜像：</p><pre><code>docker pull infinilabs/gateway:1.29.8
 </code></pre><h2 id=验证镜像>验证镜像
-<a class=anchor href=#%e9%aa%8c%e8%af%81%e9%95%9c%e5%83%8f>#</a></h2><p>将镜像下载到本地之后，可以看到极限网关的容器镜像非常小，只有不到 25MB，所以下载的速度应该是非常快的。</p><pre><code>✗ docker images |grep &quot;gateway&quot; |grep &quot;1.29.7&quot;
+<a class=anchor href=#%e9%aa%8c%e8%af%81%e9%95%9c%e5%83%8f>#</a></h2><p>将镜像下载到本地之后，可以看到极限网关的容器镜像非常小，只有不到 25MB，所以下载的速度应该是非常快的。</p><pre><code>✗ docker images |grep &quot;gateway&quot; |grep &quot;1.29.8&quot;
 REPOSITORY                                      TAG       IMAGE ID       CREATED          SIZE
-infinilabs/gateway                            1.29.7    fdae74b64e1a   47 minutes ago   23.5MB
+infinilabs/gateway                            1.29.8    fdae74b64e1a   47 minutes ago   23.5MB
 </code></pre><h2 id=创建配置>创建配置
 <a class=anchor href=#%e5%88%9b%e5%bb%ba%e9%85%8d%e7%bd%ae>#</a></h2><p>现在需要创建一个配置文件 <code>gateway.yml</code>，来进行基本的配置，如下：</p><pre><code>path.data: data
 path.logs: log
@@ -81,9 +81,9 @@ elasticsearch:
     username: test
     password: testtest
 </code></pre><p>Note: 上面配置里面的 Elasticsearch 的相关配置，请改成实际的服务器连接地址和认证信息。</p><h2 id=启动网关>启动网关
-<a class=anchor href=#%e5%90%af%e5%8a%a8%e7%bd%91%e5%85%b3>#</a></h2><p>使用如下命令启动极限网关容器：</p><pre><code>docker run -p 2900:2900 -p 8000:8000  -v=`pwd`/gateway.yml:/gateway.yml  infinilabs/gateway:1.29.7
+<a class=anchor href=#%e5%90%af%e5%8a%a8%e7%bd%91%e5%85%b3>#</a></h2><p>使用如下命令启动极限网关容器：</p><pre><code>docker run -p 2900:2900 -p 8000:8000  -v=`pwd`/gateway.yml:/gateway.yml  infinilabs/gateway:1.29.8
 </code></pre><h2 id=验证网关>验证网关
-<a class=anchor href=#%e9%aa%8c%e8%af%81%e7%bd%91%e5%85%b3>#</a></h2><p>如果都运行正常的话，应该可以看到如下的信息：</p><pre><code>➜  /tmp docker run -p 2900:2900 -p 8000:8000  -v=`pwd`/gateway.yml:/gateway.yml  infinilabs/gateway:1.29.7
+<a class=anchor href=#%e9%aa%8c%e8%af%81%e7%bd%91%e5%85%b3>#</a></h2><p>如果都运行正常的话，应该可以看到如下的信息：</p><pre><code>➜  /tmp docker run -p 2900:2900 -p 8000:8000  -v=`pwd`/gateway.yml:/gateway.yml  infinilabs/gateway:1.29.8
    ___   _   _____  __  __    __  _
   / _ \ /_\ /__   \/__\/ / /\ \ \/_\ /\_/\
  / /_\///_\\  / /\/_\  \ \/  \/ //_\\\_ _/
@@ -97,7 +97,7 @@ elasticsearch:
 [12-30 05:26:41] [INF] [entry.go:257] entry [es_gateway] listen at: http://0.0.0.0:8000
 [12-30 05:26:41] [INF] [app.go:247] gateway now started.
 [12-30 05:26:45] [INF] [reverseproxy.go:196] elasticsearch [prod] endpoints: [] =&gt; [192.168.3.201:9200]
-</code></pre><p>如果希望容器运行在后台，加上 <code>-d</code> 参数，如下：</p><pre><code>docker run -d -p 2900:2900 -p 8000:8000  -v=`pwd`/gateway.yml:/gateway.yml  infinilabs/gateway:1.29.7
+</code></pre><p>如果希望容器运行在后台，加上 <code>-d</code> 参数，如下：</p><pre><code>docker run -d -p 2900:2900 -p 8000:8000  -v=`pwd`/gateway.yml:/gateway.yml  infinilabs/gateway:1.29.8
 </code></pre><p>使用命令行或者浏览器访问地址： <code>http://localhost:8000/</code> 应该就能正常访问 Elasticsearch 了，如下：</p><pre><code>➜  /tmp curl -v http://localhost:8000/
 *   Trying ::1...
 * TCP_NODELAY set
@@ -138,7 +138,7 @@ elasticsearch:
 
 services:
   infini-gateway:
-    image: infinilabs/gateway:1.29.7
+    image: infinilabs/gateway:1.29.8
     ports:
       - 2900:2900
       - 8000:8000
