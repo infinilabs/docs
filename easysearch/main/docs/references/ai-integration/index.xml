@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>AI 集成 on INFINI Easysearch</title><link>/easysearch/main/docs/references/ai-integration/</link><description>Recent content in AI 集成 on INFINI Easysearch</description><generator>Hugo -- gohugo.io</generator><atom:link href="/easysearch/main/docs/references/ai-integration/index.xml" rel="self" type="application/rss+xml"/><item><title>写入数据文本向量化</title><link>/easysearch/main/docs/references/ai-integration/ingest-text-embedding/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/references/ai-integration/ingest-text-embedding/</guid><description>写入数据文本向量化 # Easysearch 使用摄取管道 ingest pipeline 中的一系列处理器，可以对写入的数据进行处理，并且支持对文本进行向量化，本文档介绍如何在 Easysearch 中使用 text_embedding 处理器对写入数据进行向量化。
+先决条件 # 支持与 OpenAI API 兼容的 embedding 接口，支持 Ollama embedding 接口。
+需要安装 Easysearch 的 knn 和 ai 插件。
+在生产环境中使用数据采集时，您的集群应至少包含一个节点，且该节点的节点角色权限设置为 ingest 。
+创建带有向量字段的索引 # 首先，需要创建一个包含 knn mapping 的索引，text_vector 是存储向量的字段，向量维度是 768。
+PUT /my-index { &amp;quot;mappings&amp;quot;: { &amp;quot;properties&amp;quot;: { &amp;quot;text_vector&amp;quot;: { &amp;quot;type&amp;quot;: &amp;quot;knn_dense_float_vector&amp;quot;, &amp;quot;knn&amp;quot;: { &amp;quot;dims&amp;quot;: 768, &amp;quot;model&amp;quot;: &amp;quot;lsh&amp;quot;, &amp;quot;similarity&amp;quot;: &amp;quot;cosine&amp;quot;, &amp;quot;L&amp;quot;: 99, &amp;quot;k&amp;quot;: 1 } } } } } 创建或更新 text_embedding 处理器 # 请求路径：</description></item><item><title>搜索请求文本向量化</title><link>/easysearch/main/docs/references/ai-integration/search-text-embedding/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/references/ai-integration/search-text-embedding/</guid><description>搜索请求文本向量化 # Easysearch 使用搜索管道的 semantic_query_enricher 处理器，协助 semantic query，将文本转为向量。
+搜索管道 # 您可以使用搜索管道构建新的或重用现有的结果重排器、查询重写器以及其他对查询或结果进行操作的组件。搜索管道使您能够更轻松地在 Easysearch 中处理搜索查询和搜索结果。 将部分应用程序功能迁移到 Easysearch 搜索管道中可以降低应用程序的整体复杂性。作为搜索管道的一部分，您可以指定执行模块化任务的处理器列表。 然后，您可以轻松添加或重新排序这些处理器，以自定义应用程序的搜索结果。
+以下是与搜索管道相关的术语列表：
+搜索请求处理器（Search request processor）：拦截搜索请求（即查询及随请求传入的元数据），对其执行某种操作，然后返回处理后的搜索请求。 搜索响应处理器（Search response processor）：拦截搜索响应及其对应的搜索请求（即查询、结果及随请求传入的元数据），对其执行某种操作，然后返回处理后的搜索响应。 处理器（Processor）：泛指搜索请求处理器或搜索响应处理器。 搜索管道（Search pipeline）：在 Easysearch 中集成的一个有序处理器列表。该管道会拦截查询，先对查询进行处理，再将其发往 Easysearch；随后拦截返回的结果，对结果进行处理，最后将结果返回给调用方，如下图所示。 上图中的 semantic_query_enricher 是一个专门为向量查询补充 Embedding 请求所需配置的处理器，使用户无需在每个查询中重复指定模型 ID、API 密钥等参数。
+先决条件 # 服务兼容性 需满足以下任一条件：
+支持与 OpenAI API 兼容的 embedding 接口 支持 Ollama embedding 接口 插件要求 必须安装 Easysearch 的以下插件：
+knn ai 数据准备 需预先完成：</description></item><item><title>文本向量化</title><link>/easysearch/main/docs/references/ai-integration/text-embeddings/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/references/ai-integration/text-embeddings/</guid><description>[已废弃] 文本向量化 # 本文档描述的功能已不再支持，将在下个版本删除，请使用新的 写入数据文本向量化替代。
+本文档介绍如何在 Easysearch 中集成和使用预先部署的 Ollama 服务来生成文本嵌入向量。
+先决条件 # 需要预先部署好 Ollama 服务，现阶段集成的服务版本是 0.5.4。
+可以用以下命令测试服务是否正常：
+curl http://localhost:11434/api/embed -d '{ &amp;quot;model&amp;quot;: &amp;quot;nomic-embed-text:latest&amp;quot;, &amp;quot;input&amp;quot;: &amp;quot;Why is the sky blue?&amp;quot; }' 配置 Ollama 服务 # 可以通过 ollama_url 配置项指定 Ollama 服务的地址。您可以通过以下 API 查看当前配置：
+GET _cluster/settings?flat_settings=true&amp;amp;include_defaults=true&amp;amp;filter_path=*.ollama_url 如果没有修改，会输出默认值：
+{ &amp;quot;defaults&amp;quot;: { &amp;quot;ollama_url&amp;quot;: &amp;quot;http://localhost:11434&amp;quot; } } REST API # POST /_ai/embed { &amp;quot;model&amp;quot;: &amp;quot;模型名称&amp;quot;, &amp;quot;input&amp;quot;: &amp;quot;文本内容&amp;quot; } 请求示例 # POST /_ai/embed { &amp;quot;model&amp;quot;: &amp;quot;nomic-embed-text:latest&amp;quot;, &amp;quot;input&amp;quot;: &amp;quot;Llamas are members of the camelid family&amp;quot; } 批量生成 Embeddings # 可以一次为多个文本生成嵌入向量。</description></item><item><title>混合搜索</title><link>/easysearch/main/docs/references/ai-integration/hybrid-search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/references/ai-integration/hybrid-search/</guid><description>混合搜索 # 混合搜索结合了关键词搜索和语义搜索，以提升搜索相关性。要实现混合搜索，您需要建立一个在搜索时运行的搜索管道。 该管道会在中间阶段拦截搜索结果，并通过处理流程对文档分数进行归一化和组合处理。
+要使用混合搜索，您需要配置搜索管道，添加混合排序处理器。
+混合排序处理器 # 混合排序处理器 hybrid-ranker-processor 是一种基于排名的搜索阶段结果处理器，运行在搜索执行的查询阶段和获取阶段之间。它会拦截查询阶段的结果，然后使用 倒数排序融合算法（RRF，Reciprocal Rank Fusion） 来合并不同查询子句，最终生成排序后的搜索结果列表。
+适用场景：
+需要融合不同搜索技术（如关键词和语义搜索）的结果 子查询的原始分数不可直接比较（如 BM25 和 KNN） 算法原理 # RRF 是一种多查询融合方法，其核心计算逻辑为：
+对每个文档在不同子结果集给出的排名取倒数（如排名第 k 则得分为 1/(k+60)） 将各子结果集的倒数得分相加，生成统一排序分数 按最终分数降序输出结果集 RRF 的通用计算公式如下（其中 k 为平滑常数，默认 60，query_j_rank 表示混合查询中某文档在第 j 种查询方法返回结果中的排名）：
+rankScore(document_i) = sum(1/(k + query_1_rank), 1/(k + query_2_rank), ..., 1/(k + query_j_rank)) 请求体字段 # 下表列出了所有可用的请求字段。
+字段 数据类型 说明 combination.</description></item></channel></rss>
