@@ -6,7 +6,14 @@ Obtain API Token #  Make sure you have a valid API token before continue.
 Create a simple connector #  curl -H'X-API-TOKEN: cv9bb63q50k5eikkq43gp07lmg60gn2nor7uf650xpxazd6a6nns8uttymz52uvnplhmtaf829x71lph51li' -XPOST http://localhost:9000/connector/ -d'{ &#34;name&#34;: &#34;My Connector&#34; }' Response
 { &#34;_id&#34;: &#34;cv9bc23q50k5eikkq4c0&#34;, &#34;result&#34;: &#34;created&#34; } Create a datasource for this connector #  curl -H'X-API-TOKEN: cv9bb63q50k5eikkq43gp07lmg60gn2nor7uf650xpxazd6a6nns8uttymz52uvnplhmtaf829x71lph51li' -H 'Content-Type: application/json' -XPOST http://localhost:9000/datasource/ -d' { &#34;name&#34;:&#34;My Datasource&#34;, &#34;type&#34;:&#34;connector&#34;, &#34;connector&#34;:{ &#34;id&#34;:&#34;cv9bc23q50k5eikkq4c0&#34; } }' Response"><meta property="og:type" content="article"><meta property="og:url" content="/coco-server/main/docs/tutorials/howto_create_your_own_datasource/"><title>How to integrate Coco AI with your own datasource | Coco Server</title><link rel=manifest href=/coco-server/main/manifest.json><link rel=icon href=/coco-server/main/favicon.png type=image/x-icon><link rel=stylesheet href=/coco-server/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><script defer src=/coco-server/main/js/jquery-2.x.min.js></script><script defer src=/coco-server/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/coco-server/main><img src=/coco-server/main/img/logo-en.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
-<option value>(latest)</option></select></div><ul><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
+<option value>main (latest)</option>
+<option value=v0.7.1>v0.7.1</option>
+<option value=v0.7.0>v0.7.0</option>
+<option value=v0.6.0>v0.6.0</option>
+<option value=v0.5.0>v0.5.0</option>
+<option value=v0.4.0>v0.4.0</option>
+<option value=v0.3.0>v0.3.0</option>
+<option value=v0.2.2>v0.2.2</option></select></div><ul><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
 <label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>Getting Started</a>
 <span>▾</span></label><ul><li><a href=/coco-server/main/docs/getting-started/install/>Installation</a></li><li><a href=/coco-server/main/docs/getting-started/setup/>Setup Wizard</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle>
 <label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a href=/coco-server/main/docs/references/>References</a>
