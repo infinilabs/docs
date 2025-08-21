@@ -65,9 +65,7 @@ bin/easysearch-plugin install ingest-common 如果觉得比较麻烦，也可以
 <label for=section-232f0668f3be6ea64e1c220baec34dfc class="flex justify-between"><a>文档操作</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/document/index-data/>增删改查</a></li><li><a href=/easysearch/main/docs/references/document/index-alias/>别名操作</a></li><li><a href=/easysearch/main/docs/references/document/index-compression/>索引压缩</a></li></ul></li><li><input type=checkbox id=section-6b02990358c7382bac3f39043e5fd437 class=toggle>
 <label for=section-6b02990358c7382bac3f39043e5fd437 class="flex justify-between"><a>搜索操作</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/term/>词项查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/>全文查询</a></li><li><a href=/easysearch/main/docs/references/search/knn_api/>向量查询</a></li><li><a href=/easysearch/main/docs/references/search/bool/>布尔查询</a></li><li><a href=/easysearch/main/docs/references/search/search-template/>查询模版</a></li><li><a href=/easysearch/main/docs/references/search/async_search/>异步搜索</a></li><li><a href=/easysearch/main/docs/references/search/pit_api/>定点查询</a></li></ul></li><li><input type=checkbox id=section-69a0462c4990a8b0bf6189289fb56e8a class=toggle>
-<label for=section-69a0462c4990a8b0bf6189289fb56e8a class="flex justify-between"><a href=/easysearch/main/docs/references/aggregation/>聚合操作</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/aggregation/metric-agg/>指标聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-agg/>分桶聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-agg/>管道聚合</a></li></ul></li><li><input type=checkbox id=section-86e828ca7e30e9d2e35881b956319411 class=toggle>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/term/>词项查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/>全文查询</a></li><li><a href=/easysearch/main/docs/references/search/knn_api/>向量查询</a></li><li><a href=/easysearch/main/docs/references/search/bool/>布尔查询</a></li><li><a href=/easysearch/main/docs/references/search/search-template/>查询模版</a></li><li><a href=/easysearch/main/docs/references/search/async_search/>异步搜索</a></li><li><a href=/easysearch/main/docs/references/search/pit_api/>定点查询</a></li></ul></li><li><input type=checkbox id=section-86e828ca7e30e9d2e35881b956319411 class=toggle>
 <label for=section-86e828ca7e30e9d2e35881b956319411 class="flex justify-between"><a>SQL 查询</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/sql/sql-jdbc/>SQL-JDBC</a></li><li><a href=/easysearch/main/docs/references/sql/aggregations/>聚合查询</a></li><li><a href=/easysearch/main/docs/references/sql/fulltext/>全文搜索</a></li><li><a href=/easysearch/main/docs/references/sql/complex/>复杂查询</a></li><li><a href=/easysearch/main/docs/references/sql/basics/>基础查询</a></li></ul></li><li><input type=checkbox id=section-1c80046b8a7d2b6f02509e78096b1388 class=toggle>
 <label for=section-1c80046b8a7d2b6f02509e78096b1388 class="flex justify-between"><a href=/easysearch/main/docs/references/security/>安全模块</a>
@@ -79,13 +77,21 @@ bin/easysearch-plugin install ingest-common 如果觉得比较麻烦，也可以
 <label for=section-4632348aa5cba7d33c080167da2f13b6 class="flex justify-between"><a>文本分词</a>
 <span>▾</span></label><ul><li><input type=checkbox id=section-13c9df598f113d7537eff14f9f5147e3 class=toggle checked>
 <label for=section-13c9df598f113d7537eff14f9f5147e3 class="flex justify-between"><a href=/easysearch/main/docs/references/text-analysis/analyzers/>分词器</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/ik-analyzer/ class=active>IK 分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/stop-analyzer/>停用词分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/keyword-analyzer/>关键词分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/creating-a-custom-analyzer/>创建一个自定义分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/pattern-analyzer/>匹配模式分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/language-analyzer/>各类语种分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/fingerprint-analyzer/>指纹分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/search-analyzers/>搜索分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/standard-analyzer/>标准分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/whitespace-analyzer/>空格分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/simple-analyzer/>简单分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/index-analyzers/>索引分词器</a></li></ul></li><li><input type=checkbox id=section-8066f3918cdd51465da4720002ab0bb5 class=toggle>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/ik-analyzer/ class=active>IK 分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/stop-analyzer/>停用词分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/keyword-analyzer/>关键词分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/creating-a-custom-analyzer/>创建一个自定义分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/pattern-analyzer/>匹配模式分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/language-analyzer/>各类语种分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/pinyin-analyzer/>拼音分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/fingerprint-analyzer/>指纹分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/search-analyzers/>搜索分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/standard-analyzer/>标准分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/whitespace-analyzer/>空格分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/simple-analyzer/>简单分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/stconvert-analyzer/>简繁转换分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/index-analyzers/>索引分词器</a></li></ul></li><li><input type=checkbox id=section-8066f3918cdd51465da4720002ab0bb5 class=toggle>
 <label for=section-8066f3918cdd51465da4720002ab0bb5 class="flex justify-between"><a href=/easysearch/main/docs/references/text-analysis/token-filters/>分词过滤器</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/ascii-folding/>ASCII 折叠分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/cjk-bigram/>CJK 二元分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/cjk-width/>CJK 宽度分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/kstem/>KStem 分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/kuromoji-completion/>Kuromoji 补全分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/n-gram/>n-gram 分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/keep-types/>保留类型分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/trim/>修剪分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/stop/>停用词分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/keyword-marker/>关键词标记分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/keyword-repeat/>关键词重复分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/delimited-payload/>分隔式负载分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/pattern-replace/>匹配替换分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/decimal-digit/>十进制数字分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/word-delimiter/>单词分隔符分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/word-delimiter-graph/>单词分隔符图分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/remove-duplicates/>去重分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/reverse/>反转分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/synonym/>同义词分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/synonym-graph/>同义词图分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/unique/>唯一分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/multiplexer/>多路复用分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/uppercase/>大写分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/lowercase/>小写分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/common-grams/>常用词组分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/flatten-graph/>平图化分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/normalization/>归一化分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/truncate/>截断分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/fingerprint/>指纹分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/pattern-capture/>捕获匹配分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/min-hash/>最小哈希分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/condition/>条件分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/porter-stem/>波特词干分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/apostrophe/>省略符号分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/elision/>省略词分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/classic/>经典分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/keep-words/>词保留分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/dictionary-decompounder/>词典复合词分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/stemmer/>词干提取分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/stemmer-override/>词干覆盖分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/shingle/>词片分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/predicate-token-filter/>谓词分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/edge-n-gram/>边缘 n 元分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/length/>长度分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/limit/>限制分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/snowball/>雪球算法分词过滤器</a></li></ul></li><li><input type=checkbox id=section-d6e4a0d07abe0df202540482628fd24b class=toggle>
 <label for=section-d6e4a0d07abe0df202540482628fd24b class="flex justify-between"><a href=/easysearch/main/docs/references/text-analysis/character-filters/>字符过滤器</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/text-analysis/character-filters/html-strip/>HTML 剥离字符过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/character-filters/pattern-replace/>匹配替换字符过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/character-filters/mapping/>映射字符过滤器</a></li></ul></li><li><a href=/easysearch/main/docs/references/text-analysis/normalizers/>规范化</a></li><li><input type=checkbox id=section-71b540c4dd821da562660864e8601756 class=toggle>
 <label for=section-71b540c4dd821da562660864e8601756 class="flex justify-between"><a href=/easysearch/main/docs/references/text-analysis/tokenizers/>词元生成器</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/n-gram/>N-gram 词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/uax-url-email/>UAX URL 邮件词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/keyword/>关键词词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/edge-n-gram/>前缀 n 元词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/pattern/>匹配词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/letter/>字母词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/character-group/>字符组词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/lowercase/>小写词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/standard/>标准词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/whitespace/>空格词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/simple-pattern-split/>简单分割匹配词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/classic/>经典词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/path-hierarchy/>路径词元分词器</a></li></ul></li><li><a href=/easysearch/main/docs/references/text-analysis/stemming/>词干提取</a></li></ul></li><li><input type=checkbox id=section-52d7e2e9abce80d3dc7a6a56a0089b77 class=toggle>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/n-gram/>N-gram 词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/uax-url-email/>UAX URL 邮件词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/keyword/>关键词词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/edge-n-gram/>前缀 n 元词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/pattern/>匹配词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/letter/>字母词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/character-group/>字符组词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/lowercase/>小写词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/standard/>标准词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/whitespace/>空格词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/simple-pattern-split/>简单分割匹配词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/classic/>经典词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/path-hierarchy/>路径词元分词器</a></li></ul></li><li><a href=/easysearch/main/docs/references/text-analysis/stemming/>词干提取</a></li></ul></li><li><input type=checkbox id=section-69a0462c4990a8b0bf6189289fb56e8a class=toggle>
+<label for=section-69a0462c4990a8b0bf6189289fb56e8a class="flex justify-between"><a href=/easysearch/main/docs/references/aggregation/>聚合</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-a4f13a0648bb2302e5d49c0d41bfe786 class=toggle>
+<label for=section-a4f13a0648bb2302e5d49c0d41bfe786 class="flex justify-between"><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/>分组聚合</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/ip-range/>IP 范围聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/global/>全局聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/terms/>分组聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/reverse-nested/>反向嵌套聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/geo-distance/>地理距离聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/composite/>复合聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/diversified-sampler/>多样化采样聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/filters/>多过滤聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/children/>子关联聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/nested/>嵌套聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/date-histogram/>日期直方图聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/date-range/>日期范围聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/parent/>父级聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/histogram/>直方图聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/rare-terms/>稀有分组聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/missing/>缺省聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/range/>范围聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/filter/>过滤聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/adjacency-matrix/>邻接矩阵聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/sampler/>采样聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/significant-terms/>重点分组聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/significant-text/>重点文本聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/auto-interval-date-histogram/>Auto Interval Date Histogram</a></li></ul></li><li><input type=checkbox id=section-4d85e7011dfe7f276bbd2e35ea5b128f class=toggle>
+<label for=section-4d85e7011dfe7f276bbd2e35ea5b128f class="flex justify-between"><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/>指标聚合</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/top-hits/>Top 汇总</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/median-absolute-deviation/>中位数绝对偏差聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/value-count/>值计数聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/weighted-avg/>加权平均聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/geocentroid/>地理中心点</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/geobounds/>地理边界聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/cardinality/>基数聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/average/>平均聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/extended-stats/>扩展统计聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/maximum/>最大值聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/minimum/>最小值聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/sum/>求和聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/percentile-ranks/>百分位排名聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/percentile/>百分位聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/matrix-stats/>矩阵统计聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/stats/>统计聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/scripted-metric/>脚本指标聚合</a></li></ul></li><li><input type=checkbox id=section-4296c7ea235f6f8cebc4737c24766aa3 class=toggle>
+<label for=section-4296c7ea235f6f8cebc4737c24766aa3 class="flex justify-between"><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/>管道聚合</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/bucket-sort/>分组排序聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/bucket-script/>存储分组脚本聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/bucket-selector/>存储分组选择聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/derivative/>导数聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/avg-bucket/>平均分组聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/serial-diff/>序列差分聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/extended-stats/>扩展统计分组聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/max-bucket/>最大分组聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/min-bucket/>最小值分组聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/sum-bucket/>求和分组聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/percentiles-bucket/>百分位数分组聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/moving-function/>移动函数聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/moving-avg/>移动平均聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/cumulative-sum/>累积和聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/stats-bucket/>统计分组聚合</a></li></ul></li></ul></li><li><input type=checkbox id=section-52d7e2e9abce80d3dc7a6a56a0089b77 class=toggle>
 <label for=section-52d7e2e9abce80d3dc7a6a56a0089b77 class="flex justify-between"><a>管理模块</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/management/cluster/>搭建集群</a></li><li><a href=/easysearch/main/docs/references/management/catapis/>CAT API</a></li><li><a href=/easysearch/main/docs/references/management/logs/>系统日志</a></li><li><a href=/easysearch/main/docs/references/management/index-templates/>索引模板</a></li><li><a href=/easysearch/main/docs/references/management/reindex-data/>重建数据</a></li><li><a href=/easysearch/main/docs/references/management/tasksapis/>任务管理</a></li><li><a href=/easysearch/main/docs/references/management/slm_api/>快照生命周期管理</a></li><li><a href=/easysearch/main/docs/references/management/ilm_api/>索引生命周期管理</a></li><li><a href=/easysearch/main/docs/references/management/ccr_api/>跨集群复制</a></li><li><a href=/easysearch/main/docs/references/management/snapshot-restore/>备份还原</a></li><li><a href=/easysearch/main/docs/references/management/throttling/>写入限流</a></li><li><a href=/easysearch/main/docs/references/management/searchable_snapshot/>可搜索快照</a></li><li><a href=/easysearch/main/docs/references/management/time-series-Index-optimization/>使用时间范围合并策略优化时序索引</a></li><li><a href=/easysearch/main/docs/references/management/rollup_api/>数据汇总</a></li><li><a href=/easysearch/main/docs/references/management/popular-api/>其它常用 API</a></li></ul></li><li><input type=checkbox id=section-b34adbce31bce6650a0099282b315617 class=toggle>
 <label for=section-b34adbce31bce6650a0099282b315617 class="flex justify-between"><a>客户端</a>
@@ -95,7 +101,7 @@ bin/easysearch-plugin install ingest-common 如果觉得比较麻烦，也可以
 <label for=section-1adc738e7351809ea378ec7e9730bd1f class="flex justify-between"><a>版本历史</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/release-notes/client/>Easysearch-client</a></li><li><a href=/easysearch/main/docs/release-notes/easysearch/>Easysearch</a></li></ul></li><li><a href=/easysearch/main/docs/resources/>其它资源</a><ul></ul></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/easysearch/main/svg/menu.svg class=book-icon alt=Menu></label>
 <strong>IK 分词器</strong>
-<label for=toc-control><img src=/easysearch/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#ik-分词器>IK 分词器</a><ul><li><a href=#ik-分词器安装>IK 分词器安装</a></li><li><a href=#使用样例>使用样例</a></li><li><a href=#关于-ik_smart-和-ik_max_word>关于 ik_smart 和 ik_max_word</a></li><li><a href=#字段级别词典设置>字段级别词典设置</a><ul><li><a href=#自定义词库内容>自定义词库内容</a></li><li><a href=#设置自定义词库>设置自定义词库</a></li><li><a href=#词库内容更新>词库内容更新</a></li></ul></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=ik-分词器>IK 分词器
+<label for=toc-control><img src=/easysearch/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#ik-分词器>IK 分词器</a><ul><li><a href=#ik-分词器安装>IK 分词器安装</a></li><li><a href=#使用样例>使用样例</a></li><li><a href=#关于-ik_smart-和-ik_max_word>关于 ik_smart 和 ik_max_word</a></li><li><a href=#字段级别词典设置>字段级别词典设置</a><ul><li><a href=#自定义词库内容>自定义词库内容</a></li><li><a href=#设置自定义词库>设置自定义词库</a></li><li><a href=#词库内容的自动新增>词库内容的自动新增</a></li><li><a href=#全量-reload>全量 reload</a></li></ul></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=ik-分词器>IK 分词器
 <a class=anchor href=#ik-%e5%88%86%e8%af%8d%e5%99%a8>#</a></h1><p>IK 分词器是一款专为处理中文文本设计的分词器，高效且智能。支持 <code>ik_smart</code> 和 <code>ik_max_word</code> 两种分词模式。</p><h2 id=ik-分词器安装>IK 分词器安装
 <a class=anchor href=#ik-%e5%88%86%e8%af%8d%e5%99%a8%e5%ae%89%e8%a3%85>#</a></h2><p>IK 分词插件安装命令如下：</p><pre><code>bin/easysearch-plugin install analysis-ik
 </code></pre><p>同时也需要安装 ingest-common 插件：</p><pre><code>bin/easysearch-plugin install ingest-common
@@ -191,7 +197,7 @@ POST index_ik/_search
 }
 </code></pre><h2 id=关于-ik_smart-和-ik_max_word>关于 ik_smart 和 ik_max_word
 <a class=anchor href=#%e5%85%b3%e4%ba%8e-ik_smart-%e5%92%8c-ik_max_word>#</a></h2><p><code>ik_smart</code> 和 <code>ik_max_word</code> 是 IK 分词器的两个分词模式。</p><p>ik_max_word：将文本根据词典内容做最细粒度的切分。例如,ik_max_word 会将”中华人民共和国国歌”切分到“中华人民共和国,中华人民,中华,华人,人民共和国,人民,人,民,共和国、共和,和,国国,国歌”,详尽生成各种可能的组合。</p><p>ik_smart：执行文本粗粒度的切分。例如：ik_smart 会把 ”中华人民共和国国歌”到“中华人民共和国,国歌”。</p><p>ik_smart 比较适合短语查询，而 ik_max_word 更合适精准匹配。值得注意的是，由于 ik_smart 做了分词切割的优化，其的分词结果并不是 ik_max_word 的分词结果的子集。</p><h2 id=字段级别词典设置>字段级别词典设置
-<a class=anchor href=#%e5%ad%97%e6%ae%b5%e7%ba%a7%e5%88%ab%e8%af%8d%e5%85%b8%e8%ae%be%e7%bd%ae>#</a></h2><p>Easysearch 1.10 版本在 IK 分词器原有的功能上增加了自定义字段级别词典的功能。</p><p>自定义字段级别词典的功能支持用户对不同的字段设置不同的分词词库，用户既可以指定 IK 完全使用自有的词库，也支持在 IK 默认的词库上增加自定义的词库内容。</p><h3 id=自定义词库内容>自定义词库内容
+<a class=anchor href=#%e5%ad%97%e6%ae%b5%e7%ba%a7%e5%88%ab%e8%af%8d%e5%85%b8%e8%ae%be%e7%bd%ae>#</a></h2><p>Easysearch 在 IK 分词器原有的功能上增加了自定义字段级别词典的功能。</p><p>自定义字段级别词典的功能支持用户对不同的字段设置不同的分词词库，用户既可以指定 IK 完全使用自有的词库，也支持在 IK 默认的词库上增加自定义的词库内容。</p><h3 id=自定义词库内容>自定义词库内容
 <a class=anchor href=#%e8%87%aa%e5%ae%9a%e4%b9%89%e8%af%8d%e5%ba%93%e5%86%85%e5%ae%b9>#</a></h3><p>默认的词库索引是 .analysis_ik 索引，IK 插件自动初始化的 .analysis_ik 索引。</p><p>用户可以自定义使用某个索引替代 .analysis_ik（设置参数下面会提及），但是要保持和 .analysis_ik 一个的 mapping 结构和使用预设的 pipeline：ik_dicts_default_date_pipeline。</p><p>.analysis_ik 词库需要存储的格式如下：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>POST</span> <span style=color:#960050;background-color:#1e0010>.analysis_ik/_doc</span>
 {
   <span style=color:#f92672>&#34;dict_key&#34;</span>: <span style=color:#e6db74>&#34;test_dic&#34;</span>,
@@ -200,7 +206,7 @@ POST index_ik/_search
 </span><span style=color:#e6db74>中文万岁
 </span><span style=color:#e6db74>秋水共长天&#34;&#34;&#34;</span>
 }
-</code></pre></div><p>主要使用字段</p><ul><li>dict_content：词典内容字段。各个词典以换行符分隔。</li><li>dict_key：自定义词典名。对应自定义词典中设置的 dict_key。</li><li>dict_type：字典类型，可选 &ldquo;main_dicts&rdquo;, &ldquo;stopwords_dicts&rdquo;, &ldquo;quantifier_dicts&rdquo; 三个值。其中任意 dict_key 的"main_dicts"必须存在。</li></ul><h3 id=设置自定义词库>设置自定义词库
+</code></pre></div><p>主要使用字段</p><ul><li>dict_content：词典内容字段。各个词典以换行符分隔。</li><li>dict_key：自定义词典名。对应自定义词典中设置的 dict_key。</li><li>dict_type：字典类型，可选 &ldquo;main_dicts&rdquo;, &ldquo;stopwords_dicts&rdquo;, &ldquo;quantifier_dicts&rdquo; 三个值。其中任意 dict_key 的"main_dicts"必须存在。</li></ul><p>如果是对默认词库的自定义增加，dict_key 就写"default"，同时需要使用默认的词库索引 .analysis_ik 。</p><h3 id=设置自定义词库>设置自定义词库
 <a class=anchor href=#%e8%ae%be%e7%bd%ae%e8%87%aa%e5%ae%9a%e4%b9%89%e8%af%8d%e5%ba%93>#</a></h3><p>自定义词库的生效主要通过自定义 tokenizer 进行设置。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>my-index</span><span style=color:#ae81ff>-000001</span>
 {
   <span style=color:#f92672>&#34;settings&#34;</span>: {
@@ -232,8 +238,8 @@ POST index_ik/_search
     }
   }
 }
-</code></pre></div><p>其中</p><ul><li>custom_dict_enable：布尔值，默认 false，true 则可以定制词典读取路径，否则 load_default_dicts / dict_key / dict_index 均失效。</li><li>load_default_dicts：布尔值，默认 true，定制的词典是否包含默认的词典库。</li><li>lowcase_enable：布尔值，默认为 true，是否大小写敏感，false 则保留原来文本的大小写。</li><li>dict_key：string。对应词库索引中的 dict_key 字段内容。<strong>如果词典名不匹配，则会装载错误或者直接报错</strong> 。</li><li>dict_index: string。词库索引名称，默认是 .analysis_ik。可以自定义，但是要保持和 mapping 结构以及 pipeline 一致。</li></ul><h3 id=词库内容更新>词库内容更新
-<a class=anchor href=#%e8%af%8d%e5%ba%93%e5%86%85%e5%ae%b9%e6%9b%b4%e6%96%b0>#</a></h3><p>词库现阶段只接受追加内容，没有删除词库数据的功能。如果在同一条数据上进行修改则也被视为追加。<strong><font style=color:#DF2A3F;>暂时不建议对词库内容进行删除或者修改，可能会造成节点间词库的混乱</font></strong>。</p><p>词库的追加内容是能自动被程序探测的，这个主要依赖于 .analysis_ik 的时间戳字段和 pipeline 执行。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>词典索引写入需要的默认时间戳</span> <span style=color:#960050;background-color:#1e0010>pipeline</span>
+</code></pre></div><p>其中</p><ul><li>custom_dict_enable：布尔值，默认 false，true 则可以定制词典读取路径，否则 load_default_dicts / dict_key / dict_index 均失效。</li><li>load_default_dicts：布尔值，默认 true，定制的词典是否包含默认的词典库。</li><li>lowcase_enable：布尔值，默认为 true，是否大小写敏感，false 则保留原来文本的大小写。</li><li>dict_key：string。对应词库索引中的 dict_key 字段内容。<strong>如果词典名不匹配，则会装载错误或者直接报错</strong> 。</li><li>dict_index: string。词库索引名称，默认是 .analysis_ik。可以自定义，但是要保持和 mapping 结构以及 pipeline 一致。</li></ul><h3 id=词库内容的自动新增>词库内容的自动新增
+<a class=anchor href=#%e8%af%8d%e5%ba%93%e5%86%85%e5%ae%b9%e7%9a%84%e8%87%aa%e5%8a%a8%e6%96%b0%e5%a2%9e>#</a></h3><p>词库的追加内容是能自动被程序探测的，这个主要依赖于 .analysis_ik 的时间戳字段和 pipeline 执行。</p><p>ik 只对词库索引的新增词典内容进行自动追加，不会对存量词典的修改进修改或者删除。如果需要对某个存量自定义词典进行修改或者删除，请进行全量 reload。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>词典索引写入需要的默认时间戳</span> <span style=color:#960050;background-color:#1e0010>pipeline</span>
 <span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_ingest/pipeline/ik_dicts_default_date_pipeline</span>
 {
   <span style=color:#f92672>&#34;ik_dicts_default_date_pipeline&#34;</span>: {
@@ -295,8 +301,146 @@ POST index_ik/_search
     }
   }
 }
-</code></pre></div><p>这里 ik_dicts_default_date_pipeline 会对每一条写入词库的数据赋予当前 upload_dicts_timestamp 时间戳。ik 会记录当前词库的最大时间戳，然后<strong>每分钟</strong>都会去查询一次词库索引现有的最大时间戳。如果查到词库索引的最大的时间戳大于上次记录到的时间戳，则对这段时间内的词库内容都进行加载。</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+</code></pre></div><p>这里 ik_dicts_default_date_pipeline 会对每一条写入词库的数据赋予当前 upload_dicts_timestamp 时间戳。ik 会记录当前词库的最大时间戳，然后<strong>每分钟</strong>都会去查询一次词库索引现有的最大时间戳。如果查到词库索引的最大的时间戳大于上次记录到的时间戳，则对这段时间内的词库内容都进行加载。</p><h3 id=全量-reload>全量 reload
+<a class=anchor href=#%e5%85%a8%e9%87%8f-reload>#</a></h3><p>reload API 通过对词典库的全量重新加载来实现词典库的更新或者删除。用户可以通过下面的命令实现：</p><pre><code># 测试索引准备
+
+PUT my-index-000001
+{
+  &quot;settings&quot;: {
+    &quot;number_of_shards&quot;: 3,
+    &quot;analysis&quot;: {
+      &quot;analyzer&quot;: {
+        &quot;my_custom_analyzer&quot;: {
+          &quot;type&quot;: &quot;custom&quot;,
+          &quot;tokenizer&quot;: &quot;my_tokenizer&quot;
+        }
+      },
+      &quot;tokenizer&quot;: {
+        &quot;my_tokenizer&quot;: {
+
+          &quot;type&quot;: &quot;ik_smart&quot;,
+          &quot;custom_dict_enable&quot;: true,
+          &quot;load_default_dicts&quot;:false, # 这里不包含默认词库
+          &quot;lowcase_enable&quot;: true,
+          &quot;dict_key&quot;: &quot;test_dic&quot;
+        }
+      }
+    }
+  },
+  &quot;mappings&quot;: {
+    &quot;properties&quot;: {
+      &quot;test_ik&quot;: {
+        &quot;type&quot;: &quot;text&quot;,
+        &quot;analyzer&quot;: &quot;my_custom_analyzer&quot;
+      }
+    }
+  }
+}
+
+# 原来词库分词效果，只预置了分词“自强不息”
+GET my-index-000001/_analyze
+{
+  &quot;analyzer&quot;: &quot;my_custom_analyzer&quot;,
+  &quot;text&quot;:&quot;自强不息，杨树林&quot;
+}
+
+{
+  &quot;tokens&quot;: [
+    {
+      &quot;token&quot;: &quot;自强不息&quot;,
+      &quot;start_offset&quot;: 0,
+      &quot;end_offset&quot;: 4,
+      &quot;type&quot;: &quot;CN_WORD&quot;,
+      &quot;position&quot;: 0
+    },
+    {
+      &quot;token&quot;: &quot;杨&quot;,
+      &quot;start_offset&quot;: 5,
+      &quot;end_offset&quot;: 6,
+      &quot;type&quot;: &quot;CN_CHAR&quot;,
+      &quot;position&quot;: 1
+    },
+    {
+      &quot;token&quot;: &quot;树&quot;,
+      &quot;start_offset&quot;: 6,
+      &quot;end_offset&quot;: 7,
+      &quot;type&quot;: &quot;CN_CHAR&quot;,
+      &quot;position&quot;: 2
+    },
+    {
+      &quot;token&quot;: &quot;林&quot;,
+      &quot;start_offset&quot;: 7,
+      &quot;end_offset&quot;: 8,
+      &quot;type&quot;: &quot;CN_CHAR&quot;,
+      &quot;position&quot;: 3
+    }
+  ]
+}
+
+# 更新词库
+POST .analysis_ik/_doc
+{
+  &quot;dict_key&quot;: &quot;test_dic&quot;,
+  &quot;dict_type&quot;: &quot;main_dicts&quot;,
+  &quot;dict_content&quot;:&quot;杨树林&quot;
+}
+# 删除词库，词库文档的id为coayoJcBFHNnLYAKfTML
+DELETE .analysis_ik/_doc/coayoJcBFHNnLYAKfTML?refresh=true
+
+# 重载词库
+POST _ik/_reload
+{}
+
+# 更新后的词库效果
+GET my-index-000001/_analyze
+{
+  &quot;analyzer&quot;: &quot;my_custom_analyzer&quot;,
+  &quot;text&quot;:&quot;自强不息，杨树林&quot;
+}
+
+{
+  &quot;tokens&quot;: [
+    {
+      &quot;token&quot;: &quot;自&quot;,
+      &quot;start_offset&quot;: 0,
+      &quot;end_offset&quot;: 1,
+      &quot;type&quot;: &quot;CN_CHAR&quot;,
+      &quot;position&quot;: 0
+    },
+    {
+      &quot;token&quot;: &quot;强&quot;,
+      &quot;start_offset&quot;: 1,
+      &quot;end_offset&quot;: 2,
+      &quot;type&quot;: &quot;CN_CHAR&quot;,
+      &quot;position&quot;: 1
+    },
+    {
+      &quot;token&quot;: &quot;不&quot;,
+      &quot;start_offset&quot;: 2,
+      &quot;end_offset&quot;: 3,
+      &quot;type&quot;: &quot;CN_CHAR&quot;,
+      &quot;position&quot;: 2
+    },
+    {
+      &quot;token&quot;: &quot;息&quot;,
+      &quot;start_offset&quot;: 3,
+      &quot;end_offset&quot;: 4,
+      &quot;type&quot;: &quot;CN_CHAR&quot;,
+      &quot;position&quot;: 3
+    },
+    {
+      &quot;token&quot;: &quot;杨树林&quot;,
+      &quot;start_offset&quot;: 5,
+      &quot;end_offset&quot;: 8,
+      &quot;type&quot;: &quot;CN_WORD&quot;,
+      &quot;position&quot;: 4
+    }
+  ]
+}
+</code></pre><p>这里是实现索引里全部的词库更新。</p><p>也可以实现某个单独的词库全量更新</p><pre><code>POST _ik/_reload
+{&quot;dict_key&quot;:&quot;test_dic”}
+</code></pre></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
 gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
     import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
     searchbox({container: "#searchbox"});
-</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#ik-分词器>IK 分词器</a><ul><li><a href=#ik-分词器安装>IK 分词器安装</a></li><li><a href=#使用样例>使用样例</a></li><li><a href=#关于-ik_smart-和-ik_max_word>关于 ik_smart 和 ik_max_word</a></li><li><a href=#字段级别词典设置>字段级别词典设置</a><ul><li><a href=#自定义词库内容>自定义词库内容</a></li><li><a href=#设置自定义词库>设置自定义词库</a></li><li><a href=#词库内容更新>词库内容更新</a></li></ul></li></ul></li></ul></nav></aside></main><script src=/easysearch/main/js/asciinema-player.js></script></body></html>
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#ik-分词器>IK 分词器</a><ul><li><a href=#ik-分词器安装>IK 分词器安装</a></li><li><a href=#使用样例>使用样例</a></li><li><a href=#关于-ik_smart-和-ik_max_word>关于 ik_smart 和 ik_max_word</a></li><li><a href=#字段级别词典设置>字段级别词典设置</a><ul><li><a href=#自定义词库内容>自定义词库内容</a></li><li><a href=#设置自定义词库>设置自定义词库</a></li><li><a href=#词库内容的自动新增>词库内容的自动新增</a></li><li><a href=#全量-reload>全量 reload</a></li></ul></li></ul></li></ul></nav></aside></main><script src=/easysearch/main/js/asciinema-player.js></script></body></html>
