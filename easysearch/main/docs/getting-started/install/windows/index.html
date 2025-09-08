@@ -13,6 +13,7 @@
   通过在线脚本进行 Easysearch 安装  curl -sSL http://get."><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/main/docs/getting-started/install/windows/"><title>Windows | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/easysearch/main/css/asciinema-player.css><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/easysearch/main><img src=/easysearch/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
+<option value=v1.15.0>v1.15.0</option>
 <option value=v1.14.0>v1.14.0</option>
 <option value=v1.13.1>v1.13.1</option>
 <option value=v1.13.0>v1.13.0</option>
@@ -112,7 +113,7 @@
 <a class=anchor href=#%e6%96%b9%e6%a1%88%e4%b8%80>#</a></h2><p>如果您的 Windows 环境上有 Docker，请查看
 <a href=/easysearch/main/docs/getting-started/install/docker/>Docker 环境下使用 Easysearch</a></p><h2 id=方案二>方案二
 <a class=anchor href=#%e6%96%b9%e6%a1%88%e4%ba%8c>#</a></h2><p>使用非 https 方式的 Easysearch</p><ol><li>手工下载
-<a href=https://release.infinilabs.com/easysearch/stable/easysearch-1.14.0-windows-amd64.zip>Easysearch</a>，并解压安装。</li><li>手工下载
+<a href=https://release.infinilabs.com/easysearch/stable/easysearch-1.15.0-windows-amd64.zip>Easysearch</a>，并解压安装。</li><li>手工下载
 <a href=https://cdn.azul.com/zulu/bin/zulu17.54.21-ca-jre17.0.13-win_x64.zip>JDK</a></li><li>将 JDK 解压到 Easysearch 安装目录下，并将目录的名称修改为 jdk。</li></ol><blockquote><p>由于 Windows 环境下默认没有 openssl，生成证书不太方便，您可以通过其他方式来生成证书，如在 Linux 环境提前生成证书。</p></blockquote><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=color:#75715e>#用记事本打开 config/easysearch.yml，并修改配置。</span>
 <span style=color:#f92672>security.enabled</span>: <span style=color:#66d9ef>false</span>
 </code></pre></div><h2 id=方案三>方案三
