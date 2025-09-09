@@ -385,11 +385,11 @@
 }'
 </code></pre><hr><h2 id=如何使用自定义用户>如何使用自定义用户
 <a class=anchor href=#%e5%a6%82%e4%bd%95%e4%bd%bf%e7%94%a8%e8%87%aa%e5%ae%9a%e4%b9%89%e7%94%a8%e6%88%b7>#</a></h2><p>如果不使用 admin 用户，必须将你自定义的用户绑定到
-cross_cluster_replication_leader_full_access，它在领导者集群上提供复制权限，
-cross_cluster_replication_follower_full_access，它在追随者集群上提供复制权限。</p><p>示例 分别在 leader 和 follower 集群执行创建 replication_user 用户的命令：</p><pre><code class=language-auto data-lang=auto>curl -XPUT -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx'  'https://xxxx:9xxx/_security/user/replication_user' -d '
+replication_leader，它在领导者集群上提供复制权限，
+replication_follower，它在追随者集群上提供复制权限。</p><p>示例 分别在 leader 和 follower 集群执行创建 replication_user 用户的命令：</p><pre><code class=language-auto data-lang=auto>curl -XPUT -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx'  'https://xxxx:9xxx/_security/user/replication_user' -d '
 {
   &quot;password&quot;: &quot;123456&quot;,
-  &quot;roles&quot;: [&quot;cross_cluster_replication_leader_full_access&quot;, &quot;cross_cluster_replication_follower_full_access&quot;]
+  &quot;roles&quot;: [&quot;replication_leader&quot;, &quot;replication_follower&quot;]
 }'
 </code></pre><h3 id=用-replication_user-用户设置跟随者集群开始复制>用 replication_user 用户设置跟随者集群开始复制
 <a class=anchor href=#%e7%94%a8-replication_user-%e7%94%a8%e6%88%b7%e8%ae%be%e7%bd%ae%e8%b7%9f%e9%9a%8f%e8%80%85%e9%9b%86%e7%be%a4%e5%bc%80%e5%a7%8b%e5%a4%8d%e5%88%b6>#</a></h3><pre><code class=language-auto data-lang=auto>curl -XPUT -k -H 'Content-Type: application/json' -u 'replication_user:123456' 'https://localhost:9288/_replication/follower-01/_start?pretty' -d '
@@ -397,8 +397,8 @@ cross_cluster_replication_follower_full_access，它在追随者集群上提供�
    &quot;leader_alias&quot;: &quot;my-connection-alias&quot;,
    &quot;leader_index&quot;: &quot;leader-01&quot;,
    &quot;use_roles&quot;:{
-      &quot;leader_cluster_role&quot;: &quot;cross_cluster_replication_leader_full_access&quot;,
-      &quot;follower_cluster_role&quot;: &quot;cross_cluster_replication_follower_full_access&quot;
+      &quot;leader_cluster_role&quot;: &quot;replication_leader&quot;,
+      &quot;follower_cluster_role&quot;: &quot;replication_follower&quot;
    }
 }'
 </code></pre><h3 id=用-replication_user-用户设置跟随者集群自动复制>用 replication_user 用户设置跟随者集群自动复制
@@ -408,8 +408,8 @@ cross_cluster_replication_follower_full_access，它在追随者集群上提供�
    &quot;name&quot;: &quot;my-replication-rule&quot;,
    &quot;pattern&quot;: &quot;leader*&quot;,
    &quot;use_roles&quot;:{
-      &quot;leader_cluster_role&quot;: &quot;cross_cluster_replication_leader_full_access&quot;,
-      &quot;follower_cluster_role&quot;: &quot;cross_cluster_replication_follower_full_access&quot;
+      &quot;leader_cluster_role&quot;: &quot;replication_leader&quot;,
+      &quot;follower_cluster_role&quot;: &quot;replication_follower&quot;
    }
 }'
 </code></pre><h2 id=配置项>配置项
