@@ -1,13 +1,13 @@
 <!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="混合搜索 #  混合搜索结合了关键词搜索和语义搜索，以提升搜索相关性。要实现混合搜索，您需要建立一个在搜索时运行的搜索管道。 该管道会在中间阶段拦截搜索结果，并通过处理流程对文档分数进行归一化和组合处理。
 要使用混合搜索，您需要配置搜索管道，添加混合排序处理器。
-混合排序处理器 #  混合排序处理器 hybrid_ranker_processor 是一种基于排名的搜索阶段结果处理器，运行在搜索执行的查询阶段和获取阶段之间。它会拦截查询阶段的结果，然后使用 倒数排序融合算法（RRF，Reciprocal Rank Fusion） 来合并不同查询子句，最终生成排序后的搜索结果列表。
+混合排序处理器 #  混合排序处理器 hybrid_ranker_processor 是一种重排序处理器，运行在搜索执行的查询阶段和获取阶段之间。它会拦截查询阶段的结果，然后使用 倒数排序融合算法（RRF，Reciprocal Rank Fusion） 来合并不同查询子句，最终生成排序后的搜索结果列表。
 适用场景：
  需要融合不同搜索技术（如关键词和语义搜索）的结果 子查询的原始分数不可直接比较（如 BM25 和 KNN）  算法原理 #  RRF 是一种多查询融合方法，其核心计算逻辑为：
   对每个文档在不同子结果集给出的排名取倒数（如排名第 k 则得分为 1/(k+60)） 将各子结果集的倒数得分相加，生成统一排序分数 按最终分数降序输出结果集   RRF 的通用计算公式如下（其中 k 为平滑常数，默认 60，query_j_rank 表示混合查询中某文档在第 j 种查询方法返回结果中的排名）：
 rankScore(document_i) = sum(1/(k + query_1_rank), 1/(k + query_2_rank), ..., 1/(k + query_j_rank)) 请求体字段 #  下表列出了所有可用的请求字段。
    字段 数据类型 说明     combination."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="混合搜索"><meta property="og:description" content="混合搜索 #  混合搜索结合了关键词搜索和语义搜索，以提升搜索相关性。要实现混合搜索，您需要建立一个在搜索时运行的搜索管道。 该管道会在中间阶段拦截搜索结果，并通过处理流程对文档分数进行归一化和组合处理。
 要使用混合搜索，您需要配置搜索管道，添加混合排序处理器。
-混合排序处理器 #  混合排序处理器 hybrid_ranker_processor 是一种基于排名的搜索阶段结果处理器，运行在搜索执行的查询阶段和获取阶段之间。它会拦截查询阶段的结果，然后使用 倒数排序融合算法（RRF，Reciprocal Rank Fusion） 来合并不同查询子句，最终生成排序后的搜索结果列表。
+混合排序处理器 #  混合排序处理器 hybrid_ranker_processor 是一种重排序处理器，运行在搜索执行的查询阶段和获取阶段之间。它会拦截查询阶段的结果，然后使用 倒数排序融合算法（RRF，Reciprocal Rank Fusion） 来合并不同查询子句，最终生成排序后的搜索结果列表。
 适用场景：
  需要融合不同搜索技术（如关键词和语义搜索）的结果 子查询的原始分数不可直接比较（如 BM25 和 KNN）  算法原理 #  RRF 是一种多查询融合方法，其核心计算逻辑为：
   对每个文档在不同子结果集给出的排名取倒数（如排名第 k 则得分为 1/(k+60)） 将各子结果集的倒数得分相加，生成统一排序分数 按最终分数降序输出结果集   RRF 的通用计算公式如下（其中 k 为平滑常数，默认 60，query_j_rank 表示混合查询中某文档在第 j 种查询方法返回结果中的排名）：
@@ -71,11 +71,11 @@ rankScore(document_i) = sum(1/(k + query_1_rank), 1/(k + query_2_rank), ..., 1/(
 <label for=section-232f0668f3be6ea64e1c220baec34dfc class="flex justify-between"><a>文档操作</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/document/index-data/>增删改查</a></li><li><a href=/easysearch/main/docs/references/document/index-alias/>别名操作</a></li><li><a href=/easysearch/main/docs/references/document/index-compression/>索引压缩</a></li></ul></li><li><input type=checkbox id=section-6b02990358c7382bac3f39043e5fd437 class=toggle>
 <label for=section-6b02990358c7382bac3f39043e5fd437 class="flex justify-between"><a>搜索操作</a>
-<span>▾</span></label><ul><li><input type=checkbox id=section-19c2d09435d47ad6656e503e2a68a3b3 class=toggle>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/term/>词项查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/>全文查询</a></li><li><a href=/easysearch/main/docs/references/search/knn_api/>向量查询</a></li><li><a href=/easysearch/main/docs/references/search/bool/>布尔查询</a></li><li><a href=/easysearch/main/docs/references/search/search-template/>查询模版</a></li><li><a href=/easysearch/main/docs/references/search/async_search/>异步搜索</a></li><li><a href=/easysearch/main/docs/references/search/pit_api/>定点查询</a></li><li><input type=checkbox id=section-19c2d09435d47ad6656e503e2a68a3b3 class=toggle>
 <label for=section-19c2d09435d47ad6656e503e2a68a3b3 class="flex justify-between"><a href=/easysearch/main/docs/references/search/search-pipelines/>搜索管道</a>
 <span>▾</span></label><ul><li><input type=checkbox id=section-07023dbd216ba1a90a2c532ff5bb0961 class=toggle>
 <label for=section-07023dbd216ba1a90a2c532ff5bb0961 class="flex justify-between"><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/>搜索处理器</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/filter-query-processor/>过滤查询处理器</a></li><li><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/rename-field-processor/>重命名字段处理器</a></li><li><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/script-processor/>脚本处理器</a></li></ul></li></ul></li><li><a href=/easysearch/main/docs/references/search/term/>词项查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/>全文查询</a></li><li><a href=/easysearch/main/docs/references/search/knn_api/>向量查询</a></li><li><a href=/easysearch/main/docs/references/search/bool/>布尔查询</a></li><li><a href=/easysearch/main/docs/references/search/search-template/>查询模版</a></li><li><a href=/easysearch/main/docs/references/search/async_search/>异步搜索</a></li><li><a href=/easysearch/main/docs/references/search/pit_api/>定点查询</a></li></ul></li><li><input type=checkbox id=section-86e828ca7e30e9d2e35881b956319411 class=toggle>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/filter-query-processor/>过滤查询处理器</a></li><li><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/rename-field-processor/>重命名字段处理器</a></li><li><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/script-processor/>脚本处理器</a></li></ul></li></ul></li></ul></li><li><input type=checkbox id=section-86e828ca7e30e9d2e35881b956319411 class=toggle>
 <label for=section-86e828ca7e30e9d2e35881b956319411 class="flex justify-between"><a>SQL 查询</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/sql/sql-jdbc/>SQL-JDBC</a></li><li><a href=/easysearch/main/docs/references/sql/aggregations/>聚合查询</a></li><li><a href=/easysearch/main/docs/references/sql/fulltext/>全文搜索</a></li><li><a href=/easysearch/main/docs/references/sql/complex/>复杂查询</a></li><li><a href=/easysearch/main/docs/references/sql/basics/>基础查询</a></li></ul></li><li><input type=checkbox id=section-1c80046b8a7d2b6f02509e78096b1388 class=toggle>
 <label for=section-1c80046b8a7d2b6f02509e78096b1388 class="flex justify-between"><a href=/easysearch/main/docs/references/security/>安全模块</a>
@@ -114,13 +114,13 @@ rankScore(document_i) = sum(1/(k + query_1_rank), 1/(k + query_2_rank), ..., 1/(
 <label for=toc-control><img src=/easysearch/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#混合搜索>混合搜索</a><ul><li><a href=#混合排序处理器>混合排序处理器</a><ul><li><a href=#算法原理>算法原理</a></li><li><a href=#请求体字段><strong>请求体字段</strong></a></li><li><a href=#创建混合排序处理器>创建混合排序处理器</a></li></ul></li><li><a href=#配置混合搜索管道>配置混合搜索管道</a><ul><li><a href=#搜索管道结构>搜索管道结构：</a></li></ul></li><li><a href=#使用混合查询-api-进行搜索>使用混合查询 API 进行搜索</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=混合搜索>混合搜索
 <a class=anchor href=#%e6%b7%b7%e5%90%88%e6%90%9c%e7%b4%a2>#</a></h1><p>混合搜索结合了关键词搜索和语义搜索，以提升搜索相关性。要实现混合搜索，您需要建立一个在搜索时运行的搜索管道。
 该管道会在中间阶段拦截搜索结果，并通过处理流程对文档分数进行归一化和组合处理。</p><p>要使用混合搜索，您需要配置搜索管道，添加混合排序处理器。</p><h2 id=混合排序处理器>混合排序处理器
-<a class=anchor href=#%e6%b7%b7%e5%90%88%e6%8e%92%e5%ba%8f%e5%a4%84%e7%90%86%e5%99%a8>#</a></h2><p>混合排序处理器 <code>hybrid_ranker_processor</code> 是一种基于排名的搜索阶段结果处理器，运行在搜索执行的查询阶段和获取阶段之间。它会拦截查询阶段的结果，然后使用 <strong>倒数排序融合算法（RRF，Reciprocal Rank Fusion）</strong> 来合并不同查询子句，最终生成排序后的搜索结果列表。</p><p>适用场景：</p><ul><li>需要融合不同搜索技术（如关键词和语义搜索）的结果</li><li>子查询的原始分数不可直接比较（如 BM25 和 KNN）</li></ul><h3 id=算法原理>算法原理
+<a class=anchor href=#%e6%b7%b7%e5%90%88%e6%8e%92%e5%ba%8f%e5%a4%84%e7%90%86%e5%99%a8>#</a></h2><p>混合排序处理器 <code>hybrid_ranker_processor</code> 是一种重排序处理器，运行在搜索执行的查询阶段和获取阶段之间。它会拦截查询阶段的结果，然后使用 <strong>倒数排序融合算法（RRF，Reciprocal Rank Fusion）</strong> 来合并不同查询子句，最终生成排序后的搜索结果列表。</p><p>适用场景：</p><ul><li>需要融合不同搜索技术（如关键词和语义搜索）的结果</li><li>子查询的原始分数不可直接比较（如 BM25 和 KNN）</li></ul><h3 id=算法原理>算法原理
 <a class=anchor href=#%e7%ae%97%e6%b3%95%e5%8e%9f%e7%90%86>#</a></h3><p>RRF 是一种多查询融合方法，其核心计算逻辑为：</p><blockquote><ol><li>对每个文档在不同子结果集给出的排名取倒数（如排名第 k 则得分为 1/(k+60)）</li><li>将各子结果集的倒数得分相加，生成统一排序分数</li><li>按最终分数降序输出结果集</li></ol></blockquote><p>RRF 的通用计算公式如下（其中 k 为平滑常数，默认 60，query_j_rank 表示混合查询中某文档在第 j 种查询方法返回结果中的排名）：</p><pre><code class=language-math data-lang=math>rankScore(document_i) = sum(1/(k + query_1_rank), 1/(k + query_2_rank), ..., 1/(k + query_j_rank))
 </code></pre><h3 id=请求体字段><strong>请求体字段</strong>
 <a class=anchor href=#%e8%af%b7%e6%b1%82%e4%bd%93%e5%ad%97%e6%ae%b5>#</a></h3><p>下表列出了所有可用的请求字段。</p><table><thead><tr><th>字段</th><th>数据类型</th><th>说明</th></tr></thead><tbody><tr><td><code>combination.technique</code></td><td>String</td><td><strong>必填</strong>。指定分数组合方式，目前仅支持 <code>rrf</code>（倒数排序融合）。</td></tr><tr><td><code>combination.rank_constant</code></td><td>Integer</td><td><strong>可选</strong>。计算倒数得分前，加到文档排名的常量值（必须 ≥ 1）。默认值：60。<br>- <strong>较大值</strong>（如 100）会使分数更均匀，降低高排名结果的影响。<br>- <strong>较小值</strong>（如 10）会增大排名间的分数差异，使高排名结果更具优势。</td></tr></tbody></table><p>（注：RRF 算法适用于混合搜索场景，能够平衡关键词搜索和语义搜索的排序结果，提升整体相关性。）</p><h3 id=创建混合排序处理器>创建混合排序处理器
 <a class=anchor href=#%e5%88%9b%e5%bb%ba%e6%b7%b7%e5%90%88%e6%8e%92%e5%ba%8f%e5%a4%84%e7%90%86%e5%99%a8>#</a></h3><p>以下请求创建一个搜索管道，其中包含混合排序处理器：</p><pre><code class=language-auto data-lang=auto>PUT /_search/pipeline/rrf-pipeline
 {
-  &quot;phase_results_processors&quot;: [
+  &quot;rerank_processors&quot;: [
     {
       &quot;hybrid_ranker_processor&quot;: {
         &quot;combination&quot;: {
@@ -134,7 +134,7 @@ rankScore(document_i) = sum(1/(k + query_1_rank), 1/(k + query_2_rank), ..., 1/(
 </code></pre><p>rrf-pipeline 仅用于演示，实际使用时建议配置混合搜索管道</p><h2 id=配置混合搜索管道>配置混合搜索管道
 <a class=anchor href=#%e9%85%8d%e7%bd%ae%e6%b7%b7%e5%90%88%e6%90%9c%e7%b4%a2%e7%ae%a1%e9%81%93>#</a></h2><p>为充分发挥混合搜索的优势，建议配置语义查询增强处理器 <code>semantic_query_enricher</code>，通过结合关键词搜索的精确匹配能力和语义搜索的上下文理解能力，提升整体搜索效果。</p><p>下面这个请求是在 Easysearch 中创建一个名为 search_model_aliyun 的搜索管道(search pipeline)。搜索管道允许你在搜索请求的不同阶段插入自定义逻辑。</p><pre><code class=language-auto data-lang=auto>PUT /_search/pipeline/search_model_aliyun
 {
-  &quot;request_processors&quot;: [
+  &quot;rewrite_processors&quot;: [
     {
       &quot;semantic_query_enricher&quot; : {
         &quot;tag&quot;: &quot;tag1&quot;,
@@ -149,7 +149,7 @@ rankScore(document_i) = sum(1/(k + query_1_rank), 1/(k + query_2_rank), ..., 1/(
       }
     }
   ],
-     &quot;phase_results_processors&quot;: [
+     &quot;rerank_processors&quot;: [
     {
       &quot;hybrid_ranker_processor&quot;: {
         &quot;combination&quot;: {
@@ -159,23 +159,23 @@ rankScore(document_i) = sum(1/(k + query_1_rank), 1/(k + query_2_rank), ..., 1/(
       }
     }
   ],
-    &quot;response_processors&quot;: [
+    &quot;enrich_processors&quot;: [
     {
         &quot;hybrid_score_explanation&quot;: {}
     }
   ]
 }
 </code></pre><h3 id=搜索管道结构>搜索管道结构：
-<a class=anchor href=#%e6%90%9c%e7%b4%a2%e7%ae%a1%e9%81%93%e7%bb%93%e6%9e%84>#</a></h3><h4 id=请求处理器-request_processors>请求处理器 (request_processors)
-<a class=anchor href=#%e8%af%b7%e6%b1%82%e5%a4%84%e7%90%86%e5%99%a8-request_processors>#</a></h4><pre><code class=language-auto data-lang=auto>{
+<a class=anchor href=#%e6%90%9c%e7%b4%a2%e7%ae%a1%e9%81%93%e7%bb%93%e6%9e%84>#</a></h3><h4 id=查询重写处理器-rewrite_processors>查询重写处理器 (rewrite_processors)
+<a class=anchor href=#%e6%9f%a5%e8%af%a2%e9%87%8d%e5%86%99%e5%a4%84%e7%90%86%e5%99%a8-rewrite_processors>#</a></h4><pre><code class=language-auto data-lang=auto>{
    &quot;semantic_query_enricher&quot;: {}
 }
-</code></pre><p>这部分配置了一个语义查询增强器，将查询文本转换为向量表示，用于后续的向量搜索。</p><h4 id=查询阶段结果处理器-phase_results_processors>查询阶段结果处理器 (phase_results_processors)
-<a class=anchor href=#%e6%9f%a5%e8%af%a2%e9%98%b6%e6%ae%b5%e7%bb%93%e6%9e%9c%e5%a4%84%e7%90%86%e5%99%a8-phase_results_processors>#</a></h4><pre><code class=language-auto data-lang=auto>{
+</code></pre><p>这部分配置了一个语义查询增强器，将查询文本转换为向量表示，用于后续的向量搜索。</p><h4 id=重排序处理器-rerank_processors>重排序处理器 (rerank_processors)
+<a class=anchor href=#%e9%87%8d%e6%8e%92%e5%ba%8f%e5%a4%84%e7%90%86%e5%99%a8-rerank_processors>#</a></h4><pre><code class=language-auto data-lang=auto>{
    &quot;hybrid_ranker_processor&quot;: {}
 }
-</code></pre><p>这部分配置了一个混合排序处理器。</p><h4 id=响应处理器-response_processors可选>响应处理器 (response_processors)，可选
-<a class=anchor href=#%e5%93%8d%e5%ba%94%e5%a4%84%e7%90%86%e5%99%a8-response_processors%e5%8f%af%e9%80%89>#</a></h4><pre><code class=language-auto data-lang=auto>{
+</code></pre><p>这部分配置了一个混合排序处理器。</p><h4 id=结果增强处理器-enrich_processors可选>结果增强处理器 (enrich_processors)，可选
+<a class=anchor href=#%e7%bb%93%e6%9e%9c%e5%a2%9e%e5%bc%ba%e5%a4%84%e7%90%86%e5%99%a8-enrich_processors%e5%8f%af%e9%80%89>#</a></h4><pre><code class=language-auto data-lang=auto>{
    &quot;hybrid_score_explanation&quot;: {}
 }
 </code></pre><p>这部分配置了一个混合分数解释器，它会：</p><ul><li>在搜索结果中添加解释信息</li><li>帮助理解不同部分(如文本匹配和语义相似度)对最终得分的贡献</li></ul><h2 id=使用混合查询-api-进行搜索>使用混合查询 API 进行搜索
