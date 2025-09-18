@@ -1,10 +1,6 @@
-<!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="词项查询 #  Easysearch 在搜索数据时支持两种类型的查询：词项 (term) 查询和全文查询。
-下表显示了它们之间的差异：
-    词项查询 全文检索     描述 term 查询回应与查询匹配的文档。 全文查询回应文档与查询的匹配程度。   分词 搜索 term 是不分词的。这意味着 term 查询按原样搜索您的 term。 搜索 term 由索引时用于文档指定字段的分词器进行分词。这意味着您的搜索词将经历与文档字段相同的分词过程。   相关性 Term 级查询只返回匹配的文档，而不根据相关性得分对其进行排序。他们仍然计算相关性得分，但该得分对于返回的所有文档都是相同的。 全文查询计算每个匹配的相关性得分，并按相关性的降序对结果进行排序。   应用场景 当您希望匹配数字、日期、 tag 等精确值，并且不需要按相关性对匹配项进行排序时，请使用术语级查询。 在考虑大小写和词干变体等因素后，使用全文查询来匹配文本字段并按相关性排序。     Easysearch 使用名为 Okapi BM25 的概率排名框架来计算相关性得分。要了解更多关于 Okapi BM25 的信息，请参阅 维基百科.
- 假设您在 Easysearch 集群中索引了莎士比亚全集。我们使用 term 查询在 text_entry 字段中搜索短语 “To be，or not be”："><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="词项查询"><meta property="og:description" content="词项查询 #  Easysearch 在搜索数据时支持两种类型的查询：词项 (term) 查询和全文查询。
-下表显示了它们之间的差异：
-    词项查询 全文检索     描述 term 查询回应与查询匹配的文档。 全文查询回应文档与查询的匹配程度。   分词 搜索 term 是不分词的。这意味着 term 查询按原样搜索您的 term。 搜索 term 由索引时用于文档指定字段的分词器进行分词。这意味着您的搜索词将经历与文档字段相同的分词过程。   相关性 Term 级查询只返回匹配的文档，而不根据相关性得分对其进行排序。他们仍然计算相关性得分，但该得分对于返回的所有文档都是相同的。 全文查询计算每个匹配的相关性得分，并按相关性的降序对结果进行排序。   应用场景 当您希望匹配数字、日期、 tag 等精确值，并且不需要按相关性对匹配项进行排序时，请使用术语级查询。 在考虑大小写和词干变体等因素后，使用全文查询来匹配文本字段并按相关性排序。     Easysearch 使用名为 Okapi BM25 的概率排名框架来计算相关性得分。要了解更多关于 Okapi BM25 的信息，请参阅 维基百科.
- 假设您在 Easysearch 集群中索引了莎士比亚全集。我们使用 term 查询在 text_entry 字段中搜索短语 “To be，or not be”："><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/main/docs/references/search/term/"><title>词项查询 | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/easysearch/main/css/asciinema-player.css><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="精确查询 #  精确查询用于在索引中搜索包含确切搜索词的文档。精确查询返回的文档不会按相关性得分排序。
+处理文本数据时，仅对映射为 keyword 的字段使用精确查询。
+精确查询不适用于搜索分析过的文本字段。若要返回分析过的字段，请使用全文检索。"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="精确查询"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:url" content="/easysearch/main/docs/references/search/term/"><title>精确查询 | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=alternate type=application/rss+xml href=/easysearch/main/docs/references/search/term/index.xml title="INFINI Easysearch"><link rel=stylesheet type=text/css href=/easysearch/main/css/asciinema-player.css><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/easysearch/main><img src=/easysearch/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
 <option value=v1.15.1>v1.15.1</option>
@@ -63,7 +59,21 @@
 <label for=section-232f0668f3be6ea64e1c220baec34dfc class="flex justify-between"><a>文档操作</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/document/index-data/>增删改查</a></li><li><a href=/easysearch/main/docs/references/document/index-alias/>别名操作</a></li><li><a href=/easysearch/main/docs/references/document/index-compression/>索引压缩</a></li></ul></li><li><input type=checkbox id=section-6b02990358c7382bac3f39043e5fd437 class=toggle checked>
 <label for=section-6b02990358c7382bac3f39043e5fd437 class="flex justify-between"><a>搜索操作</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/term/ class=active>词项查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/>全文查询</a></li><li><a href=/easysearch/main/docs/references/search/knn_api/>向量查询</a></li><li><a href=/easysearch/main/docs/references/search/bool/>布尔查询</a></li><li><a href=/easysearch/main/docs/references/search/search-template/>查询模版</a></li><li><a href=/easysearch/main/docs/references/search/async_search/>异步搜索</a></li><li><a href=/easysearch/main/docs/references/search/pit_api/>定点查询</a></li><li><input type=checkbox id=section-19c2d09435d47ad6656e503e2a68a3b3 class=toggle>
+<span>▾</span></label><ul><li><input type=checkbox id=section-914ecc84741b3e200e93ea80c2eb0df1 class=toggle>
+<label for=section-914ecc84741b3e200e93ea80c2eb0df1 class="flex justify-between"><a href=/easysearch/main/docs/references/search/span/>Span 查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/span/span-first/>Span 前序匹配</a></li><li><a href=/easysearch/main/docs/references/search/span/span-within/>Span 包含于查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-containing/>Span 包含查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-multi-term/>Span 多词项查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-or/>Span 或查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-not/>Span 排除查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-term/>Span 词项查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-field-masking/>Span 跨字段查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-near/>Span 邻近查询</a></li></ul></li><li><input type=checkbox id=section-fe27ae639d7a8e652db974b443eb5848 class=toggle>
+<label for=section-fe27ae639d7a8e652db974b443eb5848 class="flex justify-between"><a href=/easysearch/main/docs/references/search/specialized/>专业查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/specialized/wrapper/>包装器</a></li><li><a href=/easysearch/main/docs/references/search/specialized/rank-feature/>排序功能</a></li><li><a href=/easysearch/main/docs/references/search/specialized/percolate/>渗透查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/more-like-this/>类似查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/script-score/>脚本分数查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/script/>脚本查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/distance-feature/>距离特征查询</a></li></ul></li><li><a href=/easysearch/main/docs/references/search/match-all/>全匹配查询</a></li><li><input type=checkbox id=section-1df907d6b381276d472faa1ffc431057 class=toggle>
+<label for=section-1df907d6b381276d472faa1ffc431057 class="flex justify-between"><a href=/easysearch/main/docs/references/search/full-text/>全文检索</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/full-text/intervals/>Intervals 查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match-bool-prefix/>匹配布尔前缀查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match/>匹配查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match-phrase-prefix/>匹配短语前缀查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match-phrase/>匹配短语查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/multi-match/>多字段查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/query-string/>字符串查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/simple-query-string/>简单字符串查询</a></li></ul></li><li><input type=checkbox id=section-2baa128ae64b7fa17aa37f790453c292 class=toggle>
+<label for=section-2baa128ae64b7fa17aa37f790453c292 class="flex justify-between"><a href=/easysearch/main/docs/references/search/joining/>关联查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/joining/has-child/>子查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/nested/>嵌套查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/parent-id/>父 ID 查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/has-parent/>父查询</a></li></ul></li><li><input type=checkbox id=section-86bf1f72d443fd258db0d40a6bf009d7 class=toggle>
+<label for=section-86bf1f72d443fd258db0d40a6bf009d7 class="flex justify-between"><a href=/easysearch/main/docs/references/search/geo-and-xy/>地理查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geopolygon/>地理多边形查询</a></li><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geoshape/>地理形状查询</a></li><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geodistance/>地理距离查询</a></li><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geo-bounding-box/>地理边界框查询</a></li></ul></li><li><input type=checkbox id=section-15ea627c37f24ed149a43b1c0b4add9f class=toggle>
+<label for=section-15ea627c37f24ed149a43b1c0b4add9f class="flex justify-between"><a href=/easysearch/main/docs/references/search/compound/>复合查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/compound/function-score/>函数评分查询</a></li><li><a href=/easysearch/main/docs/references/search/compound/boosting/>加权</a></li><li><a href=/easysearch/main/docs/references/search/compound/bool/>布尔查询</a></li><li><a href=/easysearch/main/docs/references/search/compound/constant-score/>常量化评分查询</a></li><li><a href=/easysearch/main/docs/references/search/compound/disjunction-max/>析取最大查询</a></li></ul></li><li><a href=/easysearch/main/docs/references/search/minimum-should-match/>最小匹配</a></li><li><a href=/easysearch/main/docs/references/search/query-filter-context/>查询和过滤上下文</a></li><li><a href=/easysearch/main/docs/references/search/regex-syntax/>正则表达式语法</a></li><li><input type=checkbox id=section-e8f94bccae3c54be36d1896778639639 class=toggle checked>
+<label for=section-e8f94bccae3c54be36d1896778639639 class="flex justify-between"><a href=/easysearch/main/docs/references/search/term/ class=active>精确查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/term/exists/>Exists 查询</a></li><li><a href=/easysearch/main/docs/references/search/term/ids/>IDs 查询</a></li><li><a href=/easysearch/main/docs/references/search/term/term/>Term 精确查询</a></li><li><a href=/easysearch/main/docs/references/search/term/prefix/>前缀查询</a></li><li><a href=/easysearch/main/docs/references/search/term/terms/>多词项查询</a></li><li><a href=/easysearch/main/docs/references/search/term/fuzzy/>模糊查询</a></li><li><a href=/easysearch/main/docs/references/search/term/regexp/>正则查询</a></li><li><a href=/easysearch/main/docs/references/search/term/range/>范围查询</a></li><li><a href=/easysearch/main/docs/references/search/term/terms-set/>词项集查询</a></li><li><a href=/easysearch/main/docs/references/search/term/wildcard/>通配符查询</a></li></ul></li><li><a href=/easysearch/main/docs/references/search/term-vs-full-text/>精确查询与全文检索的对比</a></li><li><a href=/easysearch/main/docs/references/search/rewrite-parameter/>重写参数</a></li><li><a href=/easysearch/main/docs/references/search/knn_api/>向量查询</a></li><li><a href=/easysearch/main/docs/references/search/search-template/>查询模版</a></li><li><a href=/easysearch/main/docs/references/search/async_search/>异步搜索</a></li><li><a href=/easysearch/main/docs/references/search/pit_api/>定点查询</a></li><li><input type=checkbox id=section-19c2d09435d47ad6656e503e2a68a3b3 class=toggle>
 <label for=section-19c2d09435d47ad6656e503e2a68a3b3 class="flex justify-between"><a href=/easysearch/main/docs/references/search/search-pipelines/>搜索管道</a>
 <span>▾</span></label><ul><li><input type=checkbox id=section-07023dbd216ba1a90a2c532ff5bb0961 class=toggle>
 <label for=section-07023dbd216ba1a90a2c532ff5bb0961 class="flex justify-between"><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/>搜索处理器</a>
@@ -99,323 +109,13 @@
 <label for=section-b34adbce31bce6650a0099282b315617 class="flex justify-between"><a>客户端</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/client/java-client/>快速开始</a></li><li><a href=/easysearch/main/docs/references/client/client-api/>API 使用</a></li></ul></li><li><input type=checkbox id=section-a0bb1e309cd3ee77d6be0614fc18cdcc class=toggle>
 <label for=section-a0bb1e309cd3ee77d6be0614fc18cdcc class="flex justify-between"><a>AI 集成</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/ai-integration/ingest-text-embedding/>写入数据文本向量化</a></li><li><a href=/easysearch/main/docs/references/ai-integration/search-text-embedding/>搜索请求文本向量化</a></li><li><a href=/easysearch/main/docs/references/ai-integration/text-embeddings/>文本向量化</a></li><li><a href=/easysearch/main/docs/references/ai-integration/hybrid-search/>混合搜索</a></li></ul></li></ul></li><li><input type=checkbox id=section-5deabf5956593012403515b953582b86 class=toggle>
-<label for=section-5deabf5956593012403515b953582b86 class="flex justify-between"><a href=/easysearch/main/docs/query-dsl/>查询 DSL</a>
-<span>▾</span></label><ul><li><input type=checkbox id=section-f6c9aa1b0a6c9393d01e52b2c705986f class=toggle>
-<label for=section-f6c9aa1b0a6c9393d01e52b2c705986f class="flex justify-between"><a href=/easysearch/main/docs/query-dsl/span/>Span 查询</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/query-dsl/span/span-first/>Span 前序匹配</a></li><li><a href=/easysearch/main/docs/query-dsl/span/span-within/>Span 包含于查询</a></li><li><a href=/easysearch/main/docs/query-dsl/span/span-containing/>Span 包含查询</a></li><li><a href=/easysearch/main/docs/query-dsl/span/span-multi-term/>Span 多词项查询</a></li><li><a href=/easysearch/main/docs/query-dsl/span/span-or/>Span 或查询</a></li><li><a href=/easysearch/main/docs/query-dsl/span/span-not/>Span 排除查询</a></li><li><a href=/easysearch/main/docs/query-dsl/span/span-term/>Span 词项查询</a></li><li><a href=/easysearch/main/docs/query-dsl/span/span-field-masking/>Span 跨字段查询</a></li><li><a href=/easysearch/main/docs/query-dsl/span/span-near/>Span 邻近查询</a></li></ul></li><li><input type=checkbox id=section-79fe6dfbc7c32ad5e32abd26f2ce821b class=toggle>
-<label for=section-79fe6dfbc7c32ad5e32abd26f2ce821b class="flex justify-between"><a href=/easysearch/main/docs/query-dsl/specialized/>专业查询</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/query-dsl/specialized/wrapper/>包装器</a></li><li><a href=/easysearch/main/docs/query-dsl/specialized/rank-feature/>排序功能</a></li><li><a href=/easysearch/main/docs/query-dsl/specialized/percolate/>渗透查询</a></li><li><a href=/easysearch/main/docs/query-dsl/specialized/more-like-this/>类似查询</a></li><li><a href=/easysearch/main/docs/query-dsl/specialized/script-score/>脚本分数查询</a></li><li><a href=/easysearch/main/docs/query-dsl/specialized/script/>脚本查询</a></li><li><a href=/easysearch/main/docs/query-dsl/specialized/distance-feature/>距离特征查询</a></li></ul></li><li><a href=/easysearch/main/docs/query-dsl/match-all/>全匹配查询</a></li><li><input type=checkbox id=section-bd9869f566788d4b48d15528c6d39dcf class=toggle>
-<label for=section-bd9869f566788d4b48d15528c6d39dcf class="flex justify-between"><a href=/easysearch/main/docs/query-dsl/full-text/>全文检索</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/query-dsl/full-text/intervals/>Intervals 查询</a></li><li><a href=/easysearch/main/docs/query-dsl/full-text/match-bool-prefix/>匹配布尔前缀查询</a></li><li><a href=/easysearch/main/docs/query-dsl/full-text/match/>匹配查询</a></li><li><a href=/easysearch/main/docs/query-dsl/full-text/match-phrase-prefix/>匹配短语前缀查询</a></li><li><a href=/easysearch/main/docs/query-dsl/full-text/match-phrase/>匹配短语查询</a></li><li><a href=/easysearch/main/docs/query-dsl/full-text/multi-match/>多字段查询</a></li><li><a href=/easysearch/main/docs/query-dsl/full-text/query-string/>字符串查询</a></li><li><a href=/easysearch/main/docs/query-dsl/full-text/simple-query-string/>简单字符串查询</a></li></ul></li><li><input type=checkbox id=section-5a4f265c868442d3bb598a153288c4c8 class=toggle>
-<label for=section-5a4f265c868442d3bb598a153288c4c8 class="flex justify-between"><a href=/easysearch/main/docs/query-dsl/joining/>关联查询</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/query-dsl/joining/has-child/>子查询</a></li><li><a href=/easysearch/main/docs/query-dsl/joining/nested/>嵌套查询</a></li><li><a href=/easysearch/main/docs/query-dsl/joining/parent-id/>父 ID 查询</a></li><li><a href=/easysearch/main/docs/query-dsl/joining/has-parent/>父查询</a></li></ul></li><li><input type=checkbox id=section-3255dea9fd3dc23bf2415acc5b39d344 class=toggle>
-<label for=section-3255dea9fd3dc23bf2415acc5b39d344 class="flex justify-between"><a href=/easysearch/main/docs/query-dsl/geo-and-xy/>地理查询</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/query-dsl/geo-and-xy/geopolygon/>地理多边形查询</a></li><li><a href=/easysearch/main/docs/query-dsl/geo-and-xy/geoshape/>地理形状查询</a></li><li><a href=/easysearch/main/docs/query-dsl/geo-and-xy/geodistance/>地理距离查询</a></li><li><a href=/easysearch/main/docs/query-dsl/geo-and-xy/geo-bounding-box/>地理边界框查询</a></li></ul></li><li><input type=checkbox id=section-c937ed8d19dcfbd2c30a6d71413fcbf9 class=toggle>
-<label for=section-c937ed8d19dcfbd2c30a6d71413fcbf9 class="flex justify-between"><a href=/easysearch/main/docs/query-dsl/compound/>复合查询</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/query-dsl/compound/function-score/>函数评分查询</a></li><li><a href=/easysearch/main/docs/query-dsl/compound/boosting/>加权</a></li><li><a href=/easysearch/main/docs/query-dsl/compound/bool/>布尔查询</a></li><li><a href=/easysearch/main/docs/query-dsl/compound/constant-score/>常量化评分查询</a></li><li><a href=/easysearch/main/docs/query-dsl/compound/disjunction-max/>析取最大查询</a></li></ul></li><li><a href=/easysearch/main/docs/query-dsl/minimum-should-match/>最小匹配</a></li><li><a href=/easysearch/main/docs/query-dsl/query-filter-context/>查询和过滤上下文</a></li><li><a href=/easysearch/main/docs/query-dsl/regex-syntax/>正则表达式语法</a></li><li><input type=checkbox id=section-eacfa310ae81f309e3e8b6026cf250ba class=toggle>
-<label for=section-eacfa310ae81f309e3e8b6026cf250ba class="flex justify-between"><a href=/easysearch/main/docs/query-dsl/term/>精确查询</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/query-dsl/term/exists/>Exists 查询</a></li><li><a href=/easysearch/main/docs/query-dsl/term/ids/>IDs 查询</a></li><li><a href=/easysearch/main/docs/query-dsl/term/term/>Term 精确查询</a></li><li><a href=/easysearch/main/docs/query-dsl/term/prefix/>前缀查询</a></li><li><a href=/easysearch/main/docs/query-dsl/term/terms/>多词项查询</a></li><li><a href=/easysearch/main/docs/query-dsl/term/fuzzy/>模糊查询</a></li><li><a href=/easysearch/main/docs/query-dsl/term/regexp/>正则查询</a></li><li><a href=/easysearch/main/docs/query-dsl/term/range/>范围查询</a></li><li><a href=/easysearch/main/docs/query-dsl/term/terms-set/>词项集查询</a></li><li><a href=/easysearch/main/docs/query-dsl/term/wildcard/>通配符查询</a></li></ul></li><li><a href=/easysearch/main/docs/query-dsl/term-vs-full-text/>精确查询与全文检索的对比</a></li><li><a href=/easysearch/main/docs/query-dsl/rewrite-parameter/>重写参数</a></li></ul></li><li><input type=checkbox id=section-1adc738e7351809ea378ec7e9730bd1f class=toggle>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/ai-integration/ingest-text-embedding/>写入数据文本向量化</a></li><li><a href=/easysearch/main/docs/references/ai-integration/search-text-embedding/>搜索请求文本向量化</a></li><li><a href=/easysearch/main/docs/references/ai-integration/text-embeddings/>文本向量化</a></li><li><a href=/easysearch/main/docs/references/ai-integration/hybrid-search/>混合搜索</a></li></ul></li></ul></li><li><input type=checkbox id=section-1adc738e7351809ea378ec7e9730bd1f class=toggle>
 <label for=section-1adc738e7351809ea378ec7e9730bd1f class="flex justify-between"><a>版本历史</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/release-notes/client/>Easysearch-client</a></li><li><a href=/easysearch/main/docs/release-notes/easysearch/>Easysearch</a></li></ul></li><li><a href=/easysearch/main/docs/resources/>其它资源</a><ul></ul></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/easysearch/main/svg/menu.svg class=book-icon alt=Menu></label>
-<strong>词项查询</strong>
-<label for=toc-control><img src=/easysearch/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#词项查询>词项查询</a><ul><li><ul><li></li></ul></li><li><a href=#term-查询>Term 查询</a></li><li><a href=#terms-查询>Terms 查询</a></li><li><a href=#ids>IDs</a></li><li><a href=#range>Range</a></li><li><a href=#前缀-prefix>前缀 Prefix</a></li><li><a href=#是否存在-exists>是否存在 Exists</a></li><li><a href=#通配符-wildcards>通配符 Wildcards</a></li><li><a href=#正则-regex>正则 Regex</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=词项查询>词项查询
-<a class=anchor href=#%e8%af%8d%e9%a1%b9%e6%9f%a5%e8%af%a2>#</a></h1><p>Easysearch 在搜索数据时支持两种类型的查询：词项 (term) 查询和全文查询。</p><p>下表显示了它们之间的差异：</p><table><thead><tr><th style=text-align:left></th><th style=text-align:left>词项查询</th><th style=text-align:left>全文检索</th></tr></thead><tbody><tr><td style=text-align:left><em>描述</em></td><td style=text-align:left>term 查询回应与查询匹配的文档。</td><td style=text-align:left>全文查询回应文档与查询的匹配程度。</td></tr><tr><td style=text-align:left><em>分词</em></td><td style=text-align:left>搜索 term 是不分词的。这意味着 term 查询按原样搜索您的 term。</td><td style=text-align:left>搜索 term 由索引时用于文档指定字段的分词器进行分词。这意味着您的搜索词将经历与文档字段相同的分词过程。</td></tr><tr><td style=text-align:left><em>相关性</em></td><td style=text-align:left>Term 级查询只返回匹配的文档，而不根据相关性得分对其进行排序。他们仍然计算相关性得分，但该得分对于返回的所有文档都是相同的。</td><td style=text-align:left>全文查询计算每个匹配的相关性得分，并按相关性的降序对结果进行排序。</td></tr><tr><td style=text-align:left><em>应用场景</em></td><td style=text-align:left>当您希望匹配数字、日期、 tag 等精确值，并且不需要按相关性对匹配项进行排序时，请使用术语级查询。</td><td style=text-align:left>在考虑大小写和词干变体等因素后，使用全文查询来匹配文本字段并按相关性排序。</td></tr></tbody></table><blockquote><p>Easysearch 使用名为 Okapi BM25 的概率排名框架来计算相关性得分。要了解更多关于 Okapi BM25 的信息，请参阅
-<a href=https://en.wikipedia.org/wiki/Okapi_BM25>维基百科</a>.</p></blockquote><p>假设您在 Easysearch 集群中索引了莎士比亚全集。我们使用 term 查询在 <code>text_entry</code> 字段中搜索短语 “To be，or not be”：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>shakespeare/_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;term&#34;</span>: {
-      <span style=color:#f92672>&#34;text_entry&#34;</span>: <span style=color:#e6db74>&#34;To be, or not to be&#34;</span>
-    }
-  }
-}
-</code></pre></div><h4 id=响应示例>响应示例
-<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
-  <span style=color:#f92672>&#34;took&#34;</span>: <span style=color:#ae81ff>3</span>,
-  <span style=color:#f92672>&#34;timed_out&#34;</span>: <span style=color:#66d9ef>false</span>,
-  <span style=color:#f92672>&#34;_shards&#34;</span>: {
-    <span style=color:#f92672>&#34;total&#34;</span>: <span style=color:#ae81ff>1</span>,
-    <span style=color:#f92672>&#34;successful&#34;</span>: <span style=color:#ae81ff>1</span>,
-    <span style=color:#f92672>&#34;skipped&#34;</span>: <span style=color:#ae81ff>0</span>,
-    <span style=color:#f92672>&#34;failed&#34;</span>: <span style=color:#ae81ff>0</span>
-  },
-  <span style=color:#f92672>&#34;hits&#34;</span>: {
-    <span style=color:#f92672>&#34;total&#34;</span>: {
-      <span style=color:#f92672>&#34;value&#34;</span>: <span style=color:#ae81ff>0</span>,
-      <span style=color:#f92672>&#34;relation&#34;</span>: <span style=color:#e6db74>&#34;eq&#34;</span>
-    },
-    <span style=color:#f92672>&#34;max_score&#34;</span>: <span style=color:#66d9ef>null</span>,
-    <span style=color:#f92672>&#34;hits&#34;</span>: []
-  }
-}
-</code></pre></div><p>我们没有找回任何匹配（ <code>hits</code> ）。这是因为 term “To be, or not to be”是在倒排索引中按字面搜索的，其中只存储文本字段的分词后的值。Term 查询不适合搜索分词的文本字段，因为它们通常会产生意外的结果。使用文本数据时，仅对仅映射为 keyword 的字段使用 term 查询。</p><p>使用全文查询:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>shakespeare/_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;match&#34;</span>: {
-      <span style=color:#f92672>&#34;text_entry&#34;</span>: <span style=color:#e6db74>&#34;To be, or not to be&#34;</span>
-    }
-  }
-}
-</code></pre></div><p>搜索查询 “To be，or not be” 被分析并标记为一个标记数组，就像文档的 <code>text_entry</code> 字段一样。全文查询在搜索查询和所有文档的 <code>text_entry</code> 字段之间执行标记的交集，然后根据相关性得分对结果进行排序：</p><h4 id=响应示例-1>响应示例
-<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b-1>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
-  <span style=color:#f92672>&#34;took&#34;</span> : <span style=color:#ae81ff>19</span>,
-  <span style=color:#f92672>&#34;timed_out&#34;</span> : <span style=color:#66d9ef>false</span>,
-  <span style=color:#f92672>&#34;_shards&#34;</span> : {
-    <span style=color:#f92672>&#34;total&#34;</span> : <span style=color:#ae81ff>1</span>,
-    <span style=color:#f92672>&#34;successful&#34;</span> : <span style=color:#ae81ff>1</span>,
-    <span style=color:#f92672>&#34;skipped&#34;</span> : <span style=color:#ae81ff>0</span>,
-    <span style=color:#f92672>&#34;failed&#34;</span> : <span style=color:#ae81ff>0</span>
-  },
-  <span style=color:#f92672>&#34;hits&#34;</span> : {
-    <span style=color:#f92672>&#34;total&#34;</span> : {
-      <span style=color:#f92672>&#34;value&#34;</span> : <span style=color:#ae81ff>10000</span>,
-      <span style=color:#f92672>&#34;relation&#34;</span> : <span style=color:#e6db74>&#34;gte&#34;</span>
-    },
-    <span style=color:#f92672>&#34;max_score&#34;</span> : <span style=color:#ae81ff>17.419369</span>,
-    <span style=color:#f92672>&#34;hits&#34;</span> : [
-      {
-        <span style=color:#f92672>&#34;_index&#34;</span> : <span style=color:#e6db74>&#34;shakespeare&#34;</span>,
-        <span style=color:#f92672>&#34;_type&#34;</span> : <span style=color:#e6db74>&#34;_doc&#34;</span>,
-        <span style=color:#f92672>&#34;_id&#34;</span> : <span style=color:#e6db74>&#34;34229&#34;</span>,
-        <span style=color:#f92672>&#34;_score&#34;</span> : <span style=color:#ae81ff>17.419369</span>,
-        <span style=color:#f92672>&#34;_source&#34;</span> : {
-          <span style=color:#f92672>&#34;type&#34;</span> : <span style=color:#e6db74>&#34;line&#34;</span>,
-          <span style=color:#f92672>&#34;line_id&#34;</span> : <span style=color:#ae81ff>34230</span>,
-          <span style=color:#f92672>&#34;play_name&#34;</span> : <span style=color:#e6db74>&#34;Hamlet&#34;</span>,
-          <span style=color:#f92672>&#34;speech_number&#34;</span> : <span style=color:#ae81ff>19</span>,
-          <span style=color:#f92672>&#34;line_number&#34;</span> : <span style=color:#e6db74>&#34;3.1.64&#34;</span>,
-          <span style=color:#f92672>&#34;speaker&#34;</span> : <span style=color:#e6db74>&#34;HAMLET&#34;</span>,
-          <span style=color:#f92672>&#34;text_entry&#34;</span> : <span style=color:#e6db74>&#34;To be, or not to be: that is the question:&#34;</span>
-        }
-      },
-      {
-        <span style=color:#f92672>&#34;_index&#34;</span> : <span style=color:#e6db74>&#34;shakespeare&#34;</span>,
-        <span style=color:#f92672>&#34;_type&#34;</span> : <span style=color:#e6db74>&#34;_doc&#34;</span>,
-        <span style=color:#f92672>&#34;_id&#34;</span> : <span style=color:#e6db74>&#34;109930&#34;</span>,
-        <span style=color:#f92672>&#34;_score&#34;</span> : <span style=color:#ae81ff>14.883024</span>,
-        <span style=color:#f92672>&#34;_source&#34;</span> : {
-          <span style=color:#f92672>&#34;type&#34;</span> : <span style=color:#e6db74>&#34;line&#34;</span>,
-          <span style=color:#f92672>&#34;line_id&#34;</span> : <span style=color:#ae81ff>109931</span>,
-          <span style=color:#f92672>&#34;play_name&#34;</span> : <span style=color:#e6db74>&#34;A Winters Tale&#34;</span>,
-          <span style=color:#f92672>&#34;speech_number&#34;</span> : <span style=color:#ae81ff>23</span>,
-          <span style=color:#f92672>&#34;line_number&#34;</span> : <span style=color:#e6db74>&#34;4.4.153&#34;</span>,
-          <span style=color:#f92672>&#34;speaker&#34;</span> : <span style=color:#e6db74>&#34;PERDITA&#34;</span>,
-          <span style=color:#f92672>&#34;text_entry&#34;</span> : <span style=color:#e6db74>&#34;Not like a corse; or if, not to be buried,&#34;</span>
-        }
-      },
-      {
-        <span style=color:#f92672>&#34;_index&#34;</span> : <span style=color:#e6db74>&#34;shakespeare&#34;</span>,
-        <span style=color:#f92672>&#34;_type&#34;</span> : <span style=color:#e6db74>&#34;_doc&#34;</span>,
-        <span style=color:#f92672>&#34;_id&#34;</span> : <span style=color:#e6db74>&#34;103117&#34;</span>,
-        <span style=color:#f92672>&#34;_score&#34;</span> : <span style=color:#ae81ff>14.782743</span>,
-        <span style=color:#f92672>&#34;_source&#34;</span> : {
-          <span style=color:#f92672>&#34;type&#34;</span> : <span style=color:#e6db74>&#34;line&#34;</span>,
-          <span style=color:#f92672>&#34;line_id&#34;</span> : <span style=color:#ae81ff>103118</span>,
-          <span style=color:#f92672>&#34;play_name&#34;</span> : <span style=color:#e6db74>&#34;Twelfth Night&#34;</span>,
-          <span style=color:#f92672>&#34;speech_number&#34;</span> : <span style=color:#ae81ff>53</span>,
-          <span style=color:#f92672>&#34;line_number&#34;</span> : <span style=color:#e6db74>&#34;1.3.95&#34;</span>,
-          <span style=color:#f92672>&#34;speaker&#34;</span> : <span style=color:#e6db74>&#34;SIR ANDREW&#34;</span>,
-          <span style=color:#f92672>&#34;text_entry&#34;</span> : <span style=color:#e6db74>&#34;will not be seen; or if she be, its four to one&#34;</span>
-        }
-      }
-    ]
-  }
-}
-<span style=color:#960050;background-color:#1e0010>...</span>
-</code></pre></div><p>有关所有全文查询的列表，请参见
-<a href=/easysearch/main/docs/references/search/full-text/>全文查询</a>。</p><p>如果您想在 speaker 字段中查询类似 “HAMLET” 的准确术语，并且不需要根据相关性得分对结果进行排序，则 term 查询更有效：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>shakespeare/_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;term&#34;</span>: {
-      <span style=color:#f92672>&#34;speaker&#34;</span>: <span style=color:#e6db74>&#34;HAMLET&#34;</span>
-    }
-  }
-}
-</code></pre></div><h4 id=响应示例-2>响应示例
-<a class=anchor href=#%e5%93%8d%e5%ba%94%e7%a4%ba%e4%be%8b-2>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
-  <span style=color:#f92672>&#34;took&#34;</span> : <span style=color:#ae81ff>5</span>,
-  <span style=color:#f92672>&#34;timed_out&#34;</span> : <span style=color:#66d9ef>false</span>,
-  <span style=color:#f92672>&#34;_shards&#34;</span> : {
-    <span style=color:#f92672>&#34;total&#34;</span> : <span style=color:#ae81ff>1</span>,
-    <span style=color:#f92672>&#34;successful&#34;</span> : <span style=color:#ae81ff>1</span>,
-    <span style=color:#f92672>&#34;skipped&#34;</span> : <span style=color:#ae81ff>0</span>,
-    <span style=color:#f92672>&#34;failed&#34;</span> : <span style=color:#ae81ff>0</span>
-  },
-  <span style=color:#f92672>&#34;hits&#34;</span> : {
-    <span style=color:#f92672>&#34;total&#34;</span> : {
-      <span style=color:#f92672>&#34;value&#34;</span> : <span style=color:#ae81ff>1582</span>,
-      <span style=color:#f92672>&#34;relation&#34;</span> : <span style=color:#e6db74>&#34;eq&#34;</span>
-    },
-    <span style=color:#f92672>&#34;max_score&#34;</span> : <span style=color:#ae81ff>4.2540946</span>,
-    <span style=color:#f92672>&#34;hits&#34;</span> : [
-      {
-        <span style=color:#f92672>&#34;_index&#34;</span> : <span style=color:#e6db74>&#34;shakespeare&#34;</span>,
-        <span style=color:#f92672>&#34;_type&#34;</span> : <span style=color:#e6db74>&#34;_doc&#34;</span>,
-        <span style=color:#f92672>&#34;_id&#34;</span> : <span style=color:#e6db74>&#34;32700&#34;</span>,
-        <span style=color:#f92672>&#34;_score&#34;</span> : <span style=color:#ae81ff>4.2540946</span>,
-        <span style=color:#f92672>&#34;_source&#34;</span> : {
-          <span style=color:#f92672>&#34;type&#34;</span> : <span style=color:#e6db74>&#34;line&#34;</span>,
-          <span style=color:#f92672>&#34;line_id&#34;</span> : <span style=color:#ae81ff>32701</span>,
-          <span style=color:#f92672>&#34;play_name&#34;</span> : <span style=color:#e6db74>&#34;Hamlet&#34;</span>,
-          <span style=color:#f92672>&#34;speech_number&#34;</span> : <span style=color:#ae81ff>9</span>,
-          <span style=color:#f92672>&#34;line_number&#34;</span> : <span style=color:#e6db74>&#34;1.2.66&#34;</span>,
-          <span style=color:#f92672>&#34;speaker&#34;</span> : <span style=color:#e6db74>&#34;HAMLET&#34;</span>,
-          <span style=color:#f92672>&#34;text_entry&#34;</span> : <span style=color:#e6db74>&#34;[Aside]  A little more than kin, and less than kind.&#34;</span>
-        }
-      },
-      {
-        <span style=color:#f92672>&#34;_index&#34;</span> : <span style=color:#e6db74>&#34;shakespeare&#34;</span>,
-        <span style=color:#f92672>&#34;_type&#34;</span> : <span style=color:#e6db74>&#34;_doc&#34;</span>,
-        <span style=color:#f92672>&#34;_id&#34;</span> : <span style=color:#e6db74>&#34;32702&#34;</span>,
-        <span style=color:#f92672>&#34;_score&#34;</span> : <span style=color:#ae81ff>4.2540946</span>,
-        <span style=color:#f92672>&#34;_source&#34;</span> : {
-          <span style=color:#f92672>&#34;type&#34;</span> : <span style=color:#e6db74>&#34;line&#34;</span>,
-          <span style=color:#f92672>&#34;line_id&#34;</span> : <span style=color:#ae81ff>32703</span>,
-          <span style=color:#f92672>&#34;play_name&#34;</span> : <span style=color:#e6db74>&#34;Hamlet&#34;</span>,
-          <span style=color:#f92672>&#34;speech_number&#34;</span> : <span style=color:#ae81ff>11</span>,
-          <span style=color:#f92672>&#34;line_number&#34;</span> : <span style=color:#e6db74>&#34;1.2.68&#34;</span>,
-          <span style=color:#f92672>&#34;speaker&#34;</span> : <span style=color:#e6db74>&#34;HAMLET&#34;</span>,
-          <span style=color:#f92672>&#34;text_entry&#34;</span> : <span style=color:#e6db74>&#34;Not so, my lord; I am too much i&#39; the sun.&#34;</span>
-        }
-      },
-      {
-        <span style=color:#f92672>&#34;_index&#34;</span> : <span style=color:#e6db74>&#34;shakespeare&#34;</span>,
-        <span style=color:#f92672>&#34;_type&#34;</span> : <span style=color:#e6db74>&#34;_doc&#34;</span>,
-        <span style=color:#f92672>&#34;_id&#34;</span> : <span style=color:#e6db74>&#34;32709&#34;</span>,
-        <span style=color:#f92672>&#34;_score&#34;</span> : <span style=color:#ae81ff>4.2540946</span>,
-        <span style=color:#f92672>&#34;_source&#34;</span> : {
-          <span style=color:#f92672>&#34;type&#34;</span> : <span style=color:#e6db74>&#34;line&#34;</span>,
-          <span style=color:#f92672>&#34;line_id&#34;</span> : <span style=color:#ae81ff>32710</span>,
-          <span style=color:#f92672>&#34;play_name&#34;</span> : <span style=color:#e6db74>&#34;Hamlet&#34;</span>,
-          <span style=color:#f92672>&#34;speech_number&#34;</span> : <span style=color:#ae81ff>13</span>,
-          <span style=color:#f92672>&#34;line_number&#34;</span> : <span style=color:#e6db74>&#34;1.2.75&#34;</span>,
-          <span style=color:#f92672>&#34;speaker&#34;</span> : <span style=color:#e6db74>&#34;HAMLET&#34;</span>,
-          <span style=color:#f92672>&#34;text_entry&#34;</span> : <span style=color:#e6db74>&#34;Ay, madam, it is common.&#34;</span>
-        }
-      }
-    ]
-  }
-}
-<span style=color:#960050;background-color:#1e0010>...</span>
-</code></pre></div><p>Term 查询精确匹配。所以，如果你搜索 “Hamlet” ，你不会得到任何匹配，因为 “HAMLET” 是一个 keyword 字段，它是按字面意思存储在 Easysearch 中，而不是以分词的形式存储的。
-搜索查询“HAMLET”也按字面搜索。因此，要在该字段上获得匹配，我们需要输入完全相同的字符。</p><hr><h2 id=term-查询>Term 查询
-<a class=anchor href=#term-%e6%9f%a5%e8%af%a2>#</a></h2><p><code>term</code> 查询在字段中搜索精确的 term。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>shakespeare/_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;term&#34;</span>: {
-      <span style=color:#f92672>&#34;line_id&#34;</span>: {
-        <span style=color:#f92672>&#34;value&#34;</span>: <span style=color:#e6db74>&#34;61809&#34;</span>
-      }
-    }
-  }
-}
-</code></pre></div><h2 id=terms-查询>Terms 查询
-<a class=anchor href=#terms-%e6%9f%a5%e8%af%a2>#</a></h2><p><code>terms</code> 查询在同一字段中搜索多个 term。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>shakespeare/_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;terms&#34;</span>: {
-      <span style=color:#f92672>&#34;line_id&#34;</span>: [
-        <span style=color:#e6db74>&#34;61809&#34;</span>,
-        <span style=color:#e6db74>&#34;61810&#34;</span>
-      ]
-    }
-  }
-}
-</code></pre></div><p>你会得到符合任何 term 的文档。</p><h2 id=ids>IDs
-<a class=anchor href=#ids>#</a></h2><p><code>ids</code> 查询搜索一个或多个文档 ID 值。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>shakespeare/_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;ids&#34;</span>: {
-      <span style=color:#f92672>&#34;values&#34;</span>: [
-        <span style=color:#ae81ff>34229</span>,
-        <span style=color:#ae81ff>91296</span>
-      ]
-    }
-  }
-}
-</code></pre></div><h2 id=range>Range
-<a class=anchor href=#range>#</a></h2><p><code>范围</code> 查询搜索字段中的值范围。</p><p>要搜索 <code>line_id</code> 值 >= 10 and &lt;= 20 的文档，请执行以下操作：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>shakespeare/_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;range&#34;</span>: {
-      <span style=color:#f92672>&#34;line_id&#34;</span>: {
-        <span style=color:#f92672>&#34;gte&#34;</span>: <span style=color:#ae81ff>10</span>,
-        <span style=color:#f92672>&#34;lte&#34;</span>: <span style=color:#ae81ff>20</span>
-      }
-    }
-  }
-}
-</code></pre></div><table><thead><tr><th style=text-align:left>参数</th><th style=text-align:left>行为</th></tr></thead><tbody><tr><td style=text-align:left><code>gte</code></td><td style=text-align:left>大于等于。</td></tr><tr><td style=text-align:left><code>gt</code></td><td style=text-align:left>大于。</td></tr><tr><td style=text-align:left><code>lte</code></td><td style=text-align:left>小于等于。</td></tr><tr><td style=text-align:left><code>lt</code></td><td style=text-align:left>小于。</td></tr></tbody></table><p>假设您有一个 <code>products</code> 索引，并且希望查找 2023 年添加的所有产品：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>products/_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;range&#34;</span>: {
-      <span style=color:#f92672>&#34;created&#34;</span>: {
-        <span style=color:#f92672>&#34;gte&#34;</span>: <span style=color:#e6db74>&#34;2023/01/01&#34;</span>,
-        <span style=color:#f92672>&#34;lte&#34;</span>: <span style=color:#e6db74>&#34;2023/12/31&#34;</span>
-      }
-    }
-  }
-}
-</code></pre></div><p>使用基本数学表达式指定相对日期。</p><p>从指定日期减去 1 年零 1 天：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>products/_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;range&#34;</span>: {
-      <span style=color:#f92672>&#34;created&#34;</span>: {
-        <span style=color:#f92672>&#34;gte&#34;</span>: <span style=color:#e6db74>&#34;2023/01/01||-1y-1d&#34;</span>
-      }
-    }
-  }
-}
-</code></pre></div><p>我们指定的第一个日期是定位日期或日期数学的起点。添加两个拖曳管道符号。然后你可以加一天（ <code>+1d</code> ）或减去两周（ <code>-2w</code> ）。此数学表达式与您指定的定位日期相关。</p><p>您还可以通过在日期或时间单位中添加正斜杠来舍入日期。</p><p>要查找上一年添加并按月份四舍五入的产品：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>products/_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;range&#34;</span>: {
-      <span style=color:#f92672>&#34;created&#34;</span>: {
-        <span style=color:#f92672>&#34;gte&#34;</span>: <span style=color:#e6db74>&#34;now-1y/M&#34;</span>
-      }
-    }
-  }
-}
-</code></pre></div><p>关键字 <code>now</code> 指向当前日期和时间。</p><h2 id=前缀-prefix>前缀 Prefix
-<a class=anchor href=#%e5%89%8d%e7%bc%80-prefix>#</a></h2><p><code>prefix</code> 查询搜索以特定前缀开头的 term。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>shakespeare/_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;prefix&#34;</span>: {
-      <span style=color:#f92672>&#34;speaker&#34;</span>: <span style=color:#e6db74>&#34;KING&#34;</span>
-    }
-  }
-}
-</code></pre></div><h2 id=是否存在-exists>是否存在 Exists
-<a class=anchor href=#%e6%98%af%e5%90%a6%e5%ad%98%e5%9c%a8-exists>#</a></h2><p><code>exists</code> 查询搜索包含特定字段的文档。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>shakespeare/_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;exists&#34;</span>: {
-      <span style=color:#f92672>&#34;field&#34;</span>: <span style=color:#e6db74>&#34;speaker&#34;</span>
-    }
-  }
-}
-</code></pre></div><h2 id=通配符-wildcards>通配符 Wildcards
-<a class=anchor href=#%e9%80%9a%e9%85%8d%e7%ac%a6-wildcards>#</a></h2><p>通配符查询搜索与通配符模式匹配的 term。</p><table><thead><tr><th style=text-align:left>特征</th><th style=text-align:left>行为</th></tr></thead><tbody><tr><td style=text-align:left><code>*</code></td><td style=text-align:left>匹配所有有效值。</td></tr><tr><td style=text-align:left><code>?</code></td><td style=text-align:left>匹配单个有效值。</td></tr></tbody></table><p>要搜索以 <code>H</code> 开头并以 <code>Y</code> 结尾的 term ：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>shakespeare/_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;wildcard&#34;</span>: {
-      <span style=color:#f92672>&#34;speaker&#34;</span>: {
-        <span style=color:#f92672>&#34;value&#34;</span>: <span style=color:#e6db74>&#34;H*Y&#34;</span>
-      }
-    }
-  }
-}
-</code></pre></div><p>如果我们将 <code>*</code> 更改为 <code>？</code>，我们得不到匹配，因为 <code>？</code> 代表单个字符。</p><p>通配符查询往往很慢，因为它们需要遍历大量术语。避免在查询的开头放置通配符，因为这可能是一个资源和时间都非常昂贵的操作。</p><h2 id=正则-regex>正则 Regex
-<a class=anchor href=#%e6%ad%a3%e5%88%99-regex>#</a></h2><p>使用 <code>regex</code> 查询搜索与正则表达式匹配的 term。</p><p>此正则表达式匹配任何单个大写或小写字母：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>shakespeare/_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;regexp&#34;</span>: {
-      <span style=color:#f92672>&#34;play_name&#34;</span>: <span style=color:#e6db74>&#34;H[a-zA-Z]+mlet&#34;</span>
-    }
-  }
-}
-</code></pre></div><p>正则表达式应用于字段中的 term ，而不是字段的整个值。</p><p>正则表达式的效率在很大程度上取决于您编写的模式。确保使用前缀或后缀编写 <code>regex</code> 查询以提高性能。</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+<strong>精确查询</strong>
+<label for=toc-control><img src=/easysearch/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#精确查询>精确查询</a></li></ul></nav></aside></header><article class=markdown><h1 id=精确查询>精确查询
+<a class=anchor href=#%e7%b2%be%e7%a1%ae%e6%9f%a5%e8%af%a2>#</a></h1><p>精确查询用于在索引中搜索包含确切搜索词的文档。精确查询返回的文档不会按相关性得分排序。</p><p>处理文本数据时，仅对映射为 <code>keyword</code> 的字段使用精确查询。</p><p>精确查询不适用于搜索分析过的文本字段。若要返回分析过的字段，请使用全文检索。</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
 gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
     import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
     searchbox({container: "#searchbox"});
-</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#词项查询>词项查询</a><ul><li><ul><li></li></ul></li><li><a href=#term-查询>Term 查询</a></li><li><a href=#terms-查询>Terms 查询</a></li><li><a href=#ids>IDs</a></li><li><a href=#range>Range</a></li><li><a href=#前缀-prefix>前缀 Prefix</a></li><li><a href=#是否存在-exists>是否存在 Exists</a></li><li><a href=#通配符-wildcards>通配符 Wildcards</a></li><li><a href=#正则-regex>正则 Regex</a></li></ul></li></ul></nav></aside></main><script src=/easysearch/main/js/asciinema-player.js></script></body></html>
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#精确查询>精确查询</a></li></ul></nav></aside></main><script src=/easysearch/main/js/asciinema-player.js></script></body></html>

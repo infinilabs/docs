@@ -1,16 +1,9 @@
-<!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="全文查询 #  尽管可以使用 HTTP 请求参数执行简单搜索，但 Easysearch 查询域特定语言（DSL）允许您指定全部搜索选项。查询 DSL 使用 HTTP 请求主体。以这种方式指定的查询还有一个额外的优点，即其意图更加明确，并且更易于随时间调整。
-此页面列出了所有全文查询类型和常用选项。考虑到选项的数量和微妙的行为，确保有用搜索结果的最佳方法是根据代表性索引测试不同的查询并验证输出。
-匹配 #  创建一个 布尔查询 ，如果字段中存在搜索项，则返回结果。
-查询的最基本形式仅提供字段（ title ）和对应的值（ wind ）:
-GET _search { &#34;query&#34;: { &#34;match&#34;: { &#34;title&#34;: &#34;wind&#34; } } } 采用 curl的方式:
-curl --insecure -XGET -u 'admin:xxxxxxxxxxxx' https://<host>:<port>/<index>/_search \  -H &#34;content-type: application/json&#34; \  -d '{ &#34;query&#34;: { &#34;match&#34;: { &#34;title&#34;: &#34;wind&#34; } } }' 查询接受以下选项。有关每个参数的描述，请参见 查询选项
-GET _search { &#34;query&#34;: { &#34;match&#34;: { &#34;title&#34;: { &#34;query&#34;: &#34;wind&#34;, &#34;fuzziness&#34;: &#34;AUTO&#34;, &#34;fuzzy_transpositions&#34;: true, &#34;operator&#34;: &#34;or&#34;, &#34;minimum_should_match&#34;: 1, &#34;analyzer&#34;: &#34;standard&#34;, &#34;zero_terms_query&#34;: &#34;none&#34;, &#34;lenient&#34;: false, &#34;cutoff_frequency&#34;: 0."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="全文查询"><meta property="og:description" content="全文查询 #  尽管可以使用 HTTP 请求参数执行简单搜索，但 Easysearch 查询域特定语言（DSL）允许您指定全部搜索选项。查询 DSL 使用 HTTP 请求主体。以这种方式指定的查询还有一个额外的优点，即其意图更加明确，并且更易于随时间调整。
-此页面列出了所有全文查询类型和常用选项。考虑到选项的数量和微妙的行为，确保有用搜索结果的最佳方法是根据代表性索引测试不同的查询并验证输出。
-匹配 #  创建一个 布尔查询 ，如果字段中存在搜索项，则返回结果。
-查询的最基本形式仅提供字段（ title ）和对应的值（ wind ）:
-GET _search { &#34;query&#34;: { &#34;match&#34;: { &#34;title&#34;: &#34;wind&#34; } } } 采用 curl的方式:
-curl --insecure -XGET -u 'admin:xxxxxxxxxxxx' https://<host>:<port>/<index>/_search \  -H &#34;content-type: application/json&#34; \  -d '{ &#34;query&#34;: { &#34;match&#34;: { &#34;title&#34;: &#34;wind&#34; } } }' 查询接受以下选项。有关每个参数的描述，请参见 查询选项
-GET _search { &#34;query&#34;: { &#34;match&#34;: { &#34;title&#34;: { &#34;query&#34;: &#34;wind&#34;, &#34;fuzziness&#34;: &#34;AUTO&#34;, &#34;fuzzy_transpositions&#34;: true, &#34;operator&#34;: &#34;or&#34;, &#34;minimum_should_match&#34;: 1, &#34;analyzer&#34;: &#34;standard&#34;, &#34;zero_terms_query&#34;: &#34;none&#34;, &#34;lenient&#34;: false, &#34;cutoff_frequency&#34;: 0."><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/main/docs/references/search/full-text/"><title>全文查询 | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/easysearch/main/css/asciinema-player.css><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="全文检索 #  此页面列出了所有全文检索类型和常用选项。您可以使用许多可选字段来创建细微的搜索行为，因此我们建议您针对代表性索引测试一些基本查询类型，并在使用多个选项执行更高级或更复杂的搜索之前验证输出。
+Easysearch 使用 Apache Lucene 搜索库，该库提供高效的数据结构和算法，用于摄取、索引、搜索和聚合数据。
+若要了解有关搜索查询类的更多信息，请参阅 Lucene 查询 JavaDocs。
+本节中显示的全文检索类型使用标准（standard）分词器，该分词器在提交查询时自动分析文本。
+下表列出了所有全文检索类型。
+   查询类型 描述     intervals 允许对匹配项的接近度和顺序进行细粒度控制。   match 默认全文检索，可用于模糊匹配和短语或邻近搜索。   match_bool_prefix 创建一个布尔查询 ，该查询匹配任何位置的所有词项，将最后一个词项视为前缀。   match_phrase 与匹配查询类似，但根据可配置的 slop 进行匹配短语查询。   match_phrase_prefix 与 match_phrase 查询类似，但将词项匹配为整个短语，将最后一个词项视为前缀。   multi_match 与匹配查询类似，但用于多个字段。   query_string 使用严格的语法在单个查询字符串中指定布尔条件和多字段搜索。   simple_query_string query_string 查询的更简单、不太严格的版本。"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="全文检索"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:url" content="/easysearch/main/docs/references/search/full-text/"><title>全文检索 | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=alternate type=application/rss+xml href=/easysearch/main/docs/references/search/full-text/index.xml title="INFINI Easysearch"><link rel=stylesheet type=text/css href=/easysearch/main/css/asciinema-player.css><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/easysearch/main><img src=/easysearch/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
 <option value=v1.15.1>v1.15.1</option>
@@ -69,7 +62,21 @@ GET _search { &#34;query&#34;: { &#34;match&#34;: { &#34;title&#34;: { &#34;quer
 <label for=section-232f0668f3be6ea64e1c220baec34dfc class="flex justify-between"><a>文档操作</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/document/index-data/>增删改查</a></li><li><a href=/easysearch/main/docs/references/document/index-alias/>别名操作</a></li><li><a href=/easysearch/main/docs/references/document/index-compression/>索引压缩</a></li></ul></li><li><input type=checkbox id=section-6b02990358c7382bac3f39043e5fd437 class=toggle checked>
 <label for=section-6b02990358c7382bac3f39043e5fd437 class="flex justify-between"><a>搜索操作</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/term/>词项查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/ class=active>全文查询</a></li><li><a href=/easysearch/main/docs/references/search/knn_api/>向量查询</a></li><li><a href=/easysearch/main/docs/references/search/bool/>布尔查询</a></li><li><a href=/easysearch/main/docs/references/search/search-template/>查询模版</a></li><li><a href=/easysearch/main/docs/references/search/async_search/>异步搜索</a></li><li><a href=/easysearch/main/docs/references/search/pit_api/>定点查询</a></li><li><input type=checkbox id=section-19c2d09435d47ad6656e503e2a68a3b3 class=toggle>
+<span>▾</span></label><ul><li><input type=checkbox id=section-914ecc84741b3e200e93ea80c2eb0df1 class=toggle>
+<label for=section-914ecc84741b3e200e93ea80c2eb0df1 class="flex justify-between"><a href=/easysearch/main/docs/references/search/span/>Span 查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/span/span-first/>Span 前序匹配</a></li><li><a href=/easysearch/main/docs/references/search/span/span-within/>Span 包含于查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-containing/>Span 包含查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-multi-term/>Span 多词项查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-or/>Span 或查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-not/>Span 排除查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-term/>Span 词项查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-field-masking/>Span 跨字段查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-near/>Span 邻近查询</a></li></ul></li><li><input type=checkbox id=section-fe27ae639d7a8e652db974b443eb5848 class=toggle>
+<label for=section-fe27ae639d7a8e652db974b443eb5848 class="flex justify-between"><a href=/easysearch/main/docs/references/search/specialized/>专业查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/specialized/wrapper/>包装器</a></li><li><a href=/easysearch/main/docs/references/search/specialized/rank-feature/>排序功能</a></li><li><a href=/easysearch/main/docs/references/search/specialized/percolate/>渗透查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/more-like-this/>类似查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/script-score/>脚本分数查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/script/>脚本查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/distance-feature/>距离特征查询</a></li></ul></li><li><a href=/easysearch/main/docs/references/search/match-all/>全匹配查询</a></li><li><input type=checkbox id=section-1df907d6b381276d472faa1ffc431057 class=toggle checked>
+<label for=section-1df907d6b381276d472faa1ffc431057 class="flex justify-between"><a href=/easysearch/main/docs/references/search/full-text/ class=active>全文检索</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/full-text/intervals/>Intervals 查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match-bool-prefix/>匹配布尔前缀查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match/>匹配查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match-phrase-prefix/>匹配短语前缀查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match-phrase/>匹配短语查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/multi-match/>多字段查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/query-string/>字符串查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/simple-query-string/>简单字符串查询</a></li></ul></li><li><input type=checkbox id=section-2baa128ae64b7fa17aa37f790453c292 class=toggle>
+<label for=section-2baa128ae64b7fa17aa37f790453c292 class="flex justify-between"><a href=/easysearch/main/docs/references/search/joining/>关联查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/joining/has-child/>子查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/nested/>嵌套查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/parent-id/>父 ID 查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/has-parent/>父查询</a></li></ul></li><li><input type=checkbox id=section-86bf1f72d443fd258db0d40a6bf009d7 class=toggle>
+<label for=section-86bf1f72d443fd258db0d40a6bf009d7 class="flex justify-between"><a href=/easysearch/main/docs/references/search/geo-and-xy/>地理查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geopolygon/>地理多边形查询</a></li><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geoshape/>地理形状查询</a></li><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geodistance/>地理距离查询</a></li><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geo-bounding-box/>地理边界框查询</a></li></ul></li><li><input type=checkbox id=section-15ea627c37f24ed149a43b1c0b4add9f class=toggle>
+<label for=section-15ea627c37f24ed149a43b1c0b4add9f class="flex justify-between"><a href=/easysearch/main/docs/references/search/compound/>复合查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/compound/function-score/>函数评分查询</a></li><li><a href=/easysearch/main/docs/references/search/compound/boosting/>加权</a></li><li><a href=/easysearch/main/docs/references/search/compound/bool/>布尔查询</a></li><li><a href=/easysearch/main/docs/references/search/compound/constant-score/>常量化评分查询</a></li><li><a href=/easysearch/main/docs/references/search/compound/disjunction-max/>析取最大查询</a></li></ul></li><li><a href=/easysearch/main/docs/references/search/minimum-should-match/>最小匹配</a></li><li><a href=/easysearch/main/docs/references/search/query-filter-context/>查询和过滤上下文</a></li><li><a href=/easysearch/main/docs/references/search/regex-syntax/>正则表达式语法</a></li><li><input type=checkbox id=section-e8f94bccae3c54be36d1896778639639 class=toggle>
+<label for=section-e8f94bccae3c54be36d1896778639639 class="flex justify-between"><a href=/easysearch/main/docs/references/search/term/>精确查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/term/exists/>Exists 查询</a></li><li><a href=/easysearch/main/docs/references/search/term/ids/>IDs 查询</a></li><li><a href=/easysearch/main/docs/references/search/term/term/>Term 精确查询</a></li><li><a href=/easysearch/main/docs/references/search/term/prefix/>前缀查询</a></li><li><a href=/easysearch/main/docs/references/search/term/terms/>多词项查询</a></li><li><a href=/easysearch/main/docs/references/search/term/fuzzy/>模糊查询</a></li><li><a href=/easysearch/main/docs/references/search/term/regexp/>正则查询</a></li><li><a href=/easysearch/main/docs/references/search/term/range/>范围查询</a></li><li><a href=/easysearch/main/docs/references/search/term/terms-set/>词项集查询</a></li><li><a href=/easysearch/main/docs/references/search/term/wildcard/>通配符查询</a></li></ul></li><li><a href=/easysearch/main/docs/references/search/term-vs-full-text/>精确查询与全文检索的对比</a></li><li><a href=/easysearch/main/docs/references/search/rewrite-parameter/>重写参数</a></li><li><a href=/easysearch/main/docs/references/search/knn_api/>向量查询</a></li><li><a href=/easysearch/main/docs/references/search/search-template/>查询模版</a></li><li><a href=/easysearch/main/docs/references/search/async_search/>异步搜索</a></li><li><a href=/easysearch/main/docs/references/search/pit_api/>定点查询</a></li><li><input type=checkbox id=section-19c2d09435d47ad6656e503e2a68a3b3 class=toggle>
 <label for=section-19c2d09435d47ad6656e503e2a68a3b3 class="flex justify-between"><a href=/easysearch/main/docs/references/search/search-pipelines/>搜索管道</a>
 <span>▾</span></label><ul><li><input type=checkbox id=section-07023dbd216ba1a90a2c532ff5bb0961 class=toggle>
 <label for=section-07023dbd216ba1a90a2c532ff5bb0961 class="flex justify-between"><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/>搜索处理器</a>
@@ -105,305 +112,14 @@ GET _search { &#34;query&#34;: { &#34;match&#34;: { &#34;title&#34;: { &#34;quer
 <label for=section-b34adbce31bce6650a0099282b315617 class="flex justify-between"><a>客户端</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/client/java-client/>快速开始</a></li><li><a href=/easysearch/main/docs/references/client/client-api/>API 使用</a></li></ul></li><li><input type=checkbox id=section-a0bb1e309cd3ee77d6be0614fc18cdcc class=toggle>
 <label for=section-a0bb1e309cd3ee77d6be0614fc18cdcc class="flex justify-between"><a>AI 集成</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/ai-integration/ingest-text-embedding/>写入数据文本向量化</a></li><li><a href=/easysearch/main/docs/references/ai-integration/search-text-embedding/>搜索请求文本向量化</a></li><li><a href=/easysearch/main/docs/references/ai-integration/text-embeddings/>文本向量化</a></li><li><a href=/easysearch/main/docs/references/ai-integration/hybrid-search/>混合搜索</a></li></ul></li></ul></li><li><input type=checkbox id=section-5deabf5956593012403515b953582b86 class=toggle>
-<label for=section-5deabf5956593012403515b953582b86 class="flex justify-between"><a href=/easysearch/main/docs/query-dsl/>查询 DSL</a>
-<span>▾</span></label><ul><li><input type=checkbox id=section-f6c9aa1b0a6c9393d01e52b2c705986f class=toggle>
-<label for=section-f6c9aa1b0a6c9393d01e52b2c705986f class="flex justify-between"><a href=/easysearch/main/docs/query-dsl/span/>Span 查询</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/query-dsl/span/span-first/>Span 前序匹配</a></li><li><a href=/easysearch/main/docs/query-dsl/span/span-within/>Span 包含于查询</a></li><li><a href=/easysearch/main/docs/query-dsl/span/span-containing/>Span 包含查询</a></li><li><a href=/easysearch/main/docs/query-dsl/span/span-multi-term/>Span 多词项查询</a></li><li><a href=/easysearch/main/docs/query-dsl/span/span-or/>Span 或查询</a></li><li><a href=/easysearch/main/docs/query-dsl/span/span-not/>Span 排除查询</a></li><li><a href=/easysearch/main/docs/query-dsl/span/span-term/>Span 词项查询</a></li><li><a href=/easysearch/main/docs/query-dsl/span/span-field-masking/>Span 跨字段查询</a></li><li><a href=/easysearch/main/docs/query-dsl/span/span-near/>Span 邻近查询</a></li></ul></li><li><input type=checkbox id=section-79fe6dfbc7c32ad5e32abd26f2ce821b class=toggle>
-<label for=section-79fe6dfbc7c32ad5e32abd26f2ce821b class="flex justify-between"><a href=/easysearch/main/docs/query-dsl/specialized/>专业查询</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/query-dsl/specialized/wrapper/>包装器</a></li><li><a href=/easysearch/main/docs/query-dsl/specialized/rank-feature/>排序功能</a></li><li><a href=/easysearch/main/docs/query-dsl/specialized/percolate/>渗透查询</a></li><li><a href=/easysearch/main/docs/query-dsl/specialized/more-like-this/>类似查询</a></li><li><a href=/easysearch/main/docs/query-dsl/specialized/script-score/>脚本分数查询</a></li><li><a href=/easysearch/main/docs/query-dsl/specialized/script/>脚本查询</a></li><li><a href=/easysearch/main/docs/query-dsl/specialized/distance-feature/>距离特征查询</a></li></ul></li><li><a href=/easysearch/main/docs/query-dsl/match-all/>全匹配查询</a></li><li><input type=checkbox id=section-bd9869f566788d4b48d15528c6d39dcf class=toggle>
-<label for=section-bd9869f566788d4b48d15528c6d39dcf class="flex justify-between"><a href=/easysearch/main/docs/query-dsl/full-text/>全文检索</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/query-dsl/full-text/intervals/>Intervals 查询</a></li><li><a href=/easysearch/main/docs/query-dsl/full-text/match-bool-prefix/>匹配布尔前缀查询</a></li><li><a href=/easysearch/main/docs/query-dsl/full-text/match/>匹配查询</a></li><li><a href=/easysearch/main/docs/query-dsl/full-text/match-phrase-prefix/>匹配短语前缀查询</a></li><li><a href=/easysearch/main/docs/query-dsl/full-text/match-phrase/>匹配短语查询</a></li><li><a href=/easysearch/main/docs/query-dsl/full-text/multi-match/>多字段查询</a></li><li><a href=/easysearch/main/docs/query-dsl/full-text/query-string/>字符串查询</a></li><li><a href=/easysearch/main/docs/query-dsl/full-text/simple-query-string/>简单字符串查询</a></li></ul></li><li><input type=checkbox id=section-5a4f265c868442d3bb598a153288c4c8 class=toggle>
-<label for=section-5a4f265c868442d3bb598a153288c4c8 class="flex justify-between"><a href=/easysearch/main/docs/query-dsl/joining/>关联查询</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/query-dsl/joining/has-child/>子查询</a></li><li><a href=/easysearch/main/docs/query-dsl/joining/nested/>嵌套查询</a></li><li><a href=/easysearch/main/docs/query-dsl/joining/parent-id/>父 ID 查询</a></li><li><a href=/easysearch/main/docs/query-dsl/joining/has-parent/>父查询</a></li></ul></li><li><input type=checkbox id=section-3255dea9fd3dc23bf2415acc5b39d344 class=toggle>
-<label for=section-3255dea9fd3dc23bf2415acc5b39d344 class="flex justify-between"><a href=/easysearch/main/docs/query-dsl/geo-and-xy/>地理查询</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/query-dsl/geo-and-xy/geopolygon/>地理多边形查询</a></li><li><a href=/easysearch/main/docs/query-dsl/geo-and-xy/geoshape/>地理形状查询</a></li><li><a href=/easysearch/main/docs/query-dsl/geo-and-xy/geodistance/>地理距离查询</a></li><li><a href=/easysearch/main/docs/query-dsl/geo-and-xy/geo-bounding-box/>地理边界框查询</a></li></ul></li><li><input type=checkbox id=section-c937ed8d19dcfbd2c30a6d71413fcbf9 class=toggle>
-<label for=section-c937ed8d19dcfbd2c30a6d71413fcbf9 class="flex justify-between"><a href=/easysearch/main/docs/query-dsl/compound/>复合查询</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/query-dsl/compound/function-score/>函数评分查询</a></li><li><a href=/easysearch/main/docs/query-dsl/compound/boosting/>加权</a></li><li><a href=/easysearch/main/docs/query-dsl/compound/bool/>布尔查询</a></li><li><a href=/easysearch/main/docs/query-dsl/compound/constant-score/>常量化评分查询</a></li><li><a href=/easysearch/main/docs/query-dsl/compound/disjunction-max/>析取最大查询</a></li></ul></li><li><a href=/easysearch/main/docs/query-dsl/minimum-should-match/>最小匹配</a></li><li><a href=/easysearch/main/docs/query-dsl/query-filter-context/>查询和过滤上下文</a></li><li><a href=/easysearch/main/docs/query-dsl/regex-syntax/>正则表达式语法</a></li><li><input type=checkbox id=section-eacfa310ae81f309e3e8b6026cf250ba class=toggle>
-<label for=section-eacfa310ae81f309e3e8b6026cf250ba class="flex justify-between"><a href=/easysearch/main/docs/query-dsl/term/>精确查询</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/query-dsl/term/exists/>Exists 查询</a></li><li><a href=/easysearch/main/docs/query-dsl/term/ids/>IDs 查询</a></li><li><a href=/easysearch/main/docs/query-dsl/term/term/>Term 精确查询</a></li><li><a href=/easysearch/main/docs/query-dsl/term/prefix/>前缀查询</a></li><li><a href=/easysearch/main/docs/query-dsl/term/terms/>多词项查询</a></li><li><a href=/easysearch/main/docs/query-dsl/term/fuzzy/>模糊查询</a></li><li><a href=/easysearch/main/docs/query-dsl/term/regexp/>正则查询</a></li><li><a href=/easysearch/main/docs/query-dsl/term/range/>范围查询</a></li><li><a href=/easysearch/main/docs/query-dsl/term/terms-set/>词项集查询</a></li><li><a href=/easysearch/main/docs/query-dsl/term/wildcard/>通配符查询</a></li></ul></li><li><a href=/easysearch/main/docs/query-dsl/term-vs-full-text/>精确查询与全文检索的对比</a></li><li><a href=/easysearch/main/docs/query-dsl/rewrite-parameter/>重写参数</a></li></ul></li><li><input type=checkbox id=section-1adc738e7351809ea378ec7e9730bd1f class=toggle>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/ai-integration/ingest-text-embedding/>写入数据文本向量化</a></li><li><a href=/easysearch/main/docs/references/ai-integration/search-text-embedding/>搜索请求文本向量化</a></li><li><a href=/easysearch/main/docs/references/ai-integration/text-embeddings/>文本向量化</a></li><li><a href=/easysearch/main/docs/references/ai-integration/hybrid-search/>混合搜索</a></li></ul></li></ul></li><li><input type=checkbox id=section-1adc738e7351809ea378ec7e9730bd1f class=toggle>
 <label for=section-1adc738e7351809ea378ec7e9730bd1f class="flex justify-between"><a>版本历史</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/release-notes/client/>Easysearch-client</a></li><li><a href=/easysearch/main/docs/release-notes/easysearch/>Easysearch</a></li></ul></li><li><a href=/easysearch/main/docs/resources/>其它资源</a><ul></ul></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/easysearch/main/svg/menu.svg class=book-icon alt=Menu></label>
-<strong>全文查询</strong>
-<label for=toc-control><img src=/easysearch/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#全文查询>全文查询</a><ul><li><a href=#匹配>匹配</a></li><li><a href=#多重匹配>多重匹配</a></li><li><a href=#匹配布尔前缀>匹配布尔前缀</a></li><li><a href=#匹配短语>匹配短语</a></li><li><a href=#匹配短语前缀>匹配短语前缀</a></li><li><a href=#通用条件>通用条件</a></li><li><a href=#查询字符串>查询字符串</a></li><li><a href=#简单查询字符串>简单查询字符串</a></li><li><a href=#全部匹配>全部匹配</a></li><li><a href=#不匹配>不匹配</a></li><li><a href=#查询选项>查询选项</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=全文查询>全文查询
-<a class=anchor href=#%e5%85%a8%e6%96%87%e6%9f%a5%e8%af%a2>#</a></h1><p>尽管可以使用 HTTP 请求参数执行简单搜索，但 Easysearch 查询域特定语言（DSL）允许您指定全部搜索选项。查询 DSL 使用 HTTP 请求主体。以这种方式指定的查询还有一个额外的优点，即其意图更加明确，并且更易于随时间调整。</p><p>此页面列出了所有全文查询类型和常用选项。考虑到选项的数量和微妙的行为，确保有用搜索结果的最佳方法是根据代表性索引测试不同的查询并验证输出。</p><h2 id=匹配>匹配
-<a class=anchor href=#%e5%8c%b9%e9%85%8d>#</a></h2><p>创建一个
-<a href=https://lucene.apache.org/core/8_4_0/core/org/apache/lucene/search/BooleanQuery.html>布尔查询</a> ，如果字段中存在搜索项，则返回结果。</p><p>查询的最基本形式仅提供字段（ <code>title</code> ）和对应的值（ <code>wind</code> ）:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;match&#34;</span>: {
-      <span style=color:#f92672>&#34;title&#34;</span>: <span style=color:#e6db74>&#34;wind&#34;</span>
-    }
-  }
-}
-</code></pre></div><p>采用
-<a href=https://curl.haxx.se/>curl</a>的方式:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>curl --insecure -XGET -u <span style=color:#e6db74>&#39;admin:xxxxxxxxxxxx&#39;</span> https://&lt;host&gt;:&lt;port&gt;/&lt;index&gt;/_search <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>  -H <span style=color:#e6db74>&#34;content-type: application/json&#34;</span> <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>  -d <span style=color:#e6db74>&#39;{
-</span><span style=color:#e6db74>    &#34;query&#34;: {
-</span><span style=color:#e6db74>      &#34;match&#34;: {
-</span><span style=color:#e6db74>        &#34;title&#34;: &#34;wind&#34;
-</span><span style=color:#e6db74>      }
-</span><span style=color:#e6db74>    }
-</span><span style=color:#e6db74>  }&#39;</span>
-</code></pre></div><p>查询接受以下选项。有关每个参数的描述，请参见
-<a href=/easysearch/main/docs/references/search/full-text/#%e6%9f%a5%e8%af%a2%e9%80%89%e9%a1%b9>查询选项</a></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;match&#34;</span>: {
-      <span style=color:#f92672>&#34;title&#34;</span>: {
-        <span style=color:#f92672>&#34;query&#34;</span>: <span style=color:#e6db74>&#34;wind&#34;</span>,
-        <span style=color:#f92672>&#34;fuzziness&#34;</span>: <span style=color:#e6db74>&#34;AUTO&#34;</span>,
-        <span style=color:#f92672>&#34;fuzzy_transpositions&#34;</span>: <span style=color:#66d9ef>true</span>,
-        <span style=color:#f92672>&#34;operator&#34;</span>:  <span style=color:#e6db74>&#34;or&#34;</span>,
-        <span style=color:#f92672>&#34;minimum_should_match&#34;</span>: <span style=color:#ae81ff>1</span>,
-        <span style=color:#f92672>&#34;analyzer&#34;</span>: <span style=color:#e6db74>&#34;standard&#34;</span>,
-        <span style=color:#f92672>&#34;zero_terms_query&#34;</span>: <span style=color:#e6db74>&#34;none&#34;</span>,
-        <span style=color:#f92672>&#34;lenient&#34;</span>: <span style=color:#66d9ef>false</span>,
-        <span style=color:#f92672>&#34;cutoff_frequency&#34;</span>: <span style=color:#ae81ff>0.01</span>,
-        <span style=color:#f92672>&#34;prefix_length&#34;</span>: <span style=color:#ae81ff>0</span>,
-        <span style=color:#f92672>&#34;max_expansions&#34;</span>: <span style=color:#ae81ff>50</span>,
-        <span style=color:#f92672>&#34;boost&#34;</span>: <span style=color:#ae81ff>1</span>
-      }
-    }
-  }
-}
-</code></pre></div><h2 id=多重匹配>多重匹配
-<a class=anchor href=#%e5%a4%9a%e9%87%8d%e5%8c%b9%e9%85%8d>#</a></h2><p>类似于
-<a href=/easysearch/main/docs/references/search/full-text/#%e5%8c%b9%e9%85%8d>匹配</a>，但搜索多个字段.</p><p><code>^</code> 允许您 <code>增强</code> 某些字段。助推是一种乘数，它对一个领域中的匹配比其他领域的匹配更为重要。在下面的示例中，标题字段中 <code>wind</code> 的匹配对 <code>_score</code> 的影响是绘图字段中匹配的四倍。结果是，像 <em>The Wind Rises</em>和<em>Gone with the Wind</em> 这样的电影接近搜索结果的顶部，而像 <em>Twister</em> 和 <em>Sharknado</em> 这样的影片，大概在剧情摘要中都有 <code>wind</code> 。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;multi_match&#34;</span>: {
-      <span style=color:#f92672>&#34;query&#34;</span>: <span style=color:#e6db74>&#34;wind&#34;</span>,
-      <span style=color:#f92672>&#34;fields&#34;</span>: [<span style=color:#e6db74>&#34;title^4&#34;</span>, <span style=color:#e6db74>&#34;plot&#34;</span>]
-    }
-  }
-}
-</code></pre></div><p>查询接受以下选项。有关每个参数的描述，请参见
-<a href=/easysearch/main/docs/references/search/full-text/#%e6%9f%a5%e8%af%a2%e9%80%89%e9%a1%b9>查询选项</a></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;multi_match&#34;</span>: {
-      <span style=color:#f92672>&#34;query&#34;</span>: <span style=color:#e6db74>&#34;wind&#34;</span>,
-      <span style=color:#f92672>&#34;fields&#34;</span>: [<span style=color:#e6db74>&#34;title^4&#34;</span>, <span style=color:#e6db74>&#34;description&#34;</span>],
-      <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;most_fields&#34;</span>,
-      <span style=color:#f92672>&#34;operator&#34;</span>: <span style=color:#e6db74>&#34;and&#34;</span>,
-      <span style=color:#f92672>&#34;minimum_should_match&#34;</span>: <span style=color:#ae81ff>3</span>,
-      <span style=color:#f92672>&#34;tie_breaker&#34;</span>: <span style=color:#ae81ff>0.0</span>,
-      <span style=color:#f92672>&#34;analyzer&#34;</span>: <span style=color:#e6db74>&#34;standard&#34;</span>,
-      <span style=color:#f92672>&#34;boost&#34;</span>: <span style=color:#ae81ff>1</span>,
-      <span style=color:#f92672>&#34;fuzziness&#34;</span>: <span style=color:#e6db74>&#34;AUTO&#34;</span>,
-      <span style=color:#f92672>&#34;fuzzy_transpositions&#34;</span>: <span style=color:#66d9ef>true</span>,
-      <span style=color:#f92672>&#34;lenient&#34;</span>: <span style=color:#66d9ef>false</span>,
-      <span style=color:#f92672>&#34;prefix_length&#34;</span>: <span style=color:#ae81ff>0</span>,
-      <span style=color:#f92672>&#34;max_expansions&#34;</span>: <span style=color:#ae81ff>50</span>,
-      <span style=color:#f92672>&#34;auto_generate_synonyms_phrase_query&#34;</span>: <span style=color:#66d9ef>true</span>,
-      <span style=color:#f92672>&#34;cutoff_frequency&#34;</span>: <span style=color:#ae81ff>0.01</span>,
-      <span style=color:#f92672>&#34;zero_terms_query&#34;</span>: <span style=color:#e6db74>&#34;none&#34;</span>
-    }
-  }
-}
-</code></pre></div><h2 id=匹配布尔前缀>匹配布尔前缀
-<a class=anchor href=#%e5%8c%b9%e9%85%8d%e5%b8%83%e5%b0%94%e5%89%8d%e7%bc%80>#</a></h2><p>类似于
-<a href=/easysearch/main/docs/references/search/full-text/#%e5%8c%b9%e9%85%8d>匹配</a>, 创建一个
-<a href=https://lucene.apache.org/core/8_4_0/core/org/apache/lucene/search/PrefixQuery.html>前缀查询</a></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;match_bool_prefix&#34;</span>: {
-      <span style=color:#f92672>&#34;title&#34;</span>: <span style=color:#e6db74>&#34;rises wi&#34;</span>
-    }
-  }
-}
-</code></pre></div><p>查询接受以下选项。有关每个参数的描述，请参见
-<a href=/easysearch/main/docs/references/search/full-text/#%e6%9f%a5%e8%af%a2%e9%80%89%e9%a1%b9>查询选项</a></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;match_bool_prefix&#34;</span>: {
-      <span style=color:#f92672>&#34;title&#34;</span>: {
-        <span style=color:#f92672>&#34;query&#34;</span>: <span style=color:#e6db74>&#34;rises wi&#34;</span>,
-        <span style=color:#f92672>&#34;fuzziness&#34;</span>: <span style=color:#e6db74>&#34;AUTO&#34;</span>,
-        <span style=color:#f92672>&#34;fuzzy_transpositions&#34;</span>: <span style=color:#66d9ef>true</span>,
-        <span style=color:#f92672>&#34;max_expansions&#34;</span>: <span style=color:#ae81ff>50</span>,
-        <span style=color:#f92672>&#34;prefix_length&#34;</span>: <span style=color:#ae81ff>0</span>,
-        <span style=color:#f92672>&#34;operator&#34;</span>:  <span style=color:#e6db74>&#34;or&#34;</span>,
-        <span style=color:#f92672>&#34;minimum_should_match&#34;</span>: <span style=color:#ae81ff>2</span>,
-        <span style=color:#f92672>&#34;analyzer&#34;</span>: <span style=color:#e6db74>&#34;standard&#34;</span>
-      }
-    }
-  }
-}
-</code></pre></div><h2 id=匹配短语>匹配短语
-<a class=anchor href=#%e5%8c%b9%e9%85%8d%e7%9f%ad%e8%af%ad>#</a></h2><p>创建一个
-<a href=https://lucene.apache.org/core/8_4_0/core/org/apache/lucene/search/PhraseQuery.html>匹配短语</a></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;match_phrase&#34;</span>: {
-      <span style=color:#f92672>&#34;title&#34;</span>: <span style=color:#e6db74>&#34;the wind rises&#34;</span>
-    }
-  }
-}
-</code></pre></div><p>查询接受以下选项。有关每个参数的描述，请参见
-<a href=/easysearch/main/docs/references/search/full-text/#%e6%9f%a5%e8%af%a2%e9%80%89%e9%a1%b9>查询选项</a></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;match_phrase&#34;</span>: {
-      <span style=color:#f92672>&#34;title&#34;</span>: {
-        <span style=color:#f92672>&#34;query&#34;</span>: <span style=color:#e6db74>&#34;wind rises the&#34;</span>,
-        <span style=color:#f92672>&#34;slop&#34;</span>: <span style=color:#ae81ff>3</span>,
-        <span style=color:#f92672>&#34;analyzer&#34;</span>: <span style=color:#e6db74>&#34;standard&#34;</span>,
-        <span style=color:#f92672>&#34;zero_terms_query&#34;</span>: <span style=color:#e6db74>&#34;none&#34;</span>
-      }
-    }
-  }
-}
-</code></pre></div><h2 id=匹配短语前缀>匹配短语前缀
-<a class=anchor href=#%e5%8c%b9%e9%85%8d%e7%9f%ad%e8%af%ad%e5%89%8d%e7%bc%80>#</a></h2><p>类似于
-<a href=/easysearch/main/docs/references/search/full-text/#%e5%8c%b9%e9%85%8d%e7%9f%ad%e8%af%ad>匹配短语</a>, 创建一个
-<a href=https://lucene.apache.org/core/8_4_0/core/org/apache/lucene/search/PrefixQuery.html>匹配短语前缀</a></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;match_phrase_prefix&#34;</span>: {
-      <span style=color:#f92672>&#34;title&#34;</span>: <span style=color:#e6db74>&#34;the wind ri&#34;</span>
-    }
-  }
-}
-</code></pre></div><p>查询接受以下选项。有关每个参数的描述，请参见
-<a href=/easysearch/main/docs/references/search/full-text/#%e6%9f%a5%e8%af%a2%e9%80%89%e9%a1%b9>查询选项</a></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;match_phrase_prefix&#34;</span>: {
-      <span style=color:#f92672>&#34;title&#34;</span>: {
-        <span style=color:#f92672>&#34;query&#34;</span>: <span style=color:#e6db74>&#34;the wind ri&#34;</span>,
-        <span style=color:#f92672>&#34;analyzer&#34;</span>: <span style=color:#e6db74>&#34;standard&#34;</span>,
-        <span style=color:#f92672>&#34;max_expansions&#34;</span>: <span style=color:#ae81ff>50</span>,
-        <span style=color:#f92672>&#34;slop&#34;</span>: <span style=color:#ae81ff>3</span>
-      }
-    }
-  }
-}
-</code></pre></div><h2 id=通用条件>通用条件
-<a class=anchor href=#%e9%80%9a%e7%94%a8%e6%9d%a1%e4%bb%b6>#</a></h2><p>公共条件查询根据分片上出现的次数将查询字符串分成高频和低频条件。低频项在结果中的权重更大，高频项仅适用于已匹配一个或多个低频项的文档。从这个意义上说，您可以将这个查询看作是一个内置的、不断变化的停止词列表。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;common&#34;</span>: {
-      <span style=color:#f92672>&#34;title&#34;</span>: {
-        <span style=color:#f92672>&#34;query&#34;</span>: <span style=color:#e6db74>&#34;the wind rises&#34;</span>
-      }
-    }
-  }
-}
-</code></pre></div><p>查询接受以下选项。有关每个参数的描述，请参见
-<a href=/easysearch/main/docs/references/search/full-text/#%e6%9f%a5%e8%af%a2%e9%80%89%e9%a1%b9>查询选项</a></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;common&#34;</span>: {
-      <span style=color:#f92672>&#34;title&#34;</span>: {
-        <span style=color:#f92672>&#34;query&#34;</span>: <span style=color:#e6db74>&#34;the wind rises&#34;</span>,
-        <span style=color:#f92672>&#34;cutoff_frequency&#34;</span>: <span style=color:#ae81ff>0.002</span>,
-        <span style=color:#f92672>&#34;low_freq_operator&#34;</span>: <span style=color:#e6db74>&#34;or&#34;</span>,
-        <span style=color:#f92672>&#34;boost&#34;</span>: <span style=color:#ae81ff>1</span>,
-        <span style=color:#f92672>&#34;analyzer&#34;</span>: <span style=color:#e6db74>&#34;standard&#34;</span>,
-        <span style=color:#f92672>&#34;minimum_should_match&#34;</span>: {
-          <span style=color:#f92672>&#34;low_freq&#34;</span> : <span style=color:#ae81ff>2</span>,
-          <span style=color:#f92672>&#34;high_freq&#34;</span> : <span style=color:#ae81ff>3</span>
-        }
-      }
-    }
-  }
-}
-</code></pre></div><h2 id=查询字符串>查询字符串
-<a class=anchor href=#%e6%9f%a5%e8%af%a2%e5%ad%97%e7%ac%a6%e4%b8%b2>#</a></h2><p>查询字符串查询根据运算符拆分文本，并逐个分析.</p><blockquote><p>如果使用 HTTP 请求参数（即 <code>_search?q=wind</code> ）进行搜索，Easysearch 将创建一个查询字符串查询。</p></blockquote><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;query_string&#34;</span>: {
-      <span style=color:#f92672>&#34;query&#34;</span>: <span style=color:#e6db74>&#34;the wind AND (rises OR rising)&#34;</span>
-    }
-  }
-}
-</code></pre></div><p>查询接受以下选项。有关每个参数的描述，请参见
-<a href=/easysearch/main/docs/references/search/full-text/#%e6%9f%a5%e8%af%a2%e9%80%89%e9%a1%b9>查询选项</a></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;query_string&#34;</span>: {
-      <span style=color:#f92672>&#34;query&#34;</span>: <span style=color:#e6db74>&#34;the wind AND (rises OR rising)&#34;</span>,
-      <span style=color:#f92672>&#34;default_field&#34;</span>: <span style=color:#e6db74>&#34;title&#34;</span>,
-      <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;best_fields&#34;</span>,
-      <span style=color:#f92672>&#34;fuzziness&#34;</span>: <span style=color:#e6db74>&#34;AUTO&#34;</span>,
-      <span style=color:#f92672>&#34;fuzzy_transpositions&#34;</span>: <span style=color:#66d9ef>true</span>,
-      <span style=color:#f92672>&#34;fuzzy_max_expansions&#34;</span>: <span style=color:#ae81ff>50</span>,
-      <span style=color:#f92672>&#34;fuzzy_prefix_length&#34;</span>: <span style=color:#ae81ff>0</span>,
-      <span style=color:#f92672>&#34;minimum_should_match&#34;</span>: <span style=color:#ae81ff>1</span>,
-      <span style=color:#f92672>&#34;default_operator&#34;</span>: <span style=color:#e6db74>&#34;or&#34;</span>,
-      <span style=color:#f92672>&#34;analyzer&#34;</span>: <span style=color:#e6db74>&#34;standard&#34;</span>,
-      <span style=color:#f92672>&#34;lenient&#34;</span>: <span style=color:#66d9ef>false</span>,
-      <span style=color:#f92672>&#34;boost&#34;</span>: <span style=color:#ae81ff>1</span>,
-      <span style=color:#f92672>&#34;allow_leading_wildcard&#34;</span>: <span style=color:#66d9ef>true</span>,
-      <span style=color:#f92672>&#34;enable_position_increments&#34;</span>: <span style=color:#66d9ef>true</span>,
-      <span style=color:#f92672>&#34;phrase_slop&#34;</span>: <span style=color:#ae81ff>3</span>,
-      <span style=color:#f92672>&#34;max_determinized_states&#34;</span>: <span style=color:#ae81ff>10000</span>,
-      <span style=color:#f92672>&#34;time_zone&#34;</span>: <span style=color:#e6db74>&#34;-08:00&#34;</span>,
-      <span style=color:#f92672>&#34;quote_field_suffix&#34;</span>: <span style=color:#e6db74>&#34;&#34;</span>,
-      <span style=color:#f92672>&#34;quote_analyzer&#34;</span>: <span style=color:#e6db74>&#34;standard&#34;</span>,
-      <span style=color:#f92672>&#34;analyze_wildcard&#34;</span>: <span style=color:#66d9ef>false</span>,
-      <span style=color:#f92672>&#34;auto_generate_synonyms_phrase_query&#34;</span>: <span style=color:#66d9ef>true</span>
-    }
-  }
-}
-</code></pre></div><h2 id=简单查询字符串>简单查询字符串
-<a class=anchor href=#%e7%ae%80%e5%8d%95%e6%9f%a5%e8%af%a2%e5%ad%97%e7%ac%a6%e4%b8%b2>#</a></h2><p>简单的查询字符串查询类似于查询字符串查询，但它允许高级用户直接在查询字符串中指定许多参数。查询将丢弃查询字符串的任何无效部分。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;simple_query_string&#34;</span>: {
-      <span style=color:#f92672>&#34;query&#34;</span>: <span style=color:#e6db74>&#34;\&#34;rises wind the\&#34;~4 | *ising~2&#34;</span>,
-      <span style=color:#f92672>&#34;fields&#34;</span>: [<span style=color:#e6db74>&#34;title&#34;</span>]
-    }
-  }
-}
-</code></pre></div><table><thead><tr><th style=text-align:left>特殊字符</th><th style=text-align:left>说明</th></tr></thead><tbody><tr><td style=text-align:left><code>+</code></td><td style=text-align:left>与 <code>and</code> 操作符一样</td></tr><tr><td style=text-align:left><code>\|</code></td><td style=text-align:left>与 <code>or</code> 操作符一样</td></tr><tr><td style=text-align:left><code>*</code></td><td style=text-align:left>通配符</td></tr><tr><td style=text-align:left><code>""</code></td><td style=text-align:left>将若干个字组成一个短语</td></tr><tr><td style=text-align:left><code>()</code></td><td style=text-align:left>将一组条件组合到一起</td></tr><tr><td style=text-align:left><code>~n</code></td><td style=text-align:left>用于单词后面 (e.g. <code>wnid~3</code> ), 设置模糊程度参数 <code>fuzziness</code> 。当用于词语后面，则设置 <code>slop</code> 参数。参见
-<a href=/easysearch/main/docs/references/search/full-text/#%e6%9f%a5%e8%af%a2%e9%80%89%e9%a1%b9>查询选项</a>.</td></tr><tr><td style=text-align:left><code>-</code></td><td style=text-align:left>Negates the term.</td></tr></tbody></table><p>查询接受以下选项。有关每个参数的描述，请参见
-<a href=/easysearch/main/docs/references/search/full-text/#%e6%9f%a5%e8%af%a2%e9%80%89%e9%a1%b9>查询选项</a></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;simple_query_string&#34;</span>: {
-      <span style=color:#f92672>&#34;query&#34;</span>: <span style=color:#e6db74>&#34;\&#34;rises wind the\&#34;~4 | *ising~2&#34;</span>,
-      <span style=color:#f92672>&#34;fields&#34;</span>: [<span style=color:#e6db74>&#34;title&#34;</span>],
-      <span style=color:#f92672>&#34;flags&#34;</span>: <span style=color:#e6db74>&#34;ALL&#34;</span>,
-      <span style=color:#f92672>&#34;fuzzy_transpositions&#34;</span>: <span style=color:#66d9ef>true</span>,
-      <span style=color:#f92672>&#34;fuzzy_max_expansions&#34;</span>: <span style=color:#ae81ff>50</span>,
-      <span style=color:#f92672>&#34;fuzzy_prefix_length&#34;</span>: <span style=color:#ae81ff>0</span>,
-      <span style=color:#f92672>&#34;minimum_should_match&#34;</span>: <span style=color:#ae81ff>1</span>,
-      <span style=color:#f92672>&#34;default_operator&#34;</span>: <span style=color:#e6db74>&#34;or&#34;</span>,
-      <span style=color:#f92672>&#34;analyzer&#34;</span>: <span style=color:#e6db74>&#34;standard&#34;</span>,
-      <span style=color:#f92672>&#34;lenient&#34;</span>: <span style=color:#66d9ef>false</span>,
-      <span style=color:#f92672>&#34;quote_field_suffix&#34;</span>: <span style=color:#e6db74>&#34;&#34;</span>,
-      <span style=color:#f92672>&#34;analyze_wildcard&#34;</span>: <span style=color:#66d9ef>false</span>,
-      <span style=color:#f92672>&#34;auto_generate_synonyms_phrase_query&#34;</span>: <span style=color:#66d9ef>true</span>
-    }
-  }
-}
-</code></pre></div><h2 id=全部匹配>全部匹配
-<a class=anchor href=#%e5%85%a8%e9%83%a8%e5%8c%b9%e9%85%8d>#</a></h2><p>匹配所有文档。可用于测试。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;match_all&#34;</span>: {}
-  }
-}
-</code></pre></div><h2 id=不匹配>不匹配
-<a class=anchor href=#%e4%b8%8d%e5%8c%b9%e9%85%8d>#</a></h2><p>不匹配任何文档。很少有人用。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>_search</span>
-{
-  <span style=color:#f92672>&#34;query&#34;</span>: {
-    <span style=color:#f92672>&#34;match_none&#34;</span>: {}
-  }
-}
-</code></pre></div><h2 id=查询选项>查询选项
-<a class=anchor href=#%e6%9f%a5%e8%af%a2%e9%80%89%e9%a1%b9>#</a></h2><table><thead><tr><th style=text-align:left>选项</th><th style=text-align:left>类型</th><th style=text-align:left>说明</th></tr></thead><tbody><tr><td style=text-align:left><code>allow_leading_wildcard</code></td><td style=text-align:left>布尔值</td><td style=text-align:left><code>*</code> 和 <code>？</code> 是否允许作为搜索项的第一个字符。默认值为 true</td></tr><tr><td style=text-align:left><code>analyze_wildcard</code></td><td style=text-align:left>Boolean</td><td style=text-align:left>Easysearch 是否应尝试分析通配符。一些分析器在这项任务上做得很差，因此默认值为 false</td></tr><tr><td style=text-align:left><code>analyzer</code></td><td style=text-align:left><code>standard, simple, whitespace, stop, keyword, pattern, &lt;language>, fingerprint</code></td><td style=text-align:left>要用于查询的分析器。不同的分析器具有不同的字符过滤器、标记化器和标记过滤器。例如， <code>stop</code> 分析器从查询字符串中删除停止词（例如 <code>an</code> 、 <code>but</code> 、 <code>this</code> ）。</td></tr><tr><td style=text-align:left><code>auto_generate_synonyms_phrase_query</code></td><td style=text-align:left>Boolean</td><td style=text-align:left>值 true（默认值）自动生成
-<a href=https://lucene.apache.org/core/8_4_0/core/org/apache/lucene/search/PhraseQuery.html>短语查询</a>多术语同义词。例如，如果您有同义词 <code>ba, batting average</code> 并搜索 <code>ba</code> ，Easysearch 将搜索 <code>ba OR batting average</code>（如果此选项为 true ）或 <code>ba OR（batting 与 average）</code>（如果该选项为 false）。</td></tr><tr><td style=text-align:left><code>boost</code></td><td style=text-align:left>Floating-point</td><td style=text-align:left>按给定乘数增加子句。用于权衡复合查询中的子句。默认值为 1.0。</td></tr><tr><td style=text-align:left><code>cutoff_frequency</code></td><td style=text-align:left>Between <code>0.0</code> and <code>1.0</code> or a positive integer</td><td style=text-align:left>该值允许您根据索引中出现的次数定义高频和低频项。介于 0 和 1 之间的数字被视为百分比。例如，0.10 为 10%。这个值意味着，如果一个单词出现在碎片上超过 10%的文档中的搜索字段中，Easysearch 会考虑单词 <code>高频</code> ，并在计算搜索分数时不再强调它因为此设置是<strong>每个碎片</strong>，所以测试它对搜索结果的影响可能很困难，除非集群有很多文档。</td></tr><tr><td style=text-align:left><code>enable_position_increments</code></td><td style=text-align:left>Boolean</td><td style=text-align:left>如果为 true，结果查询将知道位置增量。当删除停止词在术语之间留下不需要的 <code>间隙</code> 时，此设置非常有用。默认值为 true。</td></tr><tr><td style=text-align:left><code>fields</code></td><td style=text-align:left>String array</td><td style=text-align:left>要搜索的字段列表（例如 <code>"fields": ["title^4", "description"]</code>）。如果未指定，则默认为 <code>index.query.default_field</code> 设置，默认为 <code>[ "*" ]</code>。</td></tr><tr><td style=text-align:left><code>flags</code></td><td style=text-align:left>String</td><td style=text-align:left>要启用的以 <code>\|</code> 分隔的[标志]字符串（
-<a href=/easysearch/main/docs/references/search/full-text/#%e7%ae%80%e5%8d%95%e6%9f%a5%e8%af%a2%e5%ad%97%e7%ac%a6%e4%b8%b2>简单查询字符串</a>）（例如 <code>AND \| OR \| NOT</code> ），默认值为 <code>ALL</code> 。</td></tr><tr><td style=text-align:left><code>fuzziness</code></td><td style=text-align:left><code>AUTO</code> , <code>0</code> , or a positive integer</td><td style=text-align:left>在确定术语是否与值匹配时，将一个单词更改为另一个单词所需的字符编辑（插入、删除、替换）次数。例如， <code>wined</code> 和 <code>wind</code> 之间的距离为 1。默认值 <code>AUTO</code> 基于每个术语的长度选择一个值，对于大多数用例来说是一个很好的选择。</td></tr><tr><td style=text-align:left><code>fuzzy_transpositions</code></td><td style=text-align:left>Boolean</td><td style=text-align:left>将 <code>fuzzy_transposions</code> 设置为 true（默认值）会将相邻字符的交换添加到 <code>fuzzy</code> 选项的插入、删除和替换操作中。例如，如果 <code>fuzzy_transpositions</code> 为真（交换 <code>n</code> 和 <code>i</code> ），则 <code>wind</code> 和 <code>wnid</code> 之间的距离为 1；如果为假（删除 <code>n</code> ，插入 <code>n</code> ），那么 <code>wind</code> 和 <code>wnid</code> 之间距离为 2。如果 <code>fuzzy_transpositions</code> 为假，则 <code>rewind</code> 和 <code>wnid</code> 与 <code>wind</code> 的距离相同（2），尽管更以人为中心的观点认为 <code>wnid</code> 是一个明显的拼写错误。对于大多数用例来说，默认值是一个不错的选择。</td></tr><tr><td style=text-align:left><code>lenient</code></td><td style=text-align:left>Boolean</td><td style=text-align:left>将 <code>lenient</code> 设置为 true 可以忽略查询和文档字段之间的数据类型不匹配。例如，查询字符串 <code>8.2</code> 可以匹配 <code>float</code> 类型的字段。默认值为 false。</td></tr><tr><td style=text-align:left><code>low_freq_operator</code></td><td style=text-align:left><code>and, or</code></td><td style=text-align:left>低频项的运算符。默认值为 <code>或</code> 。请参阅此表中的
-<a href=/easysearch/main/docs/references/search/full-text/#%e9%80%9a%e7%94%a8%e6%9d%a1%e4%bb%b6>通用条件</a>查询和 <code>operator</code> 。</td></tr><tr><td style=text-align:left><code>max_determinized_states</code></td><td style=text-align:left>Positive integer</td><td style=text-align:left>Lucene 可以为包含正则表达式的查询字符串（例如 <code>"query" ："/wind.+？/"</code> ）创建的 “
-<a href=https://lucene.apache.org/core/8_4_0/core/org/apache/lucene/util/automaton/Operations.html#DEFAULT_MAX_DETERMINIZED_STATES>states</a>”（复杂性度量）的最大数量。较大的数字允许使用更多内存的查询。默认值为 10000。</td></tr><tr><td style=text-align:left><code>max_expansions</code></td><td style=text-align:left>Positive integer</td><td style=text-align:left>模糊查询 <code>expand</code> 在 <code>fuzziness</code> 中指定的距离内的许多匹配项。然后 Easysearch 试图将这些条款与其指数相匹配 <code>max_expansions</code> 指定模糊查询扩展到的最大项数。默认值为 50。</td></tr><tr><td style=text-align:left><code>minimum_should_match</code></td><td style=text-align:left>正或负整数、正或负百分比、组合</td><td style=text-align:left>如果查询字符串包含多个搜索项，并且您使用了 <code>或</code> 运算符，则需要匹配的项数将被视为匹配项。例如，如果 <code>minimum_should_match</code> 为 2，则 <code>wind often rising</code> 与 <code>The Wind Rises</code> 不匹配。如果 <code>minium_sshould_match</code> 为 1，则匹配。此选项还具有
-<a href=/easysearch/main/docs/references/search/full-text/#%e9%80%9a%e7%94%a8%e6%9d%a1%e4%bb%b6>通用条件</a>查询的 <code>low_freq</code> 和 <code>high_freq</code>。</td></tr><tr><td style=text-align:left><code>operator</code></td><td style=text-align:left><code>or, and</code></td><td style=text-align:left>如果查询字符串包含多个搜索项，则是否所有项都需要匹配（ <code>and</code> ），或者只有一个项需要匹配（ <code>or</code> ），才能将文档视为匹配项。</td></tr><tr><td style=text-align:left><code>phrase_slop</code></td><td style=text-align:left><code>0</code> (default) or a positive integer</td><td style=text-align:left>See <code>slop</code> .</td></tr><tr><td style=text-align:left><code>prefix_length</code></td><td style=text-align:left><code>0</code> (default) or a positive integer</td><td style=text-align:left>在模糊性中可以不考虑的主要字符数量。</td></tr><tr><td style=text-align:left><code>quote_field_suffix</code></td><td style=text-align:left>String</td><td style=text-align:left>此选项允许您根据术语是否用引号括起来来搜索不同的字段。例如，如果 <code>quote_field_suffix</code> 是 <code>.exact</code> ，并且在 <code>title</code> 字段中搜索 <code>light</code> （用引号括起来），则 Easysearch 将搜索 <code>title.exact</code> 字段。第二个字段可能使用不同的类型（例如 <code>关键字</code> 而不是 <code>文本</code> ）或不同的分析器。默认值为空。</td></tr><tr><td style=text-align:left><code>rewrite</code></td><td style=text-align:left><code>constant_score, scoring_boolean, constant_score_boolean, top_terms_N, top_terms_boost_N, top_terms_blended_freqs_N</code></td><td style=text-align:left>确定 Easysearch 如何重写和评分多术语查询。默认值为 <code>constant_score</code> 。</td></tr><tr><td style=text-align:left><code>slop</code></td><td style=text-align:left><code>0</code> (default) or a positive integer</td><td style=text-align:left>控制查询中的单词可能被错误排序并且仍然被视为匹配的程度。来自
-<a href=https://lucene.apache.org/core/8_4_0/core/org/apache/lucene/search/PhraseQuery.html#getSlop-->Lucene 文档</a>： 查询短语中单词之间允许的其他单词的数量。例如，要切换两个单词的顺序，需要两次移动（第一次移动将单词放在另一个单词的顶部），因此为了允许短语的重新排序，slop 必须至少为两个。值为零需要完全匹配。</td></tr><tr><td style=text-align:left><code>tie_breaker</code></td><td style=text-align:left><code>0.0</code> (default) to <code>1.0</code></td><td style=text-align:left>改变 Easysearch 评分搜索的方式。例如， <code>类型</code> 的 <code>best_fields</code> 通常使用任何一个字段的最高分数。如果指定介于 0.0 和 1.0 之间的 <code>tie_breaker</code> 值，则所有其他匹配字段的得分将更改为最高得分 + <code>tie_bbreaker</code> * 得分。如果指定值为 1.0，Easysearch 会将所有匹配字段的分数相加（有效地挫败了 <code>best_fields</code> 的目的）。</td></tr><tr><td style=text-align:left><code>time_zone</code></td><td style=text-align:left>UTC offset</td><td style=text-align:left>如果查询字符串包含日期范围（例如 <code>"query" ： "wind rises release_date[2012-01-01 to 2014-01-01]"</code> ），则使用的时区（例如 <code>-08:00</code> ）。默认值为 <code>UTC</code> 。</td></tr><tr><td style=text-align:left><code>type</code></td><td style=text-align:left><code>best_fields, most_fields, cross-fields, phrase, phrase_prefix</code></td><td style=text-align:left>确定 Easysearch 如何执行查询并对结果进行评分。默认值为 <code>best_fields</code> 。</td></tr><tr><td style=text-align:left><code>zero_terms_query</code></td><td style=text-align:left><code>none, all</code></td><td style=text-align:left>如果分析器从查询字符串中删除所有术语，则是不匹配任何文档（默认）还是匹配所有文档。例如， <code>stop</code> 分析器从字符串 <code>an but this</code> 中删除所有项</td></tr></tbody></table></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+<strong>全文检索</strong>
+<label for=toc-control><img src=/easysearch/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#全文检索>全文检索</a></li></ul></nav></aside></header><article class=markdown><h1 id=全文检索>全文检索
+<a class=anchor href=#%e5%85%a8%e6%96%87%e6%a3%80%e7%b4%a2>#</a></h1><p>此页面列出了所有全文检索类型和常用选项。您可以使用许多可选字段来创建细微的搜索行为，因此我们建议您针对代表性索引测试一些基本查询类型，并在使用多个选项执行更高级或更复杂的搜索之前验证输出。</p><p>Easysearch 使用 Apache Lucene 搜索库，该库提供高效的数据结构和算法，用于摄取、索引、搜索和聚合数据。</p><p>若要了解有关搜索查询类的更多信息，请参阅
+<a href=https://lucene.apache.org/core/8_9_0/core/org/apache/lucene/search/Query.html>Lucene 查询 JavaDocs</a>。</p><p>本节中显示的全文检索类型使用标准（standard）分词器，该分词器在提交查询时自动分析文本。</p><p>下表列出了所有全文检索类型。</p><table><thead><tr><th>查询类型</th><th>描述</th></tr></thead><tbody><tr><td><code>intervals</code></td><td>允许对匹配项的接近度和顺序进行细粒度控制。</td></tr><tr><td><code>match</code></td><td>默认全文检索，可用于模糊匹配和短语或邻近搜索。</td></tr><tr><td><code>match_bool_prefix</code></td><td>创建一个布尔查询 ，该查询匹配任何位置的所有词项，将最后一个词项视为前缀。</td></tr><tr><td><code>match_phrase</code></td><td>与匹配查询类似，但根据可配置的 <code>slop</code> 进行匹配短语查询。</td></tr><tr><td><code>match_phrase_prefix</code></td><td>与 match_phrase 查询类似，但将词项匹配为整个短语，将最后一个词项视为前缀。</td></tr><tr><td><code>multi_match</code></td><td>与匹配查询类似，但用于多个字段。</td></tr><tr><td><code>query_string</code></td><td>使用严格的语法在单个查询字符串中指定布尔条件和多字段搜索。</td></tr><tr><td><code>simple_query_string</code></td><td><code>query_string</code> 查询的更简单、不太严格的版本。</td></tr></tbody></table></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
 gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
     import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
     searchbox({container: "#searchbox"});
-</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#全文查询>全文查询</a><ul><li><a href=#匹配>匹配</a></li><li><a href=#多重匹配>多重匹配</a></li><li><a href=#匹配布尔前缀>匹配布尔前缀</a></li><li><a href=#匹配短语>匹配短语</a></li><li><a href=#匹配短语前缀>匹配短语前缀</a></li><li><a href=#通用条件>通用条件</a></li><li><a href=#查询字符串>查询字符串</a></li><li><a href=#简单查询字符串>简单查询字符串</a></li><li><a href=#全部匹配>全部匹配</a></li><li><a href=#不匹配>不匹配</a></li><li><a href=#查询选项>查询选项</a></li></ul></li></ul></nav></aside></main><script src=/easysearch/main/js/asciinema-player.js></script></body></html>
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#全文检索>全文检索</a></li></ul></nav></aside></main><script src=/easysearch/main/js/asciinema-player.js></script></body></html>
