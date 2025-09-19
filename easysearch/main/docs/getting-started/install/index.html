@@ -2,6 +2,7 @@
 安装演示 #     展开查看完整代码 ...  # 使用 root 用户操作 whoami && cat /etc/redhat-release && uptime # 安装 JDK yum -y install java-11 # 创建 easysearch 用户 groupadd -g 602 easysearch useradd -u 602 -g easysearch -m -d /home/easysearch -c 'easysearch' -s /bin/bash easysearch # 安装 Easysearch & Console curl -sSL http://get.infini.cloud | bash -s -- -p easysearch # 配置 Easysearch JDK ln -s /usr/lib/jvm/java-11-openjdk-11."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="安装指南"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:url" content="/easysearch/main/docs/getting-started/install/"><title>安装指南 | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=alternate type=application/rss+xml href=/easysearch/main/docs/getting-started/install/index.xml title="INFINI Easysearch"><link rel=stylesheet type=text/css href=/easysearch/main/css/asciinema-player.css><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/easysearch/main><img src=/easysearch/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
+<option value=v1.15.2>v1.15.2</option>
 <option value=v1.15.1>v1.15.1</option>
 <option value=v1.15.0>v1.15.0</option>
 <option value=v1.14.0>v1.14.0</option>
@@ -142,14 +143,13 @@ curl -ku admin:8bf1565cf6ff084d823e https://localhost:9200
 <a class=anchor href=#jvm>#</a></h2><p>对于实例的 JVM 配置，可以通过启动参数 ES_JAVA_OPTS="-Xms4g -Xmx4g" 进行设置，也可以直接修改 config/jvm.options 中相应的参数值。</p><blockquote><p>默认情况下 Easysearch 并不包含 JDK, 推荐使用 Java 15.0.1+9 或 Java 17.0.6+10, 最低版本要求为 Java 11, 要使用不同的 Java 安装，请将 JAVA_HOME 环境变量设置为 Java 安装位置或将 JDK 软链接到 Easysearch 安装目录下取名为 <code>jdk</code>。</p></blockquote><h2 id=插件安装>插件安装
 <a class=anchor href=#%e6%8f%92%e4%bb%b6%e5%ae%89%e8%a3%85>#</a></h2><p>默认情况下，插件可自动安装，内网环境需要手动安装插件。最新版本插件的
 <a href=https://release.infinilabs.com/easysearch/stable/plugins/>下载地址</a></p><p>具体插件安装步骤参考如下：</p><ol><li>切换到 Easysearch 运行用户，此处假设为 <code>easysearch</code> 用户</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>su - easysearch
-</code></pre></div><ol start=2><li>离线安装 index-management 插件</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e>#e.g 假设当前Easysearch版本为 1.2.0，且插件已下载到 /tmp/index-management-1.2.0.zip</span>
-bin/easysearch-plugin install file:///tmp/index-management-1.2.0.zip
+</code></pre></div><ol start=2><li>离线安装 analysis-ik 插件</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e>#e.g 假设当前Easysearch版本为 1.2.0，且插件已下载到 /tmp/analysis-ik-1.2.0.zip</span>
+bin/easysearch-plugin install file:///tmp/analysis-ik-1.2.0.zip
 </code></pre></div><ol start=3><li>查看已安装好的插件</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>bin/easysearch-plugin list
 
 <span style=color:#75715e>#以下为输出示例</span>
 analysis-ik
 analysis-pinyin
-index-management
 ingest-common
 ingest-geoip
 ingest-user-agent
