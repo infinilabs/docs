@@ -25,5 +25,5 @@ ZSTD 与默认编解码器相比，该编解码器提供了与best_compression�
 source 复用 # source_reuse： 启用 source_reuse 配置项能够去除 _source 字段中与 doc_values 或倒排索引重复的部分，从而有效减小索引总体大小，这个功能对日志类索引效果尤其明显。
 source_reuse 支持对以下数据类型进行压缩：keyword，integer，long，short，boolean，float，half_float，double，geo_point，ip， 如果是 text 类型，需要默认启用 keyword 类型的 multi-field 映射。 以上类型必须启用 doc_values 映射（默认启用）才能压缩。
 使用限制 # 当索引里包含 nested 类型映射，或插件额外提供的数据类型时，不能启用 source_reuse，例如 knn 索引。
-压缩效果对比 # Easysearch 压缩效果对比如下
-使用 Nginx 日志作为数据样本 就 Elasticsearch 6.4.3 和 Easysearch 1.</description></item></channel></rss>
+使用 source_reuse 压缩时，keyword 类型的字段最好不要设置 ignore_above 属性，设置过短的值可能会导致字段内容无法展示。
+压缩效果对比 # Easysearch 压缩效果对比如下</description></item></channel></rss>

@@ -1,14 +1,17 @@
 <!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="本地配置 #  通过安全模块的本地 YAML 配置文件可以方便的管理默认的内置用户或 隐藏的保留资源，例如 admin 管理员用户。不过通过 INFINI Console 或者 REST API 来创建其他用户、角色、映射、操作组和租户可能更容易。
-user.yml #  此文件包含您要添加到内部用户数据库的默认初始用户。
+本地配置的路径位于 Easysearch 部署目录的的 config/security 下, 下面是这些文件的默认配置。
+user.yml #  此文件是内置用户配置文件，用于定义系统的初始用户账户及其相关配置（如密码哈希、角色分配等）。
+admin 用户是 Easysearch 系统中的默认超级管理员用户。
 配置文件里面的密码不能是明文，必须使用 Hash 之后的密码，通过命令 ./bin/hash_password.sh -p <new-password> 可以生成一个密码哈希。
-_meta: type: &#34;user&#34; config_version: 2 admin: hash: &#34;$2y$12$ZXx5R8NfuW2TYPOdGNY7a.43WKKBMCtN9aJywYWjAz9i11w7SrkqG&#34; reserved: true external_roles: - &#34;admin&#34; description: &#34;Default admin user&#34; readonly: hash: &#34;$2y$12$d9I16.5qpYhhsbiGN4zqdeA4k6BeMl/yEKRvTo3gzxFp8UC57EgJ.&#34; reserved: false external_roles: - &#34;readall&#34; description: &#34;Default readonly user&#34; role.yml #  此文件包含要添加到内置数据库的默认初始角色。除了一些元数据之外，这个文件默认是是空的，因为系统已经了内置了若干角色，可以根据需要进行角色扩展。
-complex-role: reserved: false hidden: false cluster: - &#34;read&#34; - &#34;cluster:monitor/nodes/stats&#34; - &#34;cluster:monitor/task/get&#34; indices: - names: - &#34;kibana_sample_data_*&#34; query: '{&#34;match&#34;: {&#34;FlightDelay&#34;: true}}' field_security: - &#34;~FlightNum&#34; field_mask: - &#34;Carrier&#34; privileges: - &#34;read&#34; static: false _meta: type: &#34;roles&#34; config_version: 2 role_mapping."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="本地配置"><meta property="og:description" content="本地配置 #  通过安全模块的本地 YAML 配置文件可以方便的管理默认的内置用户或 隐藏的保留资源，例如 admin 管理员用户。不过通过 INFINI Console 或者 REST API 来创建其他用户、角色、映射、操作组和租户可能更容易。
-user.yml #  此文件包含您要添加到内部用户数据库的默认初始用户。
+--- # This is the internal user database create by initialize # The hash value is a bcrypt hash and can be generated with hash_password.sh _meta: type: &#34;user&#34; config_version: 2 # Define your internal users here ## Default users admin: hash: &#34;$2y$12$P2zO4rEJvtTqTYgQ/Ifk0eTALefRcxuiQgNUOBse/IP."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="本地配置"><meta property="og:description" content="本地配置 #  通过安全模块的本地 YAML 配置文件可以方便的管理默认的内置用户或 隐藏的保留资源，例如 admin 管理员用户。不过通过 INFINI Console 或者 REST API 来创建其他用户、角色、映射、操作组和租户可能更容易。
+本地配置的路径位于 Easysearch 部署目录的的 config/security 下, 下面是这些文件的默认配置。
+user.yml #  此文件是内置用户配置文件，用于定义系统的初始用户账户及其相关配置（如密码哈希、角色分配等）。
+admin 用户是 Easysearch 系统中的默认超级管理员用户。
 配置文件里面的密码不能是明文，必须使用 Hash 之后的密码，通过命令 ./bin/hash_password.sh -p <new-password> 可以生成一个密码哈希。
-_meta: type: &#34;user&#34; config_version: 2 admin: hash: &#34;$2y$12$ZXx5R8NfuW2TYPOdGNY7a.43WKKBMCtN9aJywYWjAz9i11w7SrkqG&#34; reserved: true external_roles: - &#34;admin&#34; description: &#34;Default admin user&#34; readonly: hash: &#34;$2y$12$d9I16.5qpYhhsbiGN4zqdeA4k6BeMl/yEKRvTo3gzxFp8UC57EgJ.&#34; reserved: false external_roles: - &#34;readall&#34; description: &#34;Default readonly user&#34; role.yml #  此文件包含要添加到内置数据库的默认初始角色。除了一些元数据之外，这个文件默认是是空的，因为系统已经了内置了若干角色，可以根据需要进行角色扩展。
-complex-role: reserved: false hidden: false cluster: - &#34;read&#34; - &#34;cluster:monitor/nodes/stats&#34; - &#34;cluster:monitor/task/get&#34; indices: - names: - &#34;kibana_sample_data_*&#34; query: '{&#34;match&#34;: {&#34;FlightDelay&#34;: true}}' field_security: - &#34;~FlightNum&#34; field_mask: - &#34;Carrier&#34; privileges: - &#34;read&#34; static: false _meta: type: &#34;roles&#34; config_version: 2 role_mapping."><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/main/docs/references/security/configuration/yaml/"><title>本地配置 | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/easysearch/main/css/asciinema-player.css><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+--- # This is the internal user database create by initialize # The hash value is a bcrypt hash and can be generated with hash_password.sh _meta: type: &#34;user&#34; config_version: 2 # Define your internal users here ## Default users admin: hash: &#34;$2y$12$P2zO4rEJvtTqTYgQ/Ifk0eTALefRcxuiQgNUOBse/IP."><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/main/docs/references/security/configuration/yaml/"><title>本地配置 | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/easysearch/main/css/asciinema-player.css><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/easysearch/main><img src=/easysearch/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
+<option value=v1.15.3>v1.15.3</option>
 <option value=v1.15.2>v1.15.2</option>
 <option value=v1.15.1>v1.15.1</option>
 <option value=v1.15.0>v1.15.0</option>
@@ -64,27 +67,7 @@ complex-role: reserved: false hidden: false cluster: - &#34;read&#34; - &#34;clu
 <label for=section-92a866d9a34e707f209ba1cdbeaba985 class="flex justify-between"><a href=/easysearch/main/docs/references/mappings-and-field-types/metadata-field/>元数据字段</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/mappings-and-field-types/metadata-field/id/>ID 属性</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/metadata-field/meta/>元数据属性</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/metadata-field/field-names/>字段名称</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/metadata-field/ignored/>忽略属性</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/metadata-field/source/>源文档属性</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/metadata-field/>索引属性</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/metadata-field/routing/>路由属性</a></li></ul></li></ul></li><li><input type=checkbox id=section-232f0668f3be6ea64e1c220baec34dfc class=toggle>
 <label for=section-232f0668f3be6ea64e1c220baec34dfc class="flex justify-between"><a>文档操作</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/document/index-data/>增删改查</a></li><li><a href=/easysearch/main/docs/references/document/index-alias/>别名操作</a></li><li><a href=/easysearch/main/docs/references/document/index-compression/>索引压缩</a></li></ul></li><li><input type=checkbox id=section-6b02990358c7382bac3f39043e5fd437 class=toggle>
-<label for=section-6b02990358c7382bac3f39043e5fd437 class="flex justify-between"><a>搜索操作</a>
-<span>▾</span></label><ul><li><input type=checkbox id=section-914ecc84741b3e200e93ea80c2eb0df1 class=toggle>
-<label for=section-914ecc84741b3e200e93ea80c2eb0df1 class="flex justify-between"><a href=/easysearch/main/docs/references/search/span/>Span 查询</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/span/span-first/>Span 前序匹配</a></li><li><a href=/easysearch/main/docs/references/search/span/span-within/>Span 包含于查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-containing/>Span 包含查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-multi-term/>Span 多词项查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-or/>Span 或查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-not/>Span 排除查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-term/>Span 词项查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-field-masking/>Span 跨字段查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-near/>Span 邻近查询</a></li></ul></li><li><input type=checkbox id=section-fe27ae639d7a8e652db974b443eb5848 class=toggle>
-<label for=section-fe27ae639d7a8e652db974b443eb5848 class="flex justify-between"><a href=/easysearch/main/docs/references/search/specialized/>专业查询</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/specialized/wrapper/>包装器</a></li><li><a href=/easysearch/main/docs/references/search/specialized/rank-feature/>排序功能</a></li><li><a href=/easysearch/main/docs/references/search/specialized/percolate/>渗透查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/more-like-this/>类似查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/script-score/>脚本分数查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/script/>脚本查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/distance-feature/>距离特征查询</a></li></ul></li><li><a href=/easysearch/main/docs/references/search/match-all/>全匹配查询</a></li><li><input type=checkbox id=section-1df907d6b381276d472faa1ffc431057 class=toggle>
-<label for=section-1df907d6b381276d472faa1ffc431057 class="flex justify-between"><a href=/easysearch/main/docs/references/search/full-text/>全文检索</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/full-text/intervals/>Intervals 查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match-bool-prefix/>匹配布尔前缀查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match/>匹配查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match-phrase-prefix/>匹配短语前缀查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match-phrase/>匹配短语查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/multi-match/>多字段查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/query-string/>字符串查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/simple-query-string/>简单字符串查询</a></li></ul></li><li><input type=checkbox id=section-2baa128ae64b7fa17aa37f790453c292 class=toggle>
-<label for=section-2baa128ae64b7fa17aa37f790453c292 class="flex justify-between"><a href=/easysearch/main/docs/references/search/joining/>关联查询</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/joining/has-child/>子查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/nested/>嵌套查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/parent-id/>父 ID 查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/has-parent/>父查询</a></li></ul></li><li><input type=checkbox id=section-86bf1f72d443fd258db0d40a6bf009d7 class=toggle>
-<label for=section-86bf1f72d443fd258db0d40a6bf009d7 class="flex justify-between"><a href=/easysearch/main/docs/references/search/geo-and-xy/>地理查询</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geopolygon/>地理多边形查询</a></li><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geoshape/>地理形状查询</a></li><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geodistance/>地理距离查询</a></li><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geo-bounding-box/>地理边界框查询</a></li></ul></li><li><input type=checkbox id=section-15ea627c37f24ed149a43b1c0b4add9f class=toggle>
-<label for=section-15ea627c37f24ed149a43b1c0b4add9f class="flex justify-between"><a href=/easysearch/main/docs/references/search/compound/>复合查询</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/compound/function-score/>函数评分查询</a></li><li><a href=/easysearch/main/docs/references/search/compound/boosting/>加权</a></li><li><a href=/easysearch/main/docs/references/search/compound/bool/>布尔查询</a></li><li><a href=/easysearch/main/docs/references/search/compound/constant-score/>常量化评分查询</a></li><li><a href=/easysearch/main/docs/references/search/compound/disjunction-max/>析取最大查询</a></li></ul></li><li><a href=/easysearch/main/docs/references/search/minimum-should-match/>最小匹配</a></li><li><a href=/easysearch/main/docs/references/search/query-filter-context/>查询和过滤上下文</a></li><li><a href=/easysearch/main/docs/references/search/regex-syntax/>正则表达式语法</a></li><li><input type=checkbox id=section-e8f94bccae3c54be36d1896778639639 class=toggle>
-<label for=section-e8f94bccae3c54be36d1896778639639 class="flex justify-between"><a href=/easysearch/main/docs/references/search/term/>精确查询</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/term/exists/>Exists 查询</a></li><li><a href=/easysearch/main/docs/references/search/term/ids/>IDs 查询</a></li><li><a href=/easysearch/main/docs/references/search/term/term/>Term 精确查询</a></li><li><a href=/easysearch/main/docs/references/search/term/prefix/>前缀查询</a></li><li><a href=/easysearch/main/docs/references/search/term/terms/>多词项查询</a></li><li><a href=/easysearch/main/docs/references/search/term/fuzzy/>模糊查询</a></li><li><a href=/easysearch/main/docs/references/search/term/regexp/>正则查询</a></li><li><a href=/easysearch/main/docs/references/search/term/range/>范围查询</a></li><li><a href=/easysearch/main/docs/references/search/term/terms-set/>词项集查询</a></li><li><a href=/easysearch/main/docs/references/search/term/wildcard/>通配符查询</a></li></ul></li><li><a href=/easysearch/main/docs/references/search/term-vs-full-text/>精确查询与全文检索的对比</a></li><li><a href=/easysearch/main/docs/references/search/rewrite-parameter/>重写参数</a></li><li><a href=/easysearch/main/docs/references/search/knn_api/>向量查询</a></li><li><a href=/easysearch/main/docs/references/search/search-template/>查询模版</a></li><li><a href=/easysearch/main/docs/references/search/async_search/>异步搜索</a></li><li><a href=/easysearch/main/docs/references/search/pit_api/>定点查询</a></li><li><input type=checkbox id=section-19c2d09435d47ad6656e503e2a68a3b3 class=toggle>
-<label for=section-19c2d09435d47ad6656e503e2a68a3b3 class="flex justify-between"><a href=/easysearch/main/docs/references/search/search-pipelines/>搜索管道</a>
-<span>▾</span></label><ul><li><input type=checkbox id=section-07023dbd216ba1a90a2c532ff5bb0961 class=toggle>
-<label for=section-07023dbd216ba1a90a2c532ff5bb0961 class="flex justify-between"><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/>搜索处理器</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/filter-query-processor/>过滤查询处理器</a></li><li><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/rename-field-processor/>重命名字段处理器</a></li><li><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/script-processor/>脚本处理器</a></li></ul></li></ul></li></ul></li><li><input type=checkbox id=section-86e828ca7e30e9d2e35881b956319411 class=toggle>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/document/index-data/>增删改查</a></li><li><a href=/easysearch/main/docs/references/document/index-alias/>别名操作</a></li><li><a href=/easysearch/main/docs/references/document/index-compression/>索引压缩</a></li></ul></li><li><input type=checkbox id=section-86e828ca7e30e9d2e35881b956319411 class=toggle>
 <label for=section-86e828ca7e30e9d2e35881b956319411 class="flex justify-between"><a>SQL 查询</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/sql/sql-jdbc/>SQL-JDBC</a></li><li><a href=/easysearch/main/docs/references/sql/aggregations/>聚合查询</a></li><li><a href=/easysearch/main/docs/references/sql/fulltext/>全文搜索</a></li><li><a href=/easysearch/main/docs/references/sql/complex/>复杂查询</a></li><li><a href=/easysearch/main/docs/references/sql/basics/>基础查询</a></li></ul></li><li><input type=checkbox id=section-1c80046b8a7d2b6f02509e78096b1388 class=toggle checked>
 <label for=section-1c80046b8a7d2b6f02509e78096b1388 class="flex justify-between"><a href=/easysearch/main/docs/references/security/>安全模块</a>
@@ -92,7 +75,27 @@ complex-role: reserved: false hidden: false cluster: - &#34;read&#34; - &#34;clu
 <label for=section-4c0acfad57ce0b1db83571ad903a192e class="flex justify-between"><a href=/easysearch/main/docs/references/security/configuration/>配置说明</a>
 <span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/security/configuration/yaml/ class=active>本地配置</a></li><li><a href=/easysearch/main/docs/references/security/configuration/backend/>后端配置</a></li><li><a href=/easysearch/main/docs/references/security/configuration/tls/>证书配置</a></li><li><a href=/easysearch/main/docs/references/security/configuration/system-indices/>系统索引</a></li></ul></li><li><input type=checkbox id=section-4854412a16ac224d9851d23b7bf6bdea class=toggle>
 <label for=section-4854412a16ac224d9851d23b7bf6bdea class="flex justify-between"><a href=/easysearch/main/docs/references/security/access-control/>权限控制</a>
-<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/security/access-control/users-roles/>用户角色</a></li><li><a href=/easysearch/main/docs/references/security/access-control/document-level-security/>文档权限</a></li><li><a href=/easysearch/main/docs/references/security/access-control/field-level-security/>字段权限</a></li><li><a href=/easysearch/main/docs/references/security/access-control/field-masking/>数据脱敏</a></li><li><a href=/easysearch/main/docs/references/security/access-control/run-as/>身份模拟</a></li><li><a href=/easysearch/main/docs/references/security/access-control/cross-cluster-search/>跨集群搜索</a></li><li><a href=/easysearch/main/docs/references/security/access-control/api/>API 接口</a></li><li><a href=/easysearch/main/docs/references/security/access-control/permissions/>权限列表</a></li></ul></li></ul></li><li><input type=checkbox id=section-4632348aa5cba7d33c080167da2f13b6 class=toggle>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/security/access-control/users-roles/>用户角色</a></li><li><a href=/easysearch/main/docs/references/security/access-control/document-level-security/>文档权限</a></li><li><a href=/easysearch/main/docs/references/security/access-control/field-level-security/>字段权限</a></li><li><a href=/easysearch/main/docs/references/security/access-control/field-masking/>数据脱敏</a></li><li><a href=/easysearch/main/docs/references/security/access-control/run-as/>身份模拟</a></li><li><a href=/easysearch/main/docs/references/security/access-control/cross-cluster-search/>跨集群搜索</a></li><li><a href=/easysearch/main/docs/references/security/access-control/api/>API 接口</a></li><li><a href=/easysearch/main/docs/references/security/access-control/permissions/>权限列表</a></li></ul></li></ul></li><li><input type=checkbox id=section-6b02990358c7382bac3f39043e5fd437 class=toggle>
+<label for=section-6b02990358c7382bac3f39043e5fd437 class="flex justify-between"><a href=/easysearch/main/docs/references/search/>搜索操作</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/query-filter-context/>查询和过滤上下文</a></li><li><a href=/easysearch/main/docs/references/search/term-vs-full-text/>精确查询与全文检索的对比</a></li><li><input type=checkbox id=section-e8f94bccae3c54be36d1896778639639 class=toggle>
+<label for=section-e8f94bccae3c54be36d1896778639639 class="flex justify-between"><a href=/easysearch/main/docs/references/search/term/>精确查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/term/exists/>Exists 查询</a></li><li><a href=/easysearch/main/docs/references/search/term/ids/>IDs 查询</a></li><li><a href=/easysearch/main/docs/references/search/term/term/>Term 精确查询</a></li><li><a href=/easysearch/main/docs/references/search/term/prefix/>前缀查询</a></li><li><a href=/easysearch/main/docs/references/search/term/terms/>多词项查询</a></li><li><a href=/easysearch/main/docs/references/search/term/fuzzy/>模糊查询</a></li><li><a href=/easysearch/main/docs/references/search/term/regexp/>正则查询</a></li><li><a href=/easysearch/main/docs/references/search/term/range/>范围查询</a></li><li><a href=/easysearch/main/docs/references/search/term/terms-set/>词项集查询</a></li><li><a href=/easysearch/main/docs/references/search/term/wildcard/>通配符查询</a></li></ul></li><li><input type=checkbox id=section-1df907d6b381276d472faa1ffc431057 class=toggle>
+<label for=section-1df907d6b381276d472faa1ffc431057 class="flex justify-between"><a href=/easysearch/main/docs/references/search/full-text/>全文检索</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/full-text/intervals/>Intervals 查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match-bool-prefix/>匹配布尔前缀查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match/>匹配查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match-phrase-prefix/>匹配短语前缀查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match-phrase/>匹配短语查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/multi-match/>多字段查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/query-string/>字符串查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/simple-query-string/>简单字符串查询</a></li></ul></li><li><input type=checkbox id=section-15ea627c37f24ed149a43b1c0b4add9f class=toggle>
+<label for=section-15ea627c37f24ed149a43b1c0b4add9f class="flex justify-between"><a href=/easysearch/main/docs/references/search/compound/>复合查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/compound/function-score/>函数评分查询</a></li><li><a href=/easysearch/main/docs/references/search/compound/boosting/>加权</a></li><li><a href=/easysearch/main/docs/references/search/compound/bool/>布尔查询</a></li><li><a href=/easysearch/main/docs/references/search/compound/constant-score/>常量化评分查询</a></li><li><a href=/easysearch/main/docs/references/search/compound/disjunction-max/>析取最大查询</a></li></ul></li><li><input type=checkbox id=section-86bf1f72d443fd258db0d40a6bf009d7 class=toggle>
+<label for=section-86bf1f72d443fd258db0d40a6bf009d7 class="flex justify-between"><a href=/easysearch/main/docs/references/search/geo-and-xy/>地理查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geopolygon/>地理多边形查询</a></li><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geoshape/>地理形状查询</a></li><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geodistance/>地理距离查询</a></li><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geo-bounding-box/>地理边界框查询</a></li></ul></li><li><input type=checkbox id=section-914ecc84741b3e200e93ea80c2eb0df1 class=toggle>
+<label for=section-914ecc84741b3e200e93ea80c2eb0df1 class="flex justify-between"><a href=/easysearch/main/docs/references/search/span/>Span 查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/span/span-first/>Span 前序匹配</a></li><li><a href=/easysearch/main/docs/references/search/span/span-within/>Span 包含于查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-containing/>Span 包含查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-multi-term/>Span 多词项查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-or/>Span 或查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-not/>Span 排除查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-term/>Span 词项查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-field-masking/>Span 跨字段查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-near/>Span 邻近查询</a></li></ul></li><li><input type=checkbox id=section-2baa128ae64b7fa17aa37f790453c292 class=toggle>
+<label for=section-2baa128ae64b7fa17aa37f790453c292 class="flex justify-between"><a href=/easysearch/main/docs/references/search/joining/>关联查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/joining/has-child/>子查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/nested/>嵌套查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/parent-id/>父 ID 查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/has-parent/>父查询</a></li></ul></li><li><input type=checkbox id=section-fe27ae639d7a8e652db974b443eb5848 class=toggle>
+<label for=section-fe27ae639d7a8e652db974b443eb5848 class="flex justify-between"><a href=/easysearch/main/docs/references/search/specialized/>专业查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/specialized/wrapper/>包装器</a></li><li><a href=/easysearch/main/docs/references/search/specialized/rank-feature/>排序功能</a></li><li><a href=/easysearch/main/docs/references/search/specialized/percolate/>渗透查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/more-like-this/>类似查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/script-score/>脚本分数查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/script/>脚本查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/distance-feature/>距离特征查询</a></li></ul></li><li><a href=/easysearch/main/docs/references/search/match-all/>全匹配查询</a></li><li><a href=/easysearch/main/docs/references/search/minimum-should-match/>最小匹配</a></li><li><a href=/easysearch/main/docs/references/search/regex-syntax/>正则表达式语法</a></li><li><a href=/easysearch/main/docs/references/search/rewrite-parameter/>重写参数</a></li><li><a href=/easysearch/main/docs/references/search/knn_api/>向量查询</a></li><li><a href=/easysearch/main/docs/references/search/search-template/>查询模版</a></li><li><a href=/easysearch/main/docs/references/search/async_search/>异步搜索</a></li><li><a href=/easysearch/main/docs/references/search/pit_api/>定点查询</a></li><li><input type=checkbox id=section-19c2d09435d47ad6656e503e2a68a3b3 class=toggle>
+<label for=section-19c2d09435d47ad6656e503e2a68a3b3 class="flex justify-between"><a href=/easysearch/main/docs/references/search/search-pipelines/>搜索管道</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-07023dbd216ba1a90a2c532ff5bb0961 class=toggle>
+<label for=section-07023dbd216ba1a90a2c532ff5bb0961 class="flex justify-between"><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/>搜索处理器</a>
+<span>▾</span></label><ul><li><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/filter-query-processor/>过滤查询处理器</a></li><li><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/rename-field-processor/>重命名字段处理器</a></li><li><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/script-processor/>脚本处理器</a></li></ul></li></ul></li></ul></li><li><input type=checkbox id=section-4632348aa5cba7d33c080167da2f13b6 class=toggle>
 <label for=section-4632348aa5cba7d33c080167da2f13b6 class="flex justify-between"><a>文本分词</a>
 <span>▾</span></label><ul><li><input type=checkbox id=section-13c9df598f113d7537eff14f9f5147e3 class=toggle>
 <label for=section-13c9df598f113d7537eff14f9f5147e3 class="flex justify-between"><a href=/easysearch/main/docs/references/text-analysis/analyzers/>分词器</a>
@@ -122,71 +125,133 @@ complex-role: reserved: false hidden: false cluster: - &#34;read&#34; - &#34;clu
 <strong>本地配置</strong>
 <label for=toc-control><img src=/easysearch/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#本地配置>本地配置</a><ul><li><a href=#useryml>user.yml</a></li><li><a href=#roleyml>role.yml</a></li><li><a href=#role_mappingyml>role_mapping.yml</a></li><li><a href=#privilegeyml>privilege.yml</a></li><li><a href=#nodes_dnyml>nodes_dn.yml</a></li><li><a href=#注意>注意</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=本地配置>本地配置
 <a class=anchor href=#%e6%9c%ac%e5%9c%b0%e9%85%8d%e7%bd%ae>#</a></h1><p>通过安全模块的本地 YAML 配置文件可以方便的管理默认的内置用户或
-<a href=/easysearch/main/docs/references/security/access-control/api/#%e9%9a%90%e8%97%8f%e7%9a%84%e4%bf%9d%e7%95%99%e8%b5%84%e6%ba%90>隐藏的保留资源</a>，例如 <code>admin</code> 管理员用户。不过通过 INFINI Console 或者 REST API 来创建其他用户、角色、映射、操作组和租户可能更容易。</p><h2 id=useryml>user.yml
-<a class=anchor href=#useryml>#</a></h2><p>此文件包含您要添加到内部用户数据库的默认初始用户。</p><p>配置文件里面的密码不能是明文，必须使用 Hash 之后的密码，通过命令 <code>./bin/hash_password.sh -p &lt;new-password></code> 可以生成一个密码哈希。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=color:#f92672>_meta</span>:
+<a href=/easysearch/main/docs/references/security/access-control/api/#%e9%9a%90%e8%97%8f%e7%9a%84%e4%bf%9d%e7%95%99%e8%b5%84%e6%ba%90>隐藏的保留资源</a>，例如 <code>admin</code> 管理员用户。不过通过 INFINI Console 或者 REST API 来创建其他用户、角色、映射、操作组和租户可能更容易。</p><p>本地配置的路径位于 Easysearch 部署目录的的 config/security 下, 下面是这些文件的默认配置。</p><h2 id=useryml>user.yml
+<a class=anchor href=#useryml>#</a></h2><p>此文件是内置用户配置文件，用于定义系统的初始用户账户及其相关配置（如密码哈希、角色分配等）。</p><p>admin 用户是 Easysearch 系统中的默认超级管理员用户。</p><p>配置文件里面的密码不能是明文，必须使用 Hash 之后的密码，通过命令 <code>./bin/hash_password.sh -p &lt;new-password></code> 可以生成一个密码哈希。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml>---
+<span style=color:#75715e># This is the internal user database create by initialize</span>
+<span style=color:#75715e># The hash value is a bcrypt hash and can be generated with hash_password.sh</span>
+
+<span style=color:#f92672>_meta</span>:
   <span style=color:#f92672>type</span>: <span style=color:#e6db74>&#34;user&#34;</span>
   <span style=color:#f92672>config_version</span>: <span style=color:#ae81ff>2</span>
 
+<span style=color:#75715e># Define your internal users here</span>
+
+<span style=color:#75715e>## Default users</span>
 <span style=color:#f92672>admin</span>:
-  <span style=color:#f92672>hash</span>: <span style=color:#e6db74>&#34;$2y$12$ZXx5R8NfuW2TYPOdGNY7a.43WKKBMCtN9aJywYWjAz9i11w7SrkqG&#34;</span>
+  <span style=color:#f92672>hash</span>: <span style=color:#e6db74>&#34;$2y$12$P2zO4rEJvtTqTYgQ/Ifk0eTALefRcxuiQgNUOBse/IP.d/XrNngG2&#34;</span>
   <span style=color:#f92672>reserved</span>: <span style=color:#66d9ef>true</span>
   <span style=color:#f92672>external_roles</span>:
     - <span style=color:#e6db74>&#34;admin&#34;</span>
   <span style=color:#f92672>description</span>: <span style=color:#e6db74>&#34;Default admin user&#34;</span>
-
-<span style=color:#f92672>readonly</span>:
-  <span style=color:#f92672>hash</span>: <span style=color:#e6db74>&#34;$2y$12$d9I16.5qpYhhsbiGN4zqdeA4k6BeMl/yEKRvTo3gzxFp8UC57EgJ.&#34;</span>
-  <span style=color:#f92672>reserved</span>: <span style=color:#66d9ef>false</span>
-  <span style=color:#f92672>external_roles</span>:
-    - <span style=color:#e6db74>&#34;readall&#34;</span>
-  <span style=color:#f92672>description</span>: <span style=color:#e6db74>&#34;Default readonly user&#34;</span>
 </code></pre></div><h2 id=roleyml>role.yml
-<a class=anchor href=#roleyml>#</a></h2><p>此文件包含要添加到内置数据库的默认初始角色。除了一些元数据之外，这个文件默认是是空的，因为系统已经了内置了若干角色，可以根据需要进行角色扩展。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=color:#f92672>complex-role</span>:
-  <span style=color:#f92672>reserved</span>: <span style=color:#66d9ef>false</span>
-  <span style=color:#f92672>hidden</span>: <span style=color:#66d9ef>false</span>
-  <span style=color:#f92672>cluster</span>:
-    - <span style=color:#e6db74>&#34;read&#34;</span>
-    - <span style=color:#e6db74>&#34;cluster:monitor/nodes/stats&#34;</span>
-    - <span style=color:#e6db74>&#34;cluster:monitor/task/get&#34;</span>
+<a class=anchor href=#roleyml>#</a></h2><p>role.yml 文件是 Easysearch 的 安全角色配置文件，用于定义不同用户角色的权限。</p><p>replication_leader 和 replication_follower 用于 跨集群复制。</p><p>security 的用途是允许通过 REST API 管理安全设置。</p><blockquote><p>⚠️ <strong>警告！</strong><br>以下角色已被弃用，将在未来的版本中删除，请勿使用：</p><ul><li><code>security_rest_api_access</code></li><li><code>cross_cluster_replication_leader_full_access</code></li><li><code>cross_cluster_replication_follower_full_access</code></li></ul></blockquote><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=color:#f92672>_meta</span>:
+  <span style=color:#f92672>type</span>: <span style=color:#e6db74>&#34;role&#34;</span>
+  <span style=color:#f92672>config_version</span>: <span style=color:#ae81ff>2</span>
+
+<span style=color:#75715e># Allows users to use all cross cluster replication functionality at leader cluster</span>
+<span style=color:#f92672>replication_leader</span>:
+  <span style=color:#f92672>reserved</span>: <span style=color:#66d9ef>true</span>
+  <span style=color:#f92672>description</span>: <span style=color:#e6db74>&#34;Grants read access to leader indices for cross-cluster replication.&#34;</span>
   <span style=color:#f92672>indices</span>:
     - <span style=color:#f92672>names</span>:
-        - <span style=color:#e6db74>&#34;kibana_sample_data_*&#34;</span>
-      <span style=color:#f92672>query</span>: <span style=color:#e6db74>&#39;{&#34;match&#34;: {&#34;FlightDelay&#34;: true}}&#39;</span>
-      <span style=color:#f92672>field_security</span>:
-        - <span style=color:#e6db74>&#34;~FlightNum&#34;</span>
-      <span style=color:#f92672>field_mask</span>:
-        - <span style=color:#e6db74>&#34;Carrier&#34;</span>
+        - <span style=color:#e6db74>&#39;*&#39;</span>
       <span style=color:#f92672>privileges</span>:
-        - <span style=color:#e6db74>&#34;read&#34;</span>
-  <span style=color:#f92672>static</span>: <span style=color:#66d9ef>false</span>
-<span style=color:#f92672>_meta</span>:
-  <span style=color:#f92672>type</span>: <span style=color:#e6db74>&#34;roles&#34;</span>
-  <span style=color:#f92672>config_version</span>: <span style=color:#ae81ff>2</span>
-</code></pre></div><h2 id=role_mappingyml>role_mapping.yml
-<a class=anchor href=#role_mappingyml>#</a></h2><p>此文件主要设置用户角色的映射关系。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=color:#f92672>manage_snapshots</span>:
+        - <span style=color:#e6db74>&#34;indices:admin/plugins/replication/index/setup/validate&#34;</span>
+        - <span style=color:#e6db74>&#34;indices:data/read/plugins/replication/changes&#34;</span>
+        - <span style=color:#e6db74>&#34;indices:data/read/plugins/replication/file_chunk&#34;</span>
+
+<span style=color:#75715e># Allows users to use all cross cluster replication functionality at follower cluster</span>
+<span style=color:#f92672>replication_follower</span>:
   <span style=color:#f92672>reserved</span>: <span style=color:#66d9ef>true</span>
-  <span style=color:#f92672>hidden</span>: <span style=color:#66d9ef>false</span>
-  <span style=color:#f92672>external_roles</span>:
-    - <span style=color:#e6db74>&#34;snapshotrestore&#34;</span>
-  <span style=color:#f92672>hosts</span>: []
-  <span style=color:#f92672>users</span>: []
-</code></pre></div><h2 id=privilegeyml>privilege.yml
-<a class=anchor href=#privilegeyml>#</a></h2><p>此文件包含您要添加到安全模块的默认权限集合。</p><p>除了一些元数据之外，该文件默认为空，因为安全模块已经内置不少了权限集合。这些集合基本上涵盖了常用的场景，这里的配置根据需要自行扩展。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=color:#f92672>my-action-group</span>:
-  <span style=color:#f92672>reserved</span>: <span style=color:#66d9ef>false</span>
-  <span style=color:#f92672>hidden</span>: <span style=color:#66d9ef>false</span>
-  <span style=color:#f92672>privileges</span>:
-    - <span style=color:#e6db74>&#34;indices:data/write/index*&#34;</span>
-    - <span style=color:#e6db74>&#34;indices:data/write/update*&#34;</span>
-    - <span style=color:#e6db74>&#34;indices:admin/mapping/put&#34;</span>
-    - <span style=color:#e6db74>&#34;indices:data/write/bulk*&#34;</span>
-    - <span style=color:#e6db74>&#34;read&#34;</span>
-    - <span style=color:#e6db74>&#34;write&#34;</span>
-  <span style=color:#f92672>static</span>: <span style=color:#66d9ef>false</span>
+  <span style=color:#f92672>description</span>: <span style=color:#e6db74>&#34;Grants manage replication permissions on follower indices.&#34;</span>
+  <span style=color:#f92672>cluster</span>:
+    - <span style=color:#e6db74>&#34;cluster:admin/plugins/replication/autofollow/update&#34;</span>
+  <span style=color:#f92672>indices</span>:
+    - <span style=color:#f92672>names</span>:
+        - <span style=color:#e6db74>&#39;*&#39;</span>
+      <span style=color:#f92672>privileges</span>:
+        - <span style=color:#e6db74>&#34;indices:admin/plugins/replication/index/setup/validate&#34;</span>
+        - <span style=color:#e6db74>&#34;indices:data/write/plugins/replication/changes&#34;</span>
+        - <span style=color:#e6db74>&#34;indices:admin/plugins/replication/index/start&#34;</span>
+        - <span style=color:#e6db74>&#34;indices:admin/plugins/replication/index/pause&#34;</span>
+        - <span style=color:#e6db74>&#34;indices:admin/plugins/replication/index/resume&#34;</span>
+        - <span style=color:#e6db74>&#34;indices:admin/plugins/replication/index/stop&#34;</span>
+        - <span style=color:#e6db74>&#34;indices:admin/plugins/replication/index/update&#34;</span>
+        - <span style=color:#e6db74>&#34;indices:admin/plugins/replication/index/status_check&#34;</span>
+
+<span style=color:#75715e># The security REST API access role is used to assign specific users access to change the security settings through the REST API.</span>
+<span style=color:#f92672>security</span>:
+  <span style=color:#f92672>reserved</span>: <span style=color:#66d9ef>true</span>
+  <span style=color:#f92672>description</span>: <span style=color:#e6db74>&#34;Grants access to the security REST API.&#34;</span>
+
+
+<span style=color:#75715e># Deprecated — will be removed in a future version. Do not use!</span>
+<span style=color:#f92672>security_rest_api_access</span>:
+  <span style=color:#f92672>reserved</span>: <span style=color:#66d9ef>true</span>
+  <span style=color:#f92672>hidden</span>: <span style=color:#66d9ef>true</span>
+
+<span style=color:#75715e># Deprecated — will be removed in a future version. Do not use!</span>
+<span style=color:#f92672>cross_cluster_replication_leader_full_access</span>:
+  <span style=color:#f92672>reserved</span>: <span style=color:#66d9ef>true</span>
+  <span style=color:#f92672>hidden</span>: <span style=color:#66d9ef>true</span>
+  <span style=color:#f92672>indices</span>:
+    - <span style=color:#f92672>names</span>:
+        - <span style=color:#e6db74>&#39;*&#39;</span>
+      <span style=color:#f92672>privileges</span>:
+        - <span style=color:#e6db74>&#34;indices:admin/plugins/replication/index/setup/validate&#34;</span>
+        - <span style=color:#e6db74>&#34;indices:data/read/plugins/replication/changes&#34;</span>
+        - <span style=color:#e6db74>&#34;indices:data/read/plugins/replication/file_chunk&#34;</span>
+
+<span style=color:#75715e># Deprecated — will be removed in a future version. Do not use!</span>
+<span style=color:#f92672>cross_cluster_replication_follower_full_access</span>:
+  <span style=color:#f92672>reserved</span>: <span style=color:#66d9ef>true</span>
+  <span style=color:#f92672>hidden</span>: <span style=color:#66d9ef>true</span>
+  <span style=color:#f92672>cluster</span>:
+    - <span style=color:#e6db74>&#34;cluster:admin/plugins/replication/autofollow/update&#34;</span>
+  <span style=color:#f92672>indices</span>:
+    - <span style=color:#f92672>names</span>:
+        - <span style=color:#e6db74>&#39;*&#39;</span>
+      <span style=color:#f92672>privileges</span>:
+        - <span style=color:#e6db74>&#34;indices:admin/plugins/replication/index/setup/validate&#34;</span>
+        - <span style=color:#e6db74>&#34;indices:data/write/plugins/replication/changes&#34;</span>
+        - <span style=color:#e6db74>&#34;indices:admin/plugins/replication/index/start&#34;</span>
+        - <span style=color:#e6db74>&#34;indices:admin/plugins/replication/index/pause&#34;</span>
+        - <span style=color:#e6db74>&#34;indices:admin/plugins/replication/index/resume&#34;</span>
+        - <span style=color:#e6db74>&#34;indices:admin/plugins/replication/index/stop&#34;</span>
+        - <span style=color:#e6db74>&#34;indices:admin/plugins/replication/index/update&#34;</span>
+        - <span style=color:#e6db74>&#34;indices:admin/plugins/replication/index/status_check&#34;</span>
+
+</code></pre></div><h2 id=role_mappingyml>role_mapping.yml
+<a class=anchor href=#role_mappingyml>#</a></h2><p>role_mapping.yml 用于将用户（users）、外部组/角色（external_roles）以及主机（hosts）映射到 INFINI Easysearch 的安全角色。</p><p>各角色的权限定义在 role.yml，此文件仅决定“谁拥有哪些角色”。</p><p>每个角色条目下，只要当前主体命中 users、external_roles 或 hosts 中的任意一项，即会获得该角色。</p><blockquote><p>提示<br>示例文件中包含一条已弃用的映射（<code>all_access</code>）。请勿再使用此条目，未来版本会移除。</p></blockquote><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml>---
+<span style=color:#75715e># In this file users, backendroles and hosts can be mapped to INFINI Easysearch Security roles.</span>
+<span style=color:#75715e># Permissions for Opendistro roles are configured in role.yml</span>
+
 <span style=color:#f92672>_meta</span>:
+  <span style=color:#f92672>type</span>: <span style=color:#e6db74>&#34;role_mapping&#34;</span>
+  <span style=color:#f92672>config_version</span>: <span style=color:#ae81ff>2</span>
+
+<span style=color:#75715e># Define your roles mapping here</span>
+
+<span style=color:#f92672>superuser</span>:
+  <span style=color:#f92672>reserved</span>: <span style=color:#66d9ef>false</span>
+  <span style=color:#f92672>external_roles</span>:
+    - <span style=color:#e6db74>&#34;admin&#34;</span>
+  <span style=color:#f92672>description</span>: <span style=color:#e6db74>&#34;Maps admin to superuser&#34;</span>
+
+
+<span style=color:#75715e># Deprecated — will be removed in a future version. Do not use!</span>
+<span style=color:#f92672>all_access</span>:
+  <span style=color:#f92672>reserved</span>: <span style=color:#66d9ef>false</span>
+  <span style=color:#f92672>hidden</span>: <span style=color:#66d9ef>true</span>
+  <span style=color:#f92672>external_roles</span>:
+    - <span style=color:#e6db74>&#34;admin&#34;</span>
+  <span style=color:#f92672>description</span>: <span style=color:#e6db74>&#34;Maps admin to all_access&#34;</span>
+</code></pre></div><h2 id=privilegeyml>privilege.yml
+<a class=anchor href=#privilegeyml>#</a></h2><p>此文件包含您要添加到安全模块的默认权限集合。</p><p>除了一些元数据之外，该文件默认为空，因为安全模块已经内置不少了权限集合。这些集合基本上涵盖了常用的场景，这里的配置根据需要自行扩展。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=color:#f92672>_meta</span>:
   <span style=color:#f92672>type</span>: <span style=color:#e6db74>&#34;privilege&#34;</span>
   <span style=color:#f92672>config_version</span>: <span style=color:#ae81ff>2</span>
 </code></pre></div><h2 id=nodes_dnyml>nodes_dn.yml
-<a class=anchor href=#nodes_dnyml>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=color:#f92672>_meta</span>:
+<a class=anchor href=#nodes_dnyml>#</a></h2><p>nodes_dn.yml 与 easysearch.yml 中的 security.nodes_dn 作用相同，均用于指定哪些证书 DN 的节点可通过 Transport 层认证加入集群。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=color:#f92672>_meta</span>:
   <span style=color:#f92672>type</span>: <span style=color:#e6db74>&#34;nodesdn&#34;</span>
   <span style=color:#f92672>config_version</span>: <span style=color:#ae81ff>2</span>
 <span style=color:#75715e># Define nodesdn mapping name and corresponding values</span>
