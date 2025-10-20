@@ -145,11 +145,11 @@
    &quot;leader_alias&quot;: &quot;my-connection-alias&quot;,
    &quot;leader_index&quot;: &quot;leader-01&quot;,
    &quot;use_roles&quot;:{
-      &quot;leader_cluster_role&quot;: &quot;all_access&quot;,
-      &quot;follower_cluster_role&quot;: &quot;all_access&quot;
+      &quot;leader_cluster_role&quot;: &quot;superuser&quot;,
+      &quot;follower_cluster_role&quot;: &quot;superuser&quot;
    }
 }'
-</code></pre><h3 id=确认复制状态>确认复制状态
+</code></pre><p>因为演示用户是 admin 所以可以直接用 superuser 角色进行复制。</p><h3 id=确认复制状态>确认复制状态
 <a class=anchor href=#%e7%a1%ae%e8%ae%a4%e5%a4%8d%e5%88%b6%e7%8a%b6%e6%80%81>#</a></h3><pre><code class=language-auto data-lang=auto>curl -XGET -k -u 'admin:xxxxxxxxxxxx' 'https://localhost:9201/_replication/follower-01/_status?pretty'
 </code></pre><p>响应</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
   <span style=color:#f92672>&#34;status&#34;</span> : <span style=color:#e6db74>&#34;SYNCING&#34;</span>,
@@ -385,8 +385,8 @@
    &quot;name&quot;: &quot;my-replication-rule&quot;,
    &quot;pattern&quot;: &quot;nginx*&quot;,
    &quot;use_roles&quot;:{
-      &quot;leader_cluster_role&quot;: &quot;all_access&quot;,
-      &quot;follower_cluster_role&quot;: &quot;all_access&quot;
+      &quot;leader_cluster_role&quot;: &quot;superuser&quot;,
+      &quot;follower_cluster_role&quot;: &quot;superuser&quot;
    }
 }'
 
