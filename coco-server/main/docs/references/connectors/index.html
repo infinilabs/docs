@@ -57,7 +57,7 @@ curl  -H <span style=color:#e6db74>&#39;Content-Type: application/json&#39;</spa
   <span style=color:#e6db74>&#34;result&#34;</span>: <span style=color:#e6db74>&#34;created&#34;</span>
 <span style=color:#f92672>}</span>
 </code></pre></div><blockquote><p>Note: Every connector is expected to implement a processor that can be registered through the API. For instance, the built-in <code>hugo</code> processor is demonstrated in the example above.</p></blockquote><h3 id=update-a-connector>Update a Connector
-<a class=anchor href=#update-a-connector>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>curl -XPUT http://localhost:9000/connector/cu0caqt3q95r66at41o0?replace<span style=color:#f92672>=</span>true -d <span style=color:#e6db74>&#39;{
+<a class=anchor href=#update-a-connector>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>curl -XPUT http://localhost:9000/connector/cu0caqt3q95r66at41o0  -d <span style=color:#e6db74>&#39;{
 </span><span style=color:#e6db74>    &#34;name&#34;: &#34;Hugo Site Connector&#34;,
 </span><span style=color:#e6db74>    &#34;description&#34;: &#34;Fetch the index.json file from a specified Hugo site.&#34;,
 </span><span style=color:#e6db74>    &#34;icon&#34;: &#34;http://coco.infini.cloud/assets/hugo.png&#34;,
