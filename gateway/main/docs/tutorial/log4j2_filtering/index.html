@@ -8,7 +8,19 @@ Vulnerability Description
 Apache Log4j is a very popular open source logging toolkit used for the Java runtime environment. Many Java frameworks including Elasticsearch of the latest version, use this component. Therefore, the scope of impact is huge.
 The latest vulnerability existing in the execution of Apache Log4j&rsquo;s remote code was revealed recently. Attackers can construct malicious requests and utilize this vulnerability to execute arbitrary code on a target server."><meta property="og:type" content="article"><meta property="og:url" content="/gateway/main/docs/tutorial/log4j2_filtering/"><title>Protect Elasticsearch from Apache Log4j Vulnerability | INFINI Gateway</title><link rel=manifest href=/gateway/main/manifest.json><link rel=icon href=/gateway/main/favicon.png type=image/x-icon><link rel=alternate hreflang=zh href=/gateway/main/zh/docs/tutorial/log4j2_filtering/ title="Apache Log4j 漏洞处置"><link rel=stylesheet href=/gateway/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><script defer src=/gateway/main/js/jquery-2.x.min.js></script><script defer src=/gateway/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/gateway/main><img src=/gateway/main/img/logo-en.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
-<option value>(latest)</option></select></div><ul><li><a href=/gateway/main/docs/overview/>Overview</a><ul></ul></li><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
+<option value>main (latest)</option>
+<option value=v1.29.8>v1.29.8</option>
+<option value=v1.29.7>v1.29.7</option>
+<option value=v1.29.6>v1.29.6</option>
+<option value=v1.29.4>v1.29.4</option>
+<option value=v1.29.3>v1.29.3</option>
+<option value=v1.29.2>v1.29.2</option>
+<option value=v1.29.1>v1.29.1</option>
+<option value=v1.29.0>v1.29.0</option>
+<option value=v1.28.2>v1.28.2</option>
+<option value=v1.28.0>v1.28.0</option>
+<option value=v1.27.0>v1.27.0</option>
+<option value=v1.26.1>v1.26.1</option></select></div><ul><li><a href=/gateway/main/docs/overview/>Overview</a><ul></ul></li><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
 <label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>Getting Started</a>
 <span>▾</span></label><ul><li><a href=/gateway/main/docs/getting-started/install/>Installing the Gateway</a></li><li><a href=/gateway/main/docs/getting-started/configuration/>Configuring the Gateway</a></li><li><a href=/gateway/main/docs/getting-started/docker/>Container Deployment</a></li><li><a href=/gateway/main/docs/getting-started/helm/>Kubernetes Deployment</a></li><li><a href=/gateway/main/docs/getting-started/optimization/>System Optimization</a></li><li><a href=/gateway/main/docs/getting-started/benchmark/>Benchmark Testing</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle>
 <label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a>References</a>
@@ -32,7 +44,7 @@ English</a></li><li><a href=/gateway/main/zh/docs/tutorial/log4j2_filtering/ cla
 <a class=anchor href=#handling-method>#</a></h2><p>If Elasticsearch does not support configuration modification, Jar package replacement of Log4j, or cluster restart, you can use INFINI Gateway to intercept requests, replace parameters, and even directly block requests.
 You can use INFINI Gateway to check parameters in requests sent to Elasticsearch and replace or reject content that contains the sensitive keyword <code>${</code>.
 In this way, INFINI Gateway can prevent the execution of malicious attack commands during Log4j logging after attack-contained requests are sent to Elasticsearch, thereby preventing attacks.</p><h2 id=reference-configuration>Reference Configuration
-<a class=anchor href=#reference-configuration>#</a></h2><p>Download the latest <code>1.29.8</code> version:
+<a class=anchor href=#reference-configuration>#</a></h2><p>Download the latest <code>1.30.0</code> version:
 <a href=https://release.infinilabs.com/gateway/stable/>https://release.infinilabs.com/gateway/stable/</a></p><p>The <code>context_filter</code> filter of INFINI Gateway can be used to detect the keywords of the request context <code>_ctx.request.to_string</code> and filter out malicious traffic, thereby blocking attacks.</p><pre><code>path.data: data
 path.logs: log
 

@@ -16,7 +16,19 @@ node.attr.zone_id: zone_huawei 创建索引采用 1 副本，可以保证百度�
 业务访问方式如下图：
  百度云业务 -> 百度 lb -> INFINI Gateway (百度) -> Elasticsearch （百度云 data 节点） 华为云业务 -> 华为 lb -> INFINI Gateway (华为) -> Elasticsearch （华为云 data 节点）  极限网关配置 #  Elasticsearch 支持一个 Preference 参数来设置请求的优先访问，通过在两个云内部的极限网关分别设置各自请求默认的 Preference 参数，让各个云内部的请求优先发往本云内的数据节点，即可实现请求的就近访问。"><meta property="og:type" content="article"><meta property="og:url" content="/gateway/main/zh/docs/user-cases/stories/a_cross_region_cluster_access_locality/"><title>作业帮跨云集群的就近本地访问 | INFINI Gateway</title><link rel=manifest href=/gateway/main/manifest.json><link rel=icon href=/gateway/main/favicon.png type=image/x-icon><link rel=alternate hreflang=en href=/gateway/main/docs/user-cases/stories/a_cross_region_cluster_access_locality/ title="Nearest Cluster Access Across Two Cloud Providers"><link rel=stylesheet href=/gateway/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><script defer src=/gateway/main/js/jquery-2.x.min.js></script><script defer src=/gateway/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/gateway/main/zh><img src=/gateway/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
-<option value>(latest)</option></select></div><ul><li><a href=/gateway/main/zh/docs/overview/>产品概述</a><ul></ul></li><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
+<option value>main (latest)</option>
+<option value=v1.29.8>v1.29.8</option>
+<option value=v1.29.7>v1.29.7</option>
+<option value=v1.29.6>v1.29.6</option>
+<option value=v1.29.4>v1.29.4</option>
+<option value=v1.29.3>v1.29.3</option>
+<option value=v1.29.2>v1.29.2</option>
+<option value=v1.29.1>v1.29.1</option>
+<option value=v1.29.0>v1.29.0</option>
+<option value=v1.28.2>v1.28.2</option>
+<option value=v1.28.0>v1.28.0</option>
+<option value=v1.27.0>v1.27.0</option>
+<option value=v1.26.1>v1.26.1</option></select></div><ul><li><a href=/gateway/main/zh/docs/overview/>产品概述</a><ul></ul></li><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
 <label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>入门指南</a>
 <span>▾</span></label><ul><li><a href=/gateway/main/zh/docs/getting-started/install/>安装网关</a></li><li><a href=/gateway/main/zh/docs/getting-started/configuration/>配置网关</a></li><li><a href=/gateway/main/zh/docs/getting-started/docker/>容器部署</a></li><li><a href=/gateway/main/zh/docs/getting-started/helm/>Helm 部署</a></li><li><a href=/gateway/main/zh/docs/getting-started/optimization/>系统调优</a></li><li><a href=/gateway/main/zh/docs/getting-started/hardware/>硬件配置</a></li><li><a href=/gateway/main/zh/docs/getting-started/benchmark/>性能测试</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle>
 <label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a>功能手册</a>

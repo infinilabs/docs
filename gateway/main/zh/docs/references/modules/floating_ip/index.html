@@ -6,7 +6,19 @@
  该特性目前仅支持 Mac OS、Linux 操作系统。且需要网关以 root 身份运行。 此特性依赖目标系统的 ping 和 ifconfig 命令，请确保相关包默认已安装。 一组启用浮动 IP 的网关所在网卡地址应该在一个子网，且内网广播互通（网关实际 IP 和浮动 IP 要求只最后一位地址不一样，如：192.168.3.x）。   功能演示 #    Youtube  Bilibili  什么是浮动 IP #  极限网关基于浮动 IP 来实现高可用，浮动 IP 也叫虚拟 IP 或者动态 IP，我们知道每台服务器之间都必须要有 IP 才能进行通信，一台服务器的 IP 一般是固定的并且一般要提前分配好， 如果这台服务器因为故障挂了的话，这个 IP 以及上面部署的业务也就不能访问了。 而一个浮动 IP 通常是一个公开的、可以路由到的 IP 地址，并且不会自动分配给实体设备。项目管理者临时分配这个动态 IP 到一个或者多个实体设备。 这个实体设备有自动分配的静态 IP 用于内部网间设备的通讯。这个内部网使用私有地址，这些私有地址不能被路由到。通过浮动 IP 内网实体的服务才能被外网识别和访问。
 为什么需要浮动 IP #  在一个配置好浮动 IP 的典型切换场景是，当出现当前绑定浮动 IP 的机器出现故障的时候，浮动 IP 地址会飘到网络中的另一台设备。新设备无延迟的接替当掉的设备，并对外提供服务。 从而实现网络服务的高可用，对应业务的消费方来说，只需要指定浮动 IP 就可以了。 浮动 IP 非常有用，在某些特定的场景，比如客户端或者 SDK 只允许配置一个服务 IP 地址，所以这个 IP 一定要是高可用的，而极限网关正好解决了这个问题。 使用两个独立的极限网关服务器，最好部署在独立的物理服务器上，两台极限网关构成一组双机热备的状态，任意网关出现故障都能保障前端业务的正常访问。"><meta property="og:type" content="article"><meta property="og:url" content="/gateway/main/zh/docs/references/modules/floating_ip/"><title>浮动 IP | INFINI Gateway</title><link rel=manifest href=/gateway/main/manifest.json><link rel=icon href=/gateway/main/favicon.png type=image/x-icon><link rel=alternate hreflang=en href=/gateway/main/docs/references/modules/floating_ip/ title="Floating IP"><link rel=stylesheet href=/gateway/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><script defer src=/gateway/main/js/jquery-2.x.min.js></script><script defer src=/gateway/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/gateway/main/zh><img src=/gateway/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
-<option value>(latest)</option></select></div><ul><li><a href=/gateway/main/zh/docs/overview/>产品概述</a><ul></ul></li><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
+<option value>main (latest)</option>
+<option value=v1.29.8>v1.29.8</option>
+<option value=v1.29.7>v1.29.7</option>
+<option value=v1.29.6>v1.29.6</option>
+<option value=v1.29.4>v1.29.4</option>
+<option value=v1.29.3>v1.29.3</option>
+<option value=v1.29.2>v1.29.2</option>
+<option value=v1.29.1>v1.29.1</option>
+<option value=v1.29.0>v1.29.0</option>
+<option value=v1.28.2>v1.28.2</option>
+<option value=v1.28.0>v1.28.0</option>
+<option value=v1.27.0>v1.27.0</option>
+<option value=v1.26.1>v1.26.1</option></select></div><ul><li><a href=/gateway/main/zh/docs/overview/>产品概述</a><ul></ul></li><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
 <label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>入门指南</a>
 <span>▾</span></label><ul><li><a href=/gateway/main/zh/docs/getting-started/install/>安装网关</a></li><li><a href=/gateway/main/zh/docs/getting-started/configuration/>配置网关</a></li><li><a href=/gateway/main/zh/docs/getting-started/docker/>容器部署</a></li><li><a href=/gateway/main/zh/docs/getting-started/helm/>Helm 部署</a></li><li><a href=/gateway/main/zh/docs/getting-started/optimization/>系统调优</a></li><li><a href=/gateway/main/zh/docs/getting-started/hardware/>硬件配置</a></li><li><a href=/gateway/main/zh/docs/getting-started/benchmark/>性能测试</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle checked>
 <label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a>功能手册</a>

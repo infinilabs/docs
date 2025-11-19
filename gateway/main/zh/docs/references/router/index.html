@@ -4,7 +4,19 @@ router: - name: my_router default_flow: default_flow tracing_flow: request_loggi
 router: - name: my_router default_flow: default_flow tracing_flow: request_logging rules: - method: - PUT - POST pattern: - &#34;/_bulk&#34; - &#34;/{index_name}/_bulk&#34; flow: - bulk_process_flow 路由有几个非常重要的概念：
  flow：请求的处理流程，一个路由里面有三个地方定义 flow default_flow: 默认的处理流，也就是业务处理的主流程，请求转发、过滤、缓存等操作都在这里面进行 tracing_flow：用于追踪请求状态的流，不受 default_flow 的影响，用于记录请求日志、统计等 rules：根据匹配规则将请求分发到特定的处理流中去，支持请求的 Method、Path 的正则匹配  参数说明 #     名称 类型 说明     name string 路由名称   default_flow string 默认的请求的处理流程名称   tracing_flow string 用于追踪请求的处理流程名称   rules array 路由规则列表，按照数组的先后顺序依次应用   rules."><meta property="og:type" content="article"><meta property="og:url" content="/gateway/main/zh/docs/references/router/"><title>服务路由 | INFINI Gateway</title><link rel=manifest href=/gateway/main/manifest.json><link rel=icon href=/gateway/main/favicon.png type=image/x-icon><link rel=alternate hreflang=en href=/gateway/main/docs/references/router/ title="Service Router"><link rel=stylesheet href=/gateway/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><script defer src=/gateway/main/js/jquery-2.x.min.js></script><script defer src=/gateway/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/gateway/main/zh><img src=/gateway/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
-<option value>(latest)</option></select></div><ul><li><a href=/gateway/main/zh/docs/overview/>产品概述</a><ul></ul></li><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
+<option value>main (latest)</option>
+<option value=v1.29.8>v1.29.8</option>
+<option value=v1.29.7>v1.29.7</option>
+<option value=v1.29.6>v1.29.6</option>
+<option value=v1.29.4>v1.29.4</option>
+<option value=v1.29.3>v1.29.3</option>
+<option value=v1.29.2>v1.29.2</option>
+<option value=v1.29.1>v1.29.1</option>
+<option value=v1.29.0>v1.29.0</option>
+<option value=v1.28.2>v1.28.2</option>
+<option value=v1.28.0>v1.28.0</option>
+<option value=v1.27.0>v1.27.0</option>
+<option value=v1.26.1>v1.26.1</option></select></div><ul><li><a href=/gateway/main/zh/docs/overview/>产品概述</a><ul></ul></li><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
 <label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>入门指南</a>
 <span>▾</span></label><ul><li><a href=/gateway/main/zh/docs/getting-started/install/>安装网关</a></li><li><a href=/gateway/main/zh/docs/getting-started/configuration/>配置网关</a></li><li><a href=/gateway/main/zh/docs/getting-started/docker/>容器部署</a></li><li><a href=/gateway/main/zh/docs/getting-started/helm/>Helm 部署</a></li><li><a href=/gateway/main/zh/docs/getting-started/optimization/>系统调优</a></li><li><a href=/gateway/main/zh/docs/getting-started/hardware/>硬件配置</a></li><li><a href=/gateway/main/zh/docs/getting-started/benchmark/>性能测试</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle checked>
 <label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a>功能手册</a>

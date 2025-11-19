@@ -4,7 +4,19 @@ flow: - name: test filter: - request_method_filter: exclude: - PUT - POST includ
 配置示例 #  一个简单的示例如下：
 flow: - name: test filter: - request_method_filter: exclude: - PUT - POST include: - GET - HEAD - DELETE 参数说明 #     名称 类型 说明     exclude array 拒绝通过的请求 Method   include array 允许通过的请求 Method   action string 符合过滤条件之后的处理动作，可以是 deny 和 redirect_flow，默认为 deny   status int 自定义模式匹配之后返回的状态码   message string 自定义 deny 模式返回的消息文本   flow string 自定义 redirect_flow 模式执行的 flow ID    注意: 当设置了 include 条件的情况下，必须至少满足 include 设置的其中一种响应码才能被允许通过。 当仅设置了 exclude 条件的情况下，不符合 exclude 的任意请求都允许通过。"><meta property="og:type" content="article"><meta property="og:url" content="/gateway/main/zh/docs/references/filters/request_method_filter/"><title>request_method_filter | INFINI Gateway</title><link rel=manifest href=/gateway/main/manifest.json><link rel=icon href=/gateway/main/favicon.png type=image/x-icon><link rel=alternate hreflang=en href=/gateway/main/docs/references/filters/request_method_filter/ title=request_method_filter><link rel=stylesheet href=/gateway/main/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/gateway/main/css/asciinema-player.css><script defer src=/gateway/main/js/jquery-2.x.min.js></script><script defer src=/gateway/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/gateway/main/zh><img src=/gateway/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
-<option value>(latest)</option></select></div><ul><li><a href=/gateway/main/zh/docs/overview/>产品概述</a><ul></ul></li><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
+<option value>main (latest)</option>
+<option value=v1.29.8>v1.29.8</option>
+<option value=v1.29.7>v1.29.7</option>
+<option value=v1.29.6>v1.29.6</option>
+<option value=v1.29.4>v1.29.4</option>
+<option value=v1.29.3>v1.29.3</option>
+<option value=v1.29.2>v1.29.2</option>
+<option value=v1.29.1>v1.29.1</option>
+<option value=v1.29.0>v1.29.0</option>
+<option value=v1.28.2>v1.28.2</option>
+<option value=v1.28.0>v1.28.0</option>
+<option value=v1.27.0>v1.27.0</option>
+<option value=v1.26.1>v1.26.1</option></select></div><ul><li><a href=/gateway/main/zh/docs/overview/>产品概述</a><ul></ul></li><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
 <label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>入门指南</a>
 <span>▾</span></label><ul><li><a href=/gateway/main/zh/docs/getting-started/install/>安装网关</a></li><li><a href=/gateway/main/zh/docs/getting-started/configuration/>配置网关</a></li><li><a href=/gateway/main/zh/docs/getting-started/docker/>容器部署</a></li><li><a href=/gateway/main/zh/docs/getting-started/helm/>Helm 部署</a></li><li><a href=/gateway/main/zh/docs/getting-started/optimization/>系统调优</a></li><li><a href=/gateway/main/zh/docs/getting-started/hardware/>硬件配置</a></li><li><a href=/gateway/main/zh/docs/getting-started/benchmark/>性能测试</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle checked>
 <label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a>功能手册</a>
