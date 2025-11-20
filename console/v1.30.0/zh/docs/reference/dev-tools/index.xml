@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>开发工具 on INFINI Console</title><link>/console/v1.30.0/zh/docs/reference/dev-tools/</link><description>Recent content in 开发工具 on INFINI Console</description><generator>Hugo -- gohugo.io</generator><atom:link href="/console/v1.30.0/zh/docs/reference/dev-tools/index.xml" rel="self" type="application/rss+xml"/><item><title>开发工具</title><link>/console/v1.30.0/zh/docs/reference/dev-tools/dev-tools/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/v1.30.0/zh/docs/reference/dev-tools/dev-tools/</guid><description>开发工具 # 简介 # 使用开发工具可以快速地编写和执行 Elasticsearch 查询以及其他的 elasticsearch API。 当开启安装验证后，所有的请求都会经过 API 级别权限校验
+打开开发工具 # 使用 Ctrl+Shift+O 快捷键打开或者在 console 右上角图标打开。
+执行请求快捷键 # Command+Enter 或者 Ctrl+Enter
+多集群多 Tab 页支持 # 开发工具支持使用 Tab 页同时打开多个集群，即使是同一个集群，也可以打开多个，Tab 页之间状态是独立的。 Tab 页默认使用集群名称作为标题，双击 Tab 页标题可以修改。 开发工具下方是一个状态栏，左侧是当前集群的健康状态、http 地址、版本信息， 右侧是 elasticsearch 接口请求的响应状态以及时长。
+查看请求头信息 # 当使用开发工具执行 elasticsearch 请求之后，可以在右侧点击 headers Tab 页查看请求头信息。</description></item><item><title>常用命令</title><link>/console/v1.30.0/zh/docs/reference/dev-tools/command/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/console/v1.30.0/zh/docs/reference/dev-tools/command/</guid><description>常用命令 # 简介 # 常用命令用于在开发工具中将高频使用的 Elasticsearch 请求保存, 这样后续如果需要使用， 只需要在开发工具中使用 LOAD 命令加载，即可快速使用。
+保存常用命令 # 打开 console 右上角的开发工具(Ctrl+shift+o)， 在开发工具中选择需要保存的 Elasticsearch 请求 （支持一次选中多个请求保存为常用命令），选中之后点击工具栏里面的 Save As Command 提交。
+加载常用命令 # 在开发工具里，输入 LOAD + 保存的命令名称关键字 会自动提示相关已保存的常用命令， 选中要加载的命令后，按回车键即可自动加载相应的常用命令。
+常用命令列表 # 在常用命令列表中可以查询已经保存的常用命令
+点击在列表中常用命令名称一栏可以查看常用命令具体信息, 也可以修改名称和 tag 信息
+删除常用命令 # 点击常用命令列表中的删除按钮，进行二次确认，确认之后执行删除操作。</description></item></channel></rss>
