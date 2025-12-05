@@ -1,0 +1,726 @@
+<!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="多字段查询 #  多字段查询与匹配查询类似。您可以使用 multi_match 查询来搜索多个字段。
+^ 会“提升”某些字段的权重。提升是乘数，用于使一个字段中的匹配比其他字段中的匹配更重要。在以下示例中，title字段中匹配 “wind” 的权重比 plot 字段中匹配的权重高 _score 四倍：
+GET _search { &#34;query&#34;: { &#34;multi_match&#34;: { &#34;query&#34;: &#34;wind&#34;, &#34;fields&#34;: [&#34;title^4&#34;, &#34;plot&#34;] } } } 结果是，像《The Wind Rises》和《Gone with the Wind》这样的电影出现在搜索结果的顶部附近，而像《Twister》这样的电影，其剧情简介中可能包含“wind”字，则出现在底部附近。
+您可以在字段名中使用通配符。例如，以下查询将搜索 speaker 字段以及所有以 play_ 开头的字段，例如 play_name 或 play_title ：
+GET _search { &#34;query&#34;: { &#34;multi_match&#34;: { &#34;query&#34;: &#34;hamlet&#34;, &#34;fields&#34;: [&#34;speaker&#34;, &#34;play_*&#34;] } } } 如果您不提供 fields 参数， multi_match 查询将搜索 index.query. Default_field 设置中指定的字段，该设置默认为 * 。默认行为是提取映射中所有适用于词级查询的字段，过滤元数据字段，并将所有提取的字段组合起来构建查询。
+ 查询中的子句最大数量由 indices."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="多字段查询"><meta property="og:description" content="多字段查询 #  多字段查询与匹配查询类似。您可以使用 multi_match 查询来搜索多个字段。
+^ 会“提升”某些字段的权重。提升是乘数，用于使一个字段中的匹配比其他字段中的匹配更重要。在以下示例中，title字段中匹配 “wind” 的权重比 plot 字段中匹配的权重高 _score 四倍：
+GET _search { &#34;query&#34;: { &#34;multi_match&#34;: { &#34;query&#34;: &#34;wind&#34;, &#34;fields&#34;: [&#34;title^4&#34;, &#34;plot&#34;] } } } 结果是，像《The Wind Rises》和《Gone with the Wind》这样的电影出现在搜索结果的顶部附近，而像《Twister》这样的电影，其剧情简介中可能包含“wind”字，则出现在底部附近。
+您可以在字段名中使用通配符。例如，以下查询将搜索 speaker 字段以及所有以 play_ 开头的字段，例如 play_name 或 play_title ：
+GET _search { &#34;query&#34;: { &#34;multi_match&#34;: { &#34;query&#34;: &#34;hamlet&#34;, &#34;fields&#34;: [&#34;speaker&#34;, &#34;play_*&#34;] } } } 如果您不提供 fields 参数， multi_match 查询将搜索 index.query. Default_field 设置中指定的字段，该设置默认为 * 。默认行为是提取映射中所有适用于词级查询的字段，过滤元数据字段，并将所有提取的字段组合起来构建查询。
+ 查询中的子句最大数量由 indices."><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/v2.0.1/docs/references/search/full-text/multi-match/"><title>多字段查询 | INFINI Easysearch</title><link rel=manifest href=/easysearch/v2.0.1/manifest.json><link rel=icon href=/easysearch/v2.0.1/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/v2.0.1/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><link rel=stylesheet type=text/css href=/easysearch/v2.0.1/css/asciinema-player.css><script defer src=/easysearch/v2.0.1/js/jquery-2.x.min.js></script><script defer src=/easysearch/v2.0.1/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/easysearch/v2.0.1><img src=/easysearch/v2.0.1/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value=v2.0.1>v2.0.1</option>
+<option value=v1.15.6>v1.15.6</option>
+<option value=v1.15.5>v1.15.5</option>
+<option value=v1.15.3>v1.15.3</option>
+<option value=v1.15.2>v1.15.2</option>
+<option value=v1.15.1>v1.15.1</option>
+<option value=v1.15.0>v1.15.0</option>
+<option value=v1.14.0>v1.14.0</option>
+<option value=v1.13.1>v1.13.1</option>
+<option value=v1.13.0>v1.13.0</option>
+<option value=v1.12.2>v1.12.2</option>
+<option value=v1.12.1>v1.12.1</option>
+<option value=v1.12.0>v1.12.0</option>
+<option value=v1.11.1>v1.11.1</option>
+<option value=v1.11.0>v1.11.0</option>
+<option value=v1.9.1>v1.9.1</option>
+<option value=v1.8.3>v1.8.3</option>
+<option value=v1.8.2>v1.8.2</option>
+<option value=v1.8.0>v1.8.0</option>
+<option value=v1.7.1>v1.7.1</option>
+<option value=v1.7.0>v1.7.0</option>
+<option value=v1.6.2>v1.6.2</option>
+<option value=v1.6.1>v1.6.1</option>
+<option value=v1.6.0>v1.6.0</option>
+<option value=v1.5.0>v1.5.0</option>
+<option value=v1.4.0>v1.4.0</option>
+<option value=v1.3.0>v1.3.0</option>
+<option value=v1.2.0>v1.2.0</option>
+<option value=v1.1.1>v1.1.1</option>
+<option value=v1.1.0>v1.1.0</option>
+<option value=v1.0.1>v1.0.1</option>
+<option value=v1.0.0>v1.0.0</option></select></div><ul><li><a href=/easysearch/v2.0.1/docs/overview/>产品概述</a><ul></ul></li><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
+<label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>入门指南</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-e622c8a7dea0dd02f82a836e861475c5 class=toggle>
+<label for=section-e622c8a7dea0dd02f82a836e861475c5 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/getting-started/install/>安装指南</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/getting-started/install/docker/>Docker</a></li><li><a href=/easysearch/v2.0.1/docs/getting-started/install/docker-compose/>Docker Compose</a></li><li><a href=/easysearch/v2.0.1/docs/getting-started/install/offline-install/>离线安装</a></li><li><a href=/easysearch/v2.0.1/docs/getting-started/install/helm/>Helm Chart</a></li><li><a href=/easysearch/v2.0.1/docs/getting-started/install/linux/>Linux</a></li><li><a href=/easysearch/v2.0.1/docs/getting-started/install/windows/>Windows</a></li><li><a href=/easysearch/v2.0.1/docs/getting-started/install/ipv6/>IPv6 支持</a></li><li><input type=checkbox id=section-8df7e740f0b8d44e94e2d5f3851aef83 class=toggle>
+<label for=section-8df7e740f0b8d44e94e2d5f3851aef83 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/getting-started/install/operator/>Operator</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/getting-started/install/operator/deploy_operator/>部署 Operator</a></li><li><a href=/easysearch/v2.0.1/docs/getting-started/install/operator/deploy_easysearch/>部署 Easysearch</a></li><li><a href=/easysearch/v2.0.1/docs/getting-started/install/operator/resource_manager/>资源扩容</a></li><li><a href=/easysearch/v2.0.1/docs/getting-started/install/operator/node_scale/>节点扩容</a></li><li><a href=/easysearch/v2.0.1/docs/getting-started/install/operator/update_password/>密码修改</a></li><li><a href=/easysearch/v2.0.1/docs/getting-started/install/operator/upgrade/>版本升级</a></li><li><a href=/easysearch/v2.0.1/docs/getting-started/install/operator/cert_manager/>证书管理</a></li><li><a href=/easysearch/v2.0.1/docs/getting-started/install/operator/s3_snapshot/>s3 备份</a></li><li><a href=/easysearch/v2.0.1/docs/getting-started/install/operator/FAQ/>FAQ</a></li></ul></li></ul></li><li><a href=/easysearch/v2.0.1/docs/getting-started/settings/>系统调优</a></li><li><a href=/easysearch/v2.0.1/docs/getting-started/hardware/>硬件配置</a></li><li><a href=/easysearch/v2.0.1/docs/getting-started/configuration/>常用配置</a></li><li><a href=/easysearch/v2.0.1/docs/getting-started/configuration_file/>配置说明</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle checked>
+<label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a>功能手册</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-dd5a2f6dc33fa990f542566f7a908106 class=toggle>
+<label for=section-dd5a2f6dc33fa990f542566f7a908106 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/>文档建模</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-7d4ce65a4422588ac64ff568cfa9eb9e class=toggle>
+<label for=section-7d4ce65a4422588ac64ff568cfa9eb9e class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/mapping-parameters/>文档映射</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/mapping-parameters/analyzer/>分词器参数</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/mapping-parameters/dynamic/>动态映射参数</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/mapping-parameters/copy_to/>字段复制参数</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/mapping-parameters/coerce/>强制类型转换参数</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/mapping-parameters/doc_values/>文档列值参数</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/mapping-parameters/enabled/>是否启用参数</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/mapping-parameters/boost/>权重参数设置</a></li></ul></li><li><input type=checkbox id=section-f879c6c2aa847411ec53259bcf512a91 class=toggle>
+<label for=section-f879c6c2aa847411ec53259bcf512a91 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/>字段类型</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/rank/>Rank 字段类型</a></li><li><input type=checkbox id=section-cd8ebeffb1e1eb5dcc529f4edbad93fc class=toggle>
+<label for=section-cd8ebeffb1e1eb5dcc529f4edbad93fc class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/geo-filed-type/>地理字段类型</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/geo-filed-type/geo-point/>Geopoint 地理点字段类型</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/geo-filed-type/geo-shape/>Geoshape 地理形状字段类型</a></li></ul></li><li><input type=checkbox id=section-f94b121fac5f49bed5028d50034cc3cf class=toggle>
+<label for=section-f94b121fac5f49bed5028d50034cc3cf class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/string-field-type/>字符串字段类型</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/string-field-type/keyword/>Keyword 字段类型</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/string-field-type/text/>Text 字段类型</a></li></ul></li><li><input type=checkbox id=section-37ac2b2e61a91ff3354b11d860ec66cf class=toggle>
+<label for=section-37ac2b2e61a91ff3354b11d860ec66cf class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/object-field-type/>对象字段类型</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/object-field-type/flattened/>Flat 对象字段类型</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/object-field-type/flattened_text/>Flat 对象字段类型</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/object-field-type/join/>Join 字段类型</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/object-field-type/nested/>Nested 字段类型</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/object-field-type/object/>Object 对象字段类型</a></li></ul></li><li><input type=checkbox id=section-4f4e977370cb5a089a66f2d06c0cf2fc class=toggle>
+<label for=section-4f4e977370cb5a089a66f2d06c0cf2fc class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/date-field-type/>日期字段类型</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/date-field-type/date-nanos/>Date nanoseconds 字段类型</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/date-field-type/date/>Date 字段类型</a></li></ul></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/ip/>IP 地址字段类型</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/match_only_text/>match_only_text 字段类型</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/percolator/>Percolator 过滤器字段类型</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/binary/>二进制字段类型</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/alias/>别名字段类型</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/knn/>向量字段类型</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/boolean/>布尔字段类型</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/numeric-field/>数值字段类型</a></li><li><input type=checkbox id=section-d087fbeb67c721ac6618bf4ae5f3be20 class=toggle>
+<label for=section-d087fbeb67c721ac6618bf4ae5f3be20 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/autocomplete-field-type/>自动补全字段类型</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/autocomplete-field-type/search-as-you-type/>Search-as-you-type 字段类型</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/autocomplete-field-type/completion/>自动补全字段类型</a></li></ul></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/range-field-type/>范围字段类型</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/field-types/wildcard/>Wildcard 字段类型</a></li></ul></li><li><input type=checkbox id=section-92a866d9a34e707f209ba1cdbeaba985 class=toggle>
+<label for=section-92a866d9a34e707f209ba1cdbeaba985 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/metadata-field/>元数据字段</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/metadata-field/id/>ID 属性</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/metadata-field/meta/>元数据属性</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/metadata-field/field-names/>字段名称</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/metadata-field/ignored/>忽略属性</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/metadata-field/source/>源文档属性</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/metadata-field/>索引属性</a></li><li><a href=/easysearch/v2.0.1/docs/references/mappings-and-field-types/metadata-field/routing/>路由属性</a></li></ul></li></ul></li><li><input type=checkbox id=section-232f0668f3be6ea64e1c220baec34dfc class=toggle>
+<label for=section-232f0668f3be6ea64e1c220baec34dfc class="flex justify-between"><a>文档操作</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/document/index-data/>增删改查</a></li><li><a href=/easysearch/v2.0.1/docs/references/document/index-alias/>别名操作</a></li><li><a href=/easysearch/v2.0.1/docs/references/document/index-compression/>索引压缩</a></li></ul></li><li><input type=checkbox id=section-af89e2c6bd89cb4170c9b65451a228d7 class=toggle>
+<label for=section-af89e2c6bd89cb4170c9b65451a228d7 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/>管道处理</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/create-ingest/>创建管道</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/simulate-ingest/>摄取管道模拟器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/get-ingest/>获取管道</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/delete-ingest/>删除管道</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/accessing-data/>在管道中访问数据</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/pipeline-failures/>处理管道故障</a></li><li><input type=checkbox id=section-b556b40404eadae2b18c0c625de1a1cc class=toggle>
+<label for=section-b556b40404eadae2b18c0c625de1a1cc class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/conditional-execution/>控制条件</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/conditional-execution/complex-conditionals/>复杂逻辑</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/conditional-execution/conditional-pipeline-processor/>控制条件和处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/conditional-execution/regex-conditionals/>正则表达式条件</a></li></ul></li><li><input type=checkbox id=section-f0c2a51225560073c3cbd74a6e69f90d class=toggle>
+<label for=section-f0c2a51225560073c3cbd74a6e69f90d class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/>摄取处理器</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/append/>添加处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/bytes/>字节处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/convert/>转换处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/csv/>CSV 处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/date-index-name/>日期索引名称处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/date/>日期处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/dissect/>解析处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/dot-expander/>点展开器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/drop/>Drop 处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/fail/>Fail 处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/foreach/>遍历处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/grok/>Grok 处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/gsub/>Gsub 处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/html-strip/>HTML 清理处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/join/>连接处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/json/>JSON 处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/kv/>KV 处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/lowercase/>小写处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/pipeline/>管道处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/remove/>移除处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/rename/>重命名处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/script/>脚本处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/set/>设置处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/sort/>Sort 处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/split/>分割处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/trim/>裁剪处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/uppercase/>大写处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/urldecode/>URL 解码处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/ingest-pipelines/index-processors/user-agent/>用户代理处理器</a></li></ul></li></ul></li><li><input type=checkbox id=section-86e828ca7e30e9d2e35881b956319411 class=toggle>
+<label for=section-86e828ca7e30e9d2e35881b956319411 class="flex justify-between"><a>SQL 查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/sql/sql-jdbc/>SQL-JDBC</a></li><li><a href=/easysearch/v2.0.1/docs/references/sql/aggregations/>聚合查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/sql/fulltext/>全文搜索</a></li><li><a href=/easysearch/v2.0.1/docs/references/sql/complex/>复杂查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/sql/basics/>基础查询</a></li></ul></li><li><input type=checkbox id=section-1c80046b8a7d2b6f02509e78096b1388 class=toggle>
+<label for=section-1c80046b8a7d2b6f02509e78096b1388 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/security/>安全模块</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-4c0acfad57ce0b1db83571ad903a192e class=toggle>
+<label for=section-4c0acfad57ce0b1db83571ad903a192e class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/security/configuration/>配置说明</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/security/configuration/yaml/>本地配置</a></li><li><a href=/easysearch/v2.0.1/docs/references/security/configuration/backend/>后端配置</a></li><li><a href=/easysearch/v2.0.1/docs/references/security/configuration/tls/>证书配置</a></li><li><a href=/easysearch/v2.0.1/docs/references/security/configuration/system-indices/>系统索引</a></li></ul></li><li><input type=checkbox id=section-4854412a16ac224d9851d23b7bf6bdea class=toggle>
+<label for=section-4854412a16ac224d9851d23b7bf6bdea class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/security/access-control/>权限控制</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/security/access-control/users-roles/>用户角色</a></li><li><a href=/easysearch/v2.0.1/docs/references/security/access-control/document-level-security/>文档权限</a></li><li><a href=/easysearch/v2.0.1/docs/references/security/access-control/field-level-security/>字段权限</a></li><li><a href=/easysearch/v2.0.1/docs/references/security/access-control/field-masking/>数据脱敏</a></li><li><a href=/easysearch/v2.0.1/docs/references/security/access-control/run-as/>身份模拟</a></li><li><a href=/easysearch/v2.0.1/docs/references/security/access-control/cross-cluster-search/>跨集群搜索</a></li><li><a href=/easysearch/v2.0.1/docs/references/security/access-control/api/>API 接口</a></li><li><a href=/easysearch/v2.0.1/docs/references/security/access-control/permissions/>权限列表</a></li></ul></li></ul></li><li><input type=checkbox id=section-6b02990358c7382bac3f39043e5fd437 class=toggle checked>
+<label for=section-6b02990358c7382bac3f39043e5fd437 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/search/>搜索操作</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/search/query-filter-context/>查询和过滤上下文</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/term-vs-full-text/>精确查询与全文检索的对比</a></li><li><input type=checkbox id=section-e8f94bccae3c54be36d1896778639639 class=toggle>
+<label for=section-e8f94bccae3c54be36d1896778639639 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/search/term/>精确查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/search/term/exists/>Exists 查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/term/ids/>IDs 查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/term/term/>Term 精确查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/term/prefix/>前缀查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/term/terms/>多词项查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/term/fuzzy/>模糊查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/term/regexp/>正则查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/term/range/>范围查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/term/terms-set/>词项集查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/term/wildcard/>通配符查询</a></li></ul></li><li><input type=checkbox id=section-1df907d6b381276d472faa1ffc431057 class=toggle checked>
+<label for=section-1df907d6b381276d472faa1ffc431057 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/search/full-text/>全文检索</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/search/full-text/intervals/>Intervals 查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/full-text/match-bool-prefix/>匹配布尔前缀查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/full-text/match/>匹配查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/full-text/match-phrase-prefix/>匹配短语前缀查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/full-text/match-phrase/>匹配短语查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/full-text/multi-match/ class=active>多字段查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/full-text/query-string/>字符串查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/full-text/simple-query-string/>简单字符串查询</a></li></ul></li><li><input type=checkbox id=section-15ea627c37f24ed149a43b1c0b4add9f class=toggle>
+<label for=section-15ea627c37f24ed149a43b1c0b4add9f class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/search/compound/>复合查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/search/compound/function-score/>函数评分查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/compound/boosting/>加权</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/compound/bool/>布尔查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/compound/constant-score/>常量化评分查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/compound/disjunction-max/>析取最大查询</a></li></ul></li><li><input type=checkbox id=section-86bf1f72d443fd258db0d40a6bf009d7 class=toggle>
+<label for=section-86bf1f72d443fd258db0d40a6bf009d7 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/search/geo-and-xy/>地理查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/search/geo-and-xy/geopolygon/>地理多边形查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/geo-and-xy/geoshape/>地理形状查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/geo-and-xy/geodistance/>地理距离查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/geo-and-xy/geo-bounding-box/>地理边界框查询</a></li></ul></li><li><input type=checkbox id=section-914ecc84741b3e200e93ea80c2eb0df1 class=toggle>
+<label for=section-914ecc84741b3e200e93ea80c2eb0df1 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/search/span/>Span 查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/search/span/span-first/>Span 前序匹配</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/span/span-within/>Span 包含于查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/span/span-containing/>Span 包含查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/span/span-multi-term/>Span 多词项查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/span/span-or/>Span 或查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/span/span-not/>Span 排除查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/span/span-term/>Span 词项查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/span/span-field-masking/>Span 跨字段查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/span/span-near/>Span 邻近查询</a></li></ul></li><li><input type=checkbox id=section-2baa128ae64b7fa17aa37f790453c292 class=toggle>
+<label for=section-2baa128ae64b7fa17aa37f790453c292 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/search/joining/>关联查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/search/joining/has-child/>子查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/joining/nested/>嵌套查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/joining/parent-id/>父 ID 查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/joining/has-parent/>父查询</a></li></ul></li><li><input type=checkbox id=section-fe27ae639d7a8e652db974b443eb5848 class=toggle>
+<label for=section-fe27ae639d7a8e652db974b443eb5848 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/search/specialized/>专业查询</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/search/specialized/wrapper/>包装器</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/specialized/rank-feature/>排序功能</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/specialized/percolate/>渗透查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/specialized/more-like-this/>类似查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/specialized/script-score/>脚本分数查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/specialized/script/>脚本查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/specialized/distance-feature/>距离特征查询</a></li></ul></li><li><a href=/easysearch/v2.0.1/docs/references/search/match-all/>全匹配查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/minimum-should-match/>最小匹配</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/regex-syntax/>正则表达式语法</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/rewrite-parameter/>重写参数</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/knn_api/>向量查询</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/search-template/>查询模版</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/async_search/>异步搜索</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/pit_api/>定点查询</a></li><li><input type=checkbox id=section-19c2d09435d47ad6656e503e2a68a3b3 class=toggle>
+<label for=section-19c2d09435d47ad6656e503e2a68a3b3 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/search/search-pipelines/>搜索管道</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-07023dbd216ba1a90a2c532ff5bb0961 class=toggle>
+<label for=section-07023dbd216ba1a90a2c532ff5bb0961 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/search/search-pipelines/search-processors/>搜索处理器</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/search/search-pipelines/search-processors/filter-query-processor/>过滤查询处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/search-pipelines/search-processors/rename-field-processor/>重命名字段处理器</a></li><li><a href=/easysearch/v2.0.1/docs/references/search/search-pipelines/search-processors/script-processor/>脚本处理器</a></li></ul></li></ul></li></ul></li><li><input type=checkbox id=section-4632348aa5cba7d33c080167da2f13b6 class=toggle>
+<label for=section-4632348aa5cba7d33c080167da2f13b6 class="flex justify-between"><a>文本分词</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-13c9df598f113d7537eff14f9f5147e3 class=toggle>
+<label for=section-13c9df598f113d7537eff14f9f5147e3 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/text-analysis/analyzers/>分词器</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/analyzers/ik-analyzer/>IK 分词器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/analyzers/stop-analyzer/>停用词分词器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/analyzers/keyword-analyzer/>关键词分词器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/analyzers/creating-a-custom-analyzer/>创建一个自定义分词器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/analyzers/pattern-analyzer/>匹配模式分词器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/analyzers/language-analyzer/>各类语种分词器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/analyzers/pinyin-analyzer/>拼音分词器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/analyzers/fingerprint-analyzer/>指纹分词器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/analyzers/search-analyzers/>搜索分词器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/analyzers/standard-analyzer/>标准分词器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/analyzers/whitespace-analyzer/>空格分词器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/analyzers/simple-analyzer/>简单分词器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/analyzers/stconvert-analyzer/>简繁转换分词器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/analyzers/index-analyzers/>索引分词器</a></li></ul></li><li><input type=checkbox id=section-8066f3918cdd51465da4720002ab0bb5 class=toggle>
+<label for=section-8066f3918cdd51465da4720002ab0bb5 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/>分词过滤器</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/ascii-folding/>ASCII 折叠分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/cjk-bigram/>CJK 二元分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/cjk-width/>CJK 宽度分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/kstem/>KStem 分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/n-gram/>n-gram 分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/keep-types/>保留类型分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/trim/>修剪分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/stop/>停用词分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/keyword-marker/>关键词标记分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/keyword-repeat/>关键词重复分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/delimited-payload/>分隔式负载分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/pattern-replace/>匹配替换分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/decimal-digit/>十进制数字分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/word-delimiter/>单词分隔符分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/word-delimiter-graph/>单词分隔符图分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/remove-duplicates/>去重分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/reverse/>反转分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/synonym/>同义词分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/synonym-graph/>同义词图分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/unique/>唯一分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/multiplexer/>多路复用分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/uppercase/>大写分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/lowercase/>小写分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/common-grams/>常用词组分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/flatten-graph/>平图化分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/normalization/>归一化分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/truncate/>截断分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/fingerprint/>指纹分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/pattern-capture/>捕获匹配分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/min-hash/>最小哈希分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/condition/>条件分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/porter-stem/>波特词干分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/apostrophe/>省略符号分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/elision/>省略词分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/classic/>经典分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/keep-words/>词保留分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/dictionary-decompounder/>词典复合词分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/stemmer/>词干提取分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/stemmer-override/>词干覆盖分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/shingle/>词片分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/predicate-token-filter/>谓词分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/edge-n-gram/>边缘 n 元分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/length/>长度分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/limit/>限制分词过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/token-filters/snowball/>雪球算法分词过滤器</a></li></ul></li><li><input type=checkbox id=section-d6e4a0d07abe0df202540482628fd24b class=toggle>
+<label for=section-d6e4a0d07abe0df202540482628fd24b class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/text-analysis/character-filters/>字符过滤器</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/character-filters/html-strip/>HTML 剥离字符过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/character-filters/pattern-replace/>匹配替换字符过滤器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/character-filters/mapping/>映射字符过滤器</a></li></ul></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/normalizers/>规范化</a></li><li><input type=checkbox id=section-71b540c4dd821da562660864e8601756 class=toggle>
+<label for=section-71b540c4dd821da562660864e8601756 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/text-analysis/tokenizers/>词元生成器</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/tokenizers/n-gram/>N-gram 词元生成器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/tokenizers/uax-url-email/>UAX URL 邮件词元生成器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/tokenizers/keyword/>关键词词元生成器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/tokenizers/edge-n-gram/>前缀 n 元词元生成器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/tokenizers/pattern/>匹配词元生成器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/tokenizers/letter/>字母词元生成器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/tokenizers/character-group/>字符组词元生成器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/tokenizers/lowercase/>小写词元生成器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/tokenizers/standard/>标准词元生成器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/tokenizers/whitespace/>空格词元生成器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/tokenizers/simple-pattern-split/>简单分割匹配词元生成器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/tokenizers/classic/>经典词元生成器</a></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/tokenizers/path-hierarchy/>路径词元分词器</a></li></ul></li><li><a href=/easysearch/v2.0.1/docs/references/text-analysis/stemming/>词干提取</a></li></ul></li><li><input type=checkbox id=section-69a0462c4990a8b0bf6189289fb56e8a class=toggle>
+<label for=section-69a0462c4990a8b0bf6189289fb56e8a class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/aggregation/>聚合分析</a>
+<span>▾</span></label><ul><li><input type=checkbox id=section-a4f13a0648bb2302e5d49c0d41bfe786 class=toggle>
+<label for=section-a4f13a0648bb2302e5d49c0d41bfe786 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/>分组聚合</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/ip-range/>IP 范围聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/global/>全局聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/terms/>分组聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/reverse-nested/>反向嵌套聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/geo-distance/>地理距离聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/composite/>复合聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/diversified-sampler/>多样化采样聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/filters/>多过滤聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/children/>子关联聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/nested/>嵌套聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/date-histogram/>日期直方图聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/date-range/>日期范围聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/parent/>父级聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/histogram/>直方图聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/rare-terms/>稀有分组聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/missing/>缺省聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/range/>范围聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/filter/>过滤聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/adjacency-matrix/>邻接矩阵聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/sampler/>采样聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/significant-terms/>重点分组聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/significant-text/>重点文本聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/bucket-aggregations/auto-interval-date-histogram/>Auto Interval Date Histogram</a></li></ul></li><li><input type=checkbox id=section-4d85e7011dfe7f276bbd2e35ea5b128f class=toggle>
+<label for=section-4d85e7011dfe7f276bbd2e35ea5b128f class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/aggregation/metric-aggregations/>指标聚合</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/aggregation/metric-aggregations/top-hits/>Top 汇总</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/metric-aggregations/median-absolute-deviation/>中位数绝对偏差聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/metric-aggregations/value-count/>值计数聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/metric-aggregations/weighted-avg/>加权平均聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/metric-aggregations/geocentroid/>地理中心点</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/metric-aggregations/geobounds/>地理边界聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/metric-aggregations/cardinality/>基数聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/metric-aggregations/average/>平均聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/metric-aggregations/extended-stats/>扩展统计聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/metric-aggregations/maximum/>最大值聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/metric-aggregations/minimum/>最小值聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/metric-aggregations/sum/>求和聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/metric-aggregations/percentile-ranks/>百分位排名聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/metric-aggregations/percentile/>百分位聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/metric-aggregations/matrix-stats/>矩阵统计聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/metric-aggregations/stats/>统计聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/metric-aggregations/scripted-metric/>脚本指标聚合</a></li></ul></li><li><input type=checkbox id=section-4296c7ea235f6f8cebc4737c24766aa3 class=toggle>
+<label for=section-4296c7ea235f6f8cebc4737c24766aa3 class="flex justify-between"><a href=/easysearch/v2.0.1/docs/references/aggregation/pipeline-aggregations/>管道聚合</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/aggregation/pipeline-aggregations/bucket-sort/>分组排序聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/pipeline-aggregations/bucket-script/>存储分组脚本聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/pipeline-aggregations/bucket-selector/>存储分组选择聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/pipeline-aggregations/derivative/>导数聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/pipeline-aggregations/avg-bucket/>平均分组聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/pipeline-aggregations/serial-diff/>序列差分聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/pipeline-aggregations/extended-stats/>扩展统计分组聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/pipeline-aggregations/max-bucket/>最大分组聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/pipeline-aggregations/min-bucket/>最小值分组聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/pipeline-aggregations/sum-bucket/>求和分组聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/pipeline-aggregations/percentiles-bucket/>百分位数分组聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/pipeline-aggregations/moving-function/>移动函数聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/pipeline-aggregations/moving-avg/>移动平均聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/pipeline-aggregations/cumulative-sum/>累积和聚合</a></li><li><a href=/easysearch/v2.0.1/docs/references/aggregation/pipeline-aggregations/stats-bucket/>统计分组聚合</a></li></ul></li></ul></li><li><input type=checkbox id=section-52d7e2e9abce80d3dc7a6a56a0089b77 class=toggle>
+<label for=section-52d7e2e9abce80d3dc7a6a56a0089b77 class="flex justify-between"><a>管理模块</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/management/cluster/>搭建集群</a></li><li><a href=/easysearch/v2.0.1/docs/references/management/catapis/>CAT API</a></li><li><a href=/easysearch/v2.0.1/docs/references/management/logs/>系统日志</a></li><li><a href=/easysearch/v2.0.1/docs/references/management/index-templates/>索引模板</a></li><li><a href=/easysearch/v2.0.1/docs/references/management/reindex-data/>重建数据</a></li><li><a href=/easysearch/v2.0.1/docs/references/management/tasksapis/>任务管理</a></li><li><a href=/easysearch/v2.0.1/docs/references/management/slm_api/>快照生命周期管理</a></li><li><a href=/easysearch/v2.0.1/docs/references/management/ilm_api/>索引生命周期管理</a></li><li><a href=/easysearch/v2.0.1/docs/references/management/ccr_api/>跨集群复制</a></li><li><a href=/easysearch/v2.0.1/docs/references/management/snapshot-restore/>备份还原</a></li><li><a href=/easysearch/v2.0.1/docs/references/management/throttling/>写入限流</a></li><li><a href=/easysearch/v2.0.1/docs/references/management/searchable_snapshot/>可搜索快照</a></li><li><a href=/easysearch/v2.0.1/docs/references/management/time-series-Index-optimization/>使用时间范围合并策略优化时序索引</a></li><li><a href=/easysearch/v2.0.1/docs/references/management/rollup_api/>数据汇总</a></li><li><a href=/easysearch/v2.0.1/docs/references/management/popular-api/>其它常用 API</a></li><li><a href=/easysearch/v2.0.1/docs/references/management/data-streams/>数据流</a></li></ul></li><li><input type=checkbox id=section-b34adbce31bce6650a0099282b315617 class=toggle>
+<label for=section-b34adbce31bce6650a0099282b315617 class="flex justify-between"><a>客户端</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/client/java-client/>快速开始</a></li><li><a href=/easysearch/v2.0.1/docs/references/client/client-api/>API 使用</a></li></ul></li><li><input type=checkbox id=section-a0bb1e309cd3ee77d6be0614fc18cdcc class=toggle>
+<label for=section-a0bb1e309cd3ee77d6be0614fc18cdcc class="flex justify-between"><a>AI 集成</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/references/ai-integration/ingest-text-embedding/>写入数据文本向量化</a></li><li><a href=/easysearch/v2.0.1/docs/references/ai-integration/search-text-embedding/>搜索请求文本向量化</a></li><li><a href=/easysearch/v2.0.1/docs/references/ai-integration/text-embeddings/>文本向量化</a></li><li><a href=/easysearch/v2.0.1/docs/references/ai-integration/hybrid-search/>混合搜索</a></li></ul></li></ul></li><li><input type=checkbox id=section-1adc738e7351809ea378ec7e9730bd1f class=toggle>
+<label for=section-1adc738e7351809ea378ec7e9730bd1f class="flex justify-between"><a>版本历史</a>
+<span>▾</span></label><ul><li><a href=/easysearch/v2.0.1/docs/release-notes/client/>Easysearch-client</a></li><li><a href=/easysearch/v2.0.1/docs/release-notes/easysearch/>Easysearch</a></li></ul></li><li><a href=/easysearch/v2.0.1/docs/resources/>其它资源</a><ul></ul></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/easysearch/v2.0.1/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>多字段查询</strong>
+<label for=toc-control><img src=/easysearch/v2.0.1/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#多字段查询>多字段查询</a><ul><li><a href=#多字段查询类型>多字段查询类型</a></li><li><a href=#best-fields-最佳字段>Best fields 最佳字段</a></li><li><a href=#most-fields-大多数字段>Most fields 大多数字段</a></li><li><a href=#操作符-operator-和-最小值应匹配-minimum_should_match>操作符 Operator 和 最小值应匹配 minimum_should_match</a></li><li><a href=#跨字段>跨字段</a><ul><li><a href=#分词器的作用>分词器的作用</a></li></ul></li><li><a href=#短语>短语</a></li><li><a href=#短语前缀>短语前缀</a></li><li><a href=#布尔前缀>布尔前缀</a></li><li><a href=#参数说明>参数说明</a><ul><li><a href=#tie_breaker-参数>tie_breaker 参数</a></li></ul></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=多字段查询>多字段查询
+<a class=anchor href=#%e5%a4%9a%e5%ad%97%e6%ae%b5%e6%9f%a5%e8%af%a2>#</a></h1><p>多字段查询与匹配查询类似。您可以使用 <code>multi_match</code> 查询来搜索多个字段。</p><p><code>^</code> 会“提升”某些字段的权重。提升是乘数，用于使一个字段中的匹配比其他字段中的匹配更重要。在以下示例中，<code>title</code>字段中匹配 “wind” 的权重比 <code>plot</code> 字段中匹配的权重高 <code>_score</code> 四倍：</p><pre><code>GET _search
+{
+  &quot;query&quot;: {
+    &quot;multi_match&quot;: {
+      &quot;query&quot;: &quot;wind&quot;,
+      &quot;fields&quot;: [&quot;title^4&quot;, &quot;plot&quot;]
+    }
+  }
+}
+
+</code></pre><p>结果是，像<code>《The Wind Rises》</code>和<code>《Gone with the Wind》</code>这样的电影出现在搜索结果的顶部附近，而像<code>《Twister》</code>这样的电影，其剧情简介中可能包含“wind”字，则出现在底部附近。</p><p>您可以在字段名中使用通配符。例如，以下查询将搜索 <code>speaker</code> 字段以及所有以 <code>play_</code> 开头的字段，例如 <code>play_name</code> 或 <code>play_title</code> ：</p><pre><code>GET _search
+{
+  &quot;query&quot;: {
+    &quot;multi_match&quot;: {
+      &quot;query&quot;: &quot;hamlet&quot;,
+      &quot;fields&quot;: [&quot;speaker&quot;, &quot;play_*&quot;]
+    }
+  }
+}
+</code></pre><p>如果您不提供 <code>fields</code> 参数， <code>multi_match</code> 查询将搜索 <code>index.query. Default_field</code> 设置中指定的字段，该设置默认为 <code>*</code> 。默认行为是提取映射中所有适用于词级查询的字段，过滤元数据字段，并将所有提取的字段组合起来构建查询。</p><blockquote><p>查询中的子句最大数量由 indices.query.bool.max_clause_count 设置定义，默认为 1,024。</p></blockquote><h2 id=多字段查询类型>多字段查询类型
+<a class=anchor href=#%e5%a4%9a%e5%ad%97%e6%ae%b5%e6%9f%a5%e8%af%a2%e7%b1%bb%e5%9e%8b>#</a></h2><p>Easysearch 支持以下多字段查询类型，它们在内部执行查询的方式上有所不同：</p><ul><li><code>best_fields</code> （默认）：返回匹配任何字段的文档。使用最佳匹配字段的 <code>_score</code> 。</li><li><code>most_fields</code> ：返回匹配任何字段的文档。使用每个匹配字段的组合得分。</li><li><code>cross_fields</code> : 将所有字段视为一个字段。处理具有相同 <code>analyzer</code> 的字段，并在任何字段中匹配词语。</li><li><code>phrase</code> : 在每个字段上运行 <code>match_phrase</code> 查询。使用最佳匹配字段的 <code>_score</code> 。</li><li><code>phrase_prefix</code> : 在每个字段上运行 <code>match_phrase_prefix</code> 查询。使用最佳匹配字段的 <code>_score</code> 。</li><li><code>bool_prefix</code> : 在每个字段上运行 <code>match_bool_prefix</code> 查询。使用每个匹配字段的组合得分。</li></ul><h2 id=best-fields-最佳字段>Best fields 最佳字段
+<a class=anchor href=#best-fields-%e6%9c%80%e4%bd%b3%e5%ad%97%e6%ae%b5>#</a></h2><p>如果你在搜索两个指定概念的字词，你希望包含这两个字词相邻的结果得分更高。</p><p>例如，创建一个包含以下科学文章的索引：</p><pre><code>PUT /articles/_doc/1
+{
+  &quot;title&quot;: &quot;Aurora borealis&quot;,
+  &quot;description&quot;: &quot;Northern lights, or aurora borealis, explained&quot;
+}
+
+PUT /articles/_doc/2
+{
+  &quot;title&quot;: &quot;Sun deprivation in the Northern countries&quot;,
+  &quot;description&quot;: &quot;Using fluorescent lights for therapy&quot;
+}
+</code></pre><p>你可以搜索标题或描述中包含 <code>northern lights</code> 的文章：</p><pre><code>GET articles/_search
+{
+  &quot;query&quot;: {
+    &quot;multi_match&quot; : {
+      &quot;query&quot;: &quot;northern lights&quot;,
+      &quot;type&quot;: &quot;best_fields&quot;,
+      &quot;fields&quot;: [ &quot;title&quot;, &quot;description&quot; ],
+      &quot;tie_breaker&quot;: 0.3
+    }
+  }
+}
+</code></pre><p>前面的查询被执行为以下 <code>dis_max</code> 查询，每个字段都有一个 <code>match</code> 查询：</p><pre><code>GET /articles/_search
+{
+  &quot;query&quot;: {
+    &quot;dis_max&quot;: {
+      &quot;queries&quot;: [
+        { &quot;match&quot;: { &quot;title&quot;: &quot;northern lights&quot; }},
+        { &quot;match&quot;: { &quot;description&quot;: &quot;northern lights&quot; }}
+      ],
+      &quot;tie_breaker&quot;: 0.3
+    }
+  }
+}
+</code></pre><p>结果包含这两个文档，但文档 1 的得分更高，因为这两个词都在 <code>description</code> 字段中：</p><pre><code>{
+  &quot;took&quot;: 30,
+  &quot;timed_out&quot;: false,
+  &quot;_shards&quot;: {
+    &quot;total&quot;: 1,
+    &quot;successful&quot;: 1,
+    &quot;skipped&quot;: 0,
+    &quot;failed&quot;: 0
+  },
+  &quot;hits&quot;: {
+    &quot;total&quot;: {
+      &quot;value&quot;: 2,
+      &quot;relation&quot;: &quot;eq&quot;
+    },
+    &quot;max_score&quot;: 0.84407747,
+    &quot;hits&quot;: [
+      {
+        &quot;_index&quot;: &quot;articles&quot;,
+        &quot;_id&quot;: &quot;1&quot;,
+        &quot;_score&quot;: 0.84407747,
+        &quot;_source&quot;: {
+          &quot;title&quot;: &quot;Aurora borealis&quot;,
+          &quot;description&quot;: &quot;Northern lights, or aurora borealis, explained&quot;
+        }
+      },
+      {
+        &quot;_index&quot;: &quot;articles&quot;,
+        &quot;_id&quot;: &quot;2&quot;,
+        &quot;_score&quot;: 0.6322521,
+        &quot;_source&quot;: {
+          &quot;title&quot;: &quot;Sun deprivation in the Northern countries&quot;,
+          &quot;description&quot;: &quot;Using fluorescent lights for therapy&quot;
+        }
+      }
+    ]
+  }
+}
+
+</code></pre><p><code>best_fields</code> 查询使用最佳匹配字段的分数。如果你指定了 <code>tie_breaker</code> ，分数将使用以下算法计算：</p><p>取最佳匹配字段的得分，并为所有其他匹配字段加上（ <code>tie_breaker * _score</code> ）。</p><h2 id=most-fields-大多数字段>Most fields 大多数字段
+<a class=anchor href=#most-fields-%e5%a4%a7%e5%a4%9a%e6%95%b0%e5%ad%97%e6%ae%b5>#</a></h2><p>使用 <code>most_fields</code> 查询针对包含相同文本但分析方式不同的多个字段。例如，原始字段可能包含使用 <code>standard</code> 分词器分析的文本，而另一个字段可能包含使用执行词干提取的 <code>english</code> 分词器分析的相同文本：</p><pre><code>PUT /articles
+{
+  &quot;mappings&quot;: {
+    &quot;properties&quot;: {
+      &quot;title&quot;: {
+        &quot;type&quot;: &quot;text&quot;,
+        &quot;fields&quot;: {
+          &quot;english&quot;: {
+            &quot;type&quot;: &quot;text&quot;,
+            &quot;analyzer&quot;: &quot;english&quot;
+          }
+        }
+      }
+    }
+  }
+}
+
+</code></pre><p>考虑以下两个索引在 <code>articles</code> 中的文档：</p><pre><code>PUT /articles/_doc/1
+{
+  &quot;title&quot;: &quot;Buttered toasts&quot;
+}
+
+PUT /articles/_doc/2
+{
+  &quot;title&quot;: &quot;Buttering a toast&quot;
+}
+
+</code></pre><p><code>standard</code> 分词器将标题 <code>Buttered toast</code> 分析为 [ <code>buttered</code> , <code>toasts</code> ]，并将标题 <code>Buttering a toast</code> 分析为 [ <code>buttering</code> , <code>a</code> , <code>toast</code> ]。另一方面，由于词干提取， <code>english</code> 分词器对两个标题都产生相同的词列表 [ <code>butter</code> , <code>toast</code> ]。</p><p>您可以使用 <code>most_fields</code> 查询以返回尽可能多的文档：</p><pre><code>GET /articles/_search
+{
+  &quot;query&quot;: {
+    &quot;multi_match&quot;: {
+      &quot;query&quot;: &quot;buttered toast&quot;,
+      &quot;fields&quot;: [
+        &quot;title&quot;,
+        &quot;title.english&quot;
+      ],
+      &quot;type&quot;: &quot;most_fields&quot;
+    }
+  }
+}
+</code></pre><p>前面的查询作为以下布尔查询执行：</p><pre><code>GET articles/_search
+{
+  &quot;query&quot;: {
+    &quot;bool&quot;: {
+      &quot;should&quot;: [
+        { &quot;match&quot;: { &quot;title&quot;: &quot;buttered toasts&quot; }},
+        { &quot;match&quot;: { &quot;title.english&quot;: &quot;buttered toasts&quot; }}
+      ]
+    }
+  }
+}
+</code></pre><p>要计算相关性分数，文档中所有 <code>match</code> 子句的分数会被加在一起，然后结果再除以 <code>match</code> 子句的数量。</p><p>包含 <code>title.english</code> 字段会检索到与词干化标记匹配的第二份文档：</p><pre><code>{
+  &quot;took&quot;: 9,
+  &quot;timed_out&quot;: false,
+  &quot;_shards&quot;: {
+    &quot;total&quot;: 1,
+    &quot;successful&quot;: 1,
+    &quot;skipped&quot;: 0,
+    &quot;failed&quot;: 0
+  },
+  &quot;hits&quot;: {
+    &quot;total&quot;: {
+      &quot;value&quot;: 2,
+      &quot;relation&quot;: &quot;eq&quot;
+    },
+    &quot;max_score&quot;: 1.4418206,
+    &quot;hits&quot;: [
+      {
+        &quot;_index&quot;: &quot;articles&quot;,
+        &quot;_id&quot;: &quot;1&quot;,
+        &quot;_score&quot;: 1.4418206,
+        &quot;_source&quot;: {
+          &quot;title&quot;: &quot;Buttered toasts&quot;
+        }
+      },
+      {
+        &quot;_index&quot;: &quot;articles&quot;,
+        &quot;_id&quot;: &quot;2&quot;,
+        &quot;_score&quot;: 0.09304003,
+        &quot;_source&quot;: {
+          &quot;title&quot;: &quot;Buttering a toast&quot;
+        }
+      }
+    ]
+  }
+}
+
+</code></pre><p>由于第一个文档的 <code>title</code> 和 <code>title.english</code> 字段都匹配，因此它的相关性得分更高。</p><h2 id=操作符-operator-和-最小值应匹配-minimum_should_match>操作符 Operator 和 最小值应匹配 minimum_should_match
+<a class=anchor href=#%e6%93%8d%e4%bd%9c%e7%ac%a6-operator-%e5%92%8c-%e6%9c%80%e5%b0%8f%e5%80%bc%e5%ba%94%e5%8c%b9%e9%85%8d-minimum_should_match>#</a></h2><p><code>best_fields</code> 和 <code>most_fields</code> 查询基于字段生成匹配查询（每个字段一个）。因此， <code>minimum_should_match</code> 和 <code>operator</code> 参数应用于每个字段，这通常不是期望的行为。</p><p>例如，创建一个 <code>customers</code> 索引，其中包含以下文档：</p><pre><code>PUT customers/_doc/1
+{
+  &quot;first_name&quot;: &quot;John&quot;,
+  &quot;last_name&quot;: &quot;Doe&quot;
+}
+
+PUT customers/_doc/2
+{
+  &quot;first_name&quot;: &quot;Jane&quot;,
+  &quot;last_name&quot;: &quot;Doe&quot;
+}
+</code></pre><p>如果你在 <code>customers</code> 索引中搜索 <code>John Doe</code> ，你可能会构建以下查询：</p><pre><code>GET customers/_validate/query?explain
+{
+  &quot;query&quot;: {
+    &quot;multi_match&quot; : {
+      &quot;query&quot;: &quot;John Doe&quot;,
+      &quot;type&quot;: &quot;best_fields&quot;,
+      &quot;fields&quot;: [ &quot;first_name&quot;, &quot;last_name&quot; ],
+      &quot;operator&quot;: &quot;and&quot;
+    }
+  }
+}
+
+</code></pre><p><code>and</code> 运算符在此查询中的意图是找到匹配 <code>John</code> 和 <code>Doe</code> 的文档。然而，查询没有返回任何结果。您可以通过运行验证 <code>API</code> 来学习查询是如何执行的：</p><pre><code>GET customers/_validate/query?explain
+{
+  &quot;query&quot;: {
+    &quot;multi_match&quot; : {
+      &quot;query&quot;:      &quot;John Doe&quot;,
+      &quot;type&quot;:       &quot;best_fields&quot;,
+      &quot;fields&quot;:     [ &quot;first_name&quot;, &quot;last_name&quot; ],
+      &quot;operator&quot;:   &quot;and&quot;
+    }
+  }
+}
+</code></pre><p>从返回内容中可以看出，查询试图将 <code>John</code> 和 <code>Doe</code> 匹配到 <code>first_name</code> 或 <code>last_name</code> 字段：</p><pre><code>{
+  &quot;_shards&quot;: {
+    &quot;total&quot;: 1,
+    &quot;successful&quot;: 1,
+    &quot;failed&quot;: 0
+  },
+  &quot;valid&quot;: true,
+  &quot;explanations&quot;: [
+    {
+      &quot;index&quot;: &quot;customers&quot;,
+      &quot;valid&quot;: true,
+      &quot;explanation&quot;: &quot;((+first_name:john +first_name:doe) | (+last_name:john +last_name:doe))&quot;
+    }
+  ]
+}
+</code></pre><p>因为两个字段都不包含这两个词，所以没有返回结果。</p><p>跨字段搜索的更好替代方案是使用 <code>cross_fields</code> 查询。与以字段为中心的 <code>best_fields</code> 和 <code>most_fields</code> 查询不同， <code>cross_fields</code> 查询是以词为中心的。</p><h2 id=跨字段>跨字段
+<a class=anchor href=#%e8%b7%a8%e5%ad%97%e6%ae%b5>#</a></h2><p>使用 <code>cross_fields</code> 查询来跨多个字段搜索数据。例如，如果索引包含客户数据，客户的名和姓位于不同的字段中。但是，当你搜索 <code>John Doe</code> 时，你希望获得文档，其中 <code>John</code> 在 <code>first_name</code> 字段中， <code>Doe</code> 在 <code>last_name</code> 字段中。</p><p><code>most_fields</code> 查询在这种情况下无法工作，因为存在以下问题：</p><ul><li><code>operator</code> 和 <code>minimum_should_match</code> 参数是按字段应用，而不是按词应用。</li><li><code>first_name</code> 和 <code>last_name</code> 字段的词频可能导致意外结果。例如，如果某人的<code>first_name</code>恰好是 <code>Doe</code> ，包含这个名字的文档会被认为是一个更好的匹配，因为这个名字不会出现在其他任何文档中。</li></ul><p><code>cross_fields</code> 查询会将查询字符串分析为单独的词，然后在任何字段中搜索每个词，就像它们是一个字段一样。</p><p>以下是 <code>cross_fields</code> 查询 <code>John Doe</code> 的内容：</p><pre><code>GET /customers/_search
+{
+  &quot;query&quot;: {
+    &quot;multi_match&quot; : {
+      &quot;query&quot;: &quot;John Doe&quot;,
+      &quot;type&quot;: &quot;cross_fields&quot;,
+      &quot;fields&quot;: [ &quot;first_name&quot;, &quot;last_name&quot; ],
+      &quot;operator&quot;: &quot;and&quot;
+    }
+  }
+}
+
+</code></pre><p>返回包含唯一一份文档，其中同时包含 <code>John</code> 和 <code>Doe</code> ：</p><pre><code>{
+  &quot;took&quot;: 19,
+  &quot;timed_out&quot;: false,
+  &quot;_shards&quot;: {
+    &quot;total&quot;: 1,
+    &quot;successful&quot;: 1,
+    &quot;skipped&quot;: 0,
+    &quot;failed&quot;: 0
+  },
+  &quot;hits&quot;: {
+    &quot;total&quot;: {
+      &quot;value&quot;: 1,
+      &quot;relation&quot;: &quot;eq&quot;
+    },
+    &quot;max_score&quot;: 0.8754687,
+    &quot;hits&quot;: [
+      {
+        &quot;_index&quot;: &quot;customers&quot;,
+        &quot;_id&quot;: &quot;1&quot;,
+        &quot;_score&quot;: 0.8754687,
+        &quot;_source&quot;: {
+          &quot;first_name&quot;: &quot;John&quot;,
+          &quot;last_name&quot;: &quot;Doe&quot;
+        }
+      }
+    ]
+  }
+}
+
+</code></pre><p>您可以使用验证 API 操作来了解前面的查询是如何执行的：</p><pre><code>GET /customers/_validate/query?explain
+{
+  &quot;query&quot;: {
+    &quot;multi_match&quot; : {
+      &quot;query&quot;: &quot;John Doe&quot;,
+      &quot;type&quot;: &quot;cross_fields&quot;,
+      &quot;fields&quot;: [ &quot;first_name&quot;, &quot;last_name&quot; ],
+      &quot;operator&quot;: &quot;and&quot;
+    }
+  }
+}
+</code></pre><p>从返回内容中可以看出，查询是在至少一个字段中搜索所有词项：</p><pre><code>{
+  &quot;_shards&quot;: {
+    &quot;total&quot;: 1,
+    &quot;successful&quot;: 1,
+    &quot;failed&quot;: 0
+  },
+  &quot;valid&quot;: true,
+  &quot;explanations&quot;: [
+    {
+      &quot;index&quot;: &quot;customers&quot;,
+      &quot;valid&quot;: true,
+      &quot;explanation&quot;: &quot;+blended(terms:[last_name:john, first_name:john]) +blended(terms:[last_name:doe, first_name:doe])&quot;
+    }
+  ]
+}
+</code></pre><p>因此，通过混合所有字段的词频，解决了因词频差异而造成的问题，从而纠正了这些差异。</p><blockquote><p>cross_fields 查询通常只在字符串字段长度为 1 的情况下有用。在其他情况下，由于提升值、词频和长度归一化对分数的贡献方式，分数不会产生有意义的词统计信息混合。</p></blockquote><blockquote><p>fuzziness 参数不适用于 cross_fields 查询。</p></blockquote><h3 id=分词器的作用>分词器的作用
+<a class=anchor href=#%e5%88%86%e8%af%8d%e5%99%a8%e7%9a%84%e4%bd%9c%e7%94%a8>#</a></h3><p><code>cross_fields</code> 查询仅能在具有相同分词器的字段上作为基于词条的查询工作。具有相同分词器的字段会被分组，这些分组会通过布尔查询组合在一起。</p><p>例如，考虑一个索引，其中 <code>first_name</code> 和 <code>last_name</code> 字段使用默认的 <code>standard</code> 分词器进行分析，而它们的 <code>.edge</code> 子字段使用边缘 n 元分词器进行分析：</p><pre><code>PUT customers
+{
+  &quot;settings&quot;: {
+    &quot;analysis&quot;: {
+      &quot;analyzer&quot;: {
+        &quot;my_analyzer&quot;: {
+          &quot;tokenizer&quot;: &quot;my_tokenizer&quot;
+        }
+      },
+      &quot;tokenizer&quot;: {
+        &quot;my_tokenizer&quot;: {
+          &quot;type&quot;: &quot;edge_ngram&quot;,
+          &quot;min_gram&quot;: 2,
+          &quot;max_gram&quot;: 10
+        }
+      }
+    }
+  },
+  &quot;mappings&quot;: {
+    &quot;properties&quot;: {
+      &quot;first_name&quot;: {
+        &quot;type&quot;: &quot;text&quot;,
+        &quot;fields&quot;: {
+          &quot;edge&quot;: {
+            &quot;type&quot;: &quot;text&quot;,
+            &quot;analyzer&quot;: &quot;my_analyzer&quot;
+          }
+        }
+      },
+      &quot;last_name&quot;: {
+        &quot;type&quot;: &quot;text&quot;,
+        &quot;fields&quot;: {
+          &quot;edge&quot;: {
+            &quot;type&quot;: &quot;text&quot;,
+            &quot;analyzer&quot;: &quot;my_analyzer&quot;
+          }
+        }
+      }
+    }
+  }
+}
+
+</code></pre><p>你在 <code>customers</code> 索引中索引了一个文档：</p><pre><code>PUT /customers/_doc/1
+{
+  &quot;first&quot;: &quot;John&quot;,
+  &quot;last&quot;: &quot;Doe&quot;
+}
+
+</code></pre><p>你可以使用 <code>cross_fields</code> 查询来跨字段搜索 <code>John Doe</code> :</p><pre><code>GET /customers/_search
+{
+  &quot;query&quot;: {
+    &quot;multi_match&quot; : {
+      &quot;query&quot;: &quot;John&quot;,
+      &quot;type&quot;: &quot;cross_fields&quot;,
+      &quot;fields&quot;: [
+        &quot;first_name&quot;, &quot;first_name.edge&quot;,
+        &quot;last_name&quot;,  &quot;last_name.edge&quot;
+      ]
+    }
+  }
+}
+
+</code></pre><p>要查看查询的执行情况，你可以运行验证 API：</p><pre><code>GET /customers/_validate/query?explain
+{
+  &quot;query&quot;: {
+    &quot;multi_match&quot; : {
+      &quot;query&quot;: &quot;John&quot;,
+      &quot;type&quot;: &quot;cross_fields&quot;,
+      &quot;fields&quot;: [
+        &quot;first_name&quot;, &quot;first_name.edge&quot;,
+        &quot;last_name&quot;,  &quot;last_name.edge&quot;
+      ]
+    }
+  }
+}
+
+</code></pre><p>返回显示 <code>last_name</code> 和 <code>first_name</code> 字段被组合在一起并视为一个字段。类似地， <code>last_name.edge</code> 和 <code>first_name.edge</code> 字段被组合在一起并视为一个字段：</p><pre><code>{
+  &quot;_shards&quot;: {
+    &quot;total&quot;: 1,
+    &quot;successful&quot;: 1,
+    &quot;failed&quot;: 0
+  },
+  &quot;valid&quot;: true,
+  &quot;explanations&quot;: [
+    {
+      &quot;index&quot;: &quot;customers&quot;,
+      &quot;valid&quot;: true,
+      &quot;explanation&quot;: &quot;(blended(terms:[last_name:john, first_name:john]) | (blended(terms:[last_name.edge:Jo, first_name.edge:Jo]) blended(terms:[last_name.edge:Joh, first_name.edge:Joh]) blended(terms:[last_name.edge:John, first_name.edge:John])))&quot;
+    }
+  ]
+}
+</code></pre><p>使用 <code>operator</code> 或 <code>minimum_should_match</code> 参数与多个字段组（如前文所述）可能会导致前一节中描述的问题。为避免这种情况，你可以将之前的查询重写为两个 <code>cross_fields</code> 子查询，通过布尔查询将它们组合起来，并将 <code>minimum_should_match</code> 应用于其中一个子查询：</p><pre><code>GET /customers/_search
+{
+  &quot;query&quot;: {
+    &quot;bool&quot;: {
+      &quot;should&quot;: [
+        {
+          &quot;multi_match&quot;: {
+            &quot;query&quot;: &quot;John Doe&quot;,
+            &quot;type&quot;: &quot;cross_fields&quot;,
+            &quot;fields&quot;: [
+              &quot;first_name&quot;,
+              &quot;last_name&quot;
+            ],
+            &quot;minimum_should_match&quot;: &quot;1&quot;
+          }
+        },
+        {
+          &quot;multi_match&quot;: {
+            &quot;query&quot;: &quot;John Doe&quot;,
+            &quot;type&quot;: &quot;cross_fields&quot;,
+            &quot;fields&quot;: [
+              &quot;first_name.edge&quot;,
+              &quot;last_name.edge&quot;
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+
+</code></pre><p>为所有字段创建一个分组，请在查询中指定一个分词器：</p><pre><code>GET customers/_search
+{
+  &quot;query&quot;: {
+   &quot;multi_match&quot; : {
+      &quot;query&quot;: &quot;John Doe&quot;,
+      &quot;type&quot;: &quot;cross_fields&quot;,
+      &quot;analyzer&quot;: &quot;standard&quot;,
+      &quot;fields&quot;: [ &quot;first_name&quot;, &quot;last_name&quot;, &quot;*.edge&quot; ]
+    }
+  }
+}
+
+</code></pre><p>在先前查询上运行 Validate API 显示了查询是如何执行的：</p><pre><code>{
+  &quot;_shards&quot;: {
+    &quot;total&quot;: 1,
+    &quot;successful&quot;: 1,
+    &quot;failed&quot;: 0
+  },
+  &quot;valid&quot;: true,
+  &quot;explanations&quot;: [
+    {
+      &quot;index&quot;: &quot;customers&quot;,
+      &quot;valid&quot;: true,
+      &quot;explanation&quot;: &quot;blended(terms:[last_name.edge:john, last_name:john, first_name:john, first_name.edge:john]) blended(terms:[last_name.edge:doe, last_name:doe, first_name:doe, first_name.edge:doe])&quot;
+    }
+  ]
+}
+</code></pre><h2 id=短语>短语
+<a class=anchor href=#%e7%9f%ad%e8%af%ad>#</a></h2><p><code>phrase</code> 查询的行为与 <code>best_fields</code> 查询类似，但使用 <code>match_phrase</code> 查询而不是 <code>match</code> 查询。</p><p>以下是在 <code>best_fields</code> 部分描述的索引中的 <code>phrase</code> 查询示例：</p><pre><code>GET articles/_search
+{
+  &quot;query&quot;: {
+    &quot;multi_match&quot; : {
+      &quot;query&quot;: &quot;northern lights&quot;,
+      &quot;type&quot;: &quot;phrase&quot;,
+      &quot;fields&quot;: [ &quot;title&quot;, &quot;description&quot; ]
+    }
+  }
+}
+</code></pre><p>前面的查询被执行为以下 <code>dis_max</code> 查询，每个字段都有一个 <code>match_phrase</code> 查询：</p><pre><code>GET articles/_search
+{
+  &quot;query&quot;: {
+    &quot;dis_max&quot;: {
+      &quot;queries&quot;: [
+        { &quot;match_phrase&quot;: { &quot;title&quot;: &quot;northern lights&quot; }},
+        { &quot;match_phrase&quot;: { &quot;description&quot;: &quot;northern lights&quot; }}
+      ]
+    }
+  }
+}
+</code></pre><p>因为默认情况下， <code>phrase</code> 查询仅当词项按相同顺序出现时才匹配文本，结果中仅返回文档 1</p><pre><code>{
+  &quot;took&quot;: 3,
+  &quot;timed_out&quot;: false,
+  &quot;_shards&quot;: {
+    &quot;total&quot;: 1,
+    &quot;successful&quot;: 1,
+    &quot;skipped&quot;: 0,
+    &quot;failed&quot;: 0
+  },
+  &quot;hits&quot;: {
+    &quot;total&quot;: {
+      &quot;value&quot;: 1,
+      &quot;relation&quot;: &quot;eq&quot;
+    },
+    &quot;max_score&quot;: 0.84407747,
+    &quot;hits&quot;: [
+      {
+        &quot;_index&quot;: &quot;articles&quot;,
+        &quot;_id&quot;: &quot;1&quot;,
+        &quot;_score&quot;: 0.84407747,
+        &quot;_source&quot;: {
+          &quot;title&quot;: &quot;Aurora borealis&quot;,
+          &quot;description&quot;: &quot;Northern lights, or aurora borealis, explained&quot;
+        }
+      }
+    ]
+  }
+}
+</code></pre><p>您可以使用 <code>slop</code> 参数来允许查询短语中的词之间包含其他词。例如，以下查询在 <code>flourescent</code> 和 <code>therapy</code> 之间最多包含两个词时接受文本匹配：</p><pre><code>GET articles/_search
+{
+  &quot;query&quot;: {
+    &quot;multi_match&quot; : {
+      &quot;query&quot;: &quot;fluorescent therapy&quot;,
+      &quot;type&quot;: &quot;phrase&quot;,
+      &quot;fields&quot;: [ &quot;title&quot;, &quot;description&quot; ],
+      &quot;slop&quot;: 2
+    }
+  }
+}
+
+</code></pre><p>返回包含文档 2</p><pre><code>{
+  &quot;took&quot;: 3,
+  &quot;timed_out&quot;: false,
+  &quot;_shards&quot;: {
+    &quot;total&quot;: 1,
+    &quot;successful&quot;: 1,
+    &quot;skipped&quot;: 0,
+    &quot;failed&quot;: 0
+  },
+  &quot;hits&quot;: {
+    &quot;total&quot;: {
+      &quot;value&quot;: 1,
+      &quot;relation&quot;: &quot;eq&quot;
+    },
+    &quot;max_score&quot;: 0.7003825,
+    &quot;hits&quot;: [
+      {
+        &quot;_index&quot;: &quot;articles&quot;,
+        &quot;_id&quot;: &quot;2&quot;,
+        &quot;_score&quot;: 0.7003825,
+        &quot;_source&quot;: {
+          &quot;title&quot;: &quot;Sun deprivation in the Northern countries&quot;,
+          &quot;description&quot;: &quot;Using fluorescent lights for therapy&quot;
+        }
+      }
+    ]
+  }
+}
+</code></pre><p>对于 <code>slop</code> 值小于 2 的情况，不会返回任何文档。</p><blockquote><p>fuzziness 参数不适用于 phrase 查询。</p></blockquote><h2 id=短语前缀>短语前缀
+<a class=anchor href=#%e7%9f%ad%e8%af%ad%e5%89%8d%e7%bc%80>#</a></h2><p><code>phrase_prefix</code> 查询的行为与 <code>phrase</code> 查询类似，但使用 <code>match_phrase_prefix</code> 查询而不是 <code>match_phrase</code> 查询。</p><p>以下是在 <code>best_fields</code> 部分描述的索引中的 <code>phrase_prefix</code> 查询示例：</p><pre><code>GET articles/_search
+{
+  &quot;query&quot;: {
+    &quot;multi_match&quot; : {
+      &quot;query&quot;: &quot;northern light&quot;,
+      &quot;type&quot;: &quot;phrase_prefix&quot;,
+      &quot;fields&quot;: [ &quot;title&quot;, &quot;description&quot; ]
+    }
+  }
+}
+</code></pre><p>前面的查询被执行为以下 <code>dis_max</code> 查询，每个字段都有一个 <code>match_phrase_prefix</code> 查询：</p><pre><code>GET articles/_search
+{
+  &quot;query&quot;: {
+    &quot;dis_max&quot;: {
+      &quot;queries&quot;: [
+        { &quot;match_phrase_prefix&quot;: { &quot;title&quot;: &quot;northern light&quot; }},
+        { &quot;match_phrase_prefix&quot;: { &quot;description&quot;: &quot;northern light&quot; }}
+      ]
+    }
+  }
+}
+</code></pre><p>您可以使用 <code>slop</code> 参数来允许在查询短语中的单词之间插入其他单词。</p><blockquote><p>fuzziness 参数不适用于 phrase_prefix 查询。</p></blockquote><h2 id=布尔前缀>布尔前缀
+<a class=anchor href=#%e5%b8%83%e5%b0%94%e5%89%8d%e7%bc%80>#</a></h2><p><code>bool_prefix</code> 查询与 <code>most_fields</code> 查询类似地评分文档，但使用 <code>match_bool_prefix</code> 查询而不是 <code>match</code> 查询。</p><p>以下是在 <code>best_fields</code> 部分描述的索引中的 <code>bool_prefix</code> 查询示例：</p><pre><code>GET articles/_search
+{
+  &quot;query&quot;: {
+    &quot;multi_match&quot; : {
+      &quot;query&quot;: &quot;li northern&quot;,
+      &quot;type&quot;: &quot;bool_prefix&quot;,
+      &quot;fields&quot;: [ &quot;title&quot;, &quot;description&quot; ]
+    }
+  }
+}
+
+</code></pre><p>前面的查询被执行为以下 <code>dis_max</code> 查询，每个字段都有一个 <code>match_bool_prefix</code> 查询：</p><pre><code>GET articles/_search
+{
+  &quot;query&quot;: {
+    &quot;dis_max&quot;: {
+      &quot;queries&quot;: [
+        { &quot;match_bool_prefix&quot;: { &quot;title&quot;: &quot;li northern&quot; }},
+        { &quot;match_bool_prefix&quot;: { &quot;description&quot;: &quot;li northern&quot; }}
+      ]
+    }
+  }
+}
+</code></pre><blockquote><p>用于构建 terms 查询的 fuzziness 、 prefix_length 、 max_expansions 、 fuzzy_rewrite 和 fuzzy_transpositions 参数是受支持的，但它们不会对由最终 term 构建的前缀查询产生影响。</p></blockquote><h2 id=参数说明>参数说明
+<a class=anchor href=#%e5%8f%82%e6%95%b0%e8%af%b4%e6%98%8e>#</a></h2><p>该查询接受以下参数。除 <code>query</code> 外的所有参数都是可选的。</p><table><thead><tr><th>参数</th><th>数据类型</th><th>描述</th></tr></thead><tbody><tr><td><code>query</code></td><td>String</td><td>用于搜索的查询字符串。必填。</td></tr><tr><td><code>auto_generate_synonyms_phrase_query</code></td><td>Boolean</td><td>指定是否自动为多词同义词创建匹配短语查询。例如，如果你将 ba,batting average 指定为同义词并搜索 ba ，Easysearch 会搜索 ba OR &ldquo;batting average&rdquo; （如果此选项为 true ）或 ba OR (batting AND average) （如果此选项为 false ）。默认值为 true 。</td></tr><tr><td><code>analyzer</code></td><td>String</td><td>用于对查询字符串文本进行分词的分词器。默认值为为 default_field 指定的索引时分词器。如果未为 default_field 指定分词器，则 analyzer 为索引的默认分词器。有关 index.query.default_field 的更多信息，请参阅动态索引级索引设置。</td></tr><tr><td><code>boost</code></td><td>Float</td><td>通过给定的乘数提升子句的权重。适用于在复合查询中对子句进行加权。[0, 1) 范围内的值会降低相关性，而大于 1 的值会增加相关性。默认值为 1 。</td></tr><tr><td><code>fields</code></td><td>字符串数组</td><td>要搜索的字段列表。如果你不提供 fields 参数， multi_match 查询会在 index.query.default_field 设置中指定的字段进行搜索，而 index.query.default_field 的默认值为 * 。</td></tr><tr><td><code>fuzziness</code></td><td>String</td><td>在确定一个词是否匹配一个值时，将一个词改为另一个词所需的字符编辑次数（插入、删除、替换）。例如， wined 和 wind 之间的距离是 1。有效值为非负整数或 AUTO 。默认值 AUTO 根据每个词的长度选择值，对于大多数用例是一个不错的选择。不支持 phrase 、 phrase_prefix 和 cross_fields 查询。</td></tr><tr><td><code>fuzzy_rewrite</code></td><td>String</td><td>确定 Easysearch 如何重写查询。有效值为 constant<em>score 、 scoring_boolean 、 constant_score_boolean 、 top_terms_N 、 top_terms_boost_N 和 top_terms_blended_freqs_N 。如果 fuzziness 参数不是 0 ，查询默认使用 fuzzy_rewrite 方法的 top_terms_blended_freqs</em>${max_expansions} 。默认值为 constant_score 。</td></tr><tr><td><code>fuzzy_transpositions</code></td><td>Boolean</td><td>将 fuzzy_transpositions 设置为 true （默认）会在 fuzziness 选项的插入、删除和替换操作中添加相邻字符的交换。例如，如果 fuzzy_transpositions 为真（交换“n”和“i”），则 wind 和 wnid 之间的距离为 1；如果为假（删除“n”，插入“n”），则距离为 2。如果 fuzzy_transpositions 为假， rewind 和 wnid 与 wind 的距离相同（2），尽管从更以人为中心的观点来看， wnid 是一个明显的拼写错误。对于大多数用例，默认值是一个不错的选择。</td></tr><tr><td><code>lenient</code></td><td>Boolean</td><td>将 lenient 设置为 true 会忽略查询与文档字段之间的数据类型不匹配。例如， &ldquo;8.2&rdquo; 的查询字符串可以匹配类型为 float 的字段。默认值为 false 。</td></tr><tr><td><code>max_expansions</code></td><td>正整数</td><td>查询可以扩展到的最大词数。模糊查询会扩展到与指定距离（ fuzziness ）内的匹配词。然后 Easysearch 尝试匹配这些词。默认值为 50 。</td></tr><tr><td><code>minimum_should_match</code></td><td>正整数或负整数、正百分比或负百分比、组合</td><td>如果查询字符串包含多个搜索词并且你使用 or 运算符，文档被考虑为匹配所需的匹配词数。例如，如果 minimum_should_match 为 2， wind often rising 不匹配 The Wind Rises. 如果 minimum_should_match 为 1 ，则匹配。详情请参阅 Minimum should match。</td></tr><tr><td><code>operator</code></td><td>String</td><td>如果查询字符串包含多个搜索词，文档是否需要所有词都匹配（ AND ）或只需一个词匹配（ OR ）才被视为匹配。有效值为：- OR : 字符串 to be 被解释为 to OR be ;- AND : 字符串 to be 被解释为 to AND be.默认为 OR 。</td></tr><tr><td><code>prefix_length</code></td><td>非负整数</td><td>不考虑模糊性的前导字符数量。默认为 0 。</td></tr><tr><td><code>slop</code></td><td>0 （默认）或一个正整数</td><td>控制查询中单词可以错乱的程度，仍然被视为匹配的程度。来自 Lucene 文档的说明：“查询短语中允许的其他单词数量。例如，要交换两个单词的顺序需要两次移动（第一次移动将单词叠放在一起），因此为了允许短语的重排序，slop 值必须至少为 2。值为零要求完全匹配。” 支持 phrase 和 phrase_prefix 查询类型。</td></tr><tr><td><code>tie_breaker</code></td><td>Float</td><td>一个介于 0 和 1.0 之间的因子，用于给匹配多个查询子句的文档赋予更高的权重。更多信息，请参阅<code>tie_breaker</code>参数。</td></tr><tr><td><code>type</code></td><td>String</td><td>多匹配查询类型。有效值为<code>best_fields</code>、<code>most_fields</code>、<code>cross_fields</code>、<code>phrase</code>、<code>phrase_prefix</code>、<code>bool_prefix</code>。默认值为<code>best_fields</code>。</td></tr><tr><td><code>zero_terms_query</code></td><td>String</td><td>在某些情况下，分词器会从查询字符串中删除所有词项。例如， stop 分词器会从字符串 an but this 中删除所有词项。在这种情况下， zero_terms_query 指定是否匹配不匹配任何文档（ none ）或所有文档（ all ）。有效值为 none 和 all 。默认为 none 。</td></tr></tbody></table><blockquote><p>fuzziness 参数不适用于 phrase 、 phrase_prefix 和 cross_fields 查询。</p></blockquote><blockquote><p>slop 参数仅适用于 phrase 和 phrase_prefix 查询。</p></blockquote><h3 id=tie_breaker-参数>tie_breaker 参数
+<a class=anchor href=#tie_breaker-%e5%8f%82%e6%95%b0>#</a></h3><p>每个词级混合查询将文档分数计算为组中任何字段返回的最佳分数。所有混合查询的分数相加产生最终分数。您可以通过使用 <code>tie_breaker</code> 参数更改分数的计算方式。 <code>tie_breaker</code> 参数接受以下值：</p><ul><li>0.0（ <code>best_fields</code> 、 <code>cross_fields</code> 、 <code>phrase</code> 和 <code>phrase_prefix</code> 查询的默认值）：取组中任何字段返回的最佳单个分数。</li><li>1.0（ <code>most_fields</code> 和 <code>bool_prefix</code> 查询的默认值）：为组内所有字段添加分数。</li><li>一个在(0, 1)范围内的浮点值：取最佳匹配字段的最佳分数，并为所有其他匹配字段添加( <code>tie_breaker</code> * <code>_score</code> )。</li></ul></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
+    import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
+    searchbox({container: "#searchbox"});
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#多字段查询>多字段查询</a><ul><li><a href=#多字段查询类型>多字段查询类型</a></li><li><a href=#best-fields-最佳字段>Best fields 最佳字段</a></li><li><a href=#most-fields-大多数字段>Most fields 大多数字段</a></li><li><a href=#操作符-operator-和-最小值应匹配-minimum_should_match>操作符 Operator 和 最小值应匹配 minimum_should_match</a></li><li><a href=#跨字段>跨字段</a><ul><li><a href=#分词器的作用>分词器的作用</a></li></ul></li><li><a href=#短语>短语</a></li><li><a href=#短语前缀>短语前缀</a></li><li><a href=#布尔前缀>布尔前缀</a></li><li><a href=#参数说明>参数说明</a><ul><li><a href=#tie_breaker-参数>tie_breaker 参数</a></li></ul></li></ul></li></ul></nav></aside></main><script src=/easysearch/v2.0.1/js/asciinema-player.js></script></body></html>
