@@ -1,0 +1,124 @@
+<!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="跨云集群的就近本地访问 #  业务需求 #  作业帮为了确保某个业务 Elasticsearch 集群的高可用，在百度云和华为云上面采取了双云部署，即将单个 Elasticsearch 集群跨云进行部署，并且要求业务请求优先访问本地云。
+Elasticsearch 单集群双云实现 #  Elasticsearch 集群采用 Master 与 Data 节点分离的架构。 目前主力云放 2 个 Master，另外一个云放一个 Master。 主要考虑就是基础设施故障中，专线故障问题是大多数，某个云厂商整体挂的情况基本没有。 所以设置了主力云，当专线故障时，主力云的 Elasticsearch 是可以读写的，业务把流量切到主力云就行了。
+具体配置方式如下。
+首先，在 Master 节点上设置：
+cluster.routing.allocation.awareness.attributes: zone_id cluster.routing.allocation.awareness.force.zone_id.values: zone_baidu,zone_huawei 然后分别在百度云上数据节点上设置：
+node.attr.zone_id: zone_baidu 和华为云上数据节点上设置：
+node.attr.zone_id: zone_huawei 创建索引采用 1 副本，可以保证百度云与华为云上都有一份相同的数据。
+业务访问方式如下图：
+ 百度云业务 -> 百度 lb -> INFINI Gateway (百度) -> Elasticsearch （百度云 data 节点） 华为云业务 -> 华为 lb -> INFINI Gateway (华为) -> Elasticsearch （华为云 data 节点）  极限网关配置 #  Elasticsearch 支持一个 Preference 参数来设置请求的优先访问，通过在两个云内部的极限网关分别设置各自请求默认的 Preference 参数，让各个云内部的请求优先发往本云内的数据节点，即可实现请求的就近访问。"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="作业帮跨云集群的就近本地访问"><meta property="og:description" content="跨云集群的就近本地访问 #  业务需求 #  作业帮为了确保某个业务 Elasticsearch 集群的高可用，在百度云和华为云上面采取了双云部署，即将单个 Elasticsearch 集群跨云进行部署，并且要求业务请求优先访问本地云。
+Elasticsearch 单集群双云实现 #  Elasticsearch 集群采用 Master 与 Data 节点分离的架构。 目前主力云放 2 个 Master，另外一个云放一个 Master。 主要考虑就是基础设施故障中，专线故障问题是大多数，某个云厂商整体挂的情况基本没有。 所以设置了主力云，当专线故障时，主力云的 Elasticsearch 是可以读写的，业务把流量切到主力云就行了。
+具体配置方式如下。
+首先，在 Master 节点上设置：
+cluster.routing.allocation.awareness.attributes: zone_id cluster.routing.allocation.awareness.force.zone_id.values: zone_baidu,zone_huawei 然后分别在百度云上数据节点上设置：
+node.attr.zone_id: zone_baidu 和华为云上数据节点上设置：
+node.attr.zone_id: zone_huawei 创建索引采用 1 副本，可以保证百度云与华为云上都有一份相同的数据。
+业务访问方式如下图：
+ 百度云业务 -> 百度 lb -> INFINI Gateway (百度) -> Elasticsearch （百度云 data 节点） 华为云业务 -> 华为 lb -> INFINI Gateway (华为) -> Elasticsearch （华为云 data 节点）  极限网关配置 #  Elasticsearch 支持一个 Preference 参数来设置请求的优先访问，通过在两个云内部的极限网关分别设置各自请求默认的 Preference 参数，让各个云内部的请求优先发往本云内的数据节点，即可实现请求的就近访问。"><meta property="og:type" content="article"><meta property="og:url" content="/gateway/v1.30.1/zh/docs/user-cases/stories/a_cross_region_cluster_access_locality/"><title>作业帮跨云集群的就近本地访问 | INFINI Gateway</title><link rel=manifest href=/gateway/v1.30.1/manifest.json><link rel=icon href=/gateway/v1.30.1/favicon.png type=image/x-icon><link rel=alternate hreflang=en href=/gateway/v1.30.1/docs/user-cases/stories/a_cross_region_cluster_access_locality/ title="Nearest Cluster Access Across Two Cloud Providers"><link rel=stylesheet href=/gateway/v1.30.1/book.min.d80e87b12a4b49d9913d0bdd98bd83b7a44988be784760ba15522b377313dcf9.css integrity="sha256-2A6HsSpLSdmRPQvdmL2Dt6RJiL54R2C6FVIrN3MT3Pk="><script defer src=/gateway/v1.30.1/js/jquery-2.x.min.js></script><script defer src=/gateway/v1.30.1/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/gateway/v1.30.1/zh><img src=/gateway/v1.30.1/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value=v1.30.1>v1.30.1</option>
+<option value=v1.30.0>v1.30.0</option>
+<option value=v1.29.8>v1.29.8</option>
+<option value=v1.29.7>v1.29.7</option>
+<option value=v1.29.6>v1.29.6</option>
+<option value=v1.29.4>v1.29.4</option>
+<option value=v1.29.3>v1.29.3</option>
+<option value=v1.29.2>v1.29.2</option>
+<option value=v1.29.1>v1.29.1</option>
+<option value=v1.29.0>v1.29.0</option>
+<option value=v1.28.2>v1.28.2</option>
+<option value=v1.28.0>v1.28.0</option>
+<option value=v1.27.0>v1.27.0</option>
+<option value=v1.26.1>v1.26.1</option></select></div><ul><li><a href=/gateway/v1.30.1/zh/docs/overview/>产品概述</a><ul></ul></li><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
+<label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>入门指南</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.30.1/zh/docs/getting-started/install/>安装网关</a></li><li><a href=/gateway/v1.30.1/zh/docs/getting-started/configuration/>配置网关</a></li><li><a href=/gateway/v1.30.1/zh/docs/getting-started/docker/>容器部署</a></li><li><a href=/gateway/v1.30.1/zh/docs/getting-started/helm/>Helm 部署</a></li><li><a href=/gateway/v1.30.1/zh/docs/getting-started/optimization/>系统调优</a></li><li><a href=/gateway/v1.30.1/zh/docs/getting-started/hardware/>硬件配置</a></li><li><a href=/gateway/v1.30.1/zh/docs/getting-started/benchmark/>性能测试</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle>
+<label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a>功能手册</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.30.1/zh/docs/references/entry/>服务入口</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/router/>服务路由</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/flow/>处理流程</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/elasticsearch/>Elasticsearch</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/context/>请求上下文</a></li><li><input type=checkbox id=section-a53d1bd91095fa28aef70cee327a5121 class=toggle>
+<label for=section-a53d1bd91095fa28aef70cee327a5121 class="flex justify-between"><a href=/gateway/v1.30.1/zh/docs/references/filters/>在线过滤器</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.30.1/zh/docs/references/filters/echo/>echo</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/auto_generate_doc_id/>auto_generate_doc_id</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/basic_auth/>basic_auth</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/bulk_request_mutate/>bulk_request_mutate</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/bulk_request_throttle/>bulk_request_throttle</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/bulk_reshuffle/>bulk_reshuffle</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/bulk_response_process/>bulk_response_process</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/cache/>cache</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/clone/>clone</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/context_filter/>context_filter</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/context_limiter/>context_limiter</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/context_parse/>context_parse</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/context_regex_replace/>context_regex_replace</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/context_switch/>context_switch</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/date_range_precision_tuning/>date_range_precision_tuning</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/drop/>drop</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/dump/>dump</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/elasticsearch/>elasticsearch</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/elasticsearch_health_check/>elasticsearch_health_check</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/flow/>flow</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/hash_mod/>hash_mod</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/http/>http</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/javascript/>javascript</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/ldap_auth/>ldap_auth</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/logging/>logging</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/queue/>queue</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/ratio/>ratio</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/record/>record</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/redirect/>redirect</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/redis_pubsub/>redis_pubsub</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/request_api_key_filter/>request_api_key_filter</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/request_api_key_limiter/>request_api_key_limiter</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/request_body_json_del/>request_body_json_del</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/request_body_json_set/>request_body_json_set</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/request_body_regex_replace/>request_body_regex_replace</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/request_client_ip_filter/>request_client_ip_filter</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/request_client_ip_limiter/>request_client_ip_limiter</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/request_header_filter/>request_header_filter</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/request_host_filter/>request_host_filter</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/request_host_limiter/>request_host_limiter</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/request_method_filter/>request_method_filter</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/request_path_filter/>request_path_filter</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/request_path_limiter/>request_path_limiter</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/request_reshuffle/>request_reshuffle</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/request_user_filter/>request_user_filter</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/request_user_limiter/>request_user_limiter</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/response_body_regex_replace/>response_body_regex_replace</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/response_header_filter/>response_header_filter</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/response_header_format/>response_header_format</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/response_status_filter/>response_status_filter</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/retry_limiter/>retry_limiter</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/rewrite_to_bulk/>rewrite_to_bulk</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/sample/>sample</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/security/>security</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/set_basic_auth/>set_basic_auth</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/set_context/>set_context</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/set_hostname/>set_hostname</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/set_request_header/>set_request_header</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/set_request_query_args/>set_request_query_args</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/set_response/>set_response</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/set_response_header/>set_response_header</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/sleep/>sleep</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/switch/>switch</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/filters/translog/>translog</a></li></ul></li><li><input type=checkbox id=section-82db29a871579194764c352cfff582f2 class=toggle>
+<label for=section-82db29a871579194764c352cfff582f2 class="flex justify-between"><a href=/gateway/v1.30.1/zh/docs/references/processors/>离线处理器</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.30.1/zh/docs/references/processors/bulk_indexing/>bulk_indexing</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/processors/consumer/>consumer</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/processors/dag/>dag</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/processors/dump_hash/>dump_hash</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/processors/flow_replay/>flow_replay</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/processors/flow_runner/>flow_runner</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/processors/index_diff/>index_diff</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/processors/indexing_merge/>indexing_merge</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/processors/json_indexing/>json_indexing</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/processors/merge_to_bulk/>merge_to_bulk</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/processors/queue_consumer/>queue_consumer</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/processors/replay/>replay</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/processors/smtp/>smtp</a></li></ul></li><li><input type=checkbox id=section-3de6688eceb9f20db2f0270adccf76e2 class=toggle>
+<label for=section-3de6688eceb9f20db2f0270adccf76e2 class="flex justify-between"><a>功能组件</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.30.1/zh/docs/references/modules/floating_ip/>浮动 IP</a></li><li><a href=/gateway/v1.30.1/zh/docs/references/modules/force_merge/>索引段合并</a></li></ul></li><li><a href=/gateway/v1.30.1/zh/docs/references/config/>其它配置</a></li></ul></li><li><input type=checkbox id=section-391bcaab6cc03bd87e3373752bfd390e class=toggle>
+<label for=section-391bcaab6cc03bd87e3373752bfd390e class="flex justify-between"><a>动手教程</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.30.1/zh/docs/tutorial/log4j2_filtering/>Apache Log4j 漏洞处置</a></li><li><a href=/gateway/v1.30.1/zh/docs/tutorial/online_query_rewrite/>在线查询修复的实现</a></li><li><a href=/gateway/v1.30.1/zh/docs/tutorial/request-logging/>查询请求流量日志分析</a></li><li><a href=/gateway/v1.30.1/zh/docs/tutorial/index_diff/>索引文档级别差异对比</a></li><li><a href=/gateway/v1.30.1/zh/docs/tutorial/es-hadoop_integration/>与 Elasticsearch-Hadoop 集成</a></li><li><a href=/gateway/v1.30.1/zh/docs/tutorial/prometheus_integration/>与 Prometheus 集成</a></li><li><a href=/gateway/v1.30.1/zh/docs/tutorial/proxy_elasticsearch/>为 Elasticsearch 无缝添加代理和基础安全</a></li><li><a href=/gateway/v1.30.1/zh/docs/tutorial/proxy_kibana/>为 Kibana 添加代理和基础安全</a></li><li><a href=/gateway/v1.30.1/zh/docs/tutorial/path_rewrite_by_javascript/>使用 JavaScript 脚本来进行复杂的查询改写</a></li><li><a href=/gateway/v1.30.1/zh/docs/tutorial/fix_count_in_search_response/>兼容不同版本的响应 Count 结构</a></li><li><a href=/gateway/v1.30.1/zh/docs/tutorial/routing_to_cluser_by_index/>在 Kibana 里统一访问来自不同集群的索引</a></li></ul></li><li><input type=checkbox id=section-7e4e95606453deb85437b78d9c3f2d72 class=toggle checked>
+<label for=section-7e4e95606453deb85437b78d9c3f2d72 class="flex justify-between"><a href=/gateway/v1.30.1/zh/docs/user-cases/>用户案例</a>
+<span>▾</span></label><ul><li><a href=/gateway/v1.30.1/zh/docs/user-cases/stories/a_cross_region_cluster_access_locality/ class=active>作业帮跨云集群的就近本地访问</a></li><li><a href=/gateway/v1.30.1/zh/docs/user-cases/stories/indexing_speedup_for_big_index_rebuild/>某保险业务索引速度百倍提升</a></li></ul></li><li><a href=/gateway/v1.30.1/zh/docs/troubleshooting/>常见问题</a><ul></ul></li><li><a href=/gateway/v1.30.1/zh/docs/release-notes/>版本历史</a><ul></ul></li><li><a href=/gateway/v1.30.1/zh/docs/resources/>其它资源</a><ul></ul></li></ul><ul><li><a href=https://github.com/infinilabs/gateway target=_blank rel=noopener>Github</a></li></ul><div class=book-languages tabindex=0 aria-haspopup=true><ul><li class="flex align-center"><img src=/gateway/v1.30.1/svg/translate.svg class=book-icon alt=Languages>
+简体中文</li></ul><ul class=book-languages-list><li><a href=/gateway/v1.30.1/docs/user-cases/stories/a_cross_region_cluster_access_locality/ class="flex align-center"><img src=/gateway/v1.30.1/svg/translate.svg class=book-icon alt=Languages>
+English</a></li><li class=active><a href=/gateway/v1.30.1/zh/ class="flex align-center"><img src=/gateway/v1.30.1/svg/translate.svg class=book-icon alt=Languages>
+简体中文</a></li></ul></div></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/gateway/v1.30.1/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>作业帮跨云集群的就近本地访问</strong>
+<label for=toc-control><img src=/gateway/v1.30.1/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#跨云集群的就近本地访问>跨云集群的就近本地访问</a><ul><li><a href=#业务需求>业务需求</a></li><li><a href=#elasticsearch-单集群双云实现>Elasticsearch 单集群双云实现</a></li><li><a href=#极限网关配置>极限网关配置</a></li><li><a href=#总结与收益>总结与收益</a><ul><li><a href=#引入极限网关前故障回顾>引入极限网关前故障回顾</a></li><li><a href=#引入极限网关的收益>引入极限网关的收益</a></li></ul></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=跨云集群的就近本地访问>跨云集群的就近本地访问
+<a class=anchor href=#%e8%b7%a8%e4%ba%91%e9%9b%86%e7%be%a4%e7%9a%84%e5%b0%b1%e8%bf%91%e6%9c%ac%e5%9c%b0%e8%ae%bf%e9%97%ae>#</a></h1><h2 id=业务需求>业务需求
+<a class=anchor href=#%e4%b8%9a%e5%8a%a1%e9%9c%80%e6%b1%82>#</a></h2><p>作业帮为了确保某个业务 Elasticsearch 集群的高可用，在百度云和华为云上面采取了双云部署，即将单个 Elasticsearch 集群跨云进行部署，并且要求业务请求优先访问本地云。</p><h2 id=elasticsearch-单集群双云实现>Elasticsearch 单集群双云实现
+<a class=anchor href=#elasticsearch-%e5%8d%95%e9%9b%86%e7%be%a4%e5%8f%8c%e4%ba%91%e5%ae%9e%e7%8e%b0>#</a></h2><p>Elasticsearch 集群采用 Master 与 Data 节点分离的架构。 目前主力云放 2 个 Master，另外一个云放一个 Master。 主要考虑就是基础设施故障中，专线故障问题是大多数，某个云厂商整体挂的情况基本没有。
+所以设置了主力云，当专线故障时，主力云的 Elasticsearch 是可以读写的，业务把流量切到主力云就行了。</p><p>具体配置方式如下。</p><p>首先，在 Master 节点上设置：</p><pre><code>cluster.routing.allocation.awareness.attributes: zone_id
+cluster.routing.allocation.awareness.force.zone_id.values: zone_baidu,zone_huawei
+</code></pre><p>然后分别在百度云上数据节点上设置：</p><pre><code>node.attr.zone_id: zone_baidu
+</code></pre><p>和华为云上数据节点上设置：</p><pre><code>node.attr.zone_id: zone_huawei
+</code></pre><p>创建索引采用 1 副本，可以保证百度云与华为云上都有一份相同的数据。</p><p>业务访问方式如下图：</p><p><img src=/gateway/v1.30.1/img/cross_region_cluster.jpg alt=跨云单集群就近访问></p><ul><li>百度云业务 -> 百度 lb -> INFINI Gateway (百度) -> Elasticsearch （百度云 data 节点）</li><li>华为云业务 -> 华为 lb -> INFINI Gateway (华为) -> Elasticsearch （华为云 data 节点）</li></ul><h2 id=极限网关配置>极限网关配置
+<a class=anchor href=#%e6%9e%81%e9%99%90%e7%bd%91%e5%85%b3%e9%85%8d%e7%bd%ae>#</a></h2><p>Elasticsearch 支持一个
+<a href=https://www.elastic.co/guide/en/elasticsearch/reference/master/search-search.html#search-preference>Preference</a> 参数来设置请求的优先访问，通过在两个云内部的极限网关分别设置各自请求默认的 Preference 参数，让各个云内部的请求优先发往本云内的数据节点，即可实现请求的就近访问。</p><p>具体的百度云的 INFINI Gateway 配置如下（华为云大体相同，就不重复贴了）：</p><pre><code>path.data: data
+path.logs: log
+
+entry:
+- name: es-test
+  enabled: true
+  router: default
+  network:
+      binding: 0.0.0.0:9200
+      reuse_port: true
+
+router:
+- name: default
+  default_flow: es-test
+
+flow:
+- name: es-test
+  filter:
+    - set_request_query_args:
+        args:
+          - preference -&gt; _prefer_nodes:node-id-of-data-baidu01,node-id-of-data-baidu02 #通过配置preference的_prefer_nodes为所有的百度data节点的node_id，来实现百度云的业务优先访问百度云的节点，最大程度避免跨云访问，对业务更友好。
+        when:
+          contains:
+            _ctx.request.path: /_search
+    - elasticsearch:
+        elasticsearch: default
+        refresh:
+            enabled: true
+            interval: 10s
+        roles:
+            include:
+            - data #配置为data，请求只发送到data节点
+        tags:
+          include:
+            - zone_id: zone_baidu #只转发给百度云里面的节点
+
+
+elasticsearch:
+- name: default
+  enabled: true
+  endpoint: http://10.10.10.10:9200
+  allow_access_when_master_not_found: true
+  discovery:
+      enabled: true
+  refresh:
+      enabled: true
+      interval: 10s
+  basic_auth:
+      username: elastic
+      password: elastic
+</code></pre><h2 id=总结与收益>总结与收益
+<a class=anchor href=#%e6%80%bb%e7%bb%93%e4%b8%8e%e6%94%b6%e7%9b%8a>#</a></h2><h3 id=引入极限网关前故障回顾>引入极限网关前故障回顾
+<a class=anchor href=#%e5%bc%95%e5%85%a5%e6%9e%81%e9%99%90%e7%bd%91%e5%85%b3%e5%89%8d%e6%95%85%e9%9a%9c%e5%9b%9e%e9%a1%be>#</a></h3><p>百度云业务访问 Elasticsearch 集群，拉取每天的增量数据同步到 Hive 集群，其中有几个任务失败后，又重新同步。结果是部分数据从华为云的 Elasticsearch 节点拉取到百度云的 Hive 集群中，数据量巨大导致跨云专线流量监控告警。由于线上业务、MySQL、Redis、Elasticsearch 等使用同一根专线，
+此次故障影响面较大。临时解决方案是业务修改语句加入 Preference 参数来实现业务只拉取本地云数据，减少对专线的占用。但是一方面业务改造及维护成本较高；另一方面作为 DBA 会担心业务改造有疏漏、新增业务遗忘 Preference 参数、以及后期调整成本较高，这始终是一个风险点。</p><h3 id=引入极限网关的收益>引入极限网关的收益
+<a class=anchor href=#%e5%bc%95%e5%85%a5%e6%9e%81%e9%99%90%e7%bd%91%e5%85%b3%e7%9a%84%e6%94%b6%e7%9b%8a>#</a></h3><p>在原有架构上加入极限网关，可以在业务不修改代码的情况下做到优先访问本地云，提升访问速度的同时，最大限度减少对专线的压力。</p><blockquote><p>作者：赵青，前网易 DBA，工作主要涉及 Oracle、MySQL、Redis、Elasticsearch、Tidb、OB 等组件的运维以及运维自动化、平台化、智能化等工作。现就职于作业帮。</p></blockquote></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class=book-languages tabindex=0 aria-haspopup=true><ul><li class="flex align-center"><img src=/gateway/v1.30.1/svg/translate.svg class=book-icon alt=Languages>
+简体中文</li></ul><ul class=book-languages-list><li><a href=/gateway/v1.30.1/docs/user-cases/stories/a_cross_region_cluster_access_locality/ class="flex align-center"><img src=/gateway/v1.30.1/svg/translate.svg class=book-icon alt=Languages>
+English</a></li><li class=active><a href=/gateway/v1.30.1/zh/ class="flex align-center"><img src=/gateway/v1.30.1/svg/translate.svg class=book-icon alt=Languages>
+简体中文</a></li></ul></div><div><a class="flex align-center" href=https://github.com/infinilabs/gateway/edit/v1.30.1/docs/content.zh/docs/user-cases/stories/a_cross_region_cluster_access_locality.md target=_blank rel=noopener><img src=/gateway/v1.30.1/svg/edit.svg class=book-icon alt=Edit>
+<span>编辑本页</span></a></div><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
+    import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
+    searchbox({container: "#searchbox"});
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><nav id=TableOfContents><ul><li><a href=#跨云集群的就近本地访问>跨云集群的就近本地访问</a><ul><li><a href=#业务需求>业务需求</a></li><li><a href=#elasticsearch-单集群双云实现>Elasticsearch 单集群双云实现</a></li><li><a href=#极限网关配置>极限网关配置</a></li><li><a href=#总结与收益>总结与收益</a><ul><li><a href=#引入极限网关前故障回顾>引入极限网关前故障回顾</a></li><li><a href=#引入极限网关的收益>引入极限网关的收益</a></li></ul></li></ul></li></ul></nav></aside></main></body></html>
