@@ -45,7 +45,7 @@ English</a></li><li><a href=/gateway/main/zh/docs/tutorial/log4j2_filtering/ cla
 <a class=anchor href=#handling-method>#</a></h2><p>If Elasticsearch does not support configuration modification, Jar package replacement of Log4j, or cluster restart, you can use INFINI Gateway to intercept requests, replace parameters, and even directly block requests.
 You can use INFINI Gateway to check parameters in requests sent to Elasticsearch and replace or reject content that contains the sensitive keyword <code>${</code>.
 In this way, INFINI Gateway can prevent the execution of malicious attack commands during Log4j logging after attack-contained requests are sent to Elasticsearch, thereby preventing attacks.</p><h2 id=reference-configuration>Reference Configuration
-<a class=anchor href=#reference-configuration>#</a></h2><p>Download the latest <code>1.30.0</code> version:
+<a class=anchor href=#reference-configuration>#</a></h2><p>Download the latest <code>1.30.1-2308</code> version:
 <a href=https://release.infinilabs.com/gateway/stable/>https://release.infinilabs.com/gateway/stable/</a></p><p>The <code>context_filter</code> filter of INFINI Gateway can be used to detect the keywords of the request context <code>_ctx.request.to_string</code> and filter out malicious traffic, thereby blocking attacks.</p><pre><code>path.data: data
 path.logs: log
 
