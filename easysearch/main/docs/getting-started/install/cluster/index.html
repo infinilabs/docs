@@ -1,14 +1,12 @@
-<!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="父 ID 查询 #  parent_id 查询返回具有指定 ID 的父文档的子文档。您可以通过使用连接字段类型在相同索引中的文档之间建立父子关系。
-参考样例 #  在您运行一个 parent_id 查询之前，您的索引必须包含一个连接字段，以便建立父子关系。索引映射请求使用以下格式：
-PUT /example_index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;relationship_field&#34;: { &#34;type&#34;: &#34;join&#34;, &#34;relations&#34;: { &#34;parent_doc&#34;: &#34;child_doc&#34; } } } } } 对于此示例，首先配置一个包含代表产品和其品牌的文档的索引，这些文档在 has_child 查询示例中有所描述。
-要搜索特定父文档的子文档，请使用 parent_id 查询。以下查询返回具有 ID 1 的父文档的子文档（产品）：
-GET testindex1/_search { &#34;query&#34;: { &#34;parent_id&#34;: { &#34;type&#34;: &#34;product&#34;, &#34;id&#34;: &#34;1&#34; } } } 返回子产品：
-{ &#34;took&#34;: 57, &#34;timed_out&#34;: false, &#34;_shards&#34;: { &#34;total&#34;: 1, &#34;successful&#34;: 1, &#34;skipped&#34;: 0, &#34;failed&#34;: 0 }, &#34;hits&#34;: { &#34;total&#34;: { &#34;value&#34;: 1, &#34;relation&#34;: &#34;eq&#34; }, &#34;max_score&#34;: 0."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="父 ID 查询"><meta property="og:description" content="父 ID 查询 #  parent_id 查询返回具有指定 ID 的父文档的子文档。您可以通过使用连接字段类型在相同索引中的文档之间建立父子关系。
-参考样例 #  在您运行一个 parent_id 查询之前，您的索引必须包含一个连接字段，以便建立父子关系。索引映射请求使用以下格式：
-PUT /example_index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;relationship_field&#34;: { &#34;type&#34;: &#34;join&#34;, &#34;relations&#34;: { &#34;parent_doc&#34;: &#34;child_doc&#34; } } } } } 对于此示例，首先配置一个包含代表产品和其品牌的文档的索引，这些文档在 has_child 查询示例中有所描述。
-要搜索特定父文档的子文档，请使用 parent_id 查询。以下查询返回具有 ID 1 的父文档的子文档（产品）：
-GET testindex1/_search { &#34;query&#34;: { &#34;parent_id&#34;: { &#34;type&#34;: &#34;product&#34;, &#34;id&#34;: &#34;1&#34; } } } 返回子产品：
-{ &#34;took&#34;: 57, &#34;timed_out&#34;: false, &#34;_shards&#34;: { &#34;total&#34;: 1, &#34;successful&#34;: 1, &#34;skipped&#34;: 0, &#34;failed&#34;: 0 }, &#34;hits&#34;: { &#34;total&#34;: { &#34;value&#34;: 1, &#34;relation&#34;: &#34;eq&#34; }, &#34;max_score&#34;: 0."><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/main/docs/references/search/joining/parent-id/"><title>父 ID 查询 | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.0c7caf230520e6c6ba3c3867f96bcc599745ad90fad4bc94d74b5278dd3ec4a2.css integrity="sha256-DHyvIwUg5sa6PDhn+WvMWZdFrZD61LyU10tSeN0+xKI="><link rel=stylesheet type=text/css href=/easysearch/main/css/asciinema-player.css><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="分布式集群安装 #  本文档介绍如何使用 initialize-cluster.sh 脚本快速搭建 Easysearch 分布式集群。该脚本支持伪分布式（单机多节点）和真分布式（多服务器）两种部署模式。
+前置要求 #   已完成 系统调优 JDK 21 或更高版本（脚本可自动下载） 已安装 OpenSSL 真分布式部署需要：  服务器间网络互通 已配置 SSH 互信（无密码登录） 目标路径有写入权限    快速开始 #  交互式安装（推荐） #  交互式模式会引导您输入集群配置信息：
+cd /data/easysearch bin/initialize-cluster.sh 脚本会依次提示您输入：
+ 集群名称：默认为 easysearch-cluster 证书域名：默认为 infini.cloud 节点数量：默认为 3 每个节点的配置：IP 地址、HTTP 端口、节点名称、节点角色 协议选择：HTTP 或 HTTPS（默认 HTTPS） API 兼容性：是否启用 Elasticsearch API 兼容模式 证书信息：国家、省份、城市、组织、有效期等（可选）  输入示例：
+====================================== Easysearch Cluster Initialization ====================================== Enter cluster name [easysearch-cluster]: my-cluster Enter domain for certificates [infini."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="分布式集群"><meta property="og:description" content="分布式集群安装 #  本文档介绍如何使用 initialize-cluster.sh 脚本快速搭建 Easysearch 分布式集群。该脚本支持伪分布式（单机多节点）和真分布式（多服务器）两种部署模式。
+前置要求 #   已完成 系统调优 JDK 21 或更高版本（脚本可自动下载） 已安装 OpenSSL 真分布式部署需要：  服务器间网络互通 已配置 SSH 互信（无密码登录） 目标路径有写入权限    快速开始 #  交互式安装（推荐） #  交互式模式会引导您输入集群配置信息：
+cd /data/easysearch bin/initialize-cluster.sh 脚本会依次提示您输入：
+ 集群名称：默认为 easysearch-cluster 证书域名：默认为 infini.cloud 节点数量：默认为 3 每个节点的配置：IP 地址、HTTP 端口、节点名称、节点角色 协议选择：HTTP 或 HTTPS（默认 HTTPS） API 兼容性：是否启用 Elasticsearch API 兼容模式 证书信息：国家、省份、城市、组织、有效期等（可选）  输入示例：
+====================================== Easysearch Cluster Initialization ====================================== Enter cluster name [easysearch-cluster]: my-cluster Enter domain for certificates [infini."><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/main/docs/getting-started/install/cluster/"><title>分布式集群 | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.0c7caf230520e6c6ba3c3867f96bcc599745ad90fad4bc94d74b5278dd3ec4a2.css integrity="sha256-DHyvIwUg5sa6PDhn+WvMWZdFrZD61LyU10tSeN0+xKI="><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/easysearch/main><img src=/easysearch/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;outline:none></div><script>function waitForShadow(host,callback){const timer=setInterval(()=>{if(host.shadowRoot){clearInterval(timer);callback(host.shadowRoot);}},50);}
 const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{const style=document.createElement('style');style.textContent=`
       .infini__searchbox-btn {
@@ -49,13 +47,13 @@ const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{co
 <option value=v1.1.1>v1.1.1</option>
 <option value=v1.1.0>v1.1.0</option>
 <option value=v1.0.1>v1.0.1</option>
-<option value=v1.0.0>v1.0.0</option></select></div><ul><li><a href=/easysearch/main/docs/overview/>产品概述</a><ul></ul></li><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
+<option value=v1.0.0>v1.0.0</option></select></div><ul><li><a href=/easysearch/main/docs/overview/>产品概述</a><ul></ul></li><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle checked>
 <label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>入门指南</a>
-<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><input type=checkbox id=section-e622c8a7dea0dd02f82a836e861475c5 class=toggle>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><input type=checkbox id=section-e622c8a7dea0dd02f82a836e861475c5 class=toggle checked>
 <label for=section-e622c8a7dea0dd02f82a836e861475c5 class="flex justify-between"><a href=/easysearch/main/docs/getting-started/install/>安装指南</a>
-<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/getting-started/install/docker/>Docker</a></li><li><a href=/easysearch/main/docs/getting-started/install/docker-compose/>Docker Compose</a></li><li><a href=/easysearch/main/docs/getting-started/install/cluster/>分布式集群</a></li><li><a href=/easysearch/main/docs/getting-started/install/offline-install/>离线安装</a></li><li><a href=/easysearch/main/docs/getting-started/install/helm/>Helm Chart</a></li><li><a href=/easysearch/main/docs/getting-started/install/linux/>Linux</a></li><li><a href=/easysearch/main/docs/getting-started/install/windows/>Windows</a></li><li><a href=/easysearch/main/docs/getting-started/install/ipv6/>IPv6 支持</a></li><li><input type=checkbox id=section-8df7e740f0b8d44e94e2d5f3851aef83 class=toggle>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/getting-started/install/docker/>Docker</a></li><li><a href=/easysearch/main/docs/getting-started/install/docker-compose/>Docker Compose</a></li><li><a href=/easysearch/main/docs/getting-started/install/cluster/ class=active>分布式集群</a></li><li><a href=/easysearch/main/docs/getting-started/install/offline-install/>离线安装</a></li><li><a href=/easysearch/main/docs/getting-started/install/helm/>Helm Chart</a></li><li><a href=/easysearch/main/docs/getting-started/install/linux/>Linux</a></li><li><a href=/easysearch/main/docs/getting-started/install/windows/>Windows</a></li><li><a href=/easysearch/main/docs/getting-started/install/ipv6/>IPv6 支持</a></li><li><input type=checkbox id=section-8df7e740f0b8d44e94e2d5f3851aef83 class=toggle>
 <label for=section-8df7e740f0b8d44e94e2d5f3851aef83 class="flex justify-between"><a href=/easysearch/main/docs/getting-started/install/operator/>Operator</a>
-<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/getting-started/install/operator/deploy_operator/>部署 Operator</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/deploy_easysearch/>部署 Easysearch</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/resource_manager/>资源扩容</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/node_scale/>节点扩容</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/update_password/>密码修改</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/upgrade/>版本升级</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/cert_manager/>证书管理</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/s3_snapshot/>s3 备份</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/FAQ/>FAQ</a></li></ul></li></ul></li><li><a href=/easysearch/main/docs/getting-started/settings/>系统调优</a></li><li><a href=/easysearch/main/docs/getting-started/hardware/>硬件配置</a></li><li><a href=/easysearch/main/docs/getting-started/configuration/>常用配置</a></li><li><a href=/easysearch/main/docs/getting-started/configuration_file/>配置说明</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle checked>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/getting-started/install/operator/deploy_operator/>部署 Operator</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/deploy_easysearch/>部署 Easysearch</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/resource_manager/>资源扩容</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/node_scale/>节点扩容</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/update_password/>密码修改</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/upgrade/>版本升级</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/cert_manager/>证书管理</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/s3_snapshot/>s3 备份</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/FAQ/>FAQ</a></li></ul></li></ul></li><li><a href=/easysearch/main/docs/getting-started/settings/>系统调优</a></li><li><a href=/easysearch/main/docs/getting-started/hardware/>硬件配置</a></li><li><a href=/easysearch/main/docs/getting-started/configuration/>常用配置</a></li><li><a href=/easysearch/main/docs/getting-started/configuration_file/>配置说明</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle>
 <label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a>功能手册</a>
 <span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><input type=checkbox id=section-dd5a2f6dc33fa990f542566f7a908106 class=toggle>
 <label for=section-dd5a2f6dc33fa990f542566f7a908106 class="flex justify-between"><a href=/easysearch/main/docs/references/mappings-and-field-types/>文档建模</a>
@@ -91,7 +89,7 @@ const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{co
 <label for=section-4c0acfad57ce0b1db83571ad903a192e class="flex justify-between"><a href=/easysearch/main/docs/references/security/configuration/>配置说明</a>
 <span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/security/configuration/yaml/>本地配置</a></li><li><a href=/easysearch/main/docs/references/security/configuration/backend/>后端配置</a></li><li><a href=/easysearch/main/docs/references/security/configuration/tls/>证书配置</a></li><li><a href=/easysearch/main/docs/references/security/configuration/system-indices/>系统索引</a></li></ul></li><li><input type=checkbox id=section-4854412a16ac224d9851d23b7bf6bdea class=toggle>
 <label for=section-4854412a16ac224d9851d23b7bf6bdea class="flex justify-between"><a href=/easysearch/main/docs/references/security/access-control/>权限控制</a>
-<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/security/access-control/users-roles/>用户角色</a></li><li><a href=/easysearch/main/docs/references/security/access-control/document-level-security/>文档权限</a></li><li><a href=/easysearch/main/docs/references/security/access-control/field-level-security/>字段权限</a></li><li><a href=/easysearch/main/docs/references/security/access-control/field-masking/>数据脱敏</a></li><li><a href=/easysearch/main/docs/references/security/access-control/run-as/>身份模拟</a></li><li><a href=/easysearch/main/docs/references/security/access-control/cross-cluster-search/>跨集群搜索</a></li><li><a href=/easysearch/main/docs/references/security/access-control/api/>API 接口</a></li><li><a href=/easysearch/main/docs/references/security/access-control/permissions/>权限列表</a></li></ul></li></ul></li><li><input type=checkbox id=section-6b02990358c7382bac3f39043e5fd437 class=toggle checked>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/security/access-control/users-roles/>用户角色</a></li><li><a href=/easysearch/main/docs/references/security/access-control/document-level-security/>文档权限</a></li><li><a href=/easysearch/main/docs/references/security/access-control/field-level-security/>字段权限</a></li><li><a href=/easysearch/main/docs/references/security/access-control/field-masking/>数据脱敏</a></li><li><a href=/easysearch/main/docs/references/security/access-control/run-as/>身份模拟</a></li><li><a href=/easysearch/main/docs/references/security/access-control/cross-cluster-search/>跨集群搜索</a></li><li><a href=/easysearch/main/docs/references/security/access-control/api/>API 接口</a></li><li><a href=/easysearch/main/docs/references/security/access-control/permissions/>权限列表</a></li></ul></li></ul></li><li><input type=checkbox id=section-6b02990358c7382bac3f39043e5fd437 class=toggle>
 <label for=section-6b02990358c7382bac3f39043e5fd437 class="flex justify-between"><a href=/easysearch/main/docs/references/search/>搜索操作</a>
 <span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/search/query-filter-context/>查询和过滤上下文</a></li><li><a href=/easysearch/main/docs/references/search/term-vs-full-text/>精确查询与全文检索的对比</a></li><li><input type=checkbox id=section-e8f94bccae3c54be36d1896778639639 class=toggle>
 <label for=section-e8f94bccae3c54be36d1896778639639 class="flex justify-between"><a href=/easysearch/main/docs/references/search/term/>精确查询</a>
@@ -103,9 +101,9 @@ const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{co
 <label for=section-86bf1f72d443fd258db0d40a6bf009d7 class="flex justify-between"><a href=/easysearch/main/docs/references/search/geo-and-xy/>地理查询</a>
 <span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geopolygon/>地理多边形查询</a></li><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geoshape/>地理形状查询</a></li><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geodistance/>地理距离查询</a></li><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geo-bounding-box/>地理边界框查询</a></li></ul></li><li><input type=checkbox id=section-914ecc84741b3e200e93ea80c2eb0df1 class=toggle>
 <label for=section-914ecc84741b3e200e93ea80c2eb0df1 class="flex justify-between"><a href=/easysearch/main/docs/references/search/span/>Span 查询</a>
-<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/search/span/span-first/>Span 前序匹配</a></li><li><a href=/easysearch/main/docs/references/search/span/span-within/>Span 包含于查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-containing/>Span 包含查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-multi-term/>Span 多词项查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-or/>Span 或查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-not/>Span 排除查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-term/>Span 词项查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-field-masking/>Span 跨字段查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-near/>Span 邻近查询</a></li></ul></li><li><input type=checkbox id=section-2baa128ae64b7fa17aa37f790453c292 class=toggle checked>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/search/span/span-first/>Span 前序匹配</a></li><li><a href=/easysearch/main/docs/references/search/span/span-within/>Span 包含于查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-containing/>Span 包含查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-multi-term/>Span 多词项查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-or/>Span 或查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-not/>Span 排除查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-term/>Span 词项查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-field-masking/>Span 跨字段查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-near/>Span 邻近查询</a></li></ul></li><li><input type=checkbox id=section-2baa128ae64b7fa17aa37f790453c292 class=toggle>
 <label for=section-2baa128ae64b7fa17aa37f790453c292 class="flex justify-between"><a href=/easysearch/main/docs/references/search/joining/>关联查询</a>
-<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/search/joining/has-child/>子查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/nested/>嵌套查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/parent-id/ class=active>父 ID 查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/has-parent/>父查询</a></li></ul></li><li><input type=checkbox id=section-fe27ae639d7a8e652db974b443eb5848 class=toggle>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/search/joining/has-child/>子查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/nested/>嵌套查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/parent-id/>父 ID 查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/has-parent/>父查询</a></li></ul></li><li><input type=checkbox id=section-fe27ae639d7a8e652db974b443eb5848 class=toggle>
 <label for=section-fe27ae639d7a8e652db974b443eb5848 class="flex justify-between"><a href=/easysearch/main/docs/references/search/specialized/>专业查询</a>
 <span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/search/specialized/wrapper/>包装器</a></li><li><a href=/easysearch/main/docs/references/search/specialized/rank-feature/>排序功能</a></li><li><a href=/easysearch/main/docs/references/search/specialized/percolate/>渗透查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/more-like-this/>类似查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/script-score/>脚本分数查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/script/>脚本查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/distance-feature/>距离特征查询</a></li></ul></li><li><a href=/easysearch/main/docs/references/search/match-all/>全匹配查询</a></li><li><a href=/easysearch/main/docs/references/search/minimum-should-match/>最小匹配</a></li><li><a href=/easysearch/main/docs/references/search/regex-syntax/>正则表达式语法</a></li><li><a href=/easysearch/main/docs/references/search/rewrite-parameter/>重写参数</a></li><li><a href=/easysearch/main/docs/references/search/knn_api/>向量查询</a></li><li><a href=/easysearch/main/docs/references/search/search-template/>查询模版</a></li><li><a href=/easysearch/main/docs/references/search/async_search/>异步搜索</a></li><li><a href=/easysearch/main/docs/references/search/pit_api/>定点查询</a></li><li><input type=checkbox id=section-19c2d09435d47ad6656e503e2a68a3b3 class=toggle>
 <label for=section-19c2d09435d47ad6656e503e2a68a3b3 class="flex justify-between"><a href=/easysearch/main/docs/references/search/search-pipelines/>搜索管道</a>
@@ -138,67 +136,339 @@ const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{co
 <span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/ai-integration/ingest-text-embedding/>写入数据文本向量化</a></li><li><a href=/easysearch/main/docs/references/ai-integration/search-text-embedding/>搜索请求文本向量化</a></li><li><a href=/easysearch/main/docs/references/ai-integration/text-embeddings/>文本向量化</a></li><li><a href=/easysearch/main/docs/references/ai-integration/hybrid-search/>混合搜索</a></li></ul></li></ul></li><li><input type=checkbox id=section-1adc738e7351809ea378ec7e9730bd1f class=toggle>
 <label for=section-1adc738e7351809ea378ec7e9730bd1f class="flex justify-between"><a>版本历史</a>
 <span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/release-notes/client/>Easysearch-client</a></li><li><a href=/easysearch/main/docs/release-notes/easysearch/>Easysearch</a></li></ul></li><li><a href=/easysearch/main/docs/resources/>其它资源</a><ul></ul></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/easysearch/main/svg/menu.svg class=book-icon alt=Menu></label>
-<strong>父 ID 查询</strong>
-<label for=toc-control><img src=/easysearch/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><style>.toc-header{font-weight:500;margin-bottom:8px;margin-top:20px;height:24px;gap:7px}</style><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#参考样例>参考样例</a></li><li><a href=#参数说明>参数说明</a></li></ul></nav></aside></header><article class=markdown><h1 id=父-id-查询>父 ID 查询
-<a class=anchor href=#%e7%88%b6-id-%e6%9f%a5%e8%af%a2>#</a></h1><p><code>parent_id</code> 查询返回具有指定 ID 的父文档的子文档。您可以通过使用连接字段类型在相同索引中的文档之间建立父子关系。</p><h2 id=参考样例>参考样例
-<a class=anchor href=#%e5%8f%82%e8%80%83%e6%a0%b7%e4%be%8b>#</a></h2><p>在您运行一个 <code>parent_id</code> 查询之前，您的索引必须包含一个连接字段，以便建立父子关系。索引映射请求使用以下格式：</p><pre><code>PUT /example_index
-{
-  &quot;mappings&quot;: {
-    &quot;properties&quot;: {
-      &quot;relationship_field&quot;: {
-        &quot;type&quot;: &quot;join&quot;,
-        &quot;relations&quot;: {
-          &quot;parent_doc&quot;: &quot;child_doc&quot;
-        }
-      }
-    }
-  }
-}
-</code></pre><p>对于此示例，首先配置一个包含代表产品和其品牌的文档的索引，这些文档在 <code>has_child</code> 查询示例中有所描述。</p><p>要搜索特定父文档的子文档，请使用 <code>parent_id</code> 查询。以下查询返回具有 ID 1 的父文档的子文档（产品）：</p><pre><code>GET testindex1/_search
-{
-  &quot;query&quot;: {
-    &quot;parent_id&quot;: {
-      &quot;type&quot;: &quot;product&quot;,
-      &quot;id&quot;: &quot;1&quot;
-    }
-  }
-}
-</code></pre><p>返回子产品：</p><pre><code>{
-  &quot;took&quot;: 57,
-  &quot;timed_out&quot;: false,
-  &quot;_shards&quot;: {
-    &quot;total&quot;: 1,
-    &quot;successful&quot;: 1,
-    &quot;skipped&quot;: 0,
-    &quot;failed&quot;: 0
-  },
-  &quot;hits&quot;: {
-    &quot;total&quot;: {
-      &quot;value&quot;: 1,
-      &quot;relation&quot;: &quot;eq&quot;
-    },
-    &quot;max_score&quot;: 0.87546873,
-    &quot;hits&quot;: [
-      {
-        &quot;_index&quot;: &quot;testindex1&quot;,
-        &quot;_id&quot;: &quot;3&quot;,
-        &quot;_score&quot;: 0.87546873,
-        &quot;_routing&quot;: &quot;1&quot;,
-        &quot;_source&quot;: {
-          &quot;name&quot;: &quot;Mechanical watch&quot;,
-          &quot;sales_count&quot;: 150,
-          &quot;product_to_brand&quot;: {
-            &quot;name&quot;: &quot;product&quot;,
-            &quot;parent&quot;: &quot;1&quot;
-          }
-        }
-      }
-    ]
-  }
-}
-</code></pre><h2 id=参数说明>参数说明
-<a class=anchor href=#%e5%8f%82%e6%95%b0%e8%af%b4%e6%98%8e>#</a></h2><p>以下表格列出了所有由 <code>parent_id</code> 查询支持的一级参数。</p><table><thead><tr><th>参数</th><th>必填/可选</th><th>描述</th></tr></thead><tbody><tr><td><code>type</code></td><td>必填</td><td>指定在 <code>join</code> 字段映射中定义的子关系名称。</td></tr><tr><td><code>id</code></td><td>必填</td><td>父文档的 ID。查询返回与该父文档关联的子文档。</td></tr><tr><td><code>ignore_unmapped</code></td><td>可选</td><td>指示是否忽略未映射的 type 字段，而不是抛出错误而不返回文档。您可以在查询多个索引时提供此参数，其中一些索引可能不包含 type 字段。默认为 false 。</td></tr></tbody></table></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+<strong>分布式集群</strong>
+<label for=toc-control><img src=/easysearch/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><style>.toc-header{font-weight:500;margin-bottom:8px;margin-top:20px;height:24px;gap:7px}</style><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#前置要求>前置要求</a></li><li><a href=#快速开始>快速开始</a><ul><li><a href=#交互式安装推荐>交互式安装（推荐）</a></li><li><a href=#静默安装>静默安装</a></li></ul></li><li><a href=#命令行参数>命令行参数</a></li><li><a href=#生成的目录结构>生成的目录结构</a><ul><li><a href=#伪分布式模式>伪分布式模式</a></li><li><a href=#真分布式模式>真分布式模式</a></li></ul></li><li><a href=#部署方式>部署方式</a><ul><li><a href=#方式一本地伪分布式>方式一：本地伪分布式</a></li><li><a href=#方式二真实分布式部署>方式二：真实分布式部署</a></li></ul></li><li><a href=#节点配置说明>节点配置说明</a></li><li><a href=#证书和节点认证>证书和节点认证</a><ul><li><a href=#证书设计>证书设计</a></li><li><a href=#节点互信配置>节点互信配置</a></li><li><a href=#查看证书信息>查看证书信息</a></li></ul></li><li><a href=#配置为系统服务>配置为系统服务</a><ul><li><a href=#在每台服务器上创建服务文件>在每台服务器上创建服务文件</a></li><li><a href=#启用并启动服务>启用并启动服务</a></li></ul></li><li><a href=#常见问题>常见问题</a><ul><li><a href=#1-节点无法加入集群>1. 节点无法加入集群</a></li><li><a href=#2-证书验证失败>2. 证书验证失败</a></li><li><a href=#3-端口冲突>3. 端口冲突</a></li><li><a href=#4-内存不足>4. 内存不足</a></li></ul></li><li><a href=#生产环境最佳实践>生产环境最佳实践</a></li><li><a href=#更多资源>更多资源</a></li><li><a href=#总结>总结</a></li></ul></nav></aside></header><article class=markdown><h1 id=分布式集群安装>分布式集群安装
+<a class=anchor href=#%e5%88%86%e5%b8%83%e5%bc%8f%e9%9b%86%e7%be%a4%e5%ae%89%e8%a3%85>#</a></h1><p>本文档介绍如何使用 <code>initialize-cluster.sh</code> 脚本快速搭建 Easysearch 分布式集群。该脚本支持伪分布式（单机多节点）和真分布式（多服务器）两种部署模式。</p><h2 id=前置要求>前置要求
+<a class=anchor href=#%e5%89%8d%e7%bd%ae%e8%a6%81%e6%b1%82>#</a></h2><ol><li>已完成
+<a href=/easysearch/main/docs/getting-started/settings/>系统调优</a></li><li>JDK 21 或更高版本（脚本可自动下载）</li><li>已安装 OpenSSL</li><li>真分布式部署需要：<ul><li>服务器间网络互通</li><li>已配置 SSH 互信（无密码登录）</li><li>目标路径有写入权限</li></ul></li></ol><h2 id=快速开始>快速开始
+<a class=anchor href=#%e5%bf%ab%e9%80%9f%e5%bc%80%e5%a7%8b>#</a></h2><h3 id=交互式安装推荐>交互式安装（推荐）
+<a class=anchor href=#%e4%ba%a4%e4%ba%92%e5%bc%8f%e5%ae%89%e8%a3%85%e6%8e%a8%e8%8d%90>#</a></h3><p>交互式模式会引导您输入集群配置信息：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /data/easysearch
+bin/initialize-cluster.sh
+</code></pre></div><p>脚本会依次提示您输入：</p><ul><li><strong>集群名称</strong>：默认为 <code>easysearch-cluster</code></li><li><strong>证书域名</strong>：默认为 <code>infini.cloud</code></li><li><strong>节点数量</strong>：默认为 <code>3</code></li><li><strong>每个节点的配置</strong>：IP 地址、HTTP 端口、节点名称、节点角色</li><li><strong>协议选择</strong>：HTTP 或 HTTPS（默认 HTTPS）</li><li><strong>API 兼容性</strong>：是否启用 Elasticsearch API 兼容模式</li><li><strong>证书信息</strong>：国家、省份、城市、组织、有效期等（可选）</li></ul><p>输入示例：</p><pre><code>======================================
+Easysearch Cluster Initialization
+======================================
+
+Enter cluster name [easysearch-cluster]: my-cluster
+Enter domain for certificates [infini.cloud]: infinilabs.com
+How many nodes in the cluster [3]: 3
+
+Configure 3 cluster node(s):
+
+Node 1:
+  IP address [127.0.0.1]: 192.168.1.10
+  HTTP port [9200]: 9200
+  Node name [node1]: master1
+✓ Added: master1 @ 192.168.1.10:9200
+
+Node 2:
+  IP address [127.0.0.1]: 192.168.1.11
+  HTTP port [9201]: 9200
+  Node name [node2]: master2
+✓ Added: master2 @ 192.168.1.11:9200
+
+Node 3:
+  IP address [127.0.0.1]: 192.168.1.12
+  HTTP port [9202]: 9200
+  Node name [node3]: data1
+✓ Added: data1 @ 192.168.1.12:9200
+</code></pre><blockquote><p><strong>提示</strong>：所有提示项都可以直接回车使用默认值。</p></blockquote><h3 id=静默安装>静默安装
+<a class=anchor href=#%e9%9d%99%e9%bb%98%e5%ae%89%e8%a3%85>#</a></h3><h4 id=本地伪分布式3-节点>本地伪分布式（3 节点）
+<a class=anchor href=#%e6%9c%ac%e5%9c%b0%e4%bc%aa%e5%88%86%e5%b8%83%e5%bc%8f3-%e8%8a%82%e7%82%b9>#</a></h4><p>在同一台机器上运行 3 个完整的 Easysearch 实例，自动分配不同端口：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /data/easysearch
+bin/initialize-cluster.sh -s
+</code></pre></div><p>这将创建 <code>/data/cluster/3nodes/</code> 目录，包含：</p><ul><li><strong>easysearch1</strong>: 127.0.0.1:9200 (transport: 9300)</li><li><strong>easysearch2</strong>: 127.0.0.1:9201 (transport: 9301)</li><li><strong>easysearch3</strong>: 127.0.0.1:9202 (transport: 9302)</li></ul><p>每个实例都是完整的 Easysearch 副本（包含 bin、lib、config、plugins 等）。</p><h4 id=真实分布式3-台服务器>真实分布式（3 台服务器）
+<a class=anchor href=#%e7%9c%9f%e5%ae%9e%e5%88%86%e5%b8%83%e5%bc%8f3-%e5%8f%b0%e6%9c%8d%e5%8a%a1%e5%99%a8>#</a></h4><p>为 3 台服务器创建集群配置，并自动通过 SSH 分发：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /data/easysearch
+bin/initialize-cluster.sh -s <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -c prod-cluster <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -i 192.168.64.3,192.168.64.4,192.168.64.5
+</code></pre></div><p>脚本会自动：</p><ol><li>生成每个节点的完整配置和证书</li><li>通过 SSH 将节点包复制到对应服务器的 <code>/data/easysearch</code></li><li>自动解压并配置</li></ol><blockquote><p><strong>前提</strong>：当前主机已与目标服务器建立 SSH 互信。</p></blockquote><h4 id=自定义节点配置>自定义节点配置
+<a class=anchor href=#%e8%87%aa%e5%ae%9a%e4%b9%89%e8%8a%82%e7%82%b9%e9%85%8d%e7%bd%ae>#</a></h4><p>精确控制每个节点的配置：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /data/easysearch
+bin/initialize-cluster.sh -s <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -c my-cluster <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -n 192.168.1.10:9200:master1:master,data,ingest <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -n 192.168.1.11:9200:master2:master,data,ingest <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -n 192.168.1.12:9200:data1:data,ingest
+</code></pre></div><p>节点配置格式：<code>IP:HTTP_PORT:NODE_NAME:ROLES</code></p><h4 id=自定义证书信息>自定义证书信息
+<a class=anchor href=#%e8%87%aa%e5%ae%9a%e4%b9%89%e8%af%81%e4%b9%a6%e4%bf%a1%e6%81%af>#</a></h4><p>指定证书的组织信息（示例使用通用占位符）：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /data/easysearch
+bin/initialize-cluster.sh -s <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -i 192.168.1.10,192.168.1.11,192.168.1.12 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --cert-country IN <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --cert-state FI <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --cert-locality NI <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --cert-org <span style=color:#e6db74>&#34;ORG&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --cert-ou <span style=color:#e6db74>&#34;UNIT&#34;</span>
+</code></pre></div><p>生成的证书 DN 将是：</p><pre><code>CN=node1.infini.cloud,OU=UNIT,O=ORG,L=NI,ST=FI,C=IN
+</code></pre><blockquote><p><strong>注意</strong>：默认使用通用占位符（IN/FI/NI）以避免暴露真实地理位置信息。生产环境可根据实际需求自定义。</p></blockquote><p><strong>自定义证书有效期</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 生成有效期为 20 年的证书</span>
+bin/initialize-cluster.sh -s <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -i 192.168.1.10,192.168.1.11,192.168.1.12 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --cert-days <span style=color:#ae81ff>7300</span>
+</code></pre></div><h4 id=启用-elasticsearch-api-兼容性>启用 Elasticsearch API 兼容性
+<a class=anchor href=#%e5%90%af%e7%94%a8-elasticsearch-api-%e5%85%bc%e5%ae%b9%e6%80%a7>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /data/easysearch
+bin/initialize-cluster.sh -s <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -i 192.168.1.10,192.168.1.11,192.168.1.12 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --es-compat <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --es-version 8.9.0
+</code></pre></div><p>将在配置中添加：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>elasticsearch.api_compatibility</span>: <span style=color:#66d9ef>true</span>
+<span style=color:#f92672>elasticsearch.api_compatibility_version</span>: <span style=color:#e6db74>&#34;8.9.0&#34;</span>
+</code></pre></div><h4 id=使用-http-协议不启用-ssl>使用 HTTP 协议（不启用 SSL）
+<a class=anchor href=#%e4%bd%bf%e7%94%a8-http-%e5%8d%8f%e8%ae%ae%e4%b8%8d%e5%90%af%e7%94%a8-ssl>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /data/easysearch
+bin/initialize-cluster.sh -s <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -i 192.168.1.10,192.168.1.11,192.168.1.12 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --protocol http
+</code></pre></div><h2 id=命令行参数>命令行参数
+<a class=anchor href=#%e5%91%bd%e4%bb%a4%e8%a1%8c%e5%8f%82%e6%95%b0>#</a></h2><table><thead><tr><th>参数</th><th>说明</th><th>示例</th></tr></thead><tbody><tr><td><code>-h, --help</code></td><td>显示帮助信息</td><td><code>--help</code></td></tr><tr><td><code>-s, --silent</code></td><td>静默模式，使用默认值</td><td><code>-s</code></td></tr><tr><td><code>-y, --yes</code></td><td>跳过确认提示</td><td><code>-y</code></td></tr><tr><td><code>-c, --cluster-name</code></td><td>集群名称</td><td><code>-c prod-cluster</code></td></tr><tr><td><code>-d, --domain</code></td><td>证书域名</td><td><code>-d example.com</code></td></tr><tr><td><code>-n, --node</code></td><td>添加节点（可多次使用）<br>格式：IP:HTTP_PORT:NODE_NAME:ROLES</td><td><code>-n 192.168.1.10:9200:node1:master,data</code></td></tr><tr><td><code>-i, --ips</code></td><td>IP 列表（逗号分隔）<br>自动生成端口和节点名</td><td><code>-i 192.168.1.10,192.168.1.11</code></td></tr><tr><td><code>--http-port-start</code></td><td>HTTP 起始端口</td><td><code>--http-port-start 9200</code></td></tr><tr><td><code>--transport-port-start</code></td><td>Transport 起始端口</td><td><code>--transport-port-start 9300</code></td></tr><tr><td><code>--protocol</code></td><td>HTTP 协议（http 或 https）</td><td><code>--protocol https</code></td></tr><tr><td><code>--cert-country</code></td><td>证书国家代码</td><td><code>--cert-country CN</code></td></tr><tr><td><code>--cert-state</code></td><td>证书州/省</td><td><code>--cert-state Hunan</code></td></tr><tr><td><code>--cert-locality</code></td><td>证书城市</td><td><code>--cert-locality Changsha</code></td></tr><tr><td><code>--cert-org</code></td><td>证书组织</td><td><code>--cert-org "INFINI Ltd"</code></td></tr><tr><td><code>--cert-ou</code></td><td>证书组织单位</td><td><code>--cert-ou "Engineering"</code></td></tr><tr><td><code>--cert-days</code></td><td>证书有效期（天）</td><td><code>--cert-days 7300</code> (20年)</td></tr><tr><td><code>--es-compat</code></td><td>启用 Elasticsearch API 兼容性</td><td><code>--es-compat</code></td></tr><tr><td><code>--es-version</code></td><td>Elasticsearch 兼容版本</td><td><code>--es-version 8.9.0</code></td></tr></tbody></table><h2 id=生成的目录结构>生成的目录结构
+<a class=anchor href=#%e7%94%9f%e6%88%90%e7%9a%84%e7%9b%ae%e5%bd%95%e7%bb%93%e6%9e%84>#</a></h2><h3 id=伪分布式模式>伪分布式模式
+<a class=anchor href=#%e4%bc%aa%e5%88%86%e5%b8%83%e5%bc%8f%e6%a8%a1%e5%bc%8f>#</a></h3><p>脚本会在当前 Easysearch 的父目录创建集群目录：</p><pre><code>/data/cluster/
+└── 3nodes/                           # 节点数量命名
+    ├── easysearch1/                  # 完整的 Easysearch 实例 1
+    │   ├── bin/
+    │   ├── lib/
+    │   ├── modules/
+    │   ├── plugins/                  # 已安装插件
+    │   ├── jdk/                      # JDK（如果下载）
+    │   ├── config/
+    │   │   ├── easysearch.yml       # 节点 1 配置
+    │   │   ├── jvm.options
+    │   │   ├── log4j2.properties
+    │   │   ├── instance.crt         # 节点 1 证书
+    │   │   ├── instance.key
+    │   │   ├── ca.crt
+    │   │   ├── admin.crt
+    │   │   ├── admin.key
+    │   │   └── security/
+    │   │       └── user.yml          # 加密后的密码
+    │   ├── data/
+    │   └── logs/
+    ├── easysearch2/                  # 完整的 Easysearch 实例 2
+    │   └── ...
+    ├── easysearch3/                  # 完整的 Easysearch 实例 3
+    │   └── ...
+    ├── start-all.sh                  # 启动所有节点
+    ├── stop-all.sh                   # 停止所有节点
+    └── README.md                     # 集群信息（含密码）
+</code></pre><h3 id=真分布式模式>真分布式模式
+<a class=anchor href=#%e7%9c%9f%e5%88%86%e5%b8%83%e5%bc%8f%e6%a8%a1%e5%bc%8f>#</a></h3><p>脚本会创建独立的节点包，并自动分发到各服务器：</p><pre><code>/data/cluster/
+└── cluster-easysearch-cluster/       # 集群配置目录
+    ├── tmp/                          # 临时目录（用于生成证书）
+    ├── 192-168-64-3/                # 节点 1 包（待分发）
+    │   ├── bin/
+    │   ├── lib/
+    │   ├── config/
+    │   │   ├── easysearch.yml       # network.host: 192.168.64.3
+    │   │   └── ...
+    │   └── ...
+    ├── 192-168-64-4/                # 节点 2 包
+    │   └── ...
+    ├── 192-168-64-5/                # 节点 3 包
+    │   └── ...
+    ├── 192-168-64-3.tar.gz          # 压缩包（用于手动分发）
+    ├── 192-168-64-4.tar.gz
+    ├── 192-168-64-5.tar.gz
+    └── README.md                     # 部署说明
+</code></pre><p>分发到目标服务器后的结构（每台服务器）：</p><pre><code>/data/easysearch/                     # 统一目录名
+├── bin/
+├── lib/
+├── config/
+│   ├── easysearch.yml               # 包含对应 IP 的配置
+│   └── ...
+├── data/
+├── logs/
+└── pid                               # 启动后生成
+</code></pre><h2 id=部署方式>部署方式
+<a class=anchor href=#%e9%83%a8%e7%bd%b2%e6%96%b9%e5%bc%8f>#</a></h2><h3 id=方式一本地伪分布式>方式一：本地伪分布式
+<a class=anchor href=#%e6%96%b9%e5%bc%8f%e4%b8%80%e6%9c%ac%e5%9c%b0%e4%bc%aa%e5%88%86%e5%b8%83%e5%bc%8f>#</a></h3><p>适合开发测试环境，所有节点运行在同一台机器上。</p><ol><li><strong>生成集群</strong></li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /data/easysearch
+bin/initialize-cluster.sh -s
+</code></pre></div><ol start=2><li><strong>启动所有节点</strong></li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /data/cluster/3nodes
+./start-all.sh
+</code></pre></div><ol start=3><li><strong>验证集群</strong></li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 获取管理员密码</span>
+cat README.md | grep <span style=color:#e6db74>&#34;Admin Password&#34;</span>
+
+<span style=color:#75715e># 检查集群健康状态</span>
+curl -ku <span style=color:#e6db74>&#39;admin:YOUR_PASSWORD&#39;</span> <span style=color:#e6db74>&#34;https://127.0.0.1:9200/_cluster/health?pretty&#34;</span>
+
+<span style=color:#75715e># 查看节点列表</span>
+curl -ku <span style=color:#e6db74>&#39;admin:YOUR_PASSWORD&#39;</span> <span style=color:#e6db74>&#34;https://127.0.0.1:9200/_cat/nodes?v&#34;</span>
+</code></pre></div><p>输出示例：</p><pre><code>ip        heap.percent ram.percent cpu load_1m load_5m load_15m node.role master name
+127.0.0.1           45          68   8    0.52    0.38     0.35 dimr      *      node1
+127.0.0.1           38          68   8    0.52    0.38     0.35 dimr      -      node2
+127.0.0.1           42          68   8    0.52    0.38     0.35 dimr      -      node3
+</code></pre><ol start=4><li><strong>停止集群</strong></li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /data/cluster/3nodes
+./stop-all.sh
+</code></pre></div><blockquote><p><strong>说明</strong>：<code>stop-all.sh</code> 脚本会读取每个节点目录下的 <code>pid</code> 文件来优雅地停止进程。</p></blockquote><h3 id=方式二真实分布式部署>方式二：真实分布式部署
+<a class=anchor href=#%e6%96%b9%e5%bc%8f%e4%ba%8c%e7%9c%9f%e5%ae%9e%e5%88%86%e5%b8%83%e5%bc%8f%e9%83%a8%e7%bd%b2>#</a></h3><p>适合生产环境，节点分布在多台服务器上。脚本支持自动通过 SSH 分发。</p><h4 id=自动部署推荐>自动部署（推荐）
+<a class=anchor href=#%e8%87%aa%e5%8a%a8%e9%83%a8%e7%bd%b2%e6%8e%a8%e8%8d%90>#</a></h4><p><strong>前提条件</strong>：</p><ul><li>当前主机已与目标服务器建立 SSH 互信</li><li>目标服务器的 <code>/data</code> 目录有写入权限</li></ul><p><strong>步骤 1：生成并自动部署</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /data/easysearch
+bin/initialize-cluster.sh -s <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -c prod-cluster <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -i 192.168.64.3,192.168.64.4,192.168.64.5
+</code></pre></div><p>脚本会自动：</p><ol><li>生成所有节点的配置和证书</li><li>为每个节点创建完整的 Easysearch 实例</li><li>打包并通过 SSH 复制到对应服务器</li><li>在远程服务器上自动解压到 <code>/data/easysearch</code></li></ol><p><strong>步骤 2：在各服务器上启动节点</strong></p><p>在每台服务器上执行：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /data/easysearch
+bin/easysearch -d -p pid
+</code></pre></div><p>或者在管理节点上通过 SSH 批量启动：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#66d9ef>for</span> ip in 192.168.64.3 192.168.64.4 192.168.64.5; <span style=color:#66d9ef>do</span>
+  ssh $ip <span style=color:#e6db74>&#34;cd /data/easysearch &amp;&amp; bin/easysearch -d -p pid&#34;</span>
+<span style=color:#66d9ef>done</span>
+</code></pre></div><h4 id=手动部署>手动部署
+<a class=anchor href=#%e6%89%8b%e5%8a%a8%e9%83%a8%e7%bd%b2>#</a></h4><p>如果 SSH 自动部署失败或需要手动控制，可以使用手动方式。</p><p><strong>步骤 1：生成集群配置</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /data/easysearch
+bin/initialize-cluster.sh -s <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -c prod-cluster <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -i 192.168.64.3,192.168.64.4,192.168.64.5
+</code></pre></div><p>当 SSH 自动部署失败时，脚本会生成压缩包供手动分发。</p><p><strong>步骤 2：手动分发</strong></p><p>将生成的压缩包复制到对应服务器：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /data/cluster/cluster-prod-cluster
+
+<span style=color:#75715e># 复制到服务器 1</span>
+scp 192-168-64-3.tar.gz root@192.168.64.3:/tmp/
+
+<span style=color:#75715e># 复制到服务器 2</span>
+scp 192-168-64-4.tar.gz root@192.168.64.4:/tmp/
+
+<span style=color:#75715e># 复制到服务器 3</span>
+scp 192-168-64-5.tar.gz root@192.168.64.5:/tmp/
+</code></pre></div><p><strong>步骤 3：在各服务器上解压</strong></p><p>在每台服务器上执行：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /tmp
+tar -xzf 192-168-64-3.tar.gz
+mv 192-168-64-3 /data/easysearch
+chown -R easysearch:easysearch /data/easysearch
+</code></pre></div><p><strong>步骤 4：启动节点</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cd /data/easysearch
+su easysearch -c <span style=color:#e6db74>&#34;bin/easysearch -d -p pid&#34;</span>
+</code></pre></div><h4 id=验证集群>验证集群
+<a class=anchor href=#%e9%aa%8c%e8%af%81%e9%9b%86%e7%be%a4>#</a></h4><p>在任意节点上验证集群状态：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 获取管理员密码（在生成配置的服务器上）</span>
+cat /data/cluster/cluster-prod-cluster/README.md | grep <span style=color:#e6db74>&#34;Admin Password&#34;</span>
+
+<span style=color:#75715e># 检查集群健康状态</span>
+curl -ku <span style=color:#e6db74>&#39;admin:YOUR_PASSWORD&#39;</span> <span style=color:#e6db74>&#34;https://192.168.64.3:9200/_cluster/health?pretty&#34;</span>
+
+<span style=color:#75715e># 查看所有节点</span>
+curl -ku <span style=color:#e6db74>&#39;admin:YOUR_PASSWORD&#39;</span> <span style=color:#e6db74>&#34;https://192.168.64.3:9200/_cat/nodes?v&#34;</span>
+</code></pre></div><h4 id=停止节点>停止节点
+<a class=anchor href=#%e5%81%9c%e6%ad%a2%e8%8a%82%e7%82%b9>#</a></h4><p>在每台服务器上执行：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>kill <span style=color:#66d9ef>$(</span>cat /data/easysearch/pid<span style=color:#66d9ef>)</span>
+</code></pre></div><p>或通过 SSH 批量停止：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#66d9ef>for</span> ip in 192.168.64.3 192.168.64.4 192.168.64.5; <span style=color:#66d9ef>do</span>
+  ssh $ip <span style=color:#e6db74>&#34;kill \$(cat /data/easysearch/pid)&#34;</span>
+<span style=color:#66d9ef>done</span>
+</code></pre></div><h2 id=节点配置说明>节点配置说明
+<a class=anchor href=#%e8%8a%82%e7%82%b9%e9%85%8d%e7%bd%ae%e8%af%b4%e6%98%8e>#</a></h2><p>每个节点的 <code>config/easysearch.yml</code> 包含以下关键配置：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#75715e># 集群名称（所有节点相同）</span>
+<span style=color:#f92672>cluster.name</span>: <span style=color:#ae81ff>my-cluster</span>
+
+<span style=color:#75715e># 节点名称（每个节点不同）</span>
+<span style=color:#f92672>node.name</span>: <span style=color:#ae81ff>node1</span>
+<span style=color:#f92672>node.roles</span>: [ <span style=color:#ae81ff>master, data, ingest, remote_cluster_client ]</span>
+
+<span style=color:#75715e># 数据和日志路径</span>
+<span style=color:#f92672>path.data</span>: <span style=color:#ae81ff>data</span>
+<span style=color:#f92672>path.logs</span>: <span style=color:#ae81ff>logs</span>
+
+<span style=color:#75715e># 网络配置（每个节点的 IP 不同）</span>
+<span style=color:#f92672>network.host</span>: <span style=color:#ae81ff>192.168.64.3</span>
+<span style=color:#f92672>http.port</span>: <span style=color:#ae81ff>9200</span>
+<span style=color:#f92672>transport.port</span>: <span style=color:#ae81ff>9300</span>
+
+<span style=color:#75715e># 集群发现（所有节点相同）</span>
+<span style=color:#f92672>discovery.seed_hosts</span>: [<span style=color:#e6db74>&#34;192.168.64.3:9300&#34;</span>, <span style=color:#e6db74>&#34;192.168.64.4:9300&#34;</span>, <span style=color:#e6db74>&#34;192.168.64.5:9300&#34;</span>]
+<span style=color:#f92672>cluster.initial_master_nodes</span>: [<span style=color:#e6db74>&#34;node1&#34;</span>, <span style=color:#e6db74>&#34;node2&#34;</span>, <span style=color:#e6db74>&#34;node3&#34;</span>]
+
+<span style=color:#75715e># 安全配置（所有节点相同）</span>
+<span style=color:#f92672>security.enabled</span>: <span style=color:#66d9ef>true</span>
+<span style=color:#f92672>security.ssl.http.enabled</span>: <span style=color:#66d9ef>true</span>
+<span style=color:#f92672>security.ssl.http.cert_file</span>: <span style=color:#ae81ff>instance.crt</span>
+<span style=color:#f92672>security.ssl.http.key_file</span>: <span style=color:#ae81ff>instance.key</span>
+<span style=color:#f92672>security.ssl.http.ca_file</span>: <span style=color:#ae81ff>ca.crt</span>
+<span style=color:#f92672>security.ssl.transport.enabled</span>: <span style=color:#66d9ef>true</span>
+<span style=color:#f92672>security.ssl.transport.cert_file</span>: <span style=color:#ae81ff>instance.crt</span>
+<span style=color:#f92672>security.ssl.transport.key_file</span>: <span style=color:#ae81ff>instance.key</span>
+<span style=color:#f92672>security.ssl.transport.ca_file</span>: <span style=color:#ae81ff>ca.crt</span>
+
+<span style=color:#75715e># 节点认证（所有节点相同）</span>
+<span style=color:#f92672>security.nodes_dn</span>:
+  - <span style=color:#e6db74>&#34;CN=node1.infini.cloud,OU=UNIT,O=ORG,L=NI,ST=FI,C=IN&#34;</span>
+  - <span style=color:#e6db74>&#34;CN=node2.infini.cloud,OU=UNIT,O=ORG,L=NI,ST=FI,C=IN&#34;</span>
+  - <span style=color:#e6db74>&#34;CN=node3.infini.cloud,OU=UNIT,O=ORG,L=NI,ST=FI,C=IN&#34;</span>
+
+<span style=color:#75715e># 管理员认证（所有节点相同）</span>
+<span style=color:#f92672>security.authcz.admin_dn</span>:
+  - <span style=color:#e6db74>&#34;CN=admin.infini.cloud,OU=UNIT,O=ORG,L=NI,ST=FI,C=IN&#34;</span>
+</code></pre></div><blockquote><p><strong>关键配置说明</strong>：</p><ul><li>每个节点通过 <code>network.host</code> 和 <code>node.name</code> 进行区分</li><li>每个节点使用独特的证书 CN（如 <code>CN=node1.infini.cloud</code>）</li><li><code>security.nodes_dn</code> 列出所有允许加入集群的节点证书 DN</li><li><code>security.authcz.admin_dn</code> 定义管理员证书 DN</li><li><code>path.data</code> 和 <code>path.logs</code> 使用统一的相对路径</li><li>所有节点使用相同的集群发现配置</li></ul></blockquote><h2 id=证书和节点认证>证书和节点认证
+<a class=anchor href=#%e8%af%81%e4%b9%a6%e5%92%8c%e8%8a%82%e7%82%b9%e8%ae%a4%e8%af%81>#</a></h2><h3 id=证书设计>证书设计
+<a class=anchor href=#%e8%af%81%e4%b9%a6%e8%ae%be%e8%ae%a1>#</a></h3><p>脚本为集群中的每个节点生成独立的证书，使用不同的 CN（Common Name）：</p><p><strong>默认证书信息</strong>（可通过命令行参数自定义）：</p><ul><li><strong>国家 (C)</strong>：IN</li><li><strong>州/省 (ST)</strong>：FI</li><li><strong>城市 (L)</strong>：NI</li><li><strong>组织 (O)</strong>：ORG</li><li><strong>组织单位 (OU)</strong>：UNIT</li><li><strong>域名</strong>：infini.cloud</li><li><strong>有效期</strong>：3650 天（10 年）</li></ul><p><strong>生成的证书 DN</strong>：</p><ul><li><strong>节点 1 证书</strong>：<code>CN=node1.infini.cloud,OU=UNIT,O=ORG,L=NI,ST=FI,C=IN</code></li><li><strong>节点 2 证书</strong>：<code>CN=node2.infini.cloud,OU=UNIT,O=ORG,L=NI,ST=FI,C=IN</code></li><li><strong>节点 3 证书</strong>：<code>CN=node3.infini.cloud,OU=UNIT,O=ORG,L=NI,ST=FI,C=IN</code></li><li><strong>管理员证书</strong>：<code>CN=admin.infini.cloud,OU=UNIT,O=ORG,L=NI,ST=FI,C=IN</code></li></ul><p><strong>自定义证书信息</strong>：</p><p>使用命令行参数自定义证书的组织信息和有效期：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>bin/initialize-cluster.sh -s <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -i 192.168.1.10,192.168.1.11 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --cert-country IN <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --cert-state FI <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --cert-locality NI <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --cert-org <span style=color:#e6db74>&#34;ORG&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --cert-ou <span style=color:#e6db74>&#34;UNIT&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --cert-days <span style=color:#ae81ff>7300</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --domain infini.cloud
+</code></pre></div><p>将生成有效期为 20 年的证书：</p><pre><code>CN=node1.infini.cloud,OU=UNIT,O=ORG,L=NI,ST=FI,C=IN
+</code></pre><h3 id=节点互信配置>节点互信配置
+<a class=anchor href=#%e8%8a%82%e7%82%b9%e4%ba%92%e4%bf%a1%e9%85%8d%e7%bd%ae>#</a></h3><p>通过 <code>security.nodes_dn</code> 配置，明确列出所有允许加入集群的节点证书 DN。这样可以：</p><ol><li><strong>提高安全性</strong>：只有证书 DN 在白名单中的节点才能加入集群</li><li><strong>防止恶意节点</strong>：即使有人获得了 CA 签发的证书，如果 DN 不在白名单中也无法加入</li><li><strong>灵活扩展</strong>：添加新节点时，需要在所有节点配置中添加新节点的 DN</li></ol><h3 id=查看证书信息>查看证书信息
+<a class=anchor href=#%e6%9f%a5%e7%9c%8b%e8%af%81%e4%b9%a6%e4%bf%a1%e6%81%af>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 查看节点证书的 CN</span>
+openssl x509 -in cluster-config/my-cluster/certs/node1.crt -noout -subject
+
+<span style=color:#75715e># 查看证书的有效期</span>
+openssl x509 -in cluster-config/my-cluster/certs/node1.crt -noout -dates
+
+<span style=color:#75715e># 查看证书的 SAN（Subject Alternative Names）</span>
+openssl x509 -in cluster-config/my-cluster/certs/node1.crt -noout -text | grep -A1 <span style=color:#e6db74>&#34;Subject Alternative Name&#34;</span>
+
+<span style=color:#75715e># 查看证书的完整信息</span>
+openssl x509 -in cluster-config/my-cluster/certs/node1.crt -noout -text
+</code></pre></div><p><strong>示例输出</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 查看主题</span>
+$ openssl x509 -in cluster-config/my-cluster/certs/node1.crt -noout -subject
+subject<span style=color:#f92672>=</span>C <span style=color:#f92672>=</span> IN, ST <span style=color:#f92672>=</span> FI, L <span style=color:#f92672>=</span> NI, O <span style=color:#f92672>=</span> ORG, OU <span style=color:#f92672>=</span> UNIT, CN <span style=color:#f92672>=</span> node1.infini.cloud
+
+<span style=color:#75715e># 查看有效期</span>
+$ openssl x509 -in cluster-config/my-cluster/certs/node1.crt -noout -dates
+notBefore<span style=color:#f92672>=</span>Jan <span style=color:#ae81ff>02</span> 06:00:00 <span style=color:#ae81ff>2026</span> GMT
+notAfter<span style=color:#f92672>=</span>Dec <span style=color:#ae81ff>30</span> 06:00:00 <span style=color:#ae81ff>2035</span> GMT
+</code></pre></div><h2 id=配置为系统服务>配置为系统服务
+<a class=anchor href=#%e9%85%8d%e7%bd%ae%e4%b8%ba%e7%b3%bb%e7%bb%9f%e6%9c%8d%e5%8a%a1>#</a></h2><blockquote><p><strong>注意</strong>：配置系统服务主要针对生产环境的真实分布式部署。本地伪分布式测试环境直接使用 <code>start-all.sh</code> 脚本即可。</p></blockquote><p>在每台生产服务器上创建 systemd 服务文件，以便系统启动时自动运行。所有服务器使用相同的服务配置，通过 <code>config/easysearch.yml</code> 中的 <code>network.host</code> 和 <code>node.name</code> 来区分不同节点。</p><h3 id=在每台服务器上创建服务文件>在每台服务器上创建服务文件
+<a class=anchor href=#%e5%9c%a8%e6%af%8f%e5%8f%b0%e6%9c%8d%e5%8a%a1%e5%99%a8%e4%b8%8a%e5%88%9b%e5%bb%ba%e6%9c%8d%e5%8a%a1%e6%96%87%e4%bb%b6>#</a></h3><p>每台服务器都使用相同的服务配置（<code>/usr/lib/systemd/system/easysearch.service</code>）：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>sudo tee /usr/lib/systemd/system/easysearch.service <span style=color:#e6db74>&lt;&lt;-&#39;EOF&#39;
+</span><span style=color:#e6db74>[Unit]
+</span><span style=color:#e6db74>Description=Easysearch
+</span><span style=color:#e6db74>Documentation=https://www.infinilabs.com
+</span><span style=color:#e6db74>After=network.target
+</span><span style=color:#e6db74>
+</span><span style=color:#e6db74>[Service]
+</span><span style=color:#e6db74>Type=forking
+</span><span style=color:#e6db74>User=easysearch
+</span><span style=color:#e6db74>WorkingDirectory=/data/easysearch
+</span><span style=color:#e6db74>Environment=&#34;ES_PATH_CONF=/data/easysearch/config&#34;
+</span><span style=color:#e6db74>PIDFile=/data/easysearch/pid
+</span><span style=color:#e6db74>ExecStart=/data/easysearch/bin/easysearch -d -p pid
+</span><span style=color:#e6db74>PrivateTmp=true
+</span><span style=color:#e6db74>LimitNOFILE=65536
+</span><span style=color:#e6db74>LimitNPROC=65536
+</span><span style=color:#e6db74>LimitAS=infinity
+</span><span style=color:#e6db74>LimitFSIZE=infinity
+</span><span style=color:#e6db74>LimitMEMLOCK=infinity
+</span><span style=color:#e6db74>TimeoutStopSec=0
+</span><span style=color:#e6db74>KillSignal=SIGTERM
+</span><span style=color:#e6db74>KillMode=process
+</span><span style=color:#e6db74>SendSIGKILL=no
+</span><span style=color:#e6db74>SuccessExitStatus=143
+</span><span style=color:#e6db74>
+</span><span style=color:#e6db74>[Install]
+</span><span style=color:#e6db74>WantedBy=multi-user.target
+</span><span style=color:#e6db74>EOF</span>
+</code></pre></div><blockquote><p><strong>说明</strong>：</p><ul><li>所有服务器使用统一的服务名：<code>easysearch.service</code></li><li>工作目录统一为：<code>/data/easysearch</code></li><li>节点通过配置文件 <code>/data/easysearch/config/easysearch.yml</code> 中的 IP 和节点名区分</li><li>不需要使用 <code>node1</code>、<code>node2</code> 等子目录</li></ul></blockquote><h3 id=启用并启动服务>启用并启动服务
+<a class=anchor href=#%e5%90%af%e7%94%a8%e5%b9%b6%e5%90%af%e5%8a%a8%e6%9c%8d%e5%8a%a1>#</a></h3><p>在每台服务器上执行：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 重新加载服务配置</span>
+sudo systemctl daemon-reload
+
+<span style=color:#75715e># 启用开机自启</span>
+sudo systemctl enable easysearch
+
+<span style=color:#75715e># 启动服务</span>
+sudo systemctl start easysearch
+
+<span style=color:#75715e># 查看状态</span>
+sudo systemctl status easysearch
+</code></pre></div><h2 id=常见问题>常见问题
+<a class=anchor href=#%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98>#</a></h2><h3 id=1-节点无法加入集群>1. 节点无法加入集群
+<a class=anchor href=#1-%e8%8a%82%e7%82%b9%e6%97%a0%e6%b3%95%e5%8a%a0%e5%85%a5%e9%9b%86%e7%be%a4>#</a></h3><p><strong>现象</strong>：节点启动正常，但集群中只显示一个节点。</p><p><strong>排查步骤</strong>：</p><ol><li>检查网络连通性：<code>telnet 192.168.1.10 9300</code></li><li>检查防火墙：确保 HTTP 端口和 Transport 端口已开放</li><li>检查日志：查看 <code>logs/easysearch.log</code> 中的错误信息</li><li>检查集群名称：确保所有节点的 <code>cluster.name</code> 相同</li></ol><h3 id=2-证书验证失败>2. 证书验证失败
+<a class=anchor href=#2-%e8%af%81%e4%b9%a6%e9%aa%8c%e8%af%81%e5%a4%b1%e8%b4%a5>#</a></h3><p><strong>现象</strong>：节点日志中出现证书错误。</p><p><strong>解决方案</strong>：</p><ul><li>确保所有节点使用相同的 CA 证书（<code>ca.crt</code>）</li><li>检查证书中的 SAN 是否包含节点 IP</li><li>如果是跨网络部署，确保证书中包含所有可能的 IP 地址</li></ul><h3 id=3-端口冲突>3. 端口冲突
+<a class=anchor href=#3-%e7%ab%af%e5%8f%a3%e5%86%b2%e7%aa%81>#</a></h3><p><strong>现象</strong>：节点启动失败，提示端口被占用。</p><p><strong>解决方案</strong>：</p><ul><li>检查端口占用：<code>netstat -tuln | grep 9200</code></li><li>使用 <code>--http-port-start</code> 和 <code>--transport-port-start</code> 指定不同的端口范围</li></ul><h3 id=4-内存不足>4. 内存不足
+<a class=anchor href=#4-%e5%86%85%e5%ad%98%e4%b8%8d%e8%b6%b3>#</a></h3><p><strong>现象</strong>：节点频繁重启或响应缓慢。</p><p><strong>解决方案</strong>：</p><ul><li>调整 JVM 内存：编辑 <code>config/jvm.options</code></li><li>建议设置为物理内存的 50%，但不超过 32GB</li></ul><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 例如设置为 4GB</span>
+-Xms4g
+-Xmx4g
+</code></pre></div><h2 id=生产环境最佳实践>生产环境最佳实践
+<a class=anchor href=#%e7%94%9f%e4%ba%a7%e7%8e%af%e5%a2%83%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5>#</a></h2><ol><li><p><strong>节点规划</strong></p><ul><li>至少 3 个 master 节点（奇数个）</li><li>根据数据量规划 data 节点数量</li><li>考虑独立的 coordinating 节点处理查询</li></ul></li><li><p><strong>硬件配置</strong></p><ul><li>CPU：8 核及以上</li><li>内存：32GB 及以上</li><li>磁盘：SSD，至少 500GB</li><li>网络：千兆网卡</li></ul></li><li><p><strong>安全配置</strong></p><ul><li>修改默认管理员密码</li><li>配置防火墙规则</li><li>定期更新证书</li><li>启用审计日志</li></ul></li><li><p><strong>监控和备份</strong></p><ul><li>使用
+<a href=https://infinilabs.cn/docs/latest/console/>INFINI Console</a> 进行集群监控</li><li>配置快照和恢复策略</li><li>定期备份配置文件和证书</li></ul></li><li><p><strong>性能优化</strong></p><ul><li>根据负载调整刷新间隔</li><li>合理设置分片和副本数量</li><li>使用 SSD 存储</li><li>禁用 swap</li></ul></li></ol><h2 id=更多资源>更多资源
+<a class=anchor href=#%e6%9b%b4%e5%a4%9a%e8%b5%84%e6%ba%90>#</a></h2><ul><li><a href=/easysearch/main/docs/getting-started/settings/>系统调优</a></li><li><a href=/easysearch/main/docs/getting-started/configuration_file/>配置文件说明</a></li><li><a href=/easysearch/main/docs/getting-started/install/docker-compose/>Docker Compose 集群部署</a></li><li><a href=/easysearch/main/docs/getting-started/install/helm/>Kubernetes 部署</a></li><li><a href=https://infinilabs.cn/docs/latest/console/>INFINI Console 文档</a></li></ul><h2 id=总结>总结
+<a class=anchor href=#%e6%80%bb%e7%bb%93>#</a></h2><p>使用 <code>initialize-cluster.sh</code> 脚本可以快速搭建 Easysearch 分布式集群，支持：</p><ul><li>✅ 交互式和静默两种安装模式</li><li>✅ 伪分布式和真分布式部署</li><li>✅ 自动生成节点配置和证书</li><li>✅ 独立的数据和日志目录</li><li>✅ 便捷的集群管理脚本</li></ul><p>对于生产环境，建议使用真实分布式部署，并配置为系统服务以确保高可用性。</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
 gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
     import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
     searchbox({container: "#searchbox"});
-</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><style>.toc-header{font-weight:500;margin-bottom:8px;margin-top:20px;height:24px;gap:7px}</style><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#参考样例>参考样例</a></li><li><a href=#参数说明>参数说明</a></li></ul></nav></aside></main><script src=/easysearch/main/js/asciinema-player.js></script></body></html>
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><style>.toc-header{font-weight:500;margin-bottom:8px;margin-top:20px;height:24px;gap:7px}</style><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#前置要求>前置要求</a></li><li><a href=#快速开始>快速开始</a><ul><li><a href=#交互式安装推荐>交互式安装（推荐）</a></li><li><a href=#静默安装>静默安装</a></li></ul></li><li><a href=#命令行参数>命令行参数</a></li><li><a href=#生成的目录结构>生成的目录结构</a><ul><li><a href=#伪分布式模式>伪分布式模式</a></li><li><a href=#真分布式模式>真分布式模式</a></li></ul></li><li><a href=#部署方式>部署方式</a><ul><li><a href=#方式一本地伪分布式>方式一：本地伪分布式</a></li><li><a href=#方式二真实分布式部署>方式二：真实分布式部署</a></li></ul></li><li><a href=#节点配置说明>节点配置说明</a></li><li><a href=#证书和节点认证>证书和节点认证</a><ul><li><a href=#证书设计>证书设计</a></li><li><a href=#节点互信配置>节点互信配置</a></li><li><a href=#查看证书信息>查看证书信息</a></li></ul></li><li><a href=#配置为系统服务>配置为系统服务</a><ul><li><a href=#在每台服务器上创建服务文件>在每台服务器上创建服务文件</a></li><li><a href=#启用并启动服务>启用并启动服务</a></li></ul></li><li><a href=#常见问题>常见问题</a><ul><li><a href=#1-节点无法加入集群>1. 节点无法加入集群</a></li><li><a href=#2-证书验证失败>2. 证书验证失败</a></li><li><a href=#3-端口冲突>3. 端口冲突</a></li><li><a href=#4-内存不足>4. 内存不足</a></li></ul></li><li><a href=#生产环境最佳实践>生产环境最佳实践</a></li><li><a href=#更多资源>更多资源</a></li><li><a href=#总结>总结</a></li></ul></nav></aside></main></body></html>
