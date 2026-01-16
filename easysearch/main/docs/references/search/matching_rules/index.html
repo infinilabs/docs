@@ -1,0 +1,707 @@
+<!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Rules 规则引擎 #  Rules 插件是 EasySearch 的规则匹配引擎，可在数据写入时自动匹配规则库，为文档添加标签字段，实现高效的内容分类、审核和标注。
+功能特性 #   ✅ 实时匹配：数据写入时自动匹配规则，无需后处理 ✅ 高性能：基于优化的 C++ 规则引擎，支持复杂规则和大规则库 ✅ 灵活配置：支持自定义字段、正则表达式、数值范围匹配 ✅ 多规则匹配：一条文档可匹配多个规则，所有标签保留到数组中 ✅ 集群广播：多节点环境自动编译规则到所有规则插件节点   基本概念 #  规则库 (Repository) #  规则库是规则的集合，每个规则库有唯一的 repo_id，存储在 .match_rules 索引中。
+规则 (Rule) #  规则由表达式和描述组成：
+expression\t#offset#description  expression: 匹配表达式（支持 AND/OR/NOT、正则、范围等） offset: 规则序号（从 0 开始，系统自动生成，用于区分不同规则） description: 规则描述（匹配时作为标签返回）  重要说明：
+ offset 是导入到规则索引后系统自动生成的，本身没有业务含义 通过 _import API 导入规则时不需要手动指定 offset 导入时只需提供 expression 和 description，系统会自动分配 offset  标签 (Tag) #  文档匹配规则后，规则的 #offset#description 会添加到文档的 tags 字段。"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="匹配规则"><meta property="og:description" content="Rules 规则引擎 #  Rules 插件是 EasySearch 的规则匹配引擎，可在数据写入时自动匹配规则库，为文档添加标签字段，实现高效的内容分类、审核和标注。
+功能特性 #   ✅ 实时匹配：数据写入时自动匹配规则，无需后处理 ✅ 高性能：基于优化的 C++ 规则引擎，支持复杂规则和大规则库 ✅ 灵活配置：支持自定义字段、正则表达式、数值范围匹配 ✅ 多规则匹配：一条文档可匹配多个规则，所有标签保留到数组中 ✅ 集群广播：多节点环境自动编译规则到所有规则插件节点   基本概念 #  规则库 (Repository) #  规则库是规则的集合，每个规则库有唯一的 repo_id，存储在 .match_rules 索引中。
+规则 (Rule) #  规则由表达式和描述组成：
+expression\t#offset#description  expression: 匹配表达式（支持 AND/OR/NOT、正则、范围等） offset: 规则序号（从 0 开始，系统自动生成，用于区分不同规则） description: 规则描述（匹配时作为标签返回）  重要说明：
+ offset 是导入到规则索引后系统自动生成的，本身没有业务含义 通过 _import API 导入规则时不需要手动指定 offset 导入时只需提供 expression 和 description，系统会自动分配 offset  标签 (Tag) #  文档匹配规则后，规则的 #offset#description 会添加到文档的 tags 字段。"><meta property="og:type" content="article"><meta property="og:url" content="/easysearch/main/docs/references/search/matching_rules/"><title>匹配规则 | INFINI Easysearch</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.72d3849b126b44065778bd1bf070fc48dd08544384a4a73424dabd85be95d617.css integrity="sha256-ctOEmxJrRAZXeL0b8HD8SN0IVEOEpKc0JNq9hb6V1hc="><link rel=stylesheet type=text/css href=/easysearch/main/css/asciinema-player.css><script defer src=/easysearch/main/js/jquery-2.x.min.js></script><script defer src=/easysearch/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/easysearch/main><img src=/easysearch/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;height:36px;width:100%></div><script>function waitForShadow(host,callback){const timer=setInterval(()=>{if(host.shadowRoot){clearInterval(timer);callback(host.shadowRoot);}},50);}
+const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{const style=document.createElement('style');style.textContent=`
+      .infini__searchbox-btn {
+        width: 100% !important;
+        height: 36px !important;
+      }
+    `;shadow.appendChild(style);});</script><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value=v2.0.2>v2.0.2</option>
+<option value=v2.0.1>v2.0.1</option>
+<option value=v1.15.6>v1.15.6</option>
+<option value=v1.15.5>v1.15.5</option>
+<option value=v1.15.3>v1.15.3</option>
+<option value=v1.15.2>v1.15.2</option>
+<option value=v1.15.1>v1.15.1</option>
+<option value=v1.15.0>v1.15.0</option>
+<option value=v1.14.0>v1.14.0</option>
+<option value=v1.13.1>v1.13.1</option>
+<option value=v1.13.0>v1.13.0</option>
+<option value=v1.12.2>v1.12.2</option>
+<option value=v1.12.1>v1.12.1</option>
+<option value=v1.12.0>v1.12.0</option>
+<option value=v1.11.1>v1.11.1</option>
+<option value=v1.11.0>v1.11.0</option>
+<option value=v1.9.1>v1.9.1</option>
+<option value=v1.8.3>v1.8.3</option>
+<option value=v1.8.2>v1.8.2</option>
+<option value=v1.8.0>v1.8.0</option>
+<option value=v1.7.1>v1.7.1</option>
+<option value=v1.7.0>v1.7.0</option>
+<option value=v1.6.2>v1.6.2</option>
+<option value=v1.6.1>v1.6.1</option>
+<option value=v1.6.0>v1.6.0</option>
+<option value=v1.5.0>v1.5.0</option>
+<option value=v1.4.0>v1.4.0</option>
+<option value=v1.3.0>v1.3.0</option>
+<option value=v1.2.0>v1.2.0</option>
+<option value=v1.1.1>v1.1.1</option>
+<option value=v1.1.0>v1.1.0</option>
+<option value=v1.0.1>v1.0.1</option>
+<option value=v1.0.0>v1.0.0</option></select></div><ul><li><a href=/easysearch/main/docs/overview/>产品概述</a><ul></ul></li><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
+<label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>入门指南</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><input type=checkbox id=section-e622c8a7dea0dd02f82a836e861475c5 class=toggle>
+<label for=section-e622c8a7dea0dd02f82a836e861475c5 class="flex justify-between"><a href=/easysearch/main/docs/getting-started/install/>安装指南</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><input type=checkbox id=section-9ec04ead97852a8869d247275ae1cb9c class=toggle>
+<label for=section-9ec04ead97852a8869d247275ae1cb9c class="flex justify-between"><a href=/easysearch/main/docs/getting-started/install/ciip/>信创平台安装</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/getting-started/install/ciip/loongson/>龙芯平台安装</a></li><li><a href=/easysearch/main/docs/getting-started/install/ciip/zhaoxin/>兆芯平台安装</a></li><li><a href=/easysearch/main/docs/getting-started/install/ciip/shenwei/>申威平台安装</a></li><li><a href=/easysearch/main/docs/getting-started/install/ciip/kunpeng/>鲲鹏平台安装</a></li><li><a href=/easysearch/main/docs/getting-started/install/ciip/hygon/>海光平台安装</a></li><li><a href=/easysearch/main/docs/getting-started/install/ciip/feiteng/>飞腾平台安装</a></li><li><a href=/easysearch/main/docs/getting-started/install/ciip/kylin/>麒麟软件平台安装</a></li><li><a href=/easysearch/main/docs/getting-started/install/ciip/uniontech/>统信 UOS 平台安装</a></li><li><a href=/easysearch/main/docs/getting-started/install/ciip/bclinux/>移动云 BC-Linux 平台安装</a></li></ul></li><li><a href=/easysearch/main/docs/getting-started/install/cluster/>分布式集群</a></li><li><a href=/easysearch/main/docs/getting-started/install/docker/>Docker</a></li><li><a href=/easysearch/main/docs/getting-started/install/docker-compose/>Docker Compose</a></li><li><a href=/easysearch/main/docs/getting-started/install/offline-install/>离线安装</a></li><li><a href=/easysearch/main/docs/getting-started/install/helm/>Helm Chart</a></li><li><a href=/easysearch/main/docs/getting-started/install/linux/>Linux</a></li><li><a href=/easysearch/main/docs/getting-started/install/windows/>Windows</a></li><li><a href=/easysearch/main/docs/getting-started/install/ipv6/>IPv6 支持</a></li><li><input type=checkbox id=section-8df7e740f0b8d44e94e2d5f3851aef83 class=toggle>
+<label for=section-8df7e740f0b8d44e94e2d5f3851aef83 class="flex justify-between"><a href=/easysearch/main/docs/getting-started/install/operator/>Operator</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/getting-started/install/operator/deploy_operator/>部署 Operator</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/deploy_easysearch/>部署 Easysearch</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/resource_manager/>资源扩容</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/node_scale/>节点扩容</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/update_password/>密码修改</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/upgrade/>版本升级</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/cert_manager/>证书管理</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/s3_snapshot/>s3 备份</a></li><li><a href=/easysearch/main/docs/getting-started/install/operator/FAQ/>FAQ</a></li></ul></li><li><a href=/easysearch/main/docs/getting-started/install/macos/>MacOS</a></li><li><a href=/easysearch/main/docs/getting-started/install/console/>一键安装 Console 和 Easysearch</a></li></ul></li><li><a href=/easysearch/main/docs/getting-started/settings/>系统调优</a></li><li><a href=/easysearch/main/docs/getting-started/hardware/>硬件配置</a></li><li><a href=/easysearch/main/docs/getting-started/configuration/>常用配置</a></li><li><a href=/easysearch/main/docs/getting-started/configuration_file/>配置说明</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle checked>
+<label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a>功能手册</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><input type=checkbox id=section-dd5a2f6dc33fa990f542566f7a908106 class=toggle>
+<label for=section-dd5a2f6dc33fa990f542566f7a908106 class="flex justify-between"><a href=/easysearch/main/docs/references/mappings-and-field-types/>文档建模</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><input type=checkbox id=section-7d4ce65a4422588ac64ff568cfa9eb9e class=toggle>
+<label for=section-7d4ce65a4422588ac64ff568cfa9eb9e class="flex justify-between"><a href=/easysearch/main/docs/references/mappings-and-field-types/mapping-parameters/>文档映射</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/mappings-and-field-types/mapping-parameters/analyzer/>分词器参数</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/mapping-parameters/dynamic/>动态映射参数</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/mapping-parameters/copy_to/>字段复制参数</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/mapping-parameters/coerce/>强制类型转换参数</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/mapping-parameters/doc_values/>文档列值参数</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/mapping-parameters/enabled/>是否启用参数</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/mapping-parameters/boost/>权重参数设置</a></li></ul></li><li><input type=checkbox id=section-f879c6c2aa847411ec53259bcf512a91 class=toggle>
+<label for=section-f879c6c2aa847411ec53259bcf512a91 class="flex justify-between"><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/>字段类型</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/rank/>Rank 字段类型</a></li><li><input type=checkbox id=section-cd8ebeffb1e1eb5dcc529f4edbad93fc class=toggle>
+<label for=section-cd8ebeffb1e1eb5dcc529f4edbad93fc class="flex justify-between"><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/geo-filed-type/>地理字段类型</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/geo-filed-type/geo-point/>Geopoint 地理点字段类型</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/geo-filed-type/geo-shape/>Geoshape 地理形状字段类型</a></li></ul></li><li><input type=checkbox id=section-f94b121fac5f49bed5028d50034cc3cf class=toggle>
+<label for=section-f94b121fac5f49bed5028d50034cc3cf class="flex justify-between"><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/string-field-type/>字符串字段类型</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/string-field-type/keyword/>Keyword 字段类型</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/string-field-type/text/>Text 字段类型</a></li></ul></li><li><input type=checkbox id=section-37ac2b2e61a91ff3354b11d860ec66cf class=toggle>
+<label for=section-37ac2b2e61a91ff3354b11d860ec66cf class="flex justify-between"><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/object-field-type/>对象字段类型</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/object-field-type/flattened/>Flat 对象字段类型</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/object-field-type/flattened_text/>Flat 对象字段类型</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/object-field-type/join/>Join 字段类型</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/object-field-type/nested/>Nested 字段类型</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/object-field-type/object/>Object 对象字段类型</a></li></ul></li><li><input type=checkbox id=section-4f4e977370cb5a089a66f2d06c0cf2fc class=toggle>
+<label for=section-4f4e977370cb5a089a66f2d06c0cf2fc class="flex justify-between"><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/date-field-type/>日期字段类型</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/date-field-type/date-nanos/>Date nanoseconds 字段类型</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/date-field-type/date/>Date 字段类型</a></li></ul></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/ip/>IP 地址字段类型</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/match_only_text/>match_only_text 字段类型</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/percolator/>Percolator 过滤器字段类型</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/binary/>二进制字段类型</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/alias/>别名字段类型</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/knn/>向量字段类型</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/boolean/>布尔字段类型</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/numeric-field/>数值字段类型</a></li><li><input type=checkbox id=section-d087fbeb67c721ac6618bf4ae5f3be20 class=toggle>
+<label for=section-d087fbeb67c721ac6618bf4ae5f3be20 class="flex justify-between"><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/autocomplete-field-type/>自动补全字段类型</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/autocomplete-field-type/search-as-you-type/>Search-as-you-type 字段类型</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/autocomplete-field-type/completion/>自动补全字段类型</a></li></ul></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/range-field-type/>范围字段类型</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/field-types/wildcard/>Wildcard 字段类型</a></li></ul></li><li><input type=checkbox id=section-92a866d9a34e707f209ba1cdbeaba985 class=toggle>
+<label for=section-92a866d9a34e707f209ba1cdbeaba985 class="flex justify-between"><a href=/easysearch/main/docs/references/mappings-and-field-types/metadata-field/>元数据字段</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/mappings-and-field-types/metadata-field/id/>ID 属性</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/metadata-field/meta/>元数据属性</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/metadata-field/field-names/>字段名称</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/metadata-field/ignored/>忽略属性</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/metadata-field/source/>源文档属性</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/metadata-field/>索引属性</a></li><li><a href=/easysearch/main/docs/references/mappings-and-field-types/metadata-field/routing/>路由属性</a></li></ul></li></ul></li><li><input type=checkbox id=section-232f0668f3be6ea64e1c220baec34dfc class=toggle>
+<label for=section-232f0668f3be6ea64e1c220baec34dfc class="flex justify-between"><a>文档操作</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/document/index-data/>增删改查</a></li><li><a href=/easysearch/main/docs/references/document/index-alias/>别名操作</a></li><li><a href=/easysearch/main/docs/references/document/index-compression/>索引压缩</a></li></ul></li><li><input type=checkbox id=section-af89e2c6bd89cb4170c9b65451a228d7 class=toggle>
+<label for=section-af89e2c6bd89cb4170c9b65451a228d7 class="flex justify-between"><a href=/easysearch/main/docs/references/ingest-pipelines/>管道处理</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/ingest-pipelines/create-ingest/>创建管道</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/simulate-ingest/>摄取管道模拟器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/get-ingest/>获取管道</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/delete-ingest/>删除管道</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/accessing-data/>在管道中访问数据</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/pipeline-failures/>处理管道故障</a></li><li><input type=checkbox id=section-b556b40404eadae2b18c0c625de1a1cc class=toggle>
+<label for=section-b556b40404eadae2b18c0c625de1a1cc class="flex justify-between"><a href=/easysearch/main/docs/references/ingest-pipelines/conditional-execution/>控制条件</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/ingest-pipelines/conditional-execution/complex-conditionals/>复杂逻辑</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/conditional-execution/conditional-pipeline-processor/>控制条件和处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/conditional-execution/regex-conditionals/>正则表达式条件</a></li></ul></li><li><input type=checkbox id=section-f0c2a51225560073c3cbd74a6e69f90d class=toggle>
+<label for=section-f0c2a51225560073c3cbd74a6e69f90d class="flex justify-between"><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/>摄取处理器</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/append/>添加处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/bytes/>字节处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/convert/>转换处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/csv/>CSV 处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/date-index-name/>日期索引名称处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/date/>日期处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/dissect/>解析处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/dot-expander/>点展开器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/drop/>Drop 处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/fail/>Fail 处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/foreach/>遍历处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/grok/>Grok 处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/gsub/>Gsub 处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/html-strip/>HTML 清理处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/join/>连接处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/json/>JSON 处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/kv/>KV 处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/lowercase/>小写处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/pipeline/>管道处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/remove/>移除处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/rename/>重命名处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/script/>脚本处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/set/>设置处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/sort/>Sort 处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/split/>分割处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/trim/>裁剪处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/uppercase/>大写处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/urldecode/>URL 解码处理器</a></li><li><a href=/easysearch/main/docs/references/ingest-pipelines/index-processors/user-agent/>用户代理处理器</a></li></ul></li></ul></li><li><input type=checkbox id=section-86e828ca7e30e9d2e35881b956319411 class=toggle>
+<label for=section-86e828ca7e30e9d2e35881b956319411 class="flex justify-between"><a>SQL 查询</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/sql/sql-jdbc/>SQL-JDBC</a></li><li><a href=/easysearch/main/docs/references/sql/aggregations/>聚合查询</a></li><li><a href=/easysearch/main/docs/references/sql/fulltext/>全文搜索</a></li><li><a href=/easysearch/main/docs/references/sql/complex/>复杂查询</a></li><li><a href=/easysearch/main/docs/references/sql/basics/>基础查询</a></li></ul></li><li><input type=checkbox id=section-1c80046b8a7d2b6f02509e78096b1388 class=toggle>
+<label for=section-1c80046b8a7d2b6f02509e78096b1388 class="flex justify-between"><a href=/easysearch/main/docs/references/security/>安全模块</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><input type=checkbox id=section-4c0acfad57ce0b1db83571ad903a192e class=toggle>
+<label for=section-4c0acfad57ce0b1db83571ad903a192e class="flex justify-between"><a href=/easysearch/main/docs/references/security/configuration/>配置说明</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/security/configuration/yaml/>本地配置</a></li><li><a href=/easysearch/main/docs/references/security/configuration/backend/>后端配置</a></li><li><a href=/easysearch/main/docs/references/security/configuration/tls/>证书配置</a></li><li><a href=/easysearch/main/docs/references/security/configuration/system-indices/>系统索引</a></li></ul></li><li><input type=checkbox id=section-4854412a16ac224d9851d23b7bf6bdea class=toggle>
+<label for=section-4854412a16ac224d9851d23b7bf6bdea class="flex justify-between"><a href=/easysearch/main/docs/references/security/access-control/>权限控制</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/security/access-control/users-roles/>用户角色</a></li><li><a href=/easysearch/main/docs/references/security/access-control/document-level-security/>文档权限</a></li><li><a href=/easysearch/main/docs/references/security/access-control/field-level-security/>字段权限</a></li><li><a href=/easysearch/main/docs/references/security/access-control/field-masking/>数据脱敏</a></li><li><a href=/easysearch/main/docs/references/security/access-control/run-as/>身份模拟</a></li><li><a href=/easysearch/main/docs/references/security/access-control/cross-cluster-search/>跨集群搜索</a></li><li><a href=/easysearch/main/docs/references/security/access-control/api/>API 接口</a></li><li><a href=/easysearch/main/docs/references/security/access-control/permissions/>权限列表</a></li></ul></li></ul></li><li><input type=checkbox id=section-6b02990358c7382bac3f39043e5fd437 class=toggle checked>
+<label for=section-6b02990358c7382bac3f39043e5fd437 class="flex justify-between"><a href=/easysearch/main/docs/references/search/>搜索操作</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/search/query-filter-context/>查询和过滤上下文</a></li><li><a href=/easysearch/main/docs/references/search/term-vs-full-text/>精确查询与全文检索的对比</a></li><li><input type=checkbox id=section-e8f94bccae3c54be36d1896778639639 class=toggle>
+<label for=section-e8f94bccae3c54be36d1896778639639 class="flex justify-between"><a href=/easysearch/main/docs/references/search/term/>精确查询</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/search/term/exists/>Exists 查询</a></li><li><a href=/easysearch/main/docs/references/search/term/ids/>IDs 查询</a></li><li><a href=/easysearch/main/docs/references/search/term/term/>Term 精确查询</a></li><li><a href=/easysearch/main/docs/references/search/term/prefix/>前缀查询</a></li><li><a href=/easysearch/main/docs/references/search/term/terms/>多词项查询</a></li><li><a href=/easysearch/main/docs/references/search/term/fuzzy/>模糊查询</a></li><li><a href=/easysearch/main/docs/references/search/term/regexp/>正则查询</a></li><li><a href=/easysearch/main/docs/references/search/term/range/>范围查询</a></li><li><a href=/easysearch/main/docs/references/search/term/terms-set/>词项集查询</a></li><li><a href=/easysearch/main/docs/references/search/term/wildcard/>通配符查询</a></li></ul></li><li><input type=checkbox id=section-1df907d6b381276d472faa1ffc431057 class=toggle>
+<label for=section-1df907d6b381276d472faa1ffc431057 class="flex justify-between"><a href=/easysearch/main/docs/references/search/full-text/>全文检索</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/search/full-text/intervals/>Intervals 查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match-bool-prefix/>匹配布尔前缀查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match/>匹配查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match-phrase-prefix/>匹配短语前缀查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/match-phrase/>匹配短语查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/multi-match/>多字段查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/query-string/>字符串查询</a></li><li><a href=/easysearch/main/docs/references/search/full-text/simple-query-string/>简单字符串查询</a></li></ul></li><li><input type=checkbox id=section-15ea627c37f24ed149a43b1c0b4add9f class=toggle>
+<label for=section-15ea627c37f24ed149a43b1c0b4add9f class="flex justify-between"><a href=/easysearch/main/docs/references/search/compound/>复合查询</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/search/compound/function-score/>函数评分查询</a></li><li><a href=/easysearch/main/docs/references/search/compound/boosting/>加权</a></li><li><a href=/easysearch/main/docs/references/search/compound/bool/>布尔查询</a></li><li><a href=/easysearch/main/docs/references/search/compound/constant-score/>常量化评分查询</a></li><li><a href=/easysearch/main/docs/references/search/compound/disjunction-max/>析取最大查询</a></li></ul></li><li><input type=checkbox id=section-86bf1f72d443fd258db0d40a6bf009d7 class=toggle>
+<label for=section-86bf1f72d443fd258db0d40a6bf009d7 class="flex justify-between"><a href=/easysearch/main/docs/references/search/geo-and-xy/>地理查询</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geopolygon/>地理多边形查询</a></li><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geoshape/>地理形状查询</a></li><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geodistance/>地理距离查询</a></li><li><a href=/easysearch/main/docs/references/search/geo-and-xy/geo-bounding-box/>地理边界框查询</a></li></ul></li><li><input type=checkbox id=section-914ecc84741b3e200e93ea80c2eb0df1 class=toggle>
+<label for=section-914ecc84741b3e200e93ea80c2eb0df1 class="flex justify-between"><a href=/easysearch/main/docs/references/search/span/>Span 查询</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/search/span/span-first/>Span 前序匹配</a></li><li><a href=/easysearch/main/docs/references/search/span/span-within/>Span 包含于查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-containing/>Span 包含查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-multi-term/>Span 多词项查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-or/>Span 或查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-not/>Span 排除查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-term/>Span 词项查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-field-masking/>Span 跨字段查询</a></li><li><a href=/easysearch/main/docs/references/search/span/span-near/>Span 邻近查询</a></li></ul></li><li><input type=checkbox id=section-2baa128ae64b7fa17aa37f790453c292 class=toggle>
+<label for=section-2baa128ae64b7fa17aa37f790453c292 class="flex justify-between"><a href=/easysearch/main/docs/references/search/joining/>关联查询</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/search/joining/has-child/>子查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/nested/>嵌套查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/parent-id/>父 ID 查询</a></li><li><a href=/easysearch/main/docs/references/search/joining/has-parent/>父查询</a></li></ul></li><li><input type=checkbox id=section-fe27ae639d7a8e652db974b443eb5848 class=toggle>
+<label for=section-fe27ae639d7a8e652db974b443eb5848 class="flex justify-between"><a href=/easysearch/main/docs/references/search/specialized/>专业查询</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/search/specialized/wrapper/>包装器</a></li><li><a href=/easysearch/main/docs/references/search/specialized/rank-feature/>排序功能</a></li><li><a href=/easysearch/main/docs/references/search/specialized/percolate/>渗透查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/more-like-this/>类似查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/script-score/>脚本分数查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/script/>脚本查询</a></li><li><a href=/easysearch/main/docs/references/search/specialized/distance-feature/>距离特征查询</a></li></ul></li><li><a href=/easysearch/main/docs/references/search/match-all/>全匹配查询</a></li><li><a href=/easysearch/main/docs/references/search/minimum-should-match/>最小匹配</a></li><li><a href=/easysearch/main/docs/references/search/regex-syntax/>正则表达式语法</a></li><li><a href=/easysearch/main/docs/references/search/rewrite-parameter/>重写参数</a></li><li><a href=/easysearch/main/docs/references/search/knn_api/>向量查询</a></li><li><a href=/easysearch/main/docs/references/search/search-template/>查询模版</a></li><li><a href=/easysearch/main/docs/references/search/async_search/>异步搜索</a></li><li><a href=/easysearch/main/docs/references/search/pit_api/>定点查询</a></li><li><input type=checkbox id=section-19c2d09435d47ad6656e503e2a68a3b3 class=toggle>
+<label for=section-19c2d09435d47ad6656e503e2a68a3b3 class="flex justify-between"><a href=/easysearch/main/docs/references/search/search-pipelines/>搜索管道</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><input type=checkbox id=section-07023dbd216ba1a90a2c532ff5bb0961 class=toggle>
+<label for=section-07023dbd216ba1a90a2c532ff5bb0961 class="flex justify-between"><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/>搜索处理器</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/filter-query-processor/>过滤查询处理器</a></li><li><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/rename-field-processor/>重命名字段处理器</a></li><li><a href=/easysearch/main/docs/references/search/search-pipelines/search-processors/script-processor/>脚本处理器</a></li></ul></li></ul></li><li><a href=/easysearch/main/docs/references/search/matching_rules/ class=active>匹配规则</a></li></ul></li><li><input type=checkbox id=section-4632348aa5cba7d33c080167da2f13b6 class=toggle>
+<label for=section-4632348aa5cba7d33c080167da2f13b6 class="flex justify-between"><a>文本分词</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><input type=checkbox id=section-13c9df598f113d7537eff14f9f5147e3 class=toggle>
+<label for=section-13c9df598f113d7537eff14f9f5147e3 class="flex justify-between"><a href=/easysearch/main/docs/references/text-analysis/analyzers/>分词器</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/ik-analyzer/>IK 分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/stop-analyzer/>停用词分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/keyword-analyzer/>关键词分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/creating-a-custom-analyzer/>创建一个自定义分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/pattern-analyzer/>匹配模式分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/language-analyzer/>各类语种分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/pinyin-analyzer/>拼音分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/fingerprint-analyzer/>指纹分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/search-analyzers/>搜索分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/standard-analyzer/>标准分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/whitespace-analyzer/>空格分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/simple-analyzer/>简单分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/stconvert-analyzer/>简繁转换分词器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/analyzers/index-analyzers/>索引分词器</a></li></ul></li><li><input type=checkbox id=section-8066f3918cdd51465da4720002ab0bb5 class=toggle>
+<label for=section-8066f3918cdd51465da4720002ab0bb5 class="flex justify-between"><a href=/easysearch/main/docs/references/text-analysis/token-filters/>分词过滤器</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/ascii-folding/>ASCII 折叠分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/cjk-bigram/>CJK 二元分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/cjk-width/>CJK 宽度分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/kstem/>KStem 分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/n-gram/>n-gram 分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/keep-types/>保留类型分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/trim/>修剪分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/stop/>停用词分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/keyword-marker/>关键词标记分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/keyword-repeat/>关键词重复分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/delimited-payload/>分隔式负载分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/pattern-replace/>匹配替换分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/decimal-digit/>十进制数字分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/word-delimiter/>单词分隔符分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/word-delimiter-graph/>单词分隔符图分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/remove-duplicates/>去重分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/reverse/>反转分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/synonym/>同义词分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/synonym-graph/>同义词图分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/unique/>唯一分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/multiplexer/>多路复用分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/uppercase/>大写分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/lowercase/>小写分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/common-grams/>常用词组分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/flatten-graph/>平图化分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/normalization/>归一化分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/truncate/>截断分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/fingerprint/>指纹分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/pattern-capture/>捕获匹配分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/min-hash/>最小哈希分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/condition/>条件分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/porter-stem/>波特词干分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/apostrophe/>省略符号分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/elision/>省略词分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/classic/>经典分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/keep-words/>词保留分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/dictionary-decompounder/>词典复合词分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/stemmer/>词干提取分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/stemmer-override/>词干覆盖分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/shingle/>词片分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/predicate-token-filter/>谓词分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/edge-n-gram/>边缘 n 元分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/length/>长度分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/limit/>限制分词过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/token-filters/snowball/>雪球算法分词过滤器</a></li></ul></li><li><input type=checkbox id=section-d6e4a0d07abe0df202540482628fd24b class=toggle>
+<label for=section-d6e4a0d07abe0df202540482628fd24b class="flex justify-between"><a href=/easysearch/main/docs/references/text-analysis/character-filters/>字符过滤器</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/text-analysis/character-filters/html-strip/>HTML 剥离字符过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/character-filters/pattern-replace/>匹配替换字符过滤器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/character-filters/mapping/>映射字符过滤器</a></li></ul></li><li><a href=/easysearch/main/docs/references/text-analysis/normalizers/>规范化</a></li><li><input type=checkbox id=section-71b540c4dd821da562660864e8601756 class=toggle>
+<label for=section-71b540c4dd821da562660864e8601756 class="flex justify-between"><a href=/easysearch/main/docs/references/text-analysis/tokenizers/>词元生成器</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/n-gram/>N-gram 词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/uax-url-email/>UAX URL 邮件词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/keyword/>关键词词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/edge-n-gram/>前缀 n 元词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/pattern/>匹配词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/letter/>字母词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/character-group/>字符组词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/lowercase/>小写词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/standard/>标准词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/whitespace/>空格词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/simple-pattern-split/>简单分割匹配词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/classic/>经典词元生成器</a></li><li><a href=/easysearch/main/docs/references/text-analysis/tokenizers/path-hierarchy/>路径词元分词器</a></li></ul></li><li><a href=/easysearch/main/docs/references/text-analysis/stemming/>词干提取</a></li></ul></li><li><input type=checkbox id=section-69a0462c4990a8b0bf6189289fb56e8a class=toggle>
+<label for=section-69a0462c4990a8b0bf6189289fb56e8a class="flex justify-between"><a href=/easysearch/main/docs/references/aggregation/>聚合分析</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><input type=checkbox id=section-a4f13a0648bb2302e5d49c0d41bfe786 class=toggle>
+<label for=section-a4f13a0648bb2302e5d49c0d41bfe786 class="flex justify-between"><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/>分组聚合</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/ip-range/>IP 范围聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/global/>全局聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/terms/>分组聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/reverse-nested/>反向嵌套聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/geo-distance/>地理距离聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/composite/>复合聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/diversified-sampler/>多样化采样聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/filters/>多过滤聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/children/>子关联聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/nested/>嵌套聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/date-histogram/>日期直方图聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/date-range/>日期范围聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/parent/>父级聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/histogram/>直方图聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/rare-terms/>稀有分组聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/missing/>缺省聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/range/>范围聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/filter/>过滤聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/adjacency-matrix/>邻接矩阵聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/sampler/>采样聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/significant-terms/>重点分组聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/significant-text/>重点文本聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/bucket-aggregations/auto-interval-date-histogram/>Auto Interval Date Histogram</a></li></ul></li><li><input type=checkbox id=section-4d85e7011dfe7f276bbd2e35ea5b128f class=toggle>
+<label for=section-4d85e7011dfe7f276bbd2e35ea5b128f class="flex justify-between"><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/>指标聚合</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/top-hits/>Top 汇总</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/median-absolute-deviation/>中位数绝对偏差聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/value-count/>值计数聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/weighted-avg/>加权平均聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/geocentroid/>地理中心点</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/geobounds/>地理边界聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/cardinality/>基数聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/average/>平均聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/extended-stats/>扩展统计聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/maximum/>最大值聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/minimum/>最小值聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/sum/>求和聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/percentile-ranks/>百分位排名聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/percentile/>百分位聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/matrix-stats/>矩阵统计聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/stats/>统计聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/metric-aggregations/scripted-metric/>脚本指标聚合</a></li></ul></li><li><input type=checkbox id=section-4296c7ea235f6f8cebc4737c24766aa3 class=toggle>
+<label for=section-4296c7ea235f6f8cebc4737c24766aa3 class="flex justify-between"><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/>管道聚合</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/bucket-sort/>分组排序聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/bucket-script/>存储分组脚本聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/bucket-selector/>存储分组选择聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/derivative/>导数聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/avg-bucket/>平均分组聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/serial-diff/>序列差分聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/extended-stats/>扩展统计分组聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/max-bucket/>最大分组聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/min-bucket/>最小值分组聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/sum-bucket/>求和分组聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/percentiles-bucket/>百分位数分组聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/moving-function/>移动函数聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/moving-avg/>移动平均聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/cumulative-sum/>累积和聚合</a></li><li><a href=/easysearch/main/docs/references/aggregation/pipeline-aggregations/stats-bucket/>统计分组聚合</a></li></ul></li></ul></li><li><input type=checkbox id=section-52d7e2e9abce80d3dc7a6a56a0089b77 class=toggle>
+<label for=section-52d7e2e9abce80d3dc7a6a56a0089b77 class="flex justify-between"><a>管理模块</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/management/cluster/>搭建集群</a></li><li><a href=/easysearch/main/docs/references/management/catapis/>CAT API</a></li><li><a href=/easysearch/main/docs/references/management/logs/>系统日志</a></li><li><a href=/easysearch/main/docs/references/management/index-templates/>索引模板</a></li><li><a href=/easysearch/main/docs/references/management/reindex-data/>重建数据</a></li><li><a href=/easysearch/main/docs/references/management/tasksapis/>任务管理</a></li><li><a href=/easysearch/main/docs/references/management/slm_api/>快照生命周期管理</a></li><li><a href=/easysearch/main/docs/references/management/ilm_api/>索引生命周期管理</a></li><li><a href=/easysearch/main/docs/references/management/ccr_api/>跨集群复制</a></li><li><a href=/easysearch/main/docs/references/management/snapshot-restore/>备份还原</a></li><li><a href=/easysearch/main/docs/references/management/throttling/>写入限流</a></li><li><a href=/easysearch/main/docs/references/management/searchable_snapshot/>可搜索快照</a></li><li><a href=/easysearch/main/docs/references/management/time-series-Index-optimization/>使用时间范围合并策略优化时序索引</a></li><li><a href=/easysearch/main/docs/references/management/rollup_api/>数据汇总</a></li><li><a href=/easysearch/main/docs/references/management/popular-api/>其它常用 API</a></li><li><a href=/easysearch/main/docs/references/management/data-streams/>数据流</a></li></ul></li><li><input type=checkbox id=section-b34adbce31bce6650a0099282b315617 class=toggle>
+<label for=section-b34adbce31bce6650a0099282b315617 class="flex justify-between"><a>客户端</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/client/java-client/>快速开始</a></li><li><a href=/easysearch/main/docs/references/client/client-api/>API 使用</a></li></ul></li><li><input type=checkbox id=section-a0bb1e309cd3ee77d6be0614fc18cdcc class=toggle>
+<label for=section-a0bb1e309cd3ee77d6be0614fc18cdcc class="flex justify-between"><a>AI 集成</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/references/ai-integration/ingest-text-embedding/>写入数据文本向量化</a></li><li><a href=/easysearch/main/docs/references/ai-integration/search-text-embedding/>搜索请求文本向量化</a></li><li><a href=/easysearch/main/docs/references/ai-integration/text-embeddings/>文本向量化</a></li><li><a href=/easysearch/main/docs/references/ai-integration/hybrid-search/>混合搜索</a></li></ul></li></ul></li><li><input type=checkbox id=section-1adc738e7351809ea378ec7e9730bd1f class=toggle>
+<label for=section-1adc738e7351809ea378ec7e9730bd1f class="flex justify-between"><a>版本历史</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=/easysearch/main/docs/release-notes/client/>Easysearch-client</a></li><li><a href=/easysearch/main/docs/release-notes/easysearch/>Easysearch</a></li></ul></li><li><a href=/easysearch/main/docs/resources/>其它资源</a><ul></ul></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/easysearch/main/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>匹配规则</strong>
+<label for=toc-control><img src=/easysearch/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><style>.toc-header{margin-bottom:8px;margin-top:20px;height:24px;gap:7px;span { font-weight: 500; }}#TableOfContents a{color:#8440f1}</style><style>.book-toc>nav li::before{content:"";position:absolute;left:-16px;width:2px;height:32px;top:6px;transform:translateY(-50%)scaleY(0);background:0 0;opacity:0;transition:transform .28s cubic-bezier(.2,.8,.2,1),background-color .18s ease,opacity .18s}.book-toc>nav>ul>li.ancestor::before{left:-16px}.book-toc>nav>ul>li.ancestor>ul>li.active::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor>ul>li.active::before{left:-48px}.book-toc>nav li.active::before,.book-toc>nav li.ancestor::before{background:#8440f1;transform:translateY(-50%)scaleY(1);opacity:1}.book-toc>nav li.active>a{font-weight:500}.book-toc>nav li.ancestor>a{font-weight:500}:target{scroll-margin-top:80px}</style><script>document.addEventListener('DOMContentLoaded',function(){const nav=document.getElementsByClassName('book-toc')[0].querySelector('nav');if(!nav)return;const links=Array.from(nav.querySelectorAll('a[href^="#"]'));const idToLi=new Map();let isProgrammatic=false;let programmaticTargetId=null;let scrollEndTimer=null;links.forEach(link=>{const href=link.getAttribute('href');if(!href||href.length<2)return;const id=decodeURIComponent(href.slice(1));const li=link.closest('li');if(li)idToLi.set(id,li);link.addEventListener('click',function(e){const target=document.getElementById(id);if(target){e.preventDefault();isProgrammatic=true;programmaticTargetId=id;setActiveById(id);target.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+id);clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},1200);}});});window.addEventListener('scroll',function(){clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},120);},{passive:true});function clearAll(){idToLi.forEach(li=>li.classList.remove('active','ancestor'));links.forEach(a=>a.removeAttribute('aria-current'));}
+function setActiveById(id){clearAll();const li=idToLi.get(id);if(!li)return;li.classList.add('active');const a=li.querySelector('a[href^="#"]');if(a)a.setAttribute('aria-current','true');let parent=li.parentElement;while(parent&&parent!==nav){const parentLi=parent.closest('li');if(parentLi&&parentLi!==li)parentLi.classList.add('ancestor');parent=parent.parentElement;}}
+const observedEls=Array.from(idToLi.keys()).map(id=>document.getElementById(id)).filter(Boolean);if(observedEls.length){const io=new IntersectionObserver((entries)=>{let candidate=null;entries.forEach(en=>{if(!en.isIntersecting)return;if(!candidate)candidate=en;else{const curTop=Math.abs(candidate.boundingClientRect.top);const newTop=Math.abs(en.boundingClientRect.top);if(newTop<curTop)candidate=en;}});if(!candidate||!candidate.target||!candidate.target.id)return;const foundId=candidate.target.id;if(isProgrammatic&&programmaticTargetId&&foundId!==programmaticTargetId){return;}
+setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.1,0.25,0.5]});observedEls.forEach(el=>io.observe(el));}
+if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#功能特性>功能特性</a></li><li><a href=#基本概念>基本概念</a><ul><li><a href=#规则库-repository>规则库 (Repository)</a></li><li><a href=#规则-rule>规则 (Rule)</a></li><li><a href=#标签-tag>标签 (Tag)</a></li></ul></li><li><a href=#环境要求>环境要求</a><ul><li><a href=#节点配置>节点配置</a></li></ul></li><li><a href=#快速开始>快速开始</a><ul><li><a href=#步骤-1-导入规则>步骤 1: 导入规则</a></li><li><a href=#步骤-2-编译规则库>步骤 2: 编译规则库</a></li><li><a href=#步骤-3-创建-ingest-pipeline>步骤 3: 创建 Ingest Pipeline</a></li><li><a href=#步骤-4-写入文档测试>步骤 4: 写入文档测试</a></li></ul></li><li><a href=#规则语法>规则语法</a><ul><li><a href=#规则文件格式>规则文件格式</a></li><li><a href=#基本语法>基本语法</a></li><li><a href=#高级功能>高级功能</a></li><li><a href=#规则编写最佳实践>规则编写最佳实践</a></li><li><a href=#常见错误>常见错误</a></li><li><a href=#特殊字符速查表>特殊字符速查表</a></li></ul></li><li><a href=#高级应用示例>高级应用示例</a><ul><li><a href=#示例-1-舆情监控>示例 1: 舆情监控</a></li></ul></li><li><a href=#规则索引结构>规则索引结构</a><ul><li><a href=#match_rules-索引说明>.match_rules 索引说明</a></li></ul></li><li><a href=#api-参考>API 参考</a><ul><li><a href=#导入规则-api>导入规则 API</a></li><li><a href=#编译规则-api>编译规则 API</a></li><li><a href=#查询规则库-api>查询规则库 API</a></li></ul></li><li><a href=#节点启动与规则同步>节点启动与规则同步</a><ul><li><a href=#自动同步机制>自动同步机制</a></li><li><a href=#同步期间的写入行为>同步期间的写入行为</a></li></ul></li><li><a href=#批量导入工具>批量导入工具</a></li><li><a href=#使用场景>使用场景</a><ul><li><a href=#1-内容安全审核>1. 内容安全审核</a></li><li><a href=#2-新闻分类>2. 新闻分类</a></li><li><a href=#3-商品推荐>3. 商品推荐</a></li><li><a href=#4-舆情监控>4. 舆情监控</a></li></ul></li><li><a href=#性能优化>性能优化</a><ul><li><a href=#规则库大小建议>规则库大小建议</a></li><li><a href=#编译性能参考>编译性能参考</a></li><li><a href=#字段优化>字段优化</a></li></ul></li><li><a href=#常见问题>常见问题</a><ul><li><a href=#q1-tags-字段为空>Q1: tags 字段为空？</a></li><li><a href=#q2-编译失败>Q2: 编译失败？</a></li><li><a href=#q3-正则表达式报错>Q3: 正则表达式报错？</a></li><li><a href=#q4-pipeline-不生效>Q4: Pipeline 不生效？</a></li><li><a href=#q5-节点启动后写入操作变慢>Q5: 节点启动后写入操作变慢？</a></li><li><a href=#q6-规则库文件丢失后怎么办>Q6: 规则库文件丢失后怎么办？</a></li></ul></li><li><a href=#限制和注意事项>限制和注意事项</a></li><li><a href=#参考资料>参考资料</a></li></ul></nav></aside></header><article class=markdown><h1 id=rules-规则引擎>Rules 规则引擎
+<a class=anchor href=#rules-%e8%a7%84%e5%88%99%e5%bc%95%e6%93%8e>#</a></h1><p>Rules 插件是 EasySearch 的规则匹配引擎，可在数据写入时自动匹配规则库，为文档添加标签字段，实现高效的内容分类、审核和标注。</p><h2 id=功能特性>功能特性
+<a class=anchor href=#%e5%8a%9f%e8%83%bd%e7%89%b9%e6%80%a7>#</a></h2><ul><li>✅ <strong>实时匹配</strong>：数据写入时自动匹配规则，无需后处理</li><li>✅ <strong>高性能</strong>：基于优化的 C++ 规则引擎，支持复杂规则和大规则库</li><li>✅ <strong>灵活配置</strong>：支持自定义字段、正则表达式、数值范围匹配</li><li>✅ <strong>多规则匹配</strong>：一条文档可匹配多个规则，所有标签保留到数组中</li><li>✅ <strong>集群广播</strong>：多节点环境自动编译规则到所有规则插件节点</li></ul><hr><h2 id=基本概念>基本概念
+<a class=anchor href=#%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5>#</a></h2><h3 id=规则库-repository>规则库 (Repository)
+<a class=anchor href=#%e8%a7%84%e5%88%99%e5%ba%93-repository>#</a></h3><p>规则库是规则的集合，每个规则库有唯一的 <code>repo_id</code>，存储在 <code>.match_rules</code> 索引中。</p><h3 id=规则-rule>规则 (Rule)
+<a class=anchor href=#%e8%a7%84%e5%88%99-rule>#</a></h3><p>规则由<strong>表达式</strong>和<strong>描述</strong>组成：</p><pre><code>expression\t#offset#description
+</code></pre><ul><li><strong>expression</strong>: 匹配表达式（支持 AND/OR/NOT、正则、范围等）</li><li><strong>offset</strong>: 规则序号（从 0 开始，系统自动生成，用于区分不同规则）</li><li><strong>description</strong>: 规则描述（匹配时作为标签返回）</li></ul><p><strong>重要说明</strong>：</p><ul><li><code>offset</code> 是导入到规则索引后系统自动生成的，本身没有业务含义</li><li>通过 <code>_import</code> API 导入规则时<strong>不需要</strong>手动指定 offset</li><li>导入时只需提供 <code>expression</code> 和 <code>description</code>，系统会自动分配 offset</li></ul><h3 id=标签-tag>标签 (Tag)
+<a class=anchor href=#%e6%a0%87%e7%ad%be-tag>#</a></h3><p>文档匹配规则后，规则的 <code>#offset#description</code> 会添加到文档的 <code>tags</code> 字段。</p><hr><h2 id=环境要求>环境要求
+<a class=anchor href=#%e7%8e%af%e5%a2%83%e8%a6%81%e6%b1%82>#</a></h2><h3 id=节点配置>节点配置
+<a class=anchor href=#%e8%8a%82%e7%82%b9%e9%85%8d%e7%bd%ae>#</a></h3><p>Rules 插件依赖 native 库（C++ 编译的规则引擎），需要在 <code>config/easysearch.yml</code> 中禁用系统调用过滤器：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>bootstrap.system_call_filter</span>: <span style=color:#66d9ef>false</span>
+</code></pre></div><p><strong>为什么需要这个配置？</strong></p><ul><li>Rules 插件需要调用 JNI 和 native 库（libruledb-r.so）</li><li>规则编译过程会执行系统调用（如 fork、exec 等）</li><li>EasySearch 默认启用的 seccomp 过滤器会阻止这些操作</li></ul><p><strong>注意</strong>：禁用此过滤器会降低一定的安全性，建议只在运行 rules 插件的节点上禁用。</p><hr><h2 id=快速开始>快速开始
+<a class=anchor href=#%e5%bf%ab%e9%80%9f%e5%bc%80%e5%a7%8b>#</a></h2><h3 id=步骤-1-导入规则>步骤 1: 导入规则
+<a class=anchor href=#%e6%ad%a5%e9%aa%a4-1-%e5%af%bc%e5%85%a5%e8%a7%84%e5%88%99>#</a></h3><p>使用 <code>POST /_match_rules/{repo_id}/_import</code> 导入规则到索引：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>POST</span> <span style=color:#960050;background-color:#1e0010>/_match_rules/security_v</span><span style=color:#ae81ff>1</span><span style=color:#960050;background-color:#1e0010>/_import</span>
+{
+  <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;安全规则库&#34;</span>,
+  <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;用于安全事件分类的规则库&#34;</span>,
+  <span style=color:#f92672>&#34;tags&#34;</span>: [<span style=color:#e6db74>&#34;security&#34;</span>, <span style=color:#e6db74>&#34;content-filter&#34;</span>],
+  <span style=color:#f92672>&#34;rules&#34;</span>: [
+    {
+      <span style=color:#f92672>&#34;expression&#34;</span>: <span style=color:#e6db74>&#34;枪 or 手枪 or 步枪 or 猎枪&#34;</span>,
+      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;涉枪武器关键词&#34;</span>
+    },
+    {
+      <span style=color:#f92672>&#34;expression&#34;</span>: <span style=color:#e6db74>&#34;AK47 or AK-47 or M16 or M4A1&#34;</span>,
+      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;枪支型号&#34;</span>
+    },
+    {
+      <span style=color:#f92672>&#34;expression&#34;</span>: <span style=color:#e6db74>&#34;海洛因 or 冰毒 or 摇头丸 or K粉&#34;</span>,
+      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;毒品名称&#34;</span>
+    }
+  ]
+}
+</code></pre></div><p><strong>响应</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;success&#34;</span>: <span style=color:#66d9ef>true</span>,
+  <span style=color:#f92672>&#34;message&#34;</span>: <span style=color:#e6db74>&#34;Successfully imported 3 rules to repo_id &#39;security_v1&#39; (version: 1)&#34;</span>,
+  <span style=color:#f92672>&#34;repo_id&#34;</span>: <span style=color:#e6db74>&#34;security_v1&#34;</span>,
+  <span style=color:#f92672>&#34;version&#34;</span>: <span style=color:#e6db74>&#34;1&#34;</span>,
+  <span style=color:#f92672>&#34;rule_count&#34;</span>: <span style=color:#ae81ff>3</span>
+}
+</code></pre></div><h3 id=步骤-2-编译规则库>步骤 2: 编译规则库
+<a class=anchor href=#%e6%ad%a5%e9%aa%a4-2-%e7%bc%96%e8%af%91%e8%a7%84%e5%88%99%e5%ba%93>#</a></h3><p>使用 <code>POST /_match_rules/{repo_id}/_compile</code> 编译规则为二进制库：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>POST</span> <span style=color:#960050;background-color:#1e0010>/_match_rules/security_v</span><span style=color:#ae81ff>1</span><span style=color:#960050;background-color:#1e0010>/_compile</span>
+{
+  <span style=color:#f92672>&#34;quiet&#34;</span>: <span style=color:#66d9ef>true</span>
+}
+</code></pre></div><p><strong>响应</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;success&#34;</span>: <span style=color:#66d9ef>true</span>,
+  <span style=color:#f92672>&#34;message&#34;</span>: <span style=color:#e6db74>&#34;Successfully compiled 3 rules to /path/to/output/security_v1&#34;</span>,
+  <span style=color:#f92672>&#34;result&#34;</span>: {
+    <span style=color:#f92672>&#34;database_path&#34;</span>: <span style=color:#e6db74>&#34;/path/to/output/security_v1&#34;</span>,
+    <span style=color:#f92672>&#34;duration_ms&#34;</span>: <span style=color:#ae81ff>1250</span>,
+    <span style=color:#f92672>&#34;total_rules&#34;</span>: <span style=color:#ae81ff>3</span>
+  }
+}
+</code></pre></div><h3 id=步骤-3-创建-ingest-pipeline>步骤 3: 创建 Ingest Pipeline
+<a class=anchor href=#%e6%ad%a5%e9%aa%a4-3-%e5%88%9b%e5%bb%ba-ingest-pipeline>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>_ingest/pipeline/security-check</span>
+{
+  <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;使用规则引擎对安全事件分类&#34;</span>,
+  <span style=color:#f92672>&#34;processors&#34;</span>: [
+    {
+      <span style=color:#f92672>&#34;check_match_rules&#34;</span>: {
+        <span style=color:#f92672>&#34;id&#34;</span>: <span style=color:#e6db74>&#34;security_v1&#34;</span>
+      }
+    }
+  ]
+}
+</code></pre></div><p><strong>使用自定义目标字段</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>_ingest/pipeline/security-check-custom</span>
+{
+  <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;使用规则引擎对安全事件分类，结果写入 security_labels 字段&#34;</span>,
+  <span style=color:#f92672>&#34;processors&#34;</span>: [
+    {
+      <span style=color:#f92672>&#34;check_match_rules&#34;</span>: {
+        <span style=color:#f92672>&#34;id&#34;</span>: <span style=color:#e6db74>&#34;security_v1&#34;</span>,
+        <span style=color:#f92672>&#34;target_field&#34;</span>: <span style=color:#e6db74>&#34;security_labels&#34;</span>
+      }
+    }
+  ]
+}
+</code></pre></div><p><strong>配置参数</strong>：</p><table><thead><tr><th>参数</th><th>类型</th><th>必需</th><th>默认值</th><th>说明</th></tr></thead><tbody><tr><td><code>id</code></td><td>string</td><td>✅</td><td>-</td><td>规则库 ID（对应 repo_id）</td></tr><tr><td><code>target_field</code></td><td>string</td><td>❌</td><td>&ldquo;tags&rdquo;</td><td>匹配结果写入的目标字段名</td></tr><tr><td><code>ignore_missing</code></td><td>boolean</td><td>❌</td><td>false</td><td>是否忽略缺失字段错误</td></tr><tr><td><code>regex_start_at_word</code></td><td>boolean</td><td>❌</td><td>true</td><td>正则是否从单词边界开始</td></tr><tr><td><code>fields</code></td><td>array</td><td>❌</td><td>[]</td><td>数值字段列表（用于范围匹配，必须与编译时声明的字段一致）</td></tr><tr><td><code>default_match_field</code></td><td>string</td><td>❌</td><td>&ldquo;content&rdquo;</td><td>默认匹配字段名（未声明字段按此字段处理），暂时只支持 &ldquo;content&rdquo; 字段</td></tr></tbody></table><h3 id=步骤-4-写入文档测试>步骤 4: 写入文档测试
+<a class=anchor href=#%e6%ad%a5%e9%aa%a4-4-%e5%86%99%e5%85%a5%e6%96%87%e6%a1%a3%e6%b5%8b%e8%af%95>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>POST</span> <span style=color:#960050;background-color:#1e0010>security-events/_doc?pipeline=security-check</span>
+{
+  <span style=color:#f92672>&#34;title&#34;</span>: <span style=color:#e6db74>&#34;枪支交易案&#34;</span>,
+  <span style=color:#f92672>&#34;content&#34;</span>: <span style=color:#e6db74>&#34;网上出售手枪，价格5000元&#34;</span>,
+  <span style=color:#f92672>&#34;timestamp&#34;</span>: <span style=color:#e6db74>&#34;2025-12-31T10:00:00Z&#34;</span>
+}
+</code></pre></div><p><strong>查询结果</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;_source&#34;</span>: {
+    <span style=color:#f92672>&#34;title&#34;</span>: <span style=color:#e6db74>&#34;枪支交易案&#34;</span>,
+    <span style=color:#f92672>&#34;content&#34;</span>: <span style=color:#e6db74>&#34;网上出售手枪，价格5000元&#34;</span>,
+    <span style=color:#f92672>&#34;timestamp&#34;</span>: <span style=color:#e6db74>&#34;2025-12-31T10:00:00Z&#34;</span>,
+    <span style=color:#f92672>&#34;tags&#34;</span>: [<span style=color:#e6db74>&#34;#0#涉枪武器关键词&#34;</span>]
+  }
+}
+</code></pre></div><hr><h2 id=规则语法>规则语法
+<a class=anchor href=#%e8%a7%84%e5%88%99%e8%af%ad%e6%b3%95>#</a></h2><h3 id=规则文件格式>规则文件格式
+<a class=anchor href=#%e8%a7%84%e5%88%99%e6%96%87%e4%bb%b6%e6%a0%bc%e5%bc%8f>#</a></h3><p>规则文件是文本文件，每行一条规则，在系统中存储的格式如下：</p><pre><code>expression\t#offset#description
+</code></pre><p><strong>格式说明</strong>：</p><ul><li><code>expression</code>: 规则表达式（匹配条件）</li><li><code>#offset#</code>: 规则序号（从 0 开始，由系统自动生成）</li><li><code>description</code>: 规则描述（匹配时作为标签返回）</li></ul><p><strong>导入时格式</strong>：通过 <code>_import</code> API 导入时，只需提供 <code>expression</code> 和 <code>description</code>，系统会自动生成 offset：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;expression&#34;</span>: <span style=color:#e6db74>&#34;枪 or 手枪 or 步枪&#34;</span>,
+  <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;涉枪武器关键词&#34;</span>
+}
+</code></pre></div><p><strong>系统存储示例</strong>（导入后在 <code>.match_rules</code> 索引中的格式）：</p><pre><code>枪 or 手枪 or 步枪	#0#涉枪武器关键词
+AK47 or AK-47 or M16	#1#枪支型号
+海洛因 or 冰毒 or 摇头丸	#2#毒品名称
+</code></pre><p><strong>注意</strong>：</p><ul><li><code>#</code> 开头的行是注释</li><li>空行会被跳过</li><li>可使用 <code>\\</code> 作为续行符将长规则分成多行</li><li>表达式和描述之间使用 Tab 键分隔（<code>\t</code>）</li></ul><h3 id=基本语法>基本语法
+<a class=anchor href=#%e5%9f%ba%e6%9c%ac%e8%af%ad%e6%b3%95>#</a></h3><h4 id=1-逻辑操作符>1. 逻辑操作符
+<a class=anchor href=#1-%e9%80%bb%e8%be%91%e6%93%8d%e4%bd%9c%e7%ac%a6>#</a></h4><table><thead><tr><th>操作符</th><th>别名</th><th>优先级</th><th>说明</th></tr></thead><tbody><tr><td><code>and</code></td><td><code>&</code></td><td>中</td><td>同时满足（逻辑与）</td></tr><tr><td><code>or</code></td><td><code>\|</code></td><td>低</td><td>满足任一（逻辑或）</td></tr><tr><td><code>not</code></td><td><code>&!</code>, <code>-</code></td><td>中（二元）/最高（一元）</td><td>不包含（逻辑非）</td></tr><tr><td><code>near</code></td><td>无</td><td>高</td><td>距离匹配</td></tr></tbody></table><p><strong>示例</strong>：</p><pre><code># AND: 同时包含两个词
+中国 and 人民
+
+# OR: 包含任一词
+中国 or 人民
+
+# NOT: 包含前者但不包含后者
+中国 and not 日本
+中国 not 日本
+中国 - 日本
+</code></pre><h4 id=2-关键词匹配>2. 关键词匹配
+<a class=anchor href=#2-%e5%85%b3%e9%94%ae%e8%af%8d%e5%8c%b9%e9%85%8d>#</a></h4><pre><code>枪 or 手枪 or 步枪
+</code></pre><p>匹配包含任一关键词的文档。</p><p><strong>⚠️ 特殊字符警告：减号 <code>-</code> 的特殊含义</strong></p><p>减号 <code>-</code> 是 <code>not</code> 操作符的别名，会被解释为逻辑非。如果要匹配包含减号的字面文本，<strong>必须用引号括起来</strong>。</p><pre><code># ❌ 错误：会被解释为&quot;包含中国 AND 不包含2025年GDP&quot;
+中国-2025年GDP
+
+# ✅ 正确：匹配字面文本&quot;中国-2025年GDP&quot;
+&quot;中国-2025年GDP&quot;
+
+# ❌ 错误：会被解释为&quot;包含高端 AND 不包含低端&quot;
+高端-低端产品
+
+# ✅ 正确：匹配字面文本&quot;高端-低端产品&quot;
+&quot;高端-低端产品&quot;
+</code></pre><p><strong>其他需要加引号的场景</strong>：</p><ul><li>包含空格：<code>"紧急 通知"</code></li><li>包含特殊符号：<code>"C++编程"</code>, <code>"@用户名"</code></li><li>包含操作符关键字：<code>"and或or"</code></li></ul><h4 id=3-字段限定>3. 字段限定
+<a class=anchor href=#3-%e5%ad%97%e6%ae%b5%e9%99%90%e5%ae%9a>#</a></h4><p><strong>语法</strong>：</p><ul><li><code>fieldname(expression)</code>: 子串匹配，在指定字段的任意位置匹配表达式</li><li><code>fieldname[expression]</code>: 全匹配，表达式必须匹配字段的全部内容</li></ul><p><strong>示例</strong>：</p><pre><code># 在 title 字段中查找&quot;紧急&quot;
+title(紧急)
+
+# 在 author 字段中查找&quot;张三&quot;
+author(张三)
+
+# 组合使用
+title(紧急) and content(通知) and category(安全)
+
+# 全匹配（用于精确匹配）
+status[已审核]
+</code></pre><p><strong>字段处理机制</strong>：</p><p>规则引擎对字段的处理遵循以下规则：</p><ol><li><p><strong>默认字段</strong>：<code>title</code> 和 <code>content</code> 是系统内置字段，无需声明</p><ul><li>未指定字段的表达式默认匹配 <code>content</code> 字段</li></ul></li><li><p><strong>未声明字段的处理</strong>：文档中未在编译时声明的字段，会被当作 <code>content</code> 字段处理</p><ul><li>例如：<code>author(张三)</code> 中的 <code>author</code> 如果未声明，会按 <code>content</code> 字段匹配</li></ul></li><li><p><strong>数值字段</strong>：用于范围匹配的数值字段（如 <code>range(100, 500)</code>）<strong>必须</strong>在编译时通过 <code>fields</code> 参数声明</p><ul><li>未声明的数值字段会导致编译失败</li></ul></li></ol><p><strong>字段声明示例</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>编译时声明数值字段</span>
+<span style=color:#960050;background-color:#1e0010>POST</span> <span style=color:#960050;background-color:#1e0010>/_match_rules/repo/_compile</span>
+{
+  <span style=color:#f92672>&#34;fields&#34;</span>: [<span style=color:#e6db74>&#34;range&#34;</span>, <span style=color:#e6db74>&#34;price&#34;</span>, <span style=color:#e6db74>&#34;ram_gb&#34;</span>]
+}
+
+<span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>规则中使用</span>
+{
+  <span style=color:#f92672>&#34;expression&#34;</span>: <span style=color:#e6db74>&#34;title(手机) and price(3000, 5000)&#34;</span>
+}
+</code></pre></div><h4 id=4-正则表达式>4. 正则表达式
+<a class=anchor href=#4-%e6%ad%a3%e5%88%99%e8%a1%a8%e8%be%be%e5%bc%8f>#</a></h4><p><strong>简单正则</strong>（用 <code>{{...}}</code> 括起来）：</p><pre><code># 匹配北京电话号码
+{{(\(010\)|010)-?[0-9]{8}}}
+
+# 匹配邮箱地址
+{{\w+@\w+\.\w+}}
+</code></pre><p><strong>复合正则</strong>（用 <code>[...]</code> 括起来，支持逻辑运算）：</p><pre><code># 匹配除 .com 外的所有网站
+[{{https?://([\w\d_-]+\.)+[\w\d_-]+}} and not {{.*\.com}}]
+
+# 字段中使用正则
+author({{张.*}})
+</code></pre><p><strong>重要</strong>：正则表达式必须用<strong>双引号</strong>包围。</p><p>❌ 错误：<code>author(/张.*/)</code>
+✅ 正确：<code>author("/张.*/")</code></p><h3 id=高级功能>高级功能
+<a class=anchor href=#%e9%ab%98%e7%ba%a7%e5%8a%9f%e8%83%bd>#</a></h3><h4 id=距离匹配-near>距离匹配 (near)
+<a class=anchor href=#%e8%b7%9d%e7%a6%bb%e5%8c%b9%e9%85%8d-near>#</a></h4><p><code>near</code> 用于匹配两个词之间的距离。</p><p><strong>语法</strong>：</p><ul><li><code>A near/num B</code>: A 和 B 之间距离不超过 num（不分前后）</li><li><code>A near/+num B</code>: A 在 B 之前，距离不超过 num</li><li><code>A near/-num B</code>: A 在 B 之后，距离不超过 num</li></ul><p><strong>距离单位</strong>：</p><ul><li>中文：每个汉字为 1 个单位</li><li>英文/数字：每个单词为 1 个单位（如 <code>computer</code>、<code>10086</code>、<code>varname_123</code> 均为 1 个单位）</li></ul><p><strong>示例</strong>：</p><pre><code># &quot;中国&quot;和&quot;人民&quot;之间距离不超过 3
+中国 near/3 人民
+
+# &quot;中国&quot;必须在&quot;人民&quot;之前，距离不超过 5
+中国 near/+5 人民
+
+# 链式 near（等价于多个 near 的 and）
+中国 near/3 人民 near/5 勤劳 near/7 勇敢
+</code></pre><p><strong>复合 near</strong>：</p><pre><code>(中国 or 中华 or 华夏) near/3 (人民 or 百姓) near/5 (勤劳 or 勤奋)
+</code></pre><h4 id=数值范围匹配>数值范围匹配
+<a class=anchor href=#%e6%95%b0%e5%80%bc%e8%8c%83%e5%9b%b4%e5%8c%b9%e9%85%8d>#</a></h4><pre><code>range(400, 600)
+price(1000, 5000)
+</code></pre><p>匹配数值在指定范围内的文档（闭区间 [min, max]）。</p><p><strong>要求</strong>：</p><ol><li>字段类型必须是数值</li><li>编译时必须声明字段名（使用 <code>fields</code> 参数）</li></ol><p><strong>示例</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>POST</span> <span style=color:#960050;background-color:#1e0010>/_match_rules/opinion_check/_import</span>
+{
+  <span style=color:#f92672>&#34;rules&#34;</span>: [
+    {
+      <span style=color:#f92672>&#34;expression&#34;</span>: <span style=color:#e6db74>&#34;title(威马M5) and content(续航) and range(0, 500)&#34;</span>,
+      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;威马M5续航不足&#34;</span>
+    }
+  ]
+}
+
+<span style=color:#960050;background-color:#1e0010>POST</span> <span style=color:#960050;background-color:#1e0010>/_match_rules/opinion_check/_compile</span>
+{
+  <span style=color:#f92672>&#34;fields&#34;</span>: [<span style=color:#e6db74>&#34;range&#34;</span>, <span style=color:#e6db74>&#34;price&#34;</span>]
+}
+</code></pre></div><h3 id=规则编写最佳实践>规则编写最佳实践
+<a class=anchor href=#%e8%a7%84%e5%88%99%e7%bc%96%e5%86%99%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5>#</a></h3><h4 id=1-从简单到复杂>1. 从简单到复杂
+<a class=anchor href=#1-%e4%bb%8e%e7%ae%80%e5%8d%95%e5%88%b0%e5%a4%8d%e6%9d%82>#</a></h4><pre><code># 简单规则
+枪 or 手枪
+
+# 中等复杂度
+title(枪支) and (买卖 or 交易 or 出售)
+
+# 复杂规则
+(枪 or 手枪 or 步枪) near/5 (买 or 卖 or 交易) and not (玩具 or 模型)
+</code></pre><h4 id=2-合理使用字段限定>2. 合理使用字段限定
+<a class=anchor href=#2-%e5%90%88%e7%90%86%e4%bd%bf%e7%94%a8%e5%ad%97%e6%ae%b5%e9%99%90%e5%ae%9a>#</a></h4><pre><code># 标题匹配更精准
+title(紧急通知)
+
+# 组合多个字段
+title(安全) and content(漏洞) and author(安全团队)
+</code></pre><h4 id=3-使用-near-提高精确度>3. 使用 near 提高精确度
+<a class=anchor href=#3-%e4%bd%bf%e7%94%a8-near-%e6%8f%90%e9%ab%98%e7%b2%be%e7%a1%ae%e5%ba%a6>#</a></h4><pre><code># 简单 OR 可能误匹配
+枪支 or 交易
+
+# 使用 near 限制距离
+枪支 near/10 交易
+</code></pre><h4 id=4-善用-not-排除干扰>4. 善用 NOT 排除干扰
+<a class=anchor href=#4-%e5%96%84%e7%94%a8-not-%e6%8e%92%e9%99%a4%e5%b9%b2%e6%89%b0>#</a></h4><pre><code># 排除玩具枪
+(枪 or 手枪) and not (玩具 or 模型 or 仿真)
+</code></pre><h4 id=5-正则表达式用于模糊匹配>5. 正则表达式用于模糊匹配
+<a class=anchor href=#5-%e6%ad%a3%e5%88%99%e8%a1%a8%e8%be%be%e5%bc%8f%e7%94%a8%e4%ba%8e%e6%a8%a1%e7%b3%8a%e5%8c%b9%e9%85%8d>#</a></h4><pre><code># 匹配所有以&quot;张&quot;开头的姓名
+author({{张.*}})
+
+# 匹配手机号
+{{1[3-9][0-9]{9}}}
+</code></pre><h3 id=常见错误>常见错误
+<a class=anchor href=#%e5%b8%b8%e8%a7%81%e9%94%99%e8%af%af>#</a></h3><h4 id=-错误-1-减号未加引号导致误解析>❌ 错误 1: 减号未加引号导致误解析
+<a class=anchor href=#-%e9%94%99%e8%af%af-1-%e5%87%8f%e5%8f%b7%e6%9c%aa%e5%8a%a0%e5%bc%95%e5%8f%b7%e5%af%bc%e8%87%b4%e8%af%af%e8%a7%a3%e6%9e%90>#</a></h4><pre><code># 错误：会被解释为 NOT 操作
+title(2024-2025年报)
+# 实际匹配：title 包含&quot;2024&quot;但不包含&quot;2025年报&quot;
+
+# 正确：匹配字面文本
+title(&quot;2024-2025年报&quot;)
+</code></pre><p><strong>常见场景</strong>：</p><ul><li>日期范围：<code>"2024-01-01"</code>, <code>"2024-2025"</code></li><li>产品型号：<code>"iPhone-15"</code>, <code>"GTX-4090"</code></li><li>复合词：<code>"高端-低端"</code>, <code>"线上-线下"</code></li></ul><h4 id=-错误-2-正则未加引号>❌ 错误 2: 正则未加引号
+<a class=anchor href=#-%e9%94%99%e8%af%af-2-%e6%ad%a3%e5%88%99%e6%9c%aa%e5%8a%a0%e5%bc%95%e5%8f%b7>#</a></h4><pre><code># 错误
+author(/张.*/)
+
+# 正确
+author(&quot;/张.*/&quot;)
+</code></pre><h4 id=-错误-3-忘记声明自定义字段>❌ 错误 3: 忘记声明自定义字段
+<a class=anchor href=#-%e9%94%99%e8%af%af-3-%e5%bf%98%e8%ae%b0%e5%a3%b0%e6%98%8e%e8%87%aa%e5%ae%9a%e4%b9%89%e5%ad%97%e6%ae%b5>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>//</span> <span style=color:#960050;background-color:#1e0010>规则中使用了</span> <span style=color:#960050;background-color:#1e0010>range</span> <span style=color:#960050;background-color:#1e0010>字段</span>
+<span style=color:#e6db74>&#34;expression&#34;</span><span style=color:#960050;background-color:#1e0010>:</span> <span style=color:#e6db74>&#34;range(100, 500)&#34;</span>
+
+<span style=color:#960050;background-color:#1e0010>//</span> <span style=color:#960050;background-color:#1e0010>但编译时忘记声明</span>
+<span style=color:#960050;background-color:#1e0010>POST</span> <span style=color:#960050;background-color:#1e0010>/_match_rules/repo/_compile</span>
+{
+  <span style=color:#960050;background-color:#1e0010>//</span> <span style=color:#960050;background-color:#1e0010>❌</span> <span style=color:#960050;background-color:#1e0010>缺少</span> <span style=color:#960050;background-color:#1e0010>fields</span> <span style=color:#960050;background-color:#1e0010>参数</span>
+}
+
+<span style=color:#960050;background-color:#1e0010>//</span> <span style=color:#960050;background-color:#1e0010>✅</span> <span style=color:#960050;background-color:#1e0010>正确做法</span>
+<span style=color:#960050;background-color:#1e0010>POST</span> <span style=color:#960050;background-color:#1e0010>/_match_rules/repo/_compile</span>
+{
+  <span style=color:#f92672>&#34;fields&#34;</span>: [<span style=color:#e6db74>&#34;range&#34;</span>]
+}
+</code></pre></div><h4 id=-错误-4-表达式和描述未用-tab-分隔>❌ 错误 4: 表达式和描述未用 Tab 分隔
+<a class=anchor href=#-%e9%94%99%e8%af%af-4-%e8%a1%a8%e8%be%be%e5%bc%8f%e5%92%8c%e6%8f%8f%e8%bf%b0%e6%9c%aa%e7%94%a8-tab-%e5%88%86%e9%9a%94>#</a></h4><pre><code># 错误（使用空格）
+枪 or 手枪 涉枪内容
+
+# 正确（使用 Tab）
+枪 or 手枪	涉枪内容
+</code></pre><h3 id=特殊字符速查表>特殊字符速查表
+<a class=anchor href=#%e7%89%b9%e6%ae%8a%e5%ad%97%e7%ac%a6%e9%80%9f%e6%9f%a5%e8%a1%a8>#</a></h3><table><thead><tr><th>字符</th><th>在规则中的含义</th><th>如何匹配字面值</th><th>示例</th></tr></thead><tbody><tr><td><code>-</code></td><td>NOT 操作符</td><td>用引号括起来</td><td><code>"2024-2025"</code></td></tr><tr><td><code>&</code></td><td>AND 操作符</td><td>用引号括起来</td><td><code>"Tom&Jerry"</code></td></tr><tr><td><code>\|</code></td><td>OR 操作符</td><td>用引号括起来</td><td><code>"A\|B"</code></td></tr><tr><td><code>(</code> <code>)</code></td><td>分组、字段限定</td><td>用引号括起来</td><td><code>"(重要)"</code></td></tr><tr><td><code>[</code> <code>]</code></td><td>全匹配、复合正则</td><td>用引号括起来</td><td><code>"[TODO]"</code></td></tr><tr><td><code>{</code> <code>}</code></td><td>正则表达式</td><td>用引号括起来</td><td><code>"{变量}"</code></td></tr><tr><td>空格</td><td>词分隔符</td><td>用引号括起来</td><td><code>"hello world"</code></td></tr></tbody></table><p><strong>建议</strong>：当规则包含任何可能引起歧义的字符时，养成加引号的习惯。</p><hr><h2 id=高级应用示例>高级应用示例
+<a class=anchor href=#%e9%ab%98%e7%ba%a7%e5%ba%94%e7%94%a8%e7%a4%ba%e4%be%8b>#</a></h2><h3 id=示例-1-舆情监控>示例 1: 舆情监控
+<a class=anchor href=#%e7%a4%ba%e4%be%8b-1-%e8%88%86%e6%83%85%e7%9b%91%e6%8e%a7>#</a></h3><p>使用数值范围匹配来监控产品评价中的数值异常。</p><p><strong>导入规则</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>POST</span> <span style=color:#960050;background-color:#1e0010>/_match_rules/opinion_check/_import</span>
+{
+  <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;舆情监控规则&#34;</span>,
+  <span style=color:#f92672>&#34;rules&#34;</span>: [
+    {
+      <span style=color:#f92672>&#34;expression&#34;</span>: <span style=color:#e6db74>&#34;title(威马M5) and content(续航) and range(0, 500)&#34;</span>,
+      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;威马M5续航不足&#34;</span>
+    },
+    {
+      <span style=color:#f92672>&#34;expression&#34;</span>: <span style=color:#e6db74>&#34;title(威马M7) and content(续航) and range(2500, 9999)&#34;</span>,
+      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;威马M7续航异常高&#34;</span>
+    }
+  ]
+}
+</code></pre></div><p><strong>编译时声明字段</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>POST</span> <span style=color:#960050;background-color:#1e0010>/_match_rules/opinion_check/_compile</span>
+{
+  <span style=color:#f92672>&#34;fields&#34;</span>: [<span style=color:#e6db74>&#34;range&#34;</span>, <span style=color:#e6db74>&#34;price&#34;</span>, <span style=color:#e6db74>&#34;energy_kwh&#34;</span>],
+  <span style=color:#f92672>&#34;quiet&#34;</span>: <span style=color:#66d9ef>true</span>
+}
+</code></pre></div><p><strong>说明</strong>：编译时只需声明规则中<strong>实际使用</strong>的数值字段。上述规则中使用了 <code>range(0, 500)</code> 和 <code>price(2500, 9999)</code>，所以声明了这两个字段。</p><p><strong>Pipeline 配置</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>_ingest/pipeline/opinion_check</span>
+{
+  <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;使用规则引擎监测商家网络舆情&#34;</span>,
+  <span style=color:#f92672>&#34;processors&#34;</span>: [
+    {
+      <span style=color:#f92672>&#34;check_match_rules&#34;</span>: {
+        <span style=color:#f92672>&#34;id&#34;</span>: <span style=color:#e6db74>&#34;opinion_check&#34;</span>,
+        <span style=color:#f92672>&#34;fields&#34;</span>: [
+          <span style=color:#e6db74>&#34;range&#34;</span>,
+          <span style=color:#e6db74>&#34;price&#34;</span>,
+          <span style=color:#e6db74>&#34;energy_kwh&#34;</span>,
+          <span style=color:#e6db74>&#34;fuel_lper100km&#34;</span>,
+          <span style=color:#e6db74>&#34;ram_gb&#34;</span>,
+          <span style=color:#e6db74>&#34;storage_gb&#34;</span>,
+          <span style=color:#e6db74>&#34;volume_ml&#34;</span>,
+          <span style=color:#e6db74>&#34;concentration&#34;</span>
+        ]
+      }
+    }
+  ]
+}
+</code></pre></div><p><strong>说明</strong>：Pipeline 中的 <code>fields</code> 参数可以包含更多数值字段，以便支持文档中可能出现的其他数值字段匹配。这些字段不需要在当前规则库中使用，但如果文档包含这些字段，规则引擎会正确处理。</p><p><strong>测试匹配</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>POST</span> <span style=color:#960050;background-color:#1e0010>/_ingest/pipeline/opinion_check/_simulate</span>
+{
+  <span style=color:#f92672>&#34;docs&#34;</span>: [
+    {
+      <span style=color:#f92672>&#34;_index&#34;</span>: <span style=color:#e6db74>&#34;reviews&#34;</span>,
+      <span style=color:#f92672>&#34;_id&#34;</span>: <span style=color:#e6db74>&#34;doc_1&#34;</span>,
+      <span style=color:#f92672>&#34;_source&#34;</span>: {
+        <span style=color:#f92672>&#34;title&#34;</span>: <span style=color:#e6db74>&#34;威马M5续航测试&#34;</span>,
+        <span style=color:#f92672>&#34;content&#34;</span>: <span style=color:#e6db74>&#34;威马M5的续航表现一般，实测续航里程偏低&#34;</span>,
+        <span style=color:#f92672>&#34;range&#34;</span>: <span style=color:#ae81ff>450</span>
+      }
+    },
+    {
+      <span style=color:#f92672>&#34;_index&#34;</span>: <span style=color:#e6db74>&#34;reviews&#34;</span>,
+      <span style=color:#f92672>&#34;_id&#34;</span>: <span style=color:#e6db74>&#34;doc_2&#34;</span>,
+      <span style=color:#f92672>&#34;_source&#34;</span>: {
+        <span style=color:#f92672>&#34;title&#34;</span>: <span style=color:#e6db74>&#34;威马M7续航表现&#34;</span>,
+        <span style=color:#f92672>&#34;content&#34;</span>: <span style=color:#e6db74>&#34;威马M7的续航非常出色&#34;</span>,
+        <span style=color:#f92672>&#34;range&#34;</span>: <span style=color:#ae81ff>2650</span>
+      }
+    }
+  ]
+}
+</code></pre></div><p><strong>预期结果</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;docs&#34;</span>: [
+    {
+      <span style=color:#f92672>&#34;doc&#34;</span>: {
+        <span style=color:#f92672>&#34;_source&#34;</span>: {
+          <span style=color:#f92672>&#34;title&#34;</span>: <span style=color:#e6db74>&#34;威马M5续航测试&#34;</span>,
+          <span style=color:#f92672>&#34;content&#34;</span>: <span style=color:#e6db74>&#34;威马M5的续航表现一般，实测续航里程偏低&#34;</span>,
+          <span style=color:#f92672>&#34;range&#34;</span>: <span style=color:#ae81ff>450</span>,
+          <span style=color:#f92672>&#34;tags&#34;</span>: [<span style=color:#e6db74>&#34;#0#威马M5续航不足&#34;</span>]
+        }
+      }
+    },
+    {
+      <span style=color:#f92672>&#34;doc&#34;</span>: {
+        <span style=color:#f92672>&#34;_source&#34;</span>: {
+          <span style=color:#f92672>&#34;title&#34;</span>: <span style=color:#e6db74>&#34;威马M7续航表现&#34;</span>,
+          <span style=color:#f92672>&#34;content&#34;</span>: <span style=color:#e6db74>&#34;威马M7的续航非常出色&#34;</span>,
+          <span style=color:#f92672>&#34;range&#34;</span>: <span style=color:#ae81ff>2650</span>,
+          <span style=color:#f92672>&#34;tags&#34;</span>: [<span style=color:#e6db74>&#34;#1#威马M7续航异常高&#34;</span>]
+        }
+      }
+    }
+  ]
+}
+</code></pre></div><hr><h2 id=规则索引结构>规则索引结构
+<a class=anchor href=#%e8%a7%84%e5%88%99%e7%b4%a2%e5%bc%95%e7%bb%93%e6%9e%84>#</a></h2><h3 id=match_rules-索引说明>.match_rules 索引说明
+<a class=anchor href=#match_rules-%e7%b4%a2%e5%bc%95%e8%af%b4%e6%98%8e>#</a></h3><p><code>.match_rules</code> 是一个隐藏的系统索引，用于存储规则库的元数据和配置信息。每个规则库对应索引中的一条文档。</p><p><strong>索引特性</strong>：</p><ul><li><strong>索引名称</strong>：<code>.match_rules</code>（以 <code>.</code> 开头的隐藏索引）</li><li><strong>分片配置</strong>：1 个主分片，1 个副本</li><li><strong>自动扩展</strong>：副本数自动扩展到 0-1</li><li><strong>文档 ID</strong>：使用 <code>repo_id</code> 作为文档 ID</li></ul><p><strong>核心字段</strong>：</p><table><thead><tr><th>字段</th><th>类型</th><th>必需</th><th>说明</th></tr></thead><tbody><tr><td><code>name</code></td><td>text</td><td>✅</td><td>规则库名称</td></tr><tr><td><code>description</code></td><td>text</td><td>❌</td><td>规则库描述</td></tr><tr><td><code>tags</code></td><td>keyword[]</td><td>❌</td><td>规则库标签（用于分类）</td></tr><tr><td><code>rules</code></td><td>text</td><td>✅</td><td>规则文本内容（格式：<code>expression\t#offset#description</code>）</td></tr><tr><td><code>version</code></td><td>keyword</td><td>✅</td><td>规则库版本（自动递增：1, 2, 3&mldr;）</td></tr><tr><td><code>status</code></td><td>keyword</td><td>✅</td><td>编译状态：<code>pending</code>/<code>compiled</code>/<code>partial</code>/<code>failed</code></td></tr><tr><td><code>total_rules</code></td><td>integer</td><td>✅</td><td>规则总数</td></tr><tr><td><code>compiled_at</code></td><td>date</td><td>❌</td><td>编译完成时间</td></tr><tr><td><code>compiled_nodes</code></td><td>keyword[]</td><td>❌</td><td>已编译节点列表</td></tr><tr><td><code>error_message</code></td><td>text</td><td>❌</td><td>错误信息（编译失败时）</td></tr><tr><td><code>created</code></td><td>date</td><td>✅</td><td>创建时间</td></tr><tr><td><code>updated</code></td><td>date</td><td>✅</td><td>更新时间</td></tr></tbody></table><p><strong>规则文本格式</strong>：</p><p><code>rules</code> 字段存储完整的规则定义，每行一条规则，包含自动生成的 offset：</p><pre><code>expression\t#offset#description
+</code></pre><p>其中：</p><ul><li><code>offset</code> 是系统自动生成的规则序号（从 0 开始）</li><li>通过 <code>_import</code> API 导入时<strong>不需要</strong>手动指定 offset</li></ul><p>示例：</p><pre><code>枪 or 手枪 or 步枪\t#0#涉枪武器关键词
+AK47 or AK-47 or M16\t#1#枪支型号
+海洛因 or 冰毒\t#2#毒品名称
+</code></pre><p><strong>查询示例</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>查询单个规则库（排除</span> <span style=color:#960050;background-color:#1e0010>rules</span> <span style=color:#960050;background-color:#1e0010>字段避免大量数据）</span>
+<span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>.match_rules/_doc/security_v</span><span style=color:#ae81ff>1</span><span style=color:#960050;background-color:#1e0010>?_source_excludes=rules</span>
+
+<span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>搜索所有已编译的规则库</span>
+<span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>.match_rules/_search</span>
+{
+  <span style=color:#f92672>&#34;query&#34;</span>: {
+    <span style=color:#f92672>&#34;term&#34;</span>: {
+      <span style=color:#f92672>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;compiled&#34;</span>
+    }
+  },
+  <span style=color:#f92672>&#34;_source&#34;</span>: {
+    <span style=color:#f92672>&#34;excludes&#34;</span>: [<span style=color:#e6db74>&#34;rules&#34;</span>]
+  }
+}
+
+<span style=color:#960050;background-color:#1e0010>#</span> <span style=color:#960050;background-color:#1e0010>查询特定标签的规则库</span>
+<span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>.match_rules/_search</span>
+{
+  <span style=color:#f92672>&#34;query&#34;</span>: {
+    <span style=color:#f92672>&#34;term&#34;</span>: {
+      <span style=color:#f92672>&#34;tags&#34;</span>: <span style=color:#e6db74>&#34;security&#34;</span>
+    }
+  }
+}
+</code></pre></div><hr><h2 id=api-参考>API 参考
+<a class=anchor href=#api-%e5%8f%82%e8%80%83>#</a></h2><h3 id=导入规则-api>导入规则 API
+<a class=anchor href=#%e5%af%bc%e5%85%a5%e8%a7%84%e5%88%99-api>#</a></h3><h4 id=post-_match_rulesrepo_id_import>POST /_match_rules/{repo_id}/_import
+<a class=anchor href=#post-_match_rulesrepo_id_import>#</a></h4><p>覆盖导入（删除旧规则，创建新规则）。</p><p><strong>请求体</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;规则库名称&#34;</span>,
+  <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;规则库描述&#34;</span>,
+  <span style=color:#f92672>&#34;tags&#34;</span>: [<span style=color:#e6db74>&#34;tag1&#34;</span>, <span style=color:#e6db74>&#34;tag2&#34;</span>],
+  <span style=color:#f92672>&#34;rules&#34;</span>: [
+    {
+      <span style=color:#f92672>&#34;expression&#34;</span>: <span style=color:#e6db74>&#34;规则表达式&#34;</span>,
+      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;规则描述&#34;</span>
+    }
+  ]
+}
+</code></pre></div><h4 id=put-_match_rulesrepo_id_import>PUT /_match_rules/{repo_id}/_import
+<a class=anchor href=#put-_match_rulesrepo_id_import>#</a></h4><p>追加导入（保留旧规则，添加新规则）。</p><p><strong>示例</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>PUT</span> <span style=color:#960050;background-color:#1e0010>/_match_rules/security_v</span><span style=color:#ae81ff>1</span><span style=color:#960050;background-color:#1e0010>/_import</span>
+{
+  <span style=color:#f92672>&#34;rules&#34;</span>: [
+    {
+      <span style=color:#f92672>&#34;expression&#34;</span>: <span style=color:#e6db74>&#34;买枪 or 卖枪 or 枪支交易&#34;</span>,
+      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;武器交易&#34;</span>
+    }
+  ]
+}
+</code></pre></div><p><strong>响应</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;success&#34;</span>: <span style=color:#66d9ef>true</span>,
+  <span style=color:#f92672>&#34;message&#34;</span>: <span style=color:#e6db74>&#34;Successfully imported 4 rules to repo_id &#39;security_v1&#39; (version: 2)&#34;</span>,
+  <span style=color:#f92672>&#34;repo_id&#34;</span>: <span style=color:#e6db74>&#34;security_v1&#34;</span>,
+  <span style=color:#f92672>&#34;version&#34;</span>: <span style=color:#e6db74>&#34;2&#34;</span>,
+  <span style=color:#f92672>&#34;rule_count&#34;</span>: <span style=color:#ae81ff>4</span>
+}
+</code></pre></div><h4 id=post-_match_rules_import>POST /_match_rules/_import
+<a class=anchor href=#post-_match_rules_import>#</a></h4><p>自动生成 repo_id（格式：<code>repo_{timestamp}</code>）。</p><h3 id=编译规则-api>编译规则 API
+<a class=anchor href=#%e7%bc%96%e8%af%91%e8%a7%84%e5%88%99-api>#</a></h3><h4 id=post-_match_rulesrepo_id_compile>POST /_match_rules/{repo_id}/_compile
+<a class=anchor href=#post-_match_rulesrepo_id_compile>#</a></h4><p>编译规则库为二进制格式。</p><p><strong>请求体</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;fields&#34;</span>: [<span style=color:#e6db74>&#34;author&#34;</span>, <span style=color:#e6db74>&#34;source&#34;</span>, <span style=color:#e6db74>&#34;range&#34;</span>],
+  <span style=color:#f92672>&#34;quiet&#34;</span>: <span style=color:#66d9ef>true</span>
+}
+</code></pre></div><p><strong>参数说明</strong>：</p><table><thead><tr><th>参数</th><th>类型</th><th>必需</th><th>默认值</th><th>说明</th></tr></thead><tbody><tr><td><code>fields</code></td><td>array</td><td>❌</td><td>[]</td><td>数值字段列表（用于范围匹配，如 <code>range</code>, <code>price</code> 等）。<strong>注意</strong>：<code>title</code> 和 <code>content</code> 是默认字段，无需声明；未声明的非数值字段会被当作 <code>content</code> 处理</td></tr><tr><td><code>quiet</code></td><td>boolean</td><td>❌</td><td>true</td><td>是否静默模式（不输出详细日志）</td></tr></tbody></table><p><strong>多节点集群</strong>：编译会自动广播到所有包含规则插件的节点，确保每个规则插件节点都有规则库文件。</p><p><strong>响应</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;success&#34;</span>: <span style=color:#66d9ef>true</span>,
+  <span style=color:#f92672>&#34;message&#34;</span>: <span style=color:#e6db74>&#34;Broadcast compile completed for 3 nodes:\n  ✓ node-1: 15000 rules (2500ms)\n  ✓ node-2: 15000 rules (2480ms)\n  ✓ node-3: 15000 rules (2520ms)&#34;</span>,
+  <span style=color:#f92672>&#34;result&#34;</span>: {
+    <span style=color:#f92672>&#34;database_path&#34;</span>: <span style=color:#e6db74>&#34;/path/to/output/opinion_check&#34;</span>,
+    <span style=color:#f92672>&#34;duration_ms&#34;</span>: <span style=color:#ae81ff>2520</span>,
+    <span style=color:#f92672>&#34;total_rules&#34;</span>: <span style=color:#ae81ff>15000</span>
+  }
+}
+</code></pre></div><h3 id=查询规则库-api>查询规则库 API
+<a class=anchor href=#%e6%9f%a5%e8%af%a2%e8%a7%84%e5%88%99%e5%ba%93-api>#</a></h3><h4 id=get-match_rules_docrepo_id>GET .match_rules/_doc/{repo_id}
+<a class=anchor href=#get-match_rules_docrepo_id>#</a></h4><p>查询规则库详情。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>.match_rules/_doc/security_v</span><span style=color:#ae81ff>1</span>
+</code></pre></div><p><strong>响应</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;_index&#34;</span>: <span style=color:#e6db74>&#34;.match_rules&#34;</span>,
+  <span style=color:#f92672>&#34;_id&#34;</span>: <span style=color:#e6db74>&#34;security_v1&#34;</span>,
+  <span style=color:#f92672>&#34;_version&#34;</span>: <span style=color:#ae81ff>2</span>,
+  <span style=color:#f92672>&#34;found&#34;</span>: <span style=color:#66d9ef>true</span>,
+  <span style=color:#f92672>&#34;_source&#34;</span>: {
+    <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;安全规则库&#34;</span>,
+    <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;用于安全事件分类的规则库&#34;</span>,
+    <span style=color:#f92672>&#34;tags&#34;</span>: [<span style=color:#e6db74>&#34;security&#34;</span>, <span style=color:#e6db74>&#34;content-filter&#34;</span>],
+    <span style=color:#f92672>&#34;rules&#34;</span>: <span style=color:#e6db74>&#34;枪 or 手枪 or 步枪 or 猎枪\t#0#涉枪武器关键词\nAK47 or AK-47 or M16 or M4A1\t#1#枪支型号\n...&#34;</span>,
+    <span style=color:#f92672>&#34;version&#34;</span>: <span style=color:#e6db74>&#34;2&#34;</span>,
+    <span style=color:#f92672>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;compiled&#34;</span>,
+    <span style=color:#f92672>&#34;compiled_at&#34;</span>: <span style=color:#e6db74>&#34;2026-01-07T08:00:00Z&#34;</span>,
+    <span style=color:#f92672>&#34;total_rules&#34;</span>: <span style=color:#ae81ff>4</span>,
+    <span style=color:#f92672>&#34;compiled_nodes&#34;</span>: [<span style=color:#e6db74>&#34;node-1&#34;</span>, <span style=color:#e6db74>&#34;node-2&#34;</span>, <span style=color:#e6db74>&#34;node-3&#34;</span>],
+    <span style=color:#f92672>&#34;created&#34;</span>: <span style=color:#e6db74>&#34;2025-12-31T10:00:00Z&#34;</span>,
+    <span style=color:#f92672>&#34;updated&#34;</span>: <span style=color:#e6db74>&#34;2025-12-31T10:15:00Z&#34;</span>
+  }
+}
+</code></pre></div><p><strong>字段说明</strong>：</p><p><code>.match_rules</code> 索引用于存储规则库的元数据和配置信息。每个规则库对应一条文档，文档 ID 即为 <code>repo_id</code>。</p><table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody><tr><td><code>name</code></td><td>text</td><td>规则库名称（用户自定义，用于标识规则库用途）</td></tr><tr><td><code>description</code></td><td>text</td><td>规则库描述（详细说明规则库的作用和使用场景）</td></tr><tr><td><code>tags</code></td><td>keyword[]</td><td>规则库标签（用于分类和检索，如 [&ldquo;security&rdquo;, &ldquo;content-filter&rdquo;]）</td></tr><tr><td><code>rules</code></td><td>text</td><td>规则文本内容（完整的规则定义，每行一条规则，格式：<code>expression\t#offset#description</code>）</td></tr><tr><td><code>version</code></td><td>keyword</td><td>规则库版本（每次导入递增，格式：1, 2, 3&mldr;）</td></tr><tr><td><code>status</code></td><td>keyword</td><td>编译状态：<code>pending</code>（待编译）、<code>compiled</code>（已编译）、<code>partial</code>（部分编译）、<code>failed</code>（失败）</td></tr><tr><td><code>total_rules</code></td><td>integer</td><td>规则总数（导入的规则条数）</td></tr><tr><td><code>compiled_at</code></td><td>date</td><td>编译完成时间（最后一次成功编译的时间戳）</td></tr><tr><td><code>compiled_nodes</code></td><td>keyword[]</td><td>已编译节点列表（已成功编译此规则库的节点名称）</td></tr><tr><td><code>error_message</code></td><td>text</td><td>错误信息（编译失败时的详细错误描述）</td></tr><tr><td><code>created</code></td><td>date</td><td>创建时间（规则库首次导入的时间）</td></tr><tr><td><code>updated</code></td><td>date</td><td>更新时间（规则库最后一次修改的时间）</td></tr></tbody></table><p><strong>注意</strong>：</p><ul><li><code>rules</code> 字段可能包含大量文本（数万条规则），查询时建议使用 <code>_source_excludes=rules</code> 排除此字段</li><li><code>version</code> 字段在每次使用 <code>POST /_match_rules/{repo_id}/_import</code>（覆盖模式）或 <code>PUT /_match_rules/{repo_id}/_import</code>（追加模式）导入时自动递增</li><li><code>compiled_nodes</code> 字段在多节点集群中记录了所有成功编译的节点，用于判断集群同步状态</li></ul><hr><h2 id=节点启动与规则同步>节点启动与规则同步
+<a class=anchor href=#%e8%8a%82%e7%82%b9%e5%90%af%e5%8a%a8%e4%b8%8e%e8%a7%84%e5%88%99%e5%90%8c%e6%ad%a5>#</a></h2><h3 id=自动同步机制>自动同步机制
+<a class=anchor href=#%e8%87%aa%e5%8a%a8%e5%90%8c%e6%ad%a5%e6%9c%ba%e5%88%b6>#</a></h3><p>节点启动时，Rules 插件会自动检查并同步缺失的规则库：</p><ol><li><strong>检查本地规则库</strong>：对比 <code>.match_rules</code> 索引中的规则库</li><li><strong>自动编译缺失库</strong>：对于本地不存在的规则库，自动执行编译</li><li><strong>更新节点状态</strong>：同步完成后更新 <code>compiled_nodes</code> 列表</li></ol><p><strong>预期行为</strong>：</p><ul><li>首次启动：自动编译所有规则库（通常 10-20 秒）</li><li>集群重启：验证本地规则库，如有缺失自动恢复</li><li>新节点加入：后台静默同步，不影响集群服务</li></ul><h3 id=同步期间的写入行为>同步期间的写入行为
+<a class=anchor href=#%e5%90%8c%e6%ad%a5%e6%9c%9f%e9%97%b4%e7%9a%84%e5%86%99%e5%85%a5%e8%a1%8c%e4%b8%ba>#</a></h3><p>在规则库同步期间，写入操作会<strong>延迟等待</strong>，直到同步完成后自动成功。</p><p><strong>用户体验</strong>：</p><ul><li>写入请求不会立即失败，而是等待同步完成</li><li>等待时间取决于规则库大小（通常几秒到几分钟）</li><li>同步完成后写入自动成功，无需重新提交</li></ul><p><strong>不受影响的操作</strong>：</p><ul><li>✅ 所有读操作（查询、获取文档等）</li><li>✅ 系统索引的写入（<code>.match_rules</code> 等）</li></ul><p><strong>预计等待时间</strong>：</p><ul><li>通常 10-20 秒</li><li>大型规则库（数万条）可能需要更长时间</li></ul><hr><h2 id=批量导入工具>批量导入工具
+<a class=anchor href=#%e6%89%b9%e9%87%8f%e5%af%bc%e5%85%a5%e5%b7%a5%e5%85%b7>#</a></h2><p>对于大规则文件，可使用 Python 脚本批量导入：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 基本用法（追加模式）</span>
+python import_rules.py -f rules.txt -r security_v1 -n <span style=color:#e6db74>&#34;安全规则库&#34;</span>
+
+<span style=color:#75715e># 覆盖模式（删除旧规则）</span>
+python import_rules.py -f rules.txt -r opinion_v9 -n <span style=color:#e6db74>&#34;舆情规则库&#34;</span> --overwrite
+
+<span style=color:#75715e># 指定名称、描述和标签</span>
+python import_rules.py -f rules.txt -r opinion_v9 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -n <span style=color:#e6db74>&#34;舆情监控规则&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -d <span style=color:#e6db74>&#34;用于舆情监控的规则库&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  -t opinion -t monitoring
+
+<span style=color:#75715e># 使用 HTTPS 和自定义认证</span>
+python import_rules.py -f rules.txt -r security_v1 -n <span style=color:#e6db74>&#34;安全规则&#34;</span> <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --url https://localhost:9200 <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --username admin <span style=color:#ae81ff>\
+</span><span style=color:#ae81ff></span>  --password admin123
+</code></pre></div><p><strong>规则文件格式</strong> (<code>rules.txt</code>)：</p><p>规则文件每行一条规则，使用 Tab 键分隔表达式和描述（<strong>不需要手动指定 offset</strong>）：</p><pre><code>枪 or 手枪 or 步枪	涉枪武器关键词
+AK47 or AK-47 or M16	枪支型号
+海洛因 or 冰毒	毒品名称
+</code></pre><p><strong>说明</strong>：导入时系统会自动为每条规则生成 offset（从 0 开始），无需手动添加 <code>#offset#</code> 部分。</p><p><strong>工具位置</strong>：<code>plugins/rules/src/test/resources/import_rules.py</code></p><hr><h2 id=使用场景>使用场景
+<a class=anchor href=#%e4%bd%bf%e7%94%a8%e5%9c%ba%e6%99%af>#</a></h2><h3 id=1-内容安全审核>1. 内容安全审核
+<a class=anchor href=#1-%e5%86%85%e5%ae%b9%e5%ae%89%e5%85%a8%e5%ae%a1%e6%a0%b8>#</a></h3><p><strong>规则示例</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;rules&#34;</span>: [
+    {
+      <span style=color:#f92672>&#34;expression&#34;</span>: <span style=color:#e6db74>&#34;枪 or 手枪 or 步枪 or 猎枪&#34;</span>,
+      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;涉枪内容&#34;</span>
+    },
+    {
+      <span style=color:#f92672>&#34;expression&#34;</span>: <span style=color:#e6db74>&#34;海洛因 or 冰毒 or 摇头丸&#34;</span>,
+      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;涉毒内容&#34;</span>
+    },
+    {
+      <span style=color:#f92672>&#34;expression&#34;</span>: <span style=color:#e6db74>&#34;isis or 伊斯兰国 or IS组织&#34;</span>,
+      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;恐怖组织&#34;</span>
+    }
+  ]
+}
+</code></pre></div><p><strong>查询示例</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>GET</span> <span style=color:#960050;background-color:#1e0010>security-events/_search</span>
+{
+  <span style=color:#f92672>&#34;query&#34;</span>: {
+    <span style=color:#f92672>&#34;terms&#34;</span>: {
+      <span style=color:#f92672>&#34;tags&#34;</span>: [<span style=color:#e6db74>&#34;#0#涉枪内容&#34;</span>, <span style=color:#e6db74>&#34;#1#涉毒内容&#34;</span>]
+    }
+  }
+}
+</code></pre></div><h3 id=2-新闻分类>2. 新闻分类
+<a class=anchor href=#2-%e6%96%b0%e9%97%bb%e5%88%86%e7%b1%bb>#</a></h3><p><strong>规则示例</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;rules&#34;</span>: [
+    {
+      <span style=color:#f92672>&#34;expression&#34;</span>: <span style=color:#e6db74>&#34;author(张三) and source(新华网)&#34;</span>,
+      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;张三_新华网&#34;</span>
+    },
+    {
+      <span style=color:#f92672>&#34;expression&#34;</span>: <span style=color:#e6db74>&#34;title(紧急) and content(通知) and category(安全)&#34;</span>,
+      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;紧急安全通知&#34;</span>
+    }
+  ]
+}
+</code></pre></div><h3 id=3-商品推荐>3. 商品推荐
+<a class=anchor href=#3-%e5%95%86%e5%93%81%e6%8e%a8%e8%8d%90>#</a></h3><p><strong>规则示例</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;rules&#34;</span>: [
+    {
+      <span style=color:#f92672>&#34;expression&#34;</span>: <span style=color:#e6db74>&#34;category(手机) and price(3000, 5000)&#34;</span>,
+      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;中端手机&#34;</span>
+    },
+    {
+      <span style=color:#f92672>&#34;expression&#34;</span>: <span style=color:#e6db74>&#34;category(笔记本) and ram_gb(16, 32)&#34;</span>,
+      <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;高性能笔记本&#34;</span>
+    }
+  ]
+}
+</code></pre></div><h3 id=4-舆情监控>4. 舆情监控
+<a class=anchor href=#4-%e8%88%86%e6%83%85%e7%9b%91%e6%8e%a7>#</a></h3><p><strong>规则示例</strong>（见上文"数值范围匹配"章节）</p><hr><h2 id=性能优化>性能优化
+<a class=anchor href=#%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96>#</a></h2><h3 id=规则库大小建议>规则库大小建议
+<a class=anchor href=#%e8%a7%84%e5%88%99%e5%ba%93%e5%a4%a7%e5%b0%8f%e5%bb%ba%e8%ae%ae>#</a></h3><ul><li>单个规则库不超过 50,000 条规则</li><li>大规则库考虑拆分为多个 repo_id</li></ul><h3 id=编译性能参考>编译性能参考
+<a class=anchor href=#%e7%bc%96%e8%af%91%e6%80%a7%e8%83%bd%e5%8f%82%e8%80%83>#</a></h3><table><thead><tr><th>规则数</th><th>编译耗时</th></tr></thead><tbody><tr><td>1,000</td><td>~100-200ms</td></tr><tr><td>10,000</td><td>~500-1000ms</td></tr><tr><td>100,000</td><td>~5-10s</td></tr></tbody></table><h3 id=字段优化>字段优化
+<a class=anchor href=#%e5%ad%97%e6%ae%b5%e4%bc%98%e5%8c%96>#</a></h3><ul><li>只声明规则中实际使用的字段</li><li>数值字段（如 <code>range</code>、<code>price</code>）必须声明，否则编译失败</li></ul><hr><h2 id=常见问题>常见问题
+<a class=anchor href=#%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98>#</a></h2><h3 id=q1-tags-字段为空>Q1: tags 字段为空？
+<a class=anchor href=#q1-tags-%e5%ad%97%e6%ae%b5%e4%b8%ba%e7%a9%ba>#</a></h3><p><strong>可能原因</strong>：</p><ol><li>规则未匹配到内容</li><li>规则库路径不正确</li><li>自定义字段未声明</li></ol><p><strong>排查步骤</strong>：</p><ol><li>使用 <code>_simulate</code> API 测试 pipeline</li><li>检查规则表达式是否正确</li><li>确认编译时是否声明了 <code>fields</code> 参数</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=color:#960050;background-color:#1e0010>POST</span> <span style=color:#960050;background-color:#1e0010>_ingest/pipeline/security-check/_simulate</span>
+{
+  <span style=color:#f92672>&#34;docs&#34;</span>: [
+    {
+      <span style=color:#f92672>&#34;_source&#34;</span>: {
+        <span style=color:#f92672>&#34;title&#34;</span>: <span style=color:#e6db74>&#34;测试&#34;</span>,
+        <span style=color:#f92672>&#34;content&#34;</span>: <span style=color:#e6db74>&#34;手枪交易&#34;</span>
+      }
+    }
+  ]
+}
+</code></pre></div><h3 id=q2-编译失败>Q2: 编译失败？
+<a class=anchor href=#q2-%e7%bc%96%e8%af%91%e5%a4%b1%e8%b4%a5>#</a></h3><p><strong>可能原因</strong>：</p><ol><li>规则语法错误</li><li>索引中无规则数据</li><li>自定义字段未声明（导致 Range error）</li><li>未设置 <code>bootstrap.system_call_filter: false</code></li></ol><p><strong>排查步骤</strong>：</p><ol><li><strong>首先检查节点配置</strong>：确认 <code>config/easysearch.yml</code> 中设置了 <code>bootstrap.system_call_filter: false</code></li><li>检查编译响应中的 <code>message</code> 字段</li><li>确认 <code>.match_rules</code> 索引中有数据：<code>GET .match_rules/_doc/{repo_id}</code></li><li>检查是否声明了数值字段</li><li>查看 EasySearch 日志中的详细错误信息</li></ol><h3 id=q3-正则表达式报错>Q3: 正则表达式报错？
+<a class=anchor href=#q3-%e6%ad%a3%e5%88%99%e8%a1%a8%e8%be%be%e5%bc%8f%e6%8a%a5%e9%94%99>#</a></h3><p><strong>错误信息</strong>：<code>literal start with punct must be quoted</code></p><p><strong>原因</strong>：正则表达式未用双引号包围。</p><p><strong>解决</strong>：
+❌ 错误：<code>author(/张.*/)</code>
+✅ 正确：<code>author("/张.*/")</code></p><h3 id=q4-pipeline-不生效>Q4: Pipeline 不生效？
+<a class=anchor href=#q4-pipeline-%e4%b8%8d%e7%94%9f%e6%95%88>#</a></h3><p><strong>排查步骤</strong>：</p><ol><li>检查 Pipeline 是否正确创建：<code>GET _ingest/pipeline/security-check</code></li><li>确认规则库已编译：检查 <code>status</code> 字段</li><li>查看 EasySearch 日志：<code>logs/easysearch.log</code></li></ol><h3 id=q5-节点启动后写入操作变慢>Q5: 节点启动后写入操作变慢？
+<a class=anchor href=#q5-%e8%8a%82%e7%82%b9%e5%90%af%e5%8a%a8%e5%90%8e%e5%86%99%e5%85%a5%e6%93%8d%e4%bd%9c%e5%8f%98%e6%85%a2>#</a></h3><p><strong>现象</strong>：节点重启后，写入操作响应时间变长。</p><p><strong>原因</strong>：这是正常的自动同步机制，节点启动时会自动检查并同步缺失的规则库。</p><p><strong>解决方案</strong>：</p><ul><li>等待同步完成（通常 10-20 秒）</li><li>如需减少等待时间，可在重启前手动触发规则编译</li><li>多节点集群中，新节点加入不会影响其他节点的写入性能</li></ul><h3 id=q6-规则库文件丢失后怎么办>Q6: 规则库文件丢失后怎么办？
+<a class=anchor href=#q6-%e8%a7%84%e5%88%99%e5%ba%93%e6%96%87%e4%bb%b6%e4%b8%a2%e5%a4%b1%e5%90%8e%e6%80%8e%e4%b9%88%e5%8a%9e>#</a></h3><p><strong>现象</strong>：规则库文件被误删或磁盘故障导致文件丢失。</p><p><strong>自动恢复机制</strong>：</p><ul><li>插件使用元数据文件（<code>.compiled_repos.json</code>）记录编译历史</li><li>节点启动时检测到文件丢失，会自动从 <code>.match_rules</code> 索引重新编译</li><li>同步期间写入操作会等待，完成后自动恢复</li></ul><p><strong>手动恢复</strong>（如自动恢复失败）：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># 1. 检查规则库是否在索引中</span>
+GET .match_rules/_doc/<span style=color:#f92672>{</span>repo_id<span style=color:#f92672>}</span>
+
+<span style=color:#75715e># 2. 重新编译</span>
+POST /_match_rules/<span style=color:#f92672>{</span>repo_id<span style=color:#f92672>}</span>/_compile
+</code></pre></div><hr><h2 id=限制和注意事项>限制和注意事项
+<a class=anchor href=#%e9%99%90%e5%88%b6%e5%92%8c%e6%b3%a8%e6%84%8f%e4%ba%8b%e9%a1%b9>#</a></h2><ol><li><strong>License 要求</strong>：需要启用 <code>rule-engine</code> 特性的有效 License</li><li><strong>系统配置要求</strong>：必须设置 <code>bootstrap.system_call_filter: false</code>（见"环境要求"章节）</li><li><strong>目标字段可配置</strong>：默认写入 <code>tags</code> 字段，可通过 <code>target_field</code> 参数自定义</li><li><strong>数值字段类型</strong>：数值范围匹配要求字段值为数值类型</li><li><strong>正则语法</strong>：必须使用双引号包围正则表达式</li><li><strong>编译依赖索引</strong>：编译前必须先导入规则到 <code>.match_rules</code> 索引</li><li><strong>节点启动同步</strong>：节点启动时会自动同步规则库，写入操作会等待同步完成（通常 10-20 秒）</li><li><strong>元数据文件</strong>：<code>.compiled_repos.json</code> 用于检测文件丢失，请勿手动删除</li></ol><hr><h2 id=参考资料>参考资料
+<a class=anchor href=#%e5%8f%82%e8%80%83%e8%b5%84%e6%96%99>#</a></h2><ul><li><strong>规则语法文档</strong>：<code>plugins/rules/ruledb-pkg/README.md</code></li><li><strong>测试指南</strong>：<code>plugins/rules/TESTING.md</code></li><li><strong>广播编译设计</strong>：<code>plugins/rules/BROADCAST_COMPILE_DESIGN.md</code></li><li><strong>导入工具</strong>：<code>plugins/rules/src/test/resources/import_rules.py</code></li></ul></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
+    import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
+    searchbox({container: "#searchbox"});
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><style>.toc-header{margin-bottom:8px;margin-top:20px;height:24px;gap:7px;span { font-weight: 500; }}#TableOfContents a{color:#8440f1}</style><style>.book-toc>nav li::before{content:"";position:absolute;left:-16px;width:2px;height:32px;top:6px;transform:translateY(-50%)scaleY(0);background:0 0;opacity:0;transition:transform .28s cubic-bezier(.2,.8,.2,1),background-color .18s ease,opacity .18s}.book-toc>nav>ul>li.ancestor::before{left:-16px}.book-toc>nav>ul>li.ancestor>ul>li.active::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor>ul>li.active::before{left:-48px}.book-toc>nav li.active::before,.book-toc>nav li.ancestor::before{background:#8440f1;transform:translateY(-50%)scaleY(1);opacity:1}.book-toc>nav li.active>a{font-weight:500}.book-toc>nav li.ancestor>a{font-weight:500}:target{scroll-margin-top:80px}</style><script>document.addEventListener('DOMContentLoaded',function(){const nav=document.getElementsByClassName('book-toc')[0].querySelector('nav');if(!nav)return;const links=Array.from(nav.querySelectorAll('a[href^="#"]'));const idToLi=new Map();let isProgrammatic=false;let programmaticTargetId=null;let scrollEndTimer=null;links.forEach(link=>{const href=link.getAttribute('href');if(!href||href.length<2)return;const id=decodeURIComponent(href.slice(1));const li=link.closest('li');if(li)idToLi.set(id,li);link.addEventListener('click',function(e){const target=document.getElementById(id);if(target){e.preventDefault();isProgrammatic=true;programmaticTargetId=id;setActiveById(id);target.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+id);clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},1200);}});});window.addEventListener('scroll',function(){clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},120);},{passive:true});function clearAll(){idToLi.forEach(li=>li.classList.remove('active','ancestor'));links.forEach(a=>a.removeAttribute('aria-current'));}
+function setActiveById(id){clearAll();const li=idToLi.get(id);if(!li)return;li.classList.add('active');const a=li.querySelector('a[href^="#"]');if(a)a.setAttribute('aria-current','true');let parent=li.parentElement;while(parent&&parent!==nav){const parentLi=parent.closest('li');if(parentLi&&parentLi!==li)parentLi.classList.add('ancestor');parent=parent.parentElement;}}
+const observedEls=Array.from(idToLi.keys()).map(id=>document.getElementById(id)).filter(Boolean);if(observedEls.length){const io=new IntersectionObserver((entries)=>{let candidate=null;entries.forEach(en=>{if(!en.isIntersecting)return;if(!candidate)candidate=en;else{const curTop=Math.abs(candidate.boundingClientRect.top);const newTop=Math.abs(en.boundingClientRect.top);if(newTop<curTop)candidate=en;}});if(!candidate||!candidate.target||!candidate.target.id)return;const foundId=candidate.target.id;if(isProgrammatic&&programmaticTargetId&&foundId!==programmaticTargetId){return;}
+setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.1,0.25,0.5]});observedEls.forEach(el=>io.observe(el));}
+if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#功能特性>功能特性</a></li><li><a href=#基本概念>基本概念</a><ul><li><a href=#规则库-repository>规则库 (Repository)</a></li><li><a href=#规则-rule>规则 (Rule)</a></li><li><a href=#标签-tag>标签 (Tag)</a></li></ul></li><li><a href=#环境要求>环境要求</a><ul><li><a href=#节点配置>节点配置</a></li></ul></li><li><a href=#快速开始>快速开始</a><ul><li><a href=#步骤-1-导入规则>步骤 1: 导入规则</a></li><li><a href=#步骤-2-编译规则库>步骤 2: 编译规则库</a></li><li><a href=#步骤-3-创建-ingest-pipeline>步骤 3: 创建 Ingest Pipeline</a></li><li><a href=#步骤-4-写入文档测试>步骤 4: 写入文档测试</a></li></ul></li><li><a href=#规则语法>规则语法</a><ul><li><a href=#规则文件格式>规则文件格式</a></li><li><a href=#基本语法>基本语法</a></li><li><a href=#高级功能>高级功能</a></li><li><a href=#规则编写最佳实践>规则编写最佳实践</a></li><li><a href=#常见错误>常见错误</a></li><li><a href=#特殊字符速查表>特殊字符速查表</a></li></ul></li><li><a href=#高级应用示例>高级应用示例</a><ul><li><a href=#示例-1-舆情监控>示例 1: 舆情监控</a></li></ul></li><li><a href=#规则索引结构>规则索引结构</a><ul><li><a href=#match_rules-索引说明>.match_rules 索引说明</a></li></ul></li><li><a href=#api-参考>API 参考</a><ul><li><a href=#导入规则-api>导入规则 API</a></li><li><a href=#编译规则-api>编译规则 API</a></li><li><a href=#查询规则库-api>查询规则库 API</a></li></ul></li><li><a href=#节点启动与规则同步>节点启动与规则同步</a><ul><li><a href=#自动同步机制>自动同步机制</a></li><li><a href=#同步期间的写入行为>同步期间的写入行为</a></li></ul></li><li><a href=#批量导入工具>批量导入工具</a></li><li><a href=#使用场景>使用场景</a><ul><li><a href=#1-内容安全审核>1. 内容安全审核</a></li><li><a href=#2-新闻分类>2. 新闻分类</a></li><li><a href=#3-商品推荐>3. 商品推荐</a></li><li><a href=#4-舆情监控>4. 舆情监控</a></li></ul></li><li><a href=#性能优化>性能优化</a><ul><li><a href=#规则库大小建议>规则库大小建议</a></li><li><a href=#编译性能参考>编译性能参考</a></li><li><a href=#字段优化>字段优化</a></li></ul></li><li><a href=#常见问题>常见问题</a><ul><li><a href=#q1-tags-字段为空>Q1: tags 字段为空？</a></li><li><a href=#q2-编译失败>Q2: 编译失败？</a></li><li><a href=#q3-正则表达式报错>Q3: 正则表达式报错？</a></li><li><a href=#q4-pipeline-不生效>Q4: Pipeline 不生效？</a></li><li><a href=#q5-节点启动后写入操作变慢>Q5: 节点启动后写入操作变慢？</a></li><li><a href=#q6-规则库文件丢失后怎么办>Q6: 规则库文件丢失后怎么办？</a></li></ul></li><li><a href=#限制和注意事项>限制和注意事项</a></li><li><a href=#参考资料>参考资料</a></li></ul></nav></aside></main><script src=/easysearch/main/js/asciinema-player.js></script></body></html>
