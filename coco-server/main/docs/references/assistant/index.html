@@ -283,7 +283,7 @@ curl  -H <span style=color:#e6db74>&#39;Content-Type: application/json&#39;</spa
 <span style=color:#f92672>}</span>
 </code></pre></div><h3 id=create-a-chat-session>Create a Chat Session
 <a class=anchor href=#create-a-chat-session>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>//request
-curl -N -H <span style=color:#e6db74>&#39;Content-Type: application/json&#39;</span>   -XPOST http://localhost:9000/chat/_create -d<span style=color:#e6db74>&#39;{
+curl -N -H <span style=color:#e6db74>&#39;Content-Type: application/json&#39;</span>   -XPOST http://localhost:9000/chat/_create?assistant_id<span style=color:#f92672>=</span>xxxxxx -d<span style=color:#e6db74>&#39;{
 </span><span style=color:#e6db74>  &#34;message&#34;:&#34;how are you doing?&#34;
 </span><span style=color:#e6db74>}&#39;</span>
 </code></pre></div><p>This API is HTTP Streaming based API, the first line will be session creation result, as follows:</p><pre><code>//response
