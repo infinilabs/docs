@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Mapping on INFINI Easysearch</title><link>/easysearch/main/tags/Mapping/</link><description>Recent content in Mapping on INFINI Easysearch</description><generator>Hugo -- gohugo.io</generator><atom:link href="/easysearch/main/tags/Mapping/index.xml" rel="self" type="application/rss+xml"/><item><title>文档建模</title><link>/easysearch/main/docs/features/mapping-and-analysis/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/features/mapping-and-analysis/</guid><description>Mapping 与文本分析是 Easysearch 搜索能力的两大基石。本章为功能手册 - 实践应用部分。
+📚 基础理论优先：请先阅读 Mapping 与文本分析，了解基本概念和工作原理。
+本章内容导航 # 🔧 应用指南 Mapping 设计
+Mapping 基础 - text/keyword 选择、动态映射陷阱、字段配置 文本分析配置
+文本分析 - 语言分析器选择与配置 词汇识别 - 分词器选择与语言处理 归一化与规范化器 - 大小写、变音符号、Normalizer 配置 词干提取 - 词形还原与召回率优化 停用词 - 性能与表达力的权衡 同义词 - 扩展召回与多词同义词处理 模糊匹配 - 拼写容错与编辑距离 📖 API 参考 映射配置参考
+字段类型 - text、keyword、数值、日期、geo、向量等 映射参数 - analyzer、doc_values、index 等 元数据字段 - _source、_id、_routing 等系统字段 文本分析组件参考</description></item></channel></rss>

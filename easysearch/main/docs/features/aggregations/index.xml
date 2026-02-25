@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>聚合分析 on INFINI Easysearch</title><link>/easysearch/main/docs/features/aggregations/</link><description>Recent content in 聚合分析 on INFINI Easysearch</description><generator>Hugo -- gohugo.io</generator><atom:link href="/easysearch/main/docs/features/aggregations/index.xml" rel="self" type="application/rss+xml"/><item><title>聚合性能与内存</title><link>/easysearch/main/docs/features/aggregations/aggs-performance/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/features/aggregations/aggs-performance/</guid><description>聚合的性能和内存使用是生产环境中需要重点关注的问题。本页介绍聚合背后的数据结构（doc_values 和 fielddata）、内存限制机制（断路器），以及如何优化聚合查询。
+Doc Values # 聚合使用一个叫 doc values 的数据结构。Doc values 可以使聚合更快、更高效并且内存友好。
+Doc values 的存在是因为倒排索引只对某些操作是高效的。倒排索引的优势在于查找包含某个项的文档，而对于从另外一个方向的相反操作并不高效，即：确定哪些项是否存在单个文档里，聚合需要这种次级的访问模式。
+倒排索引 vs Doc Values # 对于以下倒排索引：
+Term Doc_1 Doc_2 Doc_3 ------------------------------------ brown | X | X | dog | X | | X dogs | | X | X fox | X | | X ... 如果我们想要获得所有包含 brown 的文档的词的完整列表，查询部分简单又高效。倒排索引是根据项来排序的，所以我们首先在词项列表中找到 brown，然后扫描所有列，找到包含 brown 的文档。
+然后，对于聚合部分，我们需要找到 Doc_1 和 Doc_2 里所有唯一的词项。用倒排索引做这件事情代价很高：我们会迭代索引里的每个词项并收集 Doc_1 和 Doc_2 列里面 token。这很慢而且难以扩展：随着词项和文档的数量增加，执行时间也会增加。
+Doc values 通过转置两者间的关系来解决这个问题。倒排索引将词项映射到包含它们的文档，doc values 将文档映射到它们包含的词项：</description></item><item><title>聚合场景实践</title><link>/easysearch/main/docs/features/aggregations/aggs-recipes/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/features/aggregations/aggs-recipes/</guid><description>本页不再解释每种聚合的语法，而是按“业务问题”给出几类常见的聚合场景实践。
+语法细节请先阅读前面的聚合基础/桶聚合/指标聚合章节。
+场景一：按状态与应用统计错误率 # 需求：做一个简单的错误率看板，按应用和日志级别统计请求量与错误量。
+思路：
+先用 bool.filter 限定时间窗口（如最近 15 分钟/1 小时） 使用 terms 按应用分桶 在每个应用桶内，再按日志级别分桶，并计算总数 示例：
+GET /logs-*/_search { &amp;#34;size&amp;#34;: 0, &amp;#34;query&amp;#34;: { &amp;#34;bool&amp;#34;: { &amp;#34;filter&amp;#34;: [ { &amp;#34;range&amp;#34;: { &amp;#34;@timestamp&amp;#34;: { &amp;#34;gte&amp;#34;: &amp;#34;now-15m&amp;#34; } } } ] } }, &amp;#34;aggs&amp;#34;: { &amp;#34;by_app&amp;#34;: { &amp;#34;terms&amp;#34;: { &amp;#34;field&amp;#34;: &amp;#34;app_name.keyword&amp;#34;, &amp;#34;size&amp;#34;: 20 }, &amp;#34;aggs&amp;#34;: { &amp;#34;by_level&amp;#34;: { &amp;#34;terms&amp;#34;: { &amp;#34;field&amp;#34;: &amp;#34;log_level.keyword&amp;#34; } } } } } } 可以在应用层根据各级别计数计算错误率，或继续在子聚合中添加 filter 聚合专门统计错误级别。</description></item></channel></rss>

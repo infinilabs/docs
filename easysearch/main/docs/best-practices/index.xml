@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>最佳实践 on INFINI Easysearch</title><link>/easysearch/main/docs/best-practices/</link><description>Recent content in 最佳实践 on INFINI Easysearch</description><generator>Hugo -- gohugo.io</generator><atom:link href="/easysearch/main/docs/best-practices/index.xml" rel="self" type="application/rss+xml"/><item><title>索引与分片设计实践</title><link>/easysearch/main/docs/best-practices/index-design/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/best-practices/index-design/</guid><description>这篇更偏“工程实践”：不讲所有细节，只给你一套在大多数场景下都靠谱的索引设计思路，帮你少走弯路。
+1. 先确定“索引边界”，再谈分片 # 思考顺序建议是：
+这一坨数据是否应该是一个索引？ 典型边界：数据生命周期、访问模式、隔离需求（权限/多租户）、硬件拓扑（可用区） 在它内部，需要多少主分片、多少副本？ 常用的索引边界模式：
+按业务域：orders、products、logs_app、logs_security… 按时间：logs-2026.02.01、logs-2026.02.02（时间序列，见数据建模章节） 按租户/大客户：大客户单独索引，小客户共享索引（见多租户建模章节） 建议：先控制“索引颗粒度”合理，再通过分片做水平扩展；不要指望一个索引撑住所有业务。
+2. 分片与副本：从“目标分片大小”倒推 # 分片设计没有万能数字，但可以从一个直觉出发：希望单个分片的大小 &amp;amp; 负载落在一个可控区间内。实践中常见的经验值：
+单分片 10–50GB 对大多数场景比较健康（结合你的磁盘/快照策略微调） 对于热点写入较猛的日志类索引，可以略小一点，便于滚动与恢复 一个简单的倒推流程：
+用测试环境或历史数据估算：一个分片大概能承载多少数据 &amp;amp; QPS（参考“容量规划”章节） 预估未来一段时间的索引规模（例如：单日日志量、订单增长等） 用 总数据量 / 目标分片大小 ≈ 主分片数 算一个初始值，再按机器数/故障域稍微调整 副本数则更多取决于：
+可用性（能容忍多少节点故障） 读流量（读多写少时可以多一点副本当读节点） 生产上常见组合：
+写多读少：number_of_replicas = 0/1 读多写少：number_of_replicas = 1+，甚至为查询集群设独立的 follower 3. 时间序列：按时间切索引，而不是疯狂加分片 # 日志、指标、行为埋点这些“时间序列”场景，最容易踩坑的设计就是：</description></item><item><title>查询调优与慢查询排查</title><link>/easysearch/main/docs/best-practices/query-tuning/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/best-practices/query-tuning/</guid><description>这篇不是“参数大全”，而是一个从症状出发的调优路线：给你一套在遇到“搜索慢/结果怪”时可以照着走的步骤，并总结几类典型反模式。
+1. 先确认：是“慢”，还是“查不准”？ # 调优之前先判断你面对的是哪类问题：
+性能问题：延迟高、QPS 上不去、偶发长尾 相关性问题：该上的内容没上来、不该上的跑前面 资源问题：CPU/内存/磁盘/网络被拖垮 很多时候，这三类是纠缠在一起的，但你要先选一个“主目标”：是要先跑得稳，还是先查得准。
+2. 性能调优：从慢查询样本开始 # 2.1 收集慢查询样本 # 打开搜索 slowlog（按索引粒度）： 记录超过某个阈值的查询（P95/P99 级别） 从 slowlog 和客户端日志里挑出： 最常出现的慢查询模式 最耗资源的异常查询（比如 fan-out 到海量分片） 2.2 用 profile 看“时间花在哪” # 对代表性查询加上一层 profile: true，观察：
+是哪一部分耗时最长： filter 还是 query？ 排序/聚合 是否拖慢了整体？ 是否在某些字段上做了昂贵操作： 对高基数字段做排序/聚合 对海量分片做全量 scan 2.3 常见可落地的改造方向 # 把“硬过滤”移到 filter： 所有业务强约束（租户、状态、时间范围）尽量放到 bool.</description></item><item><title>数据生命周期与保留策略</title><link>/easysearch/main/docs/best-practices/data-lifecycle/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/best-practices/data-lifecycle/</guid><description>这篇从“业务数据要活多久”的角度出发，帮你把几块能力串在一起：
+时间序列索引设计（按时间切分索引） 热/温/冷 分层与硬件资源规划 自动化的保留与归档流程（ILM/SLM 思路） data-retention 里讲到的删除/关闭/快照等具体动作 如果你只想记住一句话：先画清楚数据时间轴，再用索引 + 模板 + 生命周期策略把它搬进 Easysearch。
+1. 先画一条“数据时间轴” # 通常可以按“价值 + 访问频率”粗分为几段：
+实时区（Hot）：最近几小时～几天，写入密集、查询频繁，对延迟和可用性要求最高。 近线/历史区（Warm/Cold）：最近几周～几个月，主要用于排查与报表，对延迟容忍度更高。 归档区（Archive）：为了合规或审计留存多年，几乎不查，只要“能找回来”。 每一段都需要明确三件事：
+保留多久（例如：实时 7 天、近线 90 天、归档 3 年） 大致容量（每天多少文档/多少 GB） 访问模式（实时 OLTP vs 批量统计/偶尔查询） 有了这条时间轴，后面的索引结构、硬件资源和自动化策略才有落点。
+2. 把时间轴映射到索引与模板 # 2.1 按时间切索引：一天/一周/一月？ # 结合业务特征和容量估算，选择合适的时间粒度：
+高流量日志：通常是按天建索引：logs-2026.02.04 中等流量：可以按周：metrics-2026.w05 低流量：甚至可以按月：audit-2026.02 核心目标：
+单个分片不要过大（影响恢复和迁移） 单个索引不要包含“过长时间跨度”的数据（否则删除/归档粒度太粗） 2.2 用索引模板固化生命周期相关设置 # 为一类时间序列业务准备一个模板，例如 logs-*：</description></item><item><title>向量字段建模指南</title><link>/easysearch/main/docs/best-practices/vector-fields/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/best-practices/vector-fields/</guid><description>概述 # 向量字段是实现语义搜索（向量/kNN 搜索）的基础设施。本指南覆盖 Easysearch 中向量字段的设计原则、存储优化、性能权衡，帮助你做出合理的架构决策。
+核心出发点： 向量字段的设计直接影响三个维度——存储成本、索引性能、查询效率。在业务约束下找到最优平衡是关键。
+1. 文档模型设计 # 1.1 基本模式：混合字段设计 # 在支持语义搜索的系统中，典型文档包含三类字段：
+{ &amp;#34;_id&amp;#34;: &amp;#34;doc-001&amp;#34;, &amp;#34;metadata&amp;#34;: { &amp;#34;title&amp;#34;: &amp;#34;Easysearch 向量搜索最佳实践&amp;#34;, &amp;#34;created_at&amp;#34;: &amp;#34;2026-02-13&amp;#34;, &amp;#34;category&amp;#34;: &amp;#34;AI搜索&amp;#34; }, &amp;#34;content&amp;#34;: &amp;#34;完整的正文内容……&amp;#34;, &amp;#34;embedding&amp;#34;: [0.124, -0.031, 0.092, ...], &amp;#34;snippet&amp;#34;: &amp;#34;用于快速展示的摘要&amp;#34; } 字段分工：
+字段类型 典型字段名 数据类型 用途 存储开销 文本字段 title, content text BM25 全文搜索、分面过滤 低 元数据字段 created_at, category keyword, date 精确过滤、排序、聚合 低 向量字段 embedding, vector dense_vector kNN 语义相似度查询 高 展示字段 snippet, summary text（不分词） 快速返回、避免重查询 中 设计要点：</description></item><item><title>AI 搜索与向量检索架构实践</title><link>/easysearch/main/docs/best-practices/ai-search-architecture/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/best-practices/ai-search-architecture/</guid><description>本页从整体架构的角度，讨论 Easysearch 在 AI/语义搜索系统中的位置：
+如何规划“全文 + 向量”的多路召回 如何利用 Easysearch 做向量检索与文档存储 如何与上游模型服务、下游应用/LLM 集成 详细的向量字段与 kNN API 参数，请参考 Mapping 与 Reference 中的相关章节，本页重点放在“怎么搭这条链路”。
+1. 一条典型的 AI 搜索链路长什么样？ # 可以把 AI 搜索拆成几段：
+向量生产：由模型服务（自研或第三方）把文本/图片等转换成向量 向量与文档存储：在 Easysearch 里存放文档及其 Embedding 多路召回： 全文召回：BM25 等传统检索 向量召回：基于 kNN 的相似度检索 重排与融合： 按业务需要对多路召回结果做打分融合或模型重排 应用消费： 直接给用户展示 作为上下文提供给问答系统或大模型 Easysearch 重点负责第 2～4 段中的“存储 + 检索”能力。
+2. 全文 + 向量：多路召回的常见拆法 # 结合 Easysearch，比较常见的做法有：</description></item><item><title>安全与多租户最佳实践</title><link>/easysearch/main/docs/best-practices/security-and-multi-tenancy/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/best-practices/security-and-multi-tenancy/</guid><description>这页不讲具体配置字段，而是从“安全架构设计”的角度，回答几个问题：
+Easysearch 集群应该如何接入现有身份体系（认证）？ 权限应该怎么分层：集群、索引、文档、字段？ 多租户与业务隔离应该选什么模式？ 审计与运维流程里，Easysearch 扮演什么角色？ 具体配置与 API 细节，请以参考手册中的安全模块文档为准。
+1. 认证：尽量接到现有身份系统上 # 推荐优先考虑的几种接入方式：
+企业已有的 SSO / LDAP / AD / OIDC 等身份源 统一网关/反向代理（如 API Gateway / Ingress）前置认证，Easysearch 侧主要做鉴权 在 Easysearch 安全模块中：
+通过配置后端（backend）连接外部身份源 使用角色映射将“后端角色”转换为 Easysearch 内部的“安全角色” 实践建议：
+尽量避免在 Easysearch 里维护大量“本地用户”，而是以少量系统账号 + 外部身份源为主 为自动任务（备份、同步、监控等）单独准备技术账号与角色，避免用人类账号跑程序 2. 授权：从粗到细分层设计 # 可以从外到内分三层思考权限模型：
+集群级：谁能做集群管理操作（如创建索引、调整设置、管理快照） 索引级：谁能读/写哪些索引（按业务域、租户、环境划分） 文档/字段级：在同一索引内，不同用户/角色是否看到不同的数据/字段 结合 Easysearch 的安全功能：
+使用 角色 来封装一组权限（cluster + indices + document/field level） 对于跨多个索引的权限，可以用索引模式（如 logs-*, orders-*）来归并 实践建议：</description></item></channel></rss>

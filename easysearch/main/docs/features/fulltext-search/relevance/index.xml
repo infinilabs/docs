@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>相关性 on INFINI Easysearch</title><link>/easysearch/main/docs/features/fulltext-search/relevance/</link><description>Recent content in 相关性 on INFINI Easysearch</description><generator>Hugo -- gohugo.io</generator><atom:link href="/easysearch/main/docs/features/fulltext-search/relevance/index.xml" rel="self" type="application/rss+xml"/><item><title>评分基础</title><link>/easysearch/main/docs/features/fulltext-search/relevance/scoring-basics/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/features/fulltext-search/relevance/scoring-basics/</guid><description>处理结构化数据（比如：时间、数字、字符串、枚举）的数据库，只需检查文档（或关系数据库里的行）是否与查询匹配。
+布尔的是/非匹配是全文搜索的基础，但不止如此，我们还要知道每个文档与查询的相关度，在全文搜索引擎中不仅需要找到匹配的文档，还需根据它们相关度的高低进行排序。
+全文相关的公式或相似算法（similarity algorithms）会将多个因素合并起来，为每个文档生成一个相关度评分 _score。本章中，我们会验证各种可变部分，然后讨论如何来控制它们。
+当然，相关度不只与全文查询有关，也需要将结构化的数据考虑其中。可能我们正在找一个度假屋，需要一些的详细特征（空调、海景、免费 WiFi），匹配的特征越多相关度越高。可能我们还希望有一些其他的考虑因素，如回头率、价格、受欢迎度或距离，当然也同时考虑全文查询的相关度。
+所有的这些都可以通过 Easysearch 强大的评分基础来实现。
+相关度评分背后的理论 # Easysearch 使用布尔模型（Boolean Model）查找匹配文档，并用一个名为实用评分函数（practical scoring function）的公式来计算相关度。这个公式借鉴了词频/逆向文档频率（term frequency/inverse document frequency）和向量空间模型（vector space model），同时也加入了一些现代的新特性，如字段长度归一化（field length normalization），以及词或查询语句权重提升。
+注意：Easysearch 默认使用 BM25 相似度算法，而非经典的 TF/IDF。BM25 基于概率信息检索模型，在大多数场景下效果更好。下面先介绍 TF/IDF 的基本概念（有助于理解评分原理），然后说明 BM25 的改进。
+不要紧张！这些概念并没有像它们字面看起来那么复杂，尽管本小节提到了算法、公式和数学模型，但内容还是让人容易理解的，与理解算法本身相比，了解这些因素如何影响结果更为重要。
+布尔模型 # 布尔模型（Boolean Model）只是在查询中使用 AND、OR 和 NOT（与、或和非）这样的条件来查找匹配的文档，以下查询：
+full AND text AND search AND (elasticsearch OR lucene) 会将所有包括词 full、text 和 search，以及 elasticsearch 或 lucene 的文档作为结果集。
+这个过程简单且快速，它将所有可能不匹配的文档排除在外。
+词频/逆向文档频率（TF/IDF） # 当匹配到一组文档后，需要根据相关度排序这些文档，不是所有的文档都包含所有词，有些词比其他的词更重要。一个文档的相关度评分部分取决于每个查询词在文档中的权重。</description></item><item><title>加权与调参</title><link>/easysearch/main/docs/features/fulltext-search/relevance/boosting/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/features/fulltext-search/relevance/boosting/</guid><description>当默认 _score 排序不符合业务预期时，就需要通过&amp;quot;加权&amp;quot;来让某些字段或条件更重要。本页给出常见手段和使用建议。
+查询时权重提升 # 查询时的权重提升是可以用来影响相关度的主要工具，任意类型的查询都能接受 boost 参数。将 boost 设置为 2，并不代表最终的评分 _score 是原值的两倍；实际的权重值会经过归一化和一些其他内部优化过程。尽管如此，它确实想要表明一个提升值为 2 的句子的重要性是提升值为 1 语句的两倍。
+在实际应用中，无法通过简单的公式得出某个特定查询语句的&amp;quot;正确&amp;quot;权重提升值，只能通过不断尝试获得。需要记住的是 boost 只是影响相关度评分的其中一个因子；它还需要与其他因子相互竞争。在前例中，title 字段相对 content 字段可能已经有一个&amp;quot;缺省的&amp;quot;权重提升值，这因为在字段长度归一值中，标题往往比相关内容要短，所以不要想当然的去盲目提升一些字段的权重。选择权重，检查结果，如此反复。
+字段级别 Boost：标题 &amp;gt; 标签 &amp;gt; 正文 # 最常见的需求：
+标题匹配比正文匹配更重要 关键字段（品牌、类目）权重大于辅助字段 常见做法是在 multi_match 中给字段加权，例如：
+{ &amp;#34;query&amp;#34;: { &amp;#34;multi_match&amp;#34;: { &amp;#34;query&amp;#34;: &amp;#34;搜索 引擎&amp;#34;, &amp;#34;fields&amp;#34;: [ &amp;#34;title^3&amp;#34;, &amp;#34;tags^2&amp;#34;, &amp;#34;content&amp;#34; ] } } } 或者在 bool 查询中：
+GET /_search { &amp;#34;query&amp;#34;: { &amp;#34;bool&amp;#34;: { &amp;#34;should&amp;#34;: [ { &amp;#34;match&amp;#34;: { &amp;#34;title&amp;#34;: { &amp;#34;query&amp;#34;: &amp;#34;quick brown fox&amp;#34;, &amp;#34;boost&amp;#34;: 2 } } }, { &amp;#34;match&amp;#34;: { &amp;#34;content&amp;#34;: &amp;#34;quick brown fox&amp;#34; } } ] } } } title 查询语句的重要性是 content 查询的 2 倍，因为它的权重提升值为 2。没有设置 boost 的查询语句的值为 1。</description></item><item><title>调试与 Explain</title><link>/easysearch/main/docs/features/fulltext-search/relevance/debug-and-explain/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/features/fulltext-search/relevance/debug-and-explain/</guid><description>当你觉得&amp;quot;这条结果不该排这么前/这么后&amp;quot;时，就需要用调试工具把 _score 拆开来看。本页给出一个通用的排查流程。
+典型症状 # 明显相关的文档排在很后面 噪声文档排在前几条 修改 Mapping 或查询结构后，排序结果变得难以解释 这些问题往往源于：字段类型/分析器不匹配、查询结构不合理、boost 失衡等。
+理解评分标准 # 当调试一条复杂的查询语句时，想要理解 _score 究竟是如何计算是比较困难的。Easysearch 在每个查询语句中都有一个 explain 参数，将 explain 设为 true 就可以得到更详细的信息。
+GET /_search?explain { &amp;#34;query&amp;#34; : { &amp;#34;match&amp;#34; : { &amp;#34;tweet&amp;#34; : &amp;#34;honeymoon&amp;#34; }} } explain 参数可以让返回结果添加一个 _score 评分的得来依据。
+注意：增加一个 explain 参数会为每个匹配到的文档产生一大堆额外内容，但是花时间去理解它是很有意义的。如果现在看不明白也没关系——等你需要的时候再来回顾这一节就行。
+首先，我们看一下普通查询返回的元数据：
+{ &amp;#34;_index&amp;#34; : &amp;#34;us&amp;#34;, &amp;#34;_id&amp;#34; : &amp;#34;12&amp;#34;, &amp;#34;_score&amp;#34; : 0.076713204, &amp;#34;_source&amp;#34; : { ... trimmed ... }, &amp;#34;_node&amp;#34; : &amp;#34;mzIVYCsqSWCG_M_ZffSs9Q&amp;#34;, 这里加入了该文档来自于哪个节点哪个分片上的信息，这对我们是比较有帮助的，因为词频率和文档频率是在每个分片中计算出来的，而不是每个索引中。</description></item><item><title>相关性常用策略</title><link>/easysearch/main/docs/features/fulltext-search/relevance/relevance-recipes/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/features/fulltext-search/relevance/relevance-recipes/</guid><description>本页以&amp;quot;配方&amp;quot;的形式给出几个常见场景下的相关性策略，帮助你在默认评分的基础上做业务级调优。
+通用配方：标题 + 正文 + 标签 # 适用：大多数文档检索（文章、博客、知识库等）。
+思路：
+使用 multi_match 将多个字段一起搜索 提高标题权重，其次是标签，再是正文 示意：
+{ &amp;#34;query&amp;#34;: { &amp;#34;multi_match&amp;#34;: { &amp;#34;query&amp;#34;: &amp;#34;搜索 引擎&amp;#34;, &amp;#34;fields&amp;#34;: [ &amp;#34;title^3&amp;#34;, &amp;#34;tags^2&amp;#34;, &amp;#34;content&amp;#34; ] } } } 要点：
+确保字段类型合理（title/content 为 text，tags 可为 keyword 或 text+keyword） 对排序特别重要的字段，优先在 Mapping 里设计好 multi-fields 电商配方：匹配 + 业务信号 # 适用：商品搜索。
+核心元素：
+文本相关性：标题、品牌、类目、卖点等字段 业务信号：销量、点击率、转化率、上下架状态、库存 常见做法：
+先通过 bool + multi_match 保证文本相关性 再通过字段 boost 或 function_score 将业务信号以&amp;quot;加分项&amp;quot;的形式叠加进来 注意：</description></item></channel></rss>

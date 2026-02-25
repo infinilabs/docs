@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>文档建模 on INFINI Easysearch</title><link>/easysearch/main/docs/features/mapping-and-analysis/</link><description>Recent content in 文档建模 on INFINI Easysearch</description><generator>Hugo -- gohugo.io</generator><atom:link href="/easysearch/main/docs/features/mapping-and-analysis/index.xml" rel="self" type="application/rss+xml"/><item><title>映射基础</title><link>/easysearch/main/docs/features/mapping-and-analysis/mapping-basics/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/features/mapping-and-analysis/mapping-basics/</guid><description>映射也叫 Mapping，定义了索引中文档的“字段结构与类型”，是搜索行为的基础。搞清楚 Mapping，很多“为什么搜不到/搜不准”的问题就会迎刃而解。
+核心概念 # Mapping 负责什么？ # 字段类型：text / keyword / 数值 / 日期 / 布尔 / 对象 / nested 等 字段是否可搜索、是否可排序/聚合（doc_values、fielddata 等） 是否启用 _source、动态映射策略等 可以认为 Mapping 是 Easysearch 的&amp;quot;模式（schema）&amp;quot;，但比传统数据库更灵活。
+精确值 vs 全文 # 在 Easysearch 里，大致可以把字段分成两类：
+精确值：ID、日期、数值、状态码、枚举、用户名、邮箱等 Foo 与 foo 被视为不同 2014 与 2014-09-15 也被视为不同值 全文：自然语言文本，如标题、正文、评论内容等 我们更关心“匹不匹配、相关度高不高”，而不是完全相同 精确值的查询语义更像 SQL 里的：
+WHERE name = &amp;#34;John Smith&amp;#34; AND user_id = 2 AND date &amp;gt; &amp;#34;2014-09-15&amp;#34; 全文则是“相关性排序”的世界：搜索的是“像什么”“更接近什么”，而不是绝对等号。这也是为什么同样是字符串字段，有的该按精确值建模，有的该按全文建模。</description></item><item><title>词汇识别</title><link>/easysearch/main/docs/features/mapping-and-analysis/text-analysis-identifying-words/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/features/mapping-and-analysis/text-analysis-identifying-words/</guid><description>词汇识别是文本分析的第一步：将文本拆分为可搜索的词项。不同语言的词汇识别方式差异很大，需要选择合适的分析器和分词器。
+不同语言的挑战 # 英语 # 英语单词相对容易识别：单词之间通常以空格或标点分隔。但也有一些边界情况：
+you're 是一个单词还是两个？ o'clock、cooperate、half-baked、eyewitness 等复合词如何处理？ 德语和荷兰语 # 这些语言会将独立的单词合并成长复合词，例如：
+Weißkopfseeadler（white-headed sea eagle） 为了在查询 Adler（eagle）时也能匹配到 Weißkopfseeadler，需要将复合词拆分成词组。
+亚洲语言 # 亚洲语言更复杂：
+很多语言在单词、句子甚至段落之间没有空格 有些词可以用一个字表达，但同样的字在另一个字旁边时就是不同意思的长词的一部分 标准分析器 # 任何全文检索的 text 字段默认使用 standard 分析器。标准分析器包括：
+分词器：standard 分词器 词元过滤器：lowercase（小写转换）和 stop（停用词，默认关闭） 标准分析器可以这样重新实现：
+{ &amp;#34;type&amp;#34;: &amp;#34;custom&amp;#34;, &amp;#34;tokenizer&amp;#34;: &amp;#34;standard&amp;#34;, &amp;#34;filter&amp;#34;: [&amp;#34;lowercase&amp;#34;, &amp;#34;stop&amp;#34;] } 标准分词器 # standard 分词器基于 Unicode 文本分割算法，能够：
+识别单词边界（空格、标点） 处理大多数欧洲语言 处理亚洲语言（虽然可能不够精确） 示例：</description></item><item><title>归一化与规范化器</title><link>/easysearch/main/docs/features/mapping-and-analysis/text-analysis-normalization/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/features/mapping-and-analysis/text-analysis-normalization/</guid><description>词元归一化是将不同形式的词项统一为标准形式的过程，这对于提高搜索的召回率非常重要。例如，搜索 rôle 时也应该能匹配到 role。
+为什么需要归一化？ # 在搜索中，我们经常遇到这样的情况：
+同一个词的不同大小写形式：The、the、THE 带变音符号和不带变音符号的词：rôle、role Unicode 的不同表示形式：é 可能以不同方式编码 如果不进行归一化，这些不同的形式会被视为不同的词项，导致搜索时无法匹配。
+小写转换（Lowercasing） # 小写转换是最常见的归一化操作。大多数分析器默认都会进行小写转换。
+使用 lowercase 过滤器 # PUT /my_index { &amp;#34;settings&amp;#34;: { &amp;#34;analysis&amp;#34;: { &amp;#34;analyzer&amp;#34;: { &amp;#34;my_lowercase_analyzer&amp;#34;: { &amp;#34;type&amp;#34;: &amp;#34;custom&amp;#34;, &amp;#34;tokenizer&amp;#34;: &amp;#34;standard&amp;#34;, &amp;#34;filter&amp;#34;: [&amp;#34;lowercase&amp;#34;] } } } } } 测试效果：
+GET /my_index/_analyze { &amp;#34;analyzer&amp;#34;: &amp;#34;my_lowercase_analyzer&amp;#34;, &amp;#34;text&amp;#34;: &amp;#34;The Quick Brown Fox&amp;#34; } 输出：[the, quick, brown, fox]
+何时需要保留大小写？ # 某些场景下可能需要保留大小写：
+专有名词：iPhone、C++ 缩写：USA、NASA 代码标识符：userId、getUserInfo 对于这些场景，可以使用 keyword 类型或自定义分析器。</description></item><item><title>词干提取</title><link>/easysearch/main/docs/features/mapping-and-analysis/text-analysis-stemming/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/features/mapping-and-analysis/text-analysis-stemming/</guid><description>很多语言的单词都存在“词形变化”（inflection）：同一个概念会换着马甲出现：
+单复数：fox / foxes 时态：pay / paid / paying 性别：waiter / waitress 人称变化：hear / hears 如果只做精确词项匹配，用户搜索 fox 时不会命中只包含 foxes 的文档。词干提取（Stemming） 的目标就是把这些“形式差异”抹平：让相关词项尽量归并到同一个词根上，从而提升召回率。
+词干提取会遇到的两类问题 # 词干提取不是“精确科学”，它更像“有原则的近似”。常见两类风险：
+弱提取（Understemming）：相关词没有收敛到同一词干
+例如：jumped、jumps → jump，但 jumping → jumpi，导致漏召回。 过度提取（Overstemming）：本应区分的词被合并到同一词干
+例如：general 与 generate 都被提取为 gener，导致误召回、降低精度。 这也是为什么“哪个词干器最好”没有统一答案：你的语料、你的用户、你的容错边界都不一样。
+词干提取 vs 词形还原（Lemmatization） # 词干提取：规则化“裁剪”词形，得到的词根未必是真实单词（如 jumpi）。
+重点是：索引与查询两端一致即可。 词形还原：尝试按“词义/词典形态”归类（如 is/was/am/being → be），通常更复杂、成本更高，需要更多语言知识与上下文。 在多数搜索系统里，词干提取更常作为默认选择：成本低、收益稳。词形还原则更像“精装修”，做得好很香，做不好也可能很贵。
+算法词干器（Algorithmic stemmers） # Easysearch 常用的是算法型词干器：通过一系列规则把词映射到词根，不依赖大词典。你可以把它理解为“规则派”：不查字典，按套路办事。
+优点：
+速度快、内存占用小 对“规律变化”的词效果稳定 缺点：</description></item><item><title>停用词</title><link>/easysearch/main/docs/features/mapping-and-analysis/text-analysis-stopwords/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/features/mapping-and-analysis/text-analysis-stopwords/</guid><description>停用词（Stopwords）是指在大多数文本中非常常见、对区分文档贡献很小的词，例如 the、and、is。早期信息检索系统会大量使用停用词来减少索引体积；在今天，更需要从 性能与表达力 两方面权衡。
+高频词与低频词 # 从词项频率的角度，我们可以把词项粗略分为两类：
+低频词（更重要）：在文档集合中出现较少，通常信息量更大，区分能力更强 高频词（次重要）：在大量文档中都出现，对区分能力弱，但会显著影响性能 哪些词是“高频”，强依赖你的语料：在英文语料里 the 极常见；在中文语料里它反而不会出现。
+停用词的优缺点 # 优点：性能 # 假设一个索引有 100 万文档，词 fox 只出现在 20 个文档中：
+查询 fox：只需要对很少的候选文档计算 _score 查询 the OR fox：由于 the 几乎在所有文档里都出现，系统可能需要对大量文档计算 _score，代价骤增 因此，减少极高频词对候选集合的“污染”，有助于控制查询成本。
+缺点：表达力下降 # 把常见词一律移除会让一些真实需求变得难以表达：
+区分 happy 与 not happy 搜索乐队名 The The 搜索名句 “to be, or not to be” 某些短词在特定语料里可能很关键（例如国家代码、产品型号） 在现代硬件条件下，“省空间”往往不再是使用停用词的主理由；更重要的是避免让搜索变得“说不清、搜不准”。
+如何配置停用词 # 停用词由 stop 过滤器处理，也可以通过分析器参数直接配置。</description></item><item><title>同义词</title><link>/easysearch/main/docs/features/mapping-and-analysis/text-analysis-synonyms/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/features/mapping-and-analysis/text-analysis-synonyms/</guid><description>词干提取通过归并词形变化扩大搜索范围；同义词（Synonyms） 则通过归并“意义接近的不同表达”扩大搜索范围。
+例如，查询“英国女王”时，你可能也希望命中包含“英国君主”的文档；用户搜索“美国”时，可能也期望命中包含“美利坚合众国”“USA”等表达的文档。
+同义词看起来很简单，但“用对”并不容易：如果把语义跨度过大的词强行绑定，会让结果变得像“随机返回”。经验上，同义词应当 少而精，服务于明确的高价值场景。
+基本用法：synonym 过滤器 # 同义词通过 synonym 词元过滤器实现，它会在分析过程中把词项替换或扩展为多个词项：
+PUT /my_index { &amp;#34;settings&amp;#34;: { &amp;#34;analysis&amp;#34;: { &amp;#34;filter&amp;#34;: { &amp;#34;my_synonym_filter&amp;#34;: { &amp;#34;type&amp;#34;: &amp;#34;synonym&amp;#34;, &amp;#34;synonyms&amp;#34;: [ &amp;#34;british,english&amp;#34;, &amp;#34;queen,monarch&amp;#34; ] } }, &amp;#34;analyzer&amp;#34;: { &amp;#34;my_synonyms&amp;#34;: { &amp;#34;tokenizer&amp;#34;: &amp;#34;standard&amp;#34;, &amp;#34;filter&amp;#34;: [ &amp;#34;lowercase&amp;#34;, &amp;#34;my_synonym_filter&amp;#34; ] } } } } } 同义词通常与原词项处于同一 position，因此短语查询仍能成立（前提是规则与分析链设置得当）。
+同义词规则格式 # 权威指南里给出了两种常用格式：
+1）等价同义词（逗号分隔） # jump,leap,hop 含义：遇到其中任意一个词项时，扩展为这一组同义词（等价看待）。
+2）定向映射（=&amp;gt;） # u s a,united states,united states of america =&amp;gt; usa g b,gb,great britain =&amp;gt; britain,england,scotland,wales 含义：把左侧的一组表达统一映射为右侧一个或多个词项。</description></item><item><title>模糊匹配</title><link>/easysearch/main/docs/features/mapping-and-analysis/text-analysis-fuzzy/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>/easysearch/main/docs/features/mapping-and-analysis/text-analysis-fuzzy/</guid><description>结构化数据通常追求精确匹配，但好的全文检索往往需要一定的“容错”：用户可能会拼错名字、记不清准确写法，或者输入了常见变体。
+模糊匹配（Fuzzy matching）允许你在查询时匹配拼写接近的词项，并把“更接近”的结果排在前面或作为兜底补充。
+编辑距离与 fuzziness # 模糊匹配常以“编辑距离”定义两个词的相似度：把一个词变成另一个词需要的最少单字符编辑次数。
+一次编辑可能是：
+替换：fox → box 插入：sic → sick 删除：black → back 相邻换位：star → tsar fuzziness 参数用来限制允许的最大编辑距离：
+0：不允许编辑（精确） 1：允许一次编辑（多数拼写错误属于这一档） 2：更宽松，但更容易引入噪声、性能也更差 AUTO：根据词长自动选择（短词更严格，长词更宽松） 实践上，若你发现 AUTO 返回的结果“太松”，把 fuzziness 设为 1 往往能得到更好的质量与性能平衡。
+fuzzy 查询：term 级别的模糊等价 # fuzzy 查询可以看作是 term 查询的模糊版本。它不会对输入做分析（不分词、不归一化），而是直接在词典上找“编辑距离足够近”的候选词项：
+GET /my_index/_search { &amp;#34;query&amp;#34;: { &amp;#34;fuzzy&amp;#34;: { &amp;#34;text&amp;#34;: { &amp;#34;value&amp;#34;: &amp;#34;surprize&amp;#34;, &amp;#34;fuzziness&amp;#34;: 1 } } } } 性能保护：prefix_length 与 max_expansions # 模糊查询本质上要在词典里做扩展，候选词项越多，越可能拖垮性能。权威指南给出的两个重要“刹车”：</description></item></channel></rss>
