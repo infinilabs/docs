@@ -1,6 +1,6 @@
 {
-  "name": "INFINI Easysearch",
-  "short_name": "INFINI Easysearch",
+  "name": "INFINI Easysearch (main)",
+  "short_name": "INFINI Easysearch (main)",
   "start_url": "/easysearch/main/",
   "scope": "/easysearch/main/",
   "display": "standalone",
