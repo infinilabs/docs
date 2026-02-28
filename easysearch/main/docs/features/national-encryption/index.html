@@ -204,8 +204,7 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
 <a class=anchor href=#%e4%bf%a1%e5%88%9b%e6%9b%bf%e4%bb%a3>#</a></h3><p>在国产化环境中搭建搜索平台，平滑迁移既有 Elasticsearch 应用。</p><h3 id=行业信息化>行业信息化
 <a class=anchor href=#%e8%a1%8c%e4%b8%9a%e4%bf%a1%e6%81%af%e5%8c%96>#</a></h3><p>作为国产化体系中的搜索引擎组件，支撑数据中台、日志分析、全文检索等场景。</p><hr><h2 id=快速开始>快速开始
 <a class=anchor href=#%e5%bf%ab%e9%80%9f%e5%bc%80%e5%a7%8b>#</a></h2><h3 id=1-生成国密证书>1. 生成国密证书
-<a class=anchor href=#1-%e7%94%9f%e6%88%90%e5%9b%bd%e5%af%86%e8%af%81%e4%b9%a6>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#8be9fd;font-style:italic>cd</span> distribution/src/bin
-./generate-tlcp-certs.sh /path/to/output <span style=color:#f1fa8c>&#34;changeit&#34;</span>
+<a class=anchor href=#1-%e7%94%9f%e6%88%90%e5%9b%bd%e5%af%86%e8%af%81%e4%b9%a6>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>bin/generate-tlcp-certs.sh /path/to/output <span style=color:#f1fa8c>&#34;changeit&#34;</span>
 </code></pre></div><h3 id=2-配置国密-tls>2. 配置国密 TLS
 <a class=anchor href=#2-%e9%85%8d%e7%bd%ae%e5%9b%bd%e5%af%86-tls>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>security.enabled</span>: <span style=color:#ff79c6>true</span>
 <span style=color:#ff79c6>security.ssl.use_tongsuo</span>: <span style=color:#ff79c6>true</span>
@@ -213,17 +212,25 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
 <span style=color:#6272a4># HTTP 层</span>
 <span style=color:#ff79c6>security.ssl.http.enabled</span>: <span style=color:#ff79c6>true</span>
 <span style=color:#ff79c6>security.ssl.http.tlcp.sign_certificate</span>: server_sign.crt
+<span style=color:#ff79c6>security.ssl.http.tlcp.sign_key</span>: server_sign.key
 <span style=color:#ff79c6>security.ssl.http.tlcp.enc_certificate</span>: server_enc.crt
+<span style=color:#ff79c6>security.ssl.http.tlcp.enc_key</span>: server_enc.key
 <span style=color:#ff79c6>security.ssl.http.tlcp.trusted_ca_certificate</span>: ca_chain.crt
 
 <span style=color:#6272a4># Transport 层</span>
 <span style=color:#ff79c6>security.ssl.transport.enabled</span>: <span style=color:#ff79c6>true</span>
 <span style=color:#ff79c6>security.ssl.transport.tlcp.sign_certificate</span>: server_sign.crt
+<span style=color:#ff79c6>security.ssl.transport.tlcp.sign_key</span>: server_sign.key
 <span style=color:#ff79c6>security.ssl.transport.tlcp.enc_certificate</span>: server_enc.crt
+<span style=color:#ff79c6>security.ssl.transport.tlcp.enc_key</span>: server_enc.key
 <span style=color:#ff79c6>security.ssl.transport.tlcp.trusted_ca_certificate</span>: ca_chain.crt
 </code></pre></div><h3 id=3-验证配置>3. 验证配置
-<a class=anchor href=#3-%e9%aa%8c%e8%af%81%e9%85%8d%e7%bd%ae>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>curl -k https://localhost:9200/_security/sslinfo?pretty -u admin:changeit
-</code></pre></div><p>确认 <code>ssl_provider</code> 为 <code>Tongsuo_Security_Provider</code>。</p><blockquote><p>完整配置指南见
+<a class=anchor href=#3-%e9%aa%8c%e8%af%81%e9%85%8d%e7%bd%ae>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>bin/tlcp-curl.sh --url https://localhost:9200/_security/sslinfo?pretty <span style=color:#f1fa8c>\
+</span><span style=color:#f1fa8c></span>  -u admin:changeit <span style=color:#f1fa8c>\
+</span><span style=color:#f1fa8c></span>  --cert config/client_sign.crt --key config/client_sign.key <span style=color:#f1fa8c>\
+</span><span style=color:#f1fa8c></span>  --enc-cert config/client_enc.crt --enc-key config/client_enc.key <span style=color:#f1fa8c>\
+</span><span style=color:#f1fa8c></span>  --ca config/ca_chain.crt
+</code></pre></div><blockquote><p>仅当服务端配置 <code>security.ssl.http.clientauth_mode: REQUIRE</code> 时，客户端证书访问才是必需的；默认场景可仅使用用户名密码。</p></blockquote><p>确认 <code>ssl_provider</code> 为 <code>Tongsuo_Security_Provider</code>。</p><blockquote><p>完整配置指南见
 <a href=/easysearch/main/docs/deployment/advanced-config/guomi/>国密配置</a>。</p></blockquote><hr><h2 id=相关文档>相关文档
 <a class=anchor href=#%e7%9b%b8%e5%85%b3%e6%96%87%e6%a1%a3>#</a></h2><ul><li><a href=/easysearch/main/docs/deployment/advanced-config/guomi/>国密配置指南</a>：完整的 TLCP 双证书配置</li><li><a href=/easysearch/main/docs/deployment/advanced-config/tls-secure/>TLS 安全配置</a>：标准 TLS 配置</li><li><a href=/easysearch/main/docs/operations/security/>安全模块</a>：认证授权与访问控制</li></ul></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
 gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
