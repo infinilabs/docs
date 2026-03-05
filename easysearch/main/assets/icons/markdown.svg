@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="320px" viewBox="0 0 320 320" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>markdown</title>
+    <g id="markdown" stroke="none" fill="none" stroke-width="20">
+        <rect id="矩形" stroke="#1784FC" stroke-linecap="round" stroke-linejoin="round" x="35" y="60" width="250" height="200" rx="24"></rect>
+        <polyline id="路径" stroke="#1784FC" points="195 181 219 211.153846 243 181"></polyline>
+        <line x1="218.769231" y1="211.461538" x2="219" y2="101" id="路径" stroke="#1784FC"></line>
+        <polyline id="路径" stroke="#1784FC" stroke-linejoin="round" points="92.0111606 223.076923 92.0111606 112.076923 131.746329 197.499141 170.011161 112.076923 170.011161 223.076923"></polyline>
+    </g>
+</svg>
