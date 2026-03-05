@@ -1,6 +1,6 @@
 {
-  "name": "INFINI Agent",
-  "short_name": "INFINI Agent",
+  "name": "INFINI Agent | The Best Open Source Easysearch/Elasticsearch/OpenSearch Multi-instance Management Agent",
+  "short_name": "INFINI Agent | The Best Open Source Easysearch/Elasticsearch/OpenSearch Multi-instance Management Agent",
   "start_url": "/agent/main/",
   "scope": "/agent/main/",
   "display": "standalone",

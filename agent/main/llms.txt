@@ -1,0 +1,23 @@
+# INFINI Agent | The Best Open Source Easysearch/Elasticsearch/OpenSearch Multi-instance Management Agent
+
+> AI-friendly index of site content.
+
+## Core Content
+- [Installing the Agent](https://docs.infinilabs.com/agent/main/docs/getting-started/install/): Installing the Agent #  INFINI Agent supports mainstream operating systems and platforms. The program package is small, with no extra external dependency. So, the agent can be installed very rapidly …
+- [es_cluster_health](https://docs.infinilabs.com/agent/main/docs/configuration/processors/es_cluster_health/): es_cluster_health #  Description #  Collect the cluster health metrics.
+Configuration Example #  pipeline - name: collect_default_es_cluster_health auto_start: true keep_running: true …
+- [es_cluster_stats](https://docs.infinilabs.com/agent/main/docs/configuration/processors/es_cluster_stats/): es_cluster_stats #  Description #  Collect the cluster stats metrics.
+Configuration Example #  pipeline - name: collect_default_es_cluster_stats auto_start: true keep_running: true retry_delay_in_ms: …
+- [es_index_stats](https://docs.infinilabs.com/agent/main/docs/configuration/processors/es_index_stats/): es_index_stats #  Description #  Collect the cluster index stats metrics.
+Configuration Example #  pipeline - name: collect_default_es_index_stats auto_start: true keep_running: true …
+- [es_logs_processor](https://docs.infinilabs.com/agent/main/docs/configuration/processors/es_logs_processor/): es_logs_processor #  Description #  Collect the cluster log files.
+Configuration Example #  pipeline - name: collect_default_es_logs auto_start: true keep_running: true retry_delay_in_ms: 3000 …
+- [es_node_stats](https://docs.infinilabs.com/agent/main/docs/configuration/processors/es_node_stats/): es_node_stats #  Description #  Collect the cluster node stats metrics.
+Configuration Example #  pipeline - name: collect_default_es_node_stats auto_start: true keep_running: true retry_delay_in_ms: …
+- [logs_processor](https://docs.infinilabs.com/agent/main/docs/configuration/processors/logs_processor/): logs_processor #  Description #  Collect the local log files.
+Configuration Example #  The elasticsearch log files as an example.
+pipeline: - name: log_collect auto_start: true keep_running: true …
+
+## Other Resources
+- [Sitemap](https://docs.infinilabs.com/agent/main/sitemap.xml): Full machine-readable sitemap.
+- [RSS Feed](https://docs.infinilabs.com/agent/main/index.xml): Latest updates and posts.

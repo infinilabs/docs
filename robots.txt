@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Allow: /llms.txt
+
+Sitemap: https://docs.infinilabs.com/agent/main/sitemap.xml
+X-llms-txt: https://docs.infinilabs.com/agent/main/llms.txt
