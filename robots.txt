@@ -8,3 +8,5 @@ Sitemap: https://docs.infinilabs.com/console/main/sitemap.xml
 X-llms-txt: https://docs.infinilabs.com/console/main/llms.txt
 Sitemap: https://docs.infinilabs.com/framework/main/sitemap.xml
 X-llms-txt: https://docs.infinilabs.com/framework/main/llms.txt
+Sitemap: https://docs.infinilabs.com/gateway/main/sitemap.xml
+X-llms-txt: https://docs.infinilabs.com/gateway/main/llms.txt

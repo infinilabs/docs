@@ -1,6 +1,6 @@
 {
-  "name": "INFINI Gateway",
-  "short_name": "INFINI Gateway",
+  "name": "INFINI Gateway | The Best Open Source Golang Search-focused Gateway for Easysearch/Elasticsearch/OpenSearch",
+  "short_name": "INFINI Gateway | The Best Open Source Golang Search-focused Gateway for Easysearch/Elasticsearch/OpenSearch",
   "start_url": "/gateway/main/",
   "scope": "/gateway/main/",
   "display": "standalone",
