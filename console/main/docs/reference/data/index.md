@@ -1,0 +1,14 @@
+---
+title: "Data Management"
+date: 0001-01-01
+summary: "Data management #  Introduction #  INFINI Console Data allows you to seamlessly roam in different business clusters, supports common index management operations, quickly view and browse document information in the index, and edit and delete documents on the spot. At the same time, it supports creating data views, modifying the display format of fields, and quickly viewing time series index data with one click."
+---
+
+
+# Data management
+
+## Introduction
+
+INFINI Console Data allows you to seamlessly roam in different business clusters, supports common index management operations, quickly view and browse document information in the index, and edit and delete documents on the spot. At the same time, it supports creating data views, modifying the display format of fields, and quickly viewing time series index data with one click.
+
+{{% load-img "/img/screenshot/v1.29/datamanage/index.png" "" %}}

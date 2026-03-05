@@ -1,6 +1,6 @@
 {
-  "name": "INFINI Console",
-  "short_name": "INFINI Console",
+  "name": "INFINI Console | The Best Open Source Easysearch/Elasticsearch/OpenSearch Monitoring and Alerting Tool",
+  "short_name": "INFINI Console | The Best Open Source Easysearch/Elasticsearch/OpenSearch Monitoring and Alerting Tool",
   "start_url": "/console/main/",
   "scope": "/console/main/",
   "display": "standalone",

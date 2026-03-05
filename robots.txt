@@ -4,3 +4,5 @@ Allow: /llms.txt
 
 Sitemap: https://docs.infinilabs.com/agent/main/sitemap.xml
 X-llms-txt: https://docs.infinilabs.com/agent/main/llms.txt
+Sitemap: https://docs.infinilabs.com/console/main/sitemap.xml
+X-llms-txt: https://docs.infinilabs.com/console/main/llms.txt
