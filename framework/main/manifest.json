@@ -1,6 +1,6 @@
 {
-  "name": "INFINI Framework",
-  "short_name": "INFINI Framework",
+  "name": "INFINI Framework | The Best Open Source Golang Framework for Easysearch/Elasticsearch/OpenSearch",
+  "short_name": "INFINI Framework | The Best Open Source Golang Framework for Easysearch/Elasticsearch/OpenSearch",
   "start_url": "/framework/main/",
   "scope": "/framework/main/",
   "display": "standalone",
