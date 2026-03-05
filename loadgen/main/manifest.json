@@ -1,6 +1,6 @@
 {
-  "name": "INFINI Loadgen",
-  "short_name": "INFINI Loadgen",
+  "name": "INFINI Loadgen | The Best Open Source Golang Load Testing Tool for Easysearch/Elasticsearch/OpenSearch",
+  "short_name": "INFINI Loadgen | The Best Open Source Golang Load Testing Tool for Easysearch/Elasticsearch/OpenSearch",
   "start_url": "/loadgen/main/",
   "scope": "/loadgen/main/",
   "display": "standalone",

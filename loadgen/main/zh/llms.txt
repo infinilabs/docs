@@ -1,0 +1,17 @@
+# INFINI Loadgen | The Best Open Source Golang Load Testing Tool for Easysearch/Elasticsearch/OpenSearch
+
+> AI-friendly index of site content.
+
+## Core Content
+- [下载安装](https://docs.infinilabs.com/loadgen/main/zh/docs/getting-started/install/): 安装 INFINI Loadgen #  INFINI Loadgen 支持主流的操作系统和平台，程序包很小，没有任何额外的外部依赖，安装起来应该是很快的 ：）
+下载安装 #  自动安装
+curl -sSL http://get.infini.cloud | bash -s -- -p loadgen 通过以上脚本可自动下载相应平台的 loadgen 最新版本并解压到/opt/loadgen
+脚本 …
+- [性能测试](https://docs.infinilabs.com/loadgen/main/zh/docs/getting-started/benchmark/): 性能测试 #  INFINI Loadgen 是一款专为 Easysearch、Elasticsearch、OpenSearch 设计的轻量级性能测试工具。
+Loadgen 的特点：
+ 性能强劲 轻量级无依赖 支持模板化参数随机 支持高并发 支持压测端均衡流量控制 支持服务端返回值校验   下载地址：https://release.infinilabs.com/loadgen/
+ Loadgen …
+
+## Other Resources
+- [Sitemap](https://docs.infinilabs.com/loadgen/main/sitemap.xml): Full machine-readable sitemap.
+- [RSS Feed](https://docs.infinilabs.com/loadgen/main/index.xml): Latest updates and posts.
