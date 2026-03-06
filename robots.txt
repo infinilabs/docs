@@ -12,3 +12,5 @@ Sitemap: https://docs.infinilabs.com/gateway/main/sitemap.xml
 X-llms-txt: https://docs.infinilabs.com/gateway/main/llms.txt
 Sitemap: https://docs.infinilabs.com/loadgen/main/sitemap.xml
 X-llms-txt: https://docs.infinilabs.com/loadgen/main/llms.txt
+Sitemap: https://docs.infinilabs.com/easysearch/main/sitemap.xml
+X-llms-txt: https://docs.infinilabs.com/easysearch/main/llms.txt
