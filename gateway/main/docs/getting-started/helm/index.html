@@ -54,29 +54,29 @@ setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.
 if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#the-chart-repository>The Chart Repository</a></li><li><a href=#prerequisites>Prerequisites</a></li><li><a href=#install>Install</a></li><li><a href=#uninstall>Uninstall</a></li></ul></nav></aside></header><article class=markdown><h1 id=helm-charts>Helm Charts
 <a class=anchor href=#helm-charts>#</a></h1><p>INFINI Gateway supports deployment on K8s by using helm chart .</p><h2 id=the-chart-repository>The Chart Repository
 <a class=anchor href=#the-chart-repository>#</a></h2><p>Chart repository:
-<a href=https://helm.infinilabs.com/>https://helm.infinilabs.com</a>.</p><p>Use the follow command add the repository:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>helm repo add infinilabs https://helm.infinilabs.com
+<a href=https://helm.infinilabs.com/>https://helm.infinilabs.com</a>.</p><p>Use the follow command add the repository:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>helm repo add infinilabs https://helm.infinilabs.com
 </code></pre></div><h2 id=prerequisites>Prerequisites
 <a class=anchor href=#prerequisites>#</a></h2><ul><li>K8S StorageClass</li></ul><p>The default StorageClass of the Chart package is local-path, you can install it through
-<a href=https://github.com/rancher/local-path-provisioner>here</a>.</p><p>If you want use other StorageClass(installed), you can create a YAML file (eg. vaules.yaml) file that it contains the follow contents:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>storageClassName</span>: <span style=color:#ae81ff>\&lt;storageClassName\&gt;</span>
+<a href=https://github.com/rancher/local-path-provisioner>here</a>.</p><p>If you want use other StorageClass(installed), you can create a YAML file (eg. vaules.yaml) file that it contains the follow contents:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>storageClassName</span>: \&lt;storageClassName\&gt;
 </code></pre></div><p>and use it through <code>-f</code>.</p><ul><li>Storage Cluster</li></ul><p>The default Storage Cluster of the Chart package is Easysearch, you can install it through
 <a href=https://www.infinilabs.com/docs/latest/easysearch/getting-started/install/helm/>here</a>.</p><pre><code>Note: The username and password of easysearch in the Chart package is default, if you change it, you can adjust this by modifying the cluster connection below。
-</code></pre><p>Gateway also support other cluster (eg. Elasticsearch、Opensearch)，you can create a YAML file (eg. vaules.yaml) file that it contains the follow contents:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>env</span>:
-  <span style=color:#75715e># connection address of the logging cluster</span>
-  <span style=color:#f92672>loggingEsEndpoint</span>: <span style=color:#75715e>******</span>
-  <span style=color:#75715e># username of the logging cluster</span>
-  <span style=color:#f92672>loggingEsUser</span>: <span style=color:#75715e>******</span>
-  <span style=color:#75715e># password of the logging cluster&#39;s user</span>
-  <span style=color:#f92672>loggingEsPass</span>: <span style=color:#75715e>******</span>
-  <span style=color:#75715e># connection address of the production cluster</span>
-  <span style=color:#f92672>prodEsEndpoint</span>: <span style=color:#75715e>******</span>
-  <span style=color:#75715e># username of the production cluster</span>
-  <span style=color:#f92672>prodEsUser</span>: <span style=color:#75715e>******</span>
-  <span style=color:#75715e># password of the production cluster&#39;s user</span>
-  <span style=color:#f92672>prodEsPass</span>: <span style=color:#75715e>******</span>
+</code></pre><p>Gateway also support other cluster (eg. Elasticsearch、Opensearch)，you can create a YAML file (eg. vaules.yaml) file that it contains the follow contents:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>env</span>:
+  <span style=color:#6272a4># connection address of the logging cluster</span>
+  <span style=color:#ff79c6>loggingEsEndpoint</span>: <span style=color:#ff79c6>******</span>
+  <span style=color:#6272a4># username of the logging cluster</span>
+  <span style=color:#ff79c6>loggingEsUser</span>: <span style=color:#ff79c6>******</span>
+  <span style=color:#6272a4># password of the logging cluster&#39;s user</span>
+  <span style=color:#ff79c6>loggingEsPass</span>: <span style=color:#ff79c6>******</span>
+  <span style=color:#6272a4># connection address of the production cluster</span>
+  <span style=color:#ff79c6>prodEsEndpoint</span>: <span style=color:#ff79c6>******</span>
+  <span style=color:#6272a4># username of the production cluster</span>
+  <span style=color:#ff79c6>prodEsUser</span>: <span style=color:#ff79c6>******</span>
+  <span style=color:#6272a4># password of the production cluster&#39;s user</span>
+  <span style=color:#ff79c6>prodEsPass</span>: <span style=color:#ff79c6>******</span>
 </code></pre></div><p>and use it through <code>-f</code>.</p><h2 id=install>Install
-<a class=anchor href=#install>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>helm install gateway infinilabs/gateway -n &lt;namespace&gt;
+<a class=anchor href=#install>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>helm install gateway infinilabs/gateway -n &lt;namespace&gt;
 </code></pre></div><h2 id=uninstall>Uninstall
-<a class=anchor href=#uninstall>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>helm uninstall gateway -n &lt;namespace&gt;
+<a class=anchor href=#uninstall>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>helm uninstall gateway -n &lt;namespace&gt;
 kubectl delete pvc gateway-data-gateway-0 -n &lt;namespace&gt;
 </code></pre></div></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class=book-languages tabindex=0 aria-haspopup=true><ul><li class="flex align-center"><img src=/gateway/main/svg/translate.svg class=book-icon alt=Languages>
 English</li></ul><ul class=book-languages-list><li class=active><a href=https://docs.infinilabs.com/gateway/main/ class="flex align-center"><img src=/gateway/main/svg/translate.svg class=book-icon alt=Languages>

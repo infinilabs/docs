@@ -50,19 +50,19 @@ setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.
 if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#description>Description</a></li><li><a href=#configuration-example>Configuration Example</a></li><li><a href=#parameter-description>Parameter Description</a></li></ul></nav></aside></header><article class=markdown><h1 id=hash_mod>hash_mod
 <a class=anchor href=#hash_mod>#</a></h1><h2 id=description>Description
 <a class=anchor href=#description>#</a></h2><p>The <code>hash_mod</code> filter is used to obtain a unique partition number using the hash modulo of the request&rsquo;s context. It is generally used for subsequent request forwarding.</p><h2 id=configuration-example>Configuration Example
-<a class=anchor href=#configuration-example>#</a></h2><p>A simple example is as follows:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>flow</span>:
-  - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>default_flow</span>
-    <span style=color:#f92672>filter</span>:
-      - <span style=color:#f92672>hash_mod</span>: <span style=color:#75715e># Hash requests to different queues</span>
-          <span style=color:#f92672>source</span>: <span style=color:#e6db74>&#34;$[[_ctx.remote_ip]]_$[[_ctx.request.username]]_$[[_ctx.request.path]]&#34;</span>
-          <span style=color:#f92672>target_context_name</span>: <span style=color:#e6db74>&#34;partition_id&#34;</span>
-          <span style=color:#f92672>mod</span>: <span style=color:#ae81ff>10</span> <span style=color:#75715e># Hash to 10 partitions</span>
-          <span style=color:#f92672>add_to_header</span>: <span style=color:#66d9ef>true</span>
-      - <span style=color:#f92672>set_context</span>:
-          <span style=color:#f92672>context</span>:
-            <span style=color:#f92672>_ctx.request.header.X-Replicated-ID</span>: <span style=color:#ae81ff>$[[_util.increment_id.request_number_id]]_$[[_util.generate_uuid]]</span>
-            <span style=color:#f92672>_ctx.request.header.X-Replicated-Timestamp</span>: <span style=color:#ae81ff>$[[_sys.unix_timestamp_of_now]]</span>
-            <span style=color:#f92672>_ctx.request.header.X-Replicated</span>: <span style=color:#e6db74>&#34;true&#34;</span>
+<a class=anchor href=#configuration-example>#</a></h2><p>A simple example is as follows:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>flow</span>:
+  - <span style=color:#ff79c6>name</span>: default_flow
+    <span style=color:#ff79c6>filter</span>:
+      - <span style=color:#ff79c6>hash_mod</span>: <span style=color:#6272a4># Hash requests to different queues</span>
+          <span style=color:#ff79c6>source</span>: <span style=color:#f1fa8c>&#34;$[[_ctx.remote_ip]]_$[[_ctx.request.username]]_$[[_ctx.request.path]]&#34;</span>
+          <span style=color:#ff79c6>target_context_name</span>: <span style=color:#f1fa8c>&#34;partition_id&#34;</span>
+          <span style=color:#ff79c6>mod</span>: <span style=color:#bd93f9>10</span> <span style=color:#6272a4># Hash to 10 partitions</span>
+          <span style=color:#ff79c6>add_to_header</span>: <span style=color:#ff79c6>true</span>
+      - <span style=color:#ff79c6>set_context</span>:
+          <span style=color:#ff79c6>context</span>:
+            <span style=color:#ff79c6>_ctx.request.header.X-Replicated-ID</span>: $[[_util.increment_id.request_number_id]]_$[[_util.generate_uuid]]
+            <span style=color:#ff79c6>_ctx.request.header.X-Replicated-Timestamp</span>: $[[_sys.unix_timestamp_of_now]]
+            <span style=color:#ff79c6>_ctx.request.header.X-Replicated</span>: <span style=color:#f1fa8c>&#34;true&#34;</span>
 </code></pre></div><h2 id=parameter-description>Parameter Description
 <a class=anchor href=#parameter-description>#</a></h2><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>source</td><td>string</td><td>Input for the hash, supports variable parameters</td></tr><tr><td>target_context_name</td><td>string</td><td>The primary key name to store the partition number in the context</td></tr><tr><td>mod</td><td>int</td><td>Maximum number of partitions</td></tr><tr><td>add_to_request_header</td><td>bool</td><td>Whether to add to the request header, default is <code>true</code>, creating <code>X-Partition-ID</code> and <code>X-Partition-Size</code> headers</td></tr><tr><td>add_to_response_header</td><td>bool</td><td>Whether to add to the response header, default is <code>false</code></td></tr></tbody></table></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class=book-languages tabindex=0 aria-haspopup=true><ul><li class="flex align-center"><img src=/gateway/main/svg/translate.svg class=book-icon alt=Languages>
 English</li></ul><ul class=book-languages-list><li class=active><a href=https://docs.infinilabs.com/gateway/main/ class="flex align-center"><img src=/gateway/main/svg/translate.svg class=book-icon alt=Languages>

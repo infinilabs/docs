@@ -50,18 +50,18 @@ setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.
 if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#description>Description</a></li><li><a href=#configuration-example>Configuration Example</a></li><li><a href=#parameter-description>Parameter Description</a></li></ul></nav></aside></header><article class=markdown><h1 id=queue>queue
 <a class=anchor href=#queue>#</a></h1><h2 id=description>Description
 <a class=anchor href=#description>#</a></h2><p>The <code>queue</code> filter is used to save requests to a message queue.</p><h2 id=configuration-example>Configuration Example
-<a class=anchor href=#configuration-example>#</a></h2><p>Here is a simple example:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>flow</span>:
-  - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>queue</span>
-    <span style=color:#f92672>filter</span>:
-      - <span style=color:#f92672>queue</span>: <span style=color:#75715e># Handle dirty_writes, second-commit</span>
-          <span style=color:#f92672>queue_name</span>: <span style=color:#e6db74>&#34;primary_final_commit_log##$[[partition_id]]&#34;</span>
-          <span style=color:#f92672>labels</span>:
-            <span style=color:#f92672>type</span>: <span style=color:#e6db74>&#34;primary_final_commit_log&#34;</span>
-            <span style=color:#f92672>partition_id</span>: <span style=color:#e6db74>&#34;$[[partition_id]]&#34;</span>
-          <span style=color:#f92672>message</span>: <span style=color:#e6db74>&#34;$[[_ctx.request.header.X-Replicated-ID]]#$[[_ctx.request.header.LAST_PRODUCED_MESSAGE_OFFSET]]#$[[_sys.unix_timestamp_of_now]]&#34;</span>
-          <span style=color:#f92672>when</span>:
-            <span style=color:#f92672>equals</span>:
-              <span style=color:#f92672>_ctx.request.header.X-Replicated</span>: <span style=color:#e6db74>&#34;true&#34;</span>
+<a class=anchor href=#configuration-example>#</a></h2><p>Here is a simple example:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>flow</span>:
+  - <span style=color:#ff79c6>name</span>: queue
+    <span style=color:#ff79c6>filter</span>:
+      - <span style=color:#ff79c6>queue</span>: <span style=color:#6272a4># Handle dirty_writes, second-commit</span>
+          <span style=color:#ff79c6>queue_name</span>: <span style=color:#f1fa8c>&#34;primary_final_commit_log##$[[partition_id]]&#34;</span>
+          <span style=color:#ff79c6>labels</span>:
+            <span style=color:#ff79c6>type</span>: <span style=color:#f1fa8c>&#34;primary_final_commit_log&#34;</span>
+            <span style=color:#ff79c6>partition_id</span>: <span style=color:#f1fa8c>&#34;$[[partition_id]]&#34;</span>
+          <span style=color:#ff79c6>message</span>: <span style=color:#f1fa8c>&#34;$[[_ctx.request.header.X-Replicated-ID]]#$[[_ctx.request.header.LAST_PRODUCED_MESSAGE_OFFSET]]#$[[_sys.unix_timestamp_of_now]]&#34;</span>
+          <span style=color:#ff79c6>when</span>:
+            <span style=color:#ff79c6>equals</span>:
+              <span style=color:#ff79c6>_ctx.request.header.X-Replicated</span>: <span style=color:#f1fa8c>&#34;true&#34;</span>
 </code></pre></div><h2 id=parameter-description>Parameter Description
 <a class=anchor href=#parameter-description>#</a></h2><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>depth_threshold</td><td>int</td><td>Must be greater than the specified depth to be stored in the queue, default is <code>0</code></td></tr><tr><td>type</td><td>string</td><td>Specify the type of message queue, supports <code>kafka</code> and <code>disk</code></td></tr><tr><td>queue_name</td><td>string</td><td>Message queue name</td></tr><tr><td>labels</td><td>map</td><td>Add custom labels to the newly created message queue topic</td></tr><tr><td>message</td><td>string</td><td>Custom message content, supports variables</td></tr><tr><td>save_last_produced_message_offset</td><td>bool</td><td>Whether to retain the Offset of the last successfully written message in the context for later use as a variable</td></tr><tr><td>last_produced_message_offset_key</td><td>string</td><td>Custom variable name for storing the Offset of the last successfully written message in the context, default is <code>LAST_PRODUCED_MESSAGE_OFFSET</code></td></tr></tbody></table></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class=book-languages tabindex=0 aria-haspopup=true><ul><li class="flex align-center"><img src=/gateway/main/svg/translate.svg class=book-icon alt=Languages>
 English</li></ul><ul class=book-languages-list><li class=active><a href=https://docs.infinilabs.com/gateway/main/ class="flex align-center"><img src=/gateway/main/svg/translate.svg class=book-icon alt=Languages>

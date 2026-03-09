@@ -50,17 +50,17 @@ setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.
 if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#description>Description</a></li><li><a href=#configuration-example>Configuration Example</a></li><li><a href=#parameter-description>Parameter Description</a></li></ul></nav></aside></header><article class=markdown><h1 id=request_reshuffle>request_reshuffle
 <a class=anchor href=#request_reshuffle>#</a></h1><h2 id=description>Description
 <a class=anchor href=#description>#</a></h2><p><code>request_reshuffle</code> can analyze non-bulk requests to Elasticsearch, archive them in a queue, and store them on disk first. This allows business-side requests to return quickly, decoupling the front-end writes from the back-end Elasticsearch cluster. <code>request_reshuffle</code> requires offline pipeline consumption tasks to work in conjunction.</p><h2 id=configuration-example>Configuration Example
-<a class=anchor href=#configuration-example>#</a></h2><p>Here is a simple example:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>flow</span>:
-  - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>backup-flow-request-reshuffle</span>
-    <span style=color:#f92672>filter</span>:
-      - <span style=color:#f92672>flow</span>:
-          <span style=color:#f92672>flows</span>:
-            - <span style=color:#ae81ff>set-auth-for-backup-flow</span>
-      - <span style=color:#f92672>request_reshuffle</span>: <span style=color:#75715e># Reshuffle none-bulk requests</span>
-          <span style=color:#f92672>elasticsearch</span>: <span style=color:#e6db74>&#34;backup&#34;</span>
-          <span style=color:#f92672>queue_name_prefix</span>: <span style=color:#e6db74>&#34;request_reshuffle&#34;</span>
-          <span style=color:#f92672>partition_size</span>: <span style=color:#ae81ff>$[[env.REQUEST_RESHUFFLE_PARTITION_SIZE]]</span>
-          <span style=color:#f92672>tag_on_success</span>: [ <span style=color:#e6db74>&#34;commit_message_allowed&#34;</span> ]
+<a class=anchor href=#configuration-example>#</a></h2><p>Here is a simple example:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>flow</span>:
+  - <span style=color:#ff79c6>name</span>: backup-flow-request-reshuffle
+    <span style=color:#ff79c6>filter</span>:
+      - <span style=color:#ff79c6>flow</span>:
+          <span style=color:#ff79c6>flows</span>:
+            - set-auth-for-backup-flow
+      - <span style=color:#ff79c6>request_reshuffle</span>: <span style=color:#6272a4># Reshuffle none-bulk requests</span>
+          <span style=color:#ff79c6>elasticsearch</span>: <span style=color:#f1fa8c>&#34;backup&#34;</span>
+          <span style=color:#ff79c6>queue_name_prefix</span>: <span style=color:#f1fa8c>&#34;request_reshuffle&#34;</span>
+          <span style=color:#ff79c6>partition_size</span>: $[[env.REQUEST_RESHUFFLE_PARTITION_SIZE]]
+          <span style=color:#ff79c6>tag_on_success</span>: [ <span style=color:#f1fa8c>&#34;commit_message_allowed&#34;</span> ]
 </code></pre></div><h2 id=parameter-description>Parameter Description
 <a class=anchor href=#parameter-description>#</a></h2><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>elasticsearch</td><td>string</td><td>Elasticsearch cluster instance name</td></tr><tr><td>queue_name_prefix</td><td>string</td><td>Queue name prefix, default is <code>async_bulk</code>, default Label is <code>type:request_reshuffle</code></td></tr><tr><td>partition_size</td><td>int</td><td>In addition to <code>level</code>, partitioning is based on the document <code>_id</code>. This parameter sets the maximum partition size.</td></tr><tr><td>continue_after_reshuffle</td><td>bool</td><td>Whether to continue with subsequent processes after Reshuffle is complete, default is <code>false</code></td></tr><tr><td>tag_on_success</td><td>array</td><td>Add specified tags to the request context after processing all bulk requests</td></tr></tbody></table></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class=book-languages tabindex=0 aria-haspopup=true><ul><li class="flex align-center"><img src=/gateway/main/svg/translate.svg class=book-icon alt=Languages>
 English</li></ul><ul class=book-languages-list><li class=active><a href=https://docs.infinilabs.com/gateway/main/ class="flex align-center"><img src=/gateway/main/svg/translate.svg class=book-icon alt=Languages>

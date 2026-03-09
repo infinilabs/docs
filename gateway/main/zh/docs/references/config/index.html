@@ -79,29 +79,29 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
       password: $[[env.PROD_ES_PASS]]
 </code></pre><p>注意，外部环境变量的优先级会大于配置内部的环境变量设置，比如希望在启动程序的时候覆盖环境变量，操作如下：</p><pre><code>PROD_ES_ENDPOINT=http://1.1.1.1:9200 LOGGING_ES_ENDPOINT=http://2.2.2.2:9201  ./bin/gateway
 </code></pre><h2 id=path>Path
-<a class=anchor href=#path>#</a></h2><p>配置、数据、日志相关路径配置。</p><p>示例：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>path.data</span>: <span style=color:#ae81ff>data</span>
-<span style=color:#f92672>path.logs</span>: <span style=color:#ae81ff>log</span>
-<span style=color:#f92672>path.configs</span>: <span style=color:#e6db74>&#34;config&#34;</span>
+<a class=anchor href=#path>#</a></h2><p>配置、数据、日志相关路径配置。</p><p>示例：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>path.data</span>: data
+<span style=color:#ff79c6>path.logs</span>: log
+<span style=color:#ff79c6>path.configs</span>: <span style=color:#f1fa8c>&#34;config&#34;</span>
 </code></pre></div><table><thead><tr><th>名称</th><th>类型</th><th>说明</th></tr></thead><tbody><tr><td>path.data</td><td>string</td><td>数据目录，默认为 <code>data</code></td></tr><tr><td>path.logs</td><td>string</td><td>日志目录，默认为 <code>log</code></td></tr><tr><td>path.configs</td><td>string</td><td>配置目录，默认为 <code>config</code></td></tr></tbody></table><h2 id=log>Log
-<a class=anchor href=#log>#</a></h2><p>日志相关配置。</p><p>示例：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>log</span>:
-  <span style=color:#f92672>level</span>: <span style=color:#ae81ff>info</span>
-  <span style=color:#f92672>debug</span>: <span style=color:#66d9ef>false</span>
+<a class=anchor href=#log>#</a></h2><p>日志相关配置。</p><p>示例：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>log</span>:
+  <span style=color:#ff79c6>level</span>: info
+  <span style=color:#ff79c6>debug</span>: <span style=color:#ff79c6>false</span>
 </code></pre></div><table><thead><tr><th>名称</th><th>类型</th><th>说明</th></tr></thead><tbody><tr><td>log.level</td><td>string</td><td>日志级别，默认为 <code>info</code></td></tr><tr><td>log.debug</td><td>bool</td><td>是否开启调试模式，当开启的时候，一旦出现异常程序直接退出，打印完整堆栈，仅用于调试定位故障点，默认为 <code>false</code>，生产环境不要开启，可能丢数据</td></tr><tr><td>log.format</td><td>bool</td><td>日志格式，默认为 <code>[%Date(01-02) %Time] [%LEV] [%File:%Line] %Msg%n</code>，
 <a href=https://github.com/cihub/seelog/wiki/Format-reference>Format References</a></td></tr><tr><td>log.disable_file_output</td><td>bool</td><td>是否关闭本地文件的日志输出，默认为 <code>false</code>，容器环境不希望本地日志输出的可以开启本参数</td></tr></tbody></table><h2 id=configs>Configs
-<a class=anchor href=#configs>#</a></h2><p>配置管理相关配置。</p><p>示例：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>configs</span>:
-  <span style=color:#f92672>auto_reload</span>: <span style=color:#66d9ef>true</span>
-  <span style=color:#f92672>managed</span>: <span style=color:#66d9ef>true</span>
-  <span style=color:#f92672>panic_on_config_error</span>: <span style=color:#66d9ef>false</span> 
-  <span style=color:#f92672>interval</span>: <span style=color:#e6db74>&#34;1s&#34;</span>
-  <span style=color:#f92672>servers</span>:
-    - <span style=color:#e6db74>&#34;http://localhost:9000&#34;</span>
-  <span style=color:#f92672>max_backup_files</span>: <span style=color:#ae81ff>5</span>
-  <span style=color:#f92672>soft_delete</span>: <span style=color:#66d9ef>false</span>
-  <span style=color:#f92672>tls</span>:
-    <span style=color:#f92672>enabled</span>: <span style=color:#66d9ef>false</span>
-    <span style=color:#f92672>cert_file</span>: <span style=color:#ae81ff>/etc/ssl.crt</span>
-    <span style=color:#f92672>key_file</span>: <span style=color:#ae81ff>/etc/ssl.key</span>
-    <span style=color:#f92672>skip_insecure_verify</span>: <span style=color:#66d9ef>false</span>
+<a class=anchor href=#configs>#</a></h2><p>配置管理相关配置。</p><p>示例：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>configs</span>:
+  <span style=color:#ff79c6>auto_reload</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>managed</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>panic_on_config_error</span>: <span style=color:#ff79c6>false</span> 
+  <span style=color:#ff79c6>interval</span>: <span style=color:#f1fa8c>&#34;1s&#34;</span>
+  <span style=color:#ff79c6>servers</span>:
+    - <span style=color:#f1fa8c>&#34;http://localhost:9000&#34;</span>
+  <span style=color:#ff79c6>max_backup_files</span>: <span style=color:#bd93f9>5</span>
+  <span style=color:#ff79c6>soft_delete</span>: <span style=color:#ff79c6>false</span>
+  <span style=color:#ff79c6>tls</span>:
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>false</span>
+    <span style=color:#ff79c6>cert_file</span>: /etc/ssl.crt
+    <span style=color:#ff79c6>key_file</span>: /etc/ssl.key
+    <span style=color:#ff79c6>skip_insecure_verify</span>: <span style=color:#ff79c6>false</span>
 </code></pre></div><table><thead><tr><th>名称</th><th>类型</th><th>说明</th></tr></thead><tbody><tr><td>configs.auto_reload</td><td>bool</td><td>是否支持 <code>path.configs</code> 里面配置的动态加载</td></tr><tr><td>configs.managed</td><td>bool</td><td>是否支持由配置中心进行配置管理</td></tr><tr><td>configs.servers</td><td>[]string</td><td>配置中心地址</td></tr><tr><td>configs.interval</td><td>string</td><td>配置同步间隔</td></tr><tr><td>configs.soft_delete</td><td>bool</td><td>配置文件删除为软删除，默认 <code>true</code></td></tr><tr><td>configs.panic_on_config_error</td><td>bool</td><td>配置加载如果有错误就直接崩溃，默认 <code>true</code></td></tr><tr><td>configs.max_backup_files</td><td>int</td><td>配置文件最大备份数，默认 <code>10</code></td></tr><tr><td>configs.valid_config_extensions</td><td>[]string</td><td>有效的配置文件后缀，默认 <code>.tpl</code>, <code>.json</code>, <code>.yml</code>, <code>.yaml</code></td></tr><tr><td>configs.tls</td><td>object</td><td>TLS 配置（请参考通用
 <a href=/gateway/main/zh/#tls-%e9%85%8d%e7%bd%ae>TLS</a> 配置）</td></tr><tr><td>configs.always_register_after_restart</td><td>bool</td><td>实例重启后是否进行注册，实例运行在 K8S 环境下，需开启此参数。</td></tr><tr><td>configs.allow_generated_metrics_tasks</td><td>bool</td><td>允许自动生成采集指标任务</td></tr><tr><td>configs.ignored_path</td><td>[]string</td><td>需要忽略的配置文件路径</td></tr></tbody></table><h2 id=本地磁盘队列>本地磁盘队列
 <a class=anchor href=#%e6%9c%ac%e5%9c%b0%e7%a3%81%e7%9b%98%e9%98%9f%e5%88%97>#</a></h2><p>示例：</p><pre><code>disk_queue:
@@ -124,30 +124,30 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
 <a class=anchor href=#%e7%bd%91%e7%bb%9c%e9%85%8d%e7%bd%ae>#</a></h2><p>公共的网络配置说明。</p><table><thead><tr><th>名称</th><th>类型</th><th>说明</th></tr></thead><tbody><tr><td>*.network.host</td><td>string</td><td>服务监听的网络地址，例如，<code>192.168.3.10</code></td></tr><tr><td>*.network.port</td><td>int</td><td>服务监听的端口地址，例如，<code>8000</code></td></tr><tr><td>*.network.binding</td><td>string</td><td>服务监听的网络绑定地址，例如，<code>0.0.0.0:8000</code></td></tr><tr><td>*.network.publish</td><td>string</td><td>服务监听的外部访问地址，例如，<code>192.168.3.10:8000</code></td></tr><tr><td>*.network.reuse_port</td><td>bool</td><td>是否在多进程端口共享中重用网络端口</td></tr><tr><td>*.network.skip_occupied_port</td><td>bool</td><td>是否自动跳过已占用的端口</td></tr></tbody></table><h2 id=tls-配置>TLS 配置
 <a class=anchor href=#tls-%e9%85%8d%e7%bd%ae>#</a></h2><p>公共的 TLS 配置说明。</p><table><thead><tr><th>名称</th><th>类型</th><th>说明</th></tr></thead><tbody><tr><td>*.tls.enabled</td><td>bool</td><td>是否启用 TLS 安全传输，不指定证书可自动生成</td></tr><tr><td>*.tls.ca_file</td><td>string</td><td>TLS 安全证书的公共 CA 证书路径</td></tr><tr><td>*.tls.cert_file</td><td>string</td><td>TLS 安全证书的公共密钥路径</td></tr><tr><td>*.tls.key_file</td><td>string</td><td>TLS 安全证书的私钥路径</td></tr><tr><td>*.tls.skip_insecure_verify</td><td>bool</td><td>是否忽略 TLS 证书验证</td></tr><tr><td>*.tls.default_domain</td><td>string</td><td>用于自动生成证书的默认域名</td></tr><tr><td>*.tls.skip_domain_verify</td><td>bool</td><td>是否跳过域名验证</td></tr><tr><td>*.tls.client_session_cache_size</td><td>int</td><td>设置 TLS 会话恢复的最大客户端会话状态缓存大小</td></tr></tbody></table><h2 id=api>API
 <a class=anchor href=#api>#</a></h2><table><thead><tr><th>名称</th><th>类型</th><th>说明</th></tr></thead><tbody><tr><td>api.enabled</td><td>bool</td><td>是否启用 API 模块， 默认为 <code>true</code></td></tr><tr><td>api.network</td><td>object</td><td>网络配置，请参考通用网络配置部分</td></tr><tr><td>api.tls</td><td>object</td><td>TLS 配置，请参考通用 TLS 配置部分</td></tr><tr><td>api.security</td><td>object</td><td>API 模块的安全配置</td></tr><tr><td>api.security.enabled</td><td>bool</td><td>是否启用安全性</td></tr><tr><td>api.security.username</td><td>string</td><td>安全性的用户名</td></tr><tr><td>api.security.password</td><td>string</td><td>安全性的密码</td></tr><tr><td>api.cors.allowed_origins</td><td>[]string</td><td>跨域请求可以执行的源列表</td></tr><tr><td>api.websocket</td><td>object</td><td>API 模块的 WebSocket 配置</td></tr><tr><td>api.websocket.enabled</td><td>object</td><td>是否启用 WebSocket</td></tr><tr><td>api.websocket.permitted_hosts</td><td>[]string</td><td>允许访问 WebSocket 服务的主机列表</td></tr><tr><td>api.websocket.skip_host_verify</td><td>bool</td><td>是否跳过验证 WebSocket 的主机</td></tr></tbody></table><h2 id=metrics>Metrics
-<a class=anchor href=#metrics>#</a></h2><p>配置系统指标采集。</p><p>示例：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>metrics</span>:
-  <span style=color:#f92672>enabled</span>: <span style=color:#66d9ef>true</span>
-  <span style=color:#f92672>queue</span>: <span style=color:#ae81ff>metrics</span>
-  <span style=color:#f92672>network</span>:
-    <span style=color:#f92672>enabled</span>: <span style=color:#66d9ef>true</span>
-    <span style=color:#f92672>summary</span>: <span style=color:#66d9ef>true</span>
-    <span style=color:#f92672>details</span>: <span style=color:#66d9ef>true</span>
-  <span style=color:#f92672>memory</span>:
-    <span style=color:#f92672>metrics</span>:
-      - <span style=color:#ae81ff>swap</span>
-      - <span style=color:#ae81ff>memory</span>
-  <span style=color:#f92672>disk</span>:
-    <span style=color:#f92672>metrics</span>:
-      - <span style=color:#ae81ff>iops</span>
-      - <span style=color:#ae81ff>usage</span>
-  <span style=color:#f92672>cpu</span>:
-    <span style=color:#f92672>metrics</span>:
-      - <span style=color:#ae81ff>idle</span>
-      - <span style=color:#ae81ff>system</span>
-      - <span style=color:#ae81ff>user</span>
-      - <span style=color:#ae81ff>iowait</span>
-      - <span style=color:#ae81ff>load</span>
+<a class=anchor href=#metrics>#</a></h2><p>配置系统指标采集。</p><p>示例：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>metrics</span>:
+  <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>queue</span>: metrics
+  <span style=color:#ff79c6>network</span>:
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>summary</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>details</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>memory</span>:
+    <span style=color:#ff79c6>metrics</span>:
+      - swap
+      - memory
+  <span style=color:#ff79c6>disk</span>:
+    <span style=color:#ff79c6>metrics</span>:
+      - iops
+      - usage
+  <span style=color:#ff79c6>cpu</span>:
+    <span style=color:#ff79c6>metrics</span>:
+      - idle
+      - system
+      - user
+      - iowait
+      - load
 </code></pre></div><table><thead><tr><th>名称</th><th>类型</th><th>说明</th></tr></thead><tbody><tr><td>enabled</td><td>bool</td><td>是否开启系统指标采集，默认 <code>true</code></td></tr><tr><td>queue</td><td>string</td><td>指标采集队列</td></tr><tr><td>network</td><td>object</td><td>采集网络指标配置</td></tr><tr><td>network.enabled</td><td>bool</td><td>是否采集网络指标，默认 <code>true</code></td></tr><tr><td>network.summary</td><td>bool</td><td>是否采集 summary 指标</td></tr><tr><td>network.sockets</td><td>bool</td><td>是否采集相关 socket 指标</td></tr><tr><td>network.throughput</td><td>bool</td><td>是否采集 throughput 指标</td></tr><tr><td>network.details</td><td>bool</td><td>是否将网络 IO 指标进行累计</td></tr><tr><td>network.interfaces</td><td>[]string</td><td>指定需要采集的网络接口，默认采集所有接口</td></tr><tr><td>memory</td><td>object</td><td>采集内存指标配置</td></tr><tr><td>memory.enabled</td><td>bool</td><td>是否开启内存指标的采集，默认 <code>true</code></td></tr><tr><td>memory.metrics</td><td>[]string</td><td>指定采集相关指标，可选 <code>swap</code>，<code>memory</code></td></tr><tr><td>disk</td><td>object</td><td>采集磁盘指标配置</td></tr><tr><td>disk.metrics</td><td>[]string</td><td>指定采集相关指标，可选 <code>usage</code>，<code>iops</code></td></tr><tr><td>cpu</td><td>object</td><td>采集 CPU 指标配置</td></tr><tr><td>cpu.metrics</td><td>[]string</td><td>指定采集相关指标，可选 <code>idle</code>，<code>system</code>，<code>user</code>，<code>iowait</code>，<code>load</code></td></tr></tbody></table><h2 id=node>Node
-<a class=anchor href=#node>#</a></h2><p>节点相关配置。</p><p>示例：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>node:
+<a class=anchor href=#node>#</a></h2><p>节点相关配置。</p><p>示例：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>node:
   major_ip_pattern: &#34;.*&#34;
   labels:
     env: dev

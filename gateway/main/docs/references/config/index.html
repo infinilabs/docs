@@ -73,29 +73,29 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
       password: $[[env.PROD_ES_PASS]]
 </code></pre><p>Note that external environment variables take precedence over internal environment variable settings in the configuration. For example, to override environment variables when starting the program, use the following command:</p><pre><code>PROD_ES_ENDPOINT=http://1.1.1.1:9200 LOGGING_ES_ENDPOINT=http://2.2.2.2:9201 ./bin/gateway
 </code></pre><h2 id=path>Path
-<a class=anchor href=#path>#</a></h2><p>Common configuration for paths, including data, log and config directories.</p><p>Example:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>path.data</span>: <span style=color:#ae81ff>data</span>
-<span style=color:#f92672>path.logs</span>: <span style=color:#ae81ff>log</span>
-<span style=color:#f92672>path.configs</span>: <span style=color:#e6db74>&#34;config&#34;</span>
+<a class=anchor href=#path>#</a></h2><p>Common configuration for paths, including data, log and config directories.</p><p>Example:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>path.data</span>: data
+<span style=color:#ff79c6>path.logs</span>: log
+<span style=color:#ff79c6>path.configs</span>: <span style=color:#f1fa8c>&#34;config&#34;</span>
 </code></pre></div><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>path.data</td><td>string</td><td>Data directory, default is <code>data</code>.</td></tr><tr><td>path.logs</td><td>string</td><td>Log directory, default is <code>log</code>.</td></tr><tr><td>path.configs</td><td>string</td><td>Configuration directory, default is <code>config</code>.</td></tr></tbody></table><h2 id=log>Log
-<a class=anchor href=#log>#</a></h2><p>The configuration for logs.</p><p>Example:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>log</span>:
-  <span style=color:#f92672>level</span>: <span style=color:#ae81ff>info</span>
-  <span style=color:#f92672>debug</span>: <span style=color:#66d9ef>false</span>
+<a class=anchor href=#log>#</a></h2><p>The configuration for logs.</p><p>Example:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>log</span>:
+  <span style=color:#ff79c6>level</span>: info
+  <span style=color:#ff79c6>debug</span>: <span style=color:#ff79c6>false</span>
 </code></pre></div><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>log.level</td><td>string</td><td>Log level, default is <code>info</code>.</td></tr><tr><td>log.debug</td><td>bool</td><td>Whether to enable debug mode. When enabled, the program exits immediately in case of an exception, printing the complete stack trace. Used for debugging and fault localization. Default is <code>false</code>, do not enable in production as it may result in data loss.</td></tr><tr><td>log.format</td><td>bool</td><td>Log format, default is <code>[%Date(01-02) %Time] [%LEV] [%File:%Line] %Msg%n</code>.
 <a href=https://github.com/cihub/seelog/wiki/Format-reference>Format References</a>.</td></tr><tr><td>log.disable_file_output</td><td>bool</td><td>Whether to disable local file log output, default is <code>false</code>. Use this in container environments if you don&rsquo;t want local log output.</td></tr></tbody></table><h2 id=configs>Configs
-<a class=anchor href=#configs>#</a></h2><p>Manage the configuration.</p><p>Example:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>configs</span>:
-  <span style=color:#f92672>auto_reload</span>: <span style=color:#66d9ef>true</span>
-  <span style=color:#f92672>managed</span>: <span style=color:#66d9ef>true</span>
-  <span style=color:#f92672>panic_on_config_error</span>: <span style=color:#66d9ef>false</span> 
-  <span style=color:#f92672>interval</span>: <span style=color:#e6db74>&#34;1s&#34;</span>
-  <span style=color:#f92672>servers</span>:
-    - <span style=color:#e6db74>&#34;http://localhost:9000&#34;</span>
-  <span style=color:#f92672>max_backup_files</span>: <span style=color:#ae81ff>5</span>
-  <span style=color:#f92672>soft_delete</span>: <span style=color:#66d9ef>false</span>
-  <span style=color:#f92672>tls</span>:
-    <span style=color:#f92672>enabled</span>: <span style=color:#66d9ef>false</span>
-    <span style=color:#f92672>cert_file</span>: <span style=color:#ae81ff>/etc/ssl.crt</span>
-    <span style=color:#f92672>key_file</span>: <span style=color:#ae81ff>/etc/ssl.key</span>
-    <span style=color:#f92672>skip_insecure_verify</span>: <span style=color:#66d9ef>false</span>
+<a class=anchor href=#configs>#</a></h2><p>Manage the configuration.</p><p>Example:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>configs</span>:
+  <span style=color:#ff79c6>auto_reload</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>managed</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>panic_on_config_error</span>: <span style=color:#ff79c6>false</span> 
+  <span style=color:#ff79c6>interval</span>: <span style=color:#f1fa8c>&#34;1s&#34;</span>
+  <span style=color:#ff79c6>servers</span>:
+    - <span style=color:#f1fa8c>&#34;http://localhost:9000&#34;</span>
+  <span style=color:#ff79c6>max_backup_files</span>: <span style=color:#bd93f9>5</span>
+  <span style=color:#ff79c6>soft_delete</span>: <span style=color:#ff79c6>false</span>
+  <span style=color:#ff79c6>tls</span>:
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>false</span>
+    <span style=color:#ff79c6>cert_file</span>: /etc/ssl.crt
+    <span style=color:#ff79c6>key_file</span>: /etc/ssl.key
+    <span style=color:#ff79c6>skip_insecure_verify</span>: <span style=color:#ff79c6>false</span>
 </code></pre></div><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>configs.auto_reload</td><td>bool</td><td>Whether it supports dynamically loading configuration files under the path.configs path.</td></tr><tr><td>configs.managed</td><td>bool</td><td>Whether configuration management by the configuration center is supported.</td></tr><tr><td>configs.servers</td><td>[]string</td><td>Configuration center address</td></tr><tr><td>configs.interval</td><td>string</td><td>Configuration synchronization interval</td></tr><tr><td>configs.soft_delete</td><td>bool</td><td>The deletion of configuration files is soft deletion, default is <code>true</code>.</td></tr><tr><td>configs.panic_on_config_error</td><td>bool</td><td>If there is an error in configuration loading, it will crash directly, default <code>true</code></td></tr><tr><td>configs.max_backup_files</td><td>int</td><td>The maximum number of configuration file backups, default <code>10</code>.</td></tr><tr><td>configs.valid_config_extensions</td><td>[]string</td><td>Valid configuration file suffixes, default <code>.tpl</code>, <code>.json</code>, <code>.yml</code>, <code>.yaml</code></td></tr><tr><td>configs.tls</td><td>object</td><td>TLS Configuration (Please refer to
 <a href=/gateway/main/#tls-configuration>TLS</a>)</td></tr><tr><td>configs.always_register_after_restart</td><td>bool</td><td>Whether to register after the instance is restarted. When the instance runs in the K8S environment, this parameter needs to be enabled.</td></tr><tr><td>configs.allow_generated_metrics_tasks</td><td>bool</td><td>Allow automatic generation of collection metrics tasks.</td></tr><tr><td>configs.ignored_path</td><td>[]string</td><td>Paths of configuration files that need to be ignored.</td></tr></tbody></table><h2 id=local-disk-queue>Local Disk Queue
 <a class=anchor href=#local-disk-queue>#</a></h2><p>Example:</p><pre><code>disk_queue:
@@ -137,34 +137,34 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
           secret_key: $[[keystore.TENCENT_DNS_KEY]] #./bin/coco keystore add TENCENT_DNS_KEY
 </code></pre><p>Common TLS configurations.</p><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>*.tls.enabled</td><td>bool</td><td>Whether TLS secure transmission is enabled or not, can auto generate cert files if not specified any cert files</td></tr><tr><td>*.tls.ca_file</td><td>string</td><td>Path to the public CA cert of the TLS security certificate</td></tr><tr><td>*.tls.cert_file</td><td>string</td><td>Path to the public key of the TLS security certificate</td></tr><tr><td>*.tls.key_file</td><td>string</td><td>Path to the private key of the TLS security certificate</td></tr><tr><td>*.tls.skip_insecure_verify</td><td>bool</td><td>Whether to ignore TLS certificate verification</td></tr><tr><td>*.tls.default_domain</td><td>string</td><td>The default domain for auto generated certs</td></tr><tr><td>*.tls.skip_domain_verify</td><td>bool</td><td>Whether to skip domain verify or not</td></tr><tr><td>*.tls.client_session_cache_size</td><td>int</td><td>Set the max cache of ClientSessionState entries for TLS session resumption</td></tr></tbody></table><h3 id=auto-issue-tls-certificates>Auto-Issue TLS Certificates
 <a class=anchor href=#auto-issue-tls-certificates>#</a></h3><p>Both the <code>api</code> and <code>web</code> modules support auto-issuing TLS certificates via Let&rsquo;s Encrypt. This feature can be configured under <code>*.tls.auto_issue</code>:</p><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>*.tls.auto_issue.enabled</td><td>bool</td><td>Enables automatic issuance of TLS certificates using Let&rsquo;s Encrypt.</td></tr><tr><td>*.tls.auto_issue.path</td><td>string</td><td>Directory path where auto-issued certificates should be stored.</td></tr><tr><td>*.tls.auto_issue.email</td><td>string</td><td>Contact email for certificate issuance notifications and expiry warnings.</td></tr><tr><td>*.tls.auto_issue.include_default_domain</td><td>bool</td><td>Whether to include the <code>default_domain</code> in the list of domains for auto-issuance.</td></tr><tr><td>*.tls.auto_issue.domains</td><td>[]string</td><td>List of additional domains for which TLS certificates will be issued.</td></tr><tr><td>*.tls.auto_issue.provider</td><td>object</td><td>Specifies the DNS provider configuration for DNS-based domain validation.</td></tr></tbody></table><h4 id=dns-provider-configuration-tencent-cloud>DNS Provider Configuration (Tencent Cloud)
-<a class=anchor href=#dns-provider-configuration-tencent-cloud>#</a></h4><p>To support DNS-based verification with Tencent Cloud, configure the following within <code>*.tls.auto_issue.provider</code>:</p><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><code>tencent_dns.secret_id</code></td><td>string</td><td>Secret ID for Tencent Cloud API access.</td></tr><tr><td><code>tencent_dns.secret_key</code></td><td>string</td><td>Secret Key for Tencent Cloud API access.</td></tr></tbody></table><p>To set up and store the Tencent Cloud credentials securely, use the keystore commands:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>./bin/coco keystore add TENCENT_DNS_ID
+<a class=anchor href=#dns-provider-configuration-tencent-cloud>#</a></h4><p>To support DNS-based verification with Tencent Cloud, configure the following within <code>*.tls.auto_issue.provider</code>:</p><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><code>tencent_dns.secret_id</code></td><td>string</td><td>Secret ID for Tencent Cloud API access.</td></tr><tr><td><code>tencent_dns.secret_key</code></td><td>string</td><td>Secret Key for Tencent Cloud API access.</td></tr></tbody></table><p>To set up and store the Tencent Cloud credentials securely, use the keystore commands:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>./bin/coco keystore add TENCENT_DNS_ID
 ./bin/coco keystore add TENCENT_DNS_KEY
 </code></pre></div><h2 id=api>API
 <a class=anchor href=#api>#</a></h2><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>api.enabled</td><td>bool</td><td>Whether to enable the API module, default is <code>true</code></td></tr><tr><td>api.network</td><td>object</td><td>Networking config, please refer to common network configuration section</td></tr><tr><td>api.tls</td><td>object</td><td>TLS config, please refer to common TLS configuration section</td></tr><tr><td>api.security</td><td>object</td><td>Security config for API module</td></tr><tr><td>api.security.enabled</td><td>bool</td><td>Whether security is enabled or not</td></tr><tr><td>api.security.username</td><td>string</td><td>The username for security</td></tr><tr><td>api.security.password</td><td>string</td><td>The password for security</td></tr><tr><td>api.cors.allowed_origins</td><td>[]string</td><td>The list of origins a cross-domain request can be executed from</td></tr><tr><td>api.websocket</td><td>object</td><td>Websocket config for API module</td></tr><tr><td>api.websocket.enabled</td><td>object</td><td>Whether websocket is enabled or not</td></tr><tr><td>api.websocket.permitted_hosts</td><td>[]string</td><td>The list of hosts that permitted to access the websocket service</td></tr><tr><td>api.websocket.skip_host_verify</td><td>bool</td><td>Whether websocket skip verify the host or not</td></tr></tbody></table><h2 id=metrics>Metrics
-<a class=anchor href=#metrics>#</a></h2><p>Configure collection of system metrics.</p><p>Example:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#f92672>metrics</span>:
-  <span style=color:#f92672>enabled</span>: <span style=color:#66d9ef>true</span>
-  <span style=color:#f92672>queue</span>: <span style=color:#ae81ff>metrics</span>
-  <span style=color:#f92672>network</span>:
-    <span style=color:#f92672>enabled</span>: <span style=color:#66d9ef>true</span>
-    <span style=color:#f92672>summary</span>: <span style=color:#66d9ef>true</span>
-    <span style=color:#f92672>details</span>: <span style=color:#66d9ef>true</span>
-  <span style=color:#f92672>memory</span>:
-    <span style=color:#f92672>metrics</span>:
-      - <span style=color:#ae81ff>swap</span>
-      - <span style=color:#ae81ff>memory</span>
-  <span style=color:#f92672>disk</span>:
-    <span style=color:#f92672>metrics</span>:
-      - <span style=color:#ae81ff>iops</span>
-      - <span style=color:#ae81ff>usage</span>
-  <span style=color:#f92672>cpu</span>:
-    <span style=color:#f92672>metrics</span>:
-      - <span style=color:#ae81ff>idle</span>
-      - <span style=color:#ae81ff>system</span>
-      - <span style=color:#ae81ff>user</span>
-      - <span style=color:#ae81ff>iowait</span>
-      - <span style=color:#ae81ff>load</span>
+<a class=anchor href=#metrics>#</a></h2><p>Configure collection of system metrics.</p><p>Example:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>metrics</span>:
+  <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>queue</span>: metrics
+  <span style=color:#ff79c6>network</span>:
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>summary</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>details</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>memory</span>:
+    <span style=color:#ff79c6>metrics</span>:
+      - swap
+      - memory
+  <span style=color:#ff79c6>disk</span>:
+    <span style=color:#ff79c6>metrics</span>:
+      - iops
+      - usage
+  <span style=color:#ff79c6>cpu</span>:
+    <span style=color:#ff79c6>metrics</span>:
+      - idle
+      - system
+      - user
+      - iowait
+      - load
 </code></pre></div><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>enabled</td><td>bool</td><td>Whether to enable system metrics collection, default <code>true</code>.</td></tr><tr><td>queue</td><td>string</td><td>The queue name of metrics collection.</td></tr><tr><td>network</td><td>object</td><td>The Configuration of network metrics collection.</td></tr><tr><td>network.enabled</td><td>bool</td><td>Whether to enable network metrics collection, default <code>true</code>.</td></tr><tr><td>network.summary</td><td>bool</td><td>Whether to collect network summary metircs.</td></tr><tr><td>network.sockets</td><td>bool</td><td>Whether to collect network socket metircs.</td></tr><tr><td>network.throughput</td><td>bool</td><td>Whether to collect network throughput metircs.</td></tr><tr><td>network.details</td><td>bool</td><td>Whether to accumulate network IO metrics.</td></tr><tr><td>network.interfaces</td><td>[]string</td><td>Specify the network interfaces to be collected, and all interfaces are default.</td></tr><tr><td>memory</td><td>object</td><td>The Configuration of memory metrics collection.</td></tr><tr><td>memory.enabled</td><td>bool</td><td>Whether to enable memory metrics collection, default <code>true</code></td></tr><tr><td>memory.metrics</td><td>[]string</td><td>Specified collection metrics, optional <code>swap</code>，<code>memory</code></td></tr><tr><td>disk</td><td>object</td><td>The Configuration of disk metrics collection.</td></tr><tr><td>disk.metrics</td><td>[]string</td><td>Specified collection metrics, optional <code>usage</code>，<code>iops</code></td></tr><tr><td>cpu</td><td>object</td><td>The Configuration of cpu metrics collection.</td></tr><tr><td>cpu.metrics</td><td>[]string</td><td>Specified collection metrics, optional <code>idle</code>，<code>system</code>，<code>user</code>，<code>iowait</code>，<code>load</code></td></tr></tbody></table><h2 id=node>Node
-<a class=anchor href=#node>#</a></h2><p>The configuration of node.</p><p>Example:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>node:
+<a class=anchor href=#node>#</a></h2><p>The configuration of node.</p><p>Example:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>node:
   major_ip_pattern: &#34;.*&#34;
   labels:
     env: dev
