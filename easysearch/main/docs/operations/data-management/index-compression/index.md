@@ -74,6 +74,18 @@ Easysearch 1.1 版本 相比 Elasticsearch 索引整体大小降低了40%~50%。
 
 ## 如何启用
 
+### 2.1.0 起新增的 ZSTD 使用方式
+2.1.0 起，ZSTD 可以选择是否启用 JNI 以提升性能，通过 `index.compression.zstd.jni` 来区分：
+
+- `index.codec=ZSTD` 且 `index.compression.zstd.jni=false`：不起用 JNI（默认）
+- `index.codec=ZSTD` 且 `index.compression.zstd.jni=true`：启用 JNI
+
+同时新增以下配置项（仅在启用 JNI 时生效）：
+- `index.compression.zstd.level`：压缩级别（默认 `3`）
+- `index.compression.zstd.dict`：是否启用字典压缩（默认 `true`，且必须为 `true`）
+
+提示：从 2.1.0 起，`index.codec` 支持大小写不敏感，例如 `zstd` 也可以被识别为 `ZSTD`。
+
 ### 单个索引配置示例
 创建并设置索引的 codec 为ZSTD：
 ```json
@@ -81,6 +93,29 @@ PUT test-index
 {
   "settings": {
     "index.codec": "ZSTD"
+  }
+}
+```
+
+创建并启用 JNI（2.1.0 起）：
+```json
+PUT test-index
+{
+  "settings": {
+    "index.codec": "ZSTD",
+    "index.compression.zstd.jni": true
+  }
+}
+```
+
+自定义 ZSTD 压缩级别（2.1.0 起）：
+```json
+PUT test-index
+{
+  "settings": {
+    "index.codec": "ZSTD",
+    "index.compression.zstd.jni": true,
+    "index.compression.zstd.level": 6
   }
 }
 ```
@@ -121,3 +156,13 @@ PUT _index_template/daily_logs
   }
 }
 ```
+
+## 注意事项
+`index.compression.zstd.jni` 是创建期生效的静态设置，已有索引不能在后续通过 `PUT /<index>/_settings` 动态修改。
+如果老索引需要启用 JNI，请新建目标索引（设置 `index.compression.zstd.jni=true`）后通过 `reindex` 迁移数据。
+
+尝试在已有索引上动态更新时，会报类似错误：
+```text
+final <index-name> setting [index.compression.zstd.jni], not updateable
+```
+

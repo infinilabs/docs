@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.1.0 (2026-2-13) #  Breaking changes #  Features #   新增 Rules 规则引擎插件，提供高性能的规则匹配能力  支持 linux-x64 和 linux-aarch64 架构 支持 Ingest Pipeline 集成，数据写入时自动匹配规则并添加标签 支持复杂的规则表达式（AND/OR/NOT、near、正则、数值范围等） 支持百万级规则库，匹配性能是传统方案的上百倍。 支持多节点集群自动同步和广播编译规则 节点启动时自动同步缺失的规则库 规则库同步期间自动保护写入，确保规则完整性 本地元数据文件持久化记录编译历史，支持规则库文件丢失后的自动恢复   新增形态学分析插件（analysis-morphology），支持俄语和英语的形态分析  精准还原：基于词典将动词时态、名词格位等还原为标准原型（如 went → go） 词元扩展：同时索引原词与关联词根（如runner → runner, run），实现智能搜索匹配 高召回率：解决俄语复杂的变格与变位搜索难题，确保不同语法形式下均能精准检索   审计日志新增动态指定用户进行审计的功能 UI 插件新增如下能力  支持审计日志在线查看 支持审计日志模块动态配置 新增数据探索页面    Bug fix #  Improvements #   将“结巴”分词插件日志迁移至 Log4J，并降低周期性任务的日志级别以减少冗余  2."
+Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.1.0 (2026-2-13) #  Breaking changes #  Features #   新增 Rules 规则引擎插件，提供高性能的规则匹配能力  支持 linux-x64 和 linux-aarch64 架构 支持 Ingest Pipeline 集成，数据写入时自动匹配规则并添加标签 支持复杂的规则表达式（AND/OR/NOT、near、正则、数值范围等） 支持百万级规则库，匹配性能是传统方案的上百倍。 支持多节点集群自动同步和广播编译规则 节点启动时自动同步缺失的规则库 规则库同步期间自动保护写入，确保规则完整性 本地元数据文件持久化记录编译历史，支持规则库文件丢失后的自动恢复   新增形态学分析插件（analysis-morphology），支持俄语和英语的形态分析  精准还原：基于词典将动词时态、名词格位等还原为标准原型（如 went → go） 词元扩展：同时索引原词与关联词根（如runner → runner, run），实现智能搜索匹配 高召回率：解决俄语复杂的变格与变位搜索难题，确保不同语法形式下均能精准检索   ZSTD 压缩增强与兼容策略优化  继续使用 index."
 ---
 
 
@@ -35,11 +35,19 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
   - 精准还原：基于词典将动词时态、名词格位等还原为标准原型（如 went → go）
   - 词元扩展：同时索引原词与关联词根（如runner → runner, run），实现智能搜索匹配
   - 高召回率：解决俄语复杂的变格与变位搜索难题，确保不同语法形式下均能精准检索
+- ZSTD 压缩增强与兼容策略优化
+  - 继续使用 index.codec=ZSTD 作为统一入口
+  - 新增 index.compression.zstd.jni 与 index.compression.zstd.level 配置项，支持更高压缩率与性能提升
+- 新增国密能力集成
+  - TLS/SSL 链路集成国密算法套件（SM2/SM3/SM4）
+  - 支持国密双证书部署与双向认证配置
+  - 新增 TLCP 协议集成，支持国密双证书与双向认证链路
 - 审计日志新增动态指定用户进行审计的功能
 - UI 插件新增如下能力
   - 支持审计日志在线查看
   - 支持审计日志模块动态配置
   - 新增数据探索页面
+  - 支持配置角色权限控制菜单和页面操作
   
 ### Bug fix
 
