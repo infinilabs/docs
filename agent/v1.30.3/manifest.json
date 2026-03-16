@@ -1,0 +1,15 @@
+{
+  "name": "INFINI Agent | The Best Open Source Easysearch/Elasticsearch/OpenSearch Multi-instance Management Agent",
+  "short_name": "INFINI Agent | The Best Open Source Easysearch/Elasticsearch/OpenSearch Multi-instance Management Agent",
+  "start_url": "/agent/v1.30.3/",
+  "scope": "/agent/v1.30.3/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/agent/v1.30.3/favicon.svg",
+      "sizes": "512x512"
+    }
+  ]
+}
