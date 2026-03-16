@@ -20,3 +20,5 @@ Sitemap: https://docs.infinilabs.com/agent/v1.30.3/sitemap.xml
 X-llms-txt: https://docs.infinilabs.com/agent/v1.30.3/llms.txt
 Sitemap: https://docs.infinilabs.com/console/v1.30.3/sitemap.xml
 X-llms-txt: https://docs.infinilabs.com/console/v1.30.3/llms.txt
+Sitemap: https://docs.infinilabs.com/loadgen/v1.30.3/sitemap.xml
+X-llms-txt: https://docs.infinilabs.com/loadgen/v1.30.3/llms.txt
