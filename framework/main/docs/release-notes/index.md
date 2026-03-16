@@ -2,7 +2,7 @@
 title: "Release Notes"
 date: 0001-01-01
 summary: "Release Notes #  Information about release notes of INFINI Framework is provided here.
-Latest (In development) #  ❌ Breaking changes #  🚀 Features #   feat: support team-based scope for sharing services #258 feat: add semantic, hybrid, and nested query support #265 feat: extract BuildFuzzinessQueryClauses as public API #266  🐛 Bug fix #  ✈️ Improvements #   refactor: use PathUnescape to decode query param filter #249 chore: move entity provider to non-managed mode #250 chore: always enable orm hooks #250 refactor: refactoring permission registry #250 chore: add util to index_document #250 refactor: refactoring for principal cache #253 refactor: refactoring http error handling #254 refactor: refactoring user and permissions #256 chore: improve badger logging #260 chore: handle self-signed certs oauth client #263 chore: add collapse parameter to query builder #264 refactor: refactoring fuzziness logic chore: add util to clone context chore: add util to get request header  1."
+Latest (In development) #  ❌ Breaking changes #  🚀 Features #   feat: support team-based scope for sharing services #258 feat: add semantic, hybrid, and nested query support #265 feat: extract BuildFuzzinessQueryClauses as public API #266 feat(keystore): support large stdin secrets (&gt;1024 bytes) and multiline #271  🐛 Bug fix #  ✈️ Improvements #   refactor: use PathUnescape to decode query param filter #249 chore: move entity provider to non-managed mode #250 chore: always enable orm hooks #250 refactor: refactoring permission registry #250 chore: add util to index_document #250 refactor: refactoring for principal cache #253 refactor: refactoring http error handling #254 refactor: refactoring user and permissions #256 chore: improve badger logging #260 chore: handle self-signed certs oauth client #263 chore: add collapse parameter to query builder #264 refactor: refactoring fuzziness logic chore: add util to clone context chore: add util to get request header  1."
 ---
 
 
@@ -17,6 +17,7 @@ Information about release notes of INFINI Framework is provided here.
 - feat: support team-based scope for sharing services #258
 - feat: add semantic, hybrid, and nested query support #265
 - feat: extract BuildFuzzinessQueryClauses as public API #266
+- feat(keystore): support large stdin secrets (>1024 bytes) and multiline #271
 
 ### 🐛 Bug fix  
 ### ✈️ Improvements  
