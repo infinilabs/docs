@@ -62,6 +62,39 @@ security.audit.type: noop
 
 ---
 
+## 配置可见性控制
+
+### security.settings.expose
+
+```yaml
+security.settings.expose:
+  - security.audit.type
+  - security.ssl.http.enabled
+```
+
+| 项目 | 说明 |
+|------|------|
+| **参数** | `security.settings.expose` |
+| **默认值** | 空 |
+| **属性** | 静态 |
+| **说明** | 控制哪些 `security.*` 配置项可以在设置相关 API 响应中显示；未显式放开的 `security.*` 配置默认会被过滤 |
+
+`security.settings.expose` 支持以下两类模式：
+
+- 精确配置名，例如 `security.audit.type`
+- 通配符模式，例如 `security.ssl.http.*`
+
+上面的示例含义是：
+
+- 暴露 `security.audit.type`
+- 暴露 `security.ssl.http.enabled`
+
+> 结合当前实现，`security.settings.expose` 用于声明“允许显示”的配置项或通配符模式，不应在该配置中直接使用 `!pattern` 语法。
+
+> 修改该配置后需要重启节点生效。生产环境中应只暴露排障或观测确有需要的安全配置项，避免使用过宽的通配符模式暴露敏感信息。
+
+---
+
 ## Transport 层 TLS
 
 Transport 层用于节点间内部通信。**安全模块启用时，Transport TLS 必须配置**。

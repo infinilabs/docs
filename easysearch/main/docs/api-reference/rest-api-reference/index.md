@@ -1919,6 +1919,8 @@ HEAD {index}/_mapping/{type}
 
 返回一个或多个索引的字段使用统计信息，显示各字段被查询和使用的情况。
 
+该接口的统计采集受索引级动态配置 `index.field_usage_stats.enabled` 控制；当该配置为 `false` 时，不再记录字段访问统计，并返回空统计结果。
+
 ```
 GET {index}/_field_usage_stats
 ```

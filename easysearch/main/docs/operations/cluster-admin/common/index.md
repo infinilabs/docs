@@ -169,8 +169,11 @@ POST _snapshot/my-repository/my-snapshot/_restore
 GET metrics/_field_usage_stats
 ```
 
+> 可通过索引级动态配置 `index.field_usage_stats.enabled` 控制是否采集该统计；关闭后接口将返回空统计结果。详见 [索引设置]({{< relref "/docs/operations/data-management/index-settings.md" >}})。
+
 ## 分析指定索引每个字段的磁盘占用大小
 
 ```
 POST metrics/_disk_usage?run_expensive_tasks=true
 ```
+

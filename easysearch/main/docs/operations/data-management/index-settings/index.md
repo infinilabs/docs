@@ -150,6 +150,33 @@ POST /my-index/_refresh
 | `index.max_terms_count` | `65536` | Dynamic | Terms 查询中允许的最大 term 数量 |
 | `index.max_regex_length` | `1000` | Dynamic | 正则表达式查询的最大长度 |
 
+## 查询统计与观测
+
+| 设置 | 默认值 | 类型 | 说明 |
+|------|--------|------|------|
+| `index.field_usage_stats.enabled` | `true` | Dynamic | 是否采集 `_field_usage_stats` 字段访问统计；关闭后不再记录字段使用情况 |
+
+该配置用于控制搜索阶段是否采集字段访问统计信息。关闭后不会附加字段使用统计采集逻辑，`/{index}/_field_usage_stats` 将返回空统计结果。
+
+常见使用场景：
+
+- 默认保持开启，用于分析查询实际访问了哪些字段
+- 在高并发搜索场景下按需关闭，以减少统计带来的额外开销并提升搜索吞吐
+
+```json
+// 关闭字段访问统计采集
+PUT /my-index/_settings
+{
+  "index.field_usage_stats.enabled": false
+}
+
+// 重新开启字段访问统计采集
+PUT /my-index/_settings
+{
+  "index.field_usage_stats.enabled": true
+}
+```
+
 ## 其他重要设置
 
 | 设置 | 默认值 | 类型 | 说明 |
@@ -188,6 +215,4 @@ POST /my-index/_refresh
 - [别名（Aliases）](./aliases.md)
 - [容量规划]({{< relref "/docs/best-practices/index-design" >}})
 - [映射基础]({{< relref "/docs/features/mapping-and-analysis/mapping-basics" >}})
-
-
 
