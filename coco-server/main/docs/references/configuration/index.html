@@ -1,0 +1,282 @@
+<!doctype html><html lang=en><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Configuration Reference #  Coco Server is configured through a YAML file (coco.yml). This reference documents all available configuration options with detailed examples.
+Environment Variables #  Environment variables can be defined in the env section and referenced elsewhere in the configuration using $[[env.VAR_NAME]].
+env: ES_ENDPOINT: https://localhost:9200 ES_USERNAME: admin ES_PASSWORD: $[[keystore.ES_PASSWORD]] WEB_BINDING: 0.0.0.0:9000 API_BINDING: 0.0.0.0:2900  Sensitive values can be stored securely using the keystore: ./bin/coco keystore add ES_PASSWORD
+ Coco Server Settings #  Core server settings are defined under the coco section."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Configuration"><meta property="og:description" content="Configuration Reference #  Coco Server is configured through a YAML file (coco.yml). This reference documents all available configuration options with detailed examples.
+Environment Variables #  Environment variables can be defined in the env section and referenced elsewhere in the configuration using $[[env.VAR_NAME]].
+env: ES_ENDPOINT: https://localhost:9200 ES_USERNAME: admin ES_PASSWORD: $[[keystore.ES_PASSWORD]] WEB_BINDING: 0.0.0.0:9000 API_BINDING: 0.0.0.0:2900  Sensitive values can be stored securely using the keystore: ./bin/coco keystore add ES_PASSWORD
+ Coco Server Settings #  Core server settings are defined under the coco section."><meta property="og:type" content="article"><meta property="og:url" content="https://docs.infinilabs.com/coco-server/main/docs/references/configuration/"><title>Configuration | Coco Server | The AI-powered Enterprise Search, all in one space</title><link rel=manifest href=/coco-server/main/manifest.json><link rel=icon href=/coco-server/main/favicon.png type=image/x-icon><link rel=stylesheet href=/coco-server/main/book.min.3262edb53b95e5149dc648ac02d383f1b1afff31d4b8a674d7f9e2fc346bb138.css integrity="sha256-MmLttTuV5RSdxkisAtOD8bGv/zHUuKZ01/ni/DRrsTg="><script defer src=https://docs.infinilabs.com/coco-server/main/js/jquery-2.x.min.js></script><script defer src=https://docs.infinilabs.com/coco-server/main/js/doc.js></script><script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?64b9322783bb21716d701b15fb0b1e82";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/coco-server/main><img src=/coco-server/main/img/logo-en.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;height:36px;width:100%></div><script>function waitForShadow(host,callback){const timer=setInterval(()=>{if(host.shadowRoot){clearInterval(timer);callback(host.shadowRoot);}},50);}
+const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{const style=document.createElement('style');style.textContent=`
+      .infini__searchbox-btn {
+        width: 100% !important;
+        height: 36px !important;
+      }
+    `;shadow.appendChild(style);});</script><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value=v0.10.0>v0.10.0</option>
+<option value=v0.9.1>v0.9.1</option>
+<option value=v0.9.0>v0.9.0</option>
+<option value=v0.8.0>v0.8.0</option>
+<option value=v0.7.1>v0.7.1</option>
+<option value=v0.7.0>v0.7.0</option>
+<option value=v0.6.0>v0.6.0</option>
+<option value=v0.5.0>v0.5.0</option>
+<option value=v0.4.0>v0.4.0</option>
+<option value=v0.3.0>v0.3.0</option>
+<option value=v0.2.2>v0.2.2</option></select></div><ul><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle>
+<label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a>Getting Started</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=https://docs.infinilabs.com/coco-server/main/docs/getting-started/install/>Installation</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/getting-started/setup/>Setup Wizard</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle checked>
+<label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a href=https://docs.infinilabs.com/coco-server/main/docs/references/>References</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/configuration/ class=active>Configuration</a></li><li><input type=checkbox id=section-97bb467845ddef2c28eba43b4c87ba98 class=toggle>
+<label for=section-97bb467845ddef2c28eba43b4c87ba98 class="flex justify-between"><a>System</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/system/install/>System Initialization</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/system/settings/>System Settings</a></li></ul></li><li><input type=checkbox id=section-830be57e26216c4b31d75f7e80eea5a9 class=toggle>
+<label for=section-830be57e26216c4b31d75f7e80eea5a9 class="flex justify-between"><a>Account</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/account/authentication/>Authentication</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/account/access_token/>API Token</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/account/password/>Modify Password</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/account/profile/>Profile</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/account/logout/>Logout</a></li></ul></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/assistant/>Assistant</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/document/>Document</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/search/>Search</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connector/>Connector</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/datasource/>Datasource</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/integration/>Integration</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/model_provider/>LLM Provider</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/mcp_server/>MCP Server</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/attachment/>Attachment</a></li><li><input type=checkbox id=section-6163ea64c3eeec962ea0b7215fc64522 class=toggle>
+<label for=section-6163ea64c3eeec962ea0b7215fc64522 class="flex justify-between"><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/>Connectors</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/google_drive/>Google Drive</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/hugo_site/>Hugo Site</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/rss/>RSS</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/confluence/>Confluence</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/local_fs/>Local FS</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/network_drive/>Network Drive</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/notion/>Notion</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/s3/>S3</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/yuque/>Yuque</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/jira/>Jira</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/feishu/>Feishu/Lark</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/mysql/>MySQL</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/postgresql/>PostgreSQL</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/mssql/>MS SQL</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/oracle/>Oracle</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/dropbox/>Dropbox</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/github/>GitHub</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/neo4j/>Neo4j</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/salesforce/>Salesforce</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/gitlab/>GitLab</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/gitea/>Gitea</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/box/>Box</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/milvus/>Milvus</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/connectors/mongodb/>MongoDB</a></li></ul></li><li><input type=checkbox id=section-408b7465536335a70fc7274a637f612f class=toggle>
+<label for=section-408b7465536335a70fc7274a637f612f class="flex justify-between"><a href=https://docs.infinilabs.com/coco-server/main/docs/references/pipeline_processors/>Pipeline Processors</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><input type=checkbox id=section-055e89bdf684fdc663d269c47ef11aa0 class=toggle>
+<label for=section-055e89bdf684fdc663d269c47ef11aa0 class="flex justify-between"><a href=https://docs.infinilabs.com/coco-server/main/docs/references/pipeline_processors/enrichment/>Enrichment</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/pipeline_processors/enrichment/file_type_detection/>File Type Detection</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/pipeline_processors/enrichment/file_extraction/>Misc File Extraction</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/pipeline_processors/enrichment/document_summarization/>Summary</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/pipeline_processors/enrichment/extract_tags/>Extract Tags</a></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/references/pipeline_processors/enrichment/document_embedding/>Embedding</a></li></ul></li></ul></li></ul></li><li><input type=checkbox id=section-7dd85575c84e6825eb9419e748eb5977 class=toggle>
+<label for=section-7dd85575c84e6825eb9419e748eb5977 class="flex justify-between"><a href=https://docs.infinilabs.com/coco-server/main/docs/tutorials/>Tutorials</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=https://docs.infinilabs.com/coco-server/main/docs/tutorials/howto_create_your_own_datasource/>How to integrate Coco AI with your own datasource</a></li></ul></li><li><a href=https://docs.infinilabs.com/coco-server/main/docs/release-notes/>Release Notes</a><ul></ul></li></ul><ul><li><a href=https://github.com/infinilabs/coco-server target=_blank rel=noopener>Github</a></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/coco-server/main/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>Configuration</strong>
+<label for=toc-control><img src=/coco-server/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><style>.code-wrapper{position:relative;margin:20px 0}.code-header{position:absolute;top:8px;right:16px;font-size:12px;color:#8be9fd;font-weight:500;letter-spacing:.5px;text-transform:lowercase;pointer-events:none;transition:opacity .2s ease}.code-wrapper pre{padding:28px 18px 18px;border-radius:12px;overflow-x:auto;line-height:1.7}.copy-btn{position:absolute;top:6px;right:12px;display:flex;align-items:center;gap:6px;padding:5px 10px;font-size:12px;border-radius:8px;background:#44475a;color:#f8f8f2;border:1px solid #8440f1;cursor:pointer;opacity:0;transition:all .2s ease}.code-wrapper:hover .copy-btn{opacity:1}.code-wrapper:hover .code-header{opacity:.2}.copy-btn:hover{background:#6272a4}.copy-btn.copied{background:#fff;color:#8440f1;border-color:#8440f1}</style><script>document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll("pre > code").forEach((codeBlock)=>{const pre=codeBlock.parentElement;const className=codeBlock.className;const match=className.match(/language-(\w+)/);const language=match?match[1]:"code";const wrapper=document.createElement("div");wrapper.className="code-wrapper";pre.parentNode.insertBefore(wrapper,pre);wrapper.appendChild(pre);const header=document.createElement("div");header.className="code-header";header.innerText=language;wrapper.appendChild(header);const button=document.createElement("button");button.className="copy-btn";button.innerHTML="Copy";button.addEventListener("click",async()=>{await navigator.clipboard.writeText(codeBlock.innerText);button.classList.add("copied");button.innerText="✓ Copied";setTimeout(()=>{button.classList.remove("copied");button.innerText="Copy";},2000);});wrapper.appendChild(button);});});</script><div class="mt-2 text-right"><a href=/coco-server/main/docs/references/configuration/index.md class=text-sm>View as Markdown</a></div><aside class="hidden clearfix"><style>.book-toc>nav li::before{position:absolute;top:6px;left:-16px;width:2px;height:32px;content:"";transition:transform .28s cubic-bezier(.2,.8,.2,1),background-color .18s ease,opacity .18s;transform:translateY(-50%)scaleY(0);opacity:0;background:0 0}.book-toc>nav>ul>li.ancestor::before{left:-16px}.book-toc>nav>ul>li.ancestor>ul>li.active::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor>ul>li.active::before{left:-48px}.book-toc>nav li.active::before{transform:translateY(-50%)scaleY(1);opacity:1;background:#8440f1}.book-toc>nav li.active>a{font-weight:500}:target{scroll-margin-top:80px}</style><script>document.addEventListener('DOMContentLoaded',function(){const nav=document.getElementsByClassName('book-toc')[0].querySelector('nav');if(!nav)return;const links=Array.from(nav.querySelectorAll('a[href^="#"]'));const idToLi=new Map();let isProgrammatic=false;let programmaticTargetId=null;let scrollEndTimer=null;links.forEach(link=>{const href=link.getAttribute('href');if(!href||href.length<2)return;const id=decodeURIComponent(href.slice(1));const li=link.closest('li');if(li)idToLi.set(id,li);link.addEventListener('click',function(e){const target=document.getElementById(id);if(target){e.preventDefault();isProgrammatic=true;programmaticTargetId=id;setActiveById(id);target.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+id);clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},1200);}});});window.addEventListener('scroll',function(){clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},120);},{passive:true});function clearAll(){idToLi.forEach(li=>li.classList.remove('active','ancestor'));links.forEach(a=>a.removeAttribute('aria-current'));}
+function setActiveById(id){clearAll();const li=idToLi.get(id);if(!li)return;li.classList.add('active');const a=li.querySelector('a[href^="#"]');if(a)a.setAttribute('aria-current','true');let parent=li.parentElement;while(parent&&parent!==nav){const parentLi=parent.closest('li');if(parentLi&&parentLi!==li)parentLi.classList.add('ancestor');parent=parent.parentElement;}}
+const observedEls=Array.from(idToLi.keys()).map(id=>document.getElementById(id)).filter(Boolean);if(observedEls.length){const io=new IntersectionObserver((entries)=>{let candidate=null;entries.forEach(en=>{if(!en.isIntersecting)return;if(!candidate)candidate=en;else{const curTop=Math.abs(candidate.boundingClientRect.top);const newTop=Math.abs(en.boundingClientRect.top);if(newTop<curTop)candidate=en;}});if(!candidate||!candidate.target||!candidate.target.id)return;const foundId=candidate.target.id;if(isProgrammatic&&programmaticTargetId&&foundId!==programmaticTargetId){return;}
+setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.1,0.25,0.5]});observedEls.forEach(el=>io.observe(el));}
+if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#environment-variables>Environment Variables</a></li><li><a href=#coco-server-settings>Coco Server Settings</a><ul><li><a href=#managed-mode>Managed Mode</a></li></ul></li><li><a href=#elasticsearch-connection>Elasticsearch Connection</a></li><li><a href=#api-server>API Server</a></li><li><a href=#web-server>Web Server</a></li><li><a href=#pipeline-configuration>Pipeline Configuration</a><ul><li><a href=#document-enrichment-pipeline>Document Enrichment Pipeline</a></li><li><a href=#document-merge-pipeline>Document Merge Pipeline</a></li><li><a href=#document-ingestion-pipeline>Document Ingestion Pipeline</a></li><li><a href=#connector-dispatcher>Connector Dispatcher</a></li></ul></li><li><a href=#http-client--proxy-settings>HTTP Client / Proxy Settings</a></li><li><a href=#minimal-configuration-example>Minimal Configuration Example</a></li><li><a href=#environment-variable-overrides>Environment Variable Overrides</a></li></ul></nav></aside></header><article class=markdown><h1 id=configuration-reference>Configuration Reference
+<a class=anchor href=#configuration-reference>#</a></h1><p>Coco Server is configured through a YAML file (<code>coco.yml</code>). This reference documents all available configuration options with detailed examples.</p><h2 id=environment-variables>Environment Variables
+<a class=anchor href=#environment-variables>#</a></h2><p>Environment variables can be defined in the <code>env</code> section and referenced elsewhere in the configuration using <code>$[[env.VAR_NAME]]</code>.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>env</span>:
+  <span style=color:#ff79c6>ES_ENDPOINT</span>: https://localhost:9200
+  <span style=color:#ff79c6>ES_USERNAME</span>: admin
+  <span style=color:#ff79c6>ES_PASSWORD</span>: $[[keystore.ES_PASSWORD]]
+  <span style=color:#ff79c6>WEB_BINDING</span>: <span style=color:#bd93f9>0.0.0.0</span>:<span style=color:#bd93f9>9000</span>
+  <span style=color:#ff79c6>API_BINDING</span>: <span style=color:#bd93f9>0.0.0.0</span>:<span style=color:#bd93f9>2900</span>
+</code></pre></div><blockquote><p>Sensitive values can be stored securely using the keystore: <code>./bin/coco keystore add ES_PASSWORD</code></p></blockquote><h2 id=coco-server-settings>Coco Server Settings
+<a class=anchor href=#coco-server-settings>#</a></h2><p>Core server settings are defined under the <code>coco</code> section.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>coco</span>:
+  <span style=color:#ff79c6>server</span>:
+    <span style=color:#ff79c6>public</span>: <span style=color:#ff79c6>false</span>
+    <span style=color:#ff79c6>name</span>: <span style=color:#f1fa8c>&#34;My Coco Server&#34;</span>
+    <span style=color:#ff79c6>encode_icon_to_base64</span>: <span style=color:#ff79c6>false</span>
+    <span style=color:#ff79c6>minimal_client_version</span>:
+      <span style=color:#ff79c6>number</span>: <span style=color:#f1fa8c>&#34;0.3&#34;</span>
+    <span style=color:#ff79c6>provider</span>:
+      <span style=color:#ff79c6>name</span>: <span style=color:#f1fa8c>&#34;INFINI Labs&#34;</span>
+      <span style=color:#ff79c6>description</span>: <span style=color:#f1fa8c>&#34;Coco AI Server - Search, Connect, Collaborate.&#34;</span>
+      <span style=color:#ff79c6>icon</span>: <span style=color:#f1fa8c>&#34;https://coco.rs/favicon.ico&#34;</span>
+      <span style=color:#ff79c6>website</span>: <span style=color:#f1fa8c>&#34;https://coco.rs/&#34;</span>
+      <span style=color:#ff79c6>eula</span>: <span style=color:#f1fa8c>&#34;https://coco.rs/#/terms&#34;</span>
+      <span style=color:#ff79c6>privacy_policy</span>: <span style=color:#f1fa8c>&#34;https://coco.rs/privacy&#34;</span>
+      <span style=color:#ff79c6>banner</span>: <span style=color:#f1fa8c>&#34;https://coco.rs/svg/connect.svg&#34;</span>
+    <span style=color:#ff79c6>store</span>:
+      <span style=color:#ff79c6>endpoint</span>: <span style=color:#f1fa8c>&#34;https://coco.infini.cloud&#34;</span>
+      <span style=color:#ff79c6>local</span>: <span style=color:#ff79c6>false</span>
+</code></pre></div><table><thead><tr><th><strong>Field</strong></th><th><strong>Type</strong></th><th><strong>Default</strong></th><th><strong>Description</strong></th></tr></thead><tbody><tr><td><code>coco.server.public</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Whether the server is publicly accessible.</td></tr><tr><td><code>coco.server.name</code></td><td><code>string</code></td><td><code>""</code></td><td>Display name for the Coco Server instance.</td></tr><tr><td><code>coco.server.encode_icon_to_base64</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Encode connector icons to base64. Enable if using self-signed certificates.</td></tr><tr><td><code>coco.server.minimal_client_version.number</code></td><td><code>string</code></td><td><code>""</code></td><td>Minimum required client version number.</td></tr><tr><td><code>coco.server.provider.name</code></td><td><code>string</code></td><td><code>""</code></td><td>Organization name shown in the UI.</td></tr><tr><td><code>coco.server.provider.description</code></td><td><code>string</code></td><td><code>""</code></td><td>Server description text.</td></tr><tr><td><code>coco.server.provider.icon</code></td><td><code>string</code></td><td><code>""</code></td><td>URL to provider icon.</td></tr><tr><td><code>coco.server.provider.website</code></td><td><code>string</code></td><td><code>""</code></td><td>Provider website URL.</td></tr><tr><td><code>coco.server.provider.eula</code></td><td><code>string</code></td><td><code>""</code></td><td>End User License Agreement URL.</td></tr><tr><td><code>coco.server.provider.privacy_policy</code></td><td><code>string</code></td><td><code>""</code></td><td>Privacy policy URL.</td></tr><tr><td><code>coco.server.provider.banner</code></td><td><code>string</code></td><td><code>""</code></td><td>Banner image URL.</td></tr><tr><td><code>coco.server.store.endpoint</code></td><td><code>string</code></td><td><code>""</code></td><td>Coco extension store endpoint.</td></tr><tr><td><code>coco.server.store.local</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Use local store service.</td></tr></tbody></table><h3 id=managed-mode>Managed Mode
+<a class=anchor href=#managed-mode>#</a></h3><p>For managed deployments (e.g., multi-tenant), enable managed mode with SSO authentication:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>coco</span>:
+  <span style=color:#ff79c6>server</span>:
+    <span style=color:#ff79c6>endpoint</span>: <span style=color:#f1fa8c>&#34;http://localhost:9001/&#34;</span>
+    <span style=color:#ff79c6>auth_provider</span>:
+      <span style=color:#ff79c6>sso</span>:
+        <span style=color:#ff79c6>url</span>: <span style=color:#f1fa8c>&#34;http://localhost:9001/#/login&#34;</span>
+    <span style=color:#ff79c6>provider</span>:
+      <span style=color:#ff79c6>auth_provider</span>:
+        <span style=color:#ff79c6>sso</span>:
+          <span style=color:#ff79c6>url</span>: <span style=color:#f1fa8c>&#34;/sso/login/cloud?provider=coco-cloud&amp;product=coco&#34;</span>
+</code></pre></div><h2 id=elasticsearch-connection>Elasticsearch Connection
+<a class=anchor href=#elasticsearch-connection>#</a></h2><p>Coco Server uses Elasticsearch (or Easysearch) as its primary data store.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>elasticsearch</span>:
+  - <span style=color:#ff79c6>name</span>: prod
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>endpoints</span>:
+      - $[[env.ES_ENDPOINT]]
+    <span style=color:#ff79c6>discovery</span>:
+      <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>false</span>
+    <span style=color:#ff79c6>basic_auth</span>:
+      <span style=color:#ff79c6>username</span>: $[[env.ES_USERNAME]]
+      <span style=color:#ff79c6>password</span>: $[[env.ES_PASSWORD]]
+</code></pre></div><table><thead><tr><th><strong>Field</strong></th><th><strong>Type</strong></th><th><strong>Description</strong></th></tr></thead><tbody><tr><td><code>name</code></td><td><code>string</code></td><td>Name identifier for this Elasticsearch cluster.</td></tr><tr><td><code>enabled</code></td><td><code>boolean</code></td><td>Enable or disable this connection.</td></tr><tr><td><code>endpoints</code></td><td><code>array[string]</code></td><td>List of Elasticsearch endpoint URLs.</td></tr><tr><td><code>discovery.enabled</code></td><td><code>boolean</code></td><td>Enable node discovery for the cluster.</td></tr><tr><td><code>basic_auth.username</code></td><td><code>string</code></td><td>Username for basic authentication.</td></tr><tr><td><code>basic_auth.password</code></td><td><code>string</code></td><td>Password for basic authentication.</td></tr></tbody></table><h2 id=api-server>API Server
+<a class=anchor href=#api-server>#</a></h2><p>Internal API server configuration (typically used for inter-service communication).</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>api</span>:
+  <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>websocket</span>:
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>false</span>
+  <span style=color:#ff79c6>network</span>:
+    <span style=color:#ff79c6>binding</span>: $[[env.API_BINDING]]
+</code></pre></div><h2 id=web-server>Web Server
+<a class=anchor href=#web-server>#</a></h2><p>The web server serves the UI and public-facing API endpoints.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>web</span>:
+  <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>embedding_api</span>: <span style=color:#ff79c6>false</span>
+  <span style=color:#ff79c6>network</span>:
+    <span style=color:#ff79c6>binding</span>: $[[env.WEB_BINDING]]
+  <span style=color:#ff79c6>tls</span>:
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>false</span>
+    <span style=color:#ff79c6>skip_insecure_verify</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>default_domain</span>: <span style=color:#f1fa8c>&#34;localhost:2900&#34;</span>
+    <span style=color:#ff79c6>auto_issue</span>:
+      <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>false</span>
+      <span style=color:#ff79c6>email</span>: <span style=color:#f1fa8c>&#34;hello@infinilabs.com&#34;</span>
+      <span style=color:#ff79c6>include_default_domain</span>: <span style=color:#ff79c6>true</span>
+      <span style=color:#ff79c6>domains</span>:
+        - <span style=color:#f1fa8c>&#34;www.coco.rs&#34;</span>
+  <span style=color:#ff79c6>security</span>:
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>managed</span>: <span style=color:#ff79c6>false</span>
+    <span style=color:#ff79c6>authentication</span>:
+      <span style=color:#ff79c6>native</span>:
+        <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+      <span style=color:#ff79c6>oauth</span>:
+        <span style=color:#ff79c6>cloud</span>:
+          <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+          <span style=color:#ff79c6>client_secret</span>: <span style=color:#f1fa8c>&#34;999999&#34;</span>
+          <span style=color:#ff79c6>authorize_url</span>: <span style=color:#f1fa8c>&#34;http://localhost:9000/oauth/authorize&#34;</span>
+          <span style=color:#ff79c6>token_url</span>: <span style=color:#f1fa8c>&#34;http://localhost:9000/oauth/token&#34;</span>
+          <span style=color:#ff79c6>profile_url</span>: <span style=color:#f1fa8c>&#34;http://localhost:9000/account/profile&#34;</span>
+          <span style=color:#ff79c6>redirect_url</span>: <span style=color:#f1fa8c>&#34;http://localhost:9001/sso/callback/cloud&#34;</span>
+          <span style=color:#ff79c6>success_page</span>: <span style=color:#f1fa8c>&#34;/#/home&#34;</span>
+          <span style=color:#ff79c6>failed_page</span>: <span style=color:#f1fa8c>&#34;/#/login&#34;</span>
+          <span style=color:#ff79c6>scopes</span>: [<span style=color:#f1fa8c>&#34;openid&#34;</span>, <span style=color:#f1fa8c>&#34;email&#34;</span>, <span style=color:#f1fa8c>&#34;profile&#34;</span>]
+</code></pre></div><table><thead><tr><th><strong>Field</strong></th><th><strong>Type</strong></th><th><strong>Description</strong></th></tr></thead><tbody><tr><td><code>web.enabled</code></td><td><code>boolean</code></td><td>Enable the web server.</td></tr><tr><td><code>web.embedding_api</code></td><td><code>boolean</code></td><td>Enable embedding API endpoint.</td></tr><tr><td><code>web.network.binding</code></td><td><code>string</code></td><td>Network address and port to bind to.</td></tr><tr><td><code>web.tls.enabled</code></td><td><code>boolean</code></td><td>Enable TLS/HTTPS.</td></tr><tr><td><code>web.tls.skip_insecure_verify</code></td><td><code>boolean</code></td><td>Skip TLS certificate verification.</td></tr><tr><td><code>web.tls.auto_issue.enabled</code></td><td><code>boolean</code></td><td>Enable automatic TLS certificate issuance (Let&rsquo;s Encrypt).</td></tr><tr><td><code>web.security.enabled</code></td><td><code>boolean</code></td><td>Enable security features.</td></tr><tr><td><code>web.security.managed</code></td><td><code>boolean</code></td><td>Enable managed mode (remote managed instance).</td></tr></tbody></table><h2 id=pipeline-configuration>Pipeline Configuration
+<a class=anchor href=#pipeline-configuration>#</a></h2><p>Pipelines define background processing jobs for document enrichment, indexing, and connector dispatching.</p><h3 id=document-enrichment-pipeline>Document Enrichment Pipeline
+<a class=anchor href=#document-enrichment-pipeline>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>pipeline</span>:
+  - <span style=color:#ff79c6>name</span>: enrich_documents
+    <span style=color:#ff79c6>auto_start</span>: <span style=color:#ff79c6>false</span>
+    <span style=color:#ff79c6>keep_running</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>processor</span>:
+      - <span style=color:#ff79c6>consumer</span>:
+          <span style=color:#ff79c6>auto_commit_offset</span>: <span style=color:#ff79c6>true</span>
+          <span style=color:#ff79c6>queue_selector</span>:
+            <span style=color:#ff79c6>keys</span>:
+              - indexing_documents
+          <span style=color:#ff79c6>consumer</span>:
+            <span style=color:#ff79c6>group</span>: enriched_documents
+            <span style=color:#ff79c6>fetch_max_messages</span>: <span style=color:#bd93f9>10</span>
+          <span style=color:#ff79c6>processor</span>:
+            - <span style=color:#ff79c6>file_type_detection</span>: {}
+            - <span style=color:#ff79c6>file_extraction</span>:
+                <span style=color:#ff79c6>tika_endpoint</span>: <span style=color:#f1fa8c>&#34;http://127.0.0.1:9998&#34;</span>
+                <span style=color:#ff79c6>tika_timeout_in_seconds</span>: <span style=color:#bd93f9>360</span>
+                <span style=color:#ff79c6>chunk_size</span>: <span style=color:#bd93f9>7000</span>
+                <span style=color:#ff79c6>vision_model_provider</span>: qianwen
+                <span style=color:#ff79c6>vision_model</span>: qwen-vl-max
+            - <span style=color:#ff79c6>document_summarization</span>:
+                <span style=color:#ff79c6>model_provider</span>: deepseek
+                <span style=color:#ff79c6>model</span>: deepseek-chat
+                <span style=color:#ff79c6>model_context_length</span>: <span style=color:#bd93f9>128000</span>
+                <span style=color:#ff79c6>ai_insights_max_length</span>: <span style=color:#bd93f9>500</span>
+            - <span style=color:#ff79c6>extract_tags</span>:
+                <span style=color:#ff79c6>model_provider</span>: deepseek
+                <span style=color:#ff79c6>model</span>: deepseek-chat
+                <span style=color:#ff79c6>model_context_length</span>: <span style=color:#bd93f9>128000</span>
+            - <span style=color:#ff79c6>document_embedding</span>:
+                <span style=color:#ff79c6>model_provider</span>: qianwen
+                <span style=color:#ff79c6>model</span>: text-embedding-v4
+                <span style=color:#ff79c6>embedding_dimension</span>: <span style=color:#bd93f9>1024</span>
+                <span style=color:#ff79c6>chunk_size</span>: <span style=color:#bd93f9>7000</span>
+                <span style=color:#ff79c6>output_queue</span>:
+                  <span style=color:#ff79c6>name</span>: <span style=color:#f1fa8c>&#34;enriched_documents&#34;</span>
+</code></pre></div><table><thead><tr><th><strong>Processor</strong></th><th><strong>Description</strong></th></tr></thead><tbody><tr><td><code>file_type_detection</code></td><td>Detects the file type of uploaded documents.</td></tr><tr><td><code>file_extraction</code></td><td>Extracts text content from files using Apache Tika.</td></tr><tr><td><code>document_summarization</code></td><td>Generates AI-powered summaries of document content.</td></tr><tr><td><code>extract_tags</code></td><td>Extracts relevant tags from documents using AI.</td></tr><tr><td><code>document_embedding</code></td><td>Generates vector embeddings for semantic search.</td></tr></tbody></table><h3 id=document-merge-pipeline>Document Merge Pipeline
+<a class=anchor href=#document-merge-pipeline>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>pipeline</span>:
+  - <span style=color:#ff79c6>name</span>: merge_documents
+    <span style=color:#ff79c6>auto_start</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>keep_running</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>processor</span>:
+      - <span style=color:#ff79c6>indexing_merge</span>:
+          <span style=color:#ff79c6>input_queue</span>: <span style=color:#f1fa8c>&#34;indexing_documents&#34;</span>
+          <span style=color:#ff79c6>idle_timeout_in_seconds</span>: <span style=color:#bd93f9>1</span>
+          <span style=color:#ff79c6>elasticsearch</span>: <span style=color:#f1fa8c>&#34;prod&#34;</span>
+          <span style=color:#ff79c6>index_name</span>: <span style=color:#f1fa8c>&#34;coco_document-v2&#34;</span>
+          <span style=color:#ff79c6>key_field</span>: <span style=color:#f1fa8c>&#34;id&#34;</span>
+          <span style=color:#ff79c6>output_queue</span>:
+            <span style=color:#ff79c6>name</span>: <span style=color:#f1fa8c>&#34;merged_documents&#34;</span>
+            <span style=color:#ff79c6>label</span>:
+              <span style=color:#ff79c6>tag</span>: <span style=color:#f1fa8c>&#34;merged&#34;</span>
+          <span style=color:#ff79c6>worker_size</span>: <span style=color:#bd93f9>1</span>
+          <span style=color:#ff79c6>bulk_size_in_kb</span>: <span style=color:#bd93f9>10240</span>
+</code></pre></div><h3 id=document-ingestion-pipeline>Document Ingestion Pipeline
+<a class=anchor href=#document-ingestion-pipeline>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>pipeline</span>:
+  - <span style=color:#ff79c6>name</span>: ingest_documents
+    <span style=color:#ff79c6>auto_start</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>keep_running</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>processor</span>:
+      - <span style=color:#ff79c6>bulk_indexing</span>:
+          <span style=color:#ff79c6>bulk</span>:
+            <span style=color:#ff79c6>compress</span>: <span style=color:#ff79c6>true</span>
+            <span style=color:#ff79c6>batch_size_in_mb</span>: <span style=color:#bd93f9>10</span>
+            <span style=color:#ff79c6>batch_size_in_docs</span>: <span style=color:#bd93f9>10240</span>
+          <span style=color:#ff79c6>consumer</span>:
+            <span style=color:#ff79c6>fetch_max_messages</span>: <span style=color:#bd93f9>100</span>
+          <span style=color:#ff79c6>queues</span>:
+            <span style=color:#ff79c6>type</span>: indexing_merge
+            <span style=color:#ff79c6>tag</span>: <span style=color:#f1fa8c>&#34;merged&#34;</span>
+</code></pre></div><h3 id=connector-dispatcher>Connector Dispatcher
+<a class=anchor href=#connector-dispatcher>#</a></h3><p>The connector dispatcher manages scheduled data synchronization from configured datasources.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>pipeline</span>:
+  - <span style=color:#ff79c6>name</span>: connector_dispatcher
+    <span style=color:#ff79c6>auto_start</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>keep_running</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>singleton</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>retry_delay_in_ms</span>: <span style=color:#bd93f9>10000</span>
+    <span style=color:#ff79c6>processor</span>:
+      - <span style=color:#ff79c6>connector_dispatcher</span>:
+          <span style=color:#ff79c6>max_running_timeout_in_seconds</span>: <span style=color:#bd93f9>1200</span>
+</code></pre></div><table><thead><tr><th><strong>Field</strong></th><th><strong>Type</strong></th><th><strong>Description</strong></th></tr></thead><tbody><tr><td><code>auto_start</code></td><td><code>boolean</code></td><td>Automatically start the pipeline on server startup.</td></tr><tr><td><code>keep_running</code></td><td><code>boolean</code></td><td>Restart the pipeline if it stops.</td></tr><tr><td><code>singleton</code></td><td><code>boolean</code></td><td>Only one instance of this pipeline can run at a time.</td></tr><tr><td><code>retry_delay_in_ms</code></td><td><code>int</code></td><td>Delay in milliseconds before retrying on failure.</td></tr><tr><td><code>max_running_timeout_in_seconds</code></td><td><code>int</code></td><td>Maximum time a connector sync can run before timeout.</td></tr></tbody></table><h2 id=http-client--proxy-settings>HTTP Client / Proxy Settings
+<a class=anchor href=#http-client--proxy-settings>#</a></h2><p>Configure proxy settings for outbound HTTP requests (e.g., to external APIs and connectors).</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>http_client</span>:
+  <span style=color:#ff79c6>default</span>:
+    <span style=color:#ff79c6>proxy</span>:
+      <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>false</span>
+      <span style=color:#ff79c6>default_config</span>:
+        <span style=color:#ff79c6>http_proxy</span>: http://127.0.0.1:7890
+        <span style=color:#ff79c6>socket5_proxy</span>: socks5://127.0.0.1:7890
+      <span style=color:#ff79c6>override_system_proxy_env</span>: <span style=color:#ff79c6>true</span>
+      <span style=color:#ff79c6>permitted</span>:
+        - <span style=color:#f1fa8c>&#34;google.com&#34;</span>
+      <span style=color:#ff79c6>denied</span>:
+        - <span style=color:#f1fa8c>&#34;localhost&#34;</span>
+        - <span style=color:#f1fa8c>&#34;infinilabs.com&#34;</span>
+      <span style=color:#ff79c6>domains</span>:
+        <span style=color:#f1fa8c>&#34;github.com&#34;</span>:
+          <span style=color:#ff79c6>http_proxy</span>: http://127.0.0.1:7890
+          <span style=color:#ff79c6>socket5_proxy</span>: socks5://127.0.0.1:7890
+</code></pre></div><table><thead><tr><th><strong>Field</strong></th><th><strong>Type</strong></th><th><strong>Description</strong></th></tr></thead><tbody><tr><td><code>proxy.enabled</code></td><td><code>boolean</code></td><td>Enable proxy for outbound HTTP requests.</td></tr><tr><td><code>proxy.default_config</code></td><td><code>object</code></td><td>Default proxy configuration for all requests.</td></tr><tr><td><code>proxy.override_system_proxy_env</code></td><td><code>boolean</code></td><td>Override system proxy environment variables.</td></tr><tr><td><code>proxy.permitted</code></td><td><code>array[string]</code></td><td>List of domains allowed to use the proxy.</td></tr><tr><td><code>proxy.denied</code></td><td><code>array[string]</code></td><td>List of domains that should bypass the proxy.</td></tr><tr><td><code>proxy.domains</code></td><td><code>object</code></td><td>Per-domain proxy configuration overrides.</td></tr></tbody></table><h2 id=minimal-configuration-example>Minimal Configuration Example
+<a class=anchor href=#minimal-configuration-example>#</a></h2><p>A minimal <code>coco.yml</code> to get started:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>env</span>:
+  <span style=color:#ff79c6>ES_ENDPOINT</span>: https://localhost:9200
+  <span style=color:#ff79c6>ES_USERNAME</span>: admin
+  <span style=color:#ff79c6>ES_PASSWORD</span>: changeme
+  <span style=color:#ff79c6>WEB_BINDING</span>: <span style=color:#bd93f9>0.0.0.0</span>:<span style=color:#bd93f9>9000</span>
+  <span style=color:#ff79c6>API_BINDING</span>: <span style=color:#bd93f9>0.0.0.0</span>:<span style=color:#bd93f9>2900</span>
+
+<span style=color:#ff79c6>coco</span>:
+  <span style=color:#ff79c6>server</span>:
+    <span style=color:#ff79c6>name</span>: <span style=color:#f1fa8c>&#34;My Coco Server&#34;</span>
+
+<span style=color:#ff79c6>elasticsearch</span>:
+  - <span style=color:#ff79c6>name</span>: prod
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>endpoints</span>:
+      - $[[env.ES_ENDPOINT]]
+    <span style=color:#ff79c6>basic_auth</span>:
+      <span style=color:#ff79c6>username</span>: $[[env.ES_USERNAME]]
+      <span style=color:#ff79c6>password</span>: $[[env.ES_PASSWORD]]
+
+<span style=color:#ff79c6>web</span>:
+  <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>network</span>:
+    <span style=color:#ff79c6>binding</span>: $[[env.WEB_BINDING]]
+  <span style=color:#ff79c6>security</span>:
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+
+<span style=color:#ff79c6>api</span>:
+  <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>network</span>:
+    <span style=color:#ff79c6>binding</span>: $[[env.API_BINDING]]
+</code></pre></div><h2 id=environment-variable-overrides>Environment Variable Overrides
+<a class=anchor href=#environment-variable-overrides>#</a></h2><p>You can override configuration values using environment variables when starting the server:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#8be9fd;font-style:italic>ES_PASSWORD</span><span style=color:#ff79c6>=</span>mypassword <span style=color:#8be9fd;font-style:italic>WEB_BINDING</span><span style=color:#ff79c6>=</span>0.0.0.0:8080 ./bin/coco
+</code></pre></div></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/infinilabs/coco-server/edit/main/docs/content.en/docs/references/configuration.md target=_blank rel=noopener><img src=/coco-server/main/svg/edit.svg class=book-icon alt=Edit>
+<span>Edit this page</span></a></div><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
+    import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
+    searchbox({container: "#searchbox"});
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><a href=/coco-server/main/docs/references/configuration/index.md class=view-markdown target=_blank><img src=/assets/icons/markdown.svg>
+<span>查看 Markdown</span></a><style>.book-toc>nav li::before{position:absolute;top:6px;left:-16px;width:2px;height:32px;content:"";transition:transform .28s cubic-bezier(.2,.8,.2,1),background-color .18s ease,opacity .18s;transform:translateY(-50%)scaleY(0);opacity:0;background:0 0}.book-toc>nav>ul>li.ancestor::before{left:-16px}.book-toc>nav>ul>li.ancestor>ul>li.active::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor>ul>li.active::before{left:-48px}.book-toc>nav li.active::before{transform:translateY(-50%)scaleY(1);opacity:1;background:#8440f1}.book-toc>nav li.active>a{font-weight:500}:target{scroll-margin-top:80px}</style><script>document.addEventListener('DOMContentLoaded',function(){const nav=document.getElementsByClassName('book-toc')[0].querySelector('nav');if(!nav)return;const links=Array.from(nav.querySelectorAll('a[href^="#"]'));const idToLi=new Map();let isProgrammatic=false;let programmaticTargetId=null;let scrollEndTimer=null;links.forEach(link=>{const href=link.getAttribute('href');if(!href||href.length<2)return;const id=decodeURIComponent(href.slice(1));const li=link.closest('li');if(li)idToLi.set(id,li);link.addEventListener('click',function(e){const target=document.getElementById(id);if(target){e.preventDefault();isProgrammatic=true;programmaticTargetId=id;setActiveById(id);target.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+id);clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},1200);}});});window.addEventListener('scroll',function(){clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},120);},{passive:true});function clearAll(){idToLi.forEach(li=>li.classList.remove('active','ancestor'));links.forEach(a=>a.removeAttribute('aria-current'));}
+function setActiveById(id){clearAll();const li=idToLi.get(id);if(!li)return;li.classList.add('active');const a=li.querySelector('a[href^="#"]');if(a)a.setAttribute('aria-current','true');let parent=li.parentElement;while(parent&&parent!==nav){const parentLi=parent.closest('li');if(parentLi&&parentLi!==li)parentLi.classList.add('ancestor');parent=parent.parentElement;}}
+const observedEls=Array.from(idToLi.keys()).map(id=>document.getElementById(id)).filter(Boolean);if(observedEls.length){const io=new IntersectionObserver((entries)=>{let candidate=null;entries.forEach(en=>{if(!en.isIntersecting)return;if(!candidate)candidate=en;else{const curTop=Math.abs(candidate.boundingClientRect.top);const newTop=Math.abs(en.boundingClientRect.top);if(newTop<curTop)candidate=en;}});if(!candidate||!candidate.target||!candidate.target.id)return;const foundId=candidate.target.id;if(isProgrammatic&&programmaticTargetId&&foundId!==programmaticTargetId){return;}
+setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.1,0.25,0.5]});observedEls.forEach(el=>io.observe(el));}
+if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#environment-variables>Environment Variables</a></li><li><a href=#coco-server-settings>Coco Server Settings</a><ul><li><a href=#managed-mode>Managed Mode</a></li></ul></li><li><a href=#elasticsearch-connection>Elasticsearch Connection</a></li><li><a href=#api-server>API Server</a></li><li><a href=#web-server>Web Server</a></li><li><a href=#pipeline-configuration>Pipeline Configuration</a><ul><li><a href=#document-enrichment-pipeline>Document Enrichment Pipeline</a></li><li><a href=#document-merge-pipeline>Document Merge Pipeline</a></li><li><a href=#document-ingestion-pipeline>Document Ingestion Pipeline</a></li><li><a href=#connector-dispatcher>Connector Dispatcher</a></li></ul></li><li><a href=#http-client--proxy-settings>HTTP Client / Proxy Settings</a></li><li><a href=#minimal-configuration-example>Minimal Configuration Example</a></li><li><a href=#environment-variable-overrides>Environment Variable Overrides</a></li></ul></nav></aside></main></body></html>

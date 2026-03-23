@@ -102,7 +102,7 @@ curl  -H 'Content-Type: application/json'   -XDELETE http://localhost:9000/integ
 {
   "_id": "cvj9s15ath21fvf9st00",
   "result": "deleted"
-}'
+}
 ```
 
 

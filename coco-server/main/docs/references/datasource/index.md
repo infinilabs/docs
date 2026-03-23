@@ -2,8 +2,8 @@
 title: "Datasource"
 date: 0001-01-01
 summary: "Datasource #  Work with Datasource #  Datasource defines where the data comes from, usually we can use a specify connector to fetch data from a specify datasource.
-Create a Datasource #  We can use the connector to connect specify datasource.
-//request curl -H &#39;Content-Type: application/json&#39; -XPOST http://localhost:9000/datasource/ -d&#39; { &#34;name&#34;:&#34;My Hugo Site&#34;, &#34;type&#34;:&#34;connector&#34;, &#34;connector&#34;:{ &#34;id&#34;:&#34;hugo_site&#34;, &#34;config&#34;:{ &#34;urls&#34;: [ &#34;https://pizza.rs/index.json&#34; ] } } }&#39; //response { &#34;_id&#34;: &#34;cu1rf03q50k43nn2pi6g&#34;, &#34;result&#34;: &#34;created&#34; }  config specifies the necessary configurations for this connector."
+Below is the field description for the datasource.
+   Field Type Description     name string The datasource&rsquo;s name.   type string The datasource type, e.g., connector.   description string A brief description of the datasource."
 ---
 
 
@@ -12,6 +12,26 @@ Create a Datasource #  We can use the connector to connect specify datasource.
 ## Work with *Datasource*
 
 Datasource defines where the data comes from, usually we can use a specify connector to fetch data from a specify datasource.
+
+Below is the field description for the datasource.
+
+| **Field**                    | **Type**   | **Description**                                                                                          |
+|------------------------------|------------|----------------------------------------------------------------------------------------------------------|
+| `name`                       | `string`   | The datasource's name.                                                                                   |
+| `type`                       | `string`   | The datasource type, e.g., `connector`.                                                                  |
+| `description`                | `string`   | A brief description of the datasource.                                                                   |
+| `icon`                       | `string`   | The icon representing the datasource in the UI.                                                          |
+| `category`                   | `string`   | The category of the datasource.                                                                          |
+| `tags`                       | `array`    | Tags associated with the datasource.                                                                     |
+| `connector.id`               | `string`   | The ID of the connector to use with this datasource.                                                     |
+| `connector.config`           | `object`   | Connector-specific configuration. Refer to the [connector reference](./connectors/) for details.         |
+| `sync_config.enabled`        | `boolean`  | Enables or disables automatic synchronization.                                                           |
+| `sync_config.strategy`       | `string`   | Sync strategy to use.                                                                                    |
+| `sync_config.interval`       | `string`   | Sync interval, e.g., `30m`, `1h`.                                                                       |
+| `sync_config.page_size`      | `int`      | Number of items per sync page.                                                                           |
+| `webhook_config.enabled`     | `boolean`  | Enables or disables webhook-based ingestion.                                                             |
+| `enrichment_pipeline`        | `object`   | Pipeline configuration for document enrichment (embedding, extraction, etc.).                             |
+| `enabled`                    | `boolean`  | Enables or disables the datasource.                                                                      |
 
 ### Create a Datasource
 
@@ -51,11 +71,13 @@ curl -XGET http://localhost:9000/datasource/cu1rf03q50k43nn2pi6g
 
 ```shell
 //request
-curl  -H 'Content-Type: application/json'   -XDELETE http://localhost:9000/datasource/cu1rf03q50k43nn2pi6g -d'
+curl  -H 'Content-Type: application/json'   -XDELETE http://localhost:9000/datasource/cu1rf03q50k43nn2pi6g
+
+//response
 {
   "_id": "cu1rf03q50k43nn2pi6g",
   "result": "deleted"
-}'
+}
 ```
 
 
