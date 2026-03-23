@@ -1,6 +1,6 @@
 {
-  "name": "Coco Server",
-  "short_name": "Coco Server",
+  "name": "Coco Server | The AI-powered Enterprise Search, all in one space",
+  "short_name": "Coco Server | The AI-powered Enterprise Search, all in one space",
   "start_url": "/coco-server/main/",
   "scope": "/coco-server/main/",
   "display": "standalone",

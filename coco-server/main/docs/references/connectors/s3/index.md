@@ -1,0 +1,107 @@
+---
+title: "S3"
+date: 0001-01-01
+summary: "S3 Connector #  Register S3 Connector #  curl -XPOST &#34;http://localhost:9000/connector/&#34; -d &#39;{ &#34;name&#34;: &#34;S3 Object Storage Connector&#34;, &#34;description&#34;: &#34;Fetch file metadata from S3 cloud storage.&#34;, &#34;category&#34;: &#34;cloud_storage&#34;, &#34;icon&#34;: &#34;/assets/icons/connector/s3/icon.png&#34;, &#34;tags&#34;: [ &#34;s3&#34;, &#34;storage&#34; ], &#34;url&#34;: &#34;http://coco.rs/connectors/s3&#34;, &#34;assets&#34;: { &#34;icons&#34;: { &#34;default&#34;: &#34;/assets/icons/connector/s3/icon.png&#34; } }, &#34;processor&#34;: { &#34;enabled&#34;: true, &#34;name&#34;: &#34;s3&#34; } }&#39; Use the S3 Connector #  The S3 Connector allows you to index data from your S3 service into your system."
+---
+
+# S3 Connector
+
+## Register S3 Connector
+
+```shell
+curl -XPOST "http://localhost:9000/connector/" -d '{
+  "name": "S3 Object Storage Connector",
+  "description": "Fetch file metadata from S3 cloud storage.",
+  "category": "cloud_storage",
+  "icon": "/assets/icons/connector/s3/icon.png",
+  "tags": [
+    "s3",
+    "storage"
+  ],
+  "url": "http://coco.rs/connectors/s3",
+  "assets": {
+    "icons": {
+      "default": "/assets/icons/connector/s3/icon.png"
+    }
+  },
+  "processor": {
+    "enabled": true,
+    "name": "s3"
+  }
+}'
+```
+
+## Use the S3 Connector
+
+The S3 Connector allows you to index data from your S3 service into your system. Follow these steps to set it up:
+
+### Configure S3 Client
+
+To configure your S3 connection, you'll need to provide several key parameters. This setup allows your application to securely authenticate with and access objects within a specified S3 bucket.
+
+First, you'll need your S3 credentials:
+
+`access_key_id`: This is your public identifier, similar to a username.
+
+`secret_access_key`: This is your confidential key, like a password, used to sign requests and prove your identity. Keep this highly secure.
+
+Next, specify the location of your data:
+
+`bucket`: This is the name of the S3 bucket where your objects are stored and which you intend to interact with.
+
+`endpoint`: This is the URL of your S3 service. It could be an AWS S3 endpoint (e.g., s3.us-west-2.amazonaws.com) or the address of another S3-compatible service (e.g., a MinIO instance).
+
+Finally, you have a few optional parameters to fine-tune data access:
+
+`use_ssl`: A boolean flag (defaults to true) to enable or disable SSL/TLS (HTTPS) for secure communication. It's strongly recommended to keep this enabled.
+
+`prefix`: A string that acts as a filter. If provided, the system will only process objects whose keys (paths) start with this string. For instance, a prefix of documents/ would limit access to files within that "folder."
+
+`extensions`: An array of strings defining specific file extensions to include (e.g., ["pdf", "docx"]). If this list is empty or omitted, all file types in the specified path will be considered.
+
+### Datasource Configuration
+
+Each datasource has its own sync configuration and S3 settings:
+
+```shell
+curl -H 'Content-Type: application/json' -XPOST "http://localhost:9000/datasource/" -d '{
+    "name": "My S3 Documents",
+    "type": "connector",
+    "enabled": true,
+    "connector": {
+        "id": "s3",
+        "config": {
+            "access_key_id": "your-access_key_id",
+            "secret_access_key": "your-secret_access_key",
+            "bucket": "your-bucket",
+            "endpoint": "your-s3-service-endpoint",
+            "use_ssl": true,
+            "prefix": "",
+            "extensions": ["pdf", "docx", "txt"]
+        }
+    },
+    "sync": {
+        "enabled": true,
+        "interval": "5m"
+    }
+}'
+```
+
+## Supported Config Parameters for S3 Connector
+
+Below are the configuration parameters supported by the S3 Connector:
+
+### Datasource Config Parameters
+
+| **Field**           | **Type**   | **Description**                                                                                                     |
+|---------------------|------------|---------------------------------------------------------------------------------------------------------------------|
+| `access_key_id`     | `string`   | Your S3 access key ID (required).                                                                                   |
+| `secret_access_key` | `string`   | Your S3 secret access key (required).                                                                               |
+| `bucket`            | `string`   | The name of the S3 bucket to index (required).                                                                      |
+| `endpoint`          | `string`   | The S3 service endpoint URL (required).                                                                             |
+| `use_ssl`           | `bool`     | Whether to use SSL for the connection. Defaults to `true`.                                                          |
+| `prefix`            | `string`   | A prefix to filter objects in the bucket (e.g., `documents/`). Optional.                                            |
+| `extensions`        | `[]string` | An array of file extensions to include (e.g., `["pdf", "docx"]`). If omitted or empty, all files will be indexed.  |
+| `sync.enabled`      | `boolean`  | Enable/disable syncing for this datasource.                                                                         |
+| `sync.interval`     | `string`   | Sync interval for this datasource (e.g., "5m", "1h", "30s").                                                        |
+
