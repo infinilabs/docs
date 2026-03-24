@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.1.1 (2026-3-20) #  Breaking changes #  Features #   新增索引级动态配置项 index.field_usage_stats.enabled，用于动态控制 _field_usage_stats 字段访问统计的采集，默认值为 true。在高并发搜索场景下，禁用该配置可降低统计带来的额外开销，从而优化搜索并发吞吐。 新增安全配置 security.settings.expose，支持按白名单暴露指定 security.* 配置项；同时增强底层 SettingsFilter，支持 !pattern 例外规则。  Bug fix #  Improvements #  2.1.0 (2026-3-16) #  Breaking changes #  Features #   新增 Rules 规则引擎插件，提供高性能的规则匹配能力  支持 linux-x64 和 linux-aarch64 架构 支持 Ingest Pipeline 集成，数据写入时自动匹配规则并添加标签 支持复杂的规则表达式（AND/OR/NOT、near、正则、数值范围等） 支持百万级规则库，匹配性能是传统方案的上百倍。 支持多节点集群自动同步和广播编译规则 节点启动时自动同步缺失的规则库 规则库同步期间自动保护写入，确保规则完整性 本地元数据文件持久化记录编译历史，支持规则库文件丢失后的自动恢复   新增形态学分析插件（analysis-morphology），支持俄语和英语的形态分析  精准还原：基于词典将动词时态、名词格位等还原为标准原型（如 went → go） 词元扩展：同时索引原词与关联词根（如runner → runner, run），实现智能搜索匹配 高召回率：解决俄语复杂的变格与变位搜索难题，确保不同语法形式下均能精准检索   ZSTD 压缩增强与兼容策略优化  继续使用 index."
+Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.1.1 (2026-3-20) #  Breaking changes #  Features #   新增索引级动态配置项 index.field_usage_stats.enabled，用于动态控制 _field_usage_stats 字段访问统计的采集，默认值为 true。在高并发搜索场景下，禁用该配置可降低统计带来的额外开销，从而优化搜索并发吞吐。 新增安全配置 security.settings.expose，支持按白名单暴露指定 security.* 配置项；同时增强底层 SettingsFilter，支持 !pattern 例外规则。  Bug fix #  Improvements #   优化了 ZSTD 编解码场景下的 merge 执行效率，改善了持续写入场景中的后台合并性能与稳定性。  2.1.0 (2026-3-16) #  Breaking changes #  Features #   新增 Rules 规则引擎插件，提供高性能的规则匹配能力  支持 linux-x64 和 linux-aarch64 架构 支持 Ingest Pipeline 集成，数据写入时自动匹配规则并添加标签 支持复杂的规则表达式（AND/OR/NOT、near、正则、数值范围等） 支持百万级规则库，匹配性能是传统方案的上百倍。 支持多节点集群自动同步和广播编译规则 节点启动时自动同步缺失的规则库 规则库同步期间自动保护写入，确保规则完整性 本地元数据文件持久化记录编译历史，支持规则库文件丢失后的自动恢复   新增形态学分析插件（analysis-morphology），支持俄语和英语的形态分析  精准还原：基于词典将动词时态、名词格位等还原为标准原型（如 went → go） 词元扩展：同时索引原词与关联词根（如runner → runner, run），实现智能搜索匹配 高召回率：解决俄语复杂的变格与变位搜索难题，确保不同语法形式下均能精准检索   ZSTD 压缩增强与兼容策略优化  继续使用 index."
 ---
 
 
@@ -28,6 +28,8 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 ### Bug fix
 
 ### Improvements
+
+- 优化了 ZSTD 编解码场景下的 merge 执行效率，改善了持续写入场景中的后台合并性能与稳定性。
 
 ## 2.1.0 (2026-3-16)
 

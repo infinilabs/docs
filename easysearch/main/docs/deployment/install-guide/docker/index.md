@@ -3,7 +3,7 @@ title: "Docker"
 date: 0001-01-01
 summary: "Docker 环境下使用 Easysearch #  在使用 Docker 运行 Easysearch 之前，请确保已进行 系统调优并安装好 Docker 服务，且 Docker 服务正常运行。
  最快方式：启动临时的 docker 容器，可以从前台查看到 admin 随机生成的初始密码
- 注： Docker 环境一般用于临时验证，如需要长期使用请务必进行数据持久化   # 直接运行镜像使用随机密码（数据及配置未持久化） docker run --name easysearch --ulimit memlock=-1:-1 -p 9200:9200 infinilabs/easysearch:2.1.0-2661 # 使用自定义密码，可以使用环境变量配置 （需要 1.8.2 及以后的版本才支持） echo &#34;EASYSEARCH_INITIAL_ADMIN_PASSWORD=$(openssl rand -hex 10)&#34; | tee .env # 通过从环境变量文件设置初始密码（数据及配置未持久化） docker run --name easysearch --env-file ./.env --ulimit memlock=-1:-1 -p 9200:9200 infinilabs/easysearch:2.1.0-2661 # 使用自定义密码及命名卷 (数据持久化到命名卷) docker run -d --name easysearch \  --ulimit memlock=-1:-1 \  --env-file ."
+ 注： Docker 环境一般用于临时验证，如需要长期使用请务必进行数据持久化   # 直接运行镜像使用随机密码（数据及配置未持久化） docker run --name easysearch --ulimit memlock=-1:-1 -p 9200:9200 infinilabs/easysearch:2.1.1-2676 # 使用自定义密码，可以使用环境变量配置 （需要 1.8.2 及以后的版本才支持） echo &#34;EASYSEARCH_INITIAL_ADMIN_PASSWORD=$(openssl rand -hex 10)&#34; | tee .env # 通过从环境变量文件设置初始密码（数据及配置未持久化） docker run --name easysearch --env-file ./.env --ulimit memlock=-1:-1 -p 9200:9200 infinilabs/easysearch:2.1.1-2676 # 使用自定义密码及命名卷 (数据持久化到命名卷) docker run -d --name easysearch \  --ulimit memlock=-1:-1 \  --env-file ."
 ---
 
 
