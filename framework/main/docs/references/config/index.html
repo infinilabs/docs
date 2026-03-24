@@ -1,0 +1,281 @@
+<!doctype html><html lang=en><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Configuration Management #  The INFINI Framework provides a comprehensive configuration management system built on top of ucfg. It supports YAML-based configuration files, struct unpacking with config tags, environment variable interpolation, keystore secret references, config file watching, and multi-file config merging. Modules and plugins use a consistent pattern to declare, load, and apply their configuration.
+Overview #  Configuration in the INFINI Framework follows a layered approach:
+ Application config file (e."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Configuration Management"><meta property="og:description" content="Configuration Management #  The INFINI Framework provides a comprehensive configuration management system built on top of ucfg. It supports YAML-based configuration files, struct unpacking with config tags, environment variable interpolation, keystore secret references, config file watching, and multi-file config merging. Modules and plugins use a consistent pattern to declare, load, and apply their configuration.
+Overview #  Configuration in the INFINI Framework follows a layered approach:
+ Application config file (e."><meta property="og:type" content="article"><meta property="og:url" content="https://docs.infinilabs.com/framework/main/docs/references/config/"><title>Configuration Management | INFINI Framework | The Best Open Source Golang Framework for Easysearch/Elasticsearch/OpenSearch</title><link rel=manifest href=/framework/main/manifest.json><link rel=icon href=/framework/main/favicon.png type=image/x-icon><link rel=stylesheet href=/framework/main/book.min.3262edb53b95e5149dc648ac02d383f1b1afff31d4b8a674d7f9e2fc346bb138.css integrity="sha256-MmLttTuV5RSdxkisAtOD8bGv/zHUuKZ01/ni/DRrsTg="><script defer src=https://docs.infinilabs.com/framework/main/js/jquery-2.x.min.js></script><script defer src=https://docs.infinilabs.com/framework/main/js/doc.js></script><script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?64b9322783bb21716d701b15fb0b1e82";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/framework/main><img src=/framework/main/img/logo-en.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;height:36px;width:100%></div><script>function waitForShadow(host,callback){const timer=setInterval(()=>{if(host.shadowRoot){clearInterval(timer);callback(host.shadowRoot);}},50);}
+const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{const style=document.createElement('style');style.textContent=`
+      .infini__searchbox-btn {
+        width: 100% !important;
+        height: 36px !important;
+      }
+    `;shadow.appendChild(style);});</script><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value=v1.4.0>v1.4.0</option>
+<option value=v1.3.0>v1.3.0</option>
+<option value=v1.2.0>v1.2.0</option>
+<option value=v1.1.9>v1.1.9</option>
+<option value=v1.1.8>v1.1.8</option>
+<option value=v1.1.7>v1.1.7</option>
+<option value=v1.1.6>v1.1.6</option>
+<option value=v1.1.5>v1.1.5</option>
+<option value=v1.1.4>v1.1.4</option>
+<option value=v1.1.3>v1.1.3</option>
+<option value=v1.1.2>v1.1.2</option>
+<option value=v1.1.0>v1.1.0</option>
+<option value=v1.0.0>v1.0.0</option></select></div><ul><li><a href=https://docs.infinilabs.com/framework/main/docs/development/>Development</a><ul><li><a href=https://docs.infinilabs.com/framework/main/docs/development/setup_golang_environment/>Setting Up the Golang Environment</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/development/setup_intellij_idea/>Setup IntelliJ IDEA</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/development/create_new_application/>Create New Application</a></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle checked>
+<label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a href=https://docs.infinilabs.com/framework/main/docs/references/>References</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=https://docs.infinilabs.com/framework/main/docs/references/config/ class=active>Configuration Management</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/modules/>Module System</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/pipeline/>Pipeline and Processor</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/queue/>Queue</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/task/>Task Scheduling</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/makefile/>Makefile</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/kv/>Key-Value Store</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/stats/>Statistics Collection</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/conditions/>Conditions</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/api_web/>API & Web Framework</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/orm/>ORM (Object-Relational Mapping)</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/http_client/>Http Client Configuration</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/keystore/>Keystore</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/query_url/>Query URL Parameters</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/aggs_query/>Aggregation via URL Parameters</a></li></ul></li><li><a href=https://docs.infinilabs.com/framework/main/docs/troubleshooting/>FAQs</a><ul></ul></li><li><a href=https://docs.infinilabs.com/framework/main/docs/release-notes/>Release Notes</a><ul></ul></li></ul><ul><li><a href=https://github.com/infinilabs/framework target=_blank rel=noopener>Github</a></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/framework/main/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>Configuration Management</strong>
+<label for=toc-control><img src=/framework/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><style>.code-wrapper{position:relative;margin:20px 0}.code-header{position:absolute;top:8px;right:16px;font-size:12px;color:#8be9fd;font-weight:500;letter-spacing:.5px;text-transform:lowercase;pointer-events:none;transition:opacity .2s ease}.code-wrapper pre{padding:28px 18px 18px;border-radius:12px;overflow-x:auto;line-height:1.7}.copy-btn{position:absolute;top:6px;right:12px;display:flex;align-items:center;gap:6px;padding:5px 10px;font-size:12px;border-radius:8px;background:#44475a;color:#f8f8f2;border:1px solid #8440f1;cursor:pointer;opacity:0;transition:all .2s ease}.code-wrapper:hover .copy-btn{opacity:1}.code-wrapper:hover .code-header{opacity:.2}.copy-btn:hover{background:#6272a4}.copy-btn.copied{background:#fff;color:#8440f1;border-color:#8440f1}</style><script>document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll("pre > code").forEach((codeBlock)=>{const pre=codeBlock.parentElement;const className=codeBlock.className;const match=className.match(/language-(\w+)/);const language=match?match[1]:"code";const wrapper=document.createElement("div");wrapper.className="code-wrapper";pre.parentNode.insertBefore(wrapper,pre);wrapper.appendChild(pre);const header=document.createElement("div");header.className="code-header";header.innerText=language;wrapper.appendChild(header);const button=document.createElement("button");button.className="copy-btn";button.innerHTML="Copy";button.addEventListener("click",async()=>{await navigator.clipboard.writeText(codeBlock.innerText);button.classList.add("copied");button.innerText="✓ Copied";setTimeout(()=>{button.classList.remove("copied");button.innerText="Copy";},2000);});wrapper.appendChild(button);});});</script><div class="mt-2 text-right"><a href=/framework/main/docs/references/config/index.md class=text-sm>View as Markdown</a></div><aside class="hidden clearfix"><style>.book-toc>nav li::before{position:absolute;top:6px;left:-16px;width:2px;height:32px;content:"";transition:transform .28s cubic-bezier(.2,.8,.2,1),background-color .18s ease,opacity .18s;transform:translateY(-50%)scaleY(0);opacity:0;background:0 0}.book-toc>nav>ul>li.ancestor::before{left:-16px}.book-toc>nav>ul>li.ancestor>ul>li.active::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor>ul>li.active::before{left:-48px}.book-toc>nav li.active::before{transform:translateY(-50%)scaleY(1);opacity:1;background:#8440f1}.book-toc>nav li.active>a{font-weight:500}:target{scroll-margin-top:80px}</style><script>document.addEventListener('DOMContentLoaded',function(){const nav=document.getElementsByClassName('book-toc')[0].querySelector('nav');if(!nav)return;const links=Array.from(nav.querySelectorAll('a[href^="#"]'));const idToLi=new Map();let isProgrammatic=false;let programmaticTargetId=null;let scrollEndTimer=null;links.forEach(link=>{const href=link.getAttribute('href');if(!href||href.length<2)return;const id=decodeURIComponent(href.slice(1));const li=link.closest('li');if(li)idToLi.set(id,li);link.addEventListener('click',function(e){const target=document.getElementById(id);if(target){e.preventDefault();isProgrammatic=true;programmaticTargetId=id;setActiveById(id);target.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+id);clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},1200);}});});window.addEventListener('scroll',function(){clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},120);},{passive:true});function clearAll(){idToLi.forEach(li=>li.classList.remove('active','ancestor'));links.forEach(a=>a.removeAttribute('aria-current'));}
+function setActiveById(id){clearAll();const li=idToLi.get(id);if(!li)return;li.classList.add('active');const a=li.querySelector('a[href^="#"]');if(a)a.setAttribute('aria-current','true');let parent=li.parentElement;while(parent&&parent!==nav){const parentLi=parent.closest('li');if(parentLi&&parentLi!==li)parentLi.classList.add('ancestor');parent=parent.parentElement;}}
+const observedEls=Array.from(idToLi.keys()).map(id=>document.getElementById(id)).filter(Boolean);if(observedEls.length){const io=new IntersectionObserver((entries)=>{let candidate=null;entries.forEach(en=>{if(!en.isIntersecting)return;if(!candidate)candidate=en;else{const curTop=Math.abs(candidate.boundingClientRect.top);const newTop=Math.abs(en.boundingClientRect.top);if(newTop<curTop)candidate=en;}});if(!candidate||!candidate.target||!candidate.target.id)return;const foundId=candidate.target.id;if(isProgrammatic&&programmaticTargetId&&foundId!==programmaticTargetId){return;}
+setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.1,0.25,0.5]});observedEls.forEach(el=>io.observe(el));}
+if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#overview>Overview</a></li><li><a href=#the-config-type>The <code>Config</code> Type</a><ul><li><a href=#creating-configs>Creating Configs</a></li></ul></li><li><a href=#loading-configuration-files>Loading Configuration Files</a></li><li><a href=#unpacking-config-to-structs>Unpacking Config to Structs</a><ul><li><a href=#tag-rules>Tag Rules</a></li></ul></li><li><a href=#application-configuration-structure>Application Configuration Structure</a><ul><li><a href=#path-settings>Path Settings</a></li><li><a href=#api-server>API Server</a></li><li><a href=#modules>Modules</a></li><li><a href=#plugins>Plugins</a></li><li><a href=#logging>Logging</a></li><li><a href=#resource-limits>Resource Limits</a></li></ul></li><li><a href=#environment-variable-interpolation>Environment Variable Interpolation</a></li><li><a href=#keystore-secret-references>Keystore Secret References</a></li><li><a href=#config-file-watching>Config File Watching</a></li><li><a href=#module-configuration-pattern>Module Configuration Pattern</a></li><li><a href=#merging-configs>Merging Configs</a></li><li><a href=#complete-example>Complete Example</a></li></ul></nav></aside></header><article class=markdown><h1 id=configuration-management>Configuration Management
+<a class=anchor href=#configuration-management>#</a></h1><p>The INFINI Framework provides a comprehensive configuration management system built on top of <code>ucfg</code>. It supports YAML-based configuration files, struct unpacking with <code>config</code> tags, environment variable interpolation, keystore secret references, config file watching, and multi-file config merging. Modules and plugins use a consistent pattern to declare, load, and apply their configuration.</p><h2 id=overview>Overview
+<a class=anchor href=#overview>#</a></h2><p>Configuration in the INFINI Framework follows a layered approach:</p><ol><li><strong>Application config file</strong> (e.g., <code>myapp.yml</code>) — defines paths, API settings, modules, plugins, logging, and resource limits.</li><li><strong>Module/plugin configs</strong> — each module reads its own section from the application config.</li><li><strong>Environment variables</strong> — values can be injected at runtime using <code>${ENV_VAR}</code> syntax.</li><li><strong>Keystore secrets</strong> — sensitive values are referenced with <code>$[[keystore.secret_name]]</code> and resolved from an encrypted keystore.</li><li><strong>Config file watching</strong> — changes to configuration files on disk can trigger reload callbacks.</li></ol><h2 id=the-config-type>The <code>Config</code> Type
+<a class=anchor href=#the-config-type>#</a></h2><p>The core configuration type wraps <code>ucfg.Config</code> and is defined in the <code>core/config/</code> package:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8be9fd;font-style:italic>type</span> Config = ucfg.Config
+</code></pre></div><h3 id=creating-configs>Creating Configs
+<a class=anchor href=#creating-configs>#</a></h3><table><thead><tr><th>Function</th><th>Description</th></tr></thead><tbody><tr><td><code>NewConfig()</code></td><td>Returns an empty <code>*Config</code>.</td></tr><tr><td><code>NewConfigFrom(v interface{})</code></td><td>Creates a <code>*Config</code> from a Go map, struct, or other compatible value.</td></tr><tr><td><code>NewConfigWithYAML(yaml []byte, source string)</code></td><td>Parses raw YAML bytes into a <code>*Config</code>. The <code>source</code> string is used in error messages.</td></tr></tbody></table><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6272a4>// Empty config
+</span><span style=color:#6272a4></span>cfg <span style=color:#ff79c6>:=</span> config.<span style=color:#50fa7b>NewConfig</span>()
+
+<span style=color:#6272a4>// From a Go map
+</span><span style=color:#6272a4></span>cfg, err <span style=color:#ff79c6>:=</span> config.<span style=color:#50fa7b>NewConfigFrom</span>(<span style=color:#8be9fd;font-style:italic>map</span>[<span style=color:#8be9fd>string</span>]<span style=color:#8be9fd;font-style:italic>interface</span>{}{
+    <span style=color:#f1fa8c>&#34;host&#34;</span>: <span style=color:#f1fa8c>&#34;localhost&#34;</span>,
+    <span style=color:#f1fa8c>&#34;port&#34;</span>: <span style=color:#bd93f9>9200</span>,
+})
+
+<span style=color:#6272a4>// From raw YAML
+</span><span style=color:#6272a4></span>yamlBytes <span style=color:#ff79c6>:=</span> []<span style=color:#8be9fd;font-style:italic>byte</span>(<span style=color:#f1fa8c>`
+</span><span style=color:#f1fa8c>host: localhost
+</span><span style=color:#f1fa8c>port: 9200
+</span><span style=color:#f1fa8c>`</span>)
+cfg, err <span style=color:#ff79c6>:=</span> config.<span style=color:#50fa7b>NewConfigWithYAML</span>(yamlBytes, <span style=color:#f1fa8c>&#34;inline&#34;</span>)
+</code></pre></div><h2 id=loading-configuration-files>Loading Configuration Files
+<a class=anchor href=#loading-configuration-files>#</a></h2><p>Use <code>LoadFile</code> and <code>LoadFiles</code> to read YAML configuration from disk:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6272a4>// Load a single file
+</span><span style=color:#6272a4></span>cfg, err <span style=color:#ff79c6>:=</span> config.<span style=color:#50fa7b>LoadFile</span>(<span style=color:#f1fa8c>&#34;/etc/myapp/myapp.yml&#34;</span>)
+
+<span style=color:#6272a4>// Load multiple files
+</span><span style=color:#6272a4></span>cfgs, err <span style=color:#ff79c6>:=</span> config.<span style=color:#50fa7b>LoadFiles</span>(
+    <span style=color:#f1fa8c>&#34;/etc/myapp/base.yml&#34;</span>,
+    <span style=color:#f1fa8c>&#34;/etc/myapp/override.yml&#34;</span>,
+)
+</code></pre></div><p><code>LoadFile</code> accepts optional <code>Option</code> arguments for controlling parsing behavior. <code>LoadFiles</code> returns a slice of <code>*Config</code> values, one per file, which can be merged together.</p><h2 id=unpacking-config-to-structs>Unpacking Config to Structs
+<a class=anchor href=#unpacking-config-to-structs>#</a></h2><p>Configuration values are unpacked into Go structs using the <code>Unpack</code> method. Struct fields are mapped to YAML keys via <code>config</code> tags:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8be9fd;font-style:italic>type</span> MyConfig <span style=color:#8be9fd;font-style:italic>struct</span> {
+    Enabled  <span style=color:#8be9fd>bool</span>   <span style=color:#f1fa8c>`config:&#34;enabled&#34;`</span>
+    Host     <span style=color:#8be9fd>string</span> <span style=color:#f1fa8c>`config:&#34;host&#34;`</span>
+    Port     <span style=color:#8be9fd>int</span>    <span style=color:#f1fa8c>`config:&#34;port&#34;`</span>
+    Timeout  <span style=color:#8be9fd>string</span> <span style=color:#f1fa8c>`config:&#34;timeout&#34;`</span>
+}
+
+cfg <span style=color:#ff79c6>:=</span> MyConfig{}
+err <span style=color:#ff79c6>:=</span> config.<span style=color:#50fa7b>Unpack</span>(<span style=color:#ff79c6>&amp;</span>cfg)
+</code></pre></div><h3 id=tag-rules>Tag Rules
+<a class=anchor href=#tag-rules>#</a></h3><ul><li>The <code>config</code> tag name maps directly to the YAML key.</li><li>Nested structs map to nested YAML objects.</li><li>Unexported fields and fields without a <code>config</code> tag are ignored.</li><li>Default values can be set on the struct before calling <code>Unpack</code>; only keys present in the config will overwrite them.</li></ul><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8be9fd;font-style:italic>type</span> ServerConfig <span style=color:#8be9fd;font-style:italic>struct</span> {
+    Network NetworkConfig <span style=color:#f1fa8c>`config:&#34;network&#34;`</span>
+    TLS     TLSConfig     <span style=color:#f1fa8c>`config:&#34;tls&#34;`</span>
+}
+
+<span style=color:#8be9fd;font-style:italic>type</span> NetworkConfig <span style=color:#8be9fd;font-style:italic>struct</span> {
+    Host <span style=color:#8be9fd>string</span> <span style=color:#f1fa8c>`config:&#34;host&#34;`</span>
+    Port <span style=color:#8be9fd>int</span>    <span style=color:#f1fa8c>`config:&#34;port&#34;`</span>
+}
+
+<span style=color:#8be9fd;font-style:italic>type</span> TLSConfig <span style=color:#8be9fd;font-style:italic>struct</span> {
+    Enabled  <span style=color:#8be9fd>bool</span>   <span style=color:#f1fa8c>`config:&#34;enabled&#34;`</span>
+    CertFile <span style=color:#8be9fd>string</span> <span style=color:#f1fa8c>`config:&#34;cert_file&#34;`</span>
+    KeyFile  <span style=color:#8be9fd>string</span> <span style=color:#f1fa8c>`config:&#34;key_file&#34;`</span>
+}
+</code></pre></div><p>The corresponding YAML:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>network</span>:
+  <span style=color:#ff79c6>host</span>: <span style=color:#bd93f9>0.0.0.0</span>
+  <span style=color:#ff79c6>port</span>: <span style=color:#bd93f9>9000</span>
+<span style=color:#ff79c6>tls</span>:
+  <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>cert_file</span>: /etc/certs/server.crt
+  <span style=color:#ff79c6>key_file</span>: /etc/certs/server.key
+</code></pre></div><h2 id=application-configuration-structure>Application Configuration Structure
+<a class=anchor href=#application-configuration-structure>#</a></h2><p>The main application configuration file defines system-wide settings. The following sections are supported:</p><h3 id=path-settings>Path Settings
+<a class=anchor href=#path-settings>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>path</span>:
+  <span style=color:#ff79c6>data</span>: data
+  <span style=color:#ff79c6>log</span>: log
+  <span style=color:#ff79c6>config</span>: config
+</code></pre></div><table><thead><tr><th>Field</th><th>Description</th></tr></thead><tbody><tr><td><code>data</code></td><td>Directory for application data files (e.g., keystore, state).</td></tr><tr><td><code>log</code></td><td>Directory for log files.</td></tr><tr><td><code>config</code></td><td>Directory for additional configuration files.</td></tr></tbody></table><h3 id=api-server>API Server
+<a class=anchor href=#api-server>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>api</span>:
+  <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>network</span>:
+    <span style=color:#ff79c6>host</span>: <span style=color:#bd93f9>0.0.0.0</span>
+    <span style=color:#ff79c6>port</span>: <span style=color:#bd93f9>9000</span>
+</code></pre></div><table><thead><tr><th>Field</th><th>Description</th></tr></thead><tbody><tr><td><code>enabled</code></td><td>Whether the built-in HTTP API server is active.</td></tr><tr><td><code>network.host</code></td><td>Bind address for the API server.</td></tr><tr><td><code>network.port</code></td><td>Listen port for the API server.</td></tr></tbody></table><h3 id=modules>Modules
+<a class=anchor href=#modules>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>modules</span>:
+  - <span style=color:#ff79c6>name</span>: elasticsearch
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+  - <span style=color:#ff79c6>name</span>: pipeline
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+</code></pre></div><p>Each entry names a registered module and controls whether it is enabled at startup. Modules may define additional keys under their entry that are parsed during the module&rsquo;s <code>Setup()</code> phase.</p><h3 id=plugins>Plugins
+<a class=anchor href=#plugins>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>plugins</span>:
+  - <span style=color:#ff79c6>name</span>: badger
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+  - <span style=color:#ff79c6>name</span>: redis
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>false</span>
+</code></pre></div><p>Plugins follow the same pattern as modules. They are registered separately and started after all system modules.</p><h3 id=logging>Logging
+<a class=anchor href=#logging>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>logging</span>:
+  <span style=color:#ff79c6>level</span>: info
+  <span style=color:#ff79c6>log_level</span>: info
+</code></pre></div><table><thead><tr><th>Field</th><th>Description</th></tr></thead><tbody><tr><td><code>level</code></td><td>Global log level (<code>debug</code>, <code>info</code>, <code>warn</code>, <code>error</code>).</td></tr><tr><td><code>log_level</code></td><td>Alias for <code>level</code>. When both are set, <code>log_level</code> takes precedence.</td></tr></tbody></table><h3 id=resource-limits>Resource Limits
+<a class=anchor href=#resource-limits>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>resource_limit</span>:
+  <span style=color:#ff79c6>mem</span>:
+    <span style=color:#ff79c6>max_memory_in_bytes</span>: <span style=color:#bd93f9>0</span>
+  <span style=color:#ff79c6>cpu</span>:
+    <span style=color:#ff79c6>max_num_of_cpus</span>: <span style=color:#bd93f9>0</span>
+</code></pre></div><table><thead><tr><th>Field</th><th>Description</th></tr></thead><tbody><tr><td><code>mem.max_memory_in_bytes</code></td><td>Maximum memory usage in bytes. <code>0</code> means unlimited.</td></tr><tr><td><code>cpu.max_num_of_cpus</code></td><td>Maximum number of OS threads. <code>0</code> means use all available CPUs.</td></tr></tbody></table><h2 id=environment-variable-interpolation>Environment Variable Interpolation
+<a class=anchor href=#environment-variable-interpolation>#</a></h2><p>Configuration values can reference environment variables using <code>${ENV_VAR}</code> syntax. Variables are resolved when the configuration file is loaded:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>elasticsearch</span>:
+  - <span style=color:#ff79c6>name</span>: production
+    <span style=color:#ff79c6>endpoint</span>: ${ES_ENDPOINT}
+    <span style=color:#ff79c6>basic_auth</span>:
+      <span style=color:#ff79c6>username</span>: ${ES_USER}
+      <span style=color:#ff79c6>password</span>: ${ES_PASSWORD}
+</code></pre></div><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=color:#8be9fd;font-style:italic>export</span> <span style=color:#8be9fd;font-style:italic>ES_ENDPOINT</span><span style=color:#ff79c6>=</span>https://es.example.com:9200
+<span style=color:#8be9fd;font-style:italic>export</span> <span style=color:#8be9fd;font-style:italic>ES_USER</span><span style=color:#ff79c6>=</span>admin
+<span style=color:#8be9fd;font-style:italic>export</span> <span style=color:#8be9fd;font-style:italic>ES_PASSWORD</span><span style=color:#ff79c6>=</span>changeme
+./myapp
+</code></pre></div><p>If an environment variable is not set, the reference is left as-is or resolved to an empty string depending on the configuration options in use. This mechanism is useful for containerized deployments where configuration is injected through the environment.</p><h2 id=keystore-secret-references>Keystore Secret References
+<a class=anchor href=#keystore-secret-references>#</a></h2><p>For sensitive values that should not be stored in plain text, the framework supports references to an encrypted keystore using the <code>$[[keystore.secret_name]]</code> syntax:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>elasticsearch</span>:
+  - <span style=color:#ff79c6>name</span>: production
+    <span style=color:#ff79c6>endpoint</span>: https://localhost:9200
+    <span style=color:#ff79c6>basic_auth</span>:
+      <span style=color:#ff79c6>username</span>: admin
+      <span style=color:#ff79c6>password</span>: $[[keystore.es_password]]
+</code></pre></div><p>Secrets are managed with the <code>keystore</code> CLI subcommand (see
+<a href=/framework/main/docs/references/keystore/>Keystore</a> for details). At load time, <code>$[[keystore.es_password]]</code> is replaced with the decrypted value of the <code>es_password</code> key from the keystore.</p><p>Keystore references and environment variables can be used together in the same configuration file. Keystore references are resolved separately from environment variable interpolation.</p><h2 id=config-file-watching>Config File Watching
+<a class=anchor href=#config-file-watching>#</a></h2><p>The framework can watch configuration files for changes and invoke a callback when a modification is detected. This is useful for hot-reloading configuration without restarting the application:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>config.<span style=color:#50fa7b>NotifyOnConfigChange</span>(<span style=color:#8be9fd;font-style:italic>func</span>(ev fsnotify.Event) {
+    log.<span style=color:#50fa7b>Infof</span>(<span style=color:#f1fa8c>&#34;config file changed: %s&#34;</span>, ev.Name)
+    <span style=color:#6272a4>// Re-read configuration and apply changes
+</span><span style=color:#6272a4></span>})
+</code></pre></div><p>The watcher uses filesystem notifications (<code>fsnotify</code>) and fires the callback for create, write, and rename events on the configuration file. Ensure that the callback is safe for concurrent execution if your application may trigger multiple rapid file changes.</p><h2 id=module-configuration-pattern>Module Configuration Pattern
+<a class=anchor href=#module-configuration-pattern>#</a></h2><p>Modules and plugins follow a consistent pattern for loading their configuration section from the application config:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8be9fd;font-style:italic>type</span> MyModule <span style=color:#8be9fd;font-style:italic>struct</span> {}
+
+<span style=color:#8be9fd;font-style:italic>type</span> MyModuleConfig <span style=color:#8be9fd;font-style:italic>struct</span> {
+    Enabled  <span style=color:#8be9fd>bool</span>   <span style=color:#f1fa8c>`config:&#34;enabled&#34;`</span>
+    Host     <span style=color:#8be9fd>string</span> <span style=color:#f1fa8c>`config:&#34;host&#34;`</span>
+    Port     <span style=color:#8be9fd>int</span>    <span style=color:#f1fa8c>`config:&#34;port&#34;`</span>
+    Timeout  <span style=color:#8be9fd>string</span> <span style=color:#f1fa8c>`config:&#34;timeout&#34;`</span>
+}
+
+<span style=color:#8be9fd;font-style:italic>func</span> (module <span style=color:#ff79c6>*</span>MyModule) <span style=color:#50fa7b>Name</span>() <span style=color:#8be9fd>string</span> {
+    <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34;my_module&#34;</span>
+}
+
+<span style=color:#8be9fd;font-style:italic>func</span> (module <span style=color:#ff79c6>*</span>MyModule) <span style=color:#50fa7b>Setup</span>() {
+    cfg <span style=color:#ff79c6>:=</span> MyModuleConfig{
+        <span style=color:#6272a4>// Set defaults
+</span><span style=color:#6272a4></span>        Enabled: <span style=color:#ff79c6>true</span>,
+        Host:    <span style=color:#f1fa8c>&#34;127.0.0.1&#34;</span>,
+        Port:    <span style=color:#bd93f9>9200</span>,
+        Timeout: <span style=color:#f1fa8c>&#34;30s&#34;</span>,
+    }
+    <span style=color:#6272a4>// Parse the &#34;my_module&#34; section from the application config
+</span><span style=color:#6272a4></span>    env.<span style=color:#50fa7b>ParseConfig</span>(<span style=color:#f1fa8c>&#34;my_module&#34;</span>, <span style=color:#ff79c6>&amp;</span>cfg)
+
+    <span style=color:#ff79c6>if</span> !cfg.Enabled {
+        <span style=color:#ff79c6>return</span>
+    }
+    <span style=color:#6272a4>// Use cfg.Host, cfg.Port, cfg.Timeout ...
+</span><span style=color:#6272a4></span>}
+</code></pre></div><p>The corresponding application config:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>my_module</span>:
+  <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>host</span>: <span style=color:#bd93f9>10.0.0.1</span>
+  <span style=color:#ff79c6>port</span>: <span style=color:#bd93f9>9300</span>
+  <span style=color:#ff79c6>timeout</span>: 60s
+</code></pre></div><p><code>env.ParseConfig</code> reads the named section from the global application config and unpacks it into the provided struct. Fields not present in the YAML retain their default values set before the call.</p><h2 id=merging-configs>Merging Configs
+<a class=anchor href=#merging-configs>#</a></h2><p>Multiple <code>*Config</code> values can be merged into a single unified config using <code>MergeConfigs</code>. Later configs override keys from earlier ones:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>base, err <span style=color:#ff79c6>:=</span> config.<span style=color:#50fa7b>LoadFile</span>(<span style=color:#f1fa8c>&#34;base.yml&#34;</span>)
+override, err <span style=color:#ff79c6>:=</span> config.<span style=color:#50fa7b>LoadFile</span>(<span style=color:#f1fa8c>&#34;override.yml&#34;</span>)
+
+merged, err <span style=color:#ff79c6>:=</span> config.<span style=color:#50fa7b>MergeConfigs</span>(base, override)
+</code></pre></div><p>This is useful for layered configuration strategies such as:</p><ul><li>A <strong>base</strong> config with shared defaults.</li><li>An <strong>environment-specific</strong> override (e.g., <code>production.yml</code>, <code>staging.yml</code>).</li><li>A <strong>local</strong> override for developer machines.</li></ul><p>Keys present in later configs overwrite the same keys from earlier configs. Keys only present in earlier configs are preserved.</p><h2 id=complete-example>Complete Example
+<a class=anchor href=#complete-example>#</a></h2><p>Below is a full application configuration file demonstrating all major sections:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#6272a4># Application paths</span>
+<span style=color:#ff79c6>path</span>:
+  <span style=color:#ff79c6>data</span>: /var/lib/myapp
+  <span style=color:#ff79c6>log</span>: /var/log/myapp
+  <span style=color:#ff79c6>config</span>: /etc/myapp
+
+<span style=color:#6272a4># API server</span>
+<span style=color:#ff79c6>api</span>:
+  <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>network</span>:
+    <span style=color:#ff79c6>host</span>: <span style=color:#bd93f9>0.0.0.0</span>
+    <span style=color:#ff79c6>port</span>: <span style=color:#bd93f9>9000</span>
+
+<span style=color:#6272a4># Modules</span>
+<span style=color:#ff79c6>modules</span>:
+  - <span style=color:#ff79c6>name</span>: elasticsearch
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+  - <span style=color:#ff79c6>name</span>: pipeline
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+
+<span style=color:#6272a4># Plugins</span>
+<span style=color:#ff79c6>plugins</span>:
+  - <span style=color:#ff79c6>name</span>: badger
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+
+<span style=color:#6272a4># Logging</span>
+<span style=color:#ff79c6>logging</span>:
+  <span style=color:#ff79c6>level</span>: info
+
+<span style=color:#6272a4># Resource limits</span>
+<span style=color:#ff79c6>resource_limit</span>:
+  <span style=color:#ff79c6>mem</span>:
+    <span style=color:#ff79c6>max_memory_in_bytes</span>: <span style=color:#bd93f9>2147483648</span>  <span style=color:#6272a4># 2 GB</span>
+  <span style=color:#ff79c6>cpu</span>:
+    <span style=color:#ff79c6>max_num_of_cpus</span>: <span style=color:#bd93f9>4</span>
+
+<span style=color:#6272a4># Module-specific settings</span>
+<span style=color:#ff79c6>elasticsearch</span>:
+  - <span style=color:#ff79c6>name</span>: production
+    <span style=color:#ff79c6>endpoint</span>: ${ES_ENDPOINT}
+    <span style=color:#ff79c6>basic_auth</span>:
+      <span style=color:#ff79c6>username</span>: admin
+      <span style=color:#ff79c6>password</span>: $[[keystore.es_password]]
+</code></pre></div><p>And the corresponding module code that consumes the configuration:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#ff79c6>package</span> main
+
+<span style=color:#ff79c6>import</span> (
+    <span style=color:#f1fa8c>&#34;infini.sh/framework/core/config&#34;</span>
+    <span style=color:#f1fa8c>&#34;infini.sh/framework/core/env&#34;</span>
+    <span style=color:#f1fa8c>&#34;infini.sh/framework/core/module&#34;</span>
+)
+
+<span style=color:#8be9fd;font-style:italic>type</span> AppModule <span style=color:#8be9fd;font-style:italic>struct</span>{}
+
+<span style=color:#8be9fd;font-style:italic>type</span> AppModuleConfig <span style=color:#8be9fd;font-style:italic>struct</span> {
+    Enabled <span style=color:#8be9fd>bool</span>   <span style=color:#f1fa8c>`config:&#34;enabled&#34;`</span>
+    Host    <span style=color:#8be9fd>string</span> <span style=color:#f1fa8c>`config:&#34;host&#34;`</span>
+    Port    <span style=color:#8be9fd>int</span>    <span style=color:#f1fa8c>`config:&#34;port&#34;`</span>
+}
+
+<span style=color:#8be9fd;font-style:italic>func</span> (m <span style=color:#ff79c6>*</span>AppModule) <span style=color:#50fa7b>Name</span>() <span style=color:#8be9fd>string</span>  { <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34;app&#34;</span> }
+<span style=color:#8be9fd;font-style:italic>func</span> (m <span style=color:#ff79c6>*</span>AppModule) <span style=color:#50fa7b>Stop</span>() <span style=color:#8be9fd>error</span>   { <span style=color:#ff79c6>return</span> <span style=color:#ff79c6>nil</span> }
+<span style=color:#8be9fd;font-style:italic>func</span> (m <span style=color:#ff79c6>*</span>AppModule) <span style=color:#50fa7b>Start</span>() <span style=color:#8be9fd>error</span>  { <span style=color:#ff79c6>return</span> <span style=color:#ff79c6>nil</span> }
+
+<span style=color:#8be9fd;font-style:italic>func</span> (m <span style=color:#ff79c6>*</span>AppModule) <span style=color:#50fa7b>Setup</span>() {
+    cfg <span style=color:#ff79c6>:=</span> AppModuleConfig{
+        Enabled: <span style=color:#ff79c6>true</span>,
+        Host:    <span style=color:#f1fa8c>&#34;127.0.0.1&#34;</span>,
+        Port:    <span style=color:#bd93f9>8080</span>,
+    }
+    env.<span style=color:#50fa7b>ParseConfig</span>(<span style=color:#f1fa8c>&#34;app&#34;</span>, <span style=color:#ff79c6>&amp;</span>cfg)
+    <span style=color:#6272a4>// cfg now contains merged values from defaults + YAML
+</span><span style=color:#6272a4></span>}
+
+<span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>init</span>() {
+    module.<span style=color:#50fa7b>RegisterSystemModule</span>(<span style=color:#ff79c6>&amp;</span>AppModule{})
+}
+</code></pre></div></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/infinilabs/framework/edit/main/docs/content.en/docs/references/config.md target=_blank rel=noopener><img src=/framework/main/svg/edit.svg class=book-icon alt=Edit>
+<span>Edit this page</span></a></div><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
+    import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
+    searchbox({container: "#searchbox"});
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><a href=/framework/main/docs/references/config/index.md class=view-markdown target=_blank><img src=/assets/icons/markdown.svg>
+<span>查看 Markdown</span></a><style>.book-toc>nav li::before{position:absolute;top:6px;left:-16px;width:2px;height:32px;content:"";transition:transform .28s cubic-bezier(.2,.8,.2,1),background-color .18s ease,opacity .18s;transform:translateY(-50%)scaleY(0);opacity:0;background:0 0}.book-toc>nav>ul>li.ancestor::before{left:-16px}.book-toc>nav>ul>li.ancestor>ul>li.active::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor>ul>li.active::before{left:-48px}.book-toc>nav li.active::before{transform:translateY(-50%)scaleY(1);opacity:1;background:#8440f1}.book-toc>nav li.active>a{font-weight:500}:target{scroll-margin-top:80px}</style><script>document.addEventListener('DOMContentLoaded',function(){const nav=document.getElementsByClassName('book-toc')[0].querySelector('nav');if(!nav)return;const links=Array.from(nav.querySelectorAll('a[href^="#"]'));const idToLi=new Map();let isProgrammatic=false;let programmaticTargetId=null;let scrollEndTimer=null;links.forEach(link=>{const href=link.getAttribute('href');if(!href||href.length<2)return;const id=decodeURIComponent(href.slice(1));const li=link.closest('li');if(li)idToLi.set(id,li);link.addEventListener('click',function(e){const target=document.getElementById(id);if(target){e.preventDefault();isProgrammatic=true;programmaticTargetId=id;setActiveById(id);target.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+id);clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},1200);}});});window.addEventListener('scroll',function(){clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},120);},{passive:true});function clearAll(){idToLi.forEach(li=>li.classList.remove('active','ancestor'));links.forEach(a=>a.removeAttribute('aria-current'));}
+function setActiveById(id){clearAll();const li=idToLi.get(id);if(!li)return;li.classList.add('active');const a=li.querySelector('a[href^="#"]');if(a)a.setAttribute('aria-current','true');let parent=li.parentElement;while(parent&&parent!==nav){const parentLi=parent.closest('li');if(parentLi&&parentLi!==li)parentLi.classList.add('ancestor');parent=parent.parentElement;}}
+const observedEls=Array.from(idToLi.keys()).map(id=>document.getElementById(id)).filter(Boolean);if(observedEls.length){const io=new IntersectionObserver((entries)=>{let candidate=null;entries.forEach(en=>{if(!en.isIntersecting)return;if(!candidate)candidate=en;else{const curTop=Math.abs(candidate.boundingClientRect.top);const newTop=Math.abs(en.boundingClientRect.top);if(newTop<curTop)candidate=en;}});if(!candidate||!candidate.target||!candidate.target.id)return;const foundId=candidate.target.id;if(isProgrammatic&&programmaticTargetId&&foundId!==programmaticTargetId){return;}
+setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.1,0.25,0.5]});observedEls.forEach(el=>io.observe(el));}
+if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#overview>Overview</a></li><li><a href=#the-config-type>The <code>Config</code> Type</a><ul><li><a href=#creating-configs>Creating Configs</a></li></ul></li><li><a href=#loading-configuration-files>Loading Configuration Files</a></li><li><a href=#unpacking-config-to-structs>Unpacking Config to Structs</a><ul><li><a href=#tag-rules>Tag Rules</a></li></ul></li><li><a href=#application-configuration-structure>Application Configuration Structure</a><ul><li><a href=#path-settings>Path Settings</a></li><li><a href=#api-server>API Server</a></li><li><a href=#modules>Modules</a></li><li><a href=#plugins>Plugins</a></li><li><a href=#logging>Logging</a></li><li><a href=#resource-limits>Resource Limits</a></li></ul></li><li><a href=#environment-variable-interpolation>Environment Variable Interpolation</a></li><li><a href=#keystore-secret-references>Keystore Secret References</a></li><li><a href=#config-file-watching>Config File Watching</a></li><li><a href=#module-configuration-pattern>Module Configuration Pattern</a></li><li><a href=#merging-configs>Merging Configs</a></li><li><a href=#complete-example>Complete Example</a></li></ul></nav></aside></main></body></html>
