@@ -52,6 +52,11 @@ APM、监控与 Trace 数据存储：
 - [OpenTelemetry 集成]({{< relref "./observability/opentelemetry.md" >}})：标准化可观测性数据接入
 - [SkyWalking 存储后端]({{< relref "./observability/skywalking.md" >}})：APM 数据存储配置
 
+## 插件扩展
+
+- [插件开发总览]({{< relref "./plugins/_index.md" >}})：从入门到发布的完整插件开发文档
+- [插件开发入门]({{< relref "./plugins/getting-started.md" >}})：从模板开始快速完成第一个插件
+
 ## 第三方框架
 
 - [Easy-ES 查询框架]({{< relref "./third-party/easy-es.md" >}})

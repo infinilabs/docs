@@ -49,7 +49,7 @@ echo "EASYSEARCH_INITIAL_ADMIN_PASSWORD=$(openssl rand -hex 10)" | sudo tee /dat
 
 2. 修改目录权限
 
-> **非必须步骤，视具体操作环境而定**
+> **非必须步骤，视具体操作环境而定，可参考文末的错误说明**
 
 ```bash
 # 注意：需要根据 Docker 运行环境判断是否需要调整权限，如在 MacOS 上使用 OrbStack 则不需要调整权限。
@@ -150,10 +150,37 @@ echo "vm.max_map_count=262144" | sudo tee -a /etc/sysctl.conf
 docker logs easysearch
 
 # 常见原因：
-# 1. 内存不足 — 调小 ES_JAVA_OPTS
-# 2. 权限问题 — 调整挂载目录权限为 602:602
+# 1. 内存不足 — 调整 ES_JAVA_OPTS
+# 2. 权限问题 — 调整挂载目录权限为 chown 602:602 /data/easysearch
 # 3. 端口冲突 — 更换映射端口
+# 4. 容器名称冲突 - 删除异常容器 docker rm easysearch
 ```
+
+#### 具体错误示例
+
+- 权限错误
+
+```bash
+# 给目录赋予容器内 easysearch 用户操作权限，用户组和用户 ID 为 602
+chown 602:602 /data/easysearch
+```
+{{% load-img "/errors/permission.svg" %}}
+
+
+- 站口占用错误
+
+```bash
+# 修改端口映射，映射关系为 主机端口:容器端口
+```
+{{% load-img "/errors/port-already-in-use.svg" %}}
+
+- 首次安装后重置密码
+
+```bash
+# 由于随机密码被日志覆盖，找不到或想重新设置密码可使用以下命令来重置
+docker exec -it easysearch bash -c "/app/easysearch/bin/reset_admin_password.sh"
+```
+{{% load-img "/errors/reset-passwd.svg" %}}
 
 ### 查看容器内文件
 
