@@ -2,7 +2,7 @@
 title: "Release Notes"
 date: 0001-01-01
 summary: "Release Notes #  Information about release notes of INFINI Agent is provided here.
-Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #  1.30.1 (2025-12-19) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #   This release includes updates from the underlying Framework v1.4.0, which resolves several common issues and enhances overall stability and performance."
+Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #  1.30.2 (2026-03-16) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #   This release includes updates from the underlying Framework v1.4.0, which resolves several common issues and enhances overall stability and performance."
 ---
 
 
@@ -15,6 +15,13 @@ Information about release notes of INFINI Agent is provided here.
 ### 🚀 Features  
 ### 🐛 Bug fix  
 ### ✈️ Improvements  
+
+## 1.30.2 (2026-03-16)
+### ❌ Breaking changes  
+### 🚀 Features  
+### 🐛 Bug fix  
+### ✈️ Improvements  
+- This release includes updates from the underlying [Framework v1.4.0](https://docs.infinilabs.com/framework/v1.4.0), which resolves several common issues and enhances overall stability and performance. While there are no direct changes to Agent itself, the improvements inherited from Framework benefit Agent indirectly.
 
 ## 1.30.1 (2025-12-19)
 ### ❌ Breaking changes  
