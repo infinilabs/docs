@@ -3,7 +3,7 @@ title: "插件发布与分享"
 date: 0001-01-01
 description: "插件打包、分发与安装的实践指南。"
 summary: "插件发布与分享 #  打包 #  ./gradlew clean build # 查看产物 ls -lh build/distributions/ # 输出示例：my-plugin-0.1.0.zip # 确认 zip 内容 unzip -l build/distributions/my-plugin-0.1.0.zip # 应包含： # my-plugin-0.1.0.jar # plugin-descriptor.properties 安装到 Easysearch #  # 从本地路径安装 bin/easysearch-plugin install file:///ABSOLUTE/PATH/build/distributions/my-plugin-0.1.0.zip # 从 URL 安装（发布到 GitHub Releases 后） bin/easysearch-plugin install https://github.com/yourname/my-plugin/releases/download/v0.1.0/my-plugin-0.1.0.zip 重启 Easysearch 后验证：
-bin/easysearch curl -s http://localhost:9200/_nodes/plugins | \  python3 -m json.tool | grep -A3 &#34;my-plugin&#34; # 预期输出： # &#34;name&#34;: &#34;my-plugin&#34;, # &#34;version&#34;: &#34;0."
+bin/easysearch curl -s &#34;http://localhost:9200/_cat/plugins?v&#34; | grep my-plugin # 预期输出中应包含插件名与版本 卸载插件 #  bin/easysearch-plugin remove my-plugin 发布到 GitHub Releases #  # 1."
 ---
 
 
@@ -40,11 +40,8 @@ bin/easysearch-plugin install https://github.com/yourname/my-plugin/releases/dow
 ```bash
 bin/easysearch
 
-curl -s http://localhost:9200/_nodes/plugins | \
-  python3 -m json.tool | grep -A3 "my-plugin"
-# 预期输出：
-# "name": "my-plugin",
-# "version": "0.1.0",
+curl -s "http://localhost:9200/_cat/plugins?v" | grep my-plugin
+# 预期输出中应包含插件名与版本
 ```
 
 ## 卸载插件
@@ -97,13 +94,13 @@ bin/easysearch-plugin install \
 ## 发布前检查清单
 
 - [ ] `plugin-descriptor.properties` 字段完整，`easysearch.version` 与目标版本一致
-- [ ] `./gradlew test` 和 `./gradlew integTest` 均通过
-- [ ] 本地安装验证：`_nodes/plugins` 能看到插件
+- [ ] `./gradlew check` 通过
+- [ ] 本地安装验证：`_cat/plugins?v` 能看到插件
 - [ ] README 写明安装命令、兼容版本与已知限制
 - [ ] CHANGELOG.md 已更新
 
 ## 相关文档
 
-- [开发与测试]({{< relref "./dev-and-test.md" >}})
+- [测试与验证]({{< relref "./testing-and-validation.md" >}})
 - [插件开发入门]({{< relref "./getting-started.md" >}})
 
