@@ -1,7 +1,7 @@
 ---
 title: "References"
 date: 0001-01-01
-summary: "References #    env  path  log  configs  api  badger  disk_queue  elasticsearch  resource_limit  metrics  node  processors  other  "
+summary: "References #    env  path  log  configs  api  badger  disk_queue  elasticsearch  resource_limit  metrics  node  processors  other  Agent specific #   configs.allow_generated_metrics_tasks: enable or disable automatically generated metrics tasks (default: false, enable for Kubernetes deployments that need auto-generated metrics).  "
 ---
 
 
@@ -20,3 +20,7 @@ summary: "References #    env  path  log  configs  api  badger  disk_queue  elas
 - [node](https://docs.infinilabs.com/gateway/main/docs/references/config/#node)
 - [processors](./processors/_index.md)
 - [other](https://docs.infinilabs.com/gateway/main/docs/references/config/#misc)
+
+### Agent specific
+
+- `configs.allow_generated_metrics_tasks`: enable or disable automatically generated metrics tasks (default: `false`, enable for Kubernetes deployments that need auto-generated metrics).
