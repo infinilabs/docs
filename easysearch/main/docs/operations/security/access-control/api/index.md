@@ -2,18 +2,21 @@
 title: "API 接口"
 date: 0001-01-01
 summary: "API #  通过 REST API 可以管理用户、角色、角色映射、权限集合和租户。
+如果你要为程序或脚本签发并使用 X-API-TOKEN，请参见 Access Token。
 API 的访问控制 #  您可以控制哪些角色可以访问安全相关的 API，在配置文件 easysearch.yml:
 security.restapi.roles_enabled: [&#34;&lt;role&gt;&#34;, ...] 如果希望阻止访问特定的 API：
 security.restapi.endpoints_disabled.&lt;role&gt;.&lt;endpoint&gt;: [&#34;&lt;method&gt;&#34;, ...] 参数 endpoint 可以是:
  PRIVILEGE ROLE ROLE_MAPPING USER CONFIG CACHE  参数 method 可以是:
  GET PUT POST DELETE PATCH  例如，以下配置授予三个角色对 REST API 的访问权限，但随后会阻止 test-role 发送 PUT, POST, DELETE, 或 PATCH 到 _security/role 或 _security/user :
-security.restapi.roles_enabled: [&#34;superuser&#34;, &#34;security&#34;, &#34;test-role&#34;] security.restapi.endpoints_disabled.test-role.ROLE: [&#34;PUT&#34;, &#34;POST&#34;, &#34;DELETE&#34;, &#34;PATCH&#34;] security.restapi.endpoints_disabled.test-role.USER: [&#34;PUT&#34;, &#34;POST&#34;, &#34;DELETE&#34;, &#34;PATCH&#34;] 要为 API 配置 使用 PUT 和 PATCH 方法，请将以下行添加到 easysearch."
+security.restapi.roles_enabled: [&#34;superuser&#34;, &#34;security&#34;, &#34;test-role&#34;] security.restapi.endpoints_disabled.test-role.ROLE: [&#34;PUT&#34;, &#34;POST&#34;, &#34;DELETE&#34;, &#34;PATCH&#34;] security."
 ---
 
 
 # API
 
 通过 REST API 可以管理用户、角色、角色映射、权限集合和租户。
+
+如果你要为程序或脚本签发并使用 `X-API-TOKEN`，请参见 [Access Token]({{< relref "./access-token.md" >}})。
 
 ## API 的访问控制
 

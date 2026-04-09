@@ -179,6 +179,7 @@ roles:
 | 文档 | 说明 |
 |------|------|
 | [用户与角色]({{< relref "./access-control/users-roles.md" >}}) | 用户、角色的创建与映射 |
+| [Access Token]({{< relref "./access-control/access-token.md" >}}) | 面向程序调用的 token 认证与权限控制 |
 | [权限列表]({{< relref "./access-control/permissions.md" >}}) | 可用权限的完整清单 |
 | [文档级安全]({{< relref "./access-control/document-level-security.md" >}}) | 按条件限制可见文档 |
 | [字段级安全]({{< relref "./access-control/field-level-security.md" >}}) | 限制可见字段 |
