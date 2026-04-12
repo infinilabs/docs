@@ -2,11 +2,11 @@
 这一能力适合以下场景：
  服务到服务的 API 调用 临时授予只读或特定动作权限 为自动化脚本、采集任务、运维工具发放独立凭据  相关指南（先读这些） #    权限控制总览  用户与角色  权限列表  安全 API  使用前提 #  在使用 Access Token 之前，请先确认：
  安全模块已经启用。 你可以使用 superadmin 身份或 superuser 角色访问安全 API。 调用方已经明确需要的权限范围。   当前实现中，创建 Access Token 需要 superadmin 身份，或拥有 superuser 角色。在默认发行配置下，初始化后的 admin 用户通常会映射到 superuser；如果你修改过默认密码或角色映射，请改用实际具备相应权限的账户。
- 接口概览 #     操作 方法 路径     创建 token POST /_security/access_token   更新 token PUT /_security/access_token/{token_id}   删除 token DELETE /_security/access_token/{token_id}   搜索 token GET /_security/access_token/search    创建 Access Token #  创建请求至少需要指定："><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Access Token"><meta property="og:description" content="Access Token #  Access Token 提供了一种面向程序调用的认证方式。客户端可以先由管理员签发 token，后续通过 HTTP 头 X-API-TOKEN 访问 Easysearch API，而不需要在每次请求中传递用户名和密码。
+ 接口概览 #     操作 方法 路径     创建 token POST /_security/access_token   更新 token PUT /_security/access_token/{token_id}   删除 token DELETE /_security/access_token/{token_id}   搜索 token GET / POST /_security/access_token/search    创建 Access Token #  创建请求至少需要指定："><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Access Token"><meta property="og:description" content="Access Token #  Access Token 提供了一种面向程序调用的认证方式。客户端可以先由管理员签发 token，后续通过 HTTP 头 X-API-TOKEN 访问 Easysearch API，而不需要在每次请求中传递用户名和密码。
 这一能力适合以下场景：
  服务到服务的 API 调用 临时授予只读或特定动作权限 为自动化脚本、采集任务、运维工具发放独立凭据  相关指南（先读这些） #    权限控制总览  用户与角色  权限列表  安全 API  使用前提 #  在使用 Access Token 之前，请先确认：
  安全模块已经启用。 你可以使用 superadmin 身份或 superuser 角色访问安全 API。 调用方已经明确需要的权限范围。   当前实现中，创建 Access Token 需要 superadmin 身份，或拥有 superuser 角色。在默认发行配置下，初始化后的 admin 用户通常会映射到 superuser；如果你修改过默认密码或角色映射，请改用实际具备相应权限的账户。
- 接口概览 #     操作 方法 路径     创建 token POST /_security/access_token   更新 token PUT /_security/access_token/{token_id}   删除 token DELETE /_security/access_token/{token_id}   搜索 token GET /_security/access_token/search    创建 Access Token #  创建请求至少需要指定："><meta property="og:type" content="article"><meta property="og:url" content="https://docs.infinilabs.com/easysearch/main/docs/operations/security/access-control/access-token/"><title>Access Token | INFINI Easysearch (main) | 分布式搜索型数据库</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.a5477dc69cdc226836851fe1ccbae76d703e3ebf0cb670e9e513b00935608503.css integrity="sha256-pUd9xpzcImg2hR/hzLrnbXA+Pr8MtnDp5ROwCTVghQM="><link rel=stylesheet type=text/css href=https://docs.infinilabs.com/easysearch/main/css/asciinema-player.css><script defer src=https://docs.infinilabs.com/easysearch/main/js/jquery-2.x.min.js></script><script defer src=https://docs.infinilabs.com/easysearch/main/js/doc.js></script><script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?64b9322783bb21716d701b15fb0b1e82";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+ 接口概览 #     操作 方法 路径     创建 token POST /_security/access_token   更新 token PUT /_security/access_token/{token_id}   删除 token DELETE /_security/access_token/{token_id}   搜索 token GET / POST /_security/access_token/search    创建 Access Token #  创建请求至少需要指定："><meta property="og:type" content="article"><meta property="og:url" content="https://docs.infinilabs.com/easysearch/main/docs/operations/security/access-control/access-token/"><title>Access Token | INFINI Easysearch (main) | 分布式搜索型数据库</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.a5477dc69cdc226836851fe1ccbae76d703e3ebf0cb670e9e513b00935608503.css integrity="sha256-pUd9xpzcImg2hR/hzLrnbXA+Pr8MtnDp5ROwCTVghQM="><link rel=stylesheet type=text/css href=https://docs.infinilabs.com/easysearch/main/css/asciinema-player.css><script defer src=https://docs.infinilabs.com/easysearch/main/js/jquery-2.x.min.js></script><script defer src=https://docs.infinilabs.com/easysearch/main/js/doc.js></script><script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?64b9322783bb21716d701b15fb0b1e82";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/easysearch/main><img src=/easysearch/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;height:36px;width:100%></div><script>function waitForShadow(host,callback){const timer=setInterval(()=>{if(host.shadowRoot){clearInterval(timer);callback(host.shadowRoot);}},50);}
 const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{const style=document.createElement('style');style.textContent=`
       .infini__searchbox-btn {
@@ -196,33 +196,54 @@ const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{co
 function setActiveById(id){clearAll();const li=idToLi.get(id);if(!li)return;li.classList.add('active');const a=li.querySelector('a[href^="#"]');if(a)a.setAttribute('aria-current','true');let parent=li.parentElement;while(parent&&parent!==nav){const parentLi=parent.closest('li');if(parentLi&&parentLi!==li)parentLi.classList.add('ancestor');parent=parent.parentElement;}}
 const observedEls=Array.from(idToLi.keys()).map(id=>document.getElementById(id)).filter(Boolean);if(observedEls.length){const io=new IntersectionObserver((entries)=>{let candidate=null;entries.forEach(en=>{if(!en.isIntersecting)return;if(!candidate)candidate=en;else{const curTop=Math.abs(candidate.boundingClientRect.top);const newTop=Math.abs(en.boundingClientRect.top);if(newTop<curTop)candidate=en;}});if(!candidate||!candidate.target||!candidate.target.id)return;const foundId=candidate.target.id;if(isProgrammatic&&programmaticTargetId&&foundId!==programmaticTargetId){return;}
 setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.1,0.25,0.5]});observedEls.forEach(el=>io.observe(el));}
-if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#相关指南先读这些>相关指南（先读这些）</a></li><li><a href=#使用前提>使用前提</a></li><li><a href=#接口概览>接口概览</a></li><li><a href=#创建-access-token>创建 Access Token</a></li><li><a href=#权限字段怎么写>权限字段怎么写</a></li><li><a href=#使用-access-token-调用-api>使用 Access Token 调用 API</a></li><li><a href=#搜索已有-token>搜索已有 Token</a></li><li><a href=#更新-token>更新 Token</a></li><li><a href=#删除-token>删除 Token</a></li><li><a href=#常见错误>常见错误</a></li><li><a href=#与-enrollment-token-的区别>与 enrollment token 的区别</a></li><li><a href=#实践建议>实践建议</a></li></ul></nav></aside></header><article class=markdown><h1 id=access-token>Access Token
+if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#相关指南先读这些>相关指南（先读这些）</a></li><li><a href=#使用前提>使用前提</a></li><li><a href=#接口概览>接口概览</a></li><li><a href=#创建-access-token>创建 Access Token</a></li><li><a href=#权限描述怎么写>权限描述怎么写</a></li><li><a href=#使用-access-token-调用-api>使用 Access Token 调用 API</a></li><li><a href=#搜索已有-token>搜索已有 Token</a></li><li><a href=#更新-token>更新 Token</a></li><li><a href=#删除-token>删除 Token</a></li><li><a href=#常见错误>常见错误</a></li><li><a href=#与-enrollment-token-的区别>与 enrollment token 的区别</a></li><li><a href=#实践建议>实践建议</a></li></ul></nav></aside></header><article class=markdown><h1 id=access-token>Access Token
 <a class=anchor href=#access-token>#</a></h1><p>Access Token 提供了一种面向程序调用的认证方式。客户端可以先由管理员签发 token，后续通过 HTTP 头 <code>X-API-TOKEN</code> 访问 Easysearch API，而不需要在每次请求中传递用户名和密码。</p><p>这一能力适合以下场景：</p><ul><li>服务到服务的 API 调用</li><li>临时授予只读或特定动作权限</li><li>为自动化脚本、采集任务、运维工具发放独立凭据</li></ul><h2 id=相关指南先读这些>相关指南（先读这些）
 <a class=anchor href=#%e7%9b%b8%e5%85%b3%e6%8c%87%e5%8d%97%e5%85%88%e8%af%bb%e8%bf%99%e4%ba%9b>#</a></h2><ul><li><a href=/easysearch/main/docs/operations/security/access-control/>权限控制总览</a></li><li><a href=/easysearch/main/docs/operations/security/access-control/users-roles/>用户与角色</a></li><li><a href=/easysearch/main/docs/operations/security/access-control/permissions/>权限列表</a></li><li><a href=/easysearch/main/docs/operations/security/access-control/api/>安全 API</a></li></ul><h2 id=使用前提>使用前提
 <a class=anchor href=#%e4%bd%bf%e7%94%a8%e5%89%8d%e6%8f%90>#</a></h2><p>在使用 Access Token 之前，请先确认：</p><ol><li>安全模块已经启用。</li><li>你可以使用 superadmin 身份或 <code>superuser</code> 角色访问安全 API。</li><li>调用方已经明确需要的权限范围。</li></ol><blockquote><p>当前实现中，创建 Access Token 需要 superadmin 身份，或拥有 <code>superuser</code> 角色。在默认发行配置下，初始化后的 <code>admin</code> 用户通常会映射到 <code>superuser</code>；如果你修改过默认密码或角色映射，请改用实际具备相应权限的账户。</p></blockquote><h2 id=接口概览>接口概览
-<a class=anchor href=#%e6%8e%a5%e5%8f%a3%e6%a6%82%e8%a7%88>#</a></h2><table><thead><tr><th>操作</th><th>方法</th><th>路径</th></tr></thead><tbody><tr><td>创建 token</td><td><code>POST</code></td><td><code>/_security/access_token</code></td></tr><tr><td>更新 token</td><td><code>PUT</code></td><td><code>/_security/access_token/{token_id}</code></td></tr><tr><td>删除 token</td><td><code>DELETE</code></td><td><code>/_security/access_token/{token_id}</code></td></tr><tr><td>搜索 token</td><td><code>GET</code></td><td><code>/_security/access_token/search</code></td></tr></tbody></table><h2 id=创建-access-token>创建 Access Token
-<a class=anchor href=#%e5%88%9b%e5%bb%ba-access-token>#</a></h2><p>创建请求至少需要指定：</p><ul><li><code>name</code>：token 名称</li><li><code>permissions</code>：权限列表</li><li><code>expire_in</code>：过期时间，Unix 秒级时间戳，且必须大于当前时间</li></ul><p>示例：</p><blockquote><p>下文里的 <code>admin:admin</code> 仅用于说明默认发行配置下的调用方式；如果你的环境已经修改默认密码，或者 <code>admin</code> 不再映射到 <code>superuser</code>，请替换为实际具备 superadmin 或 <code>superuser</code> 权限的账户。</p></blockquote><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#8be9fd;font-style:italic>EXPIRE_IN</span><span style=color:#ff79c6>=</span><span style=color:#ff79c6>$(($(</span>date +%s<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>+</span> <span style=color:#bd93f9>3600</span><span style=color:#ff79c6>))</span>
-
-curl -k -u admin:admin -X POST <span style=color:#f1fa8c>&#34;https://localhost:9200/_security/access_token&#34;</span> <span style=color:#f1fa8c>\
+<a class=anchor href=#%e6%8e%a5%e5%8f%a3%e6%a6%82%e8%a7%88>#</a></h2><table><thead><tr><th>操作</th><th>方法</th><th>路径</th></tr></thead><tbody><tr><td>创建 token</td><td><code>POST</code></td><td><code>/_security/access_token</code></td></tr><tr><td>更新 token</td><td><code>PUT</code></td><td><code>/_security/access_token/{token_id}</code></td></tr><tr><td>删除 token</td><td><code>DELETE</code></td><td><code>/_security/access_token/{token_id}</code></td></tr><tr><td>搜索 token</td><td><code>GET</code> / <code>POST</code></td><td><code>/_security/access_token/search</code></td></tr></tbody></table><h2 id=创建-access-token>创建 Access Token
+<a class=anchor href=#%e5%88%9b%e5%bb%ba-access-token>#</a></h2><p>创建请求至少需要指定：</p><ul><li><code>name</code>：token 名称</li><li><code>cluster</code> 或 <code>indices</code>：权限描述，至少提供一种</li></ul><p>其中 <code>expire_in</code> 为可选字段：</p><ul><li>如果显式传入：必须是一个大于当前时间的 Unix 秒级时间戳</li><li>如果省略：服务端默认设置为“当前时间 + 3600 秒（1 小时）”</li></ul><p>示例：</p><blockquote><p>下文里的 <code>admin:admin</code> 仅用于说明默认发行配置下的调用方式；如果你的环境已经修改默认密码，或者 <code>admin</code> 不再映射到 <code>superuser</code>，请替换为实际具备 superadmin 或 <code>superuser</code> 权限的账户。</p></blockquote><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>curl -k -u admin:admin -X POST <span style=color:#f1fa8c>&#34;https://localhost:9200/_security/access_token&#34;</span> <span style=color:#f1fa8c>\
 </span><span style=color:#f1fa8c></span>  -H <span style=color:#f1fa8c>&#39;Content-Type: application/json&#39;</span> <span style=color:#f1fa8c>\
 </span><span style=color:#f1fa8c></span>  -d <span style=color:#f1fa8c>&#34;{
 </span><span style=color:#f1fa8c>    \&#34;name\&#34;: \&#34;backup-bot\&#34;,
 </span><span style=color:#f1fa8c>    \&#34;description\&#34;: \&#34;token for snapshot inspection\&#34;,
-</span><span style=color:#f1fa8c>    \&#34;permissions\&#34;: [
-</span><span style=color:#f1fa8c>      \&#34;cluster_monitor\&#34;,
-</span><span style=color:#f1fa8c>      \&#34;indices:data/read/*\&#34;
+</span><span style=color:#f1fa8c>    \&#34;cluster\&#34;: [
+</span><span style=color:#f1fa8c>      \&#34;cluster_monitor\&#34;
 </span><span style=color:#f1fa8c>    ],
-</span><span style=color:#f1fa8c>    \&#34;expire_in\&#34;: </span><span style=color:#f1fa8c>${</span><span style=color:#8be9fd;font-style:italic>EXPIRE_IN</span><span style=color:#f1fa8c>}</span><span style=color:#f1fa8c>
+</span><span style=color:#f1fa8c>    \&#34;indices\&#34;: [
+</span><span style=color:#f1fa8c>      {
+</span><span style=color:#f1fa8c>        \&#34;names\&#34;: [
+</span><span style=color:#f1fa8c>          \&#34;snapshots*\&#34;
+</span><span style=color:#f1fa8c>        ],
+</span><span style=color:#f1fa8c>        \&#34;query\&#34;: \&#34;\&#34;,
+</span><span style=color:#f1fa8c>        \&#34;field_security\&#34;: [],
+</span><span style=color:#f1fa8c>        \&#34;field_mask\&#34;: [],
+</span><span style=color:#f1fa8c>        \&#34;privileges\&#34;: [
+</span><span style=color:#f1fa8c>          \&#34;read\&#34;
+</span><span style=color:#f1fa8c>        ]
+</span><span style=color:#f1fa8c>      }
+</span><span style=color:#f1fa8c>    ]
 </span><span style=color:#f1fa8c>  }&#34;</span>
 </code></pre></div><p>响应示例：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
   <span style=color:#ff79c6>&#34;access_token&#34;</span>: <span style=color:#f1fa8c>&#34;a3f72d6f-2f9a-4a4d-89a0-4f261ee0d2adPq7fG8mT2kR9xN4vH1cD6uY3bL5sQ0wE8zA2jK4nM7pR1tV9yB6cF3dS0hJ2gL5&#34;</span>,
   <span style=color:#ff79c6>&#34;expire_in&#34;</span>: <span style=color:#bd93f9>1772812800</span>
 }
-</code></pre></div><p>说明：</p><ol><li>返回结果只包含 <code>access_token</code> 和 <code>expire_in</code>。</li><li>通用 Access Token 的字符串格式为 <code>&lt;uuid>&lt;64_random_chars></code>。</li><li>token 文档会保存在 <code>.security</code> 索引中。</li></ol><h2 id=权限字段怎么写>权限字段怎么写
-<a class=anchor href=#%e6%9d%83%e9%99%90%e5%ad%97%e6%ae%b5%e6%80%8e%e4%b9%88%e5%86%99>#</a></h2><p><code>permissions</code> 支持两类值：</p><ol><li>已定义的 privilege 名，例如：<ul><li><code>read</code></li><li><code>write</code></li><li><code>cluster_monitor</code></li><li><code>cluster_composite_ops_ro</code></li></ul></li><li>原始 action pattern，例如：<ul><li><code>indices:data/read/search</code></li><li><code>indices:data/read/*</code></li><li><code>cluster:monitor/*</code></li></ul></li></ol><p>示例：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
-  <span style=color:#ff79c6>&#34;permissions&#34;</span>: [
-    <span style=color:#f1fa8c>&#34;cluster_monitor&#34;</span>,
-    <span style=color:#f1fa8c>&#34;indices:data/read/*&#34;</span>
+</code></pre></div><p>说明：</p><ol><li>返回结果只包含 <code>access_token</code> 和 <code>expire_in</code>。</li><li>通用 Access Token 的字符串格式为 <code>&lt;uuid>&lt;64_random_chars></code>。</li><li>token 文档会以 <code>cluster</code> / <code>indices</code> 权限描述形式保存在 <code>.security</code> 索引中。</li><li>如果创建请求里省略 <code>expire_in</code>，响应中的 <code>expire_in</code> 会是服务端按默认 TTL（1 小时）计算后的到期时间。</li><li><code>access_token</code> 只会在创建成功时返回一次；搜索、更新和删除接口都不会再次返回这个字段，请在创建后立即安全保存。</li></ol><h2 id=权限描述怎么写>权限描述怎么写
+<a class=anchor href=#%e6%9d%83%e9%99%90%e6%8f%8f%e8%bf%b0%e6%80%8e%e4%b9%88%e5%86%99>#</a></h2><p>Access Token 的权限结构与创建角色时保持一致，使用顶层 <code>cluster</code> 与 <code>indices</code> 两个字段。</p><p>约束如下：</p><ol><li><code>cluster</code>：字符串数组，表示集群级权限。</li><li><code>indices</code>：对象数组，表示索引级权限。</li><li><code>cluster</code> 与 <code>indices</code> 至少要提供一种，不能同时为空。</li><li><code>indices</code> 中每个对象至少需要：<ul><li><code>names</code>：索引名或模式数组</li><li><code>privileges</code>：权限数组</li></ul></li><li><code>indices</code> 中可选字段：<ul><li><code>query</code>：DLS 查询字符串</li><li><code>field_security</code>：允许访问的字段列表</li><li><code>field_mask</code>：字段脱敏列表</li></ul></li></ol><p><code>cluster</code> 和 <code>indices[*].privileges</code> 都支持两类值：</p><ol><li>已定义的 privilege 名，例如：<ul><li><code>read</code></li><li><code>write</code></li><li><code>cluster_monitor</code></li><li><code>cluster_composite_ops_ro</code></li></ul></li><li>原始 action pattern，例如：<ul><li><code>indices:data/read/search</code></li><li><code>indices:data/read/*</code></li><li><code>cluster:monitor/*</code></li></ul></li></ol><p>示例：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#ff79c6>&#34;cluster&#34;</span>: [
+    <span style=color:#f1fa8c>&#34;cluster_monitor&#34;</span>
+  ],
+  <span style=color:#ff79c6>&#34;indices&#34;</span>: [
+    {
+      <span style=color:#ff79c6>&#34;names&#34;</span>: [
+        <span style=color:#f1fa8c>&#34;logs-*&#34;</span>
+      ],
+      <span style=color:#ff79c6>&#34;query&#34;</span>: <span style=color:#f1fa8c>&#34;&#34;</span>,
+      <span style=color:#ff79c6>&#34;field_security&#34;</span>: [],
+      <span style=color:#ff79c6>&#34;field_mask&#34;</span>: [],
+      <span style=color:#ff79c6>&#34;privileges&#34;</span>: [
+        <span style=color:#f1fa8c>&#34;read&#34;</span>
+      ]
+    }
   ]
 }
 </code></pre></div><p>实践建议：</p><ul><li>优先使用已有 privilege 名，便于统一治理。</li><li>只在确实需要精确控制时，才直接写原始 action pattern。</li><li>不要直接给过宽的权限，例如无必要时不要使用全量通配符。</li></ul><h2 id=使用-access-token-调用-api>使用 Access Token 调用 API
@@ -240,7 +261,51 @@ curl -k -u admin:admin -X POST <span style=color:#f1fa8c>&#34;https://localhost:
 </code></pre></div><p>认证与授权行为如下：</p><ol><li>服务端先根据 <code>X-API-TOKEN</code> 查找 token 文档。</li><li>若 token 不存在、已过期或状态不是 <code>active</code>，请求返回 401。</li><li>若 token 认证成功，但请求动作不在允许范围内，请求返回 403。</li></ol><h2 id=搜索已有-token>搜索已有 Token
 <a class=anchor href=#%e6%90%9c%e7%b4%a2%e5%b7%b2%e6%9c%89-token>#</a></h2><p>可以通过名称过滤，也可以传 Query DSL 请求体。</p><p>按名称搜索：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>curl -k -u admin:admin <span style=color:#f1fa8c>\
 </span><span style=color:#f1fa8c></span>  <span style=color:#f1fa8c>&#34;https://localhost:9200/_security/access_token/search?name=backup-bot&#34;</span>
-</code></pre></div><p>使用请求体搜索：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>curl -k -u admin:admin -X GET <span style=color:#f1fa8c>&#34;https://localhost:9200/_security/access_token/search&#34;</span> <span style=color:#f1fa8c>\
+</code></pre></div><p>响应示例：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#ff79c6>&#34;took&#34;</span>: <span style=color:#bd93f9>3</span>,
+  <span style=color:#ff79c6>&#34;timed_out&#34;</span>: <span style=color:#ff79c6>false</span>,
+  <span style=color:#ff79c6>&#34;hits&#34;</span>: {
+    <span style=color:#ff79c6>&#34;total&#34;</span>: {
+      <span style=color:#ff79c6>&#34;value&#34;</span>: <span style=color:#bd93f9>1</span>,
+      <span style=color:#ff79c6>&#34;relation&#34;</span>: <span style=color:#f1fa8c>&#34;eq&#34;</span>
+    },
+    <span style=color:#ff79c6>&#34;max_score&#34;</span>: <span style=color:#bd93f9>0.0</span>,
+    <span style=color:#ff79c6>&#34;hits&#34;</span>: [
+      {
+        <span style=color:#ff79c6>&#34;_index&#34;</span>: <span style=color:#f1fa8c>&#34;.security&#34;</span>,
+        <span style=color:#ff79c6>&#34;_id&#34;</span>: <span style=color:#f1fa8c>&#34;a3f72d6f-2f9a-4a4d-89a0-4f261ee0d2ad&#34;</span>,
+        <span style=color:#ff79c6>&#34;_score&#34;</span>: <span style=color:#bd93f9>0.0</span>,
+        <span style=color:#ff79c6>&#34;_source&#34;</span>: {
+          <span style=color:#ff79c6>&#34;token_doc_type&#34;</span>: <span style=color:#f1fa8c>&#34;access_token&#34;</span>,
+          <span style=color:#ff79c6>&#34;name&#34;</span>: <span style=color:#f1fa8c>&#34;backup-bot&#34;</span>,
+          <span style=color:#ff79c6>&#34;description&#34;</span>: <span style=color:#f1fa8c>&#34;token for snapshot inspection&#34;</span>,
+          <span style=color:#ff79c6>&#34;type&#34;</span>: <span style=color:#f1fa8c>&#34;general&#34;</span>,
+          <span style=color:#ff79c6>&#34;status&#34;</span>: <span style=color:#f1fa8c>&#34;active&#34;</span>,
+          <span style=color:#ff79c6>&#34;cluster&#34;</span>: [
+            <span style=color:#f1fa8c>&#34;cluster_monitor&#34;</span>
+          ],
+          <span style=color:#ff79c6>&#34;indices&#34;</span>: [
+            {
+              <span style=color:#ff79c6>&#34;names&#34;</span>: [
+                <span style=color:#f1fa8c>&#34;snapshots*&#34;</span>
+              ],
+              <span style=color:#ff79c6>&#34;query&#34;</span>: <span style=color:#f1fa8c>&#34;&#34;</span>,
+              <span style=color:#ff79c6>&#34;field_security&#34;</span>: [],
+              <span style=color:#ff79c6>&#34;field_mask&#34;</span>: [],
+              <span style=color:#ff79c6>&#34;privileges&#34;</span>: [
+                <span style=color:#f1fa8c>&#34;read&#34;</span>
+              ]
+            }
+          ],
+          <span style=color:#ff79c6>&#34;expire_in&#34;</span>: <span style=color:#bd93f9>1772812800</span>,
+          <span style=color:#ff79c6>&#34;created&#34;</span>: <span style=color:#bd93f9>1772809200000</span>,
+          <span style=color:#ff79c6>&#34;updated&#34;</span>: <span style=color:#bd93f9>1772809200000</span>
+        }
+      }
+    ]
+  }
+}
+</code></pre></div><p>使用请求体搜索（推荐用 <code>POST</code>）：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>curl -k -u admin:admin -X POST <span style=color:#f1fa8c>&#34;https://localhost:9200/_security/access_token/search&#34;</span> <span style=color:#f1fa8c>\
 </span><span style=color:#f1fa8c></span>  -H <span style=color:#f1fa8c>&#39;Content-Type: application/json&#39;</span> <span style=color:#f1fa8c>\
 </span><span style=color:#f1fa8c></span>  -d <span style=color:#f1fa8c>&#39;{
 </span><span style=color:#f1fa8c>    &#34;query&#34;: {
@@ -253,15 +318,71 @@ curl -k -u admin:admin -X POST <span style=color:#f1fa8c>&#34;https://localhost:
 </span><span style=color:#f1fa8c>    ],
 </span><span style=color:#f1fa8c>    &#34;size&#34;: 10
 </span><span style=color:#f1fa8c>  }&#39;</span>
-</code></pre></div><p>说明：</p><ol><li>默认按 <code>created desc</code> 排序。</li><li>默认 <code>size=10</code>。</li><li><code>size</code> 最大为 <code>1000</code>。</li></ol><h2 id=更新-token>更新 Token
+</code></pre></div><p>响应示例：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#ff79c6>&#34;took&#34;</span>: <span style=color:#bd93f9>2</span>,
+  <span style=color:#ff79c6>&#34;timed_out&#34;</span>: <span style=color:#ff79c6>false</span>,
+  <span style=color:#ff79c6>&#34;hits&#34;</span>: {
+    <span style=color:#ff79c6>&#34;total&#34;</span>: {
+      <span style=color:#ff79c6>&#34;value&#34;</span>: <span style=color:#bd93f9>1</span>,
+      <span style=color:#ff79c6>&#34;relation&#34;</span>: <span style=color:#f1fa8c>&#34;eq&#34;</span>
+    },
+    <span style=color:#ff79c6>&#34;max_score&#34;</span>: <span style=color:#bd93f9>0.2876821</span>,
+    <span style=color:#ff79c6>&#34;hits&#34;</span>: [
+      {
+        <span style=color:#ff79c6>&#34;_index&#34;</span>: <span style=color:#f1fa8c>&#34;.security&#34;</span>,
+        <span style=color:#ff79c6>&#34;_id&#34;</span>: <span style=color:#f1fa8c>&#34;a3f72d6f-2f9a-4a4d-89a0-4f261ee0d2ad&#34;</span>,
+        <span style=color:#ff79c6>&#34;_score&#34;</span>: <span style=color:#bd93f9>0.2876821</span>,
+        <span style=color:#ff79c6>&#34;_source&#34;</span>: {
+          <span style=color:#ff79c6>&#34;token_doc_type&#34;</span>: <span style=color:#f1fa8c>&#34;access_token&#34;</span>,
+          <span style=color:#ff79c6>&#34;name&#34;</span>: <span style=color:#f1fa8c>&#34;backup-bot-v2&#34;</span>,
+          <span style=color:#ff79c6>&#34;description&#34;</span>: <span style=color:#f1fa8c>&#34;updated token&#34;</span>,
+          <span style=color:#ff79c6>&#34;type&#34;</span>: <span style=color:#f1fa8c>&#34;general&#34;</span>,
+          <span style=color:#ff79c6>&#34;status&#34;</span>: <span style=color:#f1fa8c>&#34;active&#34;</span>,
+          <span style=color:#ff79c6>&#34;cluster&#34;</span>: [
+            <span style=color:#f1fa8c>&#34;cluster_monitor&#34;</span>
+          ],
+          <span style=color:#ff79c6>&#34;indices&#34;</span>: [
+            {
+              <span style=color:#ff79c6>&#34;names&#34;</span>: [
+                <span style=color:#f1fa8c>&#34;snapshots*&#34;</span>
+              ],
+              <span style=color:#ff79c6>&#34;query&#34;</span>: <span style=color:#f1fa8c>&#34;&#34;</span>,
+              <span style=color:#ff79c6>&#34;field_security&#34;</span>: [],
+              <span style=color:#ff79c6>&#34;field_mask&#34;</span>: [],
+              <span style=color:#ff79c6>&#34;privileges&#34;</span>: [
+                <span style=color:#f1fa8c>&#34;read&#34;</span>
+              ]
+            }
+          ],
+          <span style=color:#ff79c6>&#34;expire_in&#34;</span>: <span style=color:#bd93f9>1772899200</span>,
+          <span style=color:#ff79c6>&#34;created&#34;</span>: <span style=color:#bd93f9>1772809200000</span>,
+          <span style=color:#ff79c6>&#34;updated&#34;</span>: <span style=color:#bd93f9>1772811000000</span>
+        }
+      }
+    ]
+  }
+}
+</code></pre></div><p>说明：</p><ol><li>默认按 <code>created desc</code> 排序。</li><li>默认 <code>size=10</code>。</li><li><code>size</code> 最大为 <code>1000</code>。</li><li>搜索接口返回的 <code>_source</code> 中不包含 <code>access_token</code> 字段；该字段会被服务端直接排除，不会以掩码、星号或加密字符串形式返回。后续更新或删除时，请使用结果中的文档 <code>_id</code> 作为 <code>token_id</code>。</li></ol><h2 id=更新-token>更新 Token
 <a class=anchor href=#%e6%9b%b4%e6%96%b0-token>#</a></h2><p>更新接口路径中的 <code>{token_id}</code> 取自 token 字符串前 36 位 UUID，或者搜索结果中的文档 <code>_id</code>。</p><p>示例：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>curl -k -u admin:admin -X PUT <span style=color:#f1fa8c>&#34;https://localhost:9200/_security/access_token/a3f72d6f-2f9a-4a4d-89a0-4f261ee0d2ad&#34;</span> <span style=color:#f1fa8c>\
 </span><span style=color:#f1fa8c></span>  -H <span style=color:#f1fa8c>&#39;Content-Type: application/json&#39;</span> <span style=color:#f1fa8c>\
 </span><span style=color:#f1fa8c></span>  -d <span style=color:#f1fa8c>&#39;{
 </span><span style=color:#f1fa8c>    &#34;name&#34;: &#34;backup-bot-v2&#34;,
 </span><span style=color:#f1fa8c>    &#34;description&#34;: &#34;updated token&#34;,
-</span><span style=color:#f1fa8c>    &#34;permissions&#34;: [
-</span><span style=color:#f1fa8c>      &#34;cluster_monitor&#34;,
-</span><span style=color:#f1fa8c>      &#34;indices:data/read/*&#34;
+</span><span style=color:#f1fa8c>    &#34;cluster&#34;: [
+</span><span style=color:#f1fa8c>      &#34;cluster_monitor&#34;
+</span><span style=color:#f1fa8c>    ],
+</span><span style=color:#f1fa8c>    &#34;indices&#34;: [
+</span><span style=color:#f1fa8c>      {
+</span><span style=color:#f1fa8c>        &#34;names&#34;: [
+</span><span style=color:#f1fa8c>          &#34;snapshots*&#34;
+</span><span style=color:#f1fa8c>        ],
+</span><span style=color:#f1fa8c>        &#34;query&#34;: &#34;&#34;,
+</span><span style=color:#f1fa8c>        &#34;field_security&#34;: [],
+</span><span style=color:#f1fa8c>        &#34;field_mask&#34;: [],
+</span><span style=color:#f1fa8c>        &#34;privileges&#34;: [
+</span><span style=color:#f1fa8c>          &#34;read&#34;
+</span><span style=color:#f1fa8c>        ]
+</span><span style=color:#f1fa8c>      }
 </span><span style=color:#f1fa8c>    ],
 </span><span style=color:#f1fa8c>    &#34;expire_in&#34;: 1772899200
 </span><span style=color:#f1fa8c>  }&#39;</span>
@@ -269,7 +390,7 @@ curl -k -u admin:admin -X POST <span style=color:#f1fa8c>&#34;https://localhost:
   <span style=color:#ff79c6>&#34;_id&#34;</span>: <span style=color:#f1fa8c>&#34;a3f72d6f-2f9a-4a4d-89a0-4f261ee0d2ad&#34;</span>,
   <span style=color:#ff79c6>&#34;result&#34;</span>: <span style=color:#f1fa8c>&#34;updated&#34;</span>
 }
-</code></pre></div><p>注意：</p><ol><li>当前实现里，<code>name</code> 在更新时仍然必填。</li><li><code>description</code>、<code>permissions</code>、<code>expire_in</code> 可以按需更新。</li><li>不能通过该接口修改 <code>access_token</code> 字符串本身。</li></ol><h2 id=删除-token>删除 Token
+</code></pre></div><p>注意：</p><ol><li>当前实现里，<code>name</code> 在更新时仍然必填。</li><li><code>description</code>、<code>expire_in</code> 可以按需更新；如果需要修改权限，请按完整的 <code>cluster</code> / <code>indices</code> 描述提交。</li><li>不能通过该接口修改 <code>access_token</code> 字符串本身。</li></ol><h2 id=删除-token>删除 Token
 <a class=anchor href=#%e5%88%a0%e9%99%a4-token>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>curl -k -u admin:admin -X DELETE <span style=color:#f1fa8c>\
 </span><span style=color:#f1fa8c></span>  <span style=color:#f1fa8c>&#34;https://localhost:9200/_security/access_token/a3f72d6f-2f9a-4a4d-89a0-4f261ee0d2ad&#34;</span>
 </code></pre></div><p>响应示例：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
@@ -288,4 +409,4 @@ gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/j
 function setActiveById(id){clearAll();const li=idToLi.get(id);if(!li)return;li.classList.add('active');const a=li.querySelector('a[href^="#"]');if(a)a.setAttribute('aria-current','true');let parent=li.parentElement;while(parent&&parent!==nav){const parentLi=parent.closest('li');if(parentLi&&parentLi!==li)parentLi.classList.add('ancestor');parent=parent.parentElement;}}
 const observedEls=Array.from(idToLi.keys()).map(id=>document.getElementById(id)).filter(Boolean);if(observedEls.length){const io=new IntersectionObserver((entries)=>{let candidate=null;entries.forEach(en=>{if(!en.isIntersecting)return;if(!candidate)candidate=en;else{const curTop=Math.abs(candidate.boundingClientRect.top);const newTop=Math.abs(en.boundingClientRect.top);if(newTop<curTop)candidate=en;}});if(!candidate||!candidate.target||!candidate.target.id)return;const foundId=candidate.target.id;if(isProgrammatic&&programmaticTargetId&&foundId!==programmaticTargetId){return;}
 setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.1,0.25,0.5]});observedEls.forEach(el=>io.observe(el));}
-if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#相关指南先读这些>相关指南（先读这些）</a></li><li><a href=#使用前提>使用前提</a></li><li><a href=#接口概览>接口概览</a></li><li><a href=#创建-access-token>创建 Access Token</a></li><li><a href=#权限字段怎么写>权限字段怎么写</a></li><li><a href=#使用-access-token-调用-api>使用 Access Token 调用 API</a></li><li><a href=#搜索已有-token>搜索已有 Token</a></li><li><a href=#更新-token>更新 Token</a></li><li><a href=#删除-token>删除 Token</a></li><li><a href=#常见错误>常见错误</a></li><li><a href=#与-enrollment-token-的区别>与 enrollment token 的区别</a></li><li><a href=#实践建议>实践建议</a></li></ul></nav></aside></main><script src=https://docs.infinilabs.com/easysearch/main/js/asciinema-player.js></script></body><script src=https://infinilabs.com/notice-widget/notice-widget.umd.cjs></script><script>NoticeWidget.init({locales:{"zh-CN":"https://infinilabs.com/notice-widget/locales/zh-CN.json","en-US":"https://infinilabs.com/notice-widget/locales/en-US.json",}});</script></html>
+if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#相关指南先读这些>相关指南（先读这些）</a></li><li><a href=#使用前提>使用前提</a></li><li><a href=#接口概览>接口概览</a></li><li><a href=#创建-access-token>创建 Access Token</a></li><li><a href=#权限描述怎么写>权限描述怎么写</a></li><li><a href=#使用-access-token-调用-api>使用 Access Token 调用 API</a></li><li><a href=#搜索已有-token>搜索已有 Token</a></li><li><a href=#更新-token>更新 Token</a></li><li><a href=#删除-token>删除 Token</a></li><li><a href=#常见错误>常见错误</a></li><li><a href=#与-enrollment-token-的区别>与 enrollment token 的区别</a></li><li><a href=#实践建议>实践建议</a></li></ul></nav></aside></main><script src=https://docs.infinilabs.com/easysearch/main/js/asciinema-player.js></script></body><script src=https://infinilabs.com/notice-widget/notice-widget.umd.cjs></script><script>NoticeWidget.init({locales:{"zh-CN":"https://infinilabs.com/notice-widget/locales/zh-CN.json","en-US":"https://infinilabs.com/notice-widget/locales/en-US.json",}});</script></html>
