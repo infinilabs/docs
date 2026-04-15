@@ -312,8 +312,8 @@ summary: "权限列表 #  此页面是可用权限的完整列表。每个权限
 | indices_all     | 授予全部索引级别的权限，等同于 `indices:*`。                                         |
 | get             | 授予 `get` 和 `mget` 操作的权限。                                                    |
 | read            | 授予只读相关的权限，如搜索、获取字段 Mapping、`get` 和 `mget` 操作。                 |
-| write           | 授予在已有索引里面写入数据的权限，包括 `index`、`update`、`bulk` 和 `mapping/put`。   |
-| index           | 授予索引文档的权限，包括 `index`、`update`、`bulk` 和 `mapping/put` 操作。            |
+| write           | 授予在已有索引里面写入数据的权限，包括 `index`、`update`、`bulk shard` 级别操作和 `mapping/put`。对于经由顶层 bulk 鉴权链路执行的 REST 写入请求（如常见的 `PUT /<index>/_doc/<id>`、`POST /<index>/_bulk`、`POST /<index>/_update/<id>`、`DELETE /<index>/_doc/<id>`），当前实现通常还需要额外授予集群级 `cluster_composite_ops`。   |
+| index           | 授予索引文档的权限，包括 `index`、`update`、`bulk shard` 级别操作和 `mapping/put`。对于经由顶层 bulk 鉴权链路执行的 REST 写入请求，当前实现通常还需要额外授予集群级 `cluster_composite_ops`。            |
 | delete          | 授予删除文档的权限。                                                                 |
 | crud            | 增删改查的组合，等同于 `read` + `write`。                                            |
 | search          | 授予文档搜索的权限，包括 `search`、`msearch`、`rollup/search` 和 `suggest` 权限。    |

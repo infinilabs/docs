@@ -262,6 +262,8 @@ PUT _security/privilege/<name>
 }
 ```
 
+> 说明：`indices:data/write/bulk*` 这类 action 在当前实现中会参与顶层 bulk 鉴权链路。若你的目标是支持常见的文档写入 REST API，除了索引级 `write` / `index` 等权限外，通常还需要额外授予集群级 `cluster_composite_ops`。
+
 ### 修改权限集合
 
 修改权限集合的属性。
@@ -594,6 +596,13 @@ PUT _security/role/<role>
   "message": "'test-role' updated."
 }
 ```
+
+> 常见组合：如果角色需要支持 `PUT /<index>/_doc/<id>`、`POST /<index>/_bulk`、`POST /<index>/_update/<id>` 或 `DELETE /<index>/_doc/<id>` 这类常见文档写入请求，当前实现下推荐同时授予：
+>
+> - `cluster`: `cluster_composite_ops`
+> - `indices[*].privileges`: `write` / `index` / `delete` 或更细粒度的写权限
+>
+> 仅授予索引级 `write` / `index` 而不授予 `cluster_composite_ops` 时，这些请求可能会因为 `indices:data/write/bulk` 权限不足而返回 403。
 
 ### 修改角色
 

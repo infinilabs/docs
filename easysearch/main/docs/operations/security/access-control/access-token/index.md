@@ -169,7 +169,7 @@ Access Token 的权限结构与创建角色时保持一致，使用顶层 `clust
 X-API-TOKEN: <access_token>
 ```
 
-例如，使用只读 token 调用 `_cat/nodes`：
+例如，使用具备集群监控权限的 token 调用 `_cat/nodes`：
 
 ```bash
 curl -k "https://localhost:9200/_cat/nodes?format=json" \
@@ -188,6 +188,244 @@ curl -k "https://localhost:9200/logs-2026.04/_search" \
     }
   }'
 ```
+
+如果你希望使用 token 执行常见的文档写入 API，例如：
+
+- `PUT /<index>/_doc/<id>`
+- `POST /<index>/_bulk`
+- `POST /<index>/_update/<id>`
+- `DELETE /<index>/_doc/<id>`
+
+当前实现下，通常需要同时授予：
+
+1. 集群级 `cluster_composite_ops`
+2. 索引级 `write`、`index` 或更细粒度的写权限
+
+例如：
+
+```json
+{
+  "cluster": [
+    "cluster_composite_ops"
+  ],
+  "indices": [
+    {
+      "names": [
+        "logs-*"
+      ],
+      "query": "",
+      "field_security": [],
+      "field_mask": [],
+      "privileges": [
+        "write"
+      ]
+    }
+  ]
+}
+```
+
+如果只授予索引级 `write` / `index`，但没有授予 `cluster_composite_ops`，这些 REST 写入请求在当前实现中可能会因为 `indices:data/write/bulk` 权限不足而返回 403。
+
+## 常用 API 权限配置示例
+
+下面这些示例展示的是创建 token 时请求体里的 `cluster` / `indices` 权限配置片段，适用于当前实现里较常见的 API 组合。
+
+| 场景 | 常见 API | 推荐权限 |
+|------|----------|----------|
+| 集群监控 | `GET /_cluster/health`、`GET /_cat/nodes?format=json` | `cluster_monitor` |
+| 索引搜索与单文档读取 | `GET /<index>/_search`、`GET /<index>/_count`、`GET /<index>/_doc/<id>` | `read` |
+| 批量读取 | `POST /_mget` | `cluster_composite_ops_ro` + `read` |
+| 常见文档写入（不需要读） | `PUT /<index>/_doc/<id>`、`POST /<index>/_update/<id>`、`POST /<index>/_bulk`、`DELETE /<index>/_doc/<id>` | `cluster_composite_ops` + `write` |
+| 常见文档 CRUD | 搜索、获取、`_mget`、索引、更新、bulk、删除 | `cluster_composite_ops` + `crud` |
+| 查看索引元数据 | `GET /<index>/_settings`、`GET /<index>/_stats`、`GET /_cat/indices/<index>?format=json` | `indices_monitor`；若需要 `_cat/indices/<index>`，再加 `cluster_monitor` |
+| 修改 mapping | `PUT /<index>/_mapping` | `manage` |
+
+示例 1：只允许集群监控 API
+
+```json
+{
+  "cluster": [
+    "cluster_monitor"
+  ],
+  "indices": []
+}
+```
+
+示例 2：允许搜索、`_count` 和 `GET /_doc/<id>`
+
+```json
+{
+  "cluster": [],
+  "indices": [
+    {
+      "names": [
+        "logs-*"
+      ],
+      "query": "",
+      "field_security": [],
+      "field_mask": [],
+      "privileges": [
+        "read"
+      ]
+    }
+  ]
+}
+```
+
+示例 3：允许 `POST /_mget`
+
+```json
+{
+  "cluster": [
+    "cluster_composite_ops_ro"
+  ],
+  "indices": [
+    {
+      "names": [
+        "logs-*"
+      ],
+      "query": "",
+      "field_security": [],
+      "field_mask": [],
+      "privileges": [
+        "read"
+      ]
+    }
+  ]
+}
+```
+
+说明：
+
+1. 仅有索引级 `read` 时，`_search` 和 `GET /_doc/<id>` 可以正常使用。
+2. `POST /_mget` 额外依赖 `cluster_composite_ops_ro`。
+
+示例 4：允许常见文档写入，但不授予读权限
+
+```json
+{
+  "cluster": [
+    "cluster_composite_ops"
+  ],
+  "indices": [
+    {
+      "names": [
+        "logs-*"
+      ],
+      "query": "",
+      "field_security": [],
+      "field_mask": [],
+      "privileges": [
+        "write"
+      ]
+    }
+  ]
+}
+```
+
+这个组合适用于：
+
+- `PUT /<index>/_doc/<id>`
+- `POST /<index>/_update/<id>`
+- `POST /<index>/_bulk`
+- `DELETE /<index>/_doc/<id>`
+
+但不允许：
+
+- `GET /<index>/_search`
+- `GET /<index>/_doc/<id>`
+- `POST /_mget`
+
+示例 5：允许常见文档 CRUD
+
+```json
+{
+  "cluster": [
+    "cluster_composite_ops"
+  ],
+  "indices": [
+    {
+      "names": [
+        "logs-*"
+      ],
+      "query": "",
+      "field_security": [],
+      "field_mask": [],
+      "privileges": [
+        "crud"
+      ]
+    }
+  ]
+}
+```
+
+这个组合通常可覆盖：
+
+- `GET /<index>/_search`
+- `GET /<index>/_count`
+- `GET /<index>/_doc/<id>`
+- `POST /_mget`
+- `PUT /<index>/_doc/<id>`
+- `POST /<index>/_update/<id>`
+- `POST /<index>/_bulk`
+- `DELETE /<index>/_doc/<id>`
+
+示例 6：查看索引元数据与 cat 结果
+
+```json
+{
+  "cluster": [
+    "cluster_monitor"
+  ],
+  "indices": [
+    {
+      "names": [
+        "logs-*"
+      ],
+      "query": "",
+      "field_security": [],
+      "field_mask": [],
+      "privileges": [
+        "indices_monitor"
+      ]
+    }
+  ]
+}
+```
+
+这个组合适用于：
+
+- `GET /logs-2026.04/_settings`
+- `GET /logs-2026.04/_stats`
+- `GET /_cat/indices/logs-2026.04?format=json`
+
+如果只需要修改 mapping，而不需要读写文档，可单独授予 `manage`：
+
+```json
+{
+  "cluster": [],
+  "indices": [
+    {
+      "names": [
+        "logs-*"
+      ],
+      "query": "",
+      "field_security": [],
+      "field_mask": [],
+      "privileges": [
+        "manage"
+      ]
+    }
+  ]
+}
+```
+
+补充说明：
+
+1. 如果只想把读取权限缩小到最小范围，可以使用更细粒度的 `search` 或 `get`，而不是直接使用 `read`。
+2. 当前实现下，`search` 只覆盖搜索相关 API，不覆盖 `GET /_doc/<id>` 或 `POST /_mget`。
+3. 当前实现下，`get` 只覆盖 `GET /_doc/<id>`，不覆盖 `_search` 或 `_mget`。
+4. 当前实现下，`index` 或 `delete` 单独授予时，通常不足以支持常见 REST 写入；若要覆盖顶层 bulk 鉴权链路，请优先使用 `cluster_composite_ops + write` 或 `cluster_composite_ops + crud`。
 
 认证与授权行为如下：
 
