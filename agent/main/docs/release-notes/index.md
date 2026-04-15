@@ -2,7 +2,7 @@
 title: "Release Notes"
 date: 0001-01-01
 summary: "Release Notes #  Information about release notes of INFINI Agent is provided here.
-Latest (In development) #  ❌ Breaking changes #  🚀 Features #   feat: enable CORS support for discovery &amp; logs APIs #63  🐛 Bug fix #  ✈️ Improvements #  1.30.2 (2026-03-16) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #   This release includes updates from the underlying Framework v1."
+Latest (In development) #  ❌ Breaking changes #  🚀 Features #   feat: enable CORS support for discovery &amp; logs APIs #63 feat: shell expand LogsPath in log APIs #64  🐛 Bug fix #  ✈️ Improvements #  1.30.2 (2026-03-16) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #   This release includes updates from the underlying Framework v1."
 ---
 
 
@@ -15,6 +15,7 @@ Information about release notes of INFINI Agent is provided here.
 ### 🚀 Features  
 
 - feat: enable CORS support for discovery & logs APIs #63
+- feat: shell expand LogsPath in log APIs #64
 
 ### 🐛 Bug fix  
 ### ✈️ Improvements  
