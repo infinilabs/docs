@@ -55,6 +55,13 @@ expression\t#offset#description
 
 ## 环境要求
 
+要使用 Rules 插件，至少需要同时满足以下前提：
+
+1. 已安装 `rules` 插件
+2. 运行该插件的节点已关闭系统调用过滤
+3. 已重启节点并确认插件加载成功
+4. 已安装启用 `rule-engine` 特性的有效 License
+
 ### 节点配置
 
 Rules 插件依赖 native 库（C++ 编译的规则引擎），需要在 `config/easysearch.yml` 中禁用系统调用过滤器：
@@ -71,9 +78,54 @@ bootstrap.system_call_filter: false
 
 **注意**：禁用此过滤器会降低一定的安全性，建议只在运行 rules 插件的节点上禁用。
 
+### 插件安装与加载确认
+
+如果你还没有安装插件，可以先安装对应平台的 `rules` 插件包：
+
+```bash
+bin/easysearch-plugin install file:///ABSOLUTE/PATH/rules-linux-x64-<version>.zip
+```
+
+安装后重启节点，然后确认插件已经加载成功：
+
+```bash
+bin/easysearch-plugin list
+
+curl -s "http://localhost:9200/_cat/plugins?v"
+```
+
+输出中应能看到 `rules` 插件。
+
+### License 安装与校验
+
+Rules 功能需要启用 `rule-engine` 特性的有效 License。若尚未开通，请先申请试用或正式 License。
+
+安装 License：
+
+```json
+POST /_license/apply
+{
+  "license": "<base64-license-string>"
+}
+```
+
+查看当前 License：
+
+```json
+GET /_license/info
+```
+
+继续使用前，请至少确认：
+
+- License 已成功安装
+- License 未过期
+- `metadata.rule-engine = true`
+
 ---
 
 ## 快速开始
+
+第一次接入建议按下面顺序执行：先确认插件与 License，再导入规则、编译规则、挂接 Pipeline，最后用 `_simulate` 或实际写入验证结果。
 
 ### 步骤 1: 导入规则
 
@@ -174,6 +226,12 @@ POST /_match_rules/security_v1/_compile
 }
 ```
 
+**注意**：
+
+- 请求体必需，至少传空对象 `{}`，不要省略 body
+- 如果规则里用了数值字段或自定义字段，必须在 `fields` 中声明
+- 如果 License 未生效、插件未加载或节点缺少 native 运行环境，编译会直接失败
+
 ### 联合索引配置指南
 
 当规则中频繁出现多字段 AND 组合（如 `author(...) and source(...)`）时，建议配置 `composite`。
@@ -241,7 +299,67 @@ PUT _ingest/pipeline/news-check
 - 只配置 `composite` 不配置相关 `fields`，通常会降低可维护性（建议同时声明）
 - 未重编译直接测试，新配置不会生效
 
-### 步骤 3: 创建 Ingest Pipeline
+### 步骤 3: 先直接模拟规则命中
+
+如果你只是想先验证“这批文档会命中哪些规则”，不想马上创建 Pipeline，可以直接调用 Rules 插件自己的模拟接口：
+
+```json
+POST /_match_rules/security_v1/_simulate
+{
+  "docs": [
+    {
+      "_id": "doc-1",
+      "_source": {
+        "title": "枪支交易案",
+        "content": "网上出售手枪，价格5000元"
+      }
+    },
+    {
+      "_id": "doc-2",
+      "_source": {
+        "title": "普通新闻",
+        "content": "这是一条普通内容"
+      }
+    }
+  ]
+}
+```
+
+**响应**：
+```json
+{
+  "repo_id": "security_v1",
+  "docs": [
+    {
+      "_id": "doc-1",
+      "matched": true,
+      "matched_rules": ["涉枪武器关键词"]
+    },
+    {
+      "_id": "doc-2",
+      "matched": false,
+      "matched_rules": []
+    }
+  ]
+}
+```
+
+**适用场景**：
+
+- 先验证规则表达式是否命中预期文档
+- 做规则调试，不想先创建 Pipeline
+- 批量抽样检查编译后的规则库效果
+
+**注意**：
+
+- 规则库必须先完成 `POST /_match_rules/{repo_id}/_compile`
+- 请求体中的每条文档都必须放在 `docs[]. _source` 下
+- 这不是 ingest pipeline 的 `/_simulate`，它只返回规则命中结果，不会执行后续处理器
+- 如果你希望模拟结果尽量贴近 `check_match_rules` 的字段行为，可以在请求体中传 `fields`、`default_match_field`、`regex_start_at_word`
+- 如果该规则库在 `_compile` 时声明了 `composite`，模拟会直接使用这套已编译的联合索引结果；但 `/_simulate` 请求本身不支持临时传 `composite`
+- 如果你要验证的是完整 ingest 效果，而不只是规则命中，仍然建议再用 `POST /_ingest/pipeline/{id}/_simulate` 做最终验证
+
+### 步骤 4: 创建 Ingest Pipeline
 
 ```json
 PUT _ingest/pipeline/security-check
@@ -280,12 +398,12 @@ PUT _ingest/pipeline/security-check-custom
 |------|------|------|--------|----------------------------------------|
 | `id` | string | ✅ | - | 规则库 ID（对应 repo_id）                     |
 | `target_field` | string | ❌ | "tags" | 匹配结果写入的目标字段名                           |
-| `ignore_missing` | boolean | ❌ | false | 是否忽略缺失字段错误                             |
-| `regex_start_at_word` | boolean | ❌ | true | 正则是否从单词边界开始                            |
+| `ignore_missing` | boolean | ❌ | false | 为 `true` 时，处理阶段发生异常会跳过当前规则处理并返回原文档；默认建议保持 `false`，避免掩盖配置或环境问题 |
+| `regex_start_at_word` | boolean | ❌ | true | 控制底层正则匹配是否从词边界起算；通常保持默认值即可 |
 | `fields` | array | ❌ | [] | 文档字段白名单：指定后仅这些字段按原字段名参与匹配，其余字段内容汇总到 `default_match_field` |
 | `default_match_field` | string | ❌ | "content" | 当配置了 `fields` 时，未包含字段会汇总到该字段名参与匹配 |
 
-### 步骤 4: 写入文档测试
+### 步骤 5: 写入文档测试
 
 ```json
 POST security-events/_doc?pipeline=security-check
@@ -307,6 +425,21 @@ POST security-events/_doc?pipeline=security-check
   }
 }
 ```
+
+### 步骤 6: 检查规则库状态
+
+建议在创建 Pipeline 前先检查规则库是否已成功编译：
+
+```json
+GET .match_rules/_doc/security_v1?_source_excludes=rules
+```
+
+重点关注以下字段：
+
+- `status`：应为 `compiled` 或 `partial`
+- `compiled_at`：最近一次成功编译时间
+- `compiled_nodes`：已成功编译该规则库的节点
+- `fields` / `composite`：是否与当前编译参数一致
 
 ---
 
@@ -452,7 +585,7 @@ POST /_match_rules/repo/_compile
 
 #### 4. 正则表达式
 
-**简单正则**（用 `{{...}}` 括起来）：
+规则表达式中的正则，统一使用 `{{...}}` 语法：
 
 ```
 # 匹配北京电话号码
@@ -462,7 +595,7 @@ POST /_match_rules/repo/_compile
 {{\w+@\w+\.\w+}}
 ```
 
-**复合正则**（用 `[...]` 括起来，支持逻辑运算）：
+复合正则可用 `[...]` 包裹后再和其他条件组合：
 
 ```
 # 匹配除 .com 外的所有网站
@@ -472,10 +605,7 @@ POST /_match_rules/repo/_compile
 author({{张.*}})
 ```
 
-**重要**：正则表达式必须用**双引号**包围。
-
-❌ 错误：`author(/张.*/)`
-✅ 正确：`author("/张.*/")`
+建议不要在同一套规则里混用 `/.../` 等其他写法，统一使用 `{{...}}`，便于维护和排查。
 
 ### 高级功能
 
@@ -611,14 +741,13 @@ title("2024-2025年报")
 - 产品型号：`"iPhone-15"`, `"GTX-4090"`
 - 复合词：`"高端-低端"`, `"线上-线下"`
 
-#### ❌ 错误 2: 正则未加引号
+#### ❌ 错误 2: 正则写法混用
 
 ```
-# 错误
-author(/张.*/)
+# 不推荐：在同一套规则里混用 /.../ 等其他风格
 
-# 正确
-author("/张.*/")
+# 推荐：统一使用 {{...}} 写法
+author({{张.*}})
 ```
 
 #### ❌ 错误 3: 忘记声明自定义字段
@@ -1003,6 +1132,79 @@ PUT /_match_rules/security_v1/_import
 }
 ```
 
+### 模拟匹配 API
+
+#### POST /_match_rules/{repo_id}/_simulate
+
+直接使用已编译的规则库对输入文档做匹配验证，不需要先创建 Pipeline。
+
+**请求体**：
+```json
+{
+  "docs": [
+    {
+      "_id": "doc-1",
+      "_source": {
+        "title": "信用卡逾期",
+        "content": "银行催收投诉"
+      }
+    }
+  ]
+}
+```
+
+**请求约束**：
+
+- 规则库必须已编译完成
+- `docs` 为必填数组
+- 每个元素必须包含 `_source`
+- `_id` 可选，仅用于回显定位
+
+**可选参数**：
+
+```json
+{
+  "fields": ["title", "content"],
+  "default_match_field": "content",
+  "regex_start_at_word": true,
+  "docs": [
+    {
+      "_source": {
+        "title": "foo",
+        "body": "bar"
+      }
+    }
+  ]
+}
+```
+
+- `fields`：字段白名单；指定后仅这些字段按原字段名参与匹配，其余字段值汇总到 `default_match_field`
+- `default_match_field`：当配置了 `fields` 时，未包含字段会汇总到该字段名参与匹配，默认 `content`
+- `regex_start_at_word`：控制底层正则匹配是否从词边界起算，默认 `true`
+
+**响应**：
+```json
+{
+  "repo_id": "security_v1",
+  "docs": [
+    {
+      "_id": "doc-1",
+      "matched": true,
+      "matched_rules": ["涉枪武器关键词", "枪支型号"]
+    }
+  ]
+}
+```
+
+**说明**：
+
+- `matched_rules` 返回的是编译后规则库中的规则标签，和 `check_match_rules` 写入目标字段的值保持一致
+- 未命中时，`matched = false` 且 `matched_rules = []`
+- 如果本节点找不到已编译的规则库目录，会返回 `404`
+- 如果请求体里显式传了 `fields`、`default_match_field`、`regex_start_at_word`，匹配行为会按这些参数执行
+- 如果你需要验证联合索引效果，应先在 `POST /_match_rules/{repo_id}/_compile` 时声明 `composite`，再调用这个接口；这里不能临时覆盖编译参数
+- 如果你要验证的是完整 ingest 效果，而不只是规则命中，请继续使用 `POST /_ingest/pipeline/{id}/_simulate`
+
 ### 查询规则库 API
 
 #### GET .match_rules/_doc/{repo_id}
@@ -1188,6 +1390,8 @@ AK47 or AK-47 or M16	枪支型号
 
 **工具位置**：`plugins/rules/src/test/resources/import_rules.py`
 
+**注意**：这个脚本位于源码仓库中，主要用于开发和批量导入辅助，不属于已安装插件目录的一部分。生产环境或已安装集群也可以直接调用 `_match_rules/.../_import` REST API。
+
 ---
 
 ## 使用场景
@@ -1296,10 +1500,20 @@ GET security-events/_search
 2. **系统配置要求**：必须设置 `bootstrap.system_call_filter: false`（见"环境要求"章节）
 3. **目标字段可配置**：默认写入 `tags` 字段，可通过 `target_field` 参数自定义
 4. **数值字段类型**：数值范围匹配要求字段值为数值类型
-5. **正则语法**：必须使用双引号包围正则表达式
+5. **正则语法**：建议统一使用 `{{...}}` 语法，不要混用其他写法
 6. **编译依赖索引**：编译前必须先导入规则到 `.match_rules` 索引
 7. **节点启动同步**：节点启动时会自动同步规则库，写入操作会等待同步完成（通常 10-20 秒）
 8. **元数据文件**：`.compiled_repos.json` 用于检测文件丢失，请勿手动删除
+
+### 常见检查顺序
+
+如果第一次接入没有跑通，建议按下面顺序排查：
+
+1. `bin/easysearch-plugin list` 或 `GET /_cat/plugins?v`，确认 `rules` 插件已加载
+2. `GET /_license/info`，确认 License 已生效且 `rule-engine` 已启用
+3. 检查 `easysearch.yml` 是否设置了 `bootstrap.system_call_filter: false`
+4. `GET .match_rules/_doc/{repo_id}?_source_excludes=rules`，确认规则库已导入
+5. 重新执行 `POST /_match_rules/{repo_id}/_compile`，确认编译成功后再挂接 Pipeline
 
 ---
 
