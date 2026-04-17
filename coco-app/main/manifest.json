@@ -1,6 +1,6 @@
 {
-  "name": "Coco AI App",
-  "short_name": "Coco AI App",
+  "name": "Coco AI App | Coco AI - Connect & Collaborate",
+  "short_name": "Coco AI App | Coco AI - Connect & Collaborate",
   "start_url": "/coco-app/main/",
   "scope": "/coco-app/main/",
   "display": "standalone",
