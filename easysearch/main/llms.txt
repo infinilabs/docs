@@ -6,6 +6,10 @@
 - [查询与过滤上下文](https://docs.infinilabs.com/easysearch/main/docs/features/query-dsl/query-filter-context/): 查询与过滤上下文 #  查询由查询子句组成，这些子句可以在过滤（filter）上下文或查询上下文中运行。
 在过滤（filter）上下文中的查询子句会询问&amp;quot;文档是否匹配查询子句？&amp;ldquo;并返回匹配的文档。在查询上下文中的查询子句会询问&amp;quot;文档与查询子句匹配程度如何？&amp;quot;，返回匹配的文档，并以相关性分数的形式提供每个文档的相关性。
 相关指南（先读这些） # …
+- [图形化部署](https://docs.infinilabs.com/easysearch/main/docs/deployment/install-guide/agent-gui/): 通过 Agent 图形界面部署 Easysearch #  Agent 支持图形化一键拉起新集群（开发/生产双模式），用户无需手动编辑任何配置文件，通过图形界面即可完成 Easysearch 集群的安装、配置和日常管理。
+  安装 Agent
+macOS/Linux 用户可以通过如下脚本进行快速安装：
+curl -sSL http://get.infini.cloud | bash -s -- …
 - [审计配置](https://docs.infinilabs.com/easysearch/main/docs/management/audit-log/audit-config/): 审计配置 #  操作步骤 #    进入审计日志页面：在左侧导航栏点击「审计日志」，进入审计日志管理页。
   打开审计配置弹窗：点击页面右上角的「审计配置」按钮，弹出「审计配置」配置窗口。
   配置基础审计参数：  开启审计：打开「开启审计」总开关，启用系统审计功能。 合规配置：按需开启「记录日志差异」「仅读取元数据」「仅写入元数据」开关。 网络配置：按需开启「外部配置」「内部配置」开关。 读取监 …
@@ -1438,8 +1442,11 @@ from/size：小页场景的首选 #  from + size 适合：
 - [删除角色](https://docs.infinilabs.com/easysearch/main/docs/management/security/delete-role/): 删除角色 #  操作步骤 #    进入角色管理页：在左侧导航栏点击「安全管理」，切换到「角色」标签页，查看现有角色列表。
   打开操作菜单：找到需要删除的目标角色（如 test_role），点击该行「操作」列的更多按钮（...），在弹出菜单中选择「删除」。
   确认删除操作：在弹出的确认提示框中，点击「确定」，系统将执行角色删除。  查看操作结果：操作成功后，该角色将从角色列表中移除，列表中不再 …
-- [加入已有集群](https://docs.infinilabs.com/easysearch/main/docs/management/service-management/join-cluster/): 加入已有集群 #  可以将当前节点加入到一个已有的 Easysearch 集群中。
-操作步骤 #   进入服务管理页面：在 Agent UI 中进入「服务管理」页面，点击「加入现有集群」按钮，进入安装向导。  完成系统环境检测：系统会自动进行环境兼容性检测，确认所有检测项均通过后，点击「开始安装」。  配置集群连接信息：  输入「加入凭证」，点击「验证连接」。 验证通过后，系统将自动获取并展示集群 …
+- [加入已有集群](https://docs.infinilabs.com/easysearch/main/docs/management/service-management/join-cluster/): 加入已有集群 #  可以将当前节点加入到一个已有的 Easysearch 集群中。注意，已有集群的 security 设置需是打开状态，才可以被加入。
+操作步骤 #    获取已有集群的准入凭证
+见 如何获取集群准入凭证
+  进入服务管理页面：在 Agent UI 中进入「服务管理」页面，点击「加入现有集群」按钮，进入安装向导。
+  完成系统环境检测：系统会自动进行环境兼容性检测，确认所有检测项均 …
 - [向量搜索与语义搜索](https://docs.infinilabs.com/easysearch/main/docs/features/vector-search/vector-and-semantic-search/): 向量搜索与语义搜索 #  向量搜索和语义搜索经常被混用，但它们面向的层次不同。理解它们的区别有助于选择正确的方案。
 概念区分 #     概念 本质 Easysearch 中的对应     向量搜索 在高维空间中查找最近邻 knn_nearest_neighbors 查询   语义搜索 按&amp;quot;含义&amp;quot;而非&amp;quot;关键词&amp;quot;检索 文本 → Embedding → …
 - [拼音首字母分词器（Pinyin First Letter）](https://docs.infinilabs.com/easysearch/main/docs/features/mapping-and-analysis/text-analysis/tokenizers/pinyin-first-letter/): Pinyin First Letter 分词器 #  pinyin_first_letter 分词器将中文字符转换为拼音首字母缩写，例如 &amp;ldquo;中华人民共和国&amp;rdquo; → &amp;ldquo;zhrmghg&amp;rdquo;。适用于拼音首字母搜索场景。
