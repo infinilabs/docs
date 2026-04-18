@@ -1,0 +1,30 @@
+# INFINI Agent | The Best Open Source Easysearch/Elasticsearch/OpenSearch Multi-instance Management Agent
+
+> AI-friendly index of site content.
+
+## Core Content
+- [下载安装](https://docs.infinilabs.com/agent/v1.31.0/zh/docs/getting-started/install/): 安装 INFINI Agent #  INFINI Agent 支持主流的操作系统和平台，程序包很小，没有任何额外的外部依赖，安装起来应该是很快的 ：）
+下载安装 #  自动安装
+curl -sSL http://get.infini.cloud | bash -s -- -p agent  通过以上脚本可自动下载相应平台的 agent 最新版本并解压到/opt/agent
+  脚本的可选参数如 …
+- [API 认证](https://docs.infinilabs.com/agent/v1.31.0/zh/docs/getting-started/api-auth/): API 认证 #  INFINI Agent 的所有 HTTP 接口均需要 Token 认证。Token 在进程启动时自动生成，无需手动配置。
+获取 Token #  Agent 启动后，Token 会以 info 级别打印在日志中：
+[INF] [auth_token.go] [agent] api token: d70v0i4bd4atkku9ftlg 每次重启进程都会生成新的 Token。
+ …
+- [es_cluster_health](https://docs.infinilabs.com/agent/v1.31.0/zh/docs/configuration/processors/es_cluster_health/): es_cluster_health #  描述 #  采集集群健康指标。
+配置示例 #  pipeline - name: collect_default_es_cluster_health auto_start: true keep_running: true retry_delay_in_ms: 3000 processor: - es_cluster_health: …
+- [es_cluster_stats](https://docs.infinilabs.com/agent/v1.31.0/zh/docs/configuration/processors/es_cluster_stats/): es_cluster_stats #  描述 #  采集集群 stats 指标。
+配置示例 #  pipeline - name: collect_default_es_cluster_stats auto_start: true keep_running: true retry_delay_in_ms: 3000 processor: - es_cluster_stats: …
+- [es_index_stats](https://docs.infinilabs.com/agent/v1.31.0/zh/docs/configuration/processors/es_index_stats/): es_index_stats #  描述 #  采集集群索引 stats 指标。
+配置示例 #  pipeline - name: collect_default_es_index_stats auto_start: true keep_running: true retry_delay_in_ms: 3000 processor: - es_index_stats: elasticsearch: …
+- [es_logs_processor](https://docs.infinilabs.com/agent/v1.31.0/zh/docs/configuration/processors/es_logs_processor/): es_logs_processor #  描述 #  采集集群日志。
+配置示例 #  pipeline - name: collect_default_es_logs auto_start: true keep_running: true retry_delay_in_ms: 3000 processor: - es_logs_processor: elasticsearch: default …
+- [es_node_stats](https://docs.infinilabs.com/agent/v1.31.0/zh/docs/configuration/processors/es_node_stats/): es_node_stats #  描述 #  采集集群节点 stats 指标。
+配置示例 #  pipeline - name: collect_default_es_node_stats auto_start: true keep_running: true retry_delay_in_ms: 3000 processor: - es_node_stats: elasticsearch: …
+- [logs_processor](https://docs.infinilabs.com/agent/v1.31.0/zh/docs/configuration/processors/logs_processor/): logs_processor #  描述 #  logs_processor 处理器可采集任意日志。
+配置示例 #  以 elasticsearch 日志为例。
+pipeline: - name: log_collect auto_start: true keep_running: true retry_delay_in_ms: 3000 processor: - logs_processor: …
+
+## Other Resources
+- [Sitemap](https://docs.infinilabs.com/agent/v1.31.0/sitemap.xml): Full machine-readable sitemap.
+- [RSS Feed](https://docs.infinilabs.com/agent/v1.31.0/index.xml): Latest updates and posts.
