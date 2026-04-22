@@ -30,29 +30,29 @@ summary: "文本向量化处理器 #   需要 AI 插件和 KNN 插件
 
 ## 配置参数
 
-| 参数 | 是否必填 | 描述 |
-|------|---------|------|
-| `text_field` | 必填 | 包含待向量化文本的源字段 |
-| `vector_field` | 必填 | 存储生成的向量的目标字段。该字段应映射为 `knn_vector` 类型 |
-| `url` | 必填 | Embedding 模型服务的 API 端点 URL |
-| `vendor` | 必填 | 模型提供商标识。`openai` 表示 OpenAI 兼容接口，其他值（如 `ollama`）使用 Ollama 兼容接口 |
-| `model_id` | 必填 | 使用的 Embedding 模型 ID |
-| `api_key` | 可选 | API 密钥（使用 OpenAI 兼容接口时通常必填）。存储时会自动加密 |
-| `dimensions` | 可选 | 期望的向量维度。未指定时使用模型默认维度 |
-| `ignore_missing` | 可选 | 为 `true` 时，源字段缺失则跳过处理。默认为 `false` |
-| `batch_size` | 可选 | 批量处理时每次 API 调用包含的文档数。默认为 `1` |
-| `description` | 可选 | 处理器的简要描述 |
-| `if` | 可选 | 处理器运行的条件 |
-| `ignore_failure` | 可选 | 为 `true` 时，处理器出错后忽略继续执行。默认为 `false` |
-| `on_failure` | 可选 | 处理器失败时运行的处理器列表 |
-| `tag` | 可选 | 处理器的标识标签 |
+| 参数             | 是否必填 | 描述                                                                                     |
+| ---------------- | -------- | ---------------------------------------------------------------------------------------- |
+| `text_field`     | 必填     | 包含待向量化文本的源字段                                                                 |
+| `vector_field`   | 必填     | 存储生成的向量的目标字段。该字段应映射为 `knn_vector` 类型                               |
+| `url`            | 必填     | Embedding 模型服务的 API 端点 URL                                                        |
+| `vendor`         | 必填     | 模型提供商标识。`openai` 表示 OpenAI 兼容接口，其他值（如 `ollama`）使用 Ollama 兼容接口 |
+| `model_id`       | 必填     | 使用的 Embedding 模型 ID                                                                 |
+| `api_key`        | 可选     | API 密钥（使用 OpenAI 兼容接口时通常必填）。存储时会自动加密                             |
+| `dimensions`     | 可选     | 期望的向量维度。未指定时使用模型默认维度                                                 |
+| `ignore_missing` | 可选     | 为 `true` 时，源字段缺失则跳过处理。默认为 `false`                                       |
+| `batch_size`     | 可选     | 批量处理时每次 API 调用包含的文档数。默认为 `1`                                          |
+| `description`    | 可选     | 处理器的简要描述                                                                         |
+| `if`             | 可选     | 处理器运行的条件                                                                         |
+| `ignore_failure` | 可选     | 为 `true` 时，处理器出错后忽略继续执行。默认为 `false`                                   |
+| `on_failure`     | 可选     | 处理器失败时运行的处理器列表                                                             |
+| `tag`            | 可选     | 处理器的标识标签                                                                         |
 
 ## 支持的模型服务
 
-| 接口类型 | `vendor` 值 | 认证方式 | 典型服务 |
-|---------|------------|---------|---------|
-| OpenAI 兼容 | `openai` | `Authorization: Bearer <api_key>` 请求头 | OpenAI、阿里云 DashScope、Azure OpenAI、DeepSeek 等 |
-| Ollama 兼容 | 其他任意值（如 `ollama`） | 无认证 | Ollama 本地部署 |
+| 接口类型    | `vendor` 值               | 认证方式                                 | 典型服务                                            |
+| ----------- | ------------------------- | ---------------------------------------- | --------------------------------------------------- |
+| OpenAI 兼容 | `openai`                  | `Authorization: Bearer <api_key>` 请求头 | OpenAI、阿里云 DashScope、Azure OpenAI、DeepSeek 等 |
+| Ollama 兼容 | 其他任意值（如 `ollama`） | 无认证                                   | Ollama 本地部署                                     |
 
 ## 如何使用
 
@@ -183,7 +183,7 @@ PUT /_ingest/pipeline/batch_embedding_pipeline
 
 ## 相关文档
 
-- [写入数据文本向量化]({{< relref "/docs/integrations/ai/ai-api/ingest-text-embedding.md" >}})：完整的端到端工作流指南
+- [写入数据文本向量化]({{< relref "/docs/integrations/ai/ingest-text-embedding.md" >}})：完整的端到端工作流指南
 - [向量搜索]({{< relref "/docs/features/vector-search/_index.md" >}})：使用向量进行近邻搜索
-- [混合搜索]({{< relref "/docs/integrations/ai/ai-api/hybrid-search.md" >}})：结合关键词和向量的混合搜索
+- [混合搜索]({{< relref "/docs/integrations/ai/hybrid-search.md" >}})：结合关键词和向量的混合搜索
 

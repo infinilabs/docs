@@ -35,14 +35,14 @@ $$\text{RRF}(d) = \sum_{i=1}^{n} \frac{1}{k + r_i(d)}$$
 
 ## 请求体字段
 
-| 字段 | 类型 | 是否必填 | 说明 |
-|------|------|---------|------|
-| `combination` | Object | 否 | 得分融合配置 |
-| `combination.technique` | String | 否 | 融合算法名称。默认 `rrf` |
-| `combination.parameters` | Object | 否 | 融合算法的参数 |
-| `tag` | String | 否 | 处理器标识标签 |
-| `description` | String | 否 | 处理器描述 |
-| `ignore_failure` | Boolean | 否 | 处理器失败时是否继续执行。默认 `false` |
+| 字段                     | 类型    | 是否必填 | 说明                                   |
+| ------------------------ | ------- | -------- | -------------------------------------- |
+| `combination`            | Object  | 否       | 得分融合配置                           |
+| `combination.technique`  | String  | 否       | 融合算法名称。默认 `rrf`               |
+| `combination.parameters` | Object  | 否       | 融合算法的参数                         |
+| `tag`                    | String  | 否       | 处理器标识标签                         |
+| `description`            | String  | 否       | 处理器描述                             |
+| `ignore_failure`         | Boolean | 否       | 处理器失败时是否继续执行。默认 `false` |
 
 ## 示例
 
@@ -131,7 +131,7 @@ GET /my_index/_search?search_pipeline=full_hybrid_pipeline
 
 ## 相关文档
 
-- [混合搜索]({{< relref "/docs/integrations/ai/ai-api/hybrid-search.md" >}})：完整的混合搜索工作流和示例
+- [混合搜索]({{< relref "/docs/integrations/ai/hybrid-search.md" >}})：完整的混合搜索工作流和示例
 - [语义查询增强处理器]({{< relref "semantic-query-enricher-processor.md" >}})：自动注入 Embedding 模型信息
 - [混合评分解释处理器]({{< relref "hybrid-score-explanation-processor.md" >}})：为混合搜索结果添加评分解释
 

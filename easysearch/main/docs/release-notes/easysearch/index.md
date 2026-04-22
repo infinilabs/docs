@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.1.2 (2026-3-26) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.1.1 (2026-3-20) #  Breaking changes #  Features #   新增索引级动态配置项 index.field_usage_stats.enabled，用于动态控制 _field_usage_stats 字段访问统计的采集，默认值为 true。在高并发搜索场景下，禁用该配置可降低统计带来的额外开销，从而优化搜索并发吞吐。 新增安全配置 security.settings.expose，支持按白名单暴露指定 security.* 配置项；同时增强底层 SettingsFilter，支持 !pattern 例外规则。  Bug fix #  Improvements #   优化了 ZSTD 编解码场景下的 merge 执行效率，改善了持续写入场景中的后台合并性能与稳定性。  2."
+Latest (In development) #  Breaking changes #  Features #   新增 Agent UI，支持统一管理主机上的节点  Bug fix #   修复 cron 表达式表单正则校验 修复开发工具集群信息异常 修复点击服务管理页面的链接进入服务 UI 时出现 404 的中间页  Improvements #   统一 Agent 的登录配置，支持单点登录 优化 Agent 管理中的访问服务设置与节点日志 优化节点日志全屏按钮的位置 存储库访问密钥表单密文显示 优化 Agent 管理的主题语言存储机制  2.1.2 (2026-3-26) #  Breaking changes #  Features #  Bug fix #  Improvements #   添加插件开发文档章节，为开发者提供完整的插件开发、测试和发布指南。 增强 Easysearch 服务稳定性。  2."
 ---
 
 
@@ -13,8 +13,19 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 ## Latest (In development)
 ### Breaking changes
 ### Features
+- 新增 Agent UI，支持统一管理主机上的节点
+
 ### Bug fix
+- 修复 cron 表达式表单正则校验
+- 修复开发工具集群信息异常
+- 修复点击服务管理页面的链接进入服务 UI 时出现 404 的中间页
+
 ### Improvements
+- 统一 Agent 的登录配置，支持单点登录
+- 优化 Agent 管理中的访问服务设置与节点日志
+- 优化节点日志全屏按钮的位置
+- 存储库访问密钥表单密文显示
+- 优化 Agent 管理的主题语言存储机制
 
 ## 2.1.2 (2026-3-26)
 
@@ -25,6 +36,9 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 ### Bug fix
 
 ### Improvements
+
+- 添加插件开发文档章节，为开发者提供完整的插件开发、测试和发布指南。
+- 增强 Easysearch 服务稳定性。
 
 ## 2.1.1 (2026-3-20)
 

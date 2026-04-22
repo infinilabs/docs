@@ -96,12 +96,12 @@ POST /my-vectors/_search
 
 #### 查询参数
 
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| `field` | String | 向量字段名 |
-| `vec.values` | Float[] | 查询向量 |
-| `model` | String | 必须与创建索引时一致 |
-| `similarity` | String | 相似度函数 |
+| 参数         | 类型    | 说明                                                 |
+| ------------ | ------- | ---------------------------------------------------- |
+| `field`      | String  | 向量字段名                                           |
+| `vec.values` | Float[] | 查询向量                                             |
+| `model`      | String  | 必须与创建索引时一致                                 |
+| `similarity` | String  | 相似度函数                                           |
 | `candidates` | Integer | 候选数量，越大越准但越慢。推荐值：`size` 的 5～10 倍 |
 
 ### 精确搜索（Exact）
@@ -257,7 +257,6 @@ POST /my-vectors/_search
 }
 ```
 
-
 ## 性能调优
 
 ### LSH 参数调优
@@ -283,5 +282,5 @@ POST /my-vectors/_search
 - [向量字段建模](./vector-fields.md)：多向量设计、维度选择、模型选型策略
 - [k-NN 查询 API](./knn_api.md)：完整的 API 参数参考
 - [Embedding 服务集成]({{< relref "/docs/integrations/ai/embedding-service" >}})：接入外部 Embedding 模型
-- [AI API 集成]({{< relref "/docs/integrations/ai/ai-api/" >}})：Hybrid Search API 等高级功能
+- [AI API 集成]({{< relref "/docs/integrations/ai/_index.md" >}})：Hybrid Search API 等高级功能
 

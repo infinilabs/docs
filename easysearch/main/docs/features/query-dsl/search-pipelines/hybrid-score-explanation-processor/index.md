@@ -20,16 +20,17 @@ summary: "混合评分解释处理器（Hybrid Score Explanation Processor） # 
 在混合搜索管道中，`hybrid_ranker_processor` 在得分融合过程中会将详细的计算信息（各子查询的原始得分、归一化方式、融合方式）记录到管道处理上下文中。`hybrid_score_explanation` 处理器在响应阶段读取这些信息，并将其合并到每个搜索命中结果的 `_explanation` 字段中。
 
 解释信息包括：
+
 - **归一化详情**：使用的归一化技术及每个子查询得分的归一化结果
 - **得分融合详情**：使用的融合算法（如 RRF）及各路得分的融合过程
 
 ## 请求体字段
 
-| 字段 | 类型 | 是否必填 | 说明 |
-|------|------|---------|------|
-| `tag` | String | 否 | 处理器标识标签 |
-| `description` | String | 否 | 处理器描述 |
-| `ignore_failure` | Boolean | 否 | 处理器失败时是否继续执行。默认 `false` |
+| 字段             | 类型    | 是否必填 | 说明                                   |
+| ---------------- | ------- | -------- | -------------------------------------- |
+| `tag`            | String  | 否       | 处理器标识标签                         |
+| `description`    | String  | 否       | 处理器描述                             |
+| `ignore_failure` | Boolean | 否       | 处理器失败时是否继续执行。默认 `false` |
 
 ## 示例
 
@@ -115,5 +116,5 @@ PUT /_search/pipeline/my_explain_pipeline
 ## 相关文档
 
 - [混合搜索排序处理器]({{< relref "hybrid-ranker-processor.md" >}})：执行得分归一化和融合
-- [混合搜索]({{< relref "/docs/integrations/ai/ai-api/hybrid-search.md" >}})：完整的混合搜索工作流和示例
+- [混合搜索]({{< relref "/docs/integrations/ai/hybrid-search.md" >}})：完整的混合搜索工作流和示例
 
