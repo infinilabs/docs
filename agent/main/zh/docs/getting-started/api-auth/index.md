@@ -2,8 +2,8 @@
 title: "API 认证"
 date: 0001-01-01
 summary: "API 认证 #  INFINI Agent 的所有 HTTP 接口均需要 Token 认证。Token 在进程启动时自动生成，无需手动配置。
-获取 Token #  Agent 启动后，Token 会以 info 级别打印在日志中：
-[INF] [auth_token.go] [agent] api token: d70v0i4bd4atkku9ftlg 每次重启进程都会生成新的 Token。
+获取 Token #  Agent 启动后，Token 会被打印到 stdout 中：
+ -- Login Token ----------------- | Token: d7k714kbd4aisf3a7b90 | ---------------------------------- 每次重启进程都会生成新的 Token。
 登录验证 #  通过 POST /login 接口验证 Token，成功后可确认 Token 有效：
 curl -X POST http://localhost:2900/login \  -H &#34;Content-Type: application/json&#34; \  -d &#39;{&#34;token&#34;: &#34;d70v0i4bd4atkku9ftlg&#34;}&#39; 成功响应（200）：
 {&#34;acknowledged&#34;: true} 失败响应（401）：
@@ -17,10 +17,12 @@ INFINI Agent 的所有 HTTP 接口均需要 Token 认证。Token 在进程启动
 
 ## 获取 Token
 
-Agent 启动后，Token 会以 `info` 级别打印在日志中：
+Agent 启动后，Token 会被打印到 stdout 中：
 
 ```
-[INF] [auth_token.go] [agent] api token: d70v0i4bd4atkku9ftlg
+ --  Login Token  -----------------
+|   Token: d7k714kbd4aisf3a7b90    |
+ ----------------------------------
 ```
 
 每次重启进程都会生成新的 Token。

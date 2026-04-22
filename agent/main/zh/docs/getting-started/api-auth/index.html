@@ -1,12 +1,12 @@
 <!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="API 认证 #  INFINI Agent 的所有 HTTP 接口均需要 Token 认证。Token 在进程启动时自动生成，无需手动配置。
-获取 Token #  Agent 启动后，Token 会以 info 级别打印在日志中：
-[INF] [auth_token.go] [agent] api token: d70v0i4bd4atkku9ftlg 每次重启进程都会生成新的 Token。
+获取 Token #  Agent 启动后，Token 会被打印到 stdout 中：
+ -- Login Token ----------------- | Token: d7k714kbd4aisf3a7b90 | ---------------------------------- 每次重启进程都会生成新的 Token。
 登录验证 #  通过 POST /login 接口验证 Token，成功后可确认 Token 有效：
 curl -X POST http://localhost:2900/login \  -H &#34;Content-Type: application/json&#34; \  -d '{&#34;token&#34;: &#34;d70v0i4bd4atkku9ftlg&#34;}' 成功响应（200）：
 {&#34;acknowledged&#34;: true} 失败响应（401）：
 {&#34;status&#34;: 401, &#34;error&#34;: {&#34;reason&#34;: &#34;invalid login&#34;}} 调用其他接口 #  获取 Token 后，在所有请求的 X-API-TOKEN 请求头中携带该 Token："><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="API 认证"><meta property="og:description" content="API 认证 #  INFINI Agent 的所有 HTTP 接口均需要 Token 认证。Token 在进程启动时自动生成，无需手动配置。
-获取 Token #  Agent 启动后，Token 会以 info 级别打印在日志中：
-[INF] [auth_token.go] [agent] api token: d70v0i4bd4atkku9ftlg 每次重启进程都会生成新的 Token。
+获取 Token #  Agent 启动后，Token 会被打印到 stdout 中：
+ -- Login Token ----------------- | Token: d7k714kbd4aisf3a7b90 | ---------------------------------- 每次重启进程都会生成新的 Token。
 登录验证 #  通过 POST /login 接口验证 Token，成功后可确认 Token 有效：
 curl -X POST http://localhost:2900/login \  -H &#34;Content-Type: application/json&#34; \  -d '{&#34;token&#34;: &#34;d70v0i4bd4atkku9ftlg&#34;}' 成功响应（200）：
 {&#34;acknowledged&#34;: true} 失败响应（401）：
@@ -50,7 +50,9 @@ const observedEls=Array.from(idToLi.keys()).map(id=>document.getElementById(id))
 setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.1,0.25,0.5]});observedEls.forEach(el=>io.observe(el));}
 if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#获取-token>获取 Token</a></li><li><a href=#登录验证>登录验证</a></li><li><a href=#调用其他接口>调用其他接口</a></li></ul></nav></aside></header><article class=markdown><h1 id=api-认证>API 认证
 <a class=anchor href=#api-%e8%ae%a4%e8%af%81>#</a></h1><p>INFINI Agent 的所有 HTTP 接口均需要 Token 认证。Token 在进程启动时自动生成，无需手动配置。</p><h2 id=获取-token>获取 Token
-<a class=anchor href=#%e8%8e%b7%e5%8f%96-token>#</a></h2><p>Agent 启动后，Token 会以 <code>info</code> 级别打印在日志中：</p><pre><code>[INF] [auth_token.go] [agent] api token: d70v0i4bd4atkku9ftlg
+<a class=anchor href=#%e8%8e%b7%e5%8f%96-token>#</a></h2><p>Agent 启动后，Token 会被打印到 stdout 中：</p><pre><code> --  Login Token  -----------------
+|   Token: d7k714kbd4aisf3a7b90    |
+ ----------------------------------
 </code></pre><p>每次重启进程都会生成新的 Token。</p><h2 id=登录验证>登录验证
 <a class=anchor href=#%e7%99%bb%e5%bd%95%e9%aa%8c%e8%af%81>#</a></h2><p>通过 <code>POST /login</code> 接口验证 Token，成功后可确认 Token 有效：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>curl -X POST http://localhost:2900/login <span style=color:#f1fa8c>\
 </span><span style=color:#f1fa8c></span>  -H <span style=color:#f1fa8c>&#34;Content-Type: application/json&#34;</span> <span style=color:#f1fa8c>\

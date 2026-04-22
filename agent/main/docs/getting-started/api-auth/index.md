@@ -2,8 +2,8 @@
 title: "API Authentication"
 date: 0001-01-01
 summary: "API Authentication #  All HTTP endpoints of INFINI Agent require token-based authentication. The token is generated automatically at startup — no manual configuration needed.
-Getting the Token #  After the agent starts, the token is printed to the log at info level:
-[INF] [auth_token.go] [agent] api token: d70v0i4bd4atkku9ftlg A new token is generated on every restart.
+Getting the Token #  After the agent starts, the token is printed to the stdout:
+ -- Login Token ----------------- | Token: d7k714kbd4aisf3a7b90 | ---------------------------------- A new token is generated on every restart.
 Verifying the Token #  Use POST /login to verify the token and confirm it is valid:"
 ---
 
@@ -14,10 +14,12 @@ All HTTP endpoints of INFINI Agent require token-based authentication. The token
 
 ## Getting the Token
 
-After the agent starts, the token is printed to the log at `info` level:
+After the agent starts, the token is printed to the stdout:
 
 ```
-[INF] [auth_token.go] [agent] api token: d70v0i4bd4atkku9ftlg
+ --  Login Token  -----------------
+|   Token: d7k714kbd4aisf3a7b90    |
+ ----------------------------------
 ```
 
 A new token is generated on every restart.
