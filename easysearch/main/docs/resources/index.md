@@ -2,7 +2,7 @@
 title: "其它资源"
 date: 0001-01-01
 summary: "其它资源 #  这里是一些和 Easysearch 有关的外部有用资源。
-文章 #    Easysearch 时序数据的基于时间范围的合并策略 | 2025-04-29  Easysearch 基础运维扫盲指南：从 HTTP 到 HTTPS、认证与安全访问全解析 | 2025-04-25  从认证到透传：用 Nginx 为 EasySearch 构建一体化认证网关 | 2025-04-24  Easysearch 服务昨天还好好的，为什么今天突然访问不了了？ | 2025-04-23  Easysearch 移除 Data 节点注意事项 | 2025-04-23  使用 Logstash 迁移 MongoDB 数据到 Easysearch | 2025-04-21  Easysearch 迁移数据之 Reindex From Remote | 2025-04-16  Easysearch Rollup 相比 OpenSearch Rollup 的优势分析 | 2025-04-13  Easysearch 移除 Master 节点注意事项 | 2025-04-13  如何快速搭建高可用 Easysearch 集群 ？Ubuntu 多节点部署指南 | 2025-03-29  Docker-Compose 部署 EasySearch 异常问题排查 | 2025-03-24  Easysearch VS Opensearch 数据写入与存储性能对比 | 2025-03-24  Easysearch 索引生命周期管理实战 | 2025-03-18  Easysearch 自动备份：快照生命周期管理 | 2025-03-17  Easysearch 中 PUT 和 POST 更新索引的区别及常见错误解析 | 2025-03-12  Easysearch S3 备份实战 | 2025-03-10  Easysearch 新功能： IK 字段级别词典 | 2025-02-27  推荐给 Easysearch 新用户的几个 Elasticsearch 可视化工具 | 2025-02-20  使用 Nginx 代理 Easysearch 服务 | 2025-02-18  引爆知识革命！Easysearch 携手 DeepSeek 打造下一代智能问答系统 | 2025-02-12  Macbook Pro 快速搭建 Easysearch 学习环境 | 2025-02-11  Easysearch 写入限速实战 | 2025-01-18  Easysearch 集群重置 admin 用户密码 | 2025-01-12  Kibana OSS 7."
+文章 #    Easysearch 时序数据的基于时间范围的合并策略 | 2025-04-29  Easysearch 基础运维扫盲指南：从 HTTP 到 HTTPS、认证与安全访问全解析 | 2025-04-25  从认证到透传：用 Nginx 为 Easyserch 构建一体化认证网关 | 2025-04-24  Easysearch 服务昨天还好好的，为什么今天突然访问不了了？ | 2025-04-23  Easysearch 移除 Data 节点注意事项 | 2025-04-23  使用 Logstash 迁移 MongoDB 数据到 Easysearch | 2025-04-21  Easysearch 迁移数据之 Reindex From Remote | 2025-04-16  Easysearch Rollup 相比 OpenSearch Rollup 的优势分析 | 2025-04-13  Easysearch 移除 Master 节点注意事项 | 2025-04-13  如何快速搭建高可用 Easysearch 集群 ？Ubuntu 多节点部署指南 | 2025-03-29  Docker-Compose 部署 Easyserch 异常问题排查 | 2025-03-24  Easysearch VS Opensearch 数据写入与存储性能对比 | 2025-03-24  Easysearch 索引生命周期管理实战 | 2025-03-18  Easysearch 自动备份：快照生命周期管理 | 2025-03-17  Easysearch 中 PUT 和 POST 更新索引的区别及常见错误解析 | 2025-03-12  Easysearch S3 备份实战 | 2025-03-10  Easysearch 新功能： IK 字段级别词典 | 2025-02-27  推荐给 Easysearch 新用户的几个 Elasticsearch 可视化工具 | 2025-02-20  使用 Nginx 代理 Easysearch 服务 | 2025-02-18  引爆知识革命！Easysearch 携手 DeepSeek 打造下一代智能问答系统 | 2025-02-12  Macbook Pro 快速搭建 Easysearch 学习环境 | 2025-02-11  Easysearch 写入限速实战 | 2025-01-18  Easysearch 集群重置 admin 用户密码 | 2025-01-12  Kibana OSS 7."
 ---
 
 
@@ -14,7 +14,7 @@ summary: "其它资源 #  这里是一些和 Easysearch 有关的外部有用资
 
 - [Easysearch 时序数据的基于时间范围的合并策略](https://infinilabs.cn/blog/2025/time-range-mergepolicy-for-easysearch/) | 2025-04-29
 - [Easysearch 基础运维扫盲指南：从 HTTP 到 HTTPS、认证与安全访问全解析](https://blog.csdn.net/weixin_38781498/article/details/147514771) | 2025-04-25
-- [从认证到透传：用 Nginx 为 EasySearch 构建一体化认证网关](https://blog.csdn.net/weixin_38781498/article/details/147484530) | 2025-04-24
+- [从认证到透传：用 Nginx 为 Easyserch 构建一体化认证网关](https://blog.csdn.net/weixin_38781498/article/details/147484530) | 2025-04-24
 - [Easysearch 服务昨天还好好的，为什么今天突然访问不了了？](https://blog.csdn.net/weixin_38781498/article/details/147460362) | 2025-04-23
 - [Easysearch 移除 Data 节点注意事项](https://infinilabs.cn/blog/2025/easysearch-removal-of-data-node-considerations/) | 2025-04-23
 - [使用 Logstash 迁移 MongoDB 数据到 Easysearch](https://blog.csdn.net/yangmf2040/article/details/147404516) | 2025-04-21
@@ -22,7 +22,7 @@ summary: "其它资源 #  这里是一些和 Easysearch 有关的外部有用资
 - [Easysearch Rollup 相比 OpenSearch Rollup 的优势分析](https://infinilabs.cn/blog/2025/Easysearch-Rollup-vs-OpenSearch-Rollup/) | 2025-04-13
 - [Easysearch 移除 Master 节点注意事项](https://infinilabs.cn/blog/2025/considerations-for-removing-master-nodes-in-easysearch/) | 2025-04-13
 - [如何快速搭建高可用 Easysearch 集群 ？Ubuntu 多节点部署指南](https://mp.weixin.qq.com/s/kPGyk49j8cFaJU6_M5BoSg) | 2025-03-29
-- [Docker-Compose 部署 EasySearch 异常问题排查](https://blog.csdn.net/weixin_38781498/article/details/146483037) | 2025-03-24
+- [Docker-Compose 部署 Easyserch 异常问题排查](https://blog.csdn.net/weixin_38781498/article/details/146483037) | 2025-03-24
 - [Easysearch VS Opensearch 数据写入与存储性能对比](https://infinilabs.cn/blog/2025/easysearch-vs-opensearch-performance-comparison/) | 2025-03-24
 - [Easysearch 索引生命周期管理实战](https://blog.csdn.net/yangmf2040/article/details/146355156) | 2025-03-18
 - [Easysearch 自动备份：快照生命周期管理](https://blog.csdn.net/yangmf2040/article/details/146281726) | 2025-03-17
