@@ -2,7 +2,7 @@
 title: "版本历史"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Console 历史版本发布的相关说明。
-Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #  1.30.1 (2025-12-19) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #   此版本包含了底层 Framework v1.4.0 的更新，解决了一些常见问题，并增强了整体稳定性和性能。虽然 Console 本身没有直接的变更，但从 Framework 中继承的改进间接地使 Console 受益。  1.30.0 (2025-11-19) #  ❌ Breaking changes #  🚀 Features #   feat: 支持百分比聚合 feat: 为初始化管理员用户增加密码强度校验 (#250) feat: 支持 Nginx 代理下的子目录路径 (#243)  🐛 Bug fix #   fix: 修复了索引映射 (mapping) 在滚动查询 (scroll) 后不正确的问题 (#248) fix: 索引 mapping 在滚动操作之后不对的问题 fix: 集群监控设置显示错误  ✈️ Improvements #   此版本包含了底层 Framework v1."
+Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #  1.30.2 (2026-03-16) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #   此版本包含了底层 Framework v1.4.0 的更新，解决了一些常见问题，并增强了整体稳定性和性能。虽然 Console 本身没有直接的变更，但从 Framework 中继承的改进间接地使 Console 受益。  1.30.1 (2025-12-19) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #   此版本包含了底层 Framework v1."
 ---
 
 
@@ -15,6 +15,13 @@ Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix
 ### 🚀 Features  
 ### 🐛 Bug fix  
 ### ✈️ Improvements  
+
+## 1.30.2 (2026-03-16)
+### ❌ Breaking changes  
+### 🚀 Features  
+### 🐛 Bug fix  
+### ✈️ Improvements  
+- 此版本包含了底层 [Framework v1.4.0](https://docs.infinilabs.com/framework/v1.4.0) 的更新，解决了一些常见问题，并增强了整体稳定性和性能。虽然 Console 本身没有直接的变更，但从 Framework 中继承的改进间接地使 Console 受益。
 
 ## 1.30.1 (2025-12-19)
 ### ❌ Breaking changes  

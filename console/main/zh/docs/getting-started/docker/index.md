@@ -5,8 +5,8 @@ summary: "容器部署 #  INFINI Console 支持容器方式部署。
 下载镜像 #  INFINI Console 的镜像发布在 Docker 的官方仓库，地址如下：
 https://hub.docker.com/r/infinilabs/console
 使用下面的命令即可获取最新的容器镜像：
-mkdir -p ~/infinilabs &amp;&amp; cd ~/infinilabs docker pull infinilabs/console:1.30.1-2308 验证镜像 #  将镜像下载到本地之后，可以看到 INFINI Console 平台的容器镜像非常小，只有不到 30MB，所以下载的速度应该是非常快的。
-➜ docker images |grep &#34;console&#34; |grep &#34;1.30.1-2308&#34; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/console latest 8c27cd334e4c 47 minutes ago 26.4MB 从镜像初始化 config 目录 #  docker run --rm -v $PWD/console:/work infinilabs/console:1.30.1-2308 cp -rf /config /work 启动平台 #  使用如下命令启动 INFINI Console 容器："
+mkdir -p ~/infinilabs &amp;&amp; cd ~/infinilabs docker pull infinilabs/console:1.30.2-2396 验证镜像 #  将镜像下载到本地之后，可以看到 INFINI Console 平台的容器镜像非常小，只有不到 30MB，所以下载的速度应该是非常快的。
+➜ docker images |grep &#34;console&#34; |grep &#34;1.30.2-2396&#34; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/console latest 8c27cd334e4c 47 minutes ago 26.4MB 从镜像初始化 config 目录 #  docker run --rm -v $PWD/console:/work infinilabs/console:1.30.2-2396 cp -rf /config /work 启动平台 #  使用如下命令启动 INFINI Console 容器："
 ---
 
 

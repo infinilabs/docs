@@ -4,7 +4,7 @@ date: 0001-01-01
 summary: "Container Deployment #  INFINI Agent supports container deployment.
 Download Image #  The images of INFINI Agent are published at the official repository of Docker. The URL is as follows: https://hub.docker.com/r/infinilabs/agent
 Run the following command:
-docker pull infinilabs/agent:1.30.1-2308 Verifying the Image #  After downloading the image locally, you will notice that the container image of INFINI Agent is very small, with a size less than 25 MB. So, the downloading is very fast."
+docker pull infinilabs/agent:1.30.2-2396 Verifying the Image #  After downloading the image locally, you will notice that the container image of INFINI Agent is very small, with a size less than 25 MB. So, the downloading is very fast."
 ---
 
 

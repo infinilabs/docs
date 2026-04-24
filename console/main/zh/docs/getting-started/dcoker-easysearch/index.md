@@ -3,7 +3,7 @@ title: "使用 Docker Compose 部署 Console 和 Easysearch"
 date: 0001-01-01
 summary: "使用 Docker Compose 部署 Console 和 Easysearch #  下面介绍 INFINI Console 和 INFINI Easysearch 进行容器部署及容器内开启 Agent 指标采集模式。
 前提 #   确保 Docker 已安装并运行正常。 确保 Docker Compose 已安装。  创建 Docker Compose 文件 #  创建一个名为 docker-compose.yml 的文件
-mkdir -p ~/infinilabs &amp;&amp; cd ~/infinilabs cat &lt;&lt; &#34;EOF&#34; &gt; docker-compose.yml services: console: image: infinilabs/console:1.30.1-2308 container_name: console hostname: console networks: - cluster_network ports: - &#34;9000:9000&#34; volumes: - $PWD/console/config:/config - $PWD/console/data:/data - $PWD/console/logs:/log easysearch: image: infinilabs/easysearch:2."
+mkdir -p ~/infinilabs &amp;&amp; cd ~/infinilabs cat &lt;&lt; &#34;EOF&#34; &gt; docker-compose.yml services: console: image: infinilabs/console:1.30.2-2396 container_name: console hostname: console networks: - cluster_network ports: - &#34;9000:9000&#34; volumes: - $PWD/console/config:/config - $PWD/console/data:/data - $PWD/console/logs:/log easysearch: image: infinilabs/easysearch:2."
 ---
 
 

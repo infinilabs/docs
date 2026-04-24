@@ -5,7 +5,7 @@ summary: "Container Deployment #  INFINI Console supports container deployment.
 Downloading an Image #  The images of INFINI Console are published at the official repository of Docker. The URL is as follows:
  https://hub.docker.com/r/infinilabs/console
 Use the following command to obtain the latest container image:
-mkdir -p ~/infinilabs &amp;&amp; cd ~/infinilabs docker pull infinilabs/console:1.30.1-2308 Verifying the Image #  After downloading the image locally, you will notice that the container image of INFINI Console is very small, with a size less than 30 MB."
+mkdir -p ~/infinilabs &amp;&amp; cd ~/infinilabs docker pull infinilabs/console:1.30.2-2396 Verifying the Image #  After downloading the image locally, you will notice that the container image of INFINI Console is very small, with a size less than 30 MB."
 ---
 
 
