@@ -2905,6 +2905,51 @@ POST _match_rules/{repo_id}/_compile
 
 说明：请求体是必需的，至少传空对象 `{}`。
 
+## match_rules.list
+
+分页列出当前规则仓库元数据。该接口默认排除 `rules` 原始规则文本，适合管理后台和列表查询。
+
+```
+GET _match_rules
+```
+
+#### URL 参数
+
+| 参数 | 类型 | 说明 |
+| :--------- | :------- | :----------------------------------------------------------------------- |
+| page       | integer  | 页码，从 1 开始。默认 `1`。                                                |
+| size       | integer  | 每页条数。默认 `20`，最大 `100`。                                           |
+| q          | string   | 关键字查询，匹配 `repo_id`、`name`、`description`、`tags`。                 |
+| status     | string   | 按规则仓库状态过滤，如 `compiled`、`failed`。                               |
+| tag        | string   | 按标签过滤，支持逗号分隔多个标签。                                          |
+| sort       | string   | 排序字段。默认 `updated`。支持 `updated`、`created`、`name`、`status`、`version`、`compiled_at`、`total_rules`、`repo_id`。 |
+| order      | string   | 排序方向。默认 `desc`，支持 `asc`、`desc`。                                  |
+
+## match_rules.references
+
+查看指定规则仓库被哪些 pipeline 引用。
+
+```
+GET _match_rules/{repo_id}/_references
+```
+
+#### URL 参数
+
+| 参数 | 类型 | 说明 |
+| :--------- | :------- | :----------------------------------------------------------------------- |
+| repo_id    | string   | 必需。要查询引用关系的规则仓库 ID。                                        |
+
+#### 响应体
+
+| 字段 | 类型 | 说明 |
+| :--------- | :------- | :----------------------------------------------------------------------- |
+| referenced | boolean | 当前规则仓库是否被任一 pipeline 引用。 |
+| pipelines | array | 引用当前规则仓库的 pipeline 列表。 |
+| pipelines[].pipeline_id | string | Pipeline ID。 |
+| pipelines[].processors | array | Pipeline 中引用当前规则仓库的 `check_match_rules` 处理器列表。 |
+| pipelines[].processors[].processor_path | string | 处理器在 pipeline 配置中的路径。 |
+| pipelines[].processors[].target_field | string | 命中标签写入字段；未配置、为空字符串或纯空白时返回默认值 `tags`。 |
+
 ## match_rules.delete
 
 删除指定的规则仓库。

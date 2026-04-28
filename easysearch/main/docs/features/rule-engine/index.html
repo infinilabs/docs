@@ -770,7 +770,56 @@ GET .match_rules/_search
   ]
 }
 </code></pre></div><p><strong>说明</strong>：</p><ul><li><code>matched_rules</code> 返回的是编译后规则库中的规则标签，和 <code>check_match_rules</code> 写入目标字段的值保持一致</li><li>未命中时，<code>matched = false</code> 且 <code>matched_rules = []</code></li><li>如果本节点找不到已编译的规则库目录，会返回 <code>404</code></li><li>如果请求体里显式传了 <code>fields</code>、<code>default_match_field</code>、<code>regex_start_at_word</code>，匹配行为会按这些参数执行</li><li>如果你需要验证联合索引效果，应先在 <code>POST /_match_rules/{repo_id}/_compile</code> 时声明 <code>composite</code>，再调用这个接口；这里不能临时覆盖编译参数</li><li>如果你要验证的是完整 ingest 效果，而不只是规则命中，请继续使用 <code>POST /_ingest/pipeline/{id}/_simulate</code></li></ul><h3 id=查询规则库-api>查询规则库 API
-<a class=anchor href=#%e6%9f%a5%e8%af%a2%e8%a7%84%e5%88%99%e5%ba%93-api>#</a></h3><h4 id=get-match_rules_docrepo_id>GET .match_rules/_doc/{repo_id}
+<a class=anchor href=#%e6%9f%a5%e8%af%a2%e8%a7%84%e5%88%99%e5%ba%93-api>#</a></h3><h4 id=get-_match_rules>GET /_match_rules
+<a class=anchor href=#get-_match_rules>#</a></h4><p>分页列出当前规则库元数据，适合管理后台、列表页和巡检脚本使用。这个接口默认<strong>不会返回</strong> <code>rules</code> 原始规则文本，避免把大字段整批带出来。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>GET /_match_rules?page=<span style=color:#bd93f9>1</span>&amp;size=<span style=color:#bd93f9>20</span>&amp;q=security&amp;status=compiled&amp;tag=security,content-filter&amp;sort=updated&amp;order=desc
+</code></pre></div><p><strong>URL 参数</strong>：</p><table><thead><tr><th>参数</th><th>类型</th><th>必需</th><th>默认值</th><th>说明</th></tr></thead><tbody><tr><td><code>page</code></td><td>integer</td><td>❌</td><td>1</td><td>页码，从 1 开始</td></tr><tr><td><code>size</code></td><td>integer</td><td>❌</td><td>20</td><td>每页条数，最大 100</td></tr><tr><td><code>q</code></td><td>string</td><td>❌</td><td>-</td><td>关键字查询，匹配 <code>repo_id</code>、<code>name</code>、<code>description</code>、<code>tags</code></td></tr><tr><td><code>status</code></td><td>string</td><td>❌</td><td>-</td><td>按编译状态过滤，如 <code>compiled</code>、<code>failed</code></td></tr><tr><td><code>tag</code></td><td>string</td><td>❌</td><td>-</td><td>按标签过滤，支持逗号分隔多个标签</td></tr><tr><td><code>sort</code></td><td>string</td><td>❌</td><td><code>updated</code></td><td>排序字段，支持 <code>updated</code>、<code>created</code>、<code>name</code>、<code>status</code>、<code>version</code>、<code>compiled_at</code>、<code>total_rules</code>、<code>repo_id</code></td></tr><tr><td><code>order</code></td><td>string</td><td>❌</td><td><code>desc</code></td><td>排序方向，支持 <code>asc</code>、<code>desc</code></td></tr></tbody></table><p><strong>响应</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#ff79c6>&#34;total&#34;</span>: <span style=color:#bd93f9>2</span>,
+  <span style=color:#ff79c6>&#34;page&#34;</span>: <span style=color:#bd93f9>1</span>,
+  <span style=color:#ff79c6>&#34;size&#34;</span>: <span style=color:#bd93f9>20</span>,
+  <span style=color:#ff79c6>&#34;items&#34;</span>: [
+    {
+      <span style=color:#ff79c6>&#34;repo_id&#34;</span>: <span style=color:#f1fa8c>&#34;security_v1&#34;</span>,
+      <span style=color:#ff79c6>&#34;name&#34;</span>: <span style=color:#f1fa8c>&#34;安全规则库&#34;</span>,
+      <span style=color:#ff79c6>&#34;description&#34;</span>: <span style=color:#f1fa8c>&#34;用于安全事件分类的规则库&#34;</span>,
+      <span style=color:#ff79c6>&#34;tags&#34;</span>: [<span style=color:#f1fa8c>&#34;security&#34;</span>, <span style=color:#f1fa8c>&#34;content-filter&#34;</span>],
+      <span style=color:#ff79c6>&#34;version&#34;</span>: <span style=color:#bd93f9>2</span>,
+      <span style=color:#ff79c6>&#34;status&#34;</span>: <span style=color:#f1fa8c>&#34;compiled&#34;</span>,
+      <span style=color:#ff79c6>&#34;total_rules&#34;</span>: <span style=color:#bd93f9>4</span>,
+      <span style=color:#ff79c6>&#34;compiled_at&#34;</span>: <span style=color:#f1fa8c>&#34;2026-01-07T08:00:00Z&#34;</span>,
+      <span style=color:#ff79c6>&#34;compiled_nodes&#34;</span>: [<span style=color:#f1fa8c>&#34;node-1&#34;</span>, <span style=color:#f1fa8c>&#34;node-2&#34;</span>],
+      <span style=color:#ff79c6>&#34;fields&#34;</span>: [<span style=color:#f1fa8c>&#34;title&#34;</span>, <span style=color:#f1fa8c>&#34;content&#34;</span>],
+      <span style=color:#ff79c6>&#34;composite&#34;</span>: [<span style=color:#f1fa8c>&#34;(title,content)&#34;</span>],
+      <span style=color:#ff79c6>&#34;created&#34;</span>: <span style=color:#f1fa8c>&#34;2025-12-31T10:00:00Z&#34;</span>,
+      <span style=color:#ff79c6>&#34;updated&#34;</span>: <span style=color:#f1fa8c>&#34;2026-01-07T08:00:00Z&#34;</span>
+    }
+  ]
+}
+</code></pre></div><p><strong>说明</strong>：</p><ul><li><code>repo_id</code> 来自规则库文档 <code>_id</code></li><li>列表接口默认排除 <code>rules</code> 字段，不返回原始规则文本</li><li>如果需要查看完整规则内容，请继续使用下面的详情接口</li></ul><h4 id=get-_match_rulesrepo_id_references>GET /_match_rules/{repo_id}/_references
+<a class=anchor href=#get-_match_rulesrepo_id_references>#</a></h4><p>查看指定规则库当前被哪些 Pipeline 引用，适合删除前依赖检查、配置巡检和前端提示。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>GET /_match_rules/security_v<span style=color:#bd93f9>1</span>/_references
+</code></pre></div><p><strong>响应</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#ff79c6>&#34;referenced&#34;</span>: <span style=color:#ff79c6>true</span>,
+  <span style=color:#ff79c6>&#34;pipelines&#34;</span>: [
+    {
+      <span style=color:#ff79c6>&#34;pipeline_id&#34;</span>: <span style=color:#f1fa8c>&#34;pipeline-a&#34;</span>,
+      <span style=color:#ff79c6>&#34;processors&#34;</span>: [
+        {
+          <span style=color:#ff79c6>&#34;processor_path&#34;</span>: <span style=color:#f1fa8c>&#34;processors[0].check_match_rules&#34;</span>,
+          <span style=color:#ff79c6>&#34;target_field&#34;</span>: <span style=color:#f1fa8c>&#34;security_labels&#34;</span>
+        }
+      ]
+    },
+    {
+      <span style=color:#ff79c6>&#34;pipeline_id&#34;</span>: <span style=color:#f1fa8c>&#34;pipeline-b&#34;</span>,
+      <span style=color:#ff79c6>&#34;processors&#34;</span>: [
+        {
+          <span style=color:#ff79c6>&#34;processor_path&#34;</span>: <span style=color:#f1fa8c>&#34;processors[1].foreach.processors[0].check_match_rules&#34;</span>,
+          <span style=color:#ff79c6>&#34;target_field&#34;</span>: <span style=color:#f1fa8c>&#34;tags&#34;</span>
+        }
+      ]
+    }
+  ]
+}
+</code></pre></div><p><strong>说明</strong>：</p><ul><li><code>pipeline_id</code> 表示命中的 ingest pipeline</li><li><code>processors</code> 表示该 Pipeline 中引用当前规则库的 <code>check_match_rules</code> 处理器</li><li><code>processor_path</code> 表示处理器在 Pipeline 配置中的路径，包含嵌套 <code>processors</code> 和 <code>on_failure</code></li><li><code>target_field</code> 表示命中标签写入的目标字段；未显式配置、配置为空字符串或纯空白时返回默认值 <code>tags</code></li><li>这个接口只做“引用关系反查”，不校验规则库文档是否存在</li></ul><h4 id=get-match_rules_docrepo_id>GET .match_rules/_doc/{repo_id}
 <a class=anchor href=#get-match_rules_docrepo_id>#</a></h4><p>查询规则库详情。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>GET .match_rules/_doc/security_v<span style=color:#bd93f9>1</span>
 </code></pre></div><p><strong>响应</strong>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
   <span style=color:#ff79c6>&#34;_index&#34;</span>: <span style=color:#f1fa8c>&#34;.match_rules&#34;</span>,

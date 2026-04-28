@@ -1207,6 +1207,103 @@ PUT /_match_rules/security_v1/_import
 
 ### 查询规则库 API
 
+#### GET /_match_rules
+
+分页列出当前规则库元数据，适合管理后台、列表页和巡检脚本使用。这个接口默认**不会返回** `rules` 原始规则文本，避免把大字段整批带出来。
+
+```json
+GET /_match_rules?page=1&size=20&q=security&status=compiled&tag=security,content-filter&sort=updated&order=desc
+```
+
+**URL 参数**：
+
+| 参数 | 类型 | 必需 | 默认值 | 说明 |
+|------|------|------|--------|------|
+| `page` | integer | ❌ | 1 | 页码，从 1 开始 |
+| `size` | integer | ❌ | 20 | 每页条数，最大 100 |
+| `q` | string | ❌ | - | 关键字查询，匹配 `repo_id`、`name`、`description`、`tags` |
+| `status` | string | ❌ | - | 按编译状态过滤，如 `compiled`、`failed` |
+| `tag` | string | ❌ | - | 按标签过滤，支持逗号分隔多个标签 |
+| `sort` | string | ❌ | `updated` | 排序字段，支持 `updated`、`created`、`name`、`status`、`version`、`compiled_at`、`total_rules`、`repo_id` |
+| `order` | string | ❌ | `desc` | 排序方向，支持 `asc`、`desc` |
+
+**响应**：
+
+```json
+{
+  "total": 2,
+  "page": 1,
+  "size": 20,
+  "items": [
+    {
+      "repo_id": "security_v1",
+      "name": "安全规则库",
+      "description": "用于安全事件分类的规则库",
+      "tags": ["security", "content-filter"],
+      "version": 2,
+      "status": "compiled",
+      "total_rules": 4,
+      "compiled_at": "2026-01-07T08:00:00Z",
+      "compiled_nodes": ["node-1", "node-2"],
+      "fields": ["title", "content"],
+      "composite": ["(title,content)"],
+      "created": "2025-12-31T10:00:00Z",
+      "updated": "2026-01-07T08:00:00Z"
+    }
+  ]
+}
+```
+
+**说明**：
+
+- `repo_id` 来自规则库文档 `_id`
+- 列表接口默认排除 `rules` 字段，不返回原始规则文本
+- 如果需要查看完整规则内容，请继续使用下面的详情接口
+
+#### GET /_match_rules/{repo_id}/_references
+
+查看指定规则库当前被哪些 Pipeline 引用，适合删除前依赖检查、配置巡检和前端提示。
+
+```json
+GET /_match_rules/security_v1/_references
+```
+
+**响应**：
+
+```json
+{
+  "referenced": true,
+  "pipelines": [
+    {
+      "pipeline_id": "pipeline-a",
+      "processors": [
+        {
+          "processor_path": "processors[0].check_match_rules",
+          "target_field": "security_labels"
+        }
+      ]
+    },
+    {
+      "pipeline_id": "pipeline-b",
+      "processors": [
+        {
+          "processor_path": "processors[1].foreach.processors[0].check_match_rules",
+          "target_field": "tags"
+        }
+      ]
+    }
+  ]
+}
+```
+
+**说明**：
+
+- `pipeline_id` 表示命中的 ingest pipeline
+- `processors` 表示该 Pipeline 中引用当前规则库的 `check_match_rules` 处理器
+- `processor_path` 表示处理器在 Pipeline 配置中的路径，包含嵌套 `processors` 和 `on_failure`
+- `target_field` 表示命中标签写入的目标字段；未显式配置、配置为空字符串或纯空白时返回默认值 `tags`
+- 这个接口只做“引用关系反查”，不校验规则库文档是否存在
+
 #### GET .match_rules/_doc/{repo_id}
 
 查询规则库详情。
