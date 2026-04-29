@@ -3029,6 +3029,150 @@ POST {index}/{type}/_mget
 | \_source_excludes | list    | 要从返回的 \_source 字段中排除的字段列表 |
 | \_source_includes | list    | 要从 \_source 字段中提取并返回的字段列表 |
 
+## model_provider.create
+
+创建模型提供商，或按指定 ID 全量替换现有模型提供商配置。
+
+```
+POST _model_provider/_doc
+PUT _model_provider/_doc/{id}
+```
+
+#### URL 参数
+
+| 参数 | 类型 | 说明 |
+| :--------- | :------- | :----------------------------------------------------------------------- |
+| id         | string   | 模型提供商 ID。仅 `PUT` 时必需；`POST` 省略时由服务端自动生成。              |
+| refresh    | string   | 可选。刷新策略，例如 `true`、`false`、`wait_for`。                           |
+
+#### HTTP 请求体
+
+| 参数 | 类型 | 说明 |
+| :--------- | :------- | :----------------------------------------------------------------------- |
+| name       | string   | 必需。模型提供商名称。                                                     |
+| api_type   | string   | 必需。接口类型标识，例如 `openai`。                                        |
+| models     | array    | 必需。模型列表，不能为空。                                                 |
+| description | string  | 可选。描述信息。                                                           |
+| icon       | string   | 可选。图标地址或图标路径。                                                 |
+| website    | string   | 可选。官网地址，必须是绝对 URL。                                           |
+| base_url   | string   | 可选。模型服务基础地址，必须是绝对 URL。                                   |
+| api_key    | string   | 可选。仅 `POST` 可写入；服务端会加密存储。`PUT` 方式全量替换时不允许传入。     |
+| enabled    | boolean  | 可选。是否启用；省略时默认 `false`。                                       |
+| builtin    | boolean  | 不允许通过 REST API 写入。                                                 |
+| models[].id | string  | 可选。模型 ID。                                                            |
+| models[].name | string | 必需。模型名称，单个模型提供商内不得重复。                                  |
+| models[].type | string | 必需。模型类型，例如 `chat`、`embedding`。                                 |
+| models[].settings | object | 可选。模型默认参数。                                                  |
+| models[].settings.reasoning | boolean | 可选。是否启用 reasoning。                                 |
+| models[].settings.temperature | number | 可选。温度参数。                                        |
+| models[].settings.top_p | number | 可选。`top_p` 参数。                                              |
+| models[].settings.presence_penalty | number | 可选。`presence_penalty` 参数。                    |
+| models[].settings.frequency_penalty | number | 可选。`frequency_penalty` 参数。                  |
+| models[].settings.max_tokens | integer | 可选。`max_tokens` 参数。                              |
+| models[].settings.max_length | integer | 可选。`max_length` 参数。                              |
+
+说明：
+- `PUT /_model_provider/_doc/{id}` 为全量替换语义，若不传 `api_key`，会保留现有的加密密钥值。
+- 内置模型提供商（`builtin=true`）不允许通过该接口创建、覆盖或写入。
+
+## model_provider.get
+
+获取指定模型提供商详情。
+
+```
+GET _model_provider/_doc/{id}
+```
+
+#### URL 参数
+
+| 参数 | 类型 | 说明 |
+| :--------- | :------- | :----------------------------------------------------------------------- |
+| id         | string   | 必需。模型提供商 ID。                                                     |
+
+#### 响应体
+
+| 字段 | 类型 | 说明 |
+| :--------- | :------- | :----------------------------------------------------------------------- |
+| found      | boolean  | 是否存在该模型提供商。                                                     |
+| _source.id | string   | 模型提供商 ID。                                                           |
+| _source.name | string | 模型提供商名称。                                                           |
+| _source.api_key | string | `api_key` 的掩码值，例如 `sk-****`。                                   |
+| _source.models | array | 模型列表。                                                                |
+
+说明：
+- 详情接口会返回 `api_key` 的掩码值，不会返回明文。
+
+## model_provider.search
+
+搜索模型提供商列表。底层固定查询内部索引 `.model_provider`。
+
+```
+GET _model_provider/_search
+POST _model_provider/_search
+```
+
+#### HTTP 请求体
+
+支持标准 Search API 请求体，例如 `query`、`sort`、`from`、`size`、`\_source` 等。
+
+说明：
+- 无论是否显式请求，搜索结果都会强制排除 `api_key` 字段。
+- 返回结果中的每条命中会补充 `id` 字段，对应文档 `_id`。
+
+## model_provider.update
+
+局部更新指定模型提供商。
+
+```
+POST _model_provider/_update/{id}
+```
+
+#### URL 参数
+
+| 参数 | 类型 | 说明 |
+| :--------- | :------- | :----------------------------------------------------------------------- |
+| id         | string   | 必需。模型提供商 ID。                                                     |
+| refresh    | string   | 可选。刷新策略，例如 `true`、`false`、`wait_for`。                           |
+
+#### HTTP 请求体
+
+请求体必须包含顶层 `doc` 对象：
+
+| 参数 | 类型 | 说明 |
+| :--------- | :------- | :----------------------------------------------------------------------- |
+| doc        | object   | 必需。局部更新内容。                                                       |
+| doc.api_key | string  | 可选。若出现，则 `doc` 中只能包含这一个字段；空字符串表示清空已存储的密钥。   |
+| doc.name   | string   | 可选。模型提供商名称。                                                     |
+| doc.description | string | 可选。描述信息；空字符串表示删除该字段。                                |
+| doc.icon   | string   | 可选。图标地址或路径；空字符串表示删除该字段。                              |
+| doc.website | string  | 可选。官网地址；空字符串表示删除该字段。必须是绝对 URL。                    |
+| doc.api_type | string | 可选。接口类型标识。                                                       |
+| doc.base_url | string | 可选。模型服务基础地址；空字符串表示删除该字段。必须是绝对 URL。             |
+| doc.enabled | boolean | 可选。是否启用。                                                           |
+| doc.models | array    | 可选。模型列表；如传入则整体替换。                                         |
+
+说明：
+- 内置模型提供商不允许修改。
+- 若更新 `api_key`，必须单独调用该接口，不能与其他字段一起更新。
+
+## model_provider.delete
+
+删除指定模型提供商。
+
+```
+DELETE _model_provider/_doc/{id}
+```
+
+#### URL 参数
+
+| 参数 | 类型 | 说明 |
+| :--------- | :------- | :----------------------------------------------------------------------- |
+| id         | string   | 必需。模型提供商 ID。                                                     |
+| refresh    | string   | 可选。刷新策略，例如 `true`、`false`、`wait_for`。                           |
+
+说明：
+- 内置模型提供商不允许删除。
+
 ## msearch
 
 在单个请求中执行多个搜索操作。
