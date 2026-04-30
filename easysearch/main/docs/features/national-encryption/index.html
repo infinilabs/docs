@@ -267,7 +267,7 @@ use_tongsuo
 <span style=color:#ff79c6>security.ssl.transport.tlcp.trusted_ca_certificate</span>: ca_chain.crt
 </code></pre></div><h3 id=3-一键初始化单节点-tlcp>3. 一键初始化（单节点 TLCP）
 <a class=anchor href=#3-%e4%b8%80%e9%94%ae%e5%88%9d%e5%a7%8b%e5%8c%96%e5%8d%95%e8%8a%82%e7%82%b9-tlcp>#</a></h3><p>如需在单节点场景快速完成证书生成、TLCP 配置写入和初始密码设置，可直接使用：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#8be9fd;font-style:italic>cd</span> /path/to/easysearch
-<span style=color:#8be9fd;font-style:italic>EASYSEARCH_INITIAL_ADMIN_PASSWORD</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#39;Admin@123Test!&#39;</span> bin/initialize.sh --tlcp -s
+<span style=color:#8be9fd;font-style:italic>EASYSEARCH_INITIAL_ADMIN_PASSWORD</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#39;EasysearchP@ssw0rd!&#39;</span> bin/initialize.sh --tlcp -s
 </code></pre></div><blockquote><p>适用于首次初始化（<code>config/</code> 下没有旧的 <code>.crt/.key</code> 文件）。</p><p><code>initialize.sh --tlcp</code> 不会自动安装 Tongsuo。Linux 上请先确保 <code>tongsuo</code> 可用；macOS 可使用具备 SM2/SM3 能力的 <code>openssl</code> 或已安装的 <code>tongsuo</code>。</p><p>若是多节点部署，请使用 <code>bin/initialize-cluster.sh --tlcp</code>。</p></blockquote><h3 id=4-验证配置>4. 验证配置
 <a class=anchor href=#4-%e9%aa%8c%e8%af%81%e9%85%8d%e7%bd%ae>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>bin/tlcp-curl.sh https://localhost:9200/_security/sslinfo?pretty <span style=color:#f1fa8c>\
 </span><span style=color:#f1fa8c></span>  -u admin:changeit

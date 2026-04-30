@@ -51,7 +51,7 @@ su easysearch -c "/data/easysearch/bin/easysearch -d"
 docker run -d \
   --name easysearch-test \
   -p 9200:9200 \
-  -e "EASYSEARCH_INITIAL_ADMIN_PASSWORD=MyTest@2024" \
+  -e "EASYSEARCH_INITIAL_ADMIN_PASSWORD=EasysearchP@ssw0rd!" \
   -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
   infinilabs/easysearch:latest
 ```

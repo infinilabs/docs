@@ -53,7 +53,7 @@ summary: "Mem0 集成 #   Mem0 是一个为 AI Agent 提供持久化记忆的开
 
 ```sh
 # 生成 admin 初始密码
-echo "EASYSEARCH_INITIAL_ADMIN_PASSWORD=$(openssl rand -hex 10)" | tee .env
+echo "EASYSEARCH_INITIAL_ADMIN_PASSWORD=$(printf "%s%s%s@%s" "$(tr -dc a-z</dev/urandom|head -c4)" "$(tr -dc A-Z</dev/urandom|head -c3)" "$(tr -dc 0-9</dev/urandom|head -c2)" "$(tr -dc a-z0-9</dev/urandom|head -c3)")" | tee .env
 
 # 启动容器
 docker run -d --name easysearch \

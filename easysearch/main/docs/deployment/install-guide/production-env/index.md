@@ -102,7 +102,7 @@ Easysearch **默认启用安全功能**，首次部署需初始化：
 # 初始化安全模块（生成证书 + admin 密码）
 bin/initialize.sh -s
 # 密码将在终端输出中显示，请务必记住
-# 也可预先设置环境变量：export EASYSEARCH_INITIAL_ADMIN_PASSWORD="YourSecurePassword"
+# 也可预先设置环境变量：export EASYSEARCH_INITIAL_ADMIN_PASSWORD="EasysearchP@ssw0rd"
 ```
 
 生产环境建议：

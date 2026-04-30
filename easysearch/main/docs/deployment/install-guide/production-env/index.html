@@ -260,7 +260,7 @@ swapoff -a
 <a class=anchor href=#%e5%ae%89%e5%85%a8%e9%85%8d%e7%bd%ae>#</a></h2><p>Easysearch <strong>默认启用安全功能</strong>，首次部署需初始化：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># 初始化安全模块（生成证书 + admin 密码）</span>
 bin/initialize.sh -s
 <span style=color:#6272a4># 密码将在终端输出中显示，请务必记住</span>
-<span style=color:#6272a4># 也可预先设置环境变量：export EASYSEARCH_INITIAL_ADMIN_PASSWORD=&#34;YourSecurePassword&#34;</span>
+<span style=color:#6272a4># 也可预先设置环境变量：export EASYSEARCH_INITIAL_ADMIN_PASSWORD=&#34;EasysearchP@ssw0rd&#34;</span>
 </code></pre></div><p>生产环境建议：</p><ul><li>使用企业 CA 签发的证书替换自签名证书</li><li>启用节点间 TLS 传输加密</li><li>配置 LDAP / AD 对接（如有）</li><li>设置最小权限的角色与用户</li></ul><blockquote><p>详见
 <a href=/easysearch/main/docs/operations/security/>安全配置</a>。</p></blockquote><h2 id=备份策略>备份策略
 <a class=anchor href=#%e5%a4%87%e4%bb%bd%e7%ad%96%e7%95%a5>#</a></h2><p>生产环境<strong>必须</strong>配置快照备份：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback># 注册快照仓库

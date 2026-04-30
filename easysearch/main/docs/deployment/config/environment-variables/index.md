@@ -143,7 +143,7 @@ services:
       - cluster.name=my_cluster
       - node.name=node-1
       - discovery.type=single-node
-      - EASYSEARCH_INITIAL_ADMIN_PASSWORD=my_password
+      - EASYSEARCH_INITIAL_ADMIN_PASSWORD=EasysearchP@ssw0rd
       - ES_JAVA_OPTS=-Xms4g -Xmx4g
 ```
 

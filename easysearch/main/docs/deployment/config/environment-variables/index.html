@@ -267,7 +267,7 @@ bin/easysearch -Ecluster.name<span style=color:#ff79c6>=</span>my_cluster -Enetw
       - cluster.name=my_cluster
       - node.name=node-1
       - discovery.type=single-node
-      - EASYSEARCH_INITIAL_ADMIN_PASSWORD=my_password
+      - EASYSEARCH_INITIAL_ADMIN_PASSWORD=EasysearchP@ssw0rd
       - ES_JAVA_OPTS=-Xms4g -Xmx4g
 </code></pre></div><h3 id=_file-后缀变量><code>_FILE</code> 后缀变量
 <a class=anchor href=#_file-%e5%90%8e%e7%bc%80%e5%8f%98%e9%87%8f>#</a></h3><p>支持 <code>_FILE</code> 后缀的变量用于从文件读取敏感信息（配合 Docker Secrets 使用）：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>services</span>:

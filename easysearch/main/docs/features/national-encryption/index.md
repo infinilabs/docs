@@ -177,7 +177,7 @@ security.ssl.transport.tlcp.trusted_ca_certificate: ca_chain.crt
 
 ```bash
 cd /path/to/easysearch
-EASYSEARCH_INITIAL_ADMIN_PASSWORD='Admin@123Test!' bin/initialize.sh --tlcp -s
+EASYSEARCH_INITIAL_ADMIN_PASSWORD='EasysearchP@ssw0rd!' bin/initialize.sh --tlcp -s
 ```
 
 > 适用于首次初始化（`config/` 下没有旧的 `.crt/.key` 文件）。
