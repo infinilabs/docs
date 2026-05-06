@@ -2885,6 +2885,11 @@ DELETE _license
 
 编译指定规则仓库中的规则。编译后的规则用于 Ingest Pipeline 写入阶段的规则匹配（如 `check_match_rules` 处理器）。
 
+#### 权限控制
+
+- 需要集群级权限 `cluster:admin/rules/compile`。
+- 该 API 由服务端内部代理访问内部索引 `.match_rules` 并向集群内节点分发编译请求；不建议也不应直接对 `.match_rules` 执行普通文档或搜索请求。
+
 ```
 POST _match_rules/{repo_id}/_compile
 ```
@@ -2909,6 +2914,11 @@ POST _match_rules/{repo_id}/_compile
 
 分页列出当前规则仓库元数据。该接口默认排除 `rules` 原始规则文本，适合管理后台和列表查询。
 
+#### 权限控制
+
+- 需要集群级权限 `cluster:admin/rules/list`。
+- 该 API 由服务端内部代理访问内部索引 `.match_rules`；不建议也不应直接对 `.match_rules` 执行普通搜索请求。
+
 ```
 GET _match_rules
 ```
@@ -2928,6 +2938,11 @@ GET _match_rules
 ## match_rules.references
 
 查看指定规则仓库被哪些 pipeline 引用。
+
+#### 权限控制
+
+- 需要集群级权限 `cluster:admin/rules/references`。
+- 该 API 通过服务端内部逻辑查询规则库引用关系，不要求调用方直接访问 `.match_rules`。
 
 ```
 GET _match_rules/{repo_id}/_references
@@ -2954,6 +2969,11 @@ GET _match_rules/{repo_id}/_references
 
 删除指定的规则仓库。
 
+#### 权限控制
+
+- 需要集群级权限 `cluster:admin/rules/delete`。
+- 该 API 由服务端内部代理删除 `.match_rules` 文档并向集群内节点分发物理库删除请求；不建议也不应直接对 `.match_rules` 执行普通删除请求。
+
 ```
 DELETE _match_rules/{repo_id}
 ```
@@ -2967,6 +2987,11 @@ DELETE _match_rules/{repo_id}
 ## match_rules.import
 
 批量导入规则到规则仓库。
+
+#### 权限控制
+
+- 需要集群级权限 `cluster:admin/rules/import`。
+- 该 API 由服务端内部代理写入内部索引 `.match_rules`；不建议也不应直接对 `.match_rules` 执行普通写入请求。
 
 ```
 POST _match_rules/_import
@@ -2990,6 +3015,19 @@ PUT _match_rules/{repo_id}/_import
 - `PUT /_match_rules/{repo_id}/_import`：追加导入（append）
 - `POST /_match_rules/_import`：自动生成 `repo_id` 后覆盖导入
 - `PUT /_match_rules/_import`：自动生成 `repo_id` 后按追加语义导入（通常表现为新建规则库）
+
+## match_rules.simulate
+
+使用已编译规则库对输入文档做规则匹配模拟。
+
+#### 权限控制
+
+- 需要集群级权限 `cluster:admin/rules/simulate`。
+- 该 API 使用服务端内部已编译规则库执行匹配，不要求调用方直接访问 `.match_rules`。
+
+```
+POST _match_rules/{repo_id}/_simulate
+```
 
 ## mget
 
@@ -3032,6 +3070,11 @@ POST {index}/{type}/_mget
 ## model_provider.create
 
 创建模型提供商，或按指定 ID 全量替换现有模型提供商配置。
+
+#### 权限控制
+
+- 需要集群级权限 `cluster:admin/model_provider/write`。
+- 该 API 由服务端内部代理访问系统索引 `.model_provider`；不建议也不应直接对 `.model_provider` 执行普通文档 API。
 
 ```
 POST _model_provider/_doc
@@ -3079,6 +3122,11 @@ PUT _model_provider/_doc/{id}
 
 获取指定模型提供商详情。
 
+#### 权限控制
+
+- 需要集群级权限 `cluster:admin/model_provider/get`。
+- 该 API 由服务端内部代理访问系统索引 `.model_provider`；不建议也不应直接对 `.model_provider` 执行普通读取请求。
+
 ```
 GET _model_provider/_doc/{id}
 ```
@@ -3106,6 +3154,11 @@ GET _model_provider/_doc/{id}
 
 搜索模型提供商列表。底层固定查询内部索引 `.model_provider`。
 
+#### 权限控制
+
+- 需要集群级权限 `cluster:admin/model_provider/search`。
+- 该 API 由服务端内部代理访问系统索引 `.model_provider`；不建议也不应直接对 `.model_provider` 执行普通搜索请求。
+
 ```
 GET _model_provider/_search
 POST _model_provider/_search
@@ -3122,6 +3175,11 @@ POST _model_provider/_search
 ## model_provider.update
 
 局部更新指定模型提供商。
+
+#### 权限控制
+
+- 需要集群级权限 `cluster:admin/model_provider/update`。
+- 该 API 由服务端内部代理访问系统索引 `.model_provider`；不建议也不应直接对 `.model_provider` 执行普通文档更新请求。
 
 ```
 POST _model_provider/_update/{id}
@@ -3158,6 +3216,11 @@ POST _model_provider/_update/{id}
 ## model_provider.delete
 
 删除指定模型提供商。
+
+#### 权限控制
+
+- 需要集群级权限 `cluster:admin/model_provider/delete`。
+- 该 API 由服务端内部代理访问系统索引 `.model_provider`；不建议也不应直接对 `.model_provider` 执行普通删除请求。
 
 ```
 DELETE _model_provider/_doc/{id}

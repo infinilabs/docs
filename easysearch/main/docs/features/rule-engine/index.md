@@ -1259,6 +1259,8 @@ GET /_match_rules?page=1&size=20&q=security&status=compiled&tag=security,content
 - `repo_id` 来自规则库文档 `_id`
 - 列表接口默认排除 `rules` 字段，不返回原始规则文本
 - 如果需要查看完整规则内容，请继续使用下面的详情接口
+- 调用该接口需要集群级权限 `cluster:admin/rules/list`
+- 服务端会内部代理访问 `.match_rules`；不建议把对 `.match_rules` 的直接搜索作为常规使用方式
 
 #### GET /_match_rules/{repo_id}/_references
 
@@ -1303,6 +1305,7 @@ GET /_match_rules/security_v1/_references
 - `processor_path` 表示处理器在 Pipeline 配置中的路径，包含嵌套 `processors` 和 `on_failure`
 - `target_field` 表示命中标签写入的目标字段；未显式配置、配置为空字符串或纯空白时返回默认值 `tags`
 - 这个接口只做“引用关系反查”，不校验规则库文档是否存在
+- 调用该接口需要集群级权限 `cluster:admin/rules/references`
 
 #### GET .match_rules/_doc/{repo_id}
 
@@ -1360,6 +1363,7 @@ GET .match_rules/_doc/security_v1
 - `rules` 字段可能包含大量文本（数万条规则），查询时建议使用 `_source_excludes=rules` 排除此字段
 - `version` 字段在每次使用 `POST /_match_rules/{repo_id}/_import`（覆盖模式）或 `PUT /_match_rules/{repo_id}/_import`（追加模式）导入时自动递增
 - `compiled_nodes` 字段在多节点集群中记录了所有成功编译的节点，用于判断集群同步状态
+- `.match_rules` 是内部索引。生产场景下建议通过 `/_match_rules/*` API 访问规则库，并为调用方授予对应的 `cluster:admin/rules/*` 集群权限，而不是直接开放 `.match_rules` 索引权限
 
 ### 删除规则库 API
 
@@ -1376,6 +1380,7 @@ GET .match_rules/_doc/security_v1
 - ✅ 集群广播删除：多节点环境下同步删除物理文件
 - ✅ 物理文件清理：递归删除规则库目录
 - ✅ 元数据更新：自动更新本地元数据文件
+- ✅ 权限通过集群级 `cluster:admin/rules/delete` 控制，无需直接暴露 `.match_rules` 删除权限
 
 **依赖检查**：
 

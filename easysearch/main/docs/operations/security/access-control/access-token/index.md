@@ -648,7 +648,7 @@ curl -k -u admin:admin -X DELETE \
 
 1. 通用 Access Token 由 superadmin 或拥有 `superuser` 角色的用户通过 `/_security/access_token` 主动创建。
 2. enrollment access token 由 `/_cluster/enroll/node` 内部签发。
-3. enrollment access token 的默认 TTL 为 1 小时，但不是“签发后固定 1 小时到期”。
+3. enrollment access token 的默认 TTL 为 10 年，但不是“签发后固定 10 年到期”。
 4. 同一个 enroll token 重复成功调用 `/_cluster/enroll/node` 时，会复用同一个 access token，并重新计算 `expire_in` 写回，也就是按成功调用时间做滑动续期。
 5. enrollment access token 的权限固定为 `cluster_monitor`，主要用于节点加入集群时的只读引导请求。
 
