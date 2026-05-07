@@ -2,7 +2,7 @@
 title: "版本历史"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Agent 历史版本发布的相关说明。
-Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #   chore: 让 git 忽略 .vscode 和 plugin/enterprise #69  1.31.0 (2026-04-18) #  ❌ Breaking changes #  🚀 Features #   feat: 实现 token 登录和单点登录 #60 feat: 为日志/发现 API 实现跨域支持 #63 feat: 让日志 API 目录参数接受~ #64 feat: Easysearch 向导功能  🐛 Bug fix #  ✈️ Improvements #   此版本包含了底层 Framework v1."
+Latest (In development) #  ❌ Breaking changes #  🚀 Features #   feat: 让集群/索引/节点stats和集群健康collectors支持可插拔的存储sink #74  🐛 Bug fix #  ✈️ Improvements #   chore: 让 git 忽略 .vscode 和 plugin/enterprise #69  1.31.0 (2026-04-18) #  ❌ Breaking changes #  🚀 Features #   feat: 实现 token 登录和单点登录 #60 feat: 为日志/发现 API 实现跨域支持 #63 feat: 让日志 API 目录参数接受~ #64 feat: Easysearch 向导功能  🐛 Bug fix #  ✈️ Improvements #   此版本包含了底层 Framework v1."
 ---
 
 
@@ -14,6 +14,8 @@ Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix
 ## Latest (In development)  
 ### ❌ Breaking changes  
 ### 🚀 Features  
+- feat: 让集群/索引/节点stats和集群健康collectors支持可插拔的存储sink #74
+
 ### 🐛 Bug fix  
 ### ✈️ Improvements  
 
