@@ -2,15 +2,15 @@
 安装演示 #    下载镜像 #  极限网关的镜像发布在 Docker 的官方仓库，地址如下：
  https://hub.docker.com/r/infinilabs/gateway
 使用下面的命令即可获取最新的容器镜像：
-docker pull infinilabs/gateway:1.30.1-2308 验证镜像 #  将镜像下载到本地之后，可以看到极限网关的容器镜像非常小，只有不到 25MB，所以下载的速度应该是非常快的。
-✗ docker images |grep &#34;gateway&#34; |grep &#34;1.30.1-2308&#34; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/gateway 1.30.1-2308 fdae74b64e1a 47 minutes ago 23.5MB 创建配置 #  现在需要创建一个配置文件 gateway.yml，来进行基本的配置，如下：
+docker pull infinilabs/gateway:1.30.2-2396 验证镜像 #  将镜像下载到本地之后，可以看到极限网关的容器镜像非常小，只有不到 25MB，所以下载的速度应该是非常快的。
+✗ docker images |grep &#34;gateway&#34; |grep &#34;1.30.2-2396&#34; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/gateway 1.30.2-2396 fdae74b64e1a 47 minutes ago 23.5MB 创建配置 #  现在需要创建一个配置文件 gateway.yml，来进行基本的配置，如下：
 path.data: data path.logs: log entry: - name: my_es_entry enabled: true router: my_router max_concurrency: 200000 network: binding: 0.0.0.0:8000 flow: - name: simple_flow filter: - elasticsearch: elasticsearch: dev router: - name: my_router default_flow: simple_flow elasticsearch: - name: dev enabled: true endpoint: http://localhost:9200 basic_auth: username: test password: testtest Note: 上面配置里面的 Elasticsearch 的相关配置，请改成实际的服务器连接地址和认证信息。"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="容器部署"><meta property="og:description" content="容器部署 #  极限网关支持容器方式部署。
 安装演示 #    下载镜像 #  极限网关的镜像发布在 Docker 的官方仓库，地址如下：
  https://hub.docker.com/r/infinilabs/gateway
 使用下面的命令即可获取最新的容器镜像：
-docker pull infinilabs/gateway:1.30.1-2308 验证镜像 #  将镜像下载到本地之后，可以看到极限网关的容器镜像非常小，只有不到 25MB，所以下载的速度应该是非常快的。
-✗ docker images |grep &#34;gateway&#34; |grep &#34;1.30.1-2308&#34; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/gateway 1.30.1-2308 fdae74b64e1a 47 minutes ago 23.5MB 创建配置 #  现在需要创建一个配置文件 gateway.yml，来进行基本的配置，如下：
-path.data: data path.logs: log entry: - name: my_es_entry enabled: true router: my_router max_concurrency: 200000 network: binding: 0.0.0.0:8000 flow: - name: simple_flow filter: - elasticsearch: elasticsearch: dev router: - name: my_router default_flow: simple_flow elasticsearch: - name: dev enabled: true endpoint: http://localhost:9200 basic_auth: username: test password: testtest Note: 上面配置里面的 Elasticsearch 的相关配置，请改成实际的服务器连接地址和认证信息。"><meta property="og:type" content="article"><meta property="og:url" content="https://docs.infinilabs.com/gateway/main/zh/docs/getting-started/docker/"><title>容器部署 | INFINI Gateway | The Best Open Source Golang Search-focused Gateway for Easysearch/Elasticsearch/OpenSearch</title><link rel=manifest href=/gateway/main/manifest.json><link rel=icon href=/gateway/main/favicon.png type=image/x-icon><link rel=alternate hreflang=en href=https://docs.infinilabs.com/gateway/main/docs/getting-started/docker/ title="Container Deployment"><link rel=stylesheet href=/gateway/main/book.min.3262edb53b95e5149dc648ac02d383f1b1afff31d4b8a674d7f9e2fc346bb138.css integrity="sha256-MmLttTuV5RSdxkisAtOD8bGv/zHUuKZ01/ni/DRrsTg="><link rel=stylesheet type=text/css href=https://docs.infinilabs.com/gateway/main/css/asciinema-player.css><script defer src=https://docs.infinilabs.com/gateway/main/js/jquery-2.x.min.js></script><script defer src=https://docs.infinilabs.com/gateway/main/js/doc.js></script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+docker pull infinilabs/gateway:1.30.2-2396 验证镜像 #  将镜像下载到本地之后，可以看到极限网关的容器镜像非常小，只有不到 25MB，所以下载的速度应该是非常快的。
+✗ docker images |grep &#34;gateway&#34; |grep &#34;1.30.2-2396&#34; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/gateway 1.30.2-2396 fdae74b64e1a 47 minutes ago 23.5MB 创建配置 #  现在需要创建一个配置文件 gateway.yml，来进行基本的配置，如下：
+path.data: data path.logs: log entry: - name: my_es_entry enabled: true router: my_router max_concurrency: 200000 network: binding: 0.0.0.0:8000 flow: - name: simple_flow filter: - elasticsearch: elasticsearch: dev router: - name: my_router default_flow: simple_flow elasticsearch: - name: dev enabled: true endpoint: http://localhost:9200 basic_auth: username: test password: testtest Note: 上面配置里面的 Elasticsearch 的相关配置，请改成实际的服务器连接地址和认证信息。"><meta property="og:type" content="article"><meta property="og:url" content="https://docs.infinilabs.com/gateway/main/zh/docs/getting-started/docker/"><title>容器部署 | INFINI Gateway | The Best Open Source Golang Search-focused Gateway for Easysearch/Elasticsearch/OpenSearch</title><link rel=manifest href=/gateway/main/manifest.json><link rel=icon href=/gateway/main/favicon.png type=image/x-icon><link rel=alternate hreflang=en href=https://docs.infinilabs.com/gateway/main/docs/getting-started/docker/ title="Container Deployment"><link rel=stylesheet href=/gateway/main/book.min.a5477dc69cdc226836851fe1ccbae76d703e3ebf0cb670e9e513b00935608503.css integrity="sha256-pUd9xpzcImg2hR/hzLrnbXA+Pr8MtnDp5ROwCTVghQM="><link rel=stylesheet type=text/css href=https://docs.infinilabs.com/gateway/main/css/asciinema-player.css><script defer src=https://docs.infinilabs.com/gateway/main/js/jquery-2.x.min.js></script><script defer src=https://docs.infinilabs.com/gateway/main/js/doc.js></script><script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?64b9322783bb21716d701b15fb0b1e82";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/gateway/main/zh><img src=/gateway/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;height:36px;width:100%></div><script>function waitForShadow(host,callback){const timer=setInterval(()=>{if(host.shadowRoot){clearInterval(timer);callback(host.shadowRoot);}},50);}
 const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{const style=document.createElement('style');style.textContent=`
       .infini__searchbox-btn {
@@ -19,6 +19,7 @@ const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{co
       }
     `;shadow.appendChild(style);});</script><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
+<option value=v1.30.3>v1.30.3</option>
 <option value=v1.30.1>v1.30.1</option>
 <option value=v1.30.0>v1.30.0</option>
 <option value=v1.29.8>v1.29.8</option>
@@ -58,11 +59,11 @@ setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.
 if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#安装演示>安装演示</a></li><li><a href=#下载镜像>下载镜像</a></li><li><a href=#验证镜像>验证镜像</a></li><li><a href=#创建配置>创建配置</a></li><li><a href=#启动网关>启动网关</a></li><li><a href=#验证网关>验证网关</a></li><li><a href=#docker-compose>Docker Compose</a></li></ul></nav></aside></header><article class=markdown><h1 id=容器部署>容器部署
 <a class=anchor href=#%e5%ae%b9%e5%99%a8%e9%83%a8%e7%bd%b2>#</a></h1><p>极限网关支持容器方式部署。</p><h2 id=安装演示>安装演示
 <a class=anchor href=#%e5%ae%89%e8%a3%85%e6%bc%94%e7%a4%ba>#</a></h2><p><asciinema-player src=https://docs.infinilabs.com/gateway/main/cast//gateway_on_docker.cast cols=640 rows=30 t=49 autoplay preload=1 start-at=49 speed=1></asciinema-player></p><h2 id=下载镜像>下载镜像
-<a class=anchor href=#%e4%b8%8b%e8%bd%bd%e9%95%9c%e5%83%8f>#</a></h2><p>极限网关的镜像发布在 Docker 的官方仓库，地址如下：</p><p><a href=https://hub.docker.com/r/infinilabs/gateway>https://hub.docker.com/r/infinilabs/gateway</a></p><p>使用下面的命令即可获取最新的容器镜像：</p><pre><code>docker pull infinilabs/gateway:1.30.1-2308
+<a class=anchor href=#%e4%b8%8b%e8%bd%bd%e9%95%9c%e5%83%8f>#</a></h2><p>极限网关的镜像发布在 Docker 的官方仓库，地址如下：</p><p><a href=https://hub.docker.com/r/infinilabs/gateway>https://hub.docker.com/r/infinilabs/gateway</a></p><p>使用下面的命令即可获取最新的容器镜像：</p><pre><code>docker pull infinilabs/gateway:1.30.2-2396
 </code></pre><h2 id=验证镜像>验证镜像
-<a class=anchor href=#%e9%aa%8c%e8%af%81%e9%95%9c%e5%83%8f>#</a></h2><p>将镜像下载到本地之后，可以看到极限网关的容器镜像非常小，只有不到 25MB，所以下载的速度应该是非常快的。</p><pre><code>✗ docker images |grep &quot;gateway&quot; |grep &quot;1.30.1-2308&quot;
+<a class=anchor href=#%e9%aa%8c%e8%af%81%e9%95%9c%e5%83%8f>#</a></h2><p>将镜像下载到本地之后，可以看到极限网关的容器镜像非常小，只有不到 25MB，所以下载的速度应该是非常快的。</p><pre><code>✗ docker images |grep &quot;gateway&quot; |grep &quot;1.30.2-2396&quot;
 REPOSITORY                                      TAG       IMAGE ID       CREATED          SIZE
-infinilabs/gateway                            1.30.1-2308    fdae74b64e1a   47 minutes ago   23.5MB
+infinilabs/gateway                            1.30.2-2396    fdae74b64e1a   47 minutes ago   23.5MB
 </code></pre><h2 id=创建配置>创建配置
 <a class=anchor href=#%e5%88%9b%e5%bb%ba%e9%85%8d%e7%bd%ae>#</a></h2><p>现在需要创建一个配置文件 <code>gateway.yml</code>，来进行基本的配置，如下：</p><pre><code>path.data: data
 path.logs: log
@@ -93,9 +94,9 @@ elasticsearch:
     username: test
     password: testtest
 </code></pre><p>Note: 上面配置里面的 Elasticsearch 的相关配置，请改成实际的服务器连接地址和认证信息。</p><h2 id=启动网关>启动网关
-<a class=anchor href=#%e5%90%af%e5%8a%a8%e7%bd%91%e5%85%b3>#</a></h2><p>使用如下命令启动极限网关容器：</p><pre><code>docker run -p 2900:2900 -p 8000:8000  -v=`pwd`/gateway.yml:/gateway.yml  infinilabs/gateway:1.30.1-2308
+<a class=anchor href=#%e5%90%af%e5%8a%a8%e7%bd%91%e5%85%b3>#</a></h2><p>使用如下命令启动极限网关容器：</p><pre><code>docker run -p 2900:2900 -p 8000:8000  -v=`pwd`/gateway.yml:/gateway.yml  infinilabs/gateway:1.30.2-2396
 </code></pre><h2 id=验证网关>验证网关
-<a class=anchor href=#%e9%aa%8c%e8%af%81%e7%bd%91%e5%85%b3>#</a></h2><p>如果都运行正常的话，应该可以看到如下的信息：</p><pre><code>➜  /tmp docker run -p 2900:2900 -p 8000:8000  -v=`pwd`/gateway.yml:/gateway.yml  infinilabs/gateway:1.30.1-2308
+<a class=anchor href=#%e9%aa%8c%e8%af%81%e7%bd%91%e5%85%b3>#</a></h2><p>如果都运行正常的话，应该可以看到如下的信息：</p><pre><code>➜  /tmp docker run -p 2900:2900 -p 8000:8000  -v=`pwd`/gateway.yml:/gateway.yml  infinilabs/gateway:1.30.2-2396
    ___   _   _____  __  __    __  _
   / _ \ /_\ /__   \/__\/ / /\ \ \/_\ /\_/\
  / /_\///_\\  / /\/_\  \ \/  \/ //_\\\_ _/
@@ -109,7 +110,7 @@ elasticsearch:
 [12-30 05:26:41] [INF] [entry.go:257] entry [es_gateway] listen at: http://0.0.0.0:8000
 [12-30 05:26:41] [INF] [app.go:247] gateway now started.
 [12-30 05:26:45] [INF] [reverseproxy.go:196] elasticsearch [prod] endpoints: [] =&gt; [192.168.3.201:9200]
-</code></pre><p>如果希望容器运行在后台，加上 <code>-d</code> 参数，如下：</p><pre><code>docker run -d -p 2900:2900 -p 8000:8000  -v=`pwd`/gateway.yml:/gateway.yml  infinilabs/gateway:1.30.1-2308
+</code></pre><p>如果希望容器运行在后台，加上 <code>-d</code> 参数，如下：</p><pre><code>docker run -d -p 2900:2900 -p 8000:8000  -v=`pwd`/gateway.yml:/gateway.yml  infinilabs/gateway:1.30.2-2396
 </code></pre><p>使用命令行或者浏览器访问地址： <code>http://localhost:8000/</code> 应该就能正常访问 Elasticsearch 了，如下：</p><pre><code>➜  /tmp curl -v http://localhost:8000/
 *   Trying ::1...
 * TCP_NODELAY set
@@ -150,7 +151,7 @@ elasticsearch:
 
 services:
   infini-gateway:
-    image: infinilabs/gateway:1.30.1-2308
+    image: infinilabs/gateway:1.30.2-2396
     ports:
       - 2900:2900
       - 8000:8000
@@ -189,4 +190,4 @@ gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/j
 function setActiveById(id){clearAll();const li=idToLi.get(id);if(!li)return;li.classList.add('active');const a=li.querySelector('a[href^="#"]');if(a)a.setAttribute('aria-current','true');let parent=li.parentElement;while(parent&&parent!==nav){const parentLi=parent.closest('li');if(parentLi&&parentLi!==li)parentLi.classList.add('ancestor');parent=parent.parentElement;}}
 const observedEls=Array.from(idToLi.keys()).map(id=>document.getElementById(id)).filter(Boolean);if(observedEls.length){const io=new IntersectionObserver((entries)=>{let candidate=null;entries.forEach(en=>{if(!en.isIntersecting)return;if(!candidate)candidate=en;else{const curTop=Math.abs(candidate.boundingClientRect.top);const newTop=Math.abs(en.boundingClientRect.top);if(newTop<curTop)candidate=en;}});if(!candidate||!candidate.target||!candidate.target.id)return;const foundId=candidate.target.id;if(isProgrammatic&&programmaticTargetId&&foundId!==programmaticTargetId){return;}
 setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.1,0.25,0.5]});observedEls.forEach(el=>io.observe(el));}
-if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#安装演示>安装演示</a></li><li><a href=#下载镜像>下载镜像</a></li><li><a href=#验证镜像>验证镜像</a></li><li><a href=#创建配置>创建配置</a></li><li><a href=#启动网关>启动网关</a></li><li><a href=#验证网关>验证网关</a></li><li><a href=#docker-compose>Docker Compose</a></li></ul></nav></aside></main><script src=https://docs.infinilabs.com/gateway/main/js/asciinema-player.js></script></body></html>
+if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#安装演示>安装演示</a></li><li><a href=#下载镜像>下载镜像</a></li><li><a href=#验证镜像>验证镜像</a></li><li><a href=#创建配置>创建配置</a></li><li><a href=#启动网关>启动网关</a></li><li><a href=#验证网关>验证网关</a></li><li><a href=#docker-compose>Docker Compose</a></li></ul></nav></aside></main><script src=https://docs.infinilabs.com/gateway/main/js/asciinema-player.js></script></body><script src=https://infinilabs.com/notice-widget/notice-widget.umd.cjs></script><script>NoticeWidget.init({locales:{"zh-CN":"https://infinilabs.com/notice-widget/locales/zh-CN.json","en-US":"https://infinilabs.com/notice-widget/locales/en-US.json",}});</script></html>

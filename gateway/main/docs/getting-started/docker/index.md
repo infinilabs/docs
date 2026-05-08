@@ -5,7 +5,7 @@ summary: "Container Deployment #  INFINI Gateway supports container deployment.
 Installation Demo #    Downloading an Image #  The images of INFINI Gateway are published at the official repository of Docker. The URL is as follows:
  https://hub.docker.com/r/infinilabs/gateway
 Use the following command to obtain the latest container image:
-docker pull infinilabs/gateway:1.30.1-2308 Verifying the Image #  After downloading the image locally, you will notice that the container image of INFINI Gateway is very small, with a size less than 25 MB."
+docker pull infinilabs/gateway:1.30.2-2396 Verifying the Image #  After downloading the image locally, you will notice that the container image of INFINI Gateway is very small, with a size less than 25 MB."
 ---
 
 

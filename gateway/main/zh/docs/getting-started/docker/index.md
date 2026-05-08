@@ -5,8 +5,8 @@ summary: "容器部署 #  极限网关支持容器方式部署。
 安装演示 #    下载镜像 #  极限网关的镜像发布在 Docker 的官方仓库，地址如下：
  https://hub.docker.com/r/infinilabs/gateway
 使用下面的命令即可获取最新的容器镜像：
-docker pull infinilabs/gateway:1.30.1-2308 验证镜像 #  将镜像下载到本地之后，可以看到极限网关的容器镜像非常小，只有不到 25MB，所以下载的速度应该是非常快的。
-✗ docker images |grep &quot;gateway&quot; |grep &quot;1.30.1-2308&quot; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/gateway 1.30.1-2308 fdae74b64e1a 47 minutes ago 23.5MB 创建配置 #  现在需要创建一个配置文件 gateway.yml，来进行基本的配置，如下：
+docker pull infinilabs/gateway:1.30.2-2396 验证镜像 #  将镜像下载到本地之后，可以看到极限网关的容器镜像非常小，只有不到 25MB，所以下载的速度应该是非常快的。
+✗ docker images |grep &quot;gateway&quot; |grep &quot;1.30.2-2396&quot; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/gateway 1.30.2-2396 fdae74b64e1a 47 minutes ago 23.5MB 创建配置 #  现在需要创建一个配置文件 gateway.yml，来进行基本的配置，如下：
 path.data: data path.logs: log entry: - name: my_es_entry enabled: true router: my_router max_concurrency: 200000 network: binding: 0.0.0.0:8000 flow: - name: simple_flow filter: - elasticsearch: elasticsearch: dev router: - name: my_router default_flow: simple_flow elasticsearch: - name: dev enabled: true endpoint: http://localhost:9200 basic_auth: username: test password: testtest Note: 上面配置里面的 Elasticsearch 的相关配置，请改成实际的服务器连接地址和认证信息。"
 ---
 
