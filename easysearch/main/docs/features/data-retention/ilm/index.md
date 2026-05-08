@@ -4,7 +4,7 @@ date: 0001-01-01
 summary: "索引生命周期管理 #  索引生命周期管理（Index Lifecycle Management, ILM）为您提供了一种集成化、自动化的方式来高效管理时序数据。 通过配置 ILM 策略，您可以根据性能、可用性与数据保留需求，自动执行索引的滚动、归档和清理等操作。
  从 1.15.2 版本开始，index-management 已经成为 modules 的一部分，不需要单独安装插件。
  典型应用场景 #   自动滚动生成新索引：当现有索引达到指定大小或文档数量时，自动创建新索引。 周期性轮换索引：按天、周或月创建新索引，并将历史索引归档。 强制数据保留策略：自动删除过期索引，确保合规与存储成本可控。 分层存储：将热数据分配到高性能节点，冷数据迁移到廉价存储节点。   策略管理 API #  创建策略 #  创建一个新的生命周期策略。
-请求 #  PUT _ilm/policy/{policyID}    参数 描述 类型 是否必需     policyID 策略 ID。 string 是    查询参数 #     参数 描述 类型 默认值     if_seq_no 仅当匹配此序列号时更新。 long —   if_primary_term 仅当匹配此主分片任期时更新。 long —    请求体 #  策略支持 ES 兼容的 phases 格式。系统内部会自动转换为 states 格式。"
+请求 #  PUT _ilm/policy/{policyID}    参数 描述 类型 是否必需     policyID 策略 ID。 string 是    查询参数 #     参数 描述 类型 默认值     if_seq_no 仅当匹配此序列号时更新。 long —   if_primary_term 仅当匹配此主分片任期时更新。 long —    请求体 #  策略支持 ES 兼容的 phases 格式。系统内部会将其转换为 Easysearch 原生的 managed-index / states / actions 执行模型。"
 ---
 
 
@@ -49,7 +49,14 @@ PUT _ilm/policy/{policyID}
 
 #### 请求体
 
-策略支持 ES 兼容的 **phases 格式**。系统内部会自动转换为 states 格式。
+策略支持 ES 兼容的 **phases 格式**。系统内部会将其转换为 Easysearch 原生的 managed-index / states / actions 执行模型。
+
+当前策略 DSL 的边界如下：
+
+- `_ilm/policy` 是 ES 兼容的策略写入入口。
+- 当前不支持在 action 中声明自定义 `retry` 配置，例如 `retry.count`、`retry.backoff`、`retry.delay`。
+- action 执行失败后的恢复语义由系统默认自动重试机制和手动 `POST /_ilm/retry/{index}` 共同提供。
+- `/_ilm/explain` 返回的 `state`、`action`、`step`、`retry_info`、`info` 等字段代表运行时 managed-index 状态，而不是策略 DSL 字段。
 
 ```json
 PUT _ilm/policy/my_lifecycle
@@ -180,11 +187,6 @@ GET _ilm/policy/{policyID}
         "name": "hot",
         "actions": [
           {
-            "retry": {
-              "count": 3,
-              "backoff": "exponential",
-              "delay": "1m"
-            },
             "rollover": {
               "min_size": "50gb",
               "min_doc_count": 100000000,
@@ -192,11 +194,6 @@ GET _ilm/policy/{policyID}
             }
           },
           {
-            "retry": {
-              "count": 3,
-              "backoff": "exponential",
-              "delay": "1m"
-            },
             "index_priority": {
               "priority": 100
             }
@@ -215,21 +212,11 @@ GET _ilm/policy/{policyID}
         "name": "warm",
         "actions": [
           {
-            "retry": {
-              "count": 3,
-              "backoff": "exponential",
-              "delay": "1m"
-            },
             "force_merge": {
               "max_num_segments": 1
             }
           },
           {
-            "retry": {
-              "count": 3,
-              "backoff": "exponential",
-              "delay": "1m"
-            },
             "allocation": {
               "require": { "box_type": "warm" },
               "include": {},
@@ -238,11 +225,6 @@ GET _ilm/policy/{policyID}
             }
           },
           {
-            "retry": {
-              "count": 3,
-              "backoff": "exponential",
-              "delay": "1m"
-            },
             "index_priority": {
               "priority": 50
             }
@@ -261,21 +243,11 @@ GET _ilm/policy/{policyID}
         "name": "delete",
         "actions": [
           {
-            "retry": {
-              "count": 3,
-              "backoff": "exponential",
-              "delay": "1m"
-            },
             "wait_for_snapshot": {
               "policy": "daily-backup"
             }
           },
           {
-            "retry": {
-              "count": 3,
-              "backoff": "exponential",
-              "delay": "1m"
-            },
             "delete": {}
           }
         ],
@@ -293,7 +265,10 @@ GET _ilm/policy/{policyID}
 }
 ```
 
-> **注意**：创建策略时使用的是 ES 兼容的 phases 格式，但获取策略时返回的是内部 states 格式。操作名称也会转换为内部名称（如 `set_priority` 变为 `index_priority`）。
+> **说明**：
+> - 创建策略时使用的是 ES 兼容的 `phases` 格式。
+> - 获取策略时返回的是 Easysearch 内部 `states` 视图，不保证与原始 `phases` DSL 一一对应。
+> - 返回结构中的 action 字段用于展示内部策略表示。不同版本实现可能包含默认 `retry` 等内部字段，但这些字段不表示 `_ilm/policy` 支持用户自定义 action 级重试配置。
 
 ---
 
@@ -611,7 +586,15 @@ GET /_ilm/explain/log-test*
 
 ### 重试失败操作 {#retry}
 
-当生命周期管理操作执行失败时，使用此 API 重试。
+当托管索引上的生命周期管理操作执行失败时，使用此 API 手动触发重试。
+
+该接口面向运行时 managed-index 状态，而不是策略定义本身。通常可结合 `/_ilm/explain/{index}` 中的 `state`、`action`、`step`、`retry_info` 和 `info` 字段来判断失败位置。
+
+当前重试语义如下：
+
+- 系统会对部分失败场景执行默认自动重试。
+- 当索引已经停留在失败状态，或需要在修复外部依赖后重新推进时，可调用 `POST /_ilm/retry/{index}` 手动重试。
+- 该接口不表示 `_ilm/policy` 支持为某个 action 自定义 `retry.count`、`retry.backoff` 或 `retry.delay`。
 
 #### 请求
 
@@ -643,7 +626,7 @@ POST /_ilm/retry/{index}
 
 ## 状态转换条件
 
-在策略的 states 格式中，每个状态可以定义转换条件。当条件满足时，索引自动进入下一个状态。
+在 Easysearch 内部 `states` 视图中，每个状态可以定义转换条件。当条件满足时，索引自动进入下一个状态。对于 `_ilm/policy` 的 `phases` 写法，这些条件通常由后续 phase 的 `min_age` 推导而来。
 
 | 条件                | 描述                       | 类型     | 示例        |
 | ------------------- | -------------------------- | -------- | ----------- |
@@ -657,14 +640,9 @@ POST /_ilm/retry/{index}
 
 ## 操作参考
 
-所有操作都支持以下通用可选参数：
+当前文档中的 action 示例主要说明可写入 `_ilm/policy` 的策略字段。通用运行时重试由系统内部机制和 `/_ilm/retry/{index}` 提供，不作为策略 DSL 的通用可配置项公开。
 
-| 参数              | 描述                     | 类型     | 默认值         |
-| ----------------- | ------------------------ | -------- | -------------- |
-| `timeout`         | 操作超时时间。             | `string` | 无             |
-| `retry.count`     | 失败时的最大重试次数。      | `long`   | `3`            |
-| `retry.backoff`   | 重试退避策略。             | `string` | `exponential`  |
-| `retry.delay`     | 重试间隔时间。             | `string` | `1m`           |
+对于 `_ilm/policy` 的 `phases` 兼容写法，当前文档仅列出各 action 自身支持的字段。返回结构或内部 `states` 视图中出现的附加字段，不应直接视为可写回策略的通用参数。
 
 > **操作名称兼容性**：在 phases 格式中，可以使用 ES 兼容名称（左列）；在 states 格式中，使用内部名称（右列）：
 >
@@ -1139,9 +1117,9 @@ PUT _ilm/policy/my_policy
 
 | 参数         | 描述                | 类型     | 是否必需 |
 | ------------ | ------------------- | -------- | -------- |
-| `ism_rollup` | ISM Rollup 配置对象。 | `object` | 是       |
+| `ism_rollup` | ILM Rollup 配置对象。 | `object` | 是       |
 
-#### ISM Rollup 配置
+#### ILM Rollup 配置
 
 | 参数           | 描述                                                   | 类型     | 是否必需 | 验证                        |
 | -------------- | ------------------------------------------------------ | -------- | -------- | --------------------------- |

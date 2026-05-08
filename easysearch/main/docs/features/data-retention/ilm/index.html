@@ -1,10 +1,10 @@
 <!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="索引生命周期管理 #  索引生命周期管理（Index Lifecycle Management, ILM）为您提供了一种集成化、自动化的方式来高效管理时序数据。 通过配置 ILM 策略，您可以根据性能、可用性与数据保留需求，自动执行索引的滚动、归档和清理等操作。
  从 1.15.2 版本开始，index-management 已经成为 modules 的一部分，不需要单独安装插件。
  典型应用场景 #   自动滚动生成新索引：当现有索引达到指定大小或文档数量时，自动创建新索引。 周期性轮换索引：按天、周或月创建新索引，并将历史索引归档。 强制数据保留策略：自动删除过期索引，确保合规与存储成本可控。 分层存储：将热数据分配到高性能节点，冷数据迁移到廉价存储节点。   策略管理 API #  创建策略 #  创建一个新的生命周期策略。
-请求 #  PUT _ilm/policy/{policyID}    参数 描述 类型 是否必需     policyID 策略 ID。 string 是    查询参数 #     参数 描述 类型 默认值     if_seq_no 仅当匹配此序列号时更新。 long —   if_primary_term 仅当匹配此主分片任期时更新。 long —    请求体 #  策略支持 ES 兼容的 phases 格式。系统内部会自动转换为 states 格式。"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="索引生命周期"><meta property="og:description" content="索引生命周期管理 #  索引生命周期管理（Index Lifecycle Management, ILM）为您提供了一种集成化、自动化的方式来高效管理时序数据。 通过配置 ILM 策略，您可以根据性能、可用性与数据保留需求，自动执行索引的滚动、归档和清理等操作。
+请求 #  PUT _ilm/policy/{policyID}    参数 描述 类型 是否必需     policyID 策略 ID。 string 是    查询参数 #     参数 描述 类型 默认值     if_seq_no 仅当匹配此序列号时更新。 long —   if_primary_term 仅当匹配此主分片任期时更新。 long —    请求体 #  策略支持 ES 兼容的 phases 格式。系统内部会将其转换为 Easysearch 原生的 managed-index / states / actions 执行模型。"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="索引生命周期"><meta property="og:description" content="索引生命周期管理 #  索引生命周期管理（Index Lifecycle Management, ILM）为您提供了一种集成化、自动化的方式来高效管理时序数据。 通过配置 ILM 策略，您可以根据性能、可用性与数据保留需求，自动执行索引的滚动、归档和清理等操作。
  从 1.15.2 版本开始，index-management 已经成为 modules 的一部分，不需要单独安装插件。
  典型应用场景 #   自动滚动生成新索引：当现有索引达到指定大小或文档数量时，自动创建新索引。 周期性轮换索引：按天、周或月创建新索引，并将历史索引归档。 强制数据保留策略：自动删除过期索引，确保合规与存储成本可控。 分层存储：将热数据分配到高性能节点，冷数据迁移到廉价存储节点。   策略管理 API #  创建策略 #  创建一个新的生命周期策略。
-请求 #  PUT _ilm/policy/{policyID}    参数 描述 类型 是否必需     policyID 策略 ID。 string 是    查询参数 #     参数 描述 类型 默认值     if_seq_no 仅当匹配此序列号时更新。 long —   if_primary_term 仅当匹配此主分片任期时更新。 long —    请求体 #  策略支持 ES 兼容的 phases 格式。系统内部会自动转换为 states 格式。"><meta property="og:type" content="article"><meta property="og:url" content="https://docs.infinilabs.com/easysearch/main/docs/features/data-retention/ilm/"><title>索引生命周期 | INFINI Easysearch (main) | 分布式搜索型数据库</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.a5477dc69cdc226836851fe1ccbae76d703e3ebf0cb670e9e513b00935608503.css integrity="sha256-pUd9xpzcImg2hR/hzLrnbXA+Pr8MtnDp5ROwCTVghQM="><link rel=stylesheet type=text/css href=https://docs.infinilabs.com/easysearch/main/css/asciinema-player.css><script defer src=https://docs.infinilabs.com/easysearch/main/js/jquery-2.x.min.js></script><script defer src=https://docs.infinilabs.com/easysearch/main/js/doc.js></script><script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?64b9322783bb21716d701b15fb0b1e82";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+请求 #  PUT _ilm/policy/{policyID}    参数 描述 类型 是否必需     policyID 策略 ID。 string 是    查询参数 #     参数 描述 类型 默认值     if_seq_no 仅当匹配此序列号时更新。 long —   if_primary_term 仅当匹配此主分片任期时更新。 long —    请求体 #  策略支持 ES 兼容的 phases 格式。系统内部会将其转换为 Easysearch 原生的 managed-index / states / actions 执行模型。"><meta property="og:type" content="article"><meta property="og:url" content="https://docs.infinilabs.com/easysearch/main/docs/features/data-retention/ilm/"><title>索引生命周期 | INFINI Easysearch (main) | 分布式搜索型数据库</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.a5477dc69cdc226836851fe1ccbae76d703e3ebf0cb670e9e513b00935608503.css integrity="sha256-pUd9xpzcImg2hR/hzLrnbXA+Pr8MtnDp5ROwCTVghQM="><link rel=stylesheet type=text/css href=https://docs.infinilabs.com/easysearch/main/css/asciinema-player.css><script defer src=https://docs.infinilabs.com/easysearch/main/js/jquery-2.x.min.js></script><script defer src=https://docs.infinilabs.com/easysearch/main/js/doc.js></script><script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?64b9322783bb21716d701b15fb0b1e82";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/easysearch/main><img src=/easysearch/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;height:36px;width:100%></div><script>function waitForShadow(host,callback){const timer=setInterval(()=>{if(host.shadowRoot){clearInterval(timer);callback(host.shadowRoot);}},50);}
 const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{const style=document.createElement('style');style.textContent=`
       .infini__searchbox-btn {
@@ -13,6 +13,7 @@ const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{co
       }
     `;shadow.appendChild(style);});</script><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
+<option value=v2.2.0>v2.2.0</option>
 <option value=v2.1.2>v2.1.2</option>
 <option value=v2.1.1>v2.1.1</option>
 <option value=v2.1.0>v2.1.0</option>
@@ -233,7 +234,7 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
 <a class=anchor href=#%e8%af%b7%e6%b1%82>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>PUT _ilm/policy/{policyID}
 </code></pre></div><table><thead><tr><th>参数</th><th>描述</th><th>类型</th><th>是否必需</th></tr></thead><tbody><tr><td><code>policyID</code></td><td>策略 ID。</td><td><code>string</code></td><td>是</td></tr></tbody></table><h4 id=查询参数>查询参数
 <a class=anchor href=#%e6%9f%a5%e8%af%a2%e5%8f%82%e6%95%b0>#</a></h4><table><thead><tr><th>参数</th><th>描述</th><th>类型</th><th>默认值</th></tr></thead><tbody><tr><td><code>if_seq_no</code></td><td>仅当匹配此序列号时更新。</td><td><code>long</code></td><td>—</td></tr><tr><td><code>if_primary_term</code></td><td>仅当匹配此主分片任期时更新。</td><td><code>long</code></td><td>—</td></tr></tbody></table><h4 id=请求体>请求体
-<a class=anchor href=#%e8%af%b7%e6%b1%82%e4%bd%93>#</a></h4><p>策略支持 ES 兼容的 <strong>phases 格式</strong>。系统内部会自动转换为 states 格式。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>PUT _ilm/policy/my_lifecycle
+<a class=anchor href=#%e8%af%b7%e6%b1%82%e4%bd%93>#</a></h4><p>策略支持 ES 兼容的 <strong>phases 格式</strong>。系统内部会将其转换为 Easysearch 原生的 managed-index / states / actions 执行模型。</p><p>当前策略 DSL 的边界如下：</p><ul><li><code>_ilm/policy</code> 是 ES 兼容的策略写入入口。</li><li>当前不支持在 action 中声明自定义 <code>retry</code> 配置，例如 <code>retry.count</code>、<code>retry.backoff</code>、<code>retry.delay</code>。</li><li>action 执行失败后的恢复语义由系统默认自动重试机制和手动 <code>POST /_ilm/retry/{index}</code> 共同提供。</li><li><code>/_ilm/explain</code> 返回的 <code>state</code>、<code>action</code>、<code>step</code>、<code>retry_info</code>、<code>info</code> 等字段代表运行时 managed-index 状态，而不是策略 DSL 字段。</li></ul><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>PUT _ilm/policy/my_lifecycle
 {
   <span style=color:#ff79c6>&#34;policy&#34;</span>: {
     <span style=color:#ff79c6>&#34;phases&#34;</span>: {
@@ -324,11 +325,6 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
         <span style=color:#ff79c6>&#34;name&#34;</span>: <span style=color:#f1fa8c>&#34;hot&#34;</span>,
         <span style=color:#ff79c6>&#34;actions&#34;</span>: [
           {
-            <span style=color:#ff79c6>&#34;retry&#34;</span>: {
-              <span style=color:#ff79c6>&#34;count&#34;</span>: <span style=color:#bd93f9>3</span>,
-              <span style=color:#ff79c6>&#34;backoff&#34;</span>: <span style=color:#f1fa8c>&#34;exponential&#34;</span>,
-              <span style=color:#ff79c6>&#34;delay&#34;</span>: <span style=color:#f1fa8c>&#34;1m&#34;</span>
-            },
             <span style=color:#ff79c6>&#34;rollover&#34;</span>: {
               <span style=color:#ff79c6>&#34;min_size&#34;</span>: <span style=color:#f1fa8c>&#34;50gb&#34;</span>,
               <span style=color:#ff79c6>&#34;min_doc_count&#34;</span>: <span style=color:#bd93f9>100000000</span>,
@@ -336,11 +332,6 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
             }
           },
           {
-            <span style=color:#ff79c6>&#34;retry&#34;</span>: {
-              <span style=color:#ff79c6>&#34;count&#34;</span>: <span style=color:#bd93f9>3</span>,
-              <span style=color:#ff79c6>&#34;backoff&#34;</span>: <span style=color:#f1fa8c>&#34;exponential&#34;</span>,
-              <span style=color:#ff79c6>&#34;delay&#34;</span>: <span style=color:#f1fa8c>&#34;1m&#34;</span>
-            },
             <span style=color:#ff79c6>&#34;index_priority&#34;</span>: {
               <span style=color:#ff79c6>&#34;priority&#34;</span>: <span style=color:#bd93f9>100</span>
             }
@@ -359,21 +350,11 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
         <span style=color:#ff79c6>&#34;name&#34;</span>: <span style=color:#f1fa8c>&#34;warm&#34;</span>,
         <span style=color:#ff79c6>&#34;actions&#34;</span>: [
           {
-            <span style=color:#ff79c6>&#34;retry&#34;</span>: {
-              <span style=color:#ff79c6>&#34;count&#34;</span>: <span style=color:#bd93f9>3</span>,
-              <span style=color:#ff79c6>&#34;backoff&#34;</span>: <span style=color:#f1fa8c>&#34;exponential&#34;</span>,
-              <span style=color:#ff79c6>&#34;delay&#34;</span>: <span style=color:#f1fa8c>&#34;1m&#34;</span>
-            },
             <span style=color:#ff79c6>&#34;force_merge&#34;</span>: {
               <span style=color:#ff79c6>&#34;max_num_segments&#34;</span>: <span style=color:#bd93f9>1</span>
             }
           },
           {
-            <span style=color:#ff79c6>&#34;retry&#34;</span>: {
-              <span style=color:#ff79c6>&#34;count&#34;</span>: <span style=color:#bd93f9>3</span>,
-              <span style=color:#ff79c6>&#34;backoff&#34;</span>: <span style=color:#f1fa8c>&#34;exponential&#34;</span>,
-              <span style=color:#ff79c6>&#34;delay&#34;</span>: <span style=color:#f1fa8c>&#34;1m&#34;</span>
-            },
             <span style=color:#ff79c6>&#34;allocation&#34;</span>: {
               <span style=color:#ff79c6>&#34;require&#34;</span>: { <span style=color:#ff79c6>&#34;box_type&#34;</span>: <span style=color:#f1fa8c>&#34;warm&#34;</span> },
               <span style=color:#ff79c6>&#34;include&#34;</span>: {},
@@ -382,11 +363,6 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
             }
           },
           {
-            <span style=color:#ff79c6>&#34;retry&#34;</span>: {
-              <span style=color:#ff79c6>&#34;count&#34;</span>: <span style=color:#bd93f9>3</span>,
-              <span style=color:#ff79c6>&#34;backoff&#34;</span>: <span style=color:#f1fa8c>&#34;exponential&#34;</span>,
-              <span style=color:#ff79c6>&#34;delay&#34;</span>: <span style=color:#f1fa8c>&#34;1m&#34;</span>
-            },
             <span style=color:#ff79c6>&#34;index_priority&#34;</span>: {
               <span style=color:#ff79c6>&#34;priority&#34;</span>: <span style=color:#bd93f9>50</span>
             }
@@ -405,21 +381,11 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
         <span style=color:#ff79c6>&#34;name&#34;</span>: <span style=color:#f1fa8c>&#34;delete&#34;</span>,
         <span style=color:#ff79c6>&#34;actions&#34;</span>: [
           {
-            <span style=color:#ff79c6>&#34;retry&#34;</span>: {
-              <span style=color:#ff79c6>&#34;count&#34;</span>: <span style=color:#bd93f9>3</span>,
-              <span style=color:#ff79c6>&#34;backoff&#34;</span>: <span style=color:#f1fa8c>&#34;exponential&#34;</span>,
-              <span style=color:#ff79c6>&#34;delay&#34;</span>: <span style=color:#f1fa8c>&#34;1m&#34;</span>
-            },
             <span style=color:#ff79c6>&#34;wait_for_snapshot&#34;</span>: {
               <span style=color:#ff79c6>&#34;policy&#34;</span>: <span style=color:#f1fa8c>&#34;daily-backup&#34;</span>
             }
           },
           {
-            <span style=color:#ff79c6>&#34;retry&#34;</span>: {
-              <span style=color:#ff79c6>&#34;count&#34;</span>: <span style=color:#bd93f9>3</span>,
-              <span style=color:#ff79c6>&#34;backoff&#34;</span>: <span style=color:#f1fa8c>&#34;exponential&#34;</span>,
-              <span style=color:#ff79c6>&#34;delay&#34;</span>: <span style=color:#f1fa8c>&#34;1m&#34;</span>
-            },
             <span style=color:#ff79c6>&#34;delete&#34;</span>: {}
           }
         ],
@@ -435,7 +401,7 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
     ]
   }
 }
-</code></pre></div><blockquote><p><strong>注意</strong>：创建策略时使用的是 ES 兼容的 phases 格式，但获取策略时返回的是内部 states 格式。操作名称也会转换为内部名称（如 <code>set_priority</code> 变为 <code>index_priority</code>）。</p></blockquote><hr><h3 id=list-policies>获取所有策略
+</code></pre></div><blockquote><p><strong>说明</strong>：</p><ul><li>创建策略时使用的是 ES 兼容的 <code>phases</code> 格式。</li><li>获取策略时返回的是 Easysearch 内部 <code>states</code> 视图，不保证与原始 <code>phases</code> DSL 一一对应。</li><li>返回结构中的 action 字段用于展示内部策略表示。不同版本实现可能包含默认 <code>retry</code> 等内部字段，但这些字段不表示 <code>_ilm/policy</code> 支持用户自定义 action 级重试配置。</li></ul></blockquote><hr><h3 id=list-policies>获取所有策略
 <a class=anchor href=#list-policies>#</a></h3><p>不指定 <code>policyID</code> 即可列出所有策略。</p><h4 id=请求-2>请求
 <a class=anchor href=#%e8%af%b7%e6%b1%82-2>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>GET _ilm/policy
 </code></pre></div><h4 id=查询参数-1>查询参数
@@ -602,7 +568,7 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
   <span style=color:#ff79c6>&#34;total_managed_indices&#34;</span>: <span style=color:#bd93f9>1</span>
 }
 </code></pre></div><hr><h3 id=retry>重试失败操作
-<a class=anchor href=#retry>#</a></h3><p>当生命周期管理操作执行失败时，使用此 API 重试。</p><h4 id=请求-9>请求
+<a class=anchor href=#retry>#</a></h3><p>当托管索引上的生命周期管理操作执行失败时，使用此 API 手动触发重试。</p><p>该接口面向运行时 managed-index 状态，而不是策略定义本身。通常可结合 <code>/_ilm/explain/{index}</code> 中的 <code>state</code>、<code>action</code>、<code>step</code>、<code>retry_info</code> 和 <code>info</code> 字段来判断失败位置。</p><p>当前重试语义如下：</p><ul><li>系统会对部分失败场景执行默认自动重试。</li><li>当索引已经停留在失败状态，或需要在修复外部依赖后重新推进时，可调用 <code>POST /_ilm/retry/{index}</code> 手动重试。</li><li>该接口不表示 <code>_ilm/policy</code> 支持为某个 action 自定义 <code>retry.count</code>、<code>retry.backoff</code> 或 <code>retry.delay</code>。</li></ul><h4 id=请求-9>请求
 <a class=anchor href=#%e8%af%b7%e6%b1%82-9>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>POST /_ilm/retry/{index}
 </code></pre></div><h4 id=请求体可选>请求体（可选）
 <a class=anchor href=#%e8%af%b7%e6%b1%82%e4%bd%93%e5%8f%af%e9%80%89>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
@@ -615,8 +581,8 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
   <span style=color:#ff79c6>&#34;failed_indices&#34;</span>: []
 }
 </code></pre></div><hr><h2 id=状态转换条件>状态转换条件
-<a class=anchor href=#%e7%8a%b6%e6%80%81%e8%bd%ac%e6%8d%a2%e6%9d%a1%e4%bb%b6>#</a></h2><p>在策略的 states 格式中，每个状态可以定义转换条件。当条件满足时，索引自动进入下一个状态。</p><table><thead><tr><th>条件</th><th>描述</th><th>类型</th><th>示例</th></tr></thead><tbody><tr><td><code>min_index_age</code></td><td>索引的最小年龄。</td><td><code>string</code></td><td><code>"30d"</code></td></tr><tr><td><code>min_doc_count</code></td><td>索引的最小文档数量（须 >0）。</td><td><code>long</code></td><td><code>1000000</code></td></tr><tr><td><code>min_size</code></td><td>索引的最小大小（须 >0）。</td><td><code>string</code></td><td><code>"50gb"</code></td></tr><tr><td><code>min_rollover_age</code></td><td>自上次 rollover 以来的最小时间。</td><td><code>string</code></td><td><code>"7d"</code></td></tr><tr><td><code>cron</code></td><td>基于 cron 表达式的时间条件。</td><td><code>object</code></td><td>见下方</td></tr></tbody></table><hr><h2 id=操作参考>操作参考
-<a class=anchor href=#%e6%93%8d%e4%bd%9c%e5%8f%82%e8%80%83>#</a></h2><p>所有操作都支持以下通用可选参数：</p><table><thead><tr><th>参数</th><th>描述</th><th>类型</th><th>默认值</th></tr></thead><tbody><tr><td><code>timeout</code></td><td>操作超时时间。</td><td><code>string</code></td><td>无</td></tr><tr><td><code>retry.count</code></td><td>失败时的最大重试次数。</td><td><code>long</code></td><td><code>3</code></td></tr><tr><td><code>retry.backoff</code></td><td>重试退避策略。</td><td><code>string</code></td><td><code>exponential</code></td></tr><tr><td><code>retry.delay</code></td><td>重试间隔时间。</td><td><code>string</code></td><td><code>1m</code></td></tr></tbody></table><blockquote><p><strong>操作名称兼容性</strong>：在 phases 格式中，可以使用 ES 兼容名称（左列）；在 states 格式中，使用内部名称（右列）：</p><table><thead><tr><th>ES 兼容名称</th><th>内部名称</th></tr></thead><tbody><tr><td><code>set_priority</code></td><td><code>index_priority</code></td></tr><tr><td><code>allocate</code></td><td><code>allocation</code></td></tr><tr><td><code>forcemerge</code></td><td><code>force_merge</code></td></tr><tr><td><code>readonly</code></td><td><code>read_only</code></td></tr></tbody></table></blockquote><hr><h3 id=rollover>rollover
+<a class=anchor href=#%e7%8a%b6%e6%80%81%e8%bd%ac%e6%8d%a2%e6%9d%a1%e4%bb%b6>#</a></h2><p>在 Easysearch 内部 <code>states</code> 视图中，每个状态可以定义转换条件。当条件满足时，索引自动进入下一个状态。对于 <code>_ilm/policy</code> 的 <code>phases</code> 写法，这些条件通常由后续 phase 的 <code>min_age</code> 推导而来。</p><table><thead><tr><th>条件</th><th>描述</th><th>类型</th><th>示例</th></tr></thead><tbody><tr><td><code>min_index_age</code></td><td>索引的最小年龄。</td><td><code>string</code></td><td><code>"30d"</code></td></tr><tr><td><code>min_doc_count</code></td><td>索引的最小文档数量（须 >0）。</td><td><code>long</code></td><td><code>1000000</code></td></tr><tr><td><code>min_size</code></td><td>索引的最小大小（须 >0）。</td><td><code>string</code></td><td><code>"50gb"</code></td></tr><tr><td><code>min_rollover_age</code></td><td>自上次 rollover 以来的最小时间。</td><td><code>string</code></td><td><code>"7d"</code></td></tr><tr><td><code>cron</code></td><td>基于 cron 表达式的时间条件。</td><td><code>object</code></td><td>见下方</td></tr></tbody></table><hr><h2 id=操作参考>操作参考
+<a class=anchor href=#%e6%93%8d%e4%bd%9c%e5%8f%82%e8%80%83>#</a></h2><p>当前文档中的 action 示例主要说明可写入 <code>_ilm/policy</code> 的策略字段。通用运行时重试由系统内部机制和 <code>/_ilm/retry/{index}</code> 提供，不作为策略 DSL 的通用可配置项公开。</p><p>对于 <code>_ilm/policy</code> 的 <code>phases</code> 兼容写法，当前文档仅列出各 action 自身支持的字段。返回结构或内部 <code>states</code> 视图中出现的附加字段，不应直接视为可写回策略的通用参数。</p><blockquote><p><strong>操作名称兼容性</strong>：在 phases 格式中，可以使用 ES 兼容名称（左列）；在 states 格式中，使用内部名称（右列）：</p><table><thead><tr><th>ES 兼容名称</th><th>内部名称</th></tr></thead><tbody><tr><td><code>set_priority</code></td><td><code>index_priority</code></td></tr><tr><td><code>allocate</code></td><td><code>allocation</code></td></tr><tr><td><code>forcemerge</code></td><td><code>force_merge</code></td></tr><tr><td><code>readonly</code></td><td><code>read_only</code></td></tr></tbody></table></blockquote><hr><h3 id=rollover>rollover
 <a class=anchor href=#rollover>#</a></h3><p>当现有索引满足指定的滚动条件时，将写入目标切换到新索引。</p><p>滚动目标可以是数据流或索引别名。当目标为数据流时，新索引将变为数据流的写索引，并且其代数将递增。</p><p>如果要滚动索引别名，别名及其写索引必须满足以下条件：</p><ul><li>索引名称必须符合模式 <code>^.*-\d+$</code>，例如 <code>my-index-000001</code>。</li><li>必须将 <code>index.lifecycle.rollover_alias</code> 配置为要滚动的别名。</li><li>索引必须是别名的写索引。</li></ul><table><thead><tr><th>参数</th><th>描述</th><th>类型</th><th>是否必需</th></tr></thead><tbody><tr><td><code>min_size</code> / <code>max_size</code></td><td>当索引主分片总大小达到此值时触发滚动（不含副本）。</td><td><code>string</code></td><td>否</td></tr><tr><td><code>min_doc_count</code> / <code>max_docs</code></td><td>当索引文档数达到此值时触发滚动（不含副本和未刷新文档）。</td><td><code>long</code></td><td>否</td></tr><tr><td><code>min_index_age</code> / <code>max_age</code></td><td>当索引年龄达到此值时触发滚动。</td><td><code>string</code></td><td>否</td></tr><tr><td><code>min_primary_shard_size</code> / <code>max_primary_shard_size</code></td><td>当最大主分片大小达到此值时触发滚动。</td><td><code>string</code></td><td>否</td></tr></tbody></table><blockquote><p>每对参数中，左侧是内部名称，右侧是 ES 兼容别名。两种写法均可使用。</p></blockquote><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>PUT _ilm/policy/my_policy
 {
   <span style=color:#ff79c6>&#34;policy&#34;</span>: {
@@ -866,8 +832,8 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
   }
 }
 </code></pre></div><hr><h3 id=rollup>rollup
-<a class=anchor href=#rollup>#</a></h3><p>在生命周期操作中自动创建 rollup 作业，将细粒度时序数据汇总为粗粒度数据以节省存储空间。</p><p><strong>执行步骤</strong>：创建 Rollup 作业 → 等待 Rollup 完成（共 2 步）。</p><table><thead><tr><th>参数</th><th>描述</th><th>类型</th><th>是否必需</th></tr></thead><tbody><tr><td><code>ism_rollup</code></td><td>ISM Rollup 配置对象。</td><td><code>object</code></td><td>是</td></tr></tbody></table><h4 id=ism-rollup-配置>ISM Rollup 配置
-<a class=anchor href=#ism-rollup-%e9%85%8d%e7%bd%ae>#</a></h4><table><thead><tr><th>参数</th><th>描述</th><th>类型</th><th>是否必需</th><th>验证</th></tr></thead><tbody><tr><td><code>description</code></td><td>Rollup 作业描述。</td><td><code>string</code></td><td>是</td><td>—</td></tr><tr><td><code>target_index</code></td><td>存储 rollup 结果的目标索引名称。</td><td><code>string</code></td><td>是</td><td>不能为空</td></tr><tr><td><code>page_size</code></td><td>每批处理的文档数。</td><td><code>int</code></td><td>是</td><td>1 ~ 10000</td></tr><tr><td><code>dimensions</code></td><td>维度定义列表。</td><td><code>array</code></td><td>是</td><td>第一个必须是 <code>date_histogram</code></td></tr><tr><td><code>metrics</code></td><td>指标聚合定义列表。</td><td><code>array</code></td><td>是</td><td>—</td></tr></tbody></table><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>PUT _ilm/policy/my_policy
+<a class=anchor href=#rollup>#</a></h3><p>在生命周期操作中自动创建 rollup 作业，将细粒度时序数据汇总为粗粒度数据以节省存储空间。</p><p><strong>执行步骤</strong>：创建 Rollup 作业 → 等待 Rollup 完成（共 2 步）。</p><table><thead><tr><th>参数</th><th>描述</th><th>类型</th><th>是否必需</th></tr></thead><tbody><tr><td><code>ism_rollup</code></td><td>ILM Rollup 配置对象。</td><td><code>object</code></td><td>是</td></tr></tbody></table><h4 id=ilm-rollup-配置>ILM Rollup 配置
+<a class=anchor href=#ilm-rollup-%e9%85%8d%e7%bd%ae>#</a></h4><table><thead><tr><th>参数</th><th>描述</th><th>类型</th><th>是否必需</th><th>验证</th></tr></thead><tbody><tr><td><code>description</code></td><td>Rollup 作业描述。</td><td><code>string</code></td><td>是</td><td>—</td></tr><tr><td><code>target_index</code></td><td>存储 rollup 结果的目标索引名称。</td><td><code>string</code></td><td>是</td><td>不能为空</td></tr><tr><td><code>page_size</code></td><td>每批处理的文档数。</td><td><code>int</code></td><td>是</td><td>1 ~ 10000</td></tr><tr><td><code>dimensions</code></td><td>维度定义列表。</td><td><code>array</code></td><td>是</td><td>第一个必须是 <code>date_histogram</code></td></tr><tr><td><code>metrics</code></td><td>指标聚合定义列表。</td><td><code>array</code></td><td>是</td><td>—</td></tr></tbody></table><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>PUT _ilm/policy/my_policy
 {
   <span style=color:#ff79c6>&#34;policy&#34;</span>: {
     <span style=color:#ff79c6>&#34;phases&#34;</span>: {

@@ -1407,7 +1407,7 @@ POST _ik/_reload
 
 ## ilm.add_policy
 
-为一个或多个索引添加 ISM（索引状态管理）策略。
+为一个或多个索引添加 ILM 策略。
 
 ```
 POST _ilm/add
@@ -1424,11 +1424,11 @@ POST _ilm/add/{index}
 
 | 参数 | 类型 | 说明 |
 | :--------- | :------- | :----------------------------------------------------------------------- |
-| policy_id  | string   | 要添加的 ISM 策略 ID。                                                   |
+| policy_id  | string   | 要添加的 ILM 策略 ID。                                                   |
 
 ## ilm.change_policy
 
-更改已应用于一个或多个索引的 ISM 策略。
+更改已应用于一个或多个索引的 ILM 策略。
 
 ```
 POST _ilm/change_policy
@@ -1447,7 +1447,7 @@ POST _ilm/change_policy/{index}
 
 ## ilm.delete_policy
 
-删除指定的 ISM 策略。
+删除指定的 ILM 策略。
 
 ```
 DELETE _ilm/policy/{policyID}
@@ -1462,7 +1462,7 @@ DELETE _ilm/policy/{policyID}
 
 ## ilm.explain
 
-获取一个或多个索引的 ISM 策略执行状态和详情。
+获取一个或多个索引的 ILM 策略执行状态和详情。
 
 ```
 GET _ilm/explain
@@ -1485,7 +1485,7 @@ GET _ilm/explain/{index}
 
 ## ilm.get_policy
 
-获取一个或多个 ISM 策略的定义。
+获取一个或多个 ILM 策略的定义。
 
 ```
 GET _ilm/policy
@@ -1506,7 +1506,7 @@ HEAD _ilm/policy/{policyID}
 
 ## ilm.put_policy
 
-创建或更新一个 ISM 策略。
+创建或更新一个 ILM 策略。
 
 ```
 PUT _ilm/policy/{policyID}
@@ -1523,11 +1523,11 @@ PUT _ilm/policy/{policyID}
 
 #### HTTP 请求体
 
-ISM 策略定义，包含策略描述、状态列表、转换条件、操作配置等。
+ILM 策略定义，包含策略描述、状态列表、转换条件、操作配置等。
 
 ## ilm.remove_policy
 
-从一个或多个索引上移除 ISM 策略。
+从一个或多个索引上移除 ILM 策略。
 
 ```
 POST _ilm/remove
@@ -1542,7 +1542,7 @@ POST _ilm/remove/{index}
 
 ## ilm.retry
 
-重试因错误而失败的 ISM 策略执行。
+重试因错误而失败的 ILM 策略执行。
 
 ```
 POST _ilm/retry
@@ -2934,6 +2934,25 @@ GET _match_rules
 | tag        | string   | 按标签过滤，支持逗号分隔多个标签。                                          |
 | sort       | string   | 排序字段。默认 `updated`。支持 `updated`、`created`、`name`、`status`、`version`、`compiled_at`、`total_rules`、`repo_id`。 |
 | order      | string   | 排序方向。默认 `desc`，支持 `asc`、`desc`。                                  |
+
+## match_rules.get
+
+获取指定规则仓库详情，包含原始规则文本。
+
+#### 权限控制
+
+- 需要集群级权限 `cluster:admin/rules/get`。
+- 该 API 由服务端内部代理访问内部索引 `.match_rules`；不建议也不应直接对 `.match_rules` 执行普通文档读取请求。
+
+```
+GET _match_rules/{repo_id}
+```
+
+#### URL 参数
+
+| 参数 | 类型 | 说明 |
+| :--------- | :------- | :----------------------------------------------------------------------- |
+| repo_id    | string   | 必需。规则仓库 ID。                                                       |
 
 ## match_rules.references
 
