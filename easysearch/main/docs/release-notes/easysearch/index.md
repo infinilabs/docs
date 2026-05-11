@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.2.0 (2026-05-06) #  Breaking changes #   repository-s3 插件底层 AWS SDK 升级至 2.x，相关依赖栈已同步更新。  Features #   新增 Agent UI，支持统一管理主机上的节点 新增模型提供商管理 UI 新增 API Token 管理 UI，支持在控制台中管理 Access Token 安全模块新增 Access Token 认证与授权能力  支持通过 X-API-TOKEN 进行程序化认证，减少脚本和服务调用中直接使用用户名密码的需求 支持 Access Token 的创建、更新、删除与检索 支持按 cluster / indices 粒度配置权限，且权限模型与角色权限保持一致   新增大模型供应商管理 API，支持通过 /_model_provider/* 统一管理模型供应商配置  支持模型供应商配置与模型参数的增删改查 api_key 支持加密存储，列表不返回，详情掩码返回，并支持独立更新 使用该 API 需配置相应权限 内置供应商配置支持写保护，避免被误修改或删除   规则引擎新增规则库管理与调试 API  支持通过 GET /_match_rules 查询规则库列表 支持通过 GET /_match_rules/{repo_id}/_references 查询规则库引用关系 支持通过 POST /_match_rules/{repo_id}/_simulate 对已编译规则库进行模拟匹配   新增规则引擎 UI 新增 Agent UI 巡检模块  Bug fix #   修复 cron 表达式表单正则校验 修复开发工具集群信息异常 修复点击服务管理页面的链接进入服务 UI 时出现 404 的中间页 修复自动生成管理员密码在有可能缺少随机特殊字条 修复节点设置中 easysearch."
+Latest (In development) #  Breaking changes #  Features #   新增管道管理 UI  Bug fix #  Improvements #  2.2.0 (2026-05-06) #  Breaking changes #   repository-s3 插件底层 AWS SDK 升级至 2.x，相关依赖栈已同步更新。  Features #   新增 Agent UI，支持统一管理主机上的节点 新增模型提供商管理 UI 新增 API Token 管理 UI，支持在控制台中管理 Access Token 安全模块新增 Access Token 认证与授权能力  支持通过 X-API-TOKEN 进行程序化认证，减少脚本和服务调用中直接使用用户名密码的需求 支持 Access Token 的创建、更新、删除与检索 支持按 cluster / indices 粒度配置权限，且权限模型与角色权限保持一致   新增大模型供应商管理 API，支持通过 /_model_provider/* 统一管理模型供应商配置  支持模型供应商配置与模型参数的增删改查 api_key 支持加密存储，列表不返回，详情掩码返回，并支持独立更新 使用该 API 需配置相应权限 内置供应商配置支持写保护，避免被误修改或删除   规则引擎新增规则库管理与调试 API  支持通过 GET /_match_rules 查询规则库列表 支持通过 GET /_match_rules/{repo_id}/_references 查询规则库引用关系 支持通过 POST /_match_rules/{repo_id}/_simulate 对已编译规则库进行模拟匹配   新增规则引擎 UI 新增 Agent UI 巡检模块  Bug fix #   修复 cron 表达式表单正则校验 修复开发工具集群信息异常 修复点击服务管理页面的链接进入服务 UI 时出现 404 的中间页 修复自动生成管理员密码在有可能缺少随机特殊字条 修复节点设置中 easysearch."
 ---
 
 
@@ -13,6 +13,7 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 ## Latest (In development)
 ### Breaking changes
 ### Features
+- 新增管道管理 UI
 ### Bug fix
 ### Improvements
 
