@@ -237,7 +237,7 @@ PUT _rollup/jobs/rollup_node_stats
 | 参数 | 解释                                    | 示例值说明                                                                    |
 |------|---------------------------------------|--------------------------------------------------------------------------|
 | `source_index` | 源索引，数据将从此索引中收集                        | `.infini_metrics`: 表示从名为 .infini_metrics 的索引中收集数据                        |
-| `target_index` | 目标索引，汇总数据将存储在此索引中                     | `rollup1_{{ctx.source_index}}`: 动态生成目标索引名，使用源索引名作为一部分                    |
+| `target_index` | 目标索引，汇总数据将存储在此索引中                     | `rollup1_{{ctx.source_index}}`: 动态生成目标索引名，使用源索引名作为一部分；当前版本已不要求目标索引必须以 `rollup` 开头 |
 | `timestamp` | 用于时间聚合的时间戳字段                          | `timestamp`: 指定用于时间聚合的字段名                                                |
 | `continuous` | 设置为 true，表示这是一个连续的 rollup 作业，默认为false | `true`: 任务将持续运行，而不是一次性执行                                                 |
 | `page_size` | 每次处理的文档数量                             | `1000`: 每批处理1000个文档，可根据系统性能调整                                            |
@@ -252,7 +252,7 @@ PUT _rollup/jobs/rollup_node_stats
 | `exclude` | 要排除的指标字段                              | `payload.elasticsearch.index_stats.routing.*`: metrics 会排除符合模式的字段        |
 | `filter` | 用于过滤源文档的条件                            | `{"metadata.name": "index_stats"}`: 只处理metadata.name为index_stats的文档      |
 | `write_optimization` | 启用后采用自动生成文档 ID 的策略，提升写入速度             | `true`: 启用写入优化（1.12.0 版本增加）                                              |
-| `field_abbr` | 启用字段名缩写，可降低内存消耗                       | `true`: 启用字段名缩写（1.12.0 版本增加）                                             |
+| `field_abbr` | 启用字段名缩写，可降低 rollup 文档、mapping 与批量写入过程中的字段名开销 | `true`: 启用字段名缩写（1.12.0 版本增加）；当前版本主要对使用通配符展开的 `metrics` 字段生效 |
 | `is_continue` | 当创建的 Rollup 已经有历史数据并要断点续跑时配置          | `true`: 启用断点续跑，默认不配置为 `false`（1.12.3 版本增加）                               |
 
 #### 注意事项
@@ -263,6 +263,24 @@ PUT _rollup/jobs/rollup_node_stats
 4. 使用通配符（如 `agent.*`）时要注意，这可能会包含大量字段，影响性能。
 5. `filter` 可以有效减少处理的数据量，提高效率。
 6. `write_optimization` 和 `field_abbr` 是从 1.12.0 新增的参数。
+7. `target_index` 只是目标索引名称模板，当前版本不会再通过固定的 `rollup` 名称前缀识别 rollup 索引；rollup 搜索链路主要基于索引元数据中的 `index.rollup_index` 设置判断目标索引。
+8. `field_abbr` 当前最适合与通配符形式的 `metrics` 一起使用；如果使用显式 `metrics` 列表，字段名缩写带来的收益会明显减弱。
+
+#### `field_abbr` 的主要收益与适用场景
+
+`field_abbr` 的作用不是改变聚合结果，而是把 rollup 目标文档里原本很长的指标字段名缩写成较短的字段名，从而减少字段名重复带来的开销。对于包含大量嵌套 JSON 路径、并且 `metrics` 通过通配符批量展开的场景，这个优化最明显。
+
+主要收益包括：
+
+1. 缩小 rollup 文档 `_source` 体积。字段路径越长、每条文档里重复出现得越多，收益越明显。
+2. 缩小 rollup 索引 mapping 体积。大量动态展开的 metrics 会生成很多字段，缩写后 mapping 元数据会更紧凑。
+3. 降低 bulk 写入时的请求体、序列化和临时内存开销。对于持续写入、metrics 数量很多的任务，这通常比“单条文档省了几个字节”更有实际意义。
+4. 在 wildcard metrics 场景下，通常还能带来一定的 rollup 索引存储节省，但这个收益一般小于 `_source` 和 mapping 的节省幅度。
+
+当前实现有两个边界需要注意：
+
+1. `field_abbr` 目前主要对通配符展开出来的 `metrics` 生效；如果使用显式 `metrics` 列表，当前实现仍会保留原始字段名，收益会明显减弱。
+2. 不应把 `field_abbr` 理解成“聚合计算时 docvalues 内存显著下降”的优化。它主要优化的是字段名本身带来的文档体积、mapping 体积和写入链路开销，而不是数值聚合本身的计算模型。
 
 ### 获取索引汇总任务
 
@@ -431,6 +449,11 @@ GET _rollup/jobs/<rollup_id>/_explain
 3. 重启 Job
 4. 运行 Job 时 索引数据会增加 unique 字段标识当前 Job 批次的数据，方便数据排重
 
+补充说明：
+
+- 当前版本允许在保留已有 `metrics` 定义不变的前提下，向 Rollup job 追加新的指标字段。
+- 不允许删除已有指标字段，也不允许修改已有指标字段的聚合定义；如需变更已有指标语义，请创建新的 Rollup job。
+
 请求
 ```auto
 POST  _rollup/jobs/rollup_node_stats  
@@ -538,7 +561,102 @@ PUT /_security/user/test_user
 
 ## 断点续跑 (1.13.0)
 
-创建Rollup 时如果检测到历史索引及元数据，会自动从中断的状态点继续处理，避免重复计算。
+当连续 Rollup Job 已经运行过，并且已经生成历史 metadata 时，可以通过 `is_continue: true` 重建同名 Job，让新 Job 从旧的处理中断点继续执行，避免从头重复计算。
 
-Rollup 配置增加了 window_start_time 字段，当重建 Rollup 时 会把历史 metadata 的最新时间戳自动写到 window_start_time 里，
-通过观察 window_start_time 字段的值可以判断当前 Job 开始的 ’断点时间‘。
+### 使用方式
+
+断点续跑的典型步骤如下：
+
+1. 先让旧 Rollup Job 至少成功运行过一次，确保 `.ilm-config` 中已经存在对应的 `rollup_metadata`。
+2. 停止旧 Job：
+
+```json
+POST /_rollup/jobs/my_rollup_job/_stop
+```
+
+3. 删除旧 Job：
+
+```json
+DELETE /_rollup/jobs/my_rollup_job
+```
+
+4. 使用相同的 `rollup_id` 重新创建 Job，并在配置中增加 `is_continue: true`：
+
+```json
+PUT /_rollup/jobs/my_rollup_job?refresh=true
+{
+  "rollup": {
+    "source_index": "my_source_index",
+    "target_index": "my_rollup_target",
+    "timestamp": "ts",
+    "page_size": 100,
+    "delay": 0,
+    "cron": "* * * * *",
+    "timezone": "UTC",
+    "continuous": true,
+    "interval": "1m",
+    "identity": [
+      "region"
+    ],
+    "attributes": [],
+    "filter": {},
+    "metrics": [
+      "value"
+    ],
+    "stats": [
+      { "sum": {} },
+      { "max": {} },
+      { "min": {} },
+      { "value_count": {} },
+      { "avg": {} }
+    ],
+    "write_optimization": true,
+    "field_abbr": false,
+    "is_continue": true
+  }
+}
+```
+
+5. 启动新 Job：
+
+```json
+POST /_rollup/jobs/my_rollup_job/_start
+```
+
+6. 通过 explain 查看是否已经挂回旧 metadata，并确认当前断点：
+
+```json
+GET /_rollup/jobs/my_rollup_job/_explain
+```
+
+典型返回中可重点关注：
+
+- `metadata_id`
+- `rollup_metadata.continuous.next_window_start_time`
+- `rollup_metadata.continuous.next_window_end_time`
+
+### 使用前提
+
+当前版本的断点续跑依赖以下条件：
+
+1. 新旧 Job 的 `rollup_id` 必须相同。
+2. 历史 `rollup_metadata` 必须仍然存在于 `.ilm-config` 中。
+3. 历史 target 索引通常也应保留，避免重建后与历史结果脱节。
+
+### 关于 `window_start_time`
+
+重建成功后，系统会自动把历史 metadata 中的最新断点时间回填到 Job 文档的 `window_start_time` 字段中。
+
+这个字段主要用于观察当前 Job 的断点位置，例如：
+
+- 当前 Job 是从哪个时间窗口开始继续处理的
+- 重建后是否已经成功挂回历史 metadata
+
+可以通过查看 Job 文档中的 `window_start_time`，或 `/_rollup/jobs/{id}/_explain` 返回中的 `rollup_metadata.continuous.next_window_start_time` 来确认当前恢复点。
+
+### 注意事项
+
+1. `is_continue` 不是“从任意指定时间开始”的通用恢复参数，而是“重建同名 Job 时复用历史 metadata”的恢复开关。
+2. 当前版本不会通过 REST 请求直接接收用户手工传入的 `window_start_time`。
+3. 如果历史 metadata 已被删除，或无法重新关联到新 Job，则无法继续从旧断点恢复。
+

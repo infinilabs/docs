@@ -1124,7 +1124,7 @@ PUT _ilm/policy/my_policy
 | 参数           | 描述                                                   | 类型     | 是否必需 | 验证                        |
 | -------------- | ------------------------------------------------------ | -------- | -------- | --------------------------- |
 | `description`  | Rollup 作业描述。                                       | `string` | 是       | —                           |
-| `target_index` | 存储 rollup 结果的目标索引名称。                         | `string` | 是       | 不能为空                     |
+| `target_index` | 存储 rollup 结果的目标索引名称。                         | `string` | 是       | 不能为空；当前版本不要求目标索引必须以 `rollup` 开头 |
 | `page_size`    | 每批处理的文档数。                                       | `int`    | 是       | 1 ~ 10000                   |
 | `dimensions`   | 维度定义列表。                                           | `array`  | 是       | 第一个必须是 `date_histogram` |
 | `metrics`      | 指标聚合定义列表。                                       | `array`  | 是       | —                           |
@@ -1139,7 +1139,7 @@ PUT _ilm/policy/my_policy
           "rollup": {
             "ism_rollup": {
               "description": "Hourly rollup",
-              "target_index": "rollup-my-index",
+              "target_index": "hourly-metrics-rollup",
               "page_size": 1000,
               "dimensions": [
                 {

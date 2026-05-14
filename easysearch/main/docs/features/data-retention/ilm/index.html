@@ -833,7 +833,7 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
 }
 </code></pre></div><hr><h3 id=rollup>rollup
 <a class=anchor href=#rollup>#</a></h3><p>在生命周期操作中自动创建 rollup 作业，将细粒度时序数据汇总为粗粒度数据以节省存储空间。</p><p><strong>执行步骤</strong>：创建 Rollup 作业 → 等待 Rollup 完成（共 2 步）。</p><table><thead><tr><th>参数</th><th>描述</th><th>类型</th><th>是否必需</th></tr></thead><tbody><tr><td><code>ism_rollup</code></td><td>ILM Rollup 配置对象。</td><td><code>object</code></td><td>是</td></tr></tbody></table><h4 id=ilm-rollup-配置>ILM Rollup 配置
-<a class=anchor href=#ilm-rollup-%e9%85%8d%e7%bd%ae>#</a></h4><table><thead><tr><th>参数</th><th>描述</th><th>类型</th><th>是否必需</th><th>验证</th></tr></thead><tbody><tr><td><code>description</code></td><td>Rollup 作业描述。</td><td><code>string</code></td><td>是</td><td>—</td></tr><tr><td><code>target_index</code></td><td>存储 rollup 结果的目标索引名称。</td><td><code>string</code></td><td>是</td><td>不能为空</td></tr><tr><td><code>page_size</code></td><td>每批处理的文档数。</td><td><code>int</code></td><td>是</td><td>1 ~ 10000</td></tr><tr><td><code>dimensions</code></td><td>维度定义列表。</td><td><code>array</code></td><td>是</td><td>第一个必须是 <code>date_histogram</code></td></tr><tr><td><code>metrics</code></td><td>指标聚合定义列表。</td><td><code>array</code></td><td>是</td><td>—</td></tr></tbody></table><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>PUT _ilm/policy/my_policy
+<a class=anchor href=#ilm-rollup-%e9%85%8d%e7%bd%ae>#</a></h4><table><thead><tr><th>参数</th><th>描述</th><th>类型</th><th>是否必需</th><th>验证</th></tr></thead><tbody><tr><td><code>description</code></td><td>Rollup 作业描述。</td><td><code>string</code></td><td>是</td><td>—</td></tr><tr><td><code>target_index</code></td><td>存储 rollup 结果的目标索引名称。</td><td><code>string</code></td><td>是</td><td>不能为空；当前版本不要求目标索引必须以 <code>rollup</code> 开头</td></tr><tr><td><code>page_size</code></td><td>每批处理的文档数。</td><td><code>int</code></td><td>是</td><td>1 ~ 10000</td></tr><tr><td><code>dimensions</code></td><td>维度定义列表。</td><td><code>array</code></td><td>是</td><td>第一个必须是 <code>date_histogram</code></td></tr><tr><td><code>metrics</code></td><td>指标聚合定义列表。</td><td><code>array</code></td><td>是</td><td>—</td></tr></tbody></table><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>PUT _ilm/policy/my_policy
 {
   <span style=color:#ff79c6>&#34;policy&#34;</span>: {
     <span style=color:#ff79c6>&#34;phases&#34;</span>: {
@@ -842,7 +842,7 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
           <span style=color:#ff79c6>&#34;rollup&#34;</span>: {
             <span style=color:#ff79c6>&#34;ism_rollup&#34;</span>: {
               <span style=color:#ff79c6>&#34;description&#34;</span>: <span style=color:#f1fa8c>&#34;Hourly rollup&#34;</span>,
-              <span style=color:#ff79c6>&#34;target_index&#34;</span>: <span style=color:#f1fa8c>&#34;rollup-my-index&#34;</span>,
+              <span style=color:#ff79c6>&#34;target_index&#34;</span>: <span style=color:#f1fa8c>&#34;hourly-metrics-rollup&#34;</span>,
               <span style=color:#ff79c6>&#34;page_size&#34;</span>: <span style=color:#bd93f9>1000</span>,
               <span style=color:#ff79c6>&#34;dimensions&#34;</span>: [
                 {

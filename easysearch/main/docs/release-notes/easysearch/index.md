@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #   新增管道管理 UI  Bug fix #  Improvements #  2.2.0 (2026-05-06) #  Breaking changes #   repository-s3 插件底层 AWS SDK 升级至 2.x，相关依赖栈已同步更新。  Features #   新增 Agent UI，支持统一管理主机上的节点 新增模型提供商管理 UI 新增 API Token 管理 UI，支持在控制台中管理 Access Token 安全模块新增 Access Token 认证与授权能力  支持通过 X-API-TOKEN 进行程序化认证，减少脚本和服务调用中直接使用用户名密码的需求 支持 Access Token 的创建、更新、删除与检索 支持按 cluster / indices 粒度配置权限，且权限模型与角色权限保持一致   新增大模型供应商管理 API，支持通过 /_model_provider/* 统一管理模型供应商配置  支持模型供应商配置与模型参数的增删改查 api_key 支持加密存储，列表不返回，详情掩码返回，并支持独立更新 使用该 API 需配置相应权限 内置供应商配置支持写保护，避免被误修改或删除   规则引擎新增规则库管理与调试 API  支持通过 GET /_match_rules 查询规则库列表 支持通过 GET /_match_rules/{repo_id}/_references 查询规则库引用关系 支持通过 POST /_match_rules/{repo_id}/_simulate 对已编译规则库进行模拟匹配   新增规则引擎 UI 新增 Agent UI 巡检模块  Bug fix #   修复 cron 表达式表单正则校验 修复开发工具集群信息异常 修复点击服务管理页面的链接进入服务 UI 时出现 404 的中间页 修复自动生成管理员密码在有可能缺少随机特殊字条 修复节点设置中 easysearch."
+Latest (In development) #  Breaking changes #  Features #   新增管道管理 UI  Bug fix #   修复 Rollup job 在检测到源索引新增指标字段后更新元数据时，误将 metrics 视为完全不可修改并报出 Not allowed to modify [metrics] 的问题；现在允许以 append-only 方式追加新的指标字段。 修复 Rollup wildcard metrics 自动扩展时，先修改内存对象再落库导致后续执行链使用旧配置的时序问题，避免运行中新增指标字段后元数据与实际执行状态不一致。 修复节点启动早期 RollupListener / ManagedIndexCoordinator 在配置索引尚未可搜索时提前查询 .ilm-config，触发 all shards failed、Failed execute GetRollupsAction 或 Failed to get ILM policies with templates 的问题。 修复索引管理协程中的安全上下文注入与恢复不完整，导致 InjectSecurity- most likely thread context corruption 告警的问题。 修复 Rollup Search 将普通索引名误判为 rollup 索引并错误分流的场景；现在基于索引元数据中的 index."
 ---
 
 
@@ -15,7 +15,14 @@ Latest (In development) #  Breaking changes #  Features #   新增管道管理 U
 ### Features
 - 新增管道管理 UI
 ### Bug fix
+- 修复 Rollup job 在检测到源索引新增指标字段后更新元数据时，误将 `metrics` 视为完全不可修改并报出 `Not allowed to modify [metrics]` 的问题；现在允许以 append-only 方式追加新的指标字段。
+- 修复 Rollup wildcard metrics 自动扩展时，先修改内存对象再落库导致后续执行链使用旧配置的时序问题，避免运行中新增指标字段后元数据与实际执行状态不一致。
+- 修复节点启动早期 `RollupListener` / `ManagedIndexCoordinator` 在配置索引尚未可搜索时提前查询 `.ilm-config`，触发 `all shards failed`、`Failed execute GetRollupsAction` 或 `Failed to get ILM policies with templates` 的问题。
+- 修复索引管理协程中的安全上下文注入与恢复不完整，导致 `InjectSecurity- most likely thread context corruption` 告警的问题。
+- 修复 Rollup Search 将普通索引名误判为 rollup 索引并错误分流的场景；现在基于索引元数据中的 `index.rollup_index` 设置识别 rollup 索引，而不是依赖固定的 `rollup` 名称前缀。
 ### Improvements
+- 增强 Rollup / ILM 启动期保护逻辑，在集群状态、配置索引或主分片尚未 ready 时跳过周期性查询，减少单节点和冷启动场景中的误报日志。
+- 增强 Rollup Search 的索引拆分逻辑，支持 alias 或 wildcard 同时解析出 live index 与 rollup index 时按 concrete index 分别路由，避免遗漏原始数据。
 
 
 ## 2.2.0 (2026-05-06)
