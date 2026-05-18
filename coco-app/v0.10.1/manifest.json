@@ -1,0 +1,15 @@
+{
+  "name": "Coco AI App | Coco AI - Connect & Collaborate",
+  "short_name": "Coco AI App | Coco AI - Connect & Collaborate",
+  "start_url": "/coco-app/v0.10.1/",
+  "scope": "/coco-app/v0.10.1/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/coco-app/v0.10.1/favicon.svg",
+      "sizes": "512x512"
+    }
+  ]
+}
