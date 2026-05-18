@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #   新增管道管理 UI  Bug fix #   修复 Rollup job 在检测到源索引新增指标字段后更新元数据时，误将 metrics 视为完全不可修改并报出 Not allowed to modify [metrics] 的问题；现在允许以 append-only 方式追加新的指标字段。 修复 Rollup wildcard metrics 自动扩展时，先修改内存对象再落库导致后续执行链使用旧配置的时序问题，避免运行中新增指标字段后元数据与实际执行状态不一致。 修复节点启动早期 RollupListener / ManagedIndexCoordinator 在配置索引尚未可搜索时提前查询 .ilm-config，触发 all shards failed、Failed execute GetRollupsAction 或 Failed to get ILM policies with templates 的问题。 修复索引管理协程中的安全上下文注入与恢复不完整，导致 InjectSecurity- most likely thread context corruption 告警的问题。 修复 Rollup Search 将普通索引名误判为 rollup 索引并错误分流的场景；现在基于索引元数据中的 index."
+Latest (In development) #  Breaking changes #  Features #   新增管道管理 UI  Bug fix #   修复 Rollup job 在检测到源索引新增指标字段后无法以追加方式同步指标配置的问题，支持在保持兼容性的前提下增量扩展 metrics 字段。 修复 Rollup wildcard metrics 自动扩展后配置更新与落库时序不一致的问题，提升运行中新增指标字段场景下的元数据一致性。 修复节点启动早期 Rollup 与 ILM 组件可能在配置索引尚未可搜索时提前发起查询的问题，提升冷启动阶段的稳定性。 修复索引管理后台任务中的安全上下文恢复问题，减少安全模式下的上下文告警并提升任务执行稳定性。 修复 Rollup Search 将普通索引名误判为 rollup 索引并错误分流的场景；现在基于索引元数据中的 index.rollup_index 设置识别 rollup 索引，而不是依赖固定的 rollup 名称前缀。 修复 Rollup mixed search 在 rollup/live 边界处使用裸时间点分流，导致 date_histogram 边界 bucket 重复统计或部分丢失的问题；现在按 Rollup date_histogram 的 bucket 起点对齐分流边界，确保混合查询聚合结果与源索引 baseline 保持一致。 修复 Rollup Search 内部请求在滚动升级场景下的跨版本传输兼容性问题，保持 RollupSearchRequest 的 wire 布局兼容旧节点，避免新老版本节点混部时出现反序列化失败。 修复 Snapshot Management 在策略删除、元数据更新与序列化处理中的稳定性问题，提升 SLM 策略操作与状态推进过程中的一致性。 修复 Index Management 后台任务在节点启动早期可能过早访问内部索引的问题，避免在 Security 尚未就绪时触发异常并影响自动任务的稳定执行。  Improvements #   增强 Rollup / ILM / SLM 启动期保护逻辑，在集群状态、配置索引、安全模块或主分片尚未就绪时跳过周期性查询，减少单节点和冷启动场景中的误报日志。 增强 Rollup Search 的索引拆分逻辑，支持 alias 或 wildcard 同时解析出 live index 与 rollup index 时按 concrete index 分别路由，避免遗漏原始数据。  2."
 ---
 
 
@@ -15,13 +15,17 @@ Latest (In development) #  Breaking changes #  Features #   新增管道管理 U
 ### Features
 - 新增管道管理 UI
 ### Bug fix
-- 修复 Rollup job 在检测到源索引新增指标字段后更新元数据时，误将 `metrics` 视为完全不可修改并报出 `Not allowed to modify [metrics]` 的问题；现在允许以 append-only 方式追加新的指标字段。
-- 修复 Rollup wildcard metrics 自动扩展时，先修改内存对象再落库导致后续执行链使用旧配置的时序问题，避免运行中新增指标字段后元数据与实际执行状态不一致。
-- 修复节点启动早期 `RollupListener` / `ManagedIndexCoordinator` 在配置索引尚未可搜索时提前查询 `.ilm-config`，触发 `all shards failed`、`Failed execute GetRollupsAction` 或 `Failed to get ILM policies with templates` 的问题。
-- 修复索引管理协程中的安全上下文注入与恢复不完整，导致 `InjectSecurity- most likely thread context corruption` 告警的问题。
+- 修复 Rollup job 在检测到源索引新增指标字段后无法以追加方式同步指标配置的问题，支持在保持兼容性的前提下增量扩展 `metrics` 字段。
+- 修复 Rollup wildcard metrics 自动扩展后配置更新与落库时序不一致的问题，提升运行中新增指标字段场景下的元数据一致性。
+- 修复节点启动早期 Rollup 与 ILM 组件可能在配置索引尚未可搜索时提前发起查询的问题，提升冷启动阶段的稳定性。
+- 修复索引管理后台任务中的安全上下文恢复问题，减少安全模式下的上下文告警并提升任务执行稳定性。
 - 修复 Rollup Search 将普通索引名误判为 rollup 索引并错误分流的场景；现在基于索引元数据中的 `index.rollup_index` 设置识别 rollup 索引，而不是依赖固定的 `rollup` 名称前缀。
+- 修复 Rollup mixed search 在 rollup/live 边界处使用裸时间点分流，导致 `date_histogram` 边界 bucket 重复统计或部分丢失的问题；现在按 Rollup `date_histogram` 的 bucket 起点对齐分流边界，确保混合查询聚合结果与源索引 baseline 保持一致。
+- 修复 Rollup Search 内部请求在滚动升级场景下的跨版本传输兼容性问题，保持 `RollupSearchRequest` 的 wire 布局兼容旧节点，避免新老版本节点混部时出现反序列化失败。
+- 修复 Snapshot Management 在策略删除、元数据更新与序列化处理中的稳定性问题，提升 SLM 策略操作与状态推进过程中的一致性。
+- 修复 Index Management 后台任务在节点启动早期可能过早访问内部索引的问题，避免在 Security 尚未就绪时触发异常并影响自动任务的稳定执行。
 ### Improvements
-- 增强 Rollup / ILM 启动期保护逻辑，在集群状态、配置索引或主分片尚未 ready 时跳过周期性查询，减少单节点和冷启动场景中的误报日志。
+- 增强 Rollup / ILM / SLM 启动期保护逻辑，在集群状态、配置索引、安全模块或主分片尚未就绪时跳过周期性查询，减少单节点和冷启动场景中的误报日志。
 - 增强 Rollup Search 的索引拆分逻辑，支持 alias 或 wildcard 同时解析出 live index 与 rollup index 时按 concrete index 分别路由，避免遗漏原始数据。
 
 
