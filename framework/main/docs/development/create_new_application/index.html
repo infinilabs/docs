@@ -88,7 +88,6 @@ APP_STATIC_FOLDER :<span style=color:#ff79c6>=</span> .public
 APP_STATIC_PACKAGE :<span style=color:#ff79c6>=</span> public
 APP_UI_FOLDER :<span style=color:#ff79c6>=</span> ui
 APP_PLUGIN_FOLDER :<span style=color:#ff79c6>=</span> plugins
-<span style=color:#8be9fd;font-style:italic>PREFER_MANAGED_VENDOR</span><span style=color:#ff79c6>=</span>fase
 
 include ../framework/Makefile
 </code></pre></div><h2 id=build-the-application>Build the application
@@ -96,18 +95,10 @@ include ../framework/Makefile
 building new_app 1.0.0_SNAPSHOT main
 /Users/medcl/go/src/infini.sh/new_app
 framework path:  /Users/medcl/go/src/infini.sh/framework
-fatal: not a git repository <span style=color:#ff79c6>(</span>or any of the parent directories<span style=color:#ff79c6>)</span>: .git
 update generated info
 update configs
-<span style=color:#ff79c6>(</span><span style=color:#8be9fd;font-style:italic>cd</span> ../framework/  <span style=color:#ff79c6>&amp;&amp;</span> make update-plugins<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>||</span> <span style=color:#8be9fd;font-style:italic>true</span> <span style=color:#6272a4># build plugins in framework</span>
-<span style=color:#8be9fd;font-style:italic>GOPATH</span><span style=color:#ff79c6>=</span>~/go:~/go/src/infini.sh/framework/../vendor/ <span style=color:#8be9fd;font-style:italic>CGO_ENABLED</span><span style=color:#ff79c6>=</span><span style=color:#bd93f9>0</span> <span style=color:#8be9fd;font-style:italic>GRPC_GO_REQUIRE_HANDSHAKE</span><span style=color:#ff79c6>=</span>off  <span style=color:#8be9fd;font-style:italic>GO15VENDOREXPERIMENT</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;1&#34;</span> <span style=color:#8be9fd;font-style:italic>GO111MODULE</span><span style=color:#ff79c6>=</span>off go build -a  -gcflags<span style=color:#ff79c6>=</span><span style=color:#8be9fd;font-style:italic>all</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;-l -B&#34;</span>  -ldflags <span style=color:#f1fa8c>&#39;-static&#39;</span> -ldflags<span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#39;-s -w&#39;</span> -gcflags <span style=color:#f1fa8c>&#34;-m&#34;</span>  --work  -o /Users/medcl/go/src/infini.sh/new_app/bin/new_app
+<span style=color:#8be9fd;font-style:italic>CGO_ENABLED</span><span style=color:#ff79c6>=</span><span style=color:#bd93f9>0</span> go build -a -gcflags<span style=color:#ff79c6>=</span><span style=color:#8be9fd;font-style:italic>all</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;-l -B&#34;</span> -ldflags <span style=color:#f1fa8c>&#39;-static&#39;</span> -ldflags<span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#39;-s -w&#39;</span> -gcflags <span style=color:#f1fa8c>&#34;-m&#34;</span> --work -o /Users/medcl/go/src/infini.sh/new_app/bin/new_app
 <span style=color:#8be9fd;font-style:italic>WORK</span><span style=color:#ff79c6>=</span>/var/folders/j5/qd4qt3n55dz053d93q2mswfr0000gn/T/go-build435280758
-<span style=color:#6272a4># infini.sh/new_app</span>
-./main.go:17:9: can inline main.deferwrap1
-./main.go:21:12: can inline main.func2
-./main.go:18:22: func literal does not escape
-./main.go:19:45: &amp;api.APIModule<span style=color:#ff79c6>{}</span> escapes to heap
-./main.go:21:12: func literal escapes to heap
 restore generated info
 </code></pre></div><h2 id=run-the-application>Run the application
 <a class=anchor href=#run-the-application>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>➜  new_app git:<span style=color:#ff79c6>(</span>main<span style=color:#ff79c6>)</span> ✗ ./bin/new_app
