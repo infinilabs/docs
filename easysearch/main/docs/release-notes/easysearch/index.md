@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #   新增管道管理 UI  Bug fix #   修复 Rollup job 在检测到源索引新增指标字段后无法以追加方式同步指标配置的问题，支持在保持兼容性的前提下增量扩展 metrics 字段。 修复 Rollup wildcard metrics 自动扩展后配置更新与落库时序不一致的问题，提升运行中新增指标字段场景下的元数据一致性。 修复节点启动早期 Rollup 与 ILM 组件可能在配置索引尚未可搜索时提前发起查询的问题，提升冷启动阶段的稳定性。 修复索引管理后台任务中的安全上下文恢复问题，减少安全模式下的上下文告警并提升任务执行稳定性。 修复 Rollup Search 将普通索引名误判为 rollup 索引并错误分流的场景；现在基于索引元数据中的 index.rollup_index 设置识别 rollup 索引，而不是依赖固定的 rollup 名称前缀。 修复 Rollup mixed search 在 rollup/live 边界处使用裸时间点分流，导致 date_histogram 边界 bucket 重复统计或部分丢失的问题；现在按 Rollup date_histogram 的 bucket 起点对齐分流边界，确保混合查询聚合结果与源索引 baseline 保持一致。 修复 Rollup Search 内部请求在滚动升级场景下的跨版本传输兼容性问题，保持 RollupSearchRequest 的 wire 布局兼容旧节点，避免新老版本节点混部时出现反序列化失败。 修复 Snapshot Management 在策略删除、元数据更新与序列化处理中的稳定性问题，提升 SLM 策略操作与状态推进过程中的一致性。 修复 Index Management 后台任务在节点启动早期可能过早访问内部索引的问题，避免在 Security 尚未就绪时触发异常并影响自动任务的稳定执行。  Improvements #   增强 Rollup / ILM / SLM 启动期保护逻辑，在集群状态、配置索引、安全模块或主分片尚未就绪时跳过周期性查询，减少单节点和冷启动场景中的误报日志。 增强 Rollup Search 的索引拆分逻辑，支持 alias 或 wildcard 同时解析出 live index 与 rollup index 时按 concrete index 分别路由，避免遗漏原始数据。  2."
+Latest (In development) #  Breaking changes #  Features #   新增管道管理 UI  Bug fix #   修复 Rollup job 在检测到源索引新增指标字段后无法以追加方式同步指标配置的问题，支持在保持兼容性的前提下增量扩展 metrics 字段。 修复 Rollup wildcard metrics 自动扩展后配置更新与落库时序不一致的问题，提升运行中新增指标字段场景下的元数据一致性。 修复节点启动早期 Rollup 与 ILM 组件可能在配置索引尚未可搜索时提前发起查询的问题，提升冷启动阶段的稳定性。 修复索引管理后台任务中的安全上下文恢复问题，减少安全模式下的上下文告警并提升任务执行稳定性。 修复 Rollup Search 将普通索引名误判为 rollup 索引并错误分流的场景；现在基于索引元数据中的 index.rollup_index 设置识别 rollup 索引，而不是依赖固定的 rollup 名称前缀。 修复 Rollup mixed search 在 rollup/live 边界处使用裸时间点分流，导致 date_histogram 边界 bucket 重复统计或部分丢失的问题；现在按 Rollup date_histogram 的 bucket 起点对齐分流边界，确保混合查询聚合结果与源索引 baseline 保持一致。 修复 Rollup Search 内部请求在滚动升级场景下的跨版本传输兼容性问题，保持 RollupSearchRequest 的 wire 布局兼容旧节点，避免新老版本节点混部时出现反序列化失败。 修复 Snapshot Management 在策略删除、元数据更新与序列化处理中的稳定性问题，提升 SLM 策略操作与状态推进过程中的一致性。 修复 Index Management 后台任务在节点启动早期可能过早访问内部索引的问题，避免在 Security 尚未就绪时触发异常并影响自动任务的稳定执行。 修复可搜索快照（searchable snapshot）在 node."
 ---
 
 
@@ -24,9 +24,13 @@ Latest (In development) #  Breaking changes #  Features #   新增管道管理 U
 - 修复 Rollup Search 内部请求在滚动升级场景下的跨版本传输兼容性问题，保持 `RollupSearchRequest` 的 wire 布局兼容旧节点，避免新老版本节点混部时出现反序列化失败。
 - 修复 Snapshot Management 在策略删除、元数据更新与序列化处理中的稳定性问题，提升 SLM 策略操作与状态推进过程中的一致性。
 - 修复 Index Management 后台任务在节点启动早期可能过早访问内部索引的问题，避免在 Security 尚未就绪时触发异常并影响自动任务的稳定执行。
+- 修复可搜索快照（searchable snapshot）在 `node.search.cache.size` 配置较小时的启动失败问题；现在允许使用小容量本地 file cache 启动节点，并由运行时缓存淘汰机制按需工作。
 ### Improvements
 - 增强 Rollup / ILM / SLM 启动期保护逻辑，在集群状态、配置索引、安全模块或主分片尚未就绪时跳过周期性查询，减少单节点和冷启动场景中的误报日志。
 - 增强 Rollup Search 的索引拆分逻辑，支持 alias 或 wildcard 同时解析出 live index 与 rollup index 时按 concrete index 分别路由，避免遗漏原始数据。
+- 优化 CCR 数据同步效率，区分无新变更与 checkpoint 未同步场景，减少空轮询和无效重试。
+- 增强 CCR 跨版本滚动升级保护；升级窗口内会自动暂停运行中的 index CCR 与 auto-follow 任务，待双端完成升级后再手工恢复。
+- 为 `/_replication/all_status` 增加 `status` 过滤参数，支持按 `BOOTSTRAPPING`、`PAUSED`、`FAILED` 等状态筛选 follower 索引。
 
 
 ## 2.2.0 (2026-05-06)

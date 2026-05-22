@@ -124,6 +124,7 @@ replication_follower:
   reserved: true
   description: "Grants manage replication permissions on follower indices."
   cluster:
+    - "cluster:admin/plugins/replication/autofollow/pause_resume"
     - "cluster:admin/plugins/replication/autofollow/update"
   indices:
     - names:

@@ -144,6 +144,31 @@ PUT _snapshot/my_backup/snapshot_1
 
 当需要对集群进行维护（升级版本、更换硬件、修改配置等）时，应使用**滚动重启**方式逐节点操作，避免集群停机。
 
+### CCR 滚动升级注意事项
+
+如果集群正在使用跨集群复制（CCR），跨版本滚动升级前需要额外关注复制任务状态。
+
+从 `2.2.1` 开始，只要 leader 或 follower 任一侧进入 mixed-version 窗口，或者任一侧最低节点版本仍低于 `2.2.1`，CCR 就会进入保护状态。
+
+升级窗口中常见行为如下：
+
+- 运行中的 follower index 复制任务会自动切换到 `PAUSED`
+- 运行中的 auto-follow 规则会自动暂停
+- 新建 index CCR、恢复 index CCR、新增 auto-follow、恢复 auto-follow 这几类操作会被拒绝，通常返回 `409 replication_exception`
+
+恢复兼容性后，这些任务不会自动恢复。完成两侧升级并确认 remote 连接恢复正常后，需要手工执行对应的恢复接口：
+
+- index CCR：`POST /_replication/{follower_index}/_resume`
+- auto-follow：`POST /_replication/_autofollow/_resume`
+
+建议在每个节点升级后额外检查：
+
+- `GET /_remote/info`
+- `GET /_replication/all_status`
+- `GET /_replication/autofollow_stats`
+
+更完整的 API、状态判断与恢复示例，请参阅 [跨集群复制]({{< relref "/docs/operations/cluster-admin/ccr" >}}) 中的“滚动升级注意事项”。
+
 ### 操作步骤
 
 1. **暂停分片分配**（避免节点下线后触发不必要的数据迁移）

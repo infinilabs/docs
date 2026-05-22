@@ -117,6 +117,31 @@ curl -XGET -k -u 'admin:xxxxxxxxxxxx' 'https://localhost:9201/_replication/follo
 GET /_replication/all_status
 ```
 
+如果只想查看指定状态的 follower index，可以通过 `status` 查询参数过滤结果。支持逗号分隔、大小写不敏感的多值过滤。
+
+支持的状态值：
+
+- `BOOTSTRAPPING`
+- `SYNCING`
+- `RUNNING`
+- `PAUSED`
+- `FAILED`
+- `STOPPED`
+
+例如，只查看暂停或失败的复制任务：
+
+```auto
+GET /_replication/all_status?status=PAUSED,FAILED
+```
+
+只查看正在 bootstrap 的索引：
+
+```auto
+GET /_replication/all_status?status=BOOTSTRAPPING
+```
+
+如果传入了不支持的状态值，请求会返回 `400 Bad Request`。
+
 响应
 
 下面状态为 FAILED 或 PAUSED 的 索引 是因为 leader 集群启用了 ILM，将过期的索引删除了，CCR 会将被删除的索引在 status 中标记出来。
@@ -229,6 +254,88 @@ curl -XPOST -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'http
 ```auto
 curl -XPOST -ku 'admin:xxxxxxxxxxxx' -H 'Content-Type: application/json' 'https://localhost:9201/_replication/follower-01/_resume?pretty' -d '{}'
 ```
+
+### 滚动升级注意事项
+
+从 `2.2.1` 开始，CCR 在滚动升级窗口内会主动检查 leader 和 follower 两侧的版本兼容性。
+
+只要出现以下任一情况，CCR 就会进入保护状态：
+
+- leader 集群处于 mixed-version。
+- follower 集群处于 mixed-version。
+- leader 集群最低节点版本低于 `2.2.1`。
+- follower 集群最低节点版本低于 `2.2.1`。
+
+这意味着该保护逻辑不只针对 `2.2.0 -> 2.2.1` 首次升级。后续任意跨版本滚动升级，只要升级过程中出现 mixed-version 窗口，也会触发同样的暂停和拦截行为。
+
+需要区分的是：
+
+- 同版本滚动重启不会触发这个保护逻辑。
+- 跨版本滚动升级会在 mixed-version 窗口中触发该逻辑。
+
+#### 升级期间会自动暂停哪些任务
+
+如果某个复制任务当前正在运行，CCR 会自动将其切换到 `PAUSED`：
+
+- 正在同步中的 follower index 复制任务。
+- 正在运行中的 auto-follow 规则。
+
+常见表现：
+
+- `GET /_replication/{follower_index}/_status` 返回 `status=PAUSED`。
+- `GET /_replication/all_status` 中对应 follower index 显示 `PAUSED`。
+- `GET /_replication/autofollow_stats` 中对应 auto-follow 规则条目消失，表示任务已停止运行。
+
+暂停原因通常会在 `reason` 中体现，例如：
+
+```text
+Follower cluster is mixed-version (2.2.0 to 2.2.1). CCR is paused until both leader and follower clusters are fully upgraded ...
+```
+
+在自动暂停瞬间，可能仍有少量已经在途的同步请求完成，因此你可能会观察到一个很短的 in-flight 尾巴。这不代表任务仍处于正常可持续同步状态，也不会改变该任务最终已经被切换为 `PAUSED` 的事实。
+
+#### 升级期间会被拒绝的操作
+
+在 leader 或 follower 任一侧仍不兼容时，以下操作会被直接拒绝，通常返回 `409 replication_exception`：
+
+- 新建 index CCR：`PUT /_replication/{index}/_start`
+- 恢复已暂停的 index CCR：`POST /_replication/{index}/_resume`
+- 新增 auto-follow 规则：`POST /_replication/_autofollow`
+- 恢复已暂停的 auto-follow 规则：`POST /_replication/_autofollow/_resume`
+
+这类拒绝是 fail-closed 行为，用来避免在 mixed-version 窗口内继续建立或恢复复制链路。
+
+#### 升级完成后的恢复步骤
+
+当两侧集群都完成升级，并且 remote 连接恢复正常后，CCR 不会自动恢复已暂停的任务，需要手工恢复。
+
+恢复前建议先检查：
+
+- `GET /_remote/info` 确认 remote alias 已连接成功。
+- `GET /_replication/{follower_index}/_status` 或 `GET /_replication/all_status` 确认任务当前为 `PAUSED`。
+- `GET /_replication/autofollow_stats` 确认 auto-follow 任务尚未恢复运行。
+
+恢复 index CCR：
+
+```auto
+curl -XPOST -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'https://localhost:9201/_replication/follower-01/_resume?pretty' -d '{}'
+```
+
+恢复 auto-follow：
+
+```auto
+curl -XPOST -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'https://localhost:9201/_replication/_autofollow/_resume?pretty' -d '
+{
+   "leader_alias" : "my-connection-alias",
+   "name": "my-replication-rule"
+}'
+```
+
+恢复后建议再次验证：
+
+- index CCR 是否重新回到 `SYNCING`。
+- auto-follow 规则是否重新出现在 `/_replication/autofollow_stats` 中。
+- 向 leader 写入新文档或新建匹配索引后，follower 是否继续追平。
 
 ### 获取 leader 集群状态
 
@@ -430,6 +537,77 @@ curl -XDELETE -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'ht
    "name": "my-replication-rule"
 }'
 ```
+
+### 暂停自动跟随规则
+
+如果你希望在维护窗口内暂时停止某个自动跟随规则继续为后续匹配的新索引发起复制，可以在 follower 集群上手工暂停该规则。
+
+示例
+
+```auto
+curl -XPOST -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'https://localhost:9201/_replication/_autofollow/_pause?pretty' -d '
+{
+   "leader_alias" : "my-connection-alias",
+   "name": "my-replication-rule",
+   "reason": "manual pause before maintenance"
+}'
+```
+
+其中：
+
+- `leader_alias` 表示远端集群连接名称。
+- `name` 表示自动跟随规则名称。
+- `reason` 为可选字段，用于记录暂停原因；如果不传，默认会使用 `User initiated`。
+
+暂停后：
+
+- 已由该规则创建出来的跟随者索引不会被删除。
+- 该规则后续不会再为新的匹配索引自动发起复制。
+
+### 恢复自动跟随规则
+
+在暂停原因消除后，可以在 follower 集群上恢复该自动跟随规则：
+
+```auto
+curl -XPOST -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'https://localhost:9201/_replication/_autofollow/_resume?pretty' -d '
+{
+   "leader_alias" : "my-connection-alias",
+   "name": "my-replication-rule"
+}'
+```
+
+恢复后：
+
+- 自动跟随任务会重新运行。
+- 后续新建的匹配 leader 索引会再次自动创建对应的跟随者索引并开始复制。
+
+### 查看自动跟随规则恢复后的状态
+
+恢复后可以再次查看统计信息确认任务已经重新运行：
+
+```auto
+curl -u 'admin:xxxxxxxxxxxx' -k 'https://localhost:9201/_replication/autofollow_stats?pretty'
+```
+
+如果自动跟随规则已经恢复运行，响应中的 `autofollow_stats` 数组会重新出现对应的规则条目。
+
+### mixed-version 或不兼容窗口中的恢复行为
+
+当 follower 或 leader 任一侧仍处于 mixed-version，或者任一侧最低节点版本仍低于兼容要求时，自动跟随规则不会被允许恢复。
+
+例如，在滚动升级窗口中对自动跟随规则执行恢复，可能返回如下 `409` 错误：
+
+```json
+{
+  "error" : {
+    "type" : "replication_exception",
+    "reason" : "Leader cluster minimum version is 2.2.0. CCR is paused until both leader and follower clusters are fully upgraded ..."
+  },
+  "status" : 409
+}
+```
+
+此时需要先完成两端升级并确认 remote 连接恢复，再重新执行恢复操作。
 
 ---
 
