@@ -2,7 +2,7 @@
 title: "Release Notes"
 date: 0001-01-01
 summary: "Release Notes #  Information about release notes of Coco Server is provided here.
-Latest (In development) #  ❌ Breaking changes #  🚀 Features #   feat: add dropbox connector #614 feat: add simple stats module #622 feat: support team for authorization feat: add attachment status api #635 feat: implement query suggest api #642 feat: implement recommend api #643 feat: impl document raw content interface #648 feat: convert document cover/thumbnail to attachment URL for preview #645 feat: add RefineURL to convert document URL to preview format #649 feat: add llm_generation_lang config to AI-based processors #656 feat: detect content category and store it in metadata."
+Latest (In development) #  ❌ Breaking changes #   refactor: change boolean fields to use boolean mappings  🚀 Features #   feat: add dropbox connector #614 feat: add simple stats module #622 feat: support team for authorization feat: add attachment status api #635 feat: implement query suggest api #642 feat: implement recommend api #643 feat: impl document raw content interface #648 feat: convert document cover/thumbnail to attachment URL for preview #645 feat: add RefineURL to convert document URL to preview format #649 feat: add llm_generation_lang config to AI-based processors #656 feat: detect content category and store it in metadata."
 ---
 
 
@@ -12,6 +12,8 @@ Information about release notes of Coco Server is provided here.
 
 ## Latest (In development)  
 ### ❌ Breaking changes  
+- refactor: change boolean fields to use boolean mappings
+
 ### 🚀 Features  
 - feat: add dropbox connector #614
 - feat: add simple stats module #622
@@ -39,6 +41,7 @@ Information about release notes of Coco Server is provided here.
 - refactor: refactoring attachment API #636
 - refactor: omit field document_chunk in search interface #647
 - refactor: refactoring security framework #672
+- chore: remove unused configs in default config
 
 
 ## 0.10.0 (2025-12-19)
