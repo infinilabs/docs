@@ -2,7 +2,7 @@
 title: "Release Notes"
 date: 0001-01-01
 summary: "Release Notes #  Information about release notes of INFINI Gateway is provided here.
-Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #  1.30.2 (2026-03-16) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #   This release includes updates from the underlying Framework v1.4.0, which resolves several common issues and enhances overall stability and performance."
+Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #   Fix entry startup cleanup so failed reloads do not leave the listener port occupied.  ✈️ Improvements #   Pre-initialize es_scroll output queues, reduce noisy routing logs, and unify duration/QPS logging for scroll and bulk processing paths."
 ---
 
 
@@ -14,7 +14,9 @@ Information about release notes of INFINI Gateway is provided here.
 ### ❌ Breaking changes  
 ### 🚀 Features  
 ### 🐛 Bug fix  
+- Fix entry startup cleanup so failed reloads do not leave the listener port occupied.
 ### ✈️ Improvements  
+- Pre-initialize `es_scroll` output queues, reduce noisy routing logs, and unify duration/QPS logging for scroll and bulk processing paths.
 
 ## 1.30.2 (2026-03-16)
 ### ❌ Breaking changes  
