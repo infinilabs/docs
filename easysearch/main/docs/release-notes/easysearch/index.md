@@ -25,6 +25,8 @@ Latest (In development) #  Breaking changes #  Features #   新增管道管理 U
 - 修复 Snapshot Management 在策略删除、元数据更新与序列化处理中的稳定性问题，提升 SLM 策略操作与状态推进过程中的一致性。
 - 修复 Index Management 后台任务在节点启动早期可能过早访问内部索引的问题，避免在 Security 尚未就绪时触发异常并影响自动任务的稳定执行。
 - 修复可搜索快照（searchable snapshot）在 `node.search.cache.size` 配置较小时的启动失败问题；现在允许使用小容量本地 file cache 启动节点，并由运行时缓存淘汰机制按需工作。
+- 修复 CCR follower index 在节点重启后删除保护可能丢失的问题；现在会自动补回复制保护 block，并继续拦截直接删除 follower index 的操作。
+- 修复 `bin/hash_password.sh` 在未设置 `ES_JAVA_HOME` 或 `JAVA_HOME` 时无法回退使用发行包内置 JDK 的问题，提升默认安装场景下的可用性。
 ### Improvements
 - 增强 Rollup / ILM / SLM 启动期保护逻辑，在集群状态、配置索引、安全模块或主分片尚未就绪时跳过周期性查询，减少单节点和冷启动场景中的误报日志。
 - 增强 Rollup Search 的索引拆分逻辑，支持 alias 或 wildcard 同时解析出 live index 与 rollup index 时按 concrete index 分别路由，避免遗漏原始数据。
