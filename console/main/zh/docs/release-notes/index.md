@@ -2,7 +2,7 @@
 title: "版本历史"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Console 历史版本发布的相关说明。
-Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #  1.30.2 (2026-03-16) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #   此版本包含了底层 Framework v1.4.0 的更新，解决了一些常见问题，并增强了整体稳定性和性能。虽然 Console 本身没有直接的变更，但从 Framework 中继承的改进间接地使 Console 受益。  1.30.1 (2025-12-19) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #   此版本包含了底层 Framework v1."
+Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #   chore: 为 Console 构建与 PR 检查增加原生 Go Modules 支持  1.30.2 (2026-03-16) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #   此版本包含了底层 Framework v1.4.0 的更新，解决了一些常见问题，并增强了整体稳定性和性能。虽然 Console 本身没有直接的变更，但从 Framework 中继承的改进间接地使 Console 受益。  1."
 ---
 
 
@@ -15,6 +15,7 @@ Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix
 ### 🚀 Features  
 ### 🐛 Bug fix  
 ### ✈️ Improvements  
+- chore: 为 Console 构建与 PR 检查增加原生 Go Modules 支持
 
 ## 1.30.2 (2026-03-16)
 ### ❌ Breaking changes  

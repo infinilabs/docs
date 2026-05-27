@@ -2,7 +2,7 @@
 title: "Release Notes"
 date: 0001-01-01
 summary: "Release Notes #  Information about release notes of INFINI Console is provided here.
-Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #  1.30.2 (2026-03-16) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #   This release includes updates from the underlying Framework v1.4.0, which resolves several common issues and enhances overall stability and performance."
+Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #   chore: add native Go modules support for Console build and PR checks  1.30.2 (2026-03-16) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #   This release includes updates from the underlying Framework v1."
 ---
 
 
@@ -15,6 +15,7 @@ Information about release notes of INFINI Console is provided here.
 ### 🚀 Features  
 ### 🐛 Bug fix  
 ### ✈️ Improvements  
+- chore: add native Go modules support for Console build and PR checks
 
 ## 1.30.2 (2026-03-16)
 ### ❌ Breaking changes  
