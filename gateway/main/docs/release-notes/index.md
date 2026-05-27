@@ -2,7 +2,7 @@
 title: "Release Notes"
 date: 0001-01-01
 summary: "Release Notes #  Information about release notes of INFINI Gateway is provided here.
-Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #   Fix entry startup cleanup so failed reloads do not leave the listener port occupied.  ✈️ Improvements #   Pre-initialize es_scroll output queues, reduce noisy routing logs, and unify duration/QPS logging for scroll and bulk processing paths."
+Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #   Fix entry startup cleanup so failed reloads do not leave the listener port occupied. Fix PR checks to build Gateway in Go module mode without the legacy GOPATH vendor workspace dependency, and keep cross-platform builds working when floating_ip is enabled."
 ---
 
 
@@ -15,6 +15,7 @@ Information about release notes of INFINI Gateway is provided here.
 ### 🚀 Features  
 ### 🐛 Bug fix  
 - Fix entry startup cleanup so failed reloads do not leave the listener port occupied.
+- Fix PR checks to build Gateway in Go module mode without the legacy GOPATH vendor workspace dependency, and keep cross-platform builds working when `floating_ip` is enabled.
 ### ✈️ Improvements  
 - Pre-initialize `es_scroll` output queues, reduce noisy routing logs, and unify duration/QPS logging for scroll and bulk processing paths.
 
