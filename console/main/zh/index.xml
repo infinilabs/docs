@@ -66,20 +66,7 @@ Agent 功能特性：
 path.configs: config configs.auto_reload: true env: API_BINDING: 0.0.0.0:8080 path.data: data path.logs: log api: enabled: true tls: enabled: true cert_file: config/client.</description></item><item><title>用户管理</title><link>https://docs.infinilabs.com/console/main/zh/docs/reference/system/security/user/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://docs.infinilabs.com/console/main/zh/docs/reference/system/security/user/</guid><description>用户管理 # 简介 # 用户管理包括对用户的增删改查操作以及重置用户密码.
 创建用户 # 用户名是必填的并且需要唯一，作为登录账号名. 昵称, 手机号, 邮箱都是可选的. 给用户分配一个或者多个角色. 用户标签是可选的，可用于给用户分组. 查询用户 # 输入关键字，点击搜索按钮查询用户
 更新用户 # 按需修改，点击保存按钮保存
-重置用户密码 # 输入新密码点击保存按钮重置密码</description></item><item><title>下载安装</title><link>https://docs.infinilabs.com/console/main/zh/docs/reference/agent/install/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://docs.infinilabs.com/console/main/zh/docs/reference/agent/install/</guid><description>安装探针 # 探针支持两种方式安装，一种是手动下载安装配置，还有一种是结合新版本的 Console (&amp;gt;=1.3.0)，生成一键安装脚本。 只要执行一键安装脚本即可在主机上完成探针的安装。我们推荐使用结合 Console 来安装探针，简单和方便管理。
-一键安装 # 安装前准备 # 安装并运行 INFINI Console
-复制一键安装脚本 # 在 INFINI Console 左侧菜单 资源管理&amp;gt;探针管理，进入页面之后点击 Install Agent 按钮，即可复制类似如下一键安装脚本：
-curl -sSL http://localhost:9000/agent/install.sh?token=cjctdrms4us1c6fu04ag |sudo bash -s -- -u https://release.infinilabs.com/agent/stable -v 0.6.0-262 -t /opt/agent -u和-v参数表示从指定的 URL 下载指定版本的 Agent，-t参数表示安装的路径，在联网的环境中，&amp;ndash; 及后面的参数都可以忽略，默认情况下将从官网下载最新的 Agent 版本进行安装。
-将一键安装脚本粘贴到终端执行即可完成安装，安装之后该探针实例会被自动注册到 INFINI Console。具体操作步骤参考 Agent 快速安装
-下载安装 # 根据您所在的操作系统和平台选择下面相应的下载地址：
-https://release.infinilabs.com/agent/
-容器部署 # 探针(INFINI Agent) 也支持 Docker 容器方式部署。</description></item><item><title>容器部署</title><link>https://docs.infinilabs.com/console/main/zh/docs/reference/agent/docker/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://docs.infinilabs.com/console/main/zh/docs/reference/agent/docker/</guid><description>容器部署 # 探针 (INFINI Agent) 支持容器方式部署。
-下载镜像 # 探针(INFINI Agent) 的镜像发布在 Docker 的官方仓库，地址如下：
-https://hub.docker.com/r/infinilabs/agent
-使用下面的命令即可获取最新的容器镜像：
-docker pull infinilabs/agent:1.30.2-2396 验证镜像 # 将镜像下载到本地之后，可以看到 探针 (INFINI Agent) 的容器镜像非常小，只有不到 20MB，所以下载是非常快的。
-✗ docker images |grep &amp;quot;agent&amp;quot; |grep &amp;quot;1.30.2-2396&amp;quot; REPOSITORY TAG IMAGE ID CREATED SIZE infinilabs/agent latest 1.30.2-2396 4 days ago 13.8MB 创建配置 # 现在需要创建一个配置文件 agent.yml，来进行基本的配置，如下：
-api: enabled: true network: binding: 0.0.0.0:8080 metrics: enabled: true queue: metrics network: enabled: true summary: true details: true memory: metrics: - swap - memory disk: metrics: - ioqs - usage cpu: metrics: - idle - system - user - iowait - load elasticsearch: enabled: true agent_mode: true node_stats: true index_stats: true cluster_stats: true elasticsearch: - name: default enabled: true endpoint: http://192.</description></item><item><title>如何轻松创建一个 Elasticsearch “游客” 用户</title><link>https://docs.infinilabs.com/console/main/zh/docs/tutorials/create_readonly_account/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://docs.infinilabs.com/console/main/zh/docs/tutorials/create_readonly_account/</guid><description>如何轻松创建一个 Elasticsearch “游客” 用户 # 简介 # 有些情况下，我们想给客户分享一下某些功能或者数据，但是又不希望数据被修改。这个时候我们就需要创建一个“游客” 用户了。本文简单地介绍了如何使用 INFINI Console 创建&amp;quot;游客&amp;quot;用户。
+重置用户密码 # 输入新密码点击保存按钮重置密码</description></item><item><title>如何轻松创建一个 Elasticsearch “游客” 用户</title><link>https://docs.infinilabs.com/console/main/zh/docs/tutorials/create_readonly_account/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://docs.infinilabs.com/console/main/zh/docs/tutorials/create_readonly_account/</guid><description>如何轻松创建一个 Elasticsearch “游客” 用户 # 简介 # 有些情况下，我们想给客户分享一下某些功能或者数据，但是又不希望数据被修改。这个时候我们就需要创建一个“游客” 用户了。本文简单地介绍了如何使用 INFINI Console 创建&amp;quot;游客&amp;quot;用户。
 准备 # 下载并安装最新版 INFINI Console 开启 INFINI Console 安全功能 创建角色 # 点击 INFINI Console 左侧菜单 系统管理 &amp;gt; 安全设置，选择角色 Tab 页进入角色管理页。
 新建平台角色 readonly # 点击新建按钮，选择平台角色，新建一个平台角色 readonly，操作步骤如下：
 输入角色名称 readonly 展开所有的功能权限 除了系统设置下面的安全功能，其他所有的功能都选择 Read 权限。 系统设置下面的安全功能 设置为 None 权限。 点击保存按钮提交 选择某个功能的 All 权限代表拥有这个功能的读和写的操作权限， Read 代表只拥有读的权限， None 代表没有该功能权限（用户登录之后菜单中没有该功能）
