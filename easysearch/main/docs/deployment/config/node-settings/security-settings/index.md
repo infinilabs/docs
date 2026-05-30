@@ -203,6 +203,7 @@ security.authcz.admin_dn:
 | **说明** | Admin 客户端证书 DN 列表。持有这些 DN 证书的客户端拥有完全的集群管理权限，可以执行安全配置变更等特权操作 |
 
 > Admin 证书用于运行 `securityadmin.sh` 或其他需要特权访问的管理工具。
+> `security.authcz.admin_dn` 定义的是 superadmin 证书身份，与内部 `admin` 用户或 `superuser` 角色映射无关；`admin` 账号本身不会因为用户名叫 `admin` 就自动成为 superadmin。
 
 ---
 
@@ -211,7 +212,7 @@ security.authcz.admin_dn:
 ### security.restapi.roles_enabled
 
 ```yaml
-security.restapi.roles_enabled: ["superuser", "security_rest_api_access"]
+security.restapi.roles_enabled: ["superuser", "security_rest_api_access", "security"]
 ```
 
 | 项目 | 说明 |
@@ -220,6 +221,8 @@ security.restapi.roles_enabled: ["superuser", "security_rest_api_access"]
 | **默认值** | — |
 | **属性** | 静态 |
 | **说明** | 允许访问安全 REST API（`_security/*`）的角色列表。只有拥有这些角色的用户才能通过 API 管理安全配置 |
+
+> 当前发行版默认配置为 `["superuser", "security_rest_api_access", "security"]`。如果某个角色只应查询而不应修改用户、角色等安全资源，请配合 `security.restapi.endpoints_disabled.<role>.<endpoint>` 禁用写方法。
 
 ---
 
@@ -263,13 +266,12 @@ security.system_indices.indices: [".infini-*"]
 | 文件 | 说明 |
 |------|------|
 | `user.yml` | 内置用户定义（密码哈希由初始化脚本生成） |
-| `roles.yml` | 角色定义 |
-| `roles_mapping.yml` | 角色映射（用户/后端角色 → 安全角色） |
-| `action_groups.yml` | 权限组定义 |
-| `tenants.yml` | 租户定义 |
+| `role.yml` | 角色定义 |
+| `role_mapping.yml` | 角色映射（用户/后端角色 → 安全角色） |
+| `privilege.yml` | 权限组定义 |
 | `config.yml` | 认证与授权后端配置（LDAP、SAML 等） |
 
-> 这些文件在 `bin/initialize.sh` 初始化时自动生成。
+> 这些文件随发行包一起提供；`bin/initialize.sh` 初始化时会将它们加载到安全索引中，其中 `user.yml` 还会被 `bin/update_password.sh` 按初始化密码重写默认内置账户内容。
 
 ---
 
@@ -301,7 +303,7 @@ security.nodes_dn:
   - "CN=*.infini.cloud,OU=UNIT,O=ORG,L=NI,ST=FI,C=IN"
 security.authcz.admin_dn:
   - "CN=admin.infini.cloud,OU=UNIT,O=ORG,L=NI,ST=FI,C=IN"
-security.restapi.roles_enabled: ["superuser", "security_rest_api_access"]
+security.restapi.roles_enabled: ["superuser", "security_rest_api_access", "security"]
 
 # ---- 系统索引保护 ----
 security.system_indices.enabled: true

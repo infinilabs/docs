@@ -74,7 +74,7 @@ security.nodes_dn:
 
 # ========== 其他安全配置 ==========
 security.allow_default_init_securityindex: true
-security.restapi.roles_enabled: ["superuser", "security_rest_api_access"]
+security.restapi.roles_enabled: ["superuser", "security_rest_api_access", "security"]
 security.system_indices.enabled: true
 security.system_indices.indices: [".infini-*"]
 ```

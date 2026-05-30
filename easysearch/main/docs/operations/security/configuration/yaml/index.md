@@ -1,17 +1,17 @@
 ---
 title: "本地配置"
 date: 0001-01-01
-summary: "本地配置（YAML） #  config/security/ 目录下包含 Easysearch 安全模块的本地 YAML 配置文件。这些文件在 bin/initialize.sh 初始化时自动加载到安全索引中，也可以手动编辑后重新加载。
-通过本地 YAML 配置文件可以管理默认的内置用户或 隐藏的保留资源，例如 admin 管理员用户。除内置资源外，通过 INFINI Console 或 REST API 来创建其他用户、角色、映射和权限组通常更方便。
-相关指南（先读这些） #    安全与多租户最佳实践  权限控制总览   配置文件概览 #     文件 用途 编辑方式     user.yml 内置用户定义 手动编辑或 API   role.yml 角色定义 手动编辑或 API   role_mapping.yml 角色映射 手动编辑或 API   privilege.yml 权限组（Action Group） 手动编辑或 API   config."
+summary: "本地配置（YAML） #  config/security/ 目录下包含 Easysearch 安全模块的本地 YAML 配置文件。这些文件在 bin/initialize.sh 初始化时自动加载到安全索引中，也可以手动编辑后重新加载。默认发行版在初始化阶段还会调用 bin/update_password.sh 重新生成默认内置账户对应的 user.yml 内容。
+通过本地 YAML 配置文件可以管理默认的内置用户或 隐藏的保留资源，例如 admin、infini、infini_agent 等默认账户。除内置资源外，通过 INFINI Console 或 REST API 来创建其他用户、角色、映射和权限组通常更方便。
+相关指南（先读这些） #    安全与多租户最佳实践  权限控制总览   配置文件概览 #     文件 用途 编辑方式     user.yml 内置用户定义（初始化脚本会重写默认账户） 手动编辑或 API   role.yml 角色定义 手动编辑或 API   role_mapping.yml 角色映射 手动编辑或 API   privilege.yml 权限组（Action Group） 手动编辑或 API   config."
 ---
 
 
 # 本地配置（YAML）
 
-`config/security/` 目录下包含 Easysearch 安全模块的本地 YAML 配置文件。这些文件在 `bin/initialize.sh` 初始化时自动加载到安全索引中，也可以手动编辑后重新加载。
+`config/security/` 目录下包含 Easysearch 安全模块的本地 YAML 配置文件。这些文件在 `bin/initialize.sh` 初始化时自动加载到安全索引中，也可以手动编辑后重新加载。默认发行版在初始化阶段还会调用 `bin/update_password.sh` 重新生成默认内置账户对应的 `user.yml` 内容。
 
-通过本地 YAML 配置文件可以管理默认的内置用户或[隐藏的保留资源](../access-control/api.md#隐藏的保留资源)，例如 `admin` 管理员用户。除内置资源外，通过 INFINI Console 或 REST API 来创建其他用户、角色、映射和权限组通常更方便。
+通过本地 YAML 配置文件可以管理默认的内置用户或[隐藏的保留资源](../access-control/api.md#隐藏的保留资源)，例如 `admin`、`infini`、`infini_agent` 等默认账户。除内置资源外，通过 INFINI Console 或 REST API 来创建其他用户、角色、映射和权限组通常更方便。
 
 ## 相关指南（先读这些）
 
@@ -24,7 +24,7 @@ summary: "本地配置（YAML） #  config/security/ 目录下包含 Easysearch 
 
 | 文件 | 用途 | 编辑方式 |
 |------|------|----------|
-| `user.yml` | 内置用户定义 | 手动编辑或 API |
+| `user.yml` | 内置用户定义（初始化脚本会重写默认账户） | 手动编辑或 API |
 | `role.yml` | 角色定义 | 手动编辑或 API |
 | `role_mapping.yml` | 角色映射 | 手动编辑或 API |
 | `privilege.yml` | 权限组（Action Group） | 手动编辑或 API |
@@ -39,11 +39,13 @@ summary: "本地配置（YAML） #  config/security/ 目录下包含 Easysearch 
 
 此文件是内置用户配置文件，用于定义系统的初始用户账户及其相关配置（如密码哈希、角色分配等）。
 
-`admin` 用户是 Easysearch 系统中的默认超级管理员用户。
+`admin` 是 Easysearch 系统中的默认内置管理账号。在默认发行配置中，它通过 `role_mapping.yml` 中的 `external_roles: ["admin"]` 映射到 `superuser`；真正的 superadmin 身份由 `security.authcz.admin_dn` 中的客户端证书 DN 决定。
 
 配置文件里面的密码不能是明文，必须使用 Hash 之后的密码，通过命令 `./bin/hash_password.sh -p <new-password>` 可以生成一个密码哈希。
 
 ### 默认配置
+
+> 发行包源码中的模板 `distribution/src/config/security/user.yml` 主要保留 `admin` 示例。运行 `bin/initialize.sh` 后，`bin/update_password.sh` 会根据初始化密码生成实际运行时 `config/security/user.yml`，默认生成 `admin`、`infini`、`infini_agent` 三个内置用户；它们当前均为 `reserved: true`、`hidden: false`。
 
 ```yaml
 ---
@@ -58,6 +60,16 @@ admin:
     - "admin"
   description: "Default admin user"
 ```
+
+### 初始化生成的默认账户
+
+| 用户 | 默认属性 | 说明 |
+|------|----------|------|
+| `admin` | `reserved: true`, `hidden: false` | 默认内置管理账号；默认通过 `role_mapping.yml` 映射到 `superuser` |
+| `infini` | `reserved: true`, `hidden: false` | 默认生成的内置账户名，是否具备实际权限取决于角色/角色映射配置 |
+| `infini_agent` | `reserved: true`, `hidden: false` | 默认生成的内置账户名，是否具备实际权限取决于角色/角色映射配置 |
+
+> 初始化脚本默认不会为 `infini`、`infini_agent` 额外写入 `external_roles`。如果希望它们用于监控或 Agent 场景，请按你的部署要求在 `user.yml`、`role_mapping.yml` 或其他权限配置中显式授予相应角色。
 
 ### 字段说明
 
@@ -86,8 +98,10 @@ $ES_HOME/bin/hash_password.sh -p newpassword
 # 修改用户密码
 curl -k -u admin:oldpassword -X PUT "https://localhost:9200/_security/account" \
   -H "Content-Type: application/json" \
-  -d '{"password": "newpassword"}'
+  -d '{"current_password": "oldpassword", "password": "newpassword"}'
 ```
+
+> `PUT /_security/account` 只会修改当前登录用户自己的密码。对于 `admin`、`infini`、`infini_agent` 这类 `reserved` 内置用户，非 superadmin 不能通过 `PUT /_security/user/<name>` 修改其密码；应由账户本人使用 `PUT /_security/account` 自助改密，或由持有 Admin 证书的 superadmin 进行管理。
 
 ---
 
@@ -230,6 +244,8 @@ superuser:
     - "admin"
   description: "Maps admin to superuser"
 ```
+
+> 默认发行配置下，`user.yml` 中 `admin.external_roles: ["admin"]` 会命中这里的 `superuser` 映射；这与 `security.authcz.admin_dn` 定义的 superadmin 证书是两条独立的权限路径。
 
 ### 字段说明
 

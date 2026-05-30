@@ -4,11 +4,11 @@ date: 0001-01-01
 summary: "API #  通过 REST API 可以管理用户、角色、角色映射、权限集合和租户。
 如果你要为程序或脚本签发并使用 X-API-TOKEN，请参见 Access Token。
 API 的访问控制 #  您可以控制哪些角色可以访问安全相关的 API，在配置文件 easysearch.yml:
-security.restapi.roles_enabled: [&#34;&lt;role&gt;&#34;, ...] 如果希望阻止访问特定的 API：
+security.restapi.roles_enabled: [&#34;&lt;role&gt;&#34;, ...]  当前发行版的 easysearch.yml 默认配置为 [&quot;superuser&quot;, &quot;security_rest_api_access&quot;, &quot;security&quot;]。将某个角色加入 security.restapi.roles_enabled 后，该角色即可访问对应的 _security/* 端点；如果只希望允许查询而不允许修改用户、角色等资源，请再配合 security.restapi.endpoints_disabled.&lt;role&gt;.&lt;endpoint&gt; 禁用 PUT、POST、DELETE、PATCH。
+ 如果希望阻止访问特定的 API：
 security.restapi.endpoints_disabled.&lt;role&gt;.&lt;endpoint&gt;: [&#34;&lt;method&gt;&#34;, ...] 参数 endpoint 可以是:
  PRIVILEGE ROLE ROLE_MAPPING USER CONFIG CACHE  参数 method 可以是:
- GET PUT POST DELETE PATCH  例如，以下配置授予三个角色对 REST API 的访问权限，但随后会阻止 test-role 发送 PUT, POST, DELETE, 或 PATCH 到 _security/role 或 _security/user :
-security.restapi.roles_enabled: [&#34;superuser&#34;, &#34;security&#34;, &#34;test-role&#34;] security.restapi.endpoints_disabled.test-role.ROLE: [&#34;PUT&#34;, &#34;POST&#34;, &#34;DELETE&#34;, &#34;PATCH&#34;] security."
+ GET PUT POST DELETE PATCH  例如，以下配置授予三个角色对 REST API 的访问权限，但随后会阻止 test-role 发送 PUT, POST, DELETE, 或 PATCH 到 _security/role 或 _security/user :"
 ---
 
 
@@ -25,6 +25,8 @@ security.restapi.roles_enabled: [&#34;superuser&#34;, &#34;security&#34;, &#34;t
 ```yml
 security.restapi.roles_enabled: ["<role>", ...]
 ```
+
+> 当前发行版的 `easysearch.yml` 默认配置为 `["superuser", "security_rest_api_access", "security"]`。将某个角色加入 `security.restapi.roles_enabled` 后，该角色即可访问对应的 `_security/*` 端点；如果只希望允许查询而不允许修改用户、角色等资源，请再配合 `security.restapi.endpoints_disabled.<role>.<endpoint>` 禁用 `PUT`、`POST`、`DELETE`、`PATCH`。
 
 如果希望阻止访问特定的 API：
 
@@ -83,6 +85,8 @@ dashboard_user:
 ```
 
 隐藏的资源默认就是保留的资源。
+
+> 对 `USER` 端点而言，非 superadmin 查询 hidden 用户时会得到 `404`，并且 hidden 用户不会出现在 `GET _security/user/` 列表结果中。写入 hidden 用户会返回 `404`，写入 `reserved` 或 `static` 用户会返回 `403`。
 
 ## 账号信息
 
@@ -154,6 +158,8 @@ PUT _security/account
 
 {"status":"OK","message":"'booksuser' updated."}%
 ```
+
+> `PUT /_security/account` 只会修改当前认证用户自己的凭据字段，不会修改其他用户。当前实现中，即使当前账号是 `reserved` 或 `hidden` 的内置内部用户，只要提供正确的 `current_password`，也可以通过该接口自助修改自己的密码。
 
 ---
 
@@ -413,6 +419,13 @@ PUT _security/user/<username>
   "message": "User admin created"
 }
 ```
+
+> `PUT` / `PATCH _security/user/<username>` 用于管理内部用户，没有“只能改自己”的限制。只要调用方具备 `USER` 端点的 REST API 访问权限，就可以修改任意可写的内部用户。对于非 superadmin：
+>
+> - hidden 用户会被视为不可见，返回 `404`
+> - `reserved` 或 `static` 用户是只读的，返回 `403`
+> - 默认初始化生成的 `admin`、`infini`、`infini_agent` 当前为 `reserved: true`、`hidden: false`，因此可以通过查询 API 看到，但不能通过该接口修改其密码；这些账户中哪些具备实际权限，仍取决于角色与角色映射配置
+> - 对于需要修改密码的内置账户，应由账户本人使用 `PUT /_security/account` 自助改密，或由持有 Admin 证书的 superadmin 进行管理
 
 ### 修改用户
 

@@ -262,7 +262,7 @@ security.ssl.transport.resolve_hostname: false
 
 # ---- 访问控制 ----
 security.allow_default_init_securityindex: true
-security.restapi.roles_enabled: ["superuser", "security_rest_api_access"]
+security.restapi.roles_enabled: ["superuser", "security_rest_api_access", "security"]
 ```
 
 ---

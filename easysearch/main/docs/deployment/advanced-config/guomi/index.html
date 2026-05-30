@@ -347,7 +347,7 @@ sudo make install_sw
 
 <span style=color:#6272a4># ---- 访问控制 ----</span>
 <span style=color:#ff79c6>security.allow_default_init_securityindex</span>: <span style=color:#ff79c6>true</span>
-<span style=color:#ff79c6>security.restapi.roles_enabled</span>: [<span style=color:#f1fa8c>&#34;superuser&#34;</span>, <span style=color:#f1fa8c>&#34;security_rest_api_access&#34;</span>]
+<span style=color:#ff79c6>security.restapi.roles_enabled</span>: [<span style=color:#f1fa8c>&#34;superuser&#34;</span>, <span style=color:#f1fa8c>&#34;security_rest_api_access&#34;</span>, <span style=color:#f1fa8c>&#34;security&#34;</span>]
 </code></pre></div><hr><h2 id=备选pkcs12-truststore-模式>备选：PKCS12 Truststore 模式
 <a class=anchor href=#%e5%a4%87%e9%80%89pkcs12-truststore-%e6%a8%a1%e5%bc%8f>#</a></h2><p>如果需要使用 PKCS12 格式的 Truststore（不推荐，仅用于兼容场景）：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>security.ssl.http.truststore_filepath</span>: http-truststore-sm2.p12
 <span style=color:#ff79c6>security.ssl.http.truststore_password</span>: changeit
