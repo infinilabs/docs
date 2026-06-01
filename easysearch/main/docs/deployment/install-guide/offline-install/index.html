@@ -302,7 +302,7 @@ sudo systemctl <span style=color:#8be9fd;font-style:italic>enable</span> easysea
 sudo systemctl start easysearch
 </code></pre></div><h2 id=windows-环境离线安装>Windows 环境离线安装
 <a class=anchor href=#windows-%e7%8e%af%e5%a2%83%e7%a6%bb%e7%ba%bf%e5%ae%89%e8%a3%85>#</a></h2><h3 id=准备文件>准备文件
-<a class=anchor href=#%e5%87%86%e5%a4%87%e6%96%87%e4%bb%b6>#</a></h3><p>在有网络的环境中下载：</p><ul><li><a href=https://release.infinilabs.com/easysearch/stable/>Easysearch Windows 版</a></li><li><a href=https://cdn.azul.com/zulu/bin/zulu17.54.21-ca-jre17.0.13-win_x64.zip>JDK 17 Windows 版</a></li></ul><h3 id=安装步骤>安装步骤
+<a class=anchor href=#%e5%87%86%e5%a4%87%e6%96%87%e4%bb%b6>#</a></h3><p>在有网络的环境中下载：</p><ul><li><a href=https://release.infinilabs.com/easysearch/stable/>Easysearch Windows 版</a></li><li><a href=https://release.infinilabs.com/easysearch/jdk/21/graalvm-jdk-21_windows-x64_bin.zip>JDK 21 Windows 版</a></li></ul><h3 id=安装步骤>安装步骤
 <a class=anchor href=#%e5%ae%89%e8%a3%85%e6%ad%a5%e9%aa%a4>#</a></h3><ol><li>解压 Easysearch 到目标目录（如 <code>D:\easysearch</code>）</li><li>解压 JDK 到 Easysearch 目录下，重命名为 <code>jdk</code></li><li>修改配置文件 <code>config/easysearch.yml</code>：</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#6272a4># 如果无法在 Windows 环境生成证书，可临时禁用安全模块</span>
 <span style=color:#ff79c6>security.enabled</span>: <span style=color:#ff79c6>false</span>
 </code></pre></div><ol start=4><li>运行：</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bat data-lang=bat>bin\easysearch.bat

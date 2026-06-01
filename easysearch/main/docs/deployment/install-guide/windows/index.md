@@ -37,7 +37,7 @@ docker run -d --name easysearch `
 > 由于 Windows 环境下默认没有 OpenSSL，生成证书不太方便。如果仅用于开发测试，可以先关闭安全模块快速体验。生产环境**请务必启用安全功能**（参见方案三）。
 
 1. 手工下载 [Easysearch](https://release.infinilabs.com/easysearch/stable/easysearch-{{< globaldata "easysearch" "version" >}}-windows-amd64.zip)，解压到目标目录（如 `D:\easysearch`）。
-2. 手工下载 [JDK](https://cdn.azul.com/zulu/bin/zulu17.54.21-ca-jre17.0.13-win_x64.zip)，解压到 Easysearch 安装目录下，并将目录名称重命名为 `jdk`。
+2. 手工下载 [JDK](https://release.infinilabs.com/easysearch/jdk/21/graalvm-jdk-21_windows-x64_bin.zip)，解压到 Easysearch 安装目录下，并将目录名称重命名为 `jdk`。
 
 > 也可以下载 Bundle 包（内置 JDK），省去手动配置 JDK 的步骤。Bundle 包[下载地址](https://release.infinilabs.com/easysearch/stable/bundle/)。
 
@@ -79,7 +79,7 @@ curl -sSL http://get.infini.cloud | bash -s -- -p easysearch -d /d/data/easysear
 
 ```bash
 # 下载 JDK
-curl -# https://cdn.azul.com/zulu/bin/zulu17.54.21-ca-jre17.0.13-win_x64.zip -o /d/opt/jdk.zip
+curl -# https://release.infinilabs.com/easysearch/jdk/21/graalvm-jdk-21_windows-x64_bin.zip -o /d/opt/jdk.zip
 
 # 解压并重命名
 cd /d/data/easysearch && unzip -q /d/opt/jdk.zip

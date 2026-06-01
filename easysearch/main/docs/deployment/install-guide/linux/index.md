@@ -57,7 +57,7 @@ kill -9 $(cat pid)
 
 ```bash
 #下载JDK并存储到/usr/src目录
-wget -N https://cdn.azul.com/zulu/bin/zulu17.54.21-ca-jre17.0.13-linux_x64.tar.gz -P /usr/src
+wget -N https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_linux-x64_bin.tar.gz -P /usr/src
 ```
 
 2. 创建 JDK 解压后存储路径

@@ -238,7 +238,7 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
 <a href=/easysearch/main/docs/deployment/install-guide/docker/>Docker 环境下使用 Easysearch</a>。</p></blockquote><h2 id=方案二手工安装无-https>方案二：手工安装（无 HTTPS）
 <a class=anchor href=#%e6%96%b9%e6%a1%88%e4%ba%8c%e6%89%8b%e5%b7%a5%e5%ae%89%e8%a3%85%e6%97%a0-https>#</a></h2><blockquote><p>由于 Windows 环境下默认没有 OpenSSL，生成证书不太方便。如果仅用于开发测试，可以先关闭安全模块快速体验。生产环境<strong>请务必启用安全功能</strong>（参见方案三）。</p></blockquote><ol><li>手工下载
 <a href=https://release.infinilabs.com/easysearch/stable/easysearch--windows-amd64.zip>Easysearch</a>，解压到目标目录（如 <code>D:\easysearch</code>）。</li><li>手工下载
-<a href=https://cdn.azul.com/zulu/bin/zulu17.54.21-ca-jre17.0.13-win_x64.zip>JDK</a>，解压到 Easysearch 安装目录下，并将目录名称重命名为 <code>jdk</code>。</li></ol><blockquote><p>也可以下载 Bundle 包（内置 JDK），省去手动配置 JDK 的步骤。Bundle 包
+<a href=https://release.infinilabs.com/easysearch/jdk/21/graalvm-jdk-21_windows-x64_bin.zip>JDK</a>，解压到 Easysearch 安装目录下，并将目录名称重命名为 <code>jdk</code>。</li></ol><blockquote><p>也可以下载 Bundle 包（内置 JDK），省去手动配置 JDK 的步骤。Bundle 包
 <a href=https://release.infinilabs.com/easysearch/stable/bundle/>下载地址</a>。</p></blockquote><ol start=3><li>用记事本打开 <code>config\easysearch.yml</code>，修改配置：</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#6272a4># 关闭安全模块（仅开发测试，生产环境不建议）</span>
 <span style=color:#ff79c6>security.enabled</span>: <span style=color:#ff79c6>false</span>
 </code></pre></div><ol start=4><li>双击运行 <code>bin\easysearch.bat</code> 或在命令行执行：</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bat data-lang=bat>bin\easysearch.bat
@@ -250,7 +250,7 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
 <a class=anchor href=#%e6%96%b9%e6%a1%88%e4%b8%89%e9%80%9a%e8%bf%87-git-bash-%e5%ae%89%e8%a3%85%e6%94%af%e6%8c%81-https>#</a></h2><p>安装
 <a href=https://git-scm.com/download/win>Git for Windows</a>，使用其内置的 Bash 环境来执行初始化脚本，可正常生成证书并启用 HTTPS。</p><blockquote><p>注意：以下操作在 <strong>Git Bash</strong> 终端中执行。</p></blockquote><ol><li>通过在线脚本安装 Easysearch</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>curl -sSL http://get.infini.cloud | bash -s -- -p easysearch -d /d/data/easysearch
 </code></pre></div><ol start=2><li>下载并配置 JDK</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># 下载 JDK</span>
-curl -# https://cdn.azul.com/zulu/bin/zulu17.54.21-ca-jre17.0.13-win_x64.zip -o /d/opt/jdk.zip
+curl -# https://release.infinilabs.com/easysearch/jdk/21/graalvm-jdk-21_windows-x64_bin.zip -o /d/opt/jdk.zip
 
 <span style=color:#6272a4># 解压并重命名</span>
 <span style=color:#8be9fd;font-style:italic>cd</span> /d/data/easysearch <span style=color:#ff79c6>&amp;&amp;</span> unzip -q /d/opt/jdk.zip

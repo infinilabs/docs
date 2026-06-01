@@ -143,7 +143,7 @@ sudo systemctl start easysearch
 在有网络的环境中下载：
 
 - [Easysearch Windows 版](https://release.infinilabs.com/easysearch/stable/)
-- [JDK 17 Windows 版](https://cdn.azul.com/zulu/bin/zulu17.54.21-ca-jre17.0.13-win_x64.zip)
+- [JDK 21 Windows 版](https://release.infinilabs.com/easysearch/jdk/21/graalvm-jdk-21_windows-x64_bin.zip)
 
 ### 安装步骤
 
