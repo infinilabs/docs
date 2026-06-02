@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #   为 Agent UI 新增 API Token 管理  Bug fix #  Improvements #  2.2.1 (2026-06-01) #  Breaking changes #  Features #   新增管道管理 UI  Bug fix #   修复 Rollup job 在检测到源索引新增指标字段后无法以追加方式同步指标配置的问题，支持在保持兼容性的前提下增量扩展 metrics 字段。 修复 Rollup wildcard metrics 自动扩展后配置更新与落库时序不一致的问题，提升运行中新增指标字段场景下的元数据一致性。 修复节点启动早期 Rollup 与 ILM 组件可能在配置索引尚未可搜索时提前发起查询的问题，提升冷启动阶段的稳定性。 修复索引管理后台任务中的安全上下文恢复问题，减少安全模式下的上下文告警并提升任务执行稳定性。 修复 GET /_security/user/{name} 在查询 hidden 或不存在的内部用户时可能返回宽松结果的问题，恢复为 404，与既有 Security API 契约保持一致。 修复 PUT /_security/account 可绕过 static 内部用户只读限制的问题；现在 static 用户会返回 403，同时保留 reserved / hidden 内置用户自助改密能力。 修复 Rollup Search 将普通索引名误判为 rollup 索引并错误分流的场景；现在基于索引元数据中的 index."
+Latest (In development) #  Breaking changes #  Features #   为 Agent UI 新增 API Token 管理 在数据流页面新增“添加数据流”入口  Bug fix #  Improvements #  2.2.1 (2026-06-01) #  Breaking changes #  Features #   新增管道管理 UI  Bug fix #   修复 Rollup job 在检测到源索引新增指标字段后无法以追加方式同步指标配置的问题，支持在保持兼容性的前提下增量扩展 metrics 字段。 修复 Rollup wildcard metrics 自动扩展后配置更新与落库时序不一致的问题，提升运行中新增指标字段场景下的元数据一致性。 修复节点启动早期 Rollup 与 ILM 组件可能在配置索引尚未可搜索时提前发起查询的问题，提升冷启动阶段的稳定性。 修复索引管理后台任务中的安全上下文恢复问题，减少安全模式下的上下文告警并提升任务执行稳定性。 修复 GET /_security/user/{name} 在查询 hidden 或不存在的内部用户时可能返回宽松结果的问题，恢复为 404，与既有 Security API 契约保持一致。 修复 PUT /_security/account 可绕过 static 内部用户只读限制的问题；现在 static 用户会返回 403，同时保留 reserved / hidden 内置用户自助改密能力。 修复 Rollup Search 将普通索引名误判为 rollup 索引并错误分流的场景；现在基于索引元数据中的 index."
 ---
 
 
@@ -14,6 +14,7 @@ Latest (In development) #  Breaking changes #  Features #   为 Agent UI 新增 
 ### Breaking changes
 ### Features
 - 为 Agent UI 新增 API Token 管理
+- 在数据流页面新增“添加数据流”入口
 ### Bug fix
 ### Improvements
 

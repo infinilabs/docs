@@ -1691,15 +1691,83 @@ PUT {index}
 
 ## indices.create_data_stream
 
-创建或更新数据流。
+创建数据流。
 
 ```
 PUT _data_stream/{name}
 ```
 
+#### URL 参数
+
+| 参数 | 类型 | 说明 |
+| :--------------------- | :------ | :------------------------------------------------------------------------ |
+| timeout                | time    | 显式操作超时时间 |
+| master_timeout         | time    | 指定连接主节点的超时时间 |
+
+> 这是标准数据流创建 API。该接口通常无需请求体，实际创建行为完全由已匹配的数据流模板决定；当前也没有定义任何请求体参数。如果希望使用新增的复合 API 在缺少模板时自动补一个默认模板，请改用 `PUT _data_stream/{name}/_bootstrap`。
+
+---
+
+## indices.bootstrap_data_stream
+
+新增复合 API：按需补模板并创建数据流。这个接口用于提升数据流创建的自动化和简洁性；缺少匹配数据流模板时，接口会先自动创建默认模板，再创建数据流。
+
+```
+PUT _data_stream/{name}/_bootstrap
+```
+
+> 该接口可以理解为“按需补模板 + 创建数据流”的增强入口，适合快速创建、前端联调和测试验证；它不是标准 `PUT _data_stream/{name}` 的别名。
+
 #### HTTP 请求体
 
-数据流定义。
+可选。仅在本次请求需要自动创建默认模板时生效；如果已经存在最高优先级的匹配数据流模板，这些字段不会修改已有模板。支持以下字段：
+
+| 字段 | 类型 | 默认值 | 说明 |
+| :------------------------- | :------ | :----------------------------- | :------------------------------------------------------------------------ |
+| template_name              | string  | `ds-bootstrap-{name}`          | 自动创建模板时使用的模板名 |
+| timestamp_field            | string  | `@timestamp`                   | 自动创建模板时使用的时间戳字段名 |
+| priority                   | long    | `1000`                         | 自动创建模板的优先级，必须大于等于 `0` |
+| settings.number_of_shards  | integer | 不设置                         | 自动创建模板时写入的主分片数，也支持等价写法 `settings.index.number_of_shards` |
+| settings.number_of_replicas| integer | 不设置                         | 自动创建模板时写入的副本数，也支持等价写法 `settings.index.number_of_replicas` |
+
+> 固定规则：`index_patterns` 总是使用 `["{name}"]`；`settings` 仅支持 `number_of_shards`、`number_of_replicas` 及其 `index.` 前缀等价写法；其他字段会报错。
+
+#### URL 参数
+
+| 参数 | 类型 | 说明 |
+| :--------------------- | :------ | :------------------------------------------------------------------------ |
+| timeout                | time    | 显式操作超时时间 |
+| master_timeout         | time    | 指定连接主节点的超时时间 |
+
+#### 响应字段
+
+| 字段 | 类型 | 说明 |
+| :---------------- | :------ | :------------------------------------------------------------------------ |
+| acknowledged      | boolean | 请求是否成功完成 |
+| data_stream       | string  | 创建的数据流名称 |
+| template_created  | boolean | 本次是否自动创建了模板 |
+| template_name     | string  | 仅当 `template_created=true` 时返回，表示本次自动创建或显式指定后实际使用的模板名 |
+
+#### 成功响应示例
+
+```json
+{
+  "acknowledged": true,
+  "data_stream": "logs-nginx",
+  "template_created": true,
+  "template_name": "ds-bootstrap-logs-nginx"
+}
+```
+
+> 如果已经存在最高优先级的匹配数据流模板，该接口只会创建数据流，响应中 `template_created` 为 `false`，并且不会修改已有模板。只有当最高优先级的匹配模板是普通组合模板而不是数据流模板时，接口才返回 `400`。
+>
+> 如果目标数据流已经存在，再次调用会返回 `400 resource_already_exists_exception`；该接口不是幂等的。
+>
+> `priority` 必须大于等于 `0`；未知字段会报错；`settings` 只允许 `number_of_shards` / `number_of_replicas`。
+>
+> 如果将 `timestamp_field` 自定义为例如 `event_time`，后续写入数据流的文档也必须包含该字段。
+>
+> 如果用于前端联调，建议写入文档时使用 `POST /{name}/_doc?refresh=wait_for`，避免“刚写入立刻搜索却暂时查不到数据”的刷新时机问题。
 
 ---
 
