@@ -75,16 +75,22 @@ Easysearch 1.1 版本 相比 Elasticsearch 索引整体大小降低了40%~50%。
 ## 如何启用
 
 ### 2.1.0 起新增的 ZSTD 使用方式
-2.1.0 起，ZSTD 可以选择是否启用 JNI 以提升性能，通过 `index.compression.zstd.jni` 来区分：
+2.1.0 起，ZSTD 可以通过 `index.compression.zstd.jni` 请求使用 native/JNI 后端以提升性能：
 
 - `index.codec=ZSTD` 且 `index.compression.zstd.jni=false`：不起用 JNI（默认）
-- `index.codec=ZSTD` 且 `index.compression.zstd.jni=true`：启用 JNI
+- `index.codec=ZSTD` 且 `index.compression.zstd.jni=true`：优先使用 native/JNI 后端
 
 同时新增以下配置项（仅在启用 JNI 时生效）：
 - `index.compression.zstd.level`：压缩级别（默认 `3`）
 - `index.compression.zstd.dict`：是否启用字典压缩（默认 `true`，且必须为 `true`）
 
 提示：从 2.1.0 起，`index.codec` 支持大小写不敏感，例如 `zstd` 也可以被识别为 `ZSTD`。
+
+提示：如果运行环境不支持 native ZSTD，例如 Windows、glibc 版本过低、native 库缺失或加载失败，Easysearch 不会因为 ZSTD 直接崩溃：
+
+- 对新建的 `ZSTD` 索引，会在日志中记录 `WARN`
+- 如果请求了 `index.compression.zstd.jni=true`，但 native 后端不可用，新索引会自动回退为可兼容的纯 Java ZSTD 写入格式
+- 已经写成旧 `Lucene912ZSTDV3` native 格式的索引，在 native 后端不可用的节点上不会再导致进程崩溃，但会以明确错误提示该索引需要 native ZSTD 后端
 
 ### 单个索引配置示例
 创建并设置索引的 codec 为ZSTD：
@@ -160,6 +166,12 @@ PUT _index_template/daily_logs
 ## 注意事项
 `index.compression.zstd.jni` 是创建期生效的静态设置，已有索引不能在后续通过 `PUT /<index>/_settings` 动态修改。
 如果老索引需要启用 JNI，请新建目标索引（设置 `index.compression.zstd.jni=true`）后通过 `reindex` 迁移数据。
+
+补充说明：
+
+- `index.compression.zstd.jni=true` 表示“创建时优先尝试 native ZSTD”，不表示在所有操作系统和运行环境上都一定能启用 native 后端
+- 当 native 后端不可用时，系统会在日志中给出 `WARN`，并对可兼容的新索引自动回退到纯 Java ZSTD
+- 如果历史索引已经写成依赖 native 后端的 `V3` 格式，需要在支持 native ZSTD 的节点上打开，或先重建/重写为兼容格式
 
 尝试在已有索引上动态更新时，会报类似错误：
 ```text
