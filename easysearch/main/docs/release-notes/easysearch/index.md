@@ -41,6 +41,9 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 - 修复 `bin/hash_password.sh` 在未设置 `ES_JAVA_HOME` 或 `JAVA_HOME` 时无法回退使用发行包内置 JDK 的问题，提升默认安装场景下的可用性。
 - 修复 ZSTD 在 stored-fields DOC merge 高压力场景下可能触发 direct-memory OOM，并进一步导致 merge tragic event 或节点退出的问题，提升持续写入场景的后台合并稳定性。
 - 修复 ZSTD native 压缩失败时异常传播过于激进的问题，避免底层 direct-memory 分配失败被包装为致命 `Error`。
+- 修复安全模式下 `GET /_cluster/settings` 可能因内部索引权限过滤返回空 `persistent` / `transient` 设置的问题，并确保 `include_defaults=true` 基于完整集群 settings 计算默认值差异。
+- 修复跨集群搜索请求在内部索引权限过滤过程中丢失 remote indices，导致 CCS 查询被错误裁剪或失败的问题。
+- 修复信创或低 glibc 环境下节点启动时，Lucene SPI 实例化 `Lucene912ZSTDV3` codec 因 native ZSTD 后端不可用而失败退出的问题；实际读写 V3 stored fields 时仍会明确要求 native backend。
 ### Improvements
 - 增强 Rollup / ILM / SLM 启动期保护逻辑，在集群状态、配置索引、安全模块或主分片尚未就绪时跳过周期性查询，减少单节点和冷启动场景中的误报日志。
 - 增强 Rollup Search 的索引拆分逻辑，支持 alias 或 wildcard 同时解析出 live index 与 rollup index 时按 concrete index 分别路由，避免遗漏原始数据。
@@ -50,6 +53,7 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 - 统一安全初始化脚本与中文文档中的默认账户和配置说明：默认生成的 `admin`、`infini`、`infini_agent` 内置账户现在按 `reserved: true`、`hidden: false` 初始化，并同步明确 `security.restapi.roles_enabled`、`security.authcz.admin_dn` 与账号自助改密的实际行为。
 - 增强 ZSTD native 后端可用性探测与兼容回退覆盖；当运行环境不满足 native 条件时，索引创建阶段会更稳妥地选择兼容写入路径，并补齐相关回归与冒烟测试覆盖。
 - 继续优化 ZSTD merge / flush 路径下的 native 内存生命周期，降低 stored-fields 后台合并过程中的内存滞留与峰值压力。
+- 补强 Security REST 权限测试资源与角色映射，统一 `admin_superuser`、`security_superuser` 等测试账号配置，提升 REST 权限回归覆盖稳定性。
 
 
 ## 2.2.0 (2026-05-06)
