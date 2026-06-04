@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.2.1 (2026-06-03) #  Breaking changes #  Features #   新增管道管理 UI 为 Agent UI 新增 API Token 管理 新增数据流 bootstrap 创建 API PUT /_data_stream/{name}/_bootstrap，支持在缺少匹配数据流模板时按需自动创建默认模板后继续创建数据流，简化前端联调、测试验证和快速初始化流程。 在数据流页面新增“添加数据流”入口  Bug fix #   修复 Rollup job 在检测到源索引新增指标字段后无法以追加方式同步指标配置的问题，支持在保持兼容性的前提下增量扩展 metrics 字段。 修复 Rollup wildcard metrics 自动扩展后配置更新与落库时序不一致的问题，提升运行中新增指标字段场景下的元数据一致性。 修复节点启动早期 Rollup 与 ILM 组件可能在配置索引尚未可搜索时提前发起查询的问题，提升冷启动阶段的稳定性。 修复索引管理后台任务中的安全上下文恢复问题，减少安全模式下的上下文告警并提升任务执行稳定性。 修复 GET /_security/user/{name} 在查询 hidden 或不存在的内部用户时可能返回宽松结果的问题，恢复为 404，与既有 Security API 契约保持一致。 修复 PUT /_security/account 可绕过 static 内部用户只读限制的问题；现在 static 用户会返回 403，同时保留 reserved / hidden 内置用户自助改密能力。 修复 Rollup Search 将普通索引名误判为 rollup 索引并错误分流的场景；现在基于索引元数据中的 index."
+Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.2.1 (2026-06-05) #  Breaking changes #  Features #   新增管道管理 UI 为 Agent UI 新增 API Token 管理 新增数据流 bootstrap 创建 API PUT /_data_stream/{name}/_bootstrap，支持在缺少匹配数据流模板时按需自动创建默认模板后继续创建数据流，简化前端联调、测试验证和快速初始化流程。 在数据流页面新增“添加数据流”入口  Bug fix #   修复 Rollup job 在检测到源索引新增指标字段后无法以追加方式同步指标配置的问题，支持在保持兼容性的前提下增量扩展 metrics 字段。 修复 Rollup wildcard metrics 自动扩展后配置更新与落库时序不一致的问题，提升运行中新增指标字段场景下的元数据一致性。 修复节点启动早期 Rollup 与 ILM 组件可能在配置索引尚未可搜索时提前发起查询的问题，提升冷启动阶段的稳定性。 修复索引管理后台任务中的安全上下文恢复问题，减少安全模式下的上下文告警并提升任务执行稳定性。 修复 GET /_security/user/{name} 在查询 hidden 或不存在的内部用户时可能返回宽松结果的问题，恢复为 404，与既有 Security API 契约保持一致。 修复 PUT /_security/account 可绕过 static 内部用户只读限制的问题；现在 static 用户会返回 403，同时保留 reserved / hidden 内置用户自助改密能力。 修复 Rollup Search 将普通索引名误判为 rollup 索引并错误分流的场景；现在基于索引元数据中的 index."
 ---
 
 
@@ -17,7 +17,7 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 ### Improvements
 
 
-## 2.2.1 (2026-06-03)
+## 2.2.1 (2026-06-05)
 ### Breaking changes
 ### Features
 - 新增管道管理 UI
@@ -44,6 +44,9 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 - 修复安全模式下 `GET /_cluster/settings` 可能因内部索引权限过滤返回空 `persistent` / `transient` 设置的问题，并确保 `include_defaults=true` 基于完整集群 settings 计算默认值差异。
 - 修复跨集群搜索请求在内部索引权限过滤过程中丢失 remote indices，导致 CCS 查询被错误裁剪或失败的问题。
 - 修复信创或低 glibc 环境下节点启动时，Lucene SPI 实例化 `Lucene912ZSTDV3` codec 因 native ZSTD 后端不可用而失败退出的问题；实际读写 V3 stored fields 时仍会明确要求 native backend。
+- 修复通过 `cluster.remote.<alias>.seeds: null` 删除远程集群连接后，`_cluster/settings` 中仍可能残留空 `seeds: []` 的问题。
+- 修复 CCR 在远程集群 proxy 模式下启动复制失败的问题；现在使用 `cluster.remote.<alias>.mode=proxy` 和 `cluster.remote.<alias>.proxy_address` 配置远程连接时，会正确注册内部复制仓库并支持初始恢复与增量同步。
+- 修复 `GET /_security/user/{name}` 查询内部用户时重复加载配置并可能产生重复审计读日志的问题，保持响应过滤逻辑不再触发额外配置读取。
 ### Improvements
 - 增强 Rollup / ILM / SLM 启动期保护逻辑，在集群状态、配置索引、安全模块或主分片尚未就绪时跳过周期性查询，减少单节点和冷启动场景中的误报日志。
 - 增强 Rollup Search 的索引拆分逻辑，支持 alias 或 wildcard 同时解析出 live index 与 rollup index 时按 concrete index 分别路由，避免遗漏原始数据。
