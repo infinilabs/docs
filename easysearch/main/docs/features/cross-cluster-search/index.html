@@ -228,7 +228,7 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
 <a class=anchor href=#%e7%b3%bb%e7%bb%9f%e8%a7%a3%e8%80%a6%e4%b8%8e%e7%81%b5%e6%b4%bb%e6%80%a7>#</a></h3><p>各个集群可以独立升级、独立维护，通过 CCS 实现逻辑上的互联互通，降低超大规模架构的运维复杂度。</p><h3 id=故障隔离>故障隔离
 <a class=anchor href=#%e6%95%85%e9%9a%9c%e9%9a%94%e7%a6%bb>#</a></h3><p>若某个远程集群暂时不可用，CCS 可配置为忽略故障集群并返回其余可用部分的搜索结果，保障服务不中断。</p><hr><h2 id=快速上手>快速上手
 <a class=anchor href=#%e5%bf%ab%e9%80%9f%e4%b8%8a%e6%89%8b>#</a></h2><h3 id=1-配置远程集群连接>1. 配置远程集群连接
-<a class=anchor href=#1-%e9%85%8d%e7%bd%ae%e8%bf%9c%e7%a8%8b%e9%9b%86%e7%be%a4%e8%bf%9e%e6%8e%a5>#</a></h3><p>在本地集群上注册远程集群的种子节点：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>PUT _cluster/settings
+<a class=anchor href=#1-%e9%85%8d%e7%bd%ae%e8%bf%9c%e7%a8%8b%e9%9b%86%e7%be%a4%e8%bf%9e%e6%8e%a5>#</a></h3><p>在本地集群上注册远程集群连接。远程集群连接支持 Sniff 和 Proxy 两种访问模式。</p><p>Sniff 模式是默认访问模式，本地集群会连接配置的远程种子节点，并通过远程集群返回的节点信息发现更多可连接节点。配置时填写远程集群 transport 地址（默认端口 9300）：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>PUT _cluster/settings
 {
   <span style=color:#ff79c6>&#34;persistent&#34;</span>: {
     <span style=color:#ff79c6>&#34;cluster.remote&#34;</span>: {
@@ -241,7 +241,19 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
     }
   }
 }
-</code></pre></div><h3 id=2-跨集群搜索>2. 跨集群搜索
+</code></pre></div><p>如果本地集群不能直接访问远程集群的所有 transport 节点，只能通过固定代理地址或网关地址访问远程集群，可以使用 Proxy 模式。此时 <code>proxy_address</code> 应填写代理或网关的监听地址：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>PUT _cluster/settings
+{
+  <span style=color:#ff79c6>&#34;persistent&#34;</span>: {
+    <span style=color:#ff79c6>&#34;cluster.remote&#34;</span>: {
+      <span style=color:#ff79c6>&#34;cluster-beijing&#34;</span>: {
+        <span style=color:#ff79c6>&#34;mode&#34;</span>: <span style=color:#f1fa8c>&#34;proxy&#34;</span>,
+        <span style=color:#ff79c6>&#34;proxy_address&#34;</span>: <span style=color:#f1fa8c>&#34;beijing-proxy.example.com:19300&#34;</span>,
+        <span style=color:#ff79c6>&#34;seeds&#34;</span>: <span style=color:#ff79c6>null</span>
+      }
+    }
+  }
+}
+</code></pre></div><p><code>proxy_address</code> 使用代理入口地址，端口是代理监听端口，不是 HTTP 端口 9200。代理后端应能转发到远程集群的 transport 端口。</p><p>例如本地测试中启动 <code>127.0.0.1:19300 -> 127.0.0.1:9300</code> 的 TCP 代理时，应填写代理监听地址 <code>127.0.0.1:19300</code>。</p><p><code>proxy_address</code> 只有在 <code>mode</code> 为 <code>proxy</code> 时有效。如果同一个 alias 之前使用 Sniff 模式配置过 <code>seeds</code>，切换到 Proxy 模式时建议同时将 <code>cluster.remote.&lt;alias>.seeds</code> 置为 <code>null</code>，避免旧配置残留。</p><p>Proxy 模式只改变本地集群连接远程集群的方式，不改变跨集群搜索语法。连接成功后，仍然使用 <code>集群名:索引名</code> 的格式查询远程索引；remote-only 查询、本地和远程混合查询、远程通配符索引、<code>_msearch</code> 都使用相同的写法。</p><h3 id=2-跨集群搜索>2. 跨集群搜索
 <a class=anchor href=#2-%e8%b7%a8%e9%9b%86%e7%be%a4%e6%90%9c%e7%b4%a2>#</a></h3><p>使用 <code>集群名:索引名</code> 的格式指定远程索引：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>POST /cluster-beijing:logs-*,cluster-shanghai:logs-*/_search
 {
   <span style=color:#ff79c6>&#34;query&#34;</span>: {
@@ -280,18 +292,37 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
 </code></pre></div><hr><h2 id=连接管理>连接管理
 <a class=anchor href=#%e8%bf%9e%e6%8e%a5%e7%ae%a1%e7%90%86>#</a></h2><h3 id=查看远程集群状态>查看远程集群状态
 <a class=anchor href=#%e6%9f%a5%e7%9c%8b%e8%bf%9c%e7%a8%8b%e9%9b%86%e7%be%a4%e7%8a%b6%e6%80%81>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>GET _remote/info
-</code></pre></div><p>返回所有已配置的远程集群的连接状态、种子节点和连接模式。</p><h3 id=动态更新连接>动态更新连接
-<a class=anchor href=#%e5%8a%a8%e6%80%81%e6%9b%b4%e6%96%b0%e8%bf%9e%e6%8e%a5>#</a></h3><p>支持实时添加或移除远程集群，无需重启：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>PUT _cluster/settings
+</code></pre></div><p>返回所有已配置的远程集群的连接状态、连接模式，以及 Sniff 模式的种子节点或 Proxy 模式的代理地址。</p><h3 id=动态更新连接>动态更新连接
+<a class=anchor href=#%e5%8a%a8%e6%80%81%e6%9b%b4%e6%96%b0%e8%bf%9e%e6%8e%a5>#</a></h3><p>支持实时添加或移除远程集群，无需重启：</p><p>添加 Sniff 模式远程集群：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>PUT _cluster/settings
 {
   <span style=color:#ff79c6>&#34;persistent&#34;</span>: {
     <span style=color:#ff79c6>&#34;cluster.remote.cluster-guangzhou.seeds&#34;</span>: [<span style=color:#f1fa8c>&#34;guangzhou-node:9300&#34;</span>]
   }
 }
+</code></pre></div><p>添加 Proxy 模式远程集群：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>PUT _cluster/settings
+{
+  <span style=color:#ff79c6>&#34;persistent&#34;</span>: {
+    <span style=color:#ff79c6>&#34;cluster.remote.cluster-guangzhou.mode&#34;</span>: <span style=color:#f1fa8c>&#34;proxy&#34;</span>,
+    <span style=color:#ff79c6>&#34;cluster.remote.cluster-guangzhou.proxy_address&#34;</span>: <span style=color:#f1fa8c>&#34;guangzhou-proxy.example.com:19300&#34;</span>,
+    <span style=color:#ff79c6>&#34;cluster.remote.cluster-guangzhou.seeds&#34;</span>: <span style=color:#ff79c6>null</span>
+  }
+}
 </code></pre></div><h3 id=移除远程集群>移除远程集群
-<a class=anchor href=#%e7%a7%bb%e9%99%a4%e8%bf%9c%e7%a8%8b%e9%9b%86%e7%be%a4>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>PUT _cluster/settings
+<a class=anchor href=#%e7%a7%bb%e9%99%a4%e8%bf%9c%e7%a8%8b%e9%9b%86%e7%be%a4>#</a></h3><p>移除 Sniff 模式远程集群：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>PUT _cluster/settings
 {
   <span style=color:#ff79c6>&#34;persistent&#34;</span>: {
     <span style=color:#ff79c6>&#34;cluster.remote.cluster-guangzhou.seeds&#34;</span>: <span style=color:#ff79c6>null</span>
+  }
+}
+</code></pre></div><p>移除 Proxy 模式远程集群：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>PUT _cluster/settings
+{
+  <span style=color:#ff79c6>&#34;persistent&#34;</span>: {
+    <span style=color:#ff79c6>&#34;cluster.remote.cluster-guangzhou.seeds&#34;</span>: <span style=color:#ff79c6>null</span>,
+    <span style=color:#ff79c6>&#34;cluster.remote.cluster-guangzhou.mode&#34;</span>: <span style=color:#ff79c6>null</span>,
+    <span style=color:#ff79c6>&#34;cluster.remote.cluster-guangzhou.proxy_address&#34;</span>: <span style=color:#ff79c6>null</span>,
+    <span style=color:#ff79c6>&#34;cluster.remote.cluster-guangzhou.proxy_socket_connections&#34;</span>: <span style=color:#ff79c6>null</span>,
+    <span style=color:#ff79c6>&#34;cluster.remote.cluster-guangzhou.server_name&#34;</span>: <span style=color:#ff79c6>null</span>,
+    <span style=color:#ff79c6>&#34;cluster.remote.cluster-guangzhou.skip_unavailable&#34;</span>: <span style=color:#ff79c6>null</span>
   }
 }
 </code></pre></div><hr><h2 id=安全与权限>安全与权限

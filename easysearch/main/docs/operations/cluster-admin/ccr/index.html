@@ -228,8 +228,8 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
 <a class=anchor href=#%e9%83%a8%e7%bd%b2%e7%a4%ba%e4%be%8b%e9%9b%86%e7%be%a4>#</a></h3><ul><li>在本地起 2 个单节点的 easysearch 测试集群，分别是 follower-application (9201 端口) 和 leader-application (9200 端口)</li><li>在 easysearch.yml 添加 discovery.type: single-node</li><li>如果启用 security 功能，确保 2 个集群的证书互信，测试环境可以直接合并 2 个节点的 ca 证书：
 例如 cat ca.crt ../../easysearch-1.0.0_2/config/ca.crt > trust-chain.pem</li><li>分别设置 security.ssl.transport.ca_file: trust-chain.pem</li></ul><hr><h2 id=设置跨集群复制>设置跨集群复制
 <a class=anchor href=#%e8%ae%be%e7%bd%ae%e8%b7%a8%e9%9b%86%e7%be%a4%e5%a4%8d%e5%88%b6>#</a></h2><h3 id=设置跨群集连接>设置跨群集连接
-<a class=anchor href=#%e8%ae%be%e7%bd%ae%e8%b7%a8%e7%be%a4%e9%9b%86%e8%bf%9e%e6%8e%a5>#</a></h3><p>跨集群复制采用“pull”模型，在 follower 集群上，添加每个种子节点的 IP 地址（端口 9300），
-为连接提供一个描述性名称，您将在请求中使用该名称来启动复制。以下是对应的 curl 命令：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>curl -XPUT -k -H &#39;Content-Type: application/json&#39; -u &#39;admin:xxxxxxxxxxxx&#39; &#39;https://localhost:9201/_cluster/settings?pretty&#39; -d &#39;
+<a class=anchor href=#%e8%ae%be%e7%bd%ae%e8%b7%a8%e7%be%a4%e9%9b%86%e8%bf%9e%e6%8e%a5>#</a></h3><p>跨集群复制采用“pull”模型，需要在 follower 集群上配置到 leader 集群的远程集群连接。为连接提供一个描述性名称，后续启动复制时通过 <code>leader_alias</code> 引用该名称。</p><p>远程集群连接支持 Sniff 和 Proxy 两种访问模式。</p><h4 id=sniff-模式>Sniff 模式
+<a class=anchor href=#sniff-%e6%a8%a1%e5%bc%8f>#</a></h4><p>Sniff 模式是默认访问模式。follower 集群会连接配置的种子节点，并通过远程集群返回的节点信息发现更多可连接节点。配置时填写 leader 集群 transport 地址（默认端口 9300）：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>curl -XPUT -k -H &#39;Content-Type: application/json&#39; -u &#39;admin:xxxxxxxxxxxx&#39; &#39;https://localhost:9201/_cluster/settings?pretty&#39; -d &#39;
 {
   &#34;persistent&#34;: {
     &#34;cluster&#34;: {
@@ -241,7 +241,42 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
     }
   }
 }&#39;
-</code></pre></div><hr><h3 id=开始复制>开始复制
+</code></pre></div><h4 id=proxy-模式>Proxy 模式
+<a class=anchor href=#proxy-%e6%a8%a1%e5%bc%8f>#</a></h4><p>Proxy 模式适用于 follower 集群不能直接访问 leader 集群所有 transport 节点，只能通过一个固定代理地址或网关地址访问远程集群的场景。配置 Proxy 模式时需要显式设置 <code>mode</code> 为 <code>proxy</code>，并将 <code>proxy_address</code> 设置为代理或网关的监听地址。</p><p><code>proxy_address</code> 只有在 <code>mode</code> 为 <code>proxy</code> 时有效。它应填写代理入口地址，而不是 follower 集群的 HTTP 地址；如果通过独立 TCP 代理转发到 leader transport 端口，则应填写代理监听端口。</p><p>例如本地测试中启动 <code>127.0.0.1:19300 -> 127.0.0.1:9300</code> 的 TCP 代理时，应填写代理监听地址 <code>127.0.0.1:19300</code>。如果同一个 alias 之前使用 Sniff 模式配置过 <code>seeds</code>，切换到 Proxy 模式时建议同时将 <code>cluster.remote.&lt;alias>.seeds</code> 置为 <code>null</code>，避免旧配置残留。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>curl -XPUT -k -H &#39;Content-Type: application/json&#39; -u &#39;admin:xxxxxxxxxxxx&#39; &#39;https://localhost:9201/_cluster/settings?pretty&#39; -d &#39;
+{
+  &#34;persistent&#34;: {
+    &#34;cluster&#34;: {
+      &#34;remote&#34;: {
+        &#34;my-connection-alias&#34;: {
+          &#34;mode&#34;: &#34;proxy&#34;,
+          &#34;proxy_address&#34;: &#34;leader-proxy.example.com:19300&#34;,
+          &#34;seeds&#34;: null
+        }
+      }
+    }
+  }
+}&#39;
+</code></pre></div><p>也可以使用扁平 key 形式：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>curl -XPUT -k -H &#39;Content-Type: application/json&#39; -u &#39;admin:xxxxxxxxxxxx&#39; &#39;https://localhost:9201/_cluster/settings?pretty&#39; -d &#39;
+{
+  &#34;persistent&#34;: {
+    &#34;cluster.remote.my-connection-alias.mode&#34;: &#34;proxy&#34;,
+    &#34;cluster.remote.my-connection-alias.proxy_address&#34;: &#34;leader-proxy.example.com:19300&#34;,
+    &#34;cluster.remote.my-connection-alias.seeds&#34;: null
+  }
+}&#39;
+</code></pre></div><p>常用远程集群连接参数如下：</p><table><thead><tr><th>设置</th><th>说明</th></tr></thead><tbody><tr><td><code>cluster.remote.&lt;alias>.mode</code></td><td>远程集群访问模式。<code>sniff</code> 为默认模式，<code>proxy</code> 为代理模式。</td></tr><tr><td><code>cluster.remote.&lt;alias>.seeds</code></td><td>Sniff 模式使用的 leader transport 种子节点地址列表。</td></tr><tr><td><code>cluster.remote.&lt;alias>.proxy_address</code></td><td>Proxy 模式使用的代理或网关监听地址，格式为 <code>host:port</code>。端口应为代理监听端口，代理后端再转发到远程集群 transport 端口；不要填写 HTTP 端口。</td></tr><tr><td><code>cluster.remote.&lt;alias>.proxy_socket_connections</code></td><td>Proxy 模式下建立到代理地址的连接数。未设置时使用默认值。</td></tr><tr><td><code>cluster.remote.&lt;alias>.server_name</code></td><td>TLS/SNI 场景下使用的服务名称。未设置时为空。</td></tr><tr><td><code>cluster.remote.&lt;alias>.skip_unavailable</code></td><td>远程集群不可用时是否跳过。</td></tr></tbody></table><p>配置完成后，可以在 follower 集群查看连接状态：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>curl -XGET -k -u &#39;admin:xxxxxxxxxxxx&#39; &#39;https://localhost:9201/_remote/info?pretty&#39;
+</code></pre></div><p>Proxy 模式连接正常时，返回结果中对应 alias 应显示 <code>connected: true</code>、<code>mode: proxy</code>，并包含 <code>proxy_address</code> 和已连接的 proxy socket 数量。</p><p>如果需要删除该远程集群配置，可以将相关设置置为 <code>null</code>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>curl -XPUT -k -H &#39;Content-Type: application/json&#39; -u &#39;admin:xxxxxxxxxxxx&#39; &#39;https://localhost:9201/_cluster/settings?pretty&#39; -d &#39;
+{
+  &#34;persistent&#34;: {
+    &#34;cluster.remote.my-connection-alias.seeds&#34;: null,
+    &#34;cluster.remote.my-connection-alias.mode&#34;: null,
+    &#34;cluster.remote.my-connection-alias.proxy_address&#34;: null,
+    &#34;cluster.remote.my-connection-alias.proxy_socket_connections&#34;: null,
+    &#34;cluster.remote.my-connection-alias.server_name&#34;: null,
+    &#34;cluster.remote.my-connection-alias.skip_unavailable&#34;: null
+  }
+}&#39;
+</code></pre></div><p>如果确认该 alias 只使用过 Sniff 模式，删除时将 <code>cluster.remote.&lt;alias>.seeds</code> 置为 <code>null</code> 即可。</p><hr><h3 id=开始复制>开始复制
 <a class=anchor href=#%e5%bc%80%e5%a7%8b%e5%a4%8d%e5%88%b6>#</a></h3><p>首先，在 leader 集群创建 leader-01 索引, 并向索引写入数据。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>curl -XPUT -k -H &#39;Content-Type: application/json&#39; -u &#39;admin:xxxxxxxxxxxx&#39; &#39;https://localhost:9200/leader-01?pretty&#39;
 </code></pre></div><p>然后设置跟随者集群开始复制。在请求体中，提供你想要复制的连接名和领导者索引，以及你想要使用的安全角色：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>curl -XPUT -k -H &#39;Content-Type: application/json&#39; -u &#39;admin:xxxxxxxxxxxx&#39; &#39;https://localhost:9201/_replication/follower-01/_start?pretty&#39; -d &#39;
 {

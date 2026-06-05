@@ -44,8 +44,13 @@ Easysearch 跨集群复制（Cross-Cluster Replication, CCR）支持将数据从
 
 ### 设置跨群集连接
 
-跨集群复制采用“pull”模型，在 follower 集群上，添加每个种子节点的 IP 地址（端口 9300），
-为连接提供一个描述性名称，您将在请求中使用该名称来启动复制。以下是对应的 curl 命令：
+跨集群复制采用“pull”模型，需要在 follower 集群上配置到 leader 集群的远程集群连接。为连接提供一个描述性名称，后续启动复制时通过 `leader_alias` 引用该名称。
+
+远程集群连接支持 Sniff 和 Proxy 两种访问模式。
+
+#### Sniff 模式
+
+Sniff 模式是默认访问模式。follower 集群会连接配置的种子节点，并通过远程集群返回的节点信息发现更多可连接节点。配置时填写 leader 集群 transport 地址（默认端口 9300）：
 
 ```auto
 curl -XPUT -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'https://localhost:9201/_cluster/settings?pretty' -d '
@@ -61,6 +66,81 @@ curl -XPUT -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'https
   }
 }'
 ```
+
+#### Proxy 模式
+
+Proxy 模式适用于 follower 集群不能直接访问 leader 集群所有 transport 节点，只能通过一个固定代理地址或网关地址访问远程集群的场景。配置 Proxy 模式时需要显式设置 `mode` 为 `proxy`，并将 `proxy_address` 设置为代理或网关的监听地址。
+
+`proxy_address` 只有在 `mode` 为 `proxy` 时有效。它应填写代理入口地址，而不是 follower 集群的 HTTP 地址；如果通过独立 TCP 代理转发到 leader transport 端口，则应填写代理监听端口。
+
+例如本地测试中启动 `127.0.0.1:19300 -> 127.0.0.1:9300` 的 TCP 代理时，应填写代理监听地址 `127.0.0.1:19300`。如果同一个 alias 之前使用 Sniff 模式配置过 `seeds`，切换到 Proxy 模式时建议同时将 `cluster.remote.<alias>.seeds` 置为 `null`，避免旧配置残留。
+
+```auto
+curl -XPUT -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'https://localhost:9201/_cluster/settings?pretty' -d '
+{
+  "persistent": {
+    "cluster": {
+      "remote": {
+        "my-connection-alias": {
+          "mode": "proxy",
+          "proxy_address": "leader-proxy.example.com:19300",
+          "seeds": null
+        }
+      }
+    }
+  }
+}'
+```
+
+也可以使用扁平 key 形式：
+
+```auto
+curl -XPUT -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'https://localhost:9201/_cluster/settings?pretty' -d '
+{
+  "persistent": {
+    "cluster.remote.my-connection-alias.mode": "proxy",
+    "cluster.remote.my-connection-alias.proxy_address": "leader-proxy.example.com:19300",
+    "cluster.remote.my-connection-alias.seeds": null
+  }
+}'
+```
+
+常用远程集群连接参数如下：
+
+| 设置 | 说明 |
+| --- | --- |
+| `cluster.remote.<alias>.mode` | 远程集群访问模式。`sniff` 为默认模式，`proxy` 为代理模式。 |
+| `cluster.remote.<alias>.seeds` | Sniff 模式使用的 leader transport 种子节点地址列表。 |
+| `cluster.remote.<alias>.proxy_address` | Proxy 模式使用的代理或网关监听地址，格式为 `host:port`。端口应为代理监听端口，代理后端再转发到远程集群 transport 端口；不要填写 HTTP 端口。 |
+| `cluster.remote.<alias>.proxy_socket_connections` | Proxy 模式下建立到代理地址的连接数。未设置时使用默认值。 |
+| `cluster.remote.<alias>.server_name` | TLS/SNI 场景下使用的服务名称。未设置时为空。 |
+| `cluster.remote.<alias>.skip_unavailable` | 远程集群不可用时是否跳过。 |
+
+配置完成后，可以在 follower 集群查看连接状态：
+
+```auto
+curl -XGET -k -u 'admin:xxxxxxxxxxxx' 'https://localhost:9201/_remote/info?pretty'
+```
+
+Proxy 模式连接正常时，返回结果中对应 alias 应显示 `connected: true`、`mode: proxy`，并包含 `proxy_address` 和已连接的 proxy socket 数量。
+
+如果需要删除该远程集群配置，可以将相关设置置为 `null`：
+
+```auto
+curl -XPUT -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'https://localhost:9201/_cluster/settings?pretty' -d '
+{
+  "persistent": {
+    "cluster.remote.my-connection-alias.seeds": null,
+    "cluster.remote.my-connection-alias.mode": null,
+    "cluster.remote.my-connection-alias.proxy_address": null,
+    "cluster.remote.my-connection-alias.proxy_socket_connections": null,
+    "cluster.remote.my-connection-alias.server_name": null,
+    "cluster.remote.my-connection-alias.skip_unavailable": null
+  }
+}'
+```
+
+如果确认该 alias 只使用过 Sniff 模式，删除时将 `cluster.remote.<alias>.seeds` 置为 `null` 即可。
 
 ---
 
