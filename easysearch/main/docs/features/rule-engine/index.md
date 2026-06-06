@@ -2,17 +2,17 @@
 title: "规则引擎"
 date: 0001-01-01
 description: "高性能实时规则匹配引擎，支持在数据入库瞬间完成关键词检测、自动打标与内容清洗。"
-summary: "Rules 规则引擎 #  Rules 插件是 EasySearch 的规则匹配引擎，可在数据写入时自动匹配规则库，为文档添加标签字段，实现高效的内容分类、审核和标注。
+summary: "Rules 规则引擎 #  Rules 插件是 Easysearch 的规则匹配引擎，可在数据写入时自动匹配规则库，为文档添加标签字段，实现高效的内容分类、审核和标注。
 功能特性 #   ✅ 实时匹配：数据写入时自动匹配规则，无需后处理 ✅ 高性能：基于优化的 C++ 规则引擎，支持复杂规则和大规则库 ✅ 灵活配置：支持自定义字段、正则表达式、数值范围匹配 ✅ 多规则匹配：一条文档可匹配多个规则，所有标签保留到数组中 ✅ 集群广播：多节点环境自动编译规则到所有 Ingest 节点   基本概念 #  规则库 (Repository) #  规则库是规则的集合，每个规则库有唯一的 repo_id，存储在 .match_rules 索引中。
 规则 (Rule) #  规则由表达式和描述组成：
 expression\t#offset#description  expression: 匹配表达式（支持 AND/OR/NOT、正则、范围等） offset: 规则序号（从 0 开始，系统自动生成，用于区分不同规则） description: 规则描述（匹配时作为标签返回）  重要说明：
- offset 是导入到规则索引后系统自动生成的，本身没有业务含义 通过 _import API 导入规则时不需要手动指定 offset 导入时只需提供 expression 和 description，系统会自动分配 offset  标签 (Tag) #  文档匹配规则后，规则的 #offset#description 会添加到文档的 tags 字段。"
+ offset 是导入到规则索引后系统自动生成的，本身没有业务含义 通过 _import API 导入规则时不需要手动指定 offset 导入时只需提供 expression 和 description，系统会自动分配 offset  标签 (Tag) #  文档匹配规则后，规则的 description 会作为标签添加到文档的 tags 字段。#offset#description 是 ."
 ---
 
 
 # Rules 规则引擎
 
-Rules 插件是 EasySearch 的规则匹配引擎，可在数据写入时自动匹配规则库，为文档添加标签字段，实现高效的内容分类、审核和标注。
+Rules 插件是 Easysearch 的规则匹配引擎，可在数据写入时自动匹配规则库，为文档添加标签字段，实现高效的内容分类、审核和标注。
 
 ## 功能特性
 
@@ -49,7 +49,7 @@ expression\t#offset#description
 
 ### 标签 (Tag)
 
-文档匹配规则后，规则的 `#offset#description` 会添加到文档的 `tags` 字段。
+文档匹配规则后，规则的 `description` 会作为标签添加到文档的 `tags` 字段。`#offset#description` 是 `.match_rules` 内部保存规则文本时使用的格式，不会作为默认命中标签写入文档。
 
 ---
 
@@ -58,25 +58,31 @@ expression\t#offset#description
 要使用 Rules 插件，至少需要同时满足以下前提：
 
 1. 已安装 `rules` 插件
-2. 运行该插件的节点已关闭系统调用过滤
+2. 运行该插件的节点具备 native 规则库编译和加载条件
 3. 已重启节点并确认插件加载成功
 4. 已安装启用 `rule-engine` 特性的有效 License
 
 ### 节点配置
 
-Rules 插件依赖 native 库（C++ 编译的规则引擎），需要在 `config/easysearch.yml` 中禁用系统调用过滤器：
+Rules 插件依赖 JNI native 库（`libruledb-r.so`）完成规则编译和匹配。默认情况下，编译后的规则库会写入第一个 `path.data` 目录下的 `rules/output`；也可以显式配置规则库目录：
+
+```yaml
+ruledb_path.repo: /var/lib/easysearch/ruledb
+```
+
+如果 Linux 环境的 seccomp / system call filter 拦截 native 规则库运行所需的系统调用，编译或加载规则库时可能失败。此时可以只在安装并运行 Rules 插件的节点上禁用系统调用过滤器：
 
 ```yaml
 bootstrap.system_call_filter: false
 ```
 
-**为什么需要这个配置？**
+**为什么可能需要这个配置？**
 
 - Rules 插件需要调用 JNI 和 native 库（libruledb-r.so）
-- 规则编译过程会执行系统调用（如 fork、exec 等）
-- EasySearch 默认启用的 seccomp 过滤器会阻止这些操作
+- native 规则库在部分运行环境中可能触发被 seccomp 拦截的系统调用
+- Easysearch 默认启用的 system call filter 可能阻止这些 native 调用
 
-**注意**：禁用此过滤器会降低一定的安全性，建议只在运行 rules 插件的节点上禁用。
+**注意**：禁用此过滤器会降低一定的安全性，不建议无故在所有节点上关闭；优先只在运行 Rules 插件的 Ingest 节点上按需配置。
 
 ### 插件安装与加载确认
 
@@ -119,7 +125,7 @@ GET /_license/info
 
 - License 已成功安装
 - License 未过期
-- `metadata.rule-engine = true`
+- License metadata 中包含 `"rule-engine": true`
 
 ---
 
@@ -194,8 +200,8 @@ POST /_match_rules/security_v1/_compile
 {
   "fields": ["gender", "age", "income"],
   "composite": [
-    "(gender,age,income)",           // 基本格式
-    "s{:}(name,city,province)"       // 带分隔符格式
+    "(gender,age,income)",
+    "s{:}(name,city,province)"
   ]
 }
 ```
@@ -267,12 +273,14 @@ POST /_match_rules/news_v1/_compile
 **步骤 3：验证配置已生效**
 
 ```json
-GET .match_rules/_doc/news_v1
+GET /_match_rules?page=1&size=1&q=news_v1
 ```
 
-预期 `_source` 包含：
+预期 `items[0]` 包含：
 ```json
 {
+  "repo_id": "news_v1",
+  "status": "compiled",
   "fields": ["author", "source", "title"],
   "composite": ["(author,source)", "(author,title)", "s{:}(author,source,title)"]
 }
@@ -357,6 +365,7 @@ POST /_match_rules/security_v1/_simulate
 - 这不是 ingest pipeline 的 `/_simulate`，它只返回规则命中结果，不会执行后续处理器
 - 如果你希望模拟结果尽量贴近 `check_match_rules` 的字段行为，可以在请求体中传 `fields`、`default_match_field`、`regex_start_at_word`
 - 如果该规则库在 `_compile` 时声明了 `composite`，模拟会直接使用这套已编译的联合索引结果；但 `/_simulate` 请求本身不支持临时传 `composite`
+- 通过 `_import` API 导入的规则会自动生成 offset；offset 只用于内部规则文本和规则 ID 映射，命中标签返回的是规则 `description`
 - 如果你要验证的是完整 ingest 效果，而不只是规则命中，仍然建议再用 `POST /_ingest/pipeline/{id}/_simulate` 做最终验证
 
 ### 步骤 4: 创建 Ingest Pipeline
@@ -421,7 +430,7 @@ POST security-events/_doc?pipeline=security-check
     "title": "枪支交易案",
     "content": "网上出售手枪，价格5000元",
     "timestamp": "2025-12-31T10:00:00Z",
-    "tags": ["#0#涉枪武器关键词"]
+    "tags": ["涉枪武器关键词"]
   }
 }
 ```
@@ -431,15 +440,15 @@ POST security-events/_doc?pipeline=security-check
 建议在创建 Pipeline 前先检查规则库是否已成功编译：
 
 ```json
-GET .match_rules/_doc/security_v1?_source_excludes=rules
+GET /_match_rules?page=1&size=1&q=security_v1
 ```
 
 重点关注以下字段：
 
-- `status`：应为 `compiled` 或 `partial`
-- `compiled_at`：最近一次成功编译时间
-- `compiled_nodes`：已成功编译该规则库的节点
-- `fields` / `composite`：是否与当前编译参数一致
+- `items[0].status`：应为 `compiled` 或 `partial`
+- `items[0].compiled_at`：最近一次成功编译时间
+- `items[0].compiled_nodes`：已成功编译该规则库的节点
+- `items[0].fields` / `items[0].composite`：是否与当前编译参数一致
 
 ---
 
@@ -560,24 +569,29 @@ status[已审核]
 
 规则引擎对字段的处理遵循以下规则：
 
-1. **默认字段**：`title` 和 `content` 是系统内置字段，无需声明
-   - 未指定字段的表达式默认匹配 `content` 字段
+1. **未配置 Pipeline `fields`**：处理器会提取文档中所有非 `_` 前缀字段参与匹配，并保留原字段名；嵌套对象会按路径展开
+   - 例如 `author` 字段会以 `author` 字段参与 `author(...)` 规则匹配
 
-2. **未声明字段的处理**：文档中未在编译时声明的字段，会被当作 `content` 字段处理
-   - 例如：`author(张三)` 中的 `author` 如果未声明，会按 `content` 字段匹配
+2. **配置 Pipeline `fields`**：白名单字段按原字段名参与匹配，其他字段的值会拼接到 `default_match_field`（默认 `content`）
+   - 例如 `fields: ["title", "content"]` 时，`author`、`source` 等字段值会汇总到 `content`
 
-3. **数值字段**：用于范围匹配的数值字段（如 `range(100, 500)`）**必须**在编译时通过 `fields` 参数声明
+3. **数值字段**：用于范围匹配的数值字段（如 `range(100, 500)`）**必须**在编译时通过 `_compile` 的 `fields` 参数声明
    - 未声明的数值字段会导致编译失败
 
 **字段声明示例**：
+
+编译时声明数值字段：
+
 ```json
-# 编译时声明数值字段
 POST /_match_rules/repo/_compile
 {
   "fields": ["range", "price", "ram_gb"]
 }
+```
 
-# 规则中使用
+规则中使用这些字段：
+
+```json
 {
   "expression": "title(手机) and price(3000, 5000)"
 }
@@ -752,17 +766,22 @@ author({{张.*}})
 
 #### ❌ 错误 3: 忘记声明自定义字段
 
+规则中使用了 `range` 字段：
+
 ```json
-// 规则中使用了 range 字段
 "expression": "range(100, 500)"
+```
 
-// 但编译时忘记声明
+但编译时忘记声明：
+
+```json
 POST /_match_rules/repo/_compile
-{
-  // ❌ 缺少 fields 参数
-}
+{}
+```
 
-// ✅ 正确做法
+正确做法：
+
+```json
 POST /_match_rules/repo/_compile
 {
   "fields": ["range"]
@@ -828,7 +847,7 @@ POST /_match_rules/opinion_check/_compile
 }
 ```
 
-**说明**：编译时只需声明规则中**实际使用**的数值字段。上述规则中使用了 `range(0, 500)` 和 `price(2500, 9999)`，所以声明了这两个字段。
+**说明**：编译时只需声明规则中**实际使用**的数值字段。上述规则中使用了 `range(0, 500)` 和 `range(2500, 9999)`，所以至少需要声明 `range` 字段。
 
 **Pipeline 配置**：
 ```json
@@ -894,7 +913,7 @@ POST /_ingest/pipeline/opinion_check/_simulate
           "title": "威马M5续航测试",
           "content": "威马M5的续航表现一般，实测续航里程偏低",
           "range": 450,
-          "tags": ["#0#威马M5续航不足"]
+          "tags": ["威马M5续航不足"]
         }
       }
     },
@@ -904,7 +923,7 @@ POST /_ingest/pipeline/opinion_check/_simulate
           "title": "威马M7续航表现",
           "content": "威马M7的续航非常出色",
           "range": 2650,
-          "tags": ["#1#威马M7续航异常高"]
+          "tags": ["威马M7续航异常高"]
         }
       }
     }
@@ -914,11 +933,13 @@ POST /_ingest/pipeline/opinion_check/_simulate
 
 ---
 
-## 规则索引结构
+## 内部规则索引结构
 
 ### .match_rules 索引说明
 
 `.match_rules` 是 Rules 插件使用的内部索引（名称以 `.` 开头），用于存储规则库的元数据和配置信息。每个规则库对应索引中的一条文档。
+
+生产场景下应通过 `/_match_rules/*` API 管理规则库，并为调用方授予对应的 `cluster:admin/rules/*` 集群权限；不建议直接开放 `.match_rules` 内部索引的读写权限。
 
 **索引特性**：
 - **索引名称**：`.match_rules`（以 `.` 开头；当前初始化逻辑未显式设置 `index.hidden`）
@@ -930,11 +951,11 @@ POST /_ingest/pipeline/opinion_check/_simulate
 
 | 字段 | 类型 | 必需 | 说明 |
 |------|------|------|------|
-| `name` | text | ✅ | 规则库名称 |
+| `name` | text | ❌ | 规则库名称 |
 | `description` | text | ❌ | 规则库描述 |
 | `tags` | keyword[] | ❌ | 规则库标签（用于分类） |
 | `rules` | text | ✅ | 规则文本内容（格式：`expression\t#offset#description`） |
-| `version` | long | ✅ | 规则库版本（自动递增：1, 2, 3...） |
+| `version` | long | ✅ | 规则库版本（自动递增；当前 API 响应中通常展示为字符串，如 `"1"`、`"2"`） |
 | `status` | keyword | ✅ | 编译状态：`pending`/`compiled`/`partial`/`failed` |
 | `total_rules` | integer | ❌ | 编译后的规则总数（导入后可能为空） |
 | `compiled_at` | date | ❌ | 编译完成时间 |
@@ -964,34 +985,28 @@ AK47 or AK-47 or M16\t#1#枪支型号
 海洛因 or 冰毒\t#2#毒品名称
 ```
 
-**查询示例**：
+**推荐查询方式**：
 
 ```json
-# 查询单个规则库（排除 rules 字段避免大量数据）
-GET .match_rules/_doc/security_v1?_source_excludes=rules
+GET /_match_rules?page=1&size=1&q=security_v1
+```
 
-# 搜索所有已编译的规则库
-GET .match_rules/_search
-{
-  "query": {
-    "term": {
-      "status": "compiled"
-    }
-  },
-  "_source": {
-    "excludes": ["rules"]
-  }
-}
+搜索所有已编译的规则库：
 
-# 查询特定标签的规则库
-GET .match_rules/_search
-{
-  "query": {
-    "term": {
-      "tags": "security"
-    }
-  }
-}
+```json
+GET /_match_rules?status=compiled&size=20
+```
+
+查询特定标签的规则库：
+
+```json
+GET /_match_rules?tag=security&size=20
+```
+
+如果需要查看单个规则库的完整规则文本，可以使用详情 API：
+
+```json
+GET /_match_rules/security_v1
 ```
 
 ---
@@ -1103,8 +1118,8 @@ PUT /_match_rules/security_v1/_import
 {
   "fields": ["gender", "age", "income"],
   "composite": [
-    "(gender,age,income)",           // 基本格式
-    "s{:}(name,city,province)"       // 带分隔符格式
+    "(gender,age,income)",
+    "s{:}(name,city,province)"
   ]
 }
 ```
@@ -1198,7 +1213,7 @@ PUT /_match_rules/security_v1/_import
 
 **说明**：
 
-- `matched_rules` 返回的是编译后规则库中的规则标签，和 `check_match_rules` 写入目标字段的值保持一致
+- `matched_rules` 返回的是编译后规则库中的规则标签，和 `check_match_rules` 写入目标字段的值保持一致；通过 `_import` API 导入时，该标签来自规则的 `description`
 - 未命中时，`matched = false` 且 `matched_rules = []`
 - 如果本节点找不到已编译的规则库目录，会返回 `404`
 - 如果请求体里显式传了 `fields`、`default_match_field`、`regex_start_at_word`，匹配行为会按这些参数执行
@@ -1240,7 +1255,7 @@ GET /_match_rules?page=1&size=20&q=security&status=compiled&tag=security,content
       "name": "安全规则库",
       "description": "用于安全事件分类的规则库",
       "tags": ["security", "content-filter"],
-      "version": 2,
+      "version": "2",
       "status": "compiled",
       "total_rules": 4,
       "compiled_at": "2026-01-07T08:00:00Z",
@@ -1307,12 +1322,12 @@ GET /_match_rules/security_v1/_references
 - 这个接口只做“引用关系反查”，不校验规则库文档是否存在
 - 调用该接口需要集群级权限 `cluster:admin/rules/references`
 
-#### GET .match_rules/_doc/{repo_id}
+#### GET /_match_rules/{repo_id}
 
 查询规则库详情。
 
 ```json
-GET .match_rules/_doc/security_v1
+GET /_match_rules/security_v1
 ```
 
 **响应**：
@@ -1348,7 +1363,7 @@ GET .match_rules/_doc/security_v1
 | `description` | text | 规则库描述（详细说明规则库的作用和使用场景） |
 | `tags` | keyword[] | 规则库标签（用于分类和检索，如 ["security", "content-filter"]） |
 | `rules` | text | 规则文本内容（完整的规则定义，每行一条规则，格式：`expression\t#offset#description`） |
-| `version` | long | 规则库版本（每次导入递增，格式：1, 2, 3...） |
+| `version` | long | 规则库版本（每次导入递增；当前 API 响应中通常展示为字符串，如 `"1"`、`"2"`） |
 | `status` | keyword | 编译状态：`pending`（待编译）、`compiled`（已编译）、`partial`（部分编译）、`failed`（失败） |
 | `total_rules` | integer | 编译后的规则总数（未编译时可能为空） |
 | `compiled_at` | date | 编译完成时间（最后一次成功编译的时间戳） |
@@ -1360,7 +1375,7 @@ GET .match_rules/_doc/security_v1
 | `updated` | date | 更新时间（规则库最后一次修改的时间） |
 
 **注意**：
-- `rules` 字段可能包含大量文本（数万条规则），查询时建议使用 `_source_excludes=rules` 排除此字段
+- `rules` 字段可能包含大量文本（数万条规则）。如只需要元数据，优先使用 `GET /_match_rules` 列表接口，该接口默认不返回 `rules` 字段
 - `version` 字段在每次使用 `POST /_match_rules/{repo_id}/_import`（覆盖模式）或 `PUT /_match_rules/{repo_id}/_import`（追加模式）导入时自动递增
 - `compiled_nodes` 字段在多节点集群中记录了所有成功编译的节点，用于判断集群同步状态
 - `.match_rules` 是内部索引。生产场景下建议通过 `/_match_rules/*` API 访问规则库，并为调用方授予对应的 `cluster:admin/rules/*` 集群权限，而不是直接开放 `.match_rules` 索引权限
@@ -1526,7 +1541,7 @@ GET security-events/_search
 {
   "query": {
     "terms": {
-      "tags": ["#0#涉枪内容", "#1#涉毒内容"]
+      "tags": ["涉枪内容", "涉毒内容"]
     }
   }
 }
@@ -1599,12 +1614,12 @@ GET security-events/_search
 ## 限制和注意事项
 
 1. **License 要求**：需要启用 `rule-engine` 特性的有效 License
-2. **系统配置要求**：必须设置 `bootstrap.system_call_filter: false`（见"环境要求"章节）
+2. **系统配置要求**：如果 native 规则库编译或加载被 system call filter 拦截，需要在运行 Rules 插件的节点上配置 `bootstrap.system_call_filter: false`（见"环境要求"章节）
 3. **目标字段可配置**：默认写入 `tags` 字段，可通过 `target_field` 参数自定义
 4. **数值字段类型**：数值范围匹配要求字段值为数值类型
 5. **正则语法**：建议统一使用 `{{...}}` 语法，不要混用其他写法
-6. **编译依赖索引**：编译前必须先导入规则到 `.match_rules` 索引
-7. **节点启动同步**：节点启动时会自动同步规则库，写入操作会等待同步完成（通常 10-20 秒）
+6. **编译依赖导入**：编译前必须先通过 `/_match_rules/.../_import` API 导入规则；不要直接写入 `.match_rules` 内部索引
+7. **节点启动同步**：节点启动时会自动同步规则库，写入操作可能等待、重试或由其他可用 Ingest 节点处理
 8. **元数据文件**：`.compiled_repos.json` 用于检测文件丢失，请勿手动删除
 
 ### 常见检查顺序
@@ -1613,8 +1628,8 @@ GET security-events/_search
 
 1. `bin/easysearch-plugin list` 或 `GET /_cat/plugins?v`，确认 `rules` 插件已加载
 2. `GET /_license/info`，确认 License 已生效且 `rule-engine` 已启用
-3. 检查 `easysearch.yml` 是否设置了 `bootstrap.system_call_filter: false`
-4. `GET .match_rules/_doc/{repo_id}?_source_excludes=rules`，确认规则库已导入
+3. 如果 native 规则库编译或加载报 system call 相关错误，检查 Rules 节点的 `easysearch.yml` 是否需要设置 `bootstrap.system_call_filter: false`
+4. `GET /_match_rules?page=1&size=1&q={repo_id}`，确认规则库已导入
 5. 重新执行 `POST /_match_rules/{repo_id}/_compile`，确认编译成功后再挂接 Pipeline
 
 ---

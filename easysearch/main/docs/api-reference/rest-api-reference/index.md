@@ -1720,7 +1720,7 @@ PUT _data_stream/{name}/_bootstrap
 
 #### HTTP 请求体
 
-可选。仅在本次请求需要自动创建默认模板时生效；如果已经存在最高优先级的匹配数据流模板，这些字段不会修改已有模板。支持以下字段：
+可选。仅在本次请求需要自动创建默认模板时生效；如果最高优先级的匹配模板已经是数据流模板，`_bootstrap` 会直接按模板优先级复用已有模板，不会再创建请求体里的 `template_name`，也不会用请求体里的 `priority: 1000` 或更高优先级去抢占已有模板。`template_name` 不是指定复用模板或强制创建模板的参数；如果需要自动创建模板，但同名模板已存在且 `index_patterns` 不匹配当前数据流名称，请求会返回 `400`。支持以下字段：
 
 | 字段 | 类型 | 默认值 | 说明 |
 | :------------------------- | :------ | :----------------------------- | :------------------------------------------------------------------------ |
@@ -1730,7 +1730,7 @@ PUT _data_stream/{name}/_bootstrap
 | settings.number_of_shards  | integer | 不设置                         | 自动创建模板时写入的主分片数，也支持等价写法 `settings.index.number_of_shards` |
 | settings.number_of_replicas| integer | 不设置                         | 自动创建模板时写入的副本数，也支持等价写法 `settings.index.number_of_replicas` |
 
-> 固定规则：`index_patterns` 总是使用 `["{name}"]`；`settings` 仅支持 `number_of_shards`、`number_of_replicas` 及其 `index.` 前缀等价写法；其他字段会报错。
+> 固定规则：只有自动创建模板时，`index_patterns` 才会使用 `["{name}"]`，`priority` 默认才是 `1000`；最高优先级的匹配模板已经是数据流模板时，请求体字段不会参与模板选择。`settings` 仅支持 `number_of_shards`、`number_of_replicas` 及其 `index.` 前缀等价写法；其他字段会报错。
 
 #### URL 参数
 
@@ -1746,7 +1746,7 @@ PUT _data_stream/{name}/_bootstrap
 | acknowledged      | boolean | 请求是否成功完成 |
 | data_stream       | string  | 创建的数据流名称 |
 | template_created  | boolean | 本次是否自动创建了模板 |
-| template_name     | string  | 仅当 `template_created=true` 时返回，表示本次自动创建或显式指定后实际使用的模板名 |
+| template_name     | string  | 仅当 `template_created=true` 时返回，表示本次自动创建的模板名；该值来自默认模板名或请求体里的 `template_name` |
 
 #### 成功响应示例
 

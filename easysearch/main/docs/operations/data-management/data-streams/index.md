@@ -236,7 +236,9 @@ PUT _data_stream/logs-nginx/_bootstrap
 | `settings.number_of_shards` | integer | 不设置 | 自动创建模板时写入的主分片数，也支持等价写法 `settings.index.number_of_shards` |
 | `settings.number_of_replicas` | integer | 不设置 | 自动创建模板时写入的副本数，也支持等价写法 `settings.index.number_of_replicas` |
 
-这些字段仅在本次请求确实需要自动创建默认模板时生效；如果已经存在最高优先级的匹配数据流模板，`_bootstrap` 会直接复用该模板，不会修改已有模板。请求体不支持其他字段。
+这些字段仅在本次请求确实需要自动创建默认模板时生效；如果最高优先级的匹配模板已经是数据流模板，`_bootstrap` 会直接按模板优先级复用已有模板，不会再创建请求体里的 `template_name`，也不会用请求体里的 `priority: 1000` 或更高优先级去“抢占”已有模板。`template_name` 不是“指定复用哪个模板”或“强制创建这个模板”的参数；如果需要自动创建模板，但它指向一个已存在且 `index_patterns` 不匹配当前数据流名称的模板，请求会返回 `400`。请求体不支持其他字段。
+
+如果你希望使用某个新模板创建数据流，需要在调用 `_bootstrap` 之前先手工创建或调整一个能匹配目标数据流名称、且优先级符合预期的数据流模板；或者先删除/修改已有的匹配模板。`_bootstrap` 不会覆盖已有模板，也不会在最高优先级的匹配模板已经可用于创建数据流时自动创建一个更高优先级模板来改变选择结果。
 
 ##### 自动创建默认模板的固定规则
 
@@ -244,7 +246,7 @@ PUT _data_stream/logs-nginx/_bootstrap
 |------|----|------|
 | `index_patterns` | `["{name}"]` | 固定使用数据流名称作为匹配模式 |
 | `data_stream.timestamp_field.name` | `@timestamp` 或你传入的 `timestamp_field` | 决定后续写入文档必须携带的时间戳字段 |
-| `priority` | `1000` 或你传入的 `priority` | 控制自动创建模板和其他匹配模板的优先级比较 |
+| `priority` | `1000` 或你传入的 `priority` | 仅在自动创建模板时写入该模板；最高优先级的匹配模板已经可用于创建数据流时不会用它抢占模板选择 |
 | `settings` | 仅支持 `number_of_shards` / `number_of_replicas` 及其 `index.` 前缀等价写法 | 其他 `settings` 字段会报错 |
 
 ##### 自定义模板参数
@@ -264,7 +266,7 @@ PUT _data_stream/logs-nginx/_bootstrap
 }
 ```
 
-上面的 `priority: 2001` 是覆盖默认值的示例；如果不传 `priority`，默认值是 `1000`。同理，如果不传 `template_name`，默认会使用 `ds-bootstrap-<data_stream_name>`。
+上面的 `priority: 2001` 是覆盖默认值的示例；如果不传 `priority`，默认值是 `1000`。同理，如果不传 `template_name`，默认会使用 `ds-bootstrap-<data_stream_name>`。注意：这些值只有在本次请求确实自动创建模板时才会生效；如果最高优先级的匹配模板已经是数据流模板，响应会返回 `template_created: false`，请求体中的 `template_name`、`timestamp_field`、`priority` 和 `settings` 都不会改变实际使用的模板。
 
 ##### 成功响应示例
 
@@ -286,7 +288,9 @@ PUT _data_stream/logs-nginx/_bootstrap
 `_bootstrap` 的行为是保守的：
 
 - 如果已经有最高优先级的匹配数据流模板，它只创建数据流，不会覆盖或重建模板
+- 即使请求体传入了新的 `template_name` 和更高的 `priority`，只要最高优先级的匹配模板已经是数据流模板，`_bootstrap` 仍会复用该模板
 - 如果目标数据流已经存在，再次调用会返回 `400 resource_already_exists_exception`；该接口不是幂等的
+- 如果需要自动创建模板，但请求体里的 `template_name` 已经存在且不能匹配当前数据流名称，它会直接返回 `400`，不会覆盖该模板
 - 如果最高优先级的匹配模板是普通组合模板而不是数据流模板，它会直接返回 `400`
 - 自动创建出的模板不会在后续失败时回滚
 
@@ -314,6 +318,7 @@ DELETE _index_template/ds-bootstrap-logs-nginx-manual
 - 未知字段会报错
 - `settings` 只允许 `number_of_shards` / `number_of_replicas` 及其 `index.` 前缀等价写法
 - 当最高优先级的匹配模板是普通组合模板而不是数据流模板时，`_bootstrap` 返回 `400`
+- 当需要自动创建模板，且 `template_name` 指向已存在但不匹配当前数据流名称的模板时，`_bootstrap` 返回 `400`
 
 ### 步骤 3：向数据流中摄入数据
 
