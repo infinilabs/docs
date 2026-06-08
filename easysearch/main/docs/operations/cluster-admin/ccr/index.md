@@ -160,12 +160,12 @@ curl -XPUT -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'https
    "leader_alias": "my-connection-alias",
    "leader_index": "leader-01",
    "use_roles":{
-      "leader_cluster_role": "superuser",
-      "follower_cluster_role": "superuser"
+      "leader_cluster_role": "replication_leader",
+      "follower_cluster_role": "replication_follower"
    }
 }'
 ```
-因为演示用户是 admin 所以可以直接用 superuser 角色进行复制。
+默认发行配置会将 admin 同时映射到 `superuser`、`replication_leader` 和 `replication_follower`，因此演示用户既可以使用 `superuser`，也可以使用这里示例中的复制专用角色。
 
 ### 确认复制状态
 
@@ -581,8 +581,8 @@ curl -XPOST -k -H 'Content-Type: application/json' -u 'admin:xxxxxxxxxxxx' 'http
    "name": "my-replication-rule",
    "pattern": "nginx*",
    "use_roles":{
-      "leader_cluster_role": "superuser",
-      "follower_cluster_role": "superuser"
+      "leader_cluster_role": "replication_leader",
+      "follower_cluster_role": "replication_follower"
    }
 }'
 

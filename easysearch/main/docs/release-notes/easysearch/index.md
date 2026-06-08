@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.2.1 (2026-06-05) #  Breaking changes #  Features #   新增管道管理 UI 为 Agent UI 新增 API Token 管理 新增数据流 bootstrap 创建 API PUT /_data_stream/{name}/_bootstrap，支持在缺少匹配数据流模板时按需自动创建默认模板后继续创建数据流，简化前端联调、测试验证和快速初始化流程。 在数据流页面新增“添加数据流”入口  Bug fix #   修复 Rollup job 在检测到源索引新增指标字段后无法以追加方式同步指标配置的问题，支持在保持兼容性的前提下增量扩展 metrics 字段。 修复 Rollup wildcard metrics 自动扩展后配置更新与落库时序不一致的问题，提升运行中新增指标字段场景下的元数据一致性。 修复节点启动早期 Rollup 与 ILM 组件可能在配置索引尚未可搜索时提前发起查询的问题，提升冷启动阶段的稳定性。 修复索引管理后台任务中的安全上下文恢复问题，减少安全模式下的上下文告警并提升任务执行稳定性。 修复 GET /_security/user/{name} 在查询 hidden 或不存在的内部用户时可能返回宽松结果的问题，恢复为 404，与既有 Security API 契约保持一致。 修复 PUT /_security/account 可绕过 static 内部用户只读限制的问题；现在 static 用户会返回 403，同时保留 reserved / hidden 内置用户自助改密能力。 修复 Rollup Search 将普通索引名误判为 rollup 索引并错误分流的场景；现在基于索引元数据中的 index."
+Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.2.1 (2026-06-08) #  Breaking changes #  Features #   新增管道管理 UI 为 Agent UI 新增 API Token 管理 新增数据流 bootstrap 创建 API PUT /_data_stream/{name}/_bootstrap，支持在缺少匹配数据流模板时按需自动创建默认模板后继续创建数据流，简化前端联调、测试验证和快速初始化流程。 在数据流页面新增“添加数据流”入口  Bug fix #   修复 Rollup job 在检测到源索引新增指标字段后无法以追加方式同步指标配置的问题，支持在保持兼容性的前提下增量扩展 metrics 字段。 修复 Rollup wildcard metrics 自动扩展后配置更新与落库时序不一致的问题，提升运行中新增指标字段场景下的元数据一致性。 修复节点启动早期 Rollup 与 ILM 组件可能在配置索引尚未可搜索时提前发起查询的问题，提升冷启动阶段的稳定性。 修复索引管理后台任务中的安全上下文恢复问题，减少安全模式下的上下文告警并提升任务执行稳定性。 修复 GET /_security/user/{name} 在查询 hidden 或不存在的内部用户时可能返回宽松结果的问题，恢复为 404，与既有 Security API 契约保持一致。 修复 PUT /_security/account 可绕过 static 内部用户只读限制的问题；现在 static 用户会返回 403，同时保留 reserved / hidden 内置用户自助改密能力。 修复 Rollup Search 将普通索引名误判为 rollup 索引并错误分流的场景；现在基于索引元数据中的 index."
 ---
 
 
@@ -17,7 +17,7 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 ### Improvements
 
 
-## 2.2.1 (2026-06-05)
+## 2.2.1 (2026-06-08)
 ### Breaking changes
 ### Features
 - 新增管道管理 UI
@@ -38,6 +38,7 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 - 修复 Index Management 后台任务在节点启动早期可能过早访问内部索引的问题，避免在 Security 尚未就绪时触发异常并影响自动任务的稳定执行。
 - 修复可搜索快照（searchable snapshot）在 `node.search.cache.size` 配置较小时的启动失败问题；现在允许使用小容量本地 file cache 启动节点，并由运行时缓存淘汰机制按需工作。
 - 修复 CCR follower index 在节点重启后删除保护可能丢失的问题；现在会自动补回复制保护 block，并继续拦截直接删除 follower index 的操作。
+- 修复 CCR 在 SecurityManager 环境下协程调度到 Kotlin DefaultDispatcher 可能触发线程组权限异常的问题，并修复停止复制时未先清理 index/shard persistent task 导致 `GetChanges` 长轮询、恢复中 follower index 或后续 CCR 测试残留的问题。
 - 修复 `bin/hash_password.sh` 在未设置 `ES_JAVA_HOME` 或 `JAVA_HOME` 时无法回退使用发行包内置 JDK 的问题，提升默认安装场景下的可用性。
 - 修复 ZSTD 在 stored-fields DOC merge 高压力场景下可能触发 direct-memory OOM，并进一步导致 merge tragic event 或节点退出的问题，提升持续写入场景的后台合并稳定性。
 - 修复 ZSTD native 压缩失败时异常传播过于激进的问题，避免底层 direct-memory 分配失败被包装为致命 `Error`。
@@ -49,6 +50,7 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 - 修复 `GET /_security/user/{name}` 查询内部用户时重复加载配置并可能产生重复审计读日志的问题，保持响应过滤逻辑不再触发额外配置读取。
 - 修复远程集群管理 UI 无法删除代理模式的远程集群
 ### Improvements
+- 默认安全角色映射为 `admin` 增加 `replication_leader` 与 `replication_follower`，使其可直接在 CCR `use_roles` 中使用复制专用角色。
 - 增强 Rollup / ILM / SLM 启动期保护逻辑，在集群状态、配置索引、安全模块或主分片尚未就绪时跳过周期性查询，减少单节点和冷启动场景中的误报日志。
 - 增强 Rollup Search 的索引拆分逻辑，支持 alias 或 wildcard 同时解析出 live index 与 rollup index 时按 concrete index 分别路由，避免遗漏原始数据。
 - 优化 CCR 数据同步效率，区分无新变更与 checkpoint 未同步场景，减少空轮询和无效重试。
