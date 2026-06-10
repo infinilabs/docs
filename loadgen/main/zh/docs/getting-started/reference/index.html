@@ -1,0 +1,265 @@
+<!doctype html><html lang=zh><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="参数参考 #  本页是 Loadgen 所有配置项的完整参考。
+ 命令行参数 #  loadgen [选项]    参数 类型 默认值 说明     -run string loadgen.dsl DSL 测试文件路径   -config string loadgen.yml YAML 配置文件路径   -d int 5 测试持续时间（秒）   -c int 1 并发线程数   -r int -1（不限） 每秒最大请求数（固定 QPS）   -l int -1（不限） 请求总数上限   -compress bool false 使用 gzip 压缩请求体   -timeout int 60 请求超时时间（秒）   -dial-timeout int 3 连接超时时间（秒）   -read-timeout int 0（使用 -timeout） 读超时时间（秒）   -write-timeout int 0（使用 -timeout） 写超时时间（秒）   -cpu int -1（全部） 使用的 CPU 核数   -mem int -1（不限） 内存软上限（MB）   -log string — 日志级别：trace, debug, info, warn, error, off   -debug bool false 调试模式，panic 时立即退出并打印完整栈   -v bool — 输出版本信息     环境变量（env） #  在 YAML 或 DSL 中定义环境变量默认值，运行时可通过命令行环境变量覆盖。"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="参数参考"><meta property="og:description" content="参数参考 #  本页是 Loadgen 所有配置项的完整参考。
+ 命令行参数 #  loadgen [选项]    参数 类型 默认值 说明     -run string loadgen.dsl DSL 测试文件路径   -config string loadgen.yml YAML 配置文件路径   -d int 5 测试持续时间（秒）   -c int 1 并发线程数   -r int -1（不限） 每秒最大请求数（固定 QPS）   -l int -1（不限） 请求总数上限   -compress bool false 使用 gzip 压缩请求体   -timeout int 60 请求超时时间（秒）   -dial-timeout int 3 连接超时时间（秒）   -read-timeout int 0（使用 -timeout） 读超时时间（秒）   -write-timeout int 0（使用 -timeout） 写超时时间（秒）   -cpu int -1（全部） 使用的 CPU 核数   -mem int -1（不限） 内存软上限（MB）   -log string — 日志级别：trace, debug, info, warn, error, off   -debug bool false 调试模式，panic 时立即退出并打印完整栈   -v bool — 输出版本信息     环境变量（env） #  在 YAML 或 DSL 中定义环境变量默认值，运行时可通过命令行环境变量覆盖。"><meta property="og:type" content="article"><meta property="og:url" content="https://docs.infinilabs.com/loadgen/main/zh/docs/getting-started/reference/"><title>参数参考 | INFINI Loadgen | The Best Open Source Golang Load Testing Tool for Easysearch/Elasticsearch/OpenSearch</title><link rel=manifest href=/loadgen/main/manifest.json><link rel=icon href=/loadgen/main/favicon.png type=image/x-icon><link rel=alternate hreflang=en href=https://docs.infinilabs.com/loadgen/main/docs/getting-started/reference/ title=Reference><link rel=stylesheet href=/loadgen/main/book.min.a5477dc69cdc226836851fe1ccbae76d703e3ebf0cb670e9e513b00935608503.css integrity="sha256-pUd9xpzcImg2hR/hzLrnbXA+Pr8MtnDp5ROwCTVghQM="><script defer src=https://docs.infinilabs.com/loadgen/main/js/jquery-2.x.min.js></script><script defer src=https://docs.infinilabs.com/loadgen/main/js/doc.js></script><script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?64b9322783bb21716d701b15fb0b1e82";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/loadgen/main/zh><img src=/loadgen/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;height:36px;width:100%></div><script>function waitForShadow(host,callback){const timer=setInterval(()=>{if(host.shadowRoot){clearInterval(timer);callback(host.shadowRoot);}},50);}
+const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{const style=document.createElement('style');style.textContent=`
+      .infini__searchbox-btn {
+        width: 100% !important;
+        height: 36px !important;
+      }
+    `;shadow.appendChild(style);});</script><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value=v1.30.3>v1.30.3</option>
+<option value=v1.30.1>v1.30.1</option>
+<option value=v1.30.0>v1.30.0</option>
+<option value=v1.29.8>v1.29.8</option>
+<option value=v1.29.7>v1.29.7</option>
+<option value=v1.29.6>v1.29.6</option>
+<option value=v1.29.4>v1.29.4</option>
+<option value=v1.29.3>v1.29.3</option>
+<option value=v1.29.2>v1.29.2</option>
+<option value=v1.29.1>v1.29.1</option>
+<option value=v1.29.0>v1.29.0</option>
+<option value=v1.28.2>v1.28.2</option>
+<option value=v1.28.0>v1.28.0</option>
+<option value=v1.27.0>v1.27.0</option></select></div><ul><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle checked>
+<label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a href=https://docs.infinilabs.com/loadgen/main/zh/docs/getting-started/>入门指南</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=https://docs.infinilabs.com/loadgen/main/zh/docs/getting-started/install/>下载安装</a></li><li><a href=https://docs.infinilabs.com/loadgen/main/zh/docs/getting-started/concepts/>快速上手</a></li><li><a href=https://docs.infinilabs.com/loadgen/main/zh/docs/getting-started/reference/ class=active>参数参考</a></li><li><a href=https://docs.infinilabs.com/loadgen/main/zh/docs/getting-started/examples/>实战示例</a></li><li><a href=https://docs.infinilabs.com/loadgen/main/zh/docs/getting-started/benchmark/>性能测试</a></li><li><a href=https://docs.infinilabs.com/loadgen/main/zh/docs/getting-started/use-cases/>使用场景与实战示例</a></li></ul></li><li><a href=https://docs.infinilabs.com/loadgen/main/zh/docs/release-notes/>版本历史</a><ul></ul></li><li><a href=https://docs.infinilabs.com/loadgen/main/zh/docs/resources/>其它资源</a><ul></ul></li></ul><ul><li><a href=https://github.com/infinilabs/loadgen target=_blank rel=noopener>Github</a></li></ul><div class=book-languages tabindex=0 aria-haspopup=true><ul><li class="flex align-center"><img src=/loadgen/main/svg/translate.svg class=book-icon alt=Languages>
+简体中文</li></ul><ul class=book-languages-list><li><a href=https://docs.infinilabs.com/loadgen/main/docs/getting-started/reference/ class="flex align-center"><img src=/loadgen/main/svg/translate.svg class=book-icon alt=Languages>
+English</a></li><li class=active><a href=https://docs.infinilabs.com/loadgen/main/zh/ class="flex align-center"><img src=/loadgen/main/svg/translate.svg class=book-icon alt=Languages>
+简体中文</a></li></ul></div></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/loadgen/main/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>参数参考</strong>
+<label for=toc-control><img src=/loadgen/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><style>.code-wrapper{position:relative;margin:20px 0}.code-header{position:absolute;top:8px;right:16px;font-size:12px;color:#8be9fd;font-weight:500;letter-spacing:.5px;text-transform:lowercase;pointer-events:none;transition:opacity .2s ease}.code-wrapper pre{padding:28px 18px 18px;border-radius:12px;overflow-x:auto;line-height:1.7}.copy-btn{position:absolute;top:6px;right:12px;display:flex;align-items:center;gap:6px;padding:5px 10px;font-size:12px;border-radius:8px;background:#44475a;color:#f8f8f2;border:1px solid #8440f1;cursor:pointer;opacity:0;transition:all .2s ease}.code-wrapper:hover .copy-btn{opacity:1}.code-wrapper:hover .code-header{opacity:.2}.copy-btn:hover{background:#6272a4}.copy-btn.copied{background:#fff;color:#8440f1;border-color:#8440f1}</style><script>document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll("pre > code").forEach((codeBlock)=>{const pre=codeBlock.parentElement;const className=codeBlock.className;const match=className.match(/language-(\w+)/);const language=match?match[1]:"code";const wrapper=document.createElement("div");wrapper.className="code-wrapper";pre.parentNode.insertBefore(wrapper,pre);wrapper.appendChild(pre);const header=document.createElement("div");header.className="code-header";header.innerText=language;wrapper.appendChild(header);const button=document.createElement("button");button.className="copy-btn";button.innerHTML="Copy";button.addEventListener("click",async()=>{await navigator.clipboard.writeText(codeBlock.innerText);button.classList.add("copied");button.innerText="✓ Copied";setTimeout(()=>{button.classList.remove("copied");button.innerText="Copy";},2000);});wrapper.appendChild(button);});});</script><div class="mt-2 text-right"><a href=/loadgen/main/zh/docs/getting-started/reference/index.md class=text-sm>View as Markdown</a></div><aside class="hidden clearfix"><style>.book-toc>nav li::before{position:absolute;top:6px;left:-16px;width:2px;height:32px;content:"";transition:transform .28s cubic-bezier(.2,.8,.2,1),background-color .18s ease,opacity .18s;transform:translateY(-50%)scaleY(0);opacity:0;background:0 0}.book-toc>nav>ul>li.ancestor::before{left:-16px}.book-toc>nav>ul>li.ancestor>ul>li.active::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor>ul>li.active::before{left:-48px}.book-toc>nav li.active::before{transform:translateY(-50%)scaleY(1);opacity:1;background:#8440f1}.book-toc>nav li.active>a{font-weight:500}:target{scroll-margin-top:80px}</style><script>document.addEventListener('DOMContentLoaded',function(){const nav=document.getElementsByClassName('book-toc')[0].querySelector('nav');if(!nav)return;const links=Array.from(nav.querySelectorAll('a[href^="#"]'));const idToLi=new Map();let isProgrammatic=false;let programmaticTargetId=null;let scrollEndTimer=null;links.forEach(link=>{const href=link.getAttribute('href');if(!href||href.length<2)return;const id=decodeURIComponent(href.slice(1));const li=link.closest('li');if(li)idToLi.set(id,li);link.addEventListener('click',function(e){const target=document.getElementById(id);if(target){e.preventDefault();isProgrammatic=true;programmaticTargetId=id;setActiveById(id);target.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+id);clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},1200);}});});window.addEventListener('scroll',function(){clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},120);},{passive:true});function clearAll(){idToLi.forEach(li=>li.classList.remove('active','ancestor'));links.forEach(a=>a.removeAttribute('aria-current'));}
+function setActiveById(id){clearAll();const li=idToLi.get(id);if(!li)return;li.classList.add('active');const a=li.querySelector('a[href^="#"]');if(a)a.setAttribute('aria-current','true');let parent=li.parentElement;while(parent&&parent!==nav){const parentLi=parent.closest('li');if(parentLi&&parentLi!==li)parentLi.classList.add('ancestor');parent=parent.parentElement;}}
+const observedEls=Array.from(idToLi.keys()).map(id=>document.getElementById(id)).filter(Boolean);if(observedEls.length){const io=new IntersectionObserver((entries)=>{let candidate=null;entries.forEach(en=>{if(!en.isIntersecting)return;if(!candidate)candidate=en;else{const curTop=Math.abs(candidate.boundingClientRect.top);const newTop=Math.abs(en.boundingClientRect.top);if(newTop<curTop)candidate=en;}});if(!candidate||!candidate.target||!candidate.target.id)return;const foundId=candidate.target.id;if(isProgrammatic&&programmaticTargetId&&foundId!==programmaticTargetId){return;}
+setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.1,0.25,0.5]});observedEls.forEach(el=>io.observe(el));}
+if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#命令行参数>命令行参数</a></li><li><a href=#环境变量env>环境变量（env）</a></li><li><a href=#运行控制runner>运行控制（runner）</a></li><li><a href=#变量定义variables>变量定义（variables）</a><ul><li><a href=#变量类型一览>变量类型一览</a></li><li><a href=#变量参数详解>变量参数详解</a></li></ul></li><li><a href=#请求配置request>请求配置（request）</a><ul><li><a href=#runtime_variables-vs-runtime_body_line_variables>runtime_variables vs runtime_body_line_variables</a></li><li><a href=#dsl-格式-vs-yaml-格式>DSL 格式 vs YAML 格式</a></li></ul></li><li><a href=#断言assert>断言（assert）</a><ul><li><a href=#简写格式>简写格式</a></li><li><a href=#标准格式>标准格式</a></li><li><a href=#可断言的上下文变量>可断言的上下文变量</a></li><li><a href=#退出码>退出码</a></li></ul></li><li><a href=#动态变量注册register>动态变量注册（register）</a></li><li><a href=#预热行为>预热行为</a></li><li><a href=#输出指标>输出指标</a><ul><li><a href=#指标说明>指标说明</a></li><li><a href=#状态码与错误>状态码与错误</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=参数参考>参数参考
+<a class=anchor href=#%e5%8f%82%e6%95%b0%e5%8f%82%e8%80%83>#</a></h1><p>本页是 Loadgen 所有配置项的完整参考。</p><hr><h2 id=命令行参数>命令行参数
+<a class=anchor href=#%e5%91%bd%e4%bb%a4%e8%a1%8c%e5%8f%82%e6%95%b0>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>loadgen <span style=color:#ff79c6>[</span>选项<span style=color:#ff79c6>]</span>
+</code></pre></div><table><thead><tr><th>参数</th><th>类型</th><th>默认值</th><th>说明</th></tr></thead><tbody><tr><td><code>-run</code></td><td>string</td><td><code>loadgen.dsl</code></td><td>DSL 测试文件路径</td></tr><tr><td><code>-config</code></td><td>string</td><td><code>loadgen.yml</code></td><td>YAML 配置文件路径</td></tr><tr><td><code>-d</code></td><td>int</td><td><code>5</code></td><td>测试持续时间（秒）</td></tr><tr><td><code>-c</code></td><td>int</td><td><code>1</code></td><td>并发线程数</td></tr><tr><td><code>-r</code></td><td>int</td><td><code>-1</code>（不限）</td><td>每秒最大请求数（固定 QPS）</td></tr><tr><td><code>-l</code></td><td>int</td><td><code>-1</code>（不限）</td><td>请求总数上限</td></tr><tr><td><code>-compress</code></td><td>bool</td><td><code>false</code></td><td>使用 gzip 压缩请求体</td></tr><tr><td><code>-timeout</code></td><td>int</td><td><code>60</code></td><td>请求超时时间（秒）</td></tr><tr><td><code>-dial-timeout</code></td><td>int</td><td><code>3</code></td><td>连接超时时间（秒）</td></tr><tr><td><code>-read-timeout</code></td><td>int</td><td><code>0</code>（使用 -timeout）</td><td>读超时时间（秒）</td></tr><tr><td><code>-write-timeout</code></td><td>int</td><td><code>0</code>（使用 -timeout）</td><td>写超时时间（秒）</td></tr><tr><td><code>-cpu</code></td><td>int</td><td><code>-1</code>（全部）</td><td>使用的 CPU 核数</td></tr><tr><td><code>-mem</code></td><td>int</td><td><code>-1</code>（不限）</td><td>内存软上限（MB）</td></tr><tr><td><code>-log</code></td><td>string</td><td>—</td><td>日志级别：trace, debug, info, warn, error, off</td></tr><tr><td><code>-debug</code></td><td>bool</td><td><code>false</code></td><td>调试模式，panic 时立即退出并打印完整栈</td></tr><tr><td><code>-v</code></td><td>bool</td><td>—</td><td>输出版本信息</td></tr></tbody></table><hr><h2 id=环境变量env>环境变量（env）
+<a class=anchor href=#%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8fenv>#</a></h2><p>在 YAML 或 DSL 中定义环境变量默认值，运行时可通过命令行环境变量覆盖。</p><p><strong>YAML 格式：</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>env</span>:
+  <span style=color:#ff79c6>ES_ENDPOINT</span>: http://localhost:9200
+  <span style=color:#ff79c6>ES_USERNAME</span>: admin
+  <span style=color:#ff79c6>ES_PASSWORD</span>: admin
+</code></pre></div><p><strong>DSL 格式：</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text># env: {
+#   ES_ENDPOINT: &#34;http://localhost:9200&#34;,
+#   ES_USERNAME: &#34;admin&#34;,
+#   ES_PASSWORD: &#34;admin&#34;,
+# },
+</code></pre></div><p><strong>引用方式：</strong> <code>$[[env.ES_ENDPOINT]]</code></p><p><strong>IPv6 支持：</strong></p><p>Loadgen 完整支持 IPv6 地址。使用标准方括号格式（<code>[ipv6地址]:端口</code>）即可：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>env</span>:
+  <span style=color:#ff79c6>ES_ENDPOINT</span>: <span style=color:#f1fa8c>&#34;http://[::1]:9200&#34;</span>
+  <span style=color:#6272a4># 或使用实际 IPv6 地址：</span>
+  <span style=color:#6272a4># ES_ENDPOINT: &#34;http://[fd00::1]:9200&#34;</span>
+  <span style=color:#6272a4># 链路本地地址带 zone ID（URL 中 % 需编码为 %25）：</span>
+  <span style=color:#6272a4># ES_ENDPOINT: &#34;http://[fe80::18df:9883:1e27:b040%25en0]:9200&#34;</span>
+</code></pre></div><p>或通过命令行传入：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#8be9fd;font-style:italic>ES_ENDPOINT</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;http://[::1]:9200&#34;</span> loadgen -run loadgen.dsl -d <span style=color:#bd93f9>5</span> -c <span style=color:#bd93f9>2</span>
+<span style=color:#6272a4># 链路本地地址带 zone ID：</span>
+<span style=color:#8be9fd;font-style:italic>ES_ENDPOINT</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;http://[fe81::18df:9883:1e27:b040%25en0]:9200&#34;</span> loadgen -run loadgen.dsl -d <span style=color:#bd93f9>5</span> -c <span style=color:#bd93f9>2</span>
+</code></pre></div><blockquote><p><strong>注意：</strong> 对于带 zone ID 的链路本地 IPv6 地址（如 <code>fe80::1%en0</code>），URL 中的 <code>%</code> 必须编码为 <code>%25</code>。</p></blockquote><hr><h2 id=运行控制runner>运行控制（runner）
+<a class=anchor href=#%e8%bf%90%e8%a1%8c%e6%8e%a7%e5%88%b6runner>#</a></h2><p>控制测试运行行为的全局参数。</p><table><thead><tr><th>参数</th><th>类型</th><th>默认值</th><th>说明</th></tr></thead><tbody><tr><td><code>total_rounds</code></td><td>int</td><td>不设置</td><td>执行轮次。设置后进入轮次模式，不设置则按时间运行</td></tr><tr><td><code>no_warm</code></td><td>bool</td><td><code>false</code></td><td>跳过预热阶段</td></tr><tr><td><code>log_requests</code></td><td>bool</td><td><code>false</code></td><td>记录所有请求详情到日志</td></tr><tr><td><code>log_status_codes</code></td><td>[]int</td><td>—</td><td>仅记录指定状态码的请求（如 <code>[0, 500]</code>）</td></tr><tr><td><code>assert_invalid</code></td><td>bool</td><td><code>false</code></td><td>断言失败时 Loadgen 退出码为 1</td></tr><tr><td><code>assert_error</code></td><td>bool</td><td><code>false</code></td><td>请求错误时 Loadgen 退出码为 2</td></tr><tr><td><code>reset_context</code></td><td>bool</td><td><code>false</code></td><td>每轮次重置上下文变量</td></tr><tr><td><code>valid_status_codes_during_warmup</code></td><td>[]int</td><td>—</td><td>预热期间视为有效的状态码（如 <code>[200, 201, 404]</code>）</td></tr><tr><td><code>disable_header_names_normalizing</code></td><td>bool</td><td><code>false</code></td><td>禁止自动格式化响应头名称</td></tr><tr><td><code>default_endpoint</code></td><td>string</td><td>—</td><td>默认请求地址，请求行中省略 host 时自动补全</td></tr><tr><td><code>default_basic_auth</code></td><td>object</td><td>—</td><td>默认 Basic Auth 认证信息</td></tr></tbody></table><p><strong>DSL 格式示例：</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text># runner: {
+#   total_rounds: 1,
+#   no_warm: true,
+#   assert_invalid: true,
+#   assert_error: true,
+#   valid_status_codes_during_warmup: [200, 201],
+#   log_status_codes: [0, 500],
+#   default_endpoint: &#34;$[[env.ES_ENDPOINT]]&#34;,
+#   default_basic_auth: {
+#     username: &#34;$[[env.ES_USERNAME]]&#34;,
+#     password: &#34;$[[env.ES_PASSWORD]]&#34;,
+#   },
+# },
+</code></pre></div><hr><h2 id=变量定义variables>变量定义（variables）
+<a class=anchor href=#%e5%8f%98%e9%87%8f%e5%ae%9a%e4%b9%89variables>#</a></h2><p>变量在请求中通过 <code>$[[变量名]]</code> 引用，每次请求自动取值。</p><h3 id=变量类型一览>变量类型一览
+<a class=anchor href=#%e5%8f%98%e9%87%8f%e7%b1%bb%e5%9e%8b%e4%b8%80%e8%a7%88>#</a></h3><table><thead><tr><th>类型</th><th>说明</th><th>必要参数</th></tr></thead><tbody><tr><td><code>file</code></td><td>从文本文件随机取一行</td><td><code>path</code></td></tr><tr><td><code>list</code></td><td>从内联列表随机取一个</td><td><code>data</code></td></tr><tr><td><code>sequence</code></td><td>32 位自增整数</td><td>—</td></tr><tr><td><code>sequence64</code></td><td>64 位自增整数</td><td>—</td></tr><tr><td><code>range</code></td><td>指定范围内随机整数</td><td><code>from</code>, <code>to</code></td></tr><tr><td><code>random_array</code></td><td>由其他变量组合生成随机数组</td><td><code>variable_key</code>, <code>size</code></td></tr><tr><td><code>uuid</code></td><td>UUID v4 字符串</td><td>—</td></tr><tr><td><code>now_local</code></td><td>当前时间（本地时区）</td><td>—</td></tr><tr><td><code>now_utc</code></td><td>当前时间（UTC，完整格式）</td><td>—</td></tr><tr><td><code>now_utc_lite</code></td><td>当前时间（UTC，ISO 短格式）</td><td>—</td></tr><tr><td><code>now_unix</code></td><td>当前 Unix 时间戳</td><td>—</td></tr><tr><td><code>now_with_format</code></td><td>当前时间（自定义格式）</td><td><code>format</code></td></tr></tbody></table><h3 id=变量参数详解>变量参数详解
+<a class=anchor href=#%e5%8f%98%e9%87%8f%e5%8f%82%e6%95%b0%e8%af%a6%e8%a7%a3>#</a></h3><h4 id=file>file
+<a class=anchor href=#file>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>{
+  name: &#34;ip&#34;,
+  type: &#34;file&#34;,
+  path: &#34;dict/ip.txt&#34;,
+  data: [&#34;10.0.0.1&#34;, &#34;10.0.0.2&#34;],
+  replace: {
+    &#39;&#34;&#39;: &#39;\\&#34;&#39;,
+    &#39;\\&#39;: &#39;\\\\&#39;,
+  },
+}
+</code></pre></div><table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td><code>path</code></td><td>外部文本文件路径，每行一个值</td></tr><tr><td><code>data</code></td><td>追加到文件内容之后的额外数据列表</td></tr><tr><td><code>replace</code></td><td>对取到的值做字符替换（用于转义特殊字符）</td></tr></tbody></table><p><strong>NDJSON 语料支持：</strong></p><p><code>file</code> 类型变量同样支持 NDJSON 格式的语料文件（每行一个完整 JSON 对象）。这在批量写入场景中非常实用——可以直接将语料文件作为 bulk 请求体的数据源：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text># dict/docs.json（每行一个 JSON 文档）
+{&#34;title&#34;: &#34;Elasticsearch 入门&#34;, &#34;author&#34;: &#34;alice&#34;, &#34;views&#34;: 100}
+{&#34;title&#34;: &#34;性能调优实践&#34;, &#34;author&#34;: &#34;bob&#34;, &#34;views&#34;: 350}
+{&#34;title&#34;: &#34;集群运维指南&#34;, &#34;author&#34;: &#34;coco&#34;, &#34;views&#34;: 220}
+</code></pre></div><p>变量定义：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>{
+  name: &#34;doc&#34;,
+  type: &#34;file&#34;,
+  path: &#34;dict/docs.json&#34;,
+}
+</code></pre></div><p>在 bulk 请求中引用：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>POST $[[env.ES_ENDPOINT]]/_bulk
+{&#34;index&#34;: {&#34;_index&#34;: &#34;articles&#34;, &#34;_id&#34;: &#34;$[[uuid]]&#34;}}
+$[[doc]]
+# request: {
+#   body_repeat_times: 1000,
+# },
+</code></pre></div><p>每次重复时 <code>$[[doc]]</code> 会从语料文件中随机取一行 JSON，直接作为文档内容写入，无需在 DSL 中手写 JSON 结构。这种方式适合：</p><ul><li>用真实数据做写入压测</li><li>批量导入已有数据集</li><li>保持文档结构多样性</li></ul><h4 id=list>list
+<a class=anchor href=#list>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>{
+  name: &#34;user&#34;,
+  type: &#34;list&#34;,
+  data: [&#34;alice&#34;, &#34;bob&#34;, &#34;coco&#34;],
+}
+</code></pre></div><table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td><code>data</code></td><td>字符串数组，每次请求随机取一个</td></tr></tbody></table><h4 id=sequence--sequence64>sequence / sequence64
+<a class=anchor href=#sequence--sequence64>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>{
+  name: &#34;id&#34;,
+  type: &#34;sequence&#34;,
+  from: 1,
+  to: 999999,
+}
+</code></pre></div><table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td><code>from</code></td><td>起始值（默认 0）</td></tr><tr><td><code>to</code></td><td>最大值（到达后回绕）</td></tr></tbody></table><h4 id=range>range
+<a class=anchor href=#range>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>{
+  name: &#34;suffix&#34;,
+  type: &#34;range&#34;,
+  from: 10,
+  to: 1000,
+}
+</code></pre></div><table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td><code>from</code></td><td>范围下限</td></tr><tr><td><code>to</code></td><td>范围上限</td></tr></tbody></table><h4 id=random_array>random_array
+<a class=anchor href=#random_array>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>{
+  name: &#34;id_list&#34;,
+  type: &#34;random_array&#34;,
+  variable_type: &#34;number&#34;,
+  variable_key: &#34;suffix&#34;,
+  square_bracket: false,
+  string_bracket: &#34;&#34;,
+  size: 10,
+  replace: { ... },
+}
+</code></pre></div><table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td><code>variable_type</code></td><td>元素类型：<code>number</code> 或 <code>string</code></td></tr><tr><td><code>variable_key</code></td><td>数据源变量名</td></tr><tr><td><code>size</code></td><td>数组长度</td></tr><tr><td><code>square_bracket</code></td><td>是否用 <code>[</code> <code>]</code> 包裹输出</td></tr><tr><td><code>string_bracket</code></td><td>每个元素前后包裹的字符串</td></tr><tr><td><code>replace</code></td><td>对整个输出做字符替换</td></tr></tbody></table><h4 id=now_with_format>now_with_format
+<a class=anchor href=#now_with_format>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>{
+  name: &#34;ts&#34;,
+  type: &#34;now_with_format&#34;,
+  format: &#34;2006-01-02T15:04:05-0700&#34;,
+}
+</code></pre></div><table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td><code>format</code></td><td>Go 时间格式字符串（
+<a href=https://www.geeksforgeeks.org/time-formatting-in-golang/>格式参考</a>）</td></tr></tbody></table><hr><h2 id=请求配置request>请求配置（request）
+<a class=anchor href=#%e8%af%b7%e6%b1%82%e9%85%8d%e7%bd%aerequest>#</a></h2><p>每个请求可以通过 <code># request: { ... },</code> 注释块配置以下参数：</p><table><thead><tr><th>参数</th><th>类型</th><th>说明</th></tr></thead><tbody><tr><td><code>basic_auth</code></td><td>object</td><td>请求级 Basic Auth（覆盖 runner 默认值）</td></tr><tr><td><code>headers</code></td><td>[]object</td><td>自定义请求头列表</td></tr><tr><td><code>disable_header_names_normalizing</code></td><td>bool</td><td>禁止自动格式化请求头名称</td></tr><tr><td><code>runtime_variables</code></td><td>object</td><td>请求级运行时变量（同一请求内共享）</td></tr><tr><td><code>runtime_body_line_variables</code></td><td>object</td><td>请求体行级变量（每行独立生成）</td></tr><tr><td><code>body_repeat_times</code></td><td>int</td><td>请求体重复次数（用于 bulk 批量构造）</td></tr></tbody></table><p><strong>完整示例：</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>POST /_bulk
+{&#34;index&#34;: {&#34;_index&#34;: &#34;demo-$[[suffix]]&#34;, &#34;_id&#34;: &#34;$[[uuid]]&#34;, &#34;routing&#34;: &#34;$[[routing_no]]&#34;}}
+{&#34;id&#34;:&#34;$[[id]]&#34;,&#34;user&#34;:&#34;$[[user]]&#34;,&#34;batch&#34;:&#34;$[[batch_no]]&#34;,&#34;ts&#34;:&#34;$[[ts]]&#34;}
+# request: {
+#   basic_auth: {
+#     username: &#34;$[[env.ES_USERNAME]]&#34;,
+#     password: &#34;$[[env.ES_PASSWORD]]&#34;,
+#   },
+#   headers: [
+#     {Authorization: &#34;Bearer $[[token]]&#34;},
+#     {X-Trace-Id: &#34;$[[uuid]]&#34;},
+#   ],
+#   disable_header_names_normalizing: true,
+#   runtime_variables: {
+#     batch_no: &#34;uuid&#34;,
+#   },
+#   runtime_body_line_variables: {
+#     routing_no: &#34;uuid&#34;,
+#   },
+#   body_repeat_times: 100,
+# },
+</code></pre></div><h3 id=runtime_variables-vs-runtime_body_line_variables>runtime_variables vs runtime_body_line_variables
+<a class=anchor href=#runtime_variables-vs-runtime_body_line_variables>#</a></h3><table><thead><tr><th>类型</th><th>生成时机</th><th>典型用途</th></tr></thead><tbody><tr><td><code>runtime_variables</code></td><td>每次请求生成一次，整个请求体共享同一个值</td><td>批次号、追踪 ID</td></tr><tr><td><code>runtime_body_line_variables</code></td><td>请求体中每一"行对"独立生成一个新值</td><td>routing、文档级唯一 ID</td></tr></tbody></table><blockquote><p><strong>何为"行对"？</strong> 对于 <code>_bulk</code> 请求，每条文档由 action 行 + source 行组成。当 <code>body_repeat_times: N</code> 复制 N 份时，<code>runtime_body_line_variables</code> 确保每份拥有独立值，而 <code>runtime_variables</code> 在整个请求中保持不变。</p></blockquote><p><strong>图示：</strong></p><pre><code>请求体（body_repeat_times: 3）:
+  行对 1: routing_no = aaa   ← runtime_body_line_variables 每行对独立
+  行对 2: routing_no = bbb
+  行对 3: routing_no = ccc
+  所有行: batch_no   = xxx   ← runtime_variables 整个请求共享
+</code></pre><h3 id=dsl-格式-vs-yaml-格式>DSL 格式 vs YAML 格式
+<a class=anchor href=#dsl-%e6%a0%bc%e5%bc%8f-vs-yaml-%e6%a0%bc%e5%bc%8f>#</a></h3><p>Loadgen 支持两种配置格式。<strong>YAML 格式解析更快</strong>，在高吞吐场景下建议优先使用：</p><p><strong>YAML 格式（推荐用于压测）：</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>requests</span>:
+  - <span style=color:#ff79c6>request</span>:
+      <span style=color:#ff79c6>method</span>: POST
+      <span style=color:#ff79c6>url</span>: /_bulk
+      <span style=color:#ff79c6>runtime_variables</span>:
+        <span style=color:#ff79c6>batch_no</span>: uuid
+      <span style=color:#ff79c6>runtime_body_line_variables</span>:
+        <span style=color:#ff79c6>routing_no</span>: uuid
+      <span style=color:#ff79c6>body_repeat_times</span>: <span style=color:#bd93f9>5000</span>
+      <span style=color:#ff79c6>body</span>: |<span style=color:#f1fa8c>
+</span><span style=color:#f1fa8c>        {&#34;index&#34;: {&#34;_index&#34;: &#34;medcl&#34;, &#34;_type&#34;: &#34;_doc&#34;, &#34;_id&#34;: &#34;$[[uuid]]&#34;}}
+</span><span style=color:#f1fa8c>        {&#34;id&#34;: &#34;$[[id]]&#34;, &#34;field1&#34;: &#34;$[[list]]&#34;, &#34;now_local&#34;: &#34;$[[now_local]]&#34;, &#34;now_unix&#34;: &#34;$[[now_unix]]&#34;}
+</span><span style=color:#f1fa8c>        {&#34;index&#34;: {&#34;_index&#34;: &#34;infinilabs&#34;, &#34;_type&#34;: &#34;_doc&#34;, &#34;_id&#34;: &#34;$[[uuid]]&#34;}}
+</span><span style=color:#f1fa8c>        {&#34;id&#34;: &#34;$[[id]]&#34;, &#34;field1&#34;: &#34;$[[list]]&#34;, &#34;now_local&#34;: &#34;$[[now_local]]&#34;, &#34;now_unix&#34;: &#34;$[[now_unix]]&#34;}</span>        
+</code></pre></div><p>上面的示例中，body 包含 2 个 action+source 行对，配合 <code>body_repeat_times: 5000</code> 最终每次请求发送 10000 条文档。每个行对的 <code>routing_no</code> 独立生成，而 <code>batch_no</code> 整个请求共享一个值。</p><p><strong>等价 DSL 格式：</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>POST /_bulk
+{&#34;index&#34;: {&#34;_index&#34;: &#34;medcl&#34;, &#34;_type&#34;: &#34;_doc&#34;, &#34;_id&#34;: &#34;$[[uuid]]&#34;}}
+{&#34;id&#34;: &#34;$[[id]]&#34;, &#34;field1&#34;: &#34;$[[list]]&#34;, &#34;now_local&#34;: &#34;$[[now_local]]&#34;, &#34;now_unix&#34;: &#34;$[[now_unix]]&#34;}
+{&#34;index&#34;: {&#34;_index&#34;: &#34;infinilabs&#34;, &#34;_type&#34;: &#34;_doc&#34;, &#34;_id&#34;: &#34;$[[uuid]]&#34;}}
+{&#34;id&#34;: &#34;$[[id]]&#34;, &#34;field1&#34;: &#34;$[[list]]&#34;, &#34;now_local&#34;: &#34;$[[now_local]]&#34;, &#34;now_unix&#34;: &#34;$[[now_unix]]&#34;}
+# request: {
+#   runtime_variables: {
+#     batch_no: &#34;uuid&#34;,
+#   },
+#   runtime_body_line_variables: {
+#     routing_no: &#34;uuid&#34;,
+#   },
+#   body_repeat_times: 5000,
+# },
+</code></pre></div><blockquote><p><strong>性能提示：</strong> YAML 格式省去了运行时 DSL 解析开销，在极端吞吐场景下可观测到更高的客户端发送速率。功能验证和集成测试场景两种格式性能差异可忽略。</p></blockquote><hr><h2 id=断言assert>断言（assert）
+<a class=anchor href=#%e6%96%ad%e8%a8%80assert>#</a></h2><p>断言用于校验响应内容，不满足时当前轮次停止后续请求。</p><h3 id=简写格式>简写格式
+<a class=anchor href=#%e7%ae%80%e5%86%99%e6%a0%bc%e5%bc%8f>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text># assert: (200, {status: &#34;ok&#34;}),
+</code></pre></div><p>等价于状态码为 200 且响应体包含 <code>{"status": "ok"}</code>。</p><h3 id=标准格式>标准格式
+<a class=anchor href=#%e6%a0%87%e5%87%86%e6%a0%bc%e5%bc%8f>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text># assert: {
+#   _ctx.response.status: 200,
+#   _ctx.response.body_json.hits.total.value: 1,
+# },
+</code></pre></div><h3 id=可断言的上下文变量>可断言的上下文变量
+<a class=anchor href=#%e5%8f%af%e6%96%ad%e8%a8%80%e7%9a%84%e4%b8%8a%e4%b8%8b%e6%96%87%e5%8f%98%e9%87%8f>#</a></h3><table><thead><tr><th>路径</th><th>说明</th></tr></thead><tbody><tr><td><code>_ctx.response.status</code></td><td>HTTP 状态码</td></tr><tr><td><code>_ctx.response.header</code></td><td>响应头</td></tr><tr><td><code>_ctx.response.body</code></td><td>响应体原文</td></tr><tr><td><code>_ctx.response.body_json.*</code></td><td>响应体 JSON 字段（支持嵌套路径）</td></tr><tr><td><code>_ctx.elapsed</code></td><td>请求耗时（毫秒）</td></tr></tbody></table><h3 id=退出码>退出码
+<a class=anchor href=#%e9%80%80%e5%87%ba%e7%a0%81>#</a></h3><table><thead><tr><th>退出码</th><th>条件</th></tr></thead><tbody><tr><td>0</td><td>全部通过</td></tr><tr><td>1</td><td>存在断言失败且 <code>runner.assert_invalid: true</code></td></tr><tr><td>2</td><td>存在请求错误且 <code>runner.assert_error: true</code></td></tr></tbody></table><hr><h2 id=动态变量注册register>动态变量注册（register）
+<a class=anchor href=#%e5%8a%a8%e6%80%81%e5%8f%98%e9%87%8f%e6%b3%a8%e5%86%8cregister>#</a></h2><p>从响应中提取值并注册为变量，供后续请求使用。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text># register: [
+#   { token: &#34;_ctx.response.body_json.access_token&#34; },
+#   { task_id: &#34;_ctx.response.body_json.task&#34; },
+# ]
+</code></pre></div><p>注册后可通过 <code>$[[token]]</code>、<code>$[[task_id]]</code> 引用。</p><p>典型场景：登录获取 token → 后续请求使用 token。</p><hr><h2 id=预热行为>预热行为
+<a class=anchor href=#%e9%a2%84%e7%83%ad%e8%a1%8c%e4%b8%ba>#</a></h2><p>默认情况下，Loadgen 在正式测试前会将所有请求执行一次作为预热：</p><ul><li>预热结果输出到终端</li><li>如果预热失败会提示是否继续</li><li>通过 <code>runner.no_warm: true</code> 跳过预热</li><li>通过 <code>runner.valid_status_codes_during_warmup</code> 指定预热期间视为成功的状态码</li></ul><hr><h2 id=输出指标>输出指标
+<a class=anchor href=#%e8%be%93%e5%87%ba%e6%8c%87%e6%a0%87>#</a></h2><p>测试完成后 Loadgen 输出以下信息：</p><pre><code>75 requests finished in 13.261499ms, 139.34MB sent, 0.00bytes received
+
+[Loadgen Client Metrics]
+Requests/sec:        14.85           ← 客户端实际 QPS
+Request Traffic/sec: 27.58MB         ← 发送流量/秒
+Total Transfer/sec:  27.58MB         ← 总流量/秒（含响应）
+Fastest Request:     99.375µs        ← 最快请求
+Slowest Request:     1.898458ms      ← 最慢请求
+Status 0:            75              ← 各状态码计数
+
+[Latency Metrics]
+75 samples of 75 events
+Cumulative:  13.261499ms             ← 累计耗时
+HMean:       148.19µs               ← 调和平均
+Avg.:        176.819µs              ← 算术平均
+p50:         146.75µs               ← 中位数
+p75:         168µs                  ← 75 分位
+p95:         202.583µs              ← 95 分位
+p99:         409.458µs              ← 99 分位
+p999:        1.898458ms             ← 99.9 分位
+Long 5%:     690.854µs              ← 最慢 5% 平均
+Short 5%:    106.5µs                ← 最快 5% 平均
+Max:         1.898458ms
+Min:         99.375µs
+Range:       1.799083ms
+StdDev:      204.268µs
+Rate/sec.:   14.85
+
+[Latency Distribution]
+          99µs - 279µs ----------    ← 延迟分布直方图
+         279µs - 459µs -
+         459µs - 639µs -
+
+[Estimated Server Metrics]
+Requests/sec:        5655.47         ← 估算服务端 QPS
+Avg Req Time:        176.819µs       ← 估算服务端处理时间
+Transfer/sec:        10.26GB         ← 估算服务端吞吐
+</code></pre><h3 id=指标说明>指标说明
+<a class=anchor href=#%e6%8c%87%e6%a0%87%e8%af%b4%e6%98%8e>#</a></h3><table><thead><tr><th>区块</th><th>说明</th></tr></thead><tbody><tr><td><strong>Loadgen Client Metrics</strong></td><td>从客户端视角统计的吞吐与极值</td></tr><tr><td><strong>Latency Metrics</strong></td><td>详细延迟分布，包含百分位数</td></tr><tr><td><strong>Latency Distribution</strong></td><td>可视化延迟直方图</td></tr><tr><td><strong>Estimated Server Metrics</strong></td><td>剔除网络开销后的服务端估算值</td></tr></tbody></table><h3 id=状态码与错误>状态码与错误
+<a class=anchor href=#%e7%8a%b6%e6%80%81%e7%a0%81%e4%b8%8e%e9%94%99%e8%af%af>#</a></h3><ul><li><code>Status 200: N</code> — 正常响应</li><li><code>Status 0: N</code> — 连接失败或超时（未收到 HTTP 响应）</li><li><code>Number of Errors</code> — 网络/连接错误总数（启用 <code>assert_error</code> 时显示）</li><li><code>Number of Invalid</code> — 断言失败总数（启用 <code>assert_invalid</code> 时显示）</li></ul><blockquote><p>建议配合 INFINI Console 监控或 APM 查看服务端真实指标，客户端统计仅供参考。</p></blockquote></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class=book-languages tabindex=0 aria-haspopup=true><ul><li class="flex align-center"><img src=/loadgen/main/svg/translate.svg class=book-icon alt=Languages>
+简体中文</li></ul><ul class=book-languages-list><li><a href=https://docs.infinilabs.com/loadgen/main/docs/getting-started/reference/ class="flex align-center"><img src=/loadgen/main/svg/translate.svg class=book-icon alt=Languages>
+English</a></li><li class=active><a href=https://docs.infinilabs.com/loadgen/main/zh/ class="flex align-center"><img src=/loadgen/main/svg/translate.svg class=book-icon alt=Languages>
+简体中文</a></li></ul></div><div><a class="flex align-center" href=https://github.com/infinilabs/loadgen/edit/main/docs/content.zh/docs/getting-started/reference.md target=_blank rel=noopener><img src=/loadgen/main/svg/edit.svg class=book-icon alt=Edit>
+<span>编辑本页</span></a></div><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
+    import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
+    searchbox({container: "#searchbox"});
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><a href=/loadgen/main/zh/docs/getting-started/reference/index.md class=view-markdown target=_blank><img src=/assets/icons/markdown.svg>
+<span>查看 Markdown</span></a><style>.book-toc>nav li::before{position:absolute;top:6px;left:-16px;width:2px;height:32px;content:"";transition:transform .28s cubic-bezier(.2,.8,.2,1),background-color .18s ease,opacity .18s;transform:translateY(-50%)scaleY(0);opacity:0;background:0 0}.book-toc>nav>ul>li.ancestor::before{left:-16px}.book-toc>nav>ul>li.ancestor>ul>li.active::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor>ul>li.active::before{left:-48px}.book-toc>nav li.active::before{transform:translateY(-50%)scaleY(1);opacity:1;background:#8440f1}.book-toc>nav li.active>a{font-weight:500}:target{scroll-margin-top:80px}</style><script>document.addEventListener('DOMContentLoaded',function(){const nav=document.getElementsByClassName('book-toc')[0].querySelector('nav');if(!nav)return;const links=Array.from(nav.querySelectorAll('a[href^="#"]'));const idToLi=new Map();let isProgrammatic=false;let programmaticTargetId=null;let scrollEndTimer=null;links.forEach(link=>{const href=link.getAttribute('href');if(!href||href.length<2)return;const id=decodeURIComponent(href.slice(1));const li=link.closest('li');if(li)idToLi.set(id,li);link.addEventListener('click',function(e){const target=document.getElementById(id);if(target){e.preventDefault();isProgrammatic=true;programmaticTargetId=id;setActiveById(id);target.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+id);clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},1200);}});});window.addEventListener('scroll',function(){clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},120);},{passive:true});function clearAll(){idToLi.forEach(li=>li.classList.remove('active','ancestor'));links.forEach(a=>a.removeAttribute('aria-current'));}
+function setActiveById(id){clearAll();const li=idToLi.get(id);if(!li)return;li.classList.add('active');const a=li.querySelector('a[href^="#"]');if(a)a.setAttribute('aria-current','true');let parent=li.parentElement;while(parent&&parent!==nav){const parentLi=parent.closest('li');if(parentLi&&parentLi!==li)parentLi.classList.add('ancestor');parent=parent.parentElement;}}
+const observedEls=Array.from(idToLi.keys()).map(id=>document.getElementById(id)).filter(Boolean);if(observedEls.length){const io=new IntersectionObserver((entries)=>{let candidate=null;entries.forEach(en=>{if(!en.isIntersecting)return;if(!candidate)candidate=en;else{const curTop=Math.abs(candidate.boundingClientRect.top);const newTop=Math.abs(en.boundingClientRect.top);if(newTop<curTop)candidate=en;}});if(!candidate||!candidate.target||!candidate.target.id)return;const foundId=candidate.target.id;if(isProgrammatic&&programmaticTargetId&&foundId!==programmaticTargetId){return;}
+setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.1,0.25,0.5]});observedEls.forEach(el=>io.observe(el));}
+if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#命令行参数>命令行参数</a></li><li><a href=#环境变量env>环境变量（env）</a></li><li><a href=#运行控制runner>运行控制（runner）</a></li><li><a href=#变量定义variables>变量定义（variables）</a><ul><li><a href=#变量类型一览>变量类型一览</a></li><li><a href=#变量参数详解>变量参数详解</a></li></ul></li><li><a href=#请求配置request>请求配置（request）</a><ul><li><a href=#runtime_variables-vs-runtime_body_line_variables>runtime_variables vs runtime_body_line_variables</a></li><li><a href=#dsl-格式-vs-yaml-格式>DSL 格式 vs YAML 格式</a></li></ul></li><li><a href=#断言assert>断言（assert）</a><ul><li><a href=#简写格式>简写格式</a></li><li><a href=#标准格式>标准格式</a></li><li><a href=#可断言的上下文变量>可断言的上下文变量</a></li><li><a href=#退出码>退出码</a></li></ul></li><li><a href=#动态变量注册register>动态变量注册（register）</a></li><li><a href=#预热行为>预热行为</a></li><li><a href=#输出指标>输出指标</a><ul><li><a href=#指标说明>指标说明</a></li><li><a href=#状态码与错误>状态码与错误</a></li></ul></li></ul></nav></aside></main></body><script src=https://infinilabs.com/notice-widget/notice-widget.umd.cjs></script><script>NoticeWidget.init({locales:{"zh-CN":"https://infinilabs.com/notice-widget/locales/zh-CN.json","en-US":"https://infinilabs.com/notice-widget/locales/en-US.json",}});</script></html>

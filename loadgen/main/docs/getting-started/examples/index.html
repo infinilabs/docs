@@ -1,0 +1,313 @@
+<!doctype html><html lang=en><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Examples #  Practical examples organized by use case. Each example can be copied and run directly.
+ 1. Bulk Write Benchmarking #  Goal: Evaluate write throughput, cluster load, and queue pressure.
+# variables: [ # {name: &#34;id&#34;, type: &#34;sequence&#34;}, # {name: &#34;uuid&#34;, type: &#34;uuid&#34;}, # {name: &#34;suffix&#34;, type: &#34;range&#34;, from: 1, to: 100}, # {name: &#34;ip&#34;, type: &#34;file&#34;, path: &#34;dict/ip.txt&#34;}, # {name: &#34;now_unix&#34;, type: &#34;now_unix&#34;}, # ], POST $[[env."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Examples"><meta property="og:description" content="Examples #  Practical examples organized by use case. Each example can be copied and run directly.
+ 1. Bulk Write Benchmarking #  Goal: Evaluate write throughput, cluster load, and queue pressure.
+# variables: [ # {name: &#34;id&#34;, type: &#34;sequence&#34;}, # {name: &#34;uuid&#34;, type: &#34;uuid&#34;}, # {name: &#34;suffix&#34;, type: &#34;range&#34;, from: 1, to: 100}, # {name: &#34;ip&#34;, type: &#34;file&#34;, path: &#34;dict/ip.txt&#34;}, # {name: &#34;now_unix&#34;, type: &#34;now_unix&#34;}, # ], POST $[[env."><meta property="og:type" content="article"><meta property="og:url" content="https://docs.infinilabs.com/loadgen/main/docs/getting-started/examples/"><title>Examples | INFINI Loadgen | The Best Open Source Golang Load Testing Tool for Easysearch/Elasticsearch/OpenSearch</title><link rel=manifest href=/loadgen/main/manifest.json><link rel=icon href=/loadgen/main/favicon.png type=image/x-icon><link rel=alternate hreflang=zh href=https://docs.infinilabs.com/loadgen/main/zh/docs/getting-started/examples/ title=实战示例><link rel=stylesheet href=/loadgen/main/book.min.a5477dc69cdc226836851fe1ccbae76d703e3ebf0cb670e9e513b00935608503.css integrity="sha256-pUd9xpzcImg2hR/hzLrnbXA+Pr8MtnDp5ROwCTVghQM="><script defer src=https://docs.infinilabs.com/loadgen/main/js/jquery-2.x.min.js></script><script defer src=https://docs.infinilabs.com/loadgen/main/js/doc.js></script><script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?64b9322783bb21716d701b15fb0b1e82";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/loadgen/main><img src=/loadgen/main/img/logo-en.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;height:36px;width:100%></div><script>function waitForShadow(host,callback){const timer=setInterval(()=>{if(host.shadowRoot){clearInterval(timer);callback(host.shadowRoot);}},50);}
+const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{const style=document.createElement('style');style.textContent=`
+      .infini__searchbox-btn {
+        width: 100% !important;
+        height: 36px !important;
+      }
+    `;shadow.appendChild(style);});</script><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value=v1.30.3>v1.30.3</option>
+<option value=v1.30.1>v1.30.1</option>
+<option value=v1.30.0>v1.30.0</option>
+<option value=v1.29.8>v1.29.8</option>
+<option value=v1.29.7>v1.29.7</option>
+<option value=v1.29.6>v1.29.6</option>
+<option value=v1.29.4>v1.29.4</option>
+<option value=v1.29.3>v1.29.3</option>
+<option value=v1.29.2>v1.29.2</option>
+<option value=v1.29.1>v1.29.1</option>
+<option value=v1.29.0>v1.29.0</option>
+<option value=v1.28.2>v1.28.2</option>
+<option value=v1.28.0>v1.28.0</option>
+<option value=v1.27.0>v1.27.0</option></select></div><ul><li><input type=checkbox id=section-f1b7c1b2e5dd43526e77637c475d35b8 class=toggle checked>
+<label for=section-f1b7c1b2e5dd43526e77637c475d35b8 class="flex justify-between"><a href=https://docs.infinilabs.com/loadgen/main/docs/getting-started/>Getting Started</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=https://docs.infinilabs.com/loadgen/main/docs/getting-started/install/>Installation</a></li><li><a href=https://docs.infinilabs.com/loadgen/main/docs/getting-started/concepts/>Quick Start</a></li><li><a href=https://docs.infinilabs.com/loadgen/main/docs/getting-started/reference/>Reference</a></li><li><a href=https://docs.infinilabs.com/loadgen/main/docs/getting-started/examples/ class=active>Examples</a></li></ul></li><li><a href=https://docs.infinilabs.com/loadgen/main/docs/release-notes/>Release Notes</a><ul></ul></li></ul><ul><li><a href=https://github.com/infinilabs/loadgen target=_blank rel=noopener>Github</a></li></ul><div class=book-languages tabindex=0 aria-haspopup=true><ul><li class="flex align-center"><img src=/loadgen/main/svg/translate.svg class=book-icon alt=Languages>
+English</li></ul><ul class=book-languages-list><li class=active><a href=https://docs.infinilabs.com/loadgen/main/ class="flex align-center"><img src=/loadgen/main/svg/translate.svg class=book-icon alt=Languages>
+English</a></li><li><a href=https://docs.infinilabs.com/loadgen/main/zh/docs/getting-started/examples/ class="flex align-center"><img src=/loadgen/main/svg/translate.svg class=book-icon alt=Languages>
+简体中文</a></li></ul></div></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/loadgen/main/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>Examples</strong>
+<label for=toc-control><img src=/loadgen/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><style>.code-wrapper{position:relative;margin:20px 0}.code-header{position:absolute;top:8px;right:16px;font-size:12px;color:#8be9fd;font-weight:500;letter-spacing:.5px;text-transform:lowercase;pointer-events:none;transition:opacity .2s ease}.code-wrapper pre{padding:28px 18px 18px;border-radius:12px;overflow-x:auto;line-height:1.7}.copy-btn{position:absolute;top:6px;right:12px;display:flex;align-items:center;gap:6px;padding:5px 10px;font-size:12px;border-radius:8px;background:#44475a;color:#f8f8f2;border:1px solid #8440f1;cursor:pointer;opacity:0;transition:all .2s ease}.code-wrapper:hover .copy-btn{opacity:1}.code-wrapper:hover .code-header{opacity:.2}.copy-btn:hover{background:#6272a4}.copy-btn.copied{background:#fff;color:#8440f1;border-color:#8440f1}</style><script>document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll("pre > code").forEach((codeBlock)=>{const pre=codeBlock.parentElement;const className=codeBlock.className;const match=className.match(/language-(\w+)/);const language=match?match[1]:"code";const wrapper=document.createElement("div");wrapper.className="code-wrapper";pre.parentNode.insertBefore(wrapper,pre);wrapper.appendChild(pre);const header=document.createElement("div");header.className="code-header";header.innerText=language;wrapper.appendChild(header);const button=document.createElement("button");button.className="copy-btn";button.innerHTML="Copy";button.addEventListener("click",async()=>{await navigator.clipboard.writeText(codeBlock.innerText);button.classList.add("copied");button.innerText="✓ Copied";setTimeout(()=>{button.classList.remove("copied");button.innerText="Copy";},2000);});wrapper.appendChild(button);});});</script><div class="mt-2 text-right"><a href=/loadgen/main/docs/getting-started/examples/index.md class=text-sm>View as Markdown</a></div><aside class="hidden clearfix"><style>.book-toc>nav li::before{position:absolute;top:6px;left:-16px;width:2px;height:32px;content:"";transition:transform .28s cubic-bezier(.2,.8,.2,1),background-color .18s ease,opacity .18s;transform:translateY(-50%)scaleY(0);opacity:0;background:0 0}.book-toc>nav>ul>li.ancestor::before{left:-16px}.book-toc>nav>ul>li.ancestor>ul>li.active::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor>ul>li.active::before{left:-48px}.book-toc>nav li.active::before{transform:translateY(-50%)scaleY(1);opacity:1;background:#8440f1}.book-toc>nav li.active>a{font-weight:500}:target{scroll-margin-top:80px}</style><script>document.addEventListener('DOMContentLoaded',function(){const nav=document.getElementsByClassName('book-toc')[0].querySelector('nav');if(!nav)return;const links=Array.from(nav.querySelectorAll('a[href^="#"]'));const idToLi=new Map();let isProgrammatic=false;let programmaticTargetId=null;let scrollEndTimer=null;links.forEach(link=>{const href=link.getAttribute('href');if(!href||href.length<2)return;const id=decodeURIComponent(href.slice(1));const li=link.closest('li');if(li)idToLi.set(id,li);link.addEventListener('click',function(e){const target=document.getElementById(id);if(target){e.preventDefault();isProgrammatic=true;programmaticTargetId=id;setActiveById(id);target.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+id);clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},1200);}});});window.addEventListener('scroll',function(){clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},120);},{passive:true});function clearAll(){idToLi.forEach(li=>li.classList.remove('active','ancestor'));links.forEach(a=>a.removeAttribute('aria-current'));}
+function setActiveById(id){clearAll();const li=idToLi.get(id);if(!li)return;li.classList.add('active');const a=li.querySelector('a[href^="#"]');if(a)a.setAttribute('aria-current','true');let parent=li.parentElement;while(parent&&parent!==nav){const parentLi=parent.closest('li');if(parentLi&&parentLi!==li)parentLi.classList.add('ancestor');parent=parent.parentElement;}}
+const observedEls=Array.from(idToLi.keys()).map(id=>document.getElementById(id)).filter(Boolean);if(observedEls.length){const io=new IntersectionObserver((entries)=>{let candidate=null;entries.forEach(en=>{if(!en.isIntersecting)return;if(!candidate)candidate=en;else{const curTop=Math.abs(candidate.boundingClientRect.top);const newTop=Math.abs(en.boundingClientRect.top);if(newTop<curTop)candidate=en;}});if(!candidate||!candidate.target||!candidate.target.id)return;const foundId=candidate.target.id;if(isProgrammatic&&programmaticTargetId&&foundId!==programmaticTargetId){return;}
+setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.1,0.25,0.5]});observedEls.forEach(el=>io.observe(el));}
+if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#1-bulk-write-benchmarking>1. Bulk Write Benchmarking</a></li><li><a href=#2-search-performance-testing>2. Search Performance Testing</a></li><li><a href=#3-mixed-request-benchmarking>3. Mixed Request Benchmarking</a></li><li><a href=#4-functional-validation--ci-integration>4. Functional Validation & CI Integration</a></li><li><a href=#5-dynamic-variable-registration-chain-testing>5. Dynamic Variable Registration (Chain Testing)</a></li><li><a href=#6-json-response-assertions>6. JSON Response Assertions</a></li><li><a href=#7-authenticated-api-testing-token-mode>7. Authenticated API Testing (Token Mode)</a></li><li><a href=#8-coco-ai-integration-testing>8. Coco AI Integration Testing</a><ul><li><a href=#project-structure>Project Structure</a></li><li><a href=#global-configuration>Global Configuration</a></li><li><a href=#single-scenario-debugging>Single Scenario Debugging</a></li><li><a href=#full-regression-testing>Full Regression Testing</a></li><li><a href=#links>Links</a></li></ul></li><li><a href=#9-project-organization>9. Project Organization</a></li><li><a href=#10-command-quick-reference>10. Command Quick Reference</a></li></ul></nav></aside></header><article class=markdown><h1 id=examples>Examples
+<a class=anchor href=#examples>#</a></h1><p>Practical examples organized by use case. Each example can be copied and run directly.</p><hr><h2 id=1-bulk-write-benchmarking>1. Bulk Write Benchmarking
+<a class=anchor href=#1-bulk-write-benchmarking>#</a></h2><p><strong>Goal:</strong> Evaluate write throughput, cluster load, and queue pressure.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text># variables: [
+#   {name: &#34;id&#34;, type: &#34;sequence&#34;},
+#   {name: &#34;uuid&#34;, type: &#34;uuid&#34;},
+#   {name: &#34;suffix&#34;, type: &#34;range&#34;, from: 1, to: 100},
+#   {name: &#34;ip&#34;, type: &#34;file&#34;, path: &#34;dict/ip.txt&#34;},
+#   {name: &#34;now_unix&#34;, type: &#34;now_unix&#34;},
+# ],
+
+POST $[[env.ES_ENDPOINT]]/_bulk
+{&#34;index&#34;: {&#34;_index&#34;: &#34;bench-$[[suffix]]&#34;, &#34;_id&#34;: &#34;$[[uuid]]&#34;, &#34;routing&#34;: &#34;$[[routing_no]]&#34;}}
+{&#34;id&#34;: &#34;$[[id]]&#34;, &#34;ip&#34;: &#34;$[[ip]]&#34;, &#34;batch&#34;: &#34;$[[batch_no]]&#34;, &#34;ts&#34;: &#34;$[[now_unix]]&#34;}
+# request: {
+#   basic_auth: {
+#     username: &#34;$[[env.ES_USERNAME]]&#34;,
+#     password: &#34;$[[env.ES_PASSWORD]]&#34;,
+#   },
+#   runtime_variables: {
+#     batch_no: &#34;uuid&#34;,
+#   },
+#   runtime_body_line_variables: {
+#     routing_no: &#34;uuid&#34;,
+#   },
+#   body_repeat_times: 1000,
+# },
+</code></pre></div><p><strong>Run commands:</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># Sustained 60 seconds, 100 concurrent threads</span>
+loadgen -d <span style=color:#bd93f9>60</span> -c <span style=color:#bd93f9>100</span>
+
+<span style=color:#6272a4># Fixed QPS</span>
+loadgen -d <span style=color:#bd93f9>60</span> -c <span style=color:#bd93f9>100</span> -r <span style=color:#bd93f9>2000</span>
+
+<span style=color:#6272a4># Fixed total request count</span>
+loadgen -d <span style=color:#bd93f9>600</span> -c <span style=color:#bd93f9>100</span> -l <span style=color:#bd93f9>50000</span>
+</code></pre></div><p><strong>Reference:</strong>
+<a href=https://github.com/infinilabs/testing/blob/main/setup/loadgen/cases/bulk/create.yml>testing/setup/loadgen/cases/bulk/create.yml</a></p><hr><h2 id=2-search-performance-testing>2. Search Performance Testing
+<a class=anchor href=#2-search-performance-testing>#</a></h2><p><strong>Goal:</strong> Evaluate query latency and throughput across different query patterns.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text># variables: [
+#   {name: &#34;user&#34;, type: &#34;file&#34;, path: &#34;dict/user.txt&#34;},
+#   {name: &#34;ip&#34;, type: &#34;file&#34;, path: &#34;dict/ip.txt&#34;},
+# ],
+
+GET $[[env.ES_ENDPOINT]]/my-index/_search?q=user:$[[user]]
+# request: {
+#   basic_auth: {
+#     username: &#34;$[[env.ES_USERNAME]]&#34;,
+#     password: &#34;$[[env.ES_PASSWORD]]&#34;,
+#   },
+# },
+</code></pre></div><p><strong>Run command:</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>loadgen -d <span style=color:#bd93f9>30</span> -c <span style=color:#bd93f9>10</span>
+</code></pre></div><p><strong>Reference:</strong>
+<a href=https://github.com/infinilabs/testing/blob/main/setup/loadgen/cases/search/random_search.yml>testing/setup/loadgen/cases/search/random_search.yml</a></p><hr><h2 id=3-mixed-request-benchmarking>3. Mixed Request Benchmarking
+<a class=anchor href=#3-mixed-request-benchmarking>#</a></h2><p><strong>Goal:</strong> Simulate real-world traffic with create + update + delete mixed workload.</p><p>A single DSL file with multiple requests — Loadgen executes them sequentially in a loop:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text># variables: [
+#   {name: &#34;id&#34;, type: &#34;sequence&#34;},
+#   {name: &#34;uuid&#34;, type: &#34;uuid&#34;},
+#   {name: &#34;user&#34;, type: &#34;list&#34;, data: [&#34;alice&#34;, &#34;bob&#34;, &#34;test&#34;]},
+# ],
+
+POST $[[env.ES_ENDPOINT]]/_bulk
+{&#34;index&#34;: {&#34;_index&#34;: &#34;mixed-test&#34;, &#34;_id&#34;: &#34;$[[uuid]]&#34;}}
+{&#34;id&#34;: &#34;$[[id]]&#34;, &#34;user&#34;: &#34;$[[user]]&#34;}
+# request: {
+#   body_repeat_times: 10,
+# },
+
+POST $[[env.ES_ENDPOINT]]/_bulk
+{&#34;delete&#34;: {&#34;_index&#34;: &#34;mixed-test&#34;, &#34;_id&#34;: &#34;$[[uuid]]&#34;}}
+# request: {
+#   body_repeat_times: 5,
+# },
+</code></pre></div><p><strong>Reference:</strong>
+<a href=https://github.com/infinilabs/testing/blob/main/setup/loadgen/cases/bulk/mixed.yml>testing/setup/loadgen/cases/bulk/mixed.yml</a></p><hr><h2 id=4-functional-validation--ci-integration>4. Functional Validation & CI Integration
+<a class=anchor href=#4-functional-validation--ci-integration>#</a></h2><p><strong>Goal:</strong> Execute all requests once, assert everything passes, then exit.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text># runner: {
+#   total_rounds: 1,
+#   no_warm: true,
+#   assert_invalid: true,
+#   assert_error: true,
+# },
+
+GET $[[env.ES_ENDPOINT]]/_cluster/health
+# assert: {
+#   _ctx.response.status: 200,
+# },
+
+GET $[[env.ES_ENDPOINT]]/_cat/indices
+# assert: {
+#   _ctx.response.status: 200,
+# },
+</code></pre></div><p><strong>Run command:</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>loadgen -run health_check.dsl
+<span style=color:#8be9fd;font-style:italic>echo</span> <span style=color:#8be9fd;font-style:italic>$?</span>  <span style=color:#6272a4># 0=pass, 1=assertion failure, 2=request error</span>
+</code></pre></div><p>Ideal for CI pipelines — any assertion failure causes a non-zero exit.</p><p><strong>Reference:</strong>
+<a href=https://github.com/infinilabs/testing/blob/main/setup/loadgen/cases/dummy/loadgen.yml>testing/setup/loadgen/cases/dummy/loadgen.yml</a></p><hr><h2 id=5-dynamic-variable-registration-chain-testing>5. Dynamic Variable Registration (Chain Testing)
+<a class=anchor href=#5-dynamic-variable-registration-chain-testing>#</a></h2><p><strong>Goal:</strong> Extract values from preceding requests for use in subsequent ones.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text># runner: {
+#   total_rounds: 1,
+#   no_warm: true,
+#   assert_invalid: true,
+# },
+
+# Create a document, extract the generated _id
+POST $[[env.ES_ENDPOINT]]/my-index/_doc
+{&#34;title&#34;: &#34;test document&#34;, &#34;user&#34;: &#34;loadgen&#34;}
+# assert: {
+#   _ctx.response.status: 201,
+# },
+# register: [
+#   { doc_id: &#34;_ctx.response.body_json._id&#34; },
+# ]
+
+# Read the document using the registered doc_id
+GET $[[env.ES_ENDPOINT]]/my-index/_doc/$[[doc_id]]
+# assert: {
+#   _ctx.response.status: 200,
+#   _ctx.response.body_json._source.user: &#34;loadgen&#34;,
+# },
+
+# Delete the document
+DELETE $[[env.ES_ENDPOINT]]/my-index/_doc/$[[doc_id]]
+# assert: {
+#   _ctx.response.status: 200,
+# },
+</code></pre></div><p><strong>Reference:</strong>
+<a href=https://github.com/infinilabs/testing/blob/main/setup/easysearch/cases/crud/create_without_id/loadgen.yml>testing/setup/easysearch/cases/crud/create_without_id/loadgen.yml</a></p><hr><h2 id=6-json-response-assertions>6. JSON Response Assertions
+<a class=anchor href=#6-json-response-assertions>#</a></h2><p><strong>Goal:</strong> Validate specific fields in JSON response bodies.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>GET $[[env.ES_ENDPOINT]]/my-index/_search
+{&#34;query&#34;: {&#34;match_all&#34;: {}}}
+# assert: {
+#   _ctx.response.status: 200,
+#   _ctx.response.body_json.hits.total.value: 100,
+#   _ctx.response.body_json.timed_out: false,
+# },
+</code></pre></div><p><strong>Shorthand assertion format:</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>GET /api/status
+# assert: (200, {status: &#34;ok&#34;, version: &#34;1.0&#34;}),
+</code></pre></div><p><strong>Reference:</strong>
+<a href=https://github.com/infinilabs/testing/blob/main/setup/gateway/cases/filters/set_response/loadgen.yml>testing/setup/gateway/cases/filters/set_response/loadgen.yml</a></p><hr><h2 id=7-authenticated-api-testing-token-mode>7. Authenticated API Testing (Token Mode)
+<a class=anchor href=#7-authenticated-api-testing-token-mode>#</a></h2><p><strong>Goal:</strong> Login to get a token, then use it in subsequent requests via headers.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text># runner: {
+#   total_rounds: 1,
+#   no_warm: true,
+#   assert_invalid: true,
+#   default_endpoint: &#34;$[[env.API_HOST]]&#34;,
+# },
+
+# Login
+POST /account/login
+{&#34;email&#34;: &#34;admin@example.com&#34;, &#34;password&#34;: &#34;$[[env.ADMIN_PASSWORD]]&#34;}
+# assert: (200, {}),
+# register: [
+#   { token: &#34;_ctx.response.body_json.access_token&#34; },
+# ]
+
+# Use token to call a business API
+GET /api/resources?size=10
+# request: {
+#   headers: [
+#     {Authorization: &#34;Bearer $[[token]]&#34;},
+#   ],
+#   disable_header_names_normalizing: true,
+# },
+# assert: {
+#   _ctx.response.status: 200,
+# },
+
+# Create a resource
+POST /api/resources
+{&#34;name&#34;: &#34;test-resource&#34;, &#34;type&#34;: &#34;demo&#34;}
+# request: {
+#   headers: [
+#     {Authorization: &#34;Bearer $[[token]]&#34;},
+#   ],
+#   disable_header_names_normalizing: true,
+# },
+# assert: (200, {}),
+# register: [
+#   { resource_id: &#34;_ctx.response.body_json.id&#34; },
+# ]
+
+# Delete the resource
+DELETE /api/resources/$[[resource_id]]
+# request: {
+#   headers: [
+#     {Authorization: &#34;Bearer $[[token]]&#34;},
+#   ],
+#   disable_header_names_normalizing: true,
+# },
+# assert: {
+#   _ctx.response.status: 200,
+# },
+</code></pre></div><hr><h2 id=8-coco-ai-integration-testing>8. Coco AI Integration Testing
+<a class=anchor href=#8-coco-ai-integration-testing>#</a></h2><p>We use Loadgen for full integration testing in the
+<a href=https://github.com/infinilabs/coco-server>Coco Server</a> project:</p><h3 id=project-structure>Project Structure
+<a class=anchor href=#project-structure>#</a></h3><pre><code>tests/
+├── loadgen.yml              # Global config (env vars, runner)
+├── assets/
+│   ├── run_integration_tests.py   # Auto-execute all scenarios
+│   ├── start_coco.sh
+│   ├── stop_coco.sh
+│   └── reset_coco_indices.sh
+├── llm/
+│   ├── scenario1.dsl
+│   ├── scenario2.dsl
+│   └── scenario3.dsl
+├── assistant/
+│   └── scenario1.dsl
+└── datasource/
+    └── scenario1.dsl
+</code></pre><h3 id=global-configuration>Global Configuration
+<a class=anchor href=#global-configuration>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#6272a4># tests/loadgen.yml</span>
+<span style=color:#ff79c6>runner</span>:
+  <span style=color:#ff79c6>total_rounds</span>: <span style=color:#bd93f9>1</span>
+  <span style=color:#ff79c6>no_warm</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>reset_context</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>assert_invalid</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>default_endpoint</span>: <span style=color:#f1fa8c>&#34;$[[env.COCO_SERVER]]&#34;</span>
+
+<span style=color:#ff79c6>env</span>:
+  <span style=color:#ff79c6>COCO_SERVER</span>: http://127.0.0.1:9000
+  <span style=color:#ff79c6>ADMIN_PASSWORD</span>: PASSword_123
+</code></pre></div><h3 id=single-scenario-debugging>Single Scenario Debugging
+<a class=anchor href=#single-scenario-debugging>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#8be9fd;font-style:italic>cd</span> coco
+loadgen -config ./tests/loadgen.yml -run ./tests/llm/scenario3.dsl -debug
+</code></pre></div><h3 id=full-regression-testing>Full Regression Testing
+<a class=anchor href=#full-regression-testing>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#8be9fd;font-style:italic>cd</span> coco
+python3 ./tests/assets/run_integration_tests.py
+</code></pre></div><p>The script automatically: stops environment → resets data → starts service → executes each DSL → cleans up.</p><h3 id=links>Links
+<a class=anchor href=#links>#</a></h3><ul><li><a href=https://github.com/infinilabs/coco-server/blob/main/tests/loadgen.yml>tests/loadgen.yml</a></li><li><a href=https://github.com/infinilabs/coco-server/blob/main/tests/assets/run_integration_tests.py>tests/assets/run_integration_tests.py</a></li><li><a href=https://github.com/infinilabs/coco-server/blob/main/tests/llm/scenario3.dsl>tests/llm/scenario3.dsl</a></li></ul><hr><h2 id=9-project-organization>9. Project Organization
+<a class=anchor href=#9-project-organization>#</a></h2><p>Recommended test project structure:</p><pre><code>project/
+├── loadgen.yml              # Global configuration
+├── dict/                    # Corpus files
+│   ├── ip.txt
+│   ├── user.txt
+│   └── keywords.txt
+├── cases/                   # Test cases grouped by function
+│   ├── bulk/
+│   │   ├── create.dsl
+│   │   └── mixed.dsl
+│   ├── search/
+│   │   └── random.dsl
+│   └── crud/
+│       └── lifecycle.dsl
+└── suites/                  # Suite configs (batch run multiple cases)
+    └── regression.yml
+</code></pre><p><strong>Corpus file example (dict/ip.txt):</strong></p><pre><code>192.168.1.1
+10.0.0.1
+172.16.0.100
+</code></pre><p>One value per line; a random line is picked for each request.</p><p><strong>Reference repositories:</strong></p><ul><li><a href=https://github.com/infinilabs/testing/tree/main/setup/loadgen>testing/setup/loadgen</a></li><li><a href=https://github.com/infinilabs/testing/tree/main/suites>testing/suites</a></li></ul><hr><h2 id=10-command-quick-reference>10. Command Quick Reference
+<a class=anchor href=#10-command-quick-reference>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># Basic benchmark (60 seconds, 100 concurrent)</span>
+loadgen -run bench.dsl -d <span style=color:#bd93f9>60</span> -c <span style=color:#bd93f9>100</span>
+
+<span style=color:#6272a4># Fixed QPS</span>
+loadgen -run bench.dsl -d <span style=color:#bd93f9>60</span> -c <span style=color:#bd93f9>100</span> -r <span style=color:#bd93f9>1000</span>
+
+<span style=color:#6272a4># Fixed total requests</span>
+loadgen -run bench.dsl -d <span style=color:#bd93f9>600</span> -c <span style=color:#bd93f9>100</span> -l <span style=color:#bd93f9>50000</span>
+
+<span style=color:#6272a4># Enable gzip compression</span>
+loadgen -run bench.dsl -d <span style=color:#bd93f9>60</span> -c <span style=color:#bd93f9>100</span> -compress
+
+<span style=color:#6272a4># Functional validation (single execution)</span>
+loadgen -run test.dsl
+
+<span style=color:#6272a4># Specify config file</span>
+loadgen -run test.dsl -config env/production.yml
+
+<span style=color:#6272a4># Debug mode</span>
+loadgen -run test.dsl -debug
+</code></pre></div></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class=book-languages tabindex=0 aria-haspopup=true><ul><li class="flex align-center"><img src=/loadgen/main/svg/translate.svg class=book-icon alt=Languages>
+English</li></ul><ul class=book-languages-list><li class=active><a href=https://docs.infinilabs.com/loadgen/main/ class="flex align-center"><img src=/loadgen/main/svg/translate.svg class=book-icon alt=Languages>
+English</a></li><li><a href=https://docs.infinilabs.com/loadgen/main/zh/docs/getting-started/examples/ class="flex align-center"><img src=/loadgen/main/svg/translate.svg class=book-icon alt=Languages>
+简体中文</a></li></ul></div><div><a class="flex align-center" href=https://github.com/infinilabs/loadgen/edit/main/docs/content.en/docs/getting-started/examples.md target=_blank rel=noopener><img src=/loadgen/main/svg/edit.svg class=book-icon alt=Edit>
+<span>Edit this page</span></a></div><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
+    import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
+    searchbox({container: "#searchbox"});
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><a href=/loadgen/main/docs/getting-started/examples/index.md class=view-markdown target=_blank><img src=/assets/icons/markdown.svg>
+<span>查看 Markdown</span></a><style>.book-toc>nav li::before{position:absolute;top:6px;left:-16px;width:2px;height:32px;content:"";transition:transform .28s cubic-bezier(.2,.8,.2,1),background-color .18s ease,opacity .18s;transform:translateY(-50%)scaleY(0);opacity:0;background:0 0}.book-toc>nav>ul>li.ancestor::before{left:-16px}.book-toc>nav>ul>li.ancestor>ul>li.active::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor>ul>li.active::before{left:-48px}.book-toc>nav li.active::before{transform:translateY(-50%)scaleY(1);opacity:1;background:#8440f1}.book-toc>nav li.active>a{font-weight:500}:target{scroll-margin-top:80px}</style><script>document.addEventListener('DOMContentLoaded',function(){const nav=document.getElementsByClassName('book-toc')[0].querySelector('nav');if(!nav)return;const links=Array.from(nav.querySelectorAll('a[href^="#"]'));const idToLi=new Map();let isProgrammatic=false;let programmaticTargetId=null;let scrollEndTimer=null;links.forEach(link=>{const href=link.getAttribute('href');if(!href||href.length<2)return;const id=decodeURIComponent(href.slice(1));const li=link.closest('li');if(li)idToLi.set(id,li);link.addEventListener('click',function(e){const target=document.getElementById(id);if(target){e.preventDefault();isProgrammatic=true;programmaticTargetId=id;setActiveById(id);target.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+id);clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},1200);}});});window.addEventListener('scroll',function(){clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},120);},{passive:true});function clearAll(){idToLi.forEach(li=>li.classList.remove('active','ancestor'));links.forEach(a=>a.removeAttribute('aria-current'));}
+function setActiveById(id){clearAll();const li=idToLi.get(id);if(!li)return;li.classList.add('active');const a=li.querySelector('a[href^="#"]');if(a)a.setAttribute('aria-current','true');let parent=li.parentElement;while(parent&&parent!==nav){const parentLi=parent.closest('li');if(parentLi&&parentLi!==li)parentLi.classList.add('ancestor');parent=parent.parentElement;}}
+const observedEls=Array.from(idToLi.keys()).map(id=>document.getElementById(id)).filter(Boolean);if(observedEls.length){const io=new IntersectionObserver((entries)=>{let candidate=null;entries.forEach(en=>{if(!en.isIntersecting)return;if(!candidate)candidate=en;else{const curTop=Math.abs(candidate.boundingClientRect.top);const newTop=Math.abs(en.boundingClientRect.top);if(newTop<curTop)candidate=en;}});if(!candidate||!candidate.target||!candidate.target.id)return;const foundId=candidate.target.id;if(isProgrammatic&&programmaticTargetId&&foundId!==programmaticTargetId){return;}
+setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.1,0.25,0.5]});observedEls.forEach(el=>io.observe(el));}
+if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#1-bulk-write-benchmarking>1. Bulk Write Benchmarking</a></li><li><a href=#2-search-performance-testing>2. Search Performance Testing</a></li><li><a href=#3-mixed-request-benchmarking>3. Mixed Request Benchmarking</a></li><li><a href=#4-functional-validation--ci-integration>4. Functional Validation & CI Integration</a></li><li><a href=#5-dynamic-variable-registration-chain-testing>5. Dynamic Variable Registration (Chain Testing)</a></li><li><a href=#6-json-response-assertions>6. JSON Response Assertions</a></li><li><a href=#7-authenticated-api-testing-token-mode>7. Authenticated API Testing (Token Mode)</a></li><li><a href=#8-coco-ai-integration-testing>8. Coco AI Integration Testing</a><ul><li><a href=#project-structure>Project Structure</a></li><li><a href=#global-configuration>Global Configuration</a></li><li><a href=#single-scenario-debugging>Single Scenario Debugging</a></li><li><a href=#full-regression-testing>Full Regression Testing</a></li><li><a href=#links>Links</a></li></ul></li><li><a href=#9-project-organization>9. Project Organization</a></li><li><a href=#10-command-quick-reference>10. Command Quick Reference</a></li></ul></nav></aside></main></body><script src=https://infinilabs.com/notice-widget/notice-widget.umd.cjs></script><script>NoticeWidget.init({locales:{"zh-CN":"https://infinilabs.com/notice-widget/locales/zh-CN.json","en-US":"https://infinilabs.com/notice-widget/locales/en-US.json",}});</script></html>

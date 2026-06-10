@@ -3,10 +3,16 @@
 > AI-friendly index of site content.
 
 ## Core Content
-- [Installing the Loadgen](https://docs.infinilabs.com/loadgen/main/docs/getting-started/install/): Installing the Loadgen #  INFINI Loadgen supports mainstream operating systems and platforms. The program package is small, with no extra external dependency. So, the loadgen can be installed very …
-- [Benchmark Testing](https://docs.infinilabs.com/loadgen/main/docs/getting-started/benchmark/): Benchmark Testing #  INFINI Loadgen is a lightweight performance testing tool specifically designed for Easysearch, Elasticsearch, and OpenSearch.
-Features of Loadgen:
- Robust performance Lightweight …
+- [Installation](https://docs.infinilabs.com/loadgen/main/docs/getting-started/install/): Installation #  INFINI Loadgen is a single-binary executable with no external dependencies. Supports Linux / macOS / Windows.
+Automatic Install (Recommended) #  curl -sSL http://get.infini.cloud | …
+- [Quick Start](https://docs.infinilabs.com/loadgen/main/docs/getting-started/concepts/): Quick Start #  Get Loadgen running in 5 minutes — understand the core workflow and run your first test.
+Core Files #  Loadgen requires only two files to run:
+   File Purpose     loadgen.yml Global …
+- [Reference](https://docs.infinilabs.com/loadgen/main/docs/getting-started/reference/): Reference #  Complete reference for all Loadgen configuration options.
+ Command-Line Arguments #  loadgen [options]    Argument Type Default Description     -run string loadgen.dsl Path to DSL test …
+- [Examples](https://docs.infinilabs.com/loadgen/main/docs/getting-started/examples/): Examples #  Practical examples organized by use case. Each example can be copied and run directly.
+ 1. Bulk Write Benchmarking #  Goal: Evaluate write throughput, cluster load, and queue pressure.
+# …
 
 ## Other Resources
 - [Sitemap](https://docs.infinilabs.com/loadgen/main/sitemap.xml): Full machine-readable sitemap.
