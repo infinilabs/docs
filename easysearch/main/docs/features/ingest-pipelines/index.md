@@ -194,7 +194,7 @@ POST _ingest/pipeline/my-pipeline/_simulate
 
 ## 处理器速查表
 
-Easysearch 内置 29 个处理器（28 个来自 ingest-common 模块，1 个来自 ingest-user-agent 插件），按功能分组如下：
+Easysearch 内置 29 个处理器（28 个来自 ingest-common 插件，1 个来自 ingest-user-agent 插件），按功能分组如下：
 
 ### 文本处理
 
@@ -303,4 +303,3 @@ Easysearch 协调节点接收请求
 - [索引设置]({{< relref "/docs/operations/data-management/index-settings.md" >}})：`default_pipeline`、`final_pipeline` 等索引级配置
 - [Logstash 集成]({{< relref "/docs/integrations/ingest/logstash.md" >}})：与 Logstash 配合使用
 - [Filebeat / FluentBit 集成]({{< relref "/docs/integrations/ingest/filebeat-fluentbit.md" >}})：轻量采集器接入
-

@@ -657,6 +657,45 @@ curl -k -u admin:admin -X DELETE \
 - 如果你的目标是让脚本或应用访问业务 API，请使用通用 Access Token。
 - 如果你的目标是节点 enrollment，请使用 `/_cluster/enroll/node` 返回的 token。
 
+## Enrollment token 中 `endpoint` / `endpoints` 的兼容说明
+
+`POST /_cluster/enroll/token` 的顶层响应仍然是：
+
+```json
+{
+  "token": "<base64>",
+  "expires_at": "2026-06-10T10:39:11.167096570Z"
+}
+```
+
+其中 `token` Base64 解码后的 payload 会包含 `endpoint` 与 `endpoints`：
+
+```json
+{
+  "endpoint": "https://192.168.1.10:9200",
+  "endpoints": [
+    "https://192.168.1.10:9200",
+    "https://es-node-2.example.com:9200",
+    "https://[2001:db8::1]:9200"
+  ],
+  "cluster_name": "easysearch_test",
+  "cluster_uuid": "3LvNNqCXQ1Kq2zn6wyuGwg",
+  "access_token": "g5fHDWTknXHOR6wzhUnQ-APTGeMXgvUmdQ74yqu8DvI",
+  "issued_at": "2026-06-10T10:09:11.167096570Z",
+  "expires_at": "2026-06-10T10:39:11.167096570Z",
+  "scope": "enroll:node"
+}
+```
+
+说明：
+
+1. `endpoint` 保留为**单个字符串**，只是为了兼容旧版本调用方的使用习惯。
+2. `endpoints` 是当前推荐的新字段，包含节点发布的 HTTP publish address 列表。
+3. `endpoint` 的值等于 `endpoints[0]`，仅作为兼容字段保留，不建议新调用方继续只依赖这个单值字段。
+4. 新调用方应优先使用 `endpoints`，以便在首个地址不可用时尝试其他节点。
+5. `endpoints` 中的成员来自节点的 HTTP publish address，因此成员可能是 IPv4、hostname 或 IPv6。
+6. `endpoints` 只反映节点发布地址，调用方仍需确保这些地址对自身网络环境可达。
+
 ## 实践建议
 
 1. 为不同调用方签发不同 token，不要多人或多服务共用一个 token。
