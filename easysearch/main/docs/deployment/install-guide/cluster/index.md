@@ -3,10 +3,9 @@ title: "分布式集群"
 date: 0001-01-01
 summary: "分布式集群安装 #  本文档介绍如何使用 initialize-cluster.sh 脚本快速搭建 Easysearch 分布式集群。该脚本支持伪分布式（单机多节点）和真分布式（多服务器）两种部署模式。
  要求 Easysearch 版本 &gt;= 2.0.3。
- 前置要求 #   已完成 系统调优 JDK 21 或更高版本（脚本可自动下载） 已安装 OpenSSL 真分布式部署需要：  服务器间网络互通 已配置 SSH 互信（无密码登录） 目标路径有写入权限    快速开始 #  交互式安装（推荐） #  交互式模式会引导您输入集群配置信息：
-cd /data/easysearch bin/initialize-cluster.sh 脚本会依次提示您输入：
- 集群名称：默认为 easysearch-cluster 证书域名：默认为 infini.cloud 节点数量：默认为 3 每个节点的配置：IP 地址、HTTP 端口、节点名称、节点角色 协议选择：HTTP 或 HTTPS（默认 HTTPS） API 兼容性：是否启用 Elasticsearch API 兼容模式 证书信息：国家、省份、城市、组织、有效期等（可选）  输入示例：
-====================================== Easysearch Cluster Initialization ====================================== Enter cluster name [easysearch-cluster]: my-cluster Enter domain for certificates [infini."
+ 前置要求 #   已完成 系统调优 JDK 21 或更高版本（脚本可自动下载） 已安装 OpenSSL 真分布式部署需要：  服务器间网络互通 已配置 SSH 互信（无密码登录） 目标路径有写入权限     说明：
+ 本地伪分布式 (--nodes N 或全部 127.0.0.1) 在缺失 jdk/ 且使用 -s/--silent 时，会自动下载 JDK。 真分布式 -s/--silent 不会自动为目标节点选择架构并下载 JDK；请预先准备 Java，或使用交互模式选择目标架构后下载 bundled JDK。   快速开始 #  交互式安装（推荐） #  交互式模式会引导您输入集群配置信息：
+cd /data/easysearch bin/initialize-cluster.sh 脚本会依次提示您输入："
 ---
 
 
@@ -25,6 +24,10 @@ cd /data/easysearch bin/initialize-cluster.sh 脚本会依次提示您输入：
    - 服务器间网络互通
    - 已配置 SSH 互信（无密码登录）
    - 目标路径有写入权限
+
+> 说明：
+> - 本地伪分布式 (`--nodes N` 或全部 `127.0.0.1`) 在缺失 `jdk/` 且使用 `-s/--silent` 时，会自动下载 JDK。
+> - 真分布式 `-s/--silent` 不会自动为目标节点选择架构并下载 JDK；请预先准备 Java，或使用交互模式选择目标架构后下载 bundled JDK。
 
 ## 快速开始
 
@@ -89,6 +92,8 @@ Node 3:
 cd /data/easysearch
 bin/initialize-cluster.sh -s
 ```
+
+若当前发行包目录下没有 `jdk/`，脚本会在静默模式下自动下载适用于当前宿主机架构的 JDK，再继续初始化。
 
 这将创建 `/data/cluster/3nodes/` 目录，包含：
 - **easysearch1**: 127.0.0.1:9200 (transport: 9300)
@@ -344,7 +349,7 @@ bin/reset_admin_password.sh 'https://127.0.0.1:9200'
 | 参数 | 说明 | 示例 |
 |------|------|------|
 | `-h, --help` | 显示帮助信息 | `--help` |
-| `-s, --silent` | 静默模式，使用默认值 | `-s` |
+| `-s, --silent` | 静默模式，使用默认值；本地伪分布式缺失 bundled JDK 时会自动下载 | `-s` |
 | `-y, --yes` | 跳过确认提示 | `-y` |
 | `-c, --cluster-name` | 集群名称 | `-c prod-cluster` |
 | `-d, --domain` | 证书域名 | `-d example.com` |

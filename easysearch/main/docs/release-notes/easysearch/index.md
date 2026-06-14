@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.2.1 (2026-06-11) #  Breaking changes #  Features #   新增管道管理 UI 为 Agent UI 新增 API Token 管理 新增数据流 bootstrap 创建 API PUT /_data_stream/{name}/_bootstrap，支持在缺少匹配数据流模板时按需自动创建默认模板后继续创建数据流，简化前端联调、测试验证和快速初始化流程。 在数据流页面新增“添加数据流”入口  Bug fix #   修复 Rollup job 在检测到源索引新增指标字段后无法以追加方式同步指标配置的问题，支持在保持兼容性的前提下增量扩展 metrics 字段。 修复 Rollup wildcard metrics 自动扩展后配置更新与落库时序不一致的问题，提升运行中新增指标字段场景下的元数据一致性。 修复节点启动早期 Rollup 与 ILM 组件可能在配置索引尚未可搜索时提前发起查询的问题，提升冷启动阶段的稳定性。 修复索引管理后台任务中的安全上下文恢复问题，减少安全模式下的上下文告警并提升任务执行稳定性。 修复 GET /_security/user/{name} 在查询 hidden 或不存在的内部用户时可能返回宽松结果的问题，恢复为 404，与既有 Security API 契约保持一致。 修复 PUT /_security/account 可绕过 static 内部用户只读限制的问题；现在 static 用户会返回 403，同时保留 reserved / hidden 内置用户自助改密能力。 修复 Rollup Search 将普通索引名误判为 rollup 索引并错误分流的场景；现在基于索引元数据中的 index."
+Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.2.1 (2026-06-14) #  Breaking changes #  Features #   新增管道管理 UI 为 Agent UI 新增 API Token 管理 新增数据流 bootstrap 创建 API PUT /_data_stream/{name}/_bootstrap，支持在缺少匹配数据流模板时按需自动创建默认模板后继续创建数据流，简化前端联调、测试验证和快速初始化流程。 在数据流页面新增“添加数据流”入口  Bug fix #   修复 Rollup mixed search 在 live 分支没有匹配字段或目标索引为空时可能产生 UnmappedTerms，导致聚合结果合并失败的问题；现在会将 unmapped terms 作为空贡献参与 reduce，避免混合查询异常。 修复安全权限过滤改写 ClusterStateRequest."
 ---
 
 
@@ -17,7 +17,7 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 ### Improvements
 
 
-## 2.2.1 (2026-06-11)
+## 2.2.1 (2026-06-14)
 ### Breaking changes
 ### Features
 - 新增管道管理 UI
@@ -25,6 +25,12 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 - 新增数据流 bootstrap 创建 API `PUT /_data_stream/{name}/_bootstrap`，支持在缺少匹配数据流模板时按需自动创建默认模板后继续创建数据流，简化前端联调、测试验证和快速初始化流程。
 - 在数据流页面新增“添加数据流”入口
 ### Bug fix
+- 修复 Rollup mixed search 在 live 分支没有匹配字段或目标索引为空时可能产生 `UnmappedTerms`，导致聚合结果合并失败的问题；现在会将 unmapped terms 作为空贡献参与 reduce，避免混合查询异常。
+- 修复安全权限过滤改写 `ClusterStateRequest.indices()` 后，`/_cat/templates` 与 `/_cluster/state/metadata` 这类全局 cluster-state 请求可能丢失 legacy templates、component templates、composable index templates 和 data streams 的问题。
+- 修复安全模式下 `/_cluster/state` 在全局 metadata 请求中应用索引权限过滤时的语义问题：现在会保留全局 metadata，同时只裁剪不可见的 index metadata、routing table 和 data stream backing indices，显式 `/{index}` cluster-state 请求仍保持只返回目标索引。
+- 修复多节点场景下非 master 节点转发 `/_cluster/state` 请求到 master 时，安全过滤后的有效索引范围可能丢失的问题，并增强跨版本转发时的安全回退，避免转发链路中出现权限过滤绕过。
+- 修复过滤后的 cluster-state 响应经 transport 反序列化回到 REST 节点时，默认空 `index-graveyard` 被重新补回，导致 `metadata.index-graveyard` 或 `replication_metadata` 等 index-scoped custom metadata 可能泄漏的问题。
+- 修复 `/_cluster/state` 携带 `wait_for_metadata_version` 且等待超时时 REST 层可能因空 cluster state 返回 500/NPE 的问题；现在超时响应会正常返回 `wait_for_timed_out` 与 `cluster_name`。
 - 修复 Rollup job 在检测到源索引新增指标字段后无法以追加方式同步指标配置的问题，支持在保持兼容性的前提下增量扩展 `metrics` 字段。
 - 修复 Rollup wildcard metrics 自动扩展后配置更新与落库时序不一致的问题，提升运行中新增指标字段场景下的元数据一致性。
 - 修复节点启动早期 Rollup 与 ILM 组件可能在配置索引尚未可搜索时提前发起查询的问题，提升冷启动阶段的稳定性。
