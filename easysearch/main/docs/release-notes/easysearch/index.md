@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.2.1 (2026-06-14) #  Breaking changes #  Features #   新增管道管理 UI 为 Agent UI 新增 API Token 管理 新增数据流 bootstrap 创建 API PUT /_data_stream/{name}/_bootstrap，支持在缺少匹配数据流模板时按需自动创建默认模板后继续创建数据流，简化前端联调、测试验证和快速初始化流程。 在数据流页面新增“添加数据流”入口  Bug fix #   修复 Rollup mixed search 在 live 分支没有匹配字段或目标索引为空时可能产生 UnmappedTerms，导致聚合结果合并失败的问题；现在会将 unmapped terms 作为空贡献参与 reduce，避免混合查询异常。 修复安全权限过滤改写 ClusterStateRequest."
+Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.2.1 (2026-06-14) #  Breaking changes #  Features #   新增管道管理 UI 为 Agent UI 新增 API Token 管理 新增数据流 bootstrap 创建 API PUT /_data_stream/{name}/_bootstrap，支持在缺少匹配数据流模板时按需自动创建默认模板后继续创建数据流，简化前端联调、测试验证和快速初始化流程。 在数据流页面新增“添加数据流”入口 新增修改当前用户密码 UI  Bug fix #   修复 Rollup mixed search 在 live 分支没有匹配字段或目标索引为空时可能产生 UnmappedTerms，导致聚合结果合并失败的问题；现在会将 unmapped terms 作为空贡献参与 reduce，避免混合查询异常。 修复安全权限过滤改写 ClusterStateRequest."
 ---
 
 
@@ -24,6 +24,7 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 - 为 Agent UI 新增 API Token 管理
 - 新增数据流 bootstrap 创建 API `PUT /_data_stream/{name}/_bootstrap`，支持在缺少匹配数据流模板时按需自动创建默认模板后继续创建数据流，简化前端联调、测试验证和快速初始化流程。
 - 在数据流页面新增“添加数据流”入口
+- 新增修改当前用户密码 UI
 ### Bug fix
 - 修复 Rollup mixed search 在 live 分支没有匹配字段或目标索引为空时可能产生 `UnmappedTerms`，导致聚合结果合并失败的问题；现在会将 unmapped terms 作为空贡献参与 reduce，避免混合查询异常。
 - 修复安全权限过滤改写 `ClusterStateRequest.indices()` 后，`/_cat/templates` 与 `/_cluster/state/metadata` 这类全局 cluster-state 请求可能丢失 legacy templates、component templates、composable index templates 和 data streams 的问题。
@@ -55,6 +56,7 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 - 修复 CCR 在远程集群 proxy 模式下启动复制失败的问题；现在使用 `cluster.remote.<alias>.mode=proxy` 和 `cluster.remote.<alias>.proxy_address` 配置远程连接时，会正确注册内部复制仓库并支持初始恢复与增量同步。
 - 修复 `GET /_security/user/{name}` 查询内部用户时重复加载配置并可能产生重复审计读日志的问题，保持响应过滤逻辑不再触发额外配置读取。
 - 修复远程集群管理 UI 无法删除代理模式的远程集群
+- 修复数据探索侧边栏对象字段丢失的问题
 ### Improvements
 - Security enrollment token 新增 `endpoints` 字段，返回节点发布的 HTTP publish address 列表；原有 `endpoint` 字段继续保留为兼容单值，建议新的调用方优先使用 `endpoints`。
 - 默认安全角色映射为 `admin` 增加 `replication_leader` 与 `replication_follower`，使其可直接在 CCR `use_roles` 中使用复制专用角色。
