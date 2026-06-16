@@ -92,24 +92,6 @@ PUT /_cluster/settings
 
 从 1.10.0 版本开始，新增了 `ROLLUP_SEARCH_MAX_COUNT` 配置项，用于控制 Rollup 在运行 Job 时收集历史数据的最大并发分片请求数。这个配置项可以帮助你优化 Rollup 任务的性能，并避免集群资源过载。
 
-## 设置 Rollup 查询的时间范围上限
-从 1.10.1 版本开始，可以通过 `rollup.hours_before` 集群配置项，设置 rollup 数据的查询时间范围上限，默认值是 1，表示 针对 rollup 数据的查询不会超过当前时间的 1 小时之前，
-此参数的使用场景：
-1. 在混合查询时将 rollup 数据和原始数据的查询分割，防止查询的时间范围和数据不匹配。
-2. 限制 rollup 数据的查询时间上限。
-
-使用示例：
-```auto
-PUT /_cluster/settings
-{
-  "transient": {
-    "rollup.hours_before": 24
-
-  }
-}
-```
-设置后，对 rollup 数据的查询范围上限不会超过 24 小时之前。
-
 #### 功能：
 - **控制并发请求数**：限制 Rollup 任务在执行搜索请求时的最大并发分片请求数。
 - **动态调整**：支持在集群运行时动态调整，无需重启集群。
@@ -131,6 +113,64 @@ PUT /_cluster/settings
 - **小规模集群**：建议设置为较小的值（如 `2`），以避免资源竞争。
 - **大规模集群**：可以适当增加该值（如 `4`），以提高并发性能。
 - **动态调整**：根据集群负载情况动态调整该值，以优化性能和资源利用率。
+
+## 设置 Rollup 查询的时间范围上限
+从 1.10.1 版本开始，可以通过 `rollup.hours_before` 集群配置项，设置 Rollup 搜索的历史分界线。默认值是 `1`，表示 Rollup 查询边界默认在“当前时间 1 小时之前”。
+
+此参数的主要用途：
+1. 在混合查询时，将原始索引（live）和 rollup 索引的查询时间范围切开。
+2. 限制 rollup 数据最多只参与多早之前的历史查询。
+
+`rollup.hours_before` 影响的是**查询路由**，不是写入，也不是数据保留策略。混合查询时，系统会按这个边界拆分请求：
+
+- 原始索引（live）负责查询 `boundary -> now`
+- rollup 索引负责查询 `queryStart -> boundary`
+
+其中 `boundary` 会按 rollup 的 `date_histogram` bucket 起点对齐；boundary 所在 bucket 归 live 侧，rollup 侧只查 boundary 之前的完整历史 bucket。
+
+> 重点：系统不会根据“原始索引实际还保留了多少天数据”自动调整这个边界。
+> `rollup.hours_before` 配置得过小，而 rollup 数据覆盖范围又不够时，混合查询可能出现时间缺口，导致结果缺数。
+
+使用示例：
+```auto
+PUT /_cluster/settings
+{
+  "transient": {
+    "rollup.hours_before": 24
+
+  }
+}
+```
+设置后，混合查询的分界线会移动到“当前时间 24 小时之前”附近（实际会按 rollup bucket 对齐）。
+
+### `rollup.hours_before` 对混合查询结果的影响
+
+假设：
+
+- 查询最近 7 天的数据
+- 原始索引只保留最近 3 天
+- rollup 索引只保留最早 4 天
+
+那么：
+
+1. 当 `rollup.hours_before = 72` 时：
+   - 原始索引负责最近 3 天
+   - rollup 索引负责更早 4 天
+   - 两边结果合并后，可以覆盖完整 7 天
+
+2. 当 `rollup.hours_before = 24` 时：
+   - 原始索引只负责最近 1 天
+   - rollup 索引会被拿去负责更早 6 天
+   - 但如果 rollup 实际只存了最早 4 天，那么 `3 天前 -> 1 天前` 这 2 天既不由 live 返回，也不由 rollup 返回
+   - 最终查询结果会缺少这中间 2 天的数据
+
+可以直接把它理解为：`rollup.hours_before` 决定的是“混合查询从哪里切一刀”，而不是“系统自动按现有数据覆盖范围智能补齐”。
+
+因此，建议至少保证以下条件之一：
+
+- `rollup.hours_before` 不小于原始索引的实际保留时长
+- rollup 数据完整覆盖到 `rollup.hours_before` 对应的查询边界
+- 对覆盖不连续的场景禁用 rollup 查询，直接查原始索引
 
 
 #### rollup 自动滚动后的索引列表
