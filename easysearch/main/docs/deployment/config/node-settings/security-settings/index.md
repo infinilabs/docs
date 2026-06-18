@@ -271,7 +271,9 @@ security.system_indices.indices: [".infini-*"]
 | `privilege.yml` | 权限组定义 |
 | `config.yml` | 认证与授权后端配置（LDAP、SAML 等） |
 
-> 这些文件随发行包一起提供；`bin/initialize.sh` 初始化时会将它们加载到安全索引中，其中 `user.yml` 还会被 `bin/update_password.sh` 按初始化密码重写默认内置账户内容。
+> - 这些文件随发行包一起提供；`bin/initialize.sh` 初始化时会将它们加载到安全索引中。首次初始化时，`user.yml` 会由 `bin/update_password.sh` 按初始化密码生成默认内置账户内容；如果 `user.yml` 已存在，重复执行 `initialize.sh` 会保留该文件，不会重置 `admin` 密码
+> - 如忘记密码，可使用 `bin/reset_admin_password.sh` 重置，或参考[密码重置指南](https://infinilabs.cn/blog/2025/easysearch-reset-admin-password/)
+
 
 ---
 

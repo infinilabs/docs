@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.3.0 (2026-06-14) #  Breaking changes #  Features #   新增管道管理 UI 为 Agent UI 新增 API Token 管理 新增数据流 bootstrap 创建 API PUT /_data_stream/{name}/_bootstrap，支持在缺少匹配数据流模板时按需自动创建默认模板后继续创建数据流，简化前端联调、测试验证和快速初始化流程。 在数据流页面新增“添加数据流”入口 新增修改当前用户密码 UI  Bug fix #   修复 Rollup mixed search 在 live 分支没有匹配字段或目标索引为空时可能产生 UnmappedTerms，导致聚合结果合并失败的问题；现在会将 unmapped terms 作为空贡献参与 reduce，避免混合查询异常。 修复安全权限过滤改写 ClusterStateRequest."
+Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.3.0 (2026-06-18) #  Breaking changes #  Features #   新增管道管理 UI 为 Agent UI 新增 API Token 管理 新增数据流 bootstrap 创建 API PUT /_data_stream/{name}/_bootstrap，支持在缺少匹配数据流模板时按需自动创建默认模板后继续创建数据流，简化前端联调、测试验证和快速初始化流程。 在数据流页面新增“添加数据流”入口 新增修改当前用户密码 UI  Bug fix #   修复 source_reuse 在处理 tombstone 和非 JSON/二进制 _source 时解析失败并可能导致写入请求卡住的问题。 修复 Rollup mixed search 在 live 分支没有匹配字段或目标索引为空时可能产生 UnmappedTerms，导致聚合结果合并失败的问题；现在会将 unmapped terms 作为空贡献参与 reduce，避免混合查询异常。 修复安全权限过滤改写 ClusterStateRequest."
 ---
 
 
@@ -17,7 +17,7 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 ### Improvements
 
 
-## 2.3.0 (2026-06-14)
+## 2.3.0 (2026-06-18)
 ### Breaking changes
 ### Features
 - 新增管道管理 UI
@@ -26,6 +26,7 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 - 在数据流页面新增“添加数据流”入口
 - 新增修改当前用户密码 UI
 ### Bug fix
+- 修复 `source_reuse` 在处理 tombstone 和非 JSON/二进制 `_source` 时解析失败并可能导致写入请求卡住的问题。
 - 修复 Rollup mixed search 在 live 分支没有匹配字段或目标索引为空时可能产生 `UnmappedTerms`，导致聚合结果合并失败的问题；现在会将 unmapped terms 作为空贡献参与 reduce，避免混合查询异常。
 - 修复安全权限过滤改写 `ClusterStateRequest.indices()` 后，`/_cat/templates` 与 `/_cluster/state/metadata` 这类全局 cluster-state 请求可能丢失 legacy templates、component templates、composable index templates 和 data streams 的问题。
 - 修复安全模式下 `/_cluster/state` 在全局 metadata 请求中应用索引权限过滤时的语义问题：现在会保留全局 metadata，同时只裁剪不可见的 index metadata、routing table 和 data stream backing indices，显式 `/{index}` cluster-state 请求仍保持只返回目标索引。
@@ -66,6 +67,8 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 - 增强 CCR 跨版本滚动升级保护；升级窗口内会自动暂停运行中的 index CCR 与 auto-follow 任务，待双端完成升级后再手工恢复。
 - 为 `/_replication/all_status` 增加 `status` 过滤参数，支持按 `BOOTSTRAPPING`、`PAUSED`、`FAILED` 等状态筛选 follower 索引。
 - 统一安全初始化脚本与中文文档中的默认账户和配置说明：默认生成的 `admin`、`infini`、`infini_agent` 内置账户现在按 `reserved: true`、`hidden: false` 初始化，并同步明确 `security.restapi.roles_enabled`、`security.authcz.admin_dn` 与账号自助改密的实际行为。
+- 优化 `bin/initialize.sh` 重复初始化行为：已初始化目录中只允许清理并重新生成证书文件，保留 `data/` 和 `config/security/user.yml`，避免误删数据或重置已有 admin 密码。
+- 优化 macOS 安装体验：初始化脚本会自动清理 Easysearch 启动脚本和 bundled JDK 可执行文件上的 `com.apple.quarantine` 隔离标签，减少浏览器下载解压后触发 Gatekeeper 拦截 bundled Java 的问题。
 - 增强 ZSTD native 后端可用性探测与兼容回退覆盖；当运行环境不满足 native 条件时，索引创建阶段会更稳妥地选择兼容写入路径，并补齐相关回归与冒烟测试覆盖。
 - 继续优化 ZSTD merge / flush 路径下的 native 内存生命周期，降低 stored-fields 后台合并过程中的内存滞留与峰值压力。
 - 补强 Security REST 权限测试资源与角色映射，统一 `admin_superuser`、`security_superuser` 等测试账号配置，提升 REST 权限回归覆盖稳定性。

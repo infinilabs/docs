@@ -196,12 +196,12 @@ bin/initialize.sh -s
 
 初始化脚本会：
 1. 生成 TLS 证书（节点间通信和 HTTPS）
-2. 生成 admin 用户的随机密码
+2. 首次初始化时生成 admin 用户的随机密码
 3. 安装默认插件
 
 > ⚠️ **重要**：
 > - admin 密码**仅在终端输出中显示一次**，请务必记录
-> - 初始化脚本会覆盖已有的证书和密码，请勿对已运行的集群重复执行
+> - 对已初始化目录重复执行时，脚本只允许删除并重新生成 `config/*.crt`、`config/*.key` 证书文件；`data/` 和 `config/security/user.yml` 会保留，不会重新生成 bootstrap 密码
 > - 如忘记密码，可使用 `bin/reset_admin_password.sh` 重置，或参考[密码重置指南](https://infinilabs.cn/blog/2025/easysearch-reset-admin-password/)
 
 ---

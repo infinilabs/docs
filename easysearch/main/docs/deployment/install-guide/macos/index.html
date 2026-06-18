@@ -13,6 +13,7 @@ const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{co
       }
     `;shadow.appendChild(style);});</script><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
+<option value=v2.3.0>v2.3.0</option>
 <option value=v2.2.0>v2.2.0</option>
 <option value=v2.1.2>v2.1.2</option>
 <option value=v2.1.1>v2.1.1</option>
@@ -269,7 +270,10 @@ curl -ku admin:YOUR_PASSWORD https://localhost:9200
 <span style=color:#8be9fd;font-style:italic>cd</span> /Users/<span style=color:#ff79c6>$(</span>whoami<span style=color:#ff79c6>)</span>/data/easysearch
 bin/reset_admin_password.sh
 </code></pre></div><h3 id=macos-安全提示>macOS 安全提示
-<a class=anchor href=#macos-%e5%ae%89%e5%85%a8%e6%8f%90%e7%a4%ba>#</a></h3><p>如果遇到"无法验证开发者"的提示，可以在 <strong>系统偏好设置 → 安全性与隐私</strong> 中允许运行，或执行：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>xattr -d com.apple.quarantine bin/easysearch
+<a class=anchor href=#macos-%e5%ae%89%e5%85%a8%e6%8f%90%e7%a4%ba>#</a></h3><p>如果通过 Chrome 等浏览器下载并解压安装包，macOS 可能会给解压后的文件附加 <code>com.apple.quarantine</code> 隔离标签。此时启动时可能出现 <code>"java" cannot be opened because the developer cannot be verified</code> 或“无法验证开发者”的提示，即使 bundled JDK 的代码签名本身是合法的。</p><p><code>bin/initialize.sh</code> 会在 macOS 上自动检测并清理 Easysearch 启动脚本和 bundled JDK 可执行文件上的隔离标签。正常情况下只需要重新执行初始化脚本：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>bin/initialize.sh
+</code></pre></div><p>如需手动确认某个文件是否带有隔离标签，可以执行：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>xattr -p com.apple.quarantine jdk/Contents/Home/bin/java
+</code></pre></div><p>如果初始化脚本提示自动清理失败，可手动清理相关可执行文件的隔离标签，例如：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>xattr -d com.apple.quarantine bin/easysearch
+xattr -d com.apple.quarantine jdk/Contents/Home/bin/java
 </code></pre></div><h3 id=停止-easysearch>停止 Easysearch
 <a class=anchor href=#%e5%81%9c%e6%ad%a2-easysearch>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># 使用 PID 文件停止</span>
 <span style=color:#8be9fd;font-style:italic>kill</span> <span style=color:#ff79c6>$(</span>cat /Users/<span style=color:#ff79c6>$(</span>whoami<span style=color:#ff79c6>)</span>/data/easysearch/pid<span style=color:#ff79c6>)</span>

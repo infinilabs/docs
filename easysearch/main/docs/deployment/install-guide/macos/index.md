@@ -78,10 +78,25 @@ bin/reset_admin_password.sh
 
 ### macOS 安全提示
 
-如果遇到"无法验证开发者"的提示，可以在 **系统偏好设置 → 安全性与隐私** 中允许运行，或执行：
+如果通过 Chrome 等浏览器下载并解压安装包，macOS 可能会给解压后的文件附加 `com.apple.quarantine` 隔离标签。此时启动时可能出现 `"java" cannot be opened because the developer cannot be verified` 或“无法验证开发者”的提示，即使 bundled JDK 的代码签名本身是合法的。
+
+`bin/initialize.sh` 会在 macOS 上自动检测并清理 Easysearch 启动脚本和 bundled JDK 可执行文件上的隔离标签。正常情况下只需要重新执行初始化脚本：
+
+```bash
+bin/initialize.sh
+```
+
+如需手动确认某个文件是否带有隔离标签，可以执行：
+
+```bash
+xattr -p com.apple.quarantine jdk/Contents/Home/bin/java
+```
+
+如果初始化脚本提示自动清理失败，可手动清理相关可执行文件的隔离标签，例如：
 
 ```bash
 xattr -d com.apple.quarantine bin/easysearch
+xattr -d com.apple.quarantine jdk/Contents/Home/bin/java
 ```
 
 ### 停止 Easysearch
@@ -96,3 +111,4 @@ kill $(cat /Users/$(whoami)/data/easysearch/pid)
 - [Docker 部署]({{< relref "./docker.md" >}})
 - [测试环境部署]({{< relref "./test-env.md" >}})
 - [系统调优]({{< relref "/docs/deployment/config/settings.md" >}})
+
