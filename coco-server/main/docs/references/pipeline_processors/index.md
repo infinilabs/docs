@@ -3,7 +3,7 @@ title: "Pipeline Processors"
 date: 0001-01-01
 summary: "Processor #  A processor performs specific actions on the input document when it flows through the pipeline:
 [Doc input] --&gt; [Processor] --&gt; [Doc output] Pipeline #  A pipeline is basically multiple processors chained together, users can achieve sophisticated document processing via pipelines:
-[Doc input] --&gt; [Processor A] --&gt; [Processor B] --&gt; [Processor C] --&gt; [Doc output] "
+[Doc input] --&gt; [Processor A] --&gt; [Processor B] --&gt; [Processor C] --&gt; [Doc output] Processor categories #  Processors are grouped by the type of input they expect."
 ---
 
 
@@ -24,3 +24,17 @@ sophisticated document processing via pipelines:
 ```text
 [Doc input] --> [Processor A] --> [Processor B] --> [Processor C] --> [Doc output]
 ```
+
+## Processor categories
+
+Processors are grouped by the type of input they expect.
+
+### Document Processors
+
+Operate on **documents**. Each pipeline message carries a serialized document.
+
+### Attachment Processors
+
+Operate on **attachments**. Each pipeline message carries the serialized
+attachment metadata. Attachment processors load the binary content themselves
+when they need it.
