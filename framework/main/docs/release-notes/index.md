@@ -2,7 +2,7 @@
 title: "Release Notes"
 date: 0001-01-01
 summary: "Release Notes #  Information about release notes of INFINI Framework is provided here.
-Latest (In development) #  ❌ Breaking changes #   refactor: native security are disabled by default #283 refactor: refactoring to simplify go modules #300  🚀 Features #   feat: support team-based scope for sharing services #258 feat: add semantic, hybrid, and nested query support #265 feat: extract BuildFuzzinessQueryClauses as public API #266 feat(keystore): support large stdin secrets (&gt;1024 bytes) and multiline #271 feat(cors): add X-SERVICE-ID to allowed CORS headers #275 feat: output HTTP access logs to file feat(metrics): monitor each disk and network interface independently for bottleneck detection feat(metrics): auto-detect network interface bandwidth per device (Linux, macOS, Windows) feat(metrics): identify specific bottleneck device (e."
+Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #  1.4.2 (2026-06-23) #  ❌ Breaking changes #   refactor: native security are disabled by default #283 refactor: refactoring to simplify go modules #300  🚀 Features #   feat: support team-based scope for sharing services #258 feat: add semantic, hybrid, and nested query support #265 feat: extract BuildFuzzinessQueryClauses as public API #266 feat(keystore): support large stdin secrets (&gt;1024 bytes) and multiline #271 feat(cors): add X-SERVICE-ID to allowed CORS headers #275 feat: output HTTP access logs to file feat(metrics): monitor each disk and network interface independently for bottleneck detection feat(metrics): auto-detect network interface bandwidth per device (Linux, macOS, Windows) feat(metrics): identify specific bottleneck device (e."
 ---
 
 
@@ -12,6 +12,12 @@ Information about release notes of INFINI Framework is provided here.
 
 
 ## Latest (In development)  
+### ❌ Breaking changes  
+### 🚀 Features  
+### 🐛 Bug fix  
+### ✈️ Improvements  
+
+## 1.4.2 (2026-06-23)
 ### ❌ Breaking changes  
 - refactor: native security are disabled by default #283
 - refactor: refactoring to simplify go modules #300
