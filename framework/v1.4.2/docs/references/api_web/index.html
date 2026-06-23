@@ -1,0 +1,741 @@
+<!doctype html><html lang=en><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="API & Web Framework #  The INFINI Framework provides a comprehensive API and Web framework built on top of Go&rsquo;s HTTP ecosystem, featuring high-performance routing, flexible middleware system, and built-in security features.
+Overview #  The framework offers two separate but complementary HTTP servers:
+ API Server: Designed for programmatic access and RESTful APIs Web Server: Designed for web interfaces and UI applications  Both servers share common patterns and can be configured independently."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="API & Web Framework"><meta property="og:description" content="API & Web Framework #  The INFINI Framework provides a comprehensive API and Web framework built on top of Go&rsquo;s HTTP ecosystem, featuring high-performance routing, flexible middleware system, and built-in security features.
+Overview #  The framework offers two separate but complementary HTTP servers:
+ API Server: Designed for programmatic access and RESTful APIs Web Server: Designed for web interfaces and UI applications  Both servers share common patterns and can be configured independently."><meta property="og:type" content="article"><meta property="og:url" content="https://docs.infinilabs.com/framework/v1.4.2/docs/references/api_web/"><title>API & Web Framework | INFINI Framework | The Best Open Source Golang Framework for Easysearch/Elasticsearch/OpenSearch</title><link rel=manifest href=/framework/v1.4.2/manifest.json><link rel=icon href=/framework/v1.4.2/favicon.png type=image/x-icon><link rel=stylesheet href=/framework/v1.4.2/book.min.a5477dc69cdc226836851fe1ccbae76d703e3ebf0cb670e9e513b00935608503.css integrity="sha256-pUd9xpzcImg2hR/hzLrnbXA+Pr8MtnDp5ROwCTVghQM="><script defer src=https://docs.infinilabs.com/framework/v1.4.2/js/jquery-2.x.min.js></script><script defer src=https://docs.infinilabs.com/framework/v1.4.2/js/doc.js></script><script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?64b9322783bb21716d701b15fb0b1e82";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/framework/v1.4.2><img src=/framework/v1.4.2/img/logo-en.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;height:36px;width:100%></div><script>function waitForShadow(host,callback){const timer=setInterval(()=>{if(host.shadowRoot){clearInterval(timer);callback(host.shadowRoot);}},50);}
+const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{const style=document.createElement('style');style.textContent=`
+      .infini__searchbox-btn {
+        width: 100% !important;
+        height: 36px !important;
+      }
+    `;shadow.appendChild(style);});</script><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value=v1.4.2>v1.4.2</option>
+<option value=v1.4.1>v1.4.1</option>
+<option value=v1.4.0>v1.4.0</option>
+<option value=v1.3.0>v1.3.0</option>
+<option value=v1.2.0>v1.2.0</option>
+<option value=v1.1.9>v1.1.9</option>
+<option value=v1.1.8>v1.1.8</option>
+<option value=v1.1.7>v1.1.7</option>
+<option value=v1.1.6>v1.1.6</option>
+<option value=v1.1.5>v1.1.5</option>
+<option value=v1.1.4>v1.1.4</option>
+<option value=v1.1.3>v1.1.3</option>
+<option value=v1.1.2>v1.1.2</option>
+<option value=v1.1.0>v1.1.0</option>
+<option value=v1.0.0>v1.0.0</option></select></div><ul><li><input type=checkbox id=section-75a1b849ec817b105e0397971f02e977 class=toggle>
+<label for=section-75a1b849ec817b105e0397971f02e977 class="flex justify-between"><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/development/>Development</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/development/setup_golang_environment/>Setting Up the Golang Environment</a></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/development/setup_intellij_idea/>Setup IntelliJ IDEA</a></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/development/create_new_application/>Create New Application</a></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/development/api/>API Development</a><ul><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/development/api/specification/>API Specification</a></li></ul></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle checked>
+<label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/references/>References</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/references/config/>Configuration Management</a></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/references/modules/>Module System</a></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/references/pipeline/>Pipeline and Processor</a></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/references/queue/>Queue</a></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/references/task/>Task Scheduling</a></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/references/service/>Service Management</a></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/references/makefile/>Makefile</a></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/references/kv/>Key-Value Store</a></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/references/stats/>Statistics Collection</a></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/references/conditions/>Conditions</a></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/references/api_web/ class=active>API & Web Framework</a></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/references/orm/>ORM (Object-Relational Mapping)</a></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/references/http_client/>Http Client Configuration</a></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/references/keystore/>Keystore</a></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/references/query_url/>Query URL Parameters</a></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/references/aggs_query/>Aggregation via URL Parameters</a></li></ul></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/troubleshooting/>FAQs</a><ul></ul></li><li><a href=https://docs.infinilabs.com/framework/v1.4.2/docs/release-notes/>Release Notes</a><ul></ul></li></ul><ul><li><a href=https://github.com/infinilabs/framework target=_blank rel=noopener>Github</a></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/framework/v1.4.2/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>API & Web Framework</strong>
+<label for=toc-control><img src=/framework/v1.4.2/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><style>.code-wrapper{position:relative;margin:20px 0}.code-header{position:absolute;top:8px;right:16px;font-size:12px;color:#8be9fd;font-weight:500;letter-spacing:.5px;text-transform:lowercase;pointer-events:none;transition:opacity .2s ease}.code-wrapper pre{padding:28px 18px 18px;border-radius:12px;overflow-x:auto;line-height:1.7}.copy-btn{position:absolute;top:6px;right:12px;display:flex;align-items:center;gap:6px;padding:5px 10px;font-size:12px;border-radius:8px;background:#44475a;color:#f8f8f2;border:1px solid #8440f1;cursor:pointer;opacity:0;transition:all .2s ease}.code-wrapper:hover .copy-btn{opacity:1}.code-wrapper:hover .code-header{opacity:.2}.copy-btn:hover{background:#6272a4}.copy-btn.copied{background:#fff;color:#8440f1;border-color:#8440f1}</style><script>document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll("pre > code").forEach((codeBlock)=>{const pre=codeBlock.parentElement;const className=codeBlock.className;const match=className.match(/language-(\w+)/);const language=match?match[1]:"code";const wrapper=document.createElement("div");wrapper.className="code-wrapper";pre.parentNode.insertBefore(wrapper,pre);wrapper.appendChild(pre);const header=document.createElement("div");header.className="code-header";header.innerText=language;wrapper.appendChild(header);const button=document.createElement("button");button.className="copy-btn";button.innerHTML="Copy";button.addEventListener("click",async()=>{await navigator.clipboard.writeText(codeBlock.innerText);button.classList.add("copied");button.innerText="✓ Copied";setTimeout(()=>{button.classList.remove("copied");button.innerText="Copy";},2000);});wrapper.appendChild(button);});});</script><div class="mt-2 text-right"><a href=/framework/v1.4.2/docs/references/api_web/index.md class=text-sm>View as Markdown</a></div><aside class="hidden clearfix"><style>.book-toc>nav li::before{position:absolute;top:6px;left:-16px;width:2px;height:32px;content:"";transition:transform .28s cubic-bezier(.2,.8,.2,1),background-color .18s ease,opacity .18s;transform:translateY(-50%)scaleY(0);opacity:0;background:0 0}.book-toc>nav>ul>li.ancestor::before{left:-16px}.book-toc>nav>ul>li.ancestor>ul>li.active::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor>ul>li.active::before{left:-48px}.book-toc>nav li.active::before{transform:translateY(-50%)scaleY(1);opacity:1;background:#8440f1}.book-toc>nav li.active>a{font-weight:500}:target{scroll-margin-top:80px}</style><script>document.addEventListener('DOMContentLoaded',function(){const nav=document.getElementsByClassName('book-toc')[0].querySelector('nav');if(!nav)return;const links=Array.from(nav.querySelectorAll('a[href^="#"]'));const idToLi=new Map();let isProgrammatic=false;let programmaticTargetId=null;let scrollEndTimer=null;links.forEach(link=>{const href=link.getAttribute('href');if(!href||href.length<2)return;const id=decodeURIComponent(href.slice(1));const li=link.closest('li');if(li)idToLi.set(id,li);link.addEventListener('click',function(e){const target=document.getElementById(id);if(target){e.preventDefault();isProgrammatic=true;programmaticTargetId=id;setActiveById(id);target.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+id);clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},1200);}});});window.addEventListener('scroll',function(){clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},120);},{passive:true});function clearAll(){idToLi.forEach(li=>li.classList.remove('active','ancestor'));links.forEach(a=>a.removeAttribute('aria-current'));}
+function setActiveById(id){clearAll();const li=idToLi.get(id);if(!li)return;li.classList.add('active');const a=li.querySelector('a[href^="#"]');if(a)a.setAttribute('aria-current','true');let parent=li.parentElement;while(parent&&parent!==nav){const parentLi=parent.closest('li');if(parentLi&&parentLi!==li)parentLi.classList.add('ancestor');parent=parent.parentElement;}}
+const observedEls=Array.from(idToLi.keys()).map(id=>document.getElementById(id)).filter(Boolean);if(observedEls.length){const io=new IntersectionObserver((entries)=>{let candidate=null;entries.forEach(en=>{if(!en.isIntersecting)return;if(!candidate)candidate=en;else{const curTop=Math.abs(candidate.boundingClientRect.top);const newTop=Math.abs(en.boundingClientRect.top);if(newTop<curTop)candidate=en;}});if(!candidate||!candidate.target||!candidate.target.id)return;const foundId=candidate.target.id;if(isProgrammatic&&programmaticTargetId&&foundId!==programmaticTargetId){return;}
+setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.1,0.25,0.5]});observedEls.forEach(el=>io.observe(el));}
+if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#overview>Overview</a></li><li><a href=#architecture>Architecture</a><ul><li><a href=#core-components>Core Components</a></li></ul></li><li><a href=#configuration>Configuration</a><ul><li><a href=#api-server-configuration>API Server Configuration</a></li><li><a href=#web-server-configuration>Web Server Configuration</a></li></ul></li><li><a href=#handler-definition>Handler Definition</a><ul><li><a href=#basic-handler-structure>Basic Handler Structure</a></li><li><a href=#handler-registration>Handler Registration</a></li></ul></li><li><a href=#route-patterns-and-parameters>Route Patterns and Parameters</a><ul><li><a href=#basic-routes>Basic Routes</a></li><li><a href=#parameter-extraction>Parameter Extraction</a></li></ul></li><li><a href=#request-handling>Request Handling</a><ul><li><a href=#json-input-processing>JSON Input Processing</a></li><li><a href=#query-parameter-processing>Query Parameter Processing</a></li></ul></li><li><a href=#response-helpers>Response Helpers</a><ul><li><a href=#standard-json-responses>Standard JSON Responses</a></li><li><a href=#error-handling>Error Handling</a></li></ul></li><li><a href=#api-middleware-and-options>API Middleware and Options</a><ul><li><a href=#permission-based-access-control>Permission-based Access Control</a></li><li><a href=#feature-flags>Feature Flags</a></li><li><a href=#authentication-options>Authentication Options</a></li><li><a href=#static-rules-based-authorization>Static Rules-Based Authorization</a></li><li><a href=#pluggable-auth-filter-pipeline>Pluggable Auth Filter Pipeline</a></li><li><a href=#access-token-authentication>Access Token Authentication</a></li><li><a href=#label-and-metadata>Label and Metadata</a></li><li><a href=#available-features-reference>Available Features Reference</a></li></ul></li><li><a href=#web-framework-features>Web Framework Features</a><ul><li><a href=#static-file-serving-with-vfs>Static File Serving with VFS</a></li><li><a href=#vfs-file-lookup-strategy>VFS File Lookup Strategy</a></li><li><a href=#configuration-example>Configuration Example</a></li><li><a href=#customization-workflow>Customization Workflow</a></li><li><a href=#configuration-only-features>Configuration-Only Features</a></li><li><a href=#websocket-support>WebSocket Support</a></li><li><a href=#session-management>Session Management</a></li></ul></li><li><a href=#api-handler-base-functions>API Handler Base Functions</a><ul><li><a href=#http-method-handling>HTTP Method Handling</a></li><li><a href=#parameter-processing>Parameter Processing</a></li><li><a href=#json-processing>JSON Processing</a></li><li><a href=#error-responses>Error Responses</a></li></ul></li><li><a href=#real-world-example-datasource-module>Real-World Example: DataSource Module</a></li><li><a href=#best-practices>Best Practices</a><ul><li><a href=#1-consistent-response-patterns>1. Consistent Response Patterns</a></li><li><a href=#2-proper-error-handling>2. Proper Error Handling</a></li><li><a href=#3-parameter-validation>3. Parameter Validation</a></li><li><a href=#4-security-integration>4. Security Integration</a></li></ul></li><li><a href=#application-settings>Application Settings</a><ul><li><a href=#how-it-works-2>How It Works</a></li><li><a href=#registering-static-settings>Registering Static Settings</a></li><li><a href=#registering-dynamic-settings>Registering Dynamic Settings</a></li><li><a href=#reading-settings-programmatically>Reading Settings Programmatically</a></li><li><a href=#api-response>API Response</a></li><li><a href=#function-reference>Function Reference</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=api--web-framework>API & Web Framework
+<a class=anchor href=#api--web-framework>#</a></h1><p>The INFINI Framework provides a comprehensive API and Web framework built on top of Go&rsquo;s HTTP ecosystem, featuring high-performance routing, flexible middleware system, and built-in security features.</p><h2 id=overview>Overview
+<a class=anchor href=#overview>#</a></h2><p>The framework offers two separate but complementary HTTP servers:</p><ul><li><strong>API Server</strong>: Designed for programmatic access and RESTful APIs</li><li><strong>Web Server</strong>: Designed for web interfaces and UI applications</li></ul><p>Both servers share common patterns and can be configured independently.</p><h2 id=architecture>Architecture
+<a class=anchor href=#architecture>#</a></h2><h3 id=core-components>Core Components
+<a class=anchor href=#core-components>#</a></h3><ul><li><strong>HTTP Router</strong>: High-performance trie-based routing with path parameters</li><li><strong>Handler System</strong>: Structured request processing with built-in utilities</li><li><strong>Middleware</strong>: Flexible filter chain for cross-cutting concerns</li><li><strong>Security</strong>: Integrated authentication, authorization, and CORS support</li><li><strong>Response Helpers</strong>: Standardized JSON responses and error handling</li></ul><h2 id=configuration>Configuration
+<a class=anchor href=#configuration>#</a></h2><h3 id=api-server-configuration>API Server Configuration
+<a class=anchor href=#api-server-configuration>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>api</span>:
+  <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>network</span>:
+    <span style=color:#ff79c6>host</span>: <span style=color:#f1fa8c>&#34;0.0.0.0&#34;</span>
+    <span style=color:#ff79c6>port</span>: <span style=color:#bd93f9>9200</span>
+    <span style=color:#ff79c6>binding</span>: <span style=color:#f1fa8c>&#34;0.0.0.0:9200&#34;</span>
+    <span style=color:#ff79c6>publish</span>: <span style=color:#f1fa8c>&#34;localhost:9200&#34;</span>
+    <span style=color:#ff79c6>skip_occupied_port</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>security</span>:
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>username</span>: <span style=color:#f1fa8c>&#34;admin&#34;</span>
+    <span style=color:#ff79c6>password</span>: <span style=color:#f1fa8c>&#34;password&#34;</span>
+  <span style=color:#ff79c6>cors</span>:
+    <span style=color:#ff79c6>allowed_origins</span>:
+      - <span style=color:#f1fa8c>&#34;https://domain.com&#34;</span>
+      - <span style=color:#f1fa8c>&#34;http://localhost:3000&#34;</span>
+  <span style=color:#ff79c6>websocket</span>:
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>base_path</span>: <span style=color:#f1fa8c>&#34;/ws&#34;</span>
+    <span style=color:#ff79c6>permitted_hosts</span>: []
+    <span style=color:#ff79c6>skip_host_verify</span>: <span style=color:#ff79c6>false</span>
+  <span style=color:#ff79c6>base_path</span>: <span style=color:#f1fa8c>&#34;/_api&#34;</span>      <span style=color:#6272a4># Base path for API endpoints</span>
+  <span style=color:#ff79c6>verbose_error_root_cause</span>: <span style=color:#ff79c6>false</span>
+  <span style=color:#ff79c6>api_directory_path</span>: <span style=color:#f1fa8c>&#34;/api&#34;</span>  <span style=color:#6272a4># API documentation directory</span>
+  <span style=color:#ff79c6>disable_api_directory</span>: <span style=color:#ff79c6>false</span>
+</code></pre></div><h3 id=web-server-configuration>Web Server Configuration
+<a class=anchor href=#web-server-configuration>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>web</span>:
+  <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>network</span>:
+    <span style=color:#ff79c6>host</span>: <span style=color:#f1fa8c>&#34;0.0.0.0&#34;</span>
+    <span style=color:#ff79c6>port</span>: <span style=color:#bd93f9>8090</span>
+    <span style=color:#ff79c6>binding</span>: <span style=color:#f1fa8c>&#34;0.0.0.0:8090&#34;</span>
+    <span style=color:#ff79c6>publish</span>: <span style=color:#f1fa8c>&#34;localhost:8090&#34;</span>
+    <span style=color:#ff79c6>skip_occupied_port</span>: <span style=color:#ff79c6>true</span>
+  <span style=color:#ff79c6>security</span>:
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>authentication</span>:
+      <span style=color:#ff79c6>native</span>:
+        <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+      <span style=color:#6272a4># Note: http_basic authentication is not supported yet for web</span>
+      <span style=color:#6272a4># users should use API basic auth or OAuth2 instead</span>
+      <span style=color:#ff79c6>http_basic</span>:
+        <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>false</span>
+        <span style=color:#6272a4># endpoint: &#34;https://auth.example.com&#34;      # Not implemented</span>
+        <span style=color:#6272a4># secret_id: &#34;&#34;</span>
+        <span style=color:#6272a4># secret_key: &#34;&#34;</span>
+  <span style=color:#ff79c6>cors</span>:
+    <span style=color:#ff79c6>allowed_origins</span>:
+      - <span style=color:#f1fa8c>&#34;https://domain.com&#34;</span>
+  <span style=color:#ff79c6>websocket</span>:
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>base_path</span>: <span style=color:#f1fa8c>&#34;/ws&#34;</span>
+    <span style=color:#ff79c6>permitted_hosts</span>: []
+    <span style=color:#ff79c6>skip_host_verify</span>: <span style=color:#ff79c6>false</span>
+  <span style=color:#ff79c6>base_path</span>: <span style=color:#f1fa8c>&#34;&#34;</span>            <span style=color:#6272a4># Base path for web application</span>
+  <span style=color:#ff79c6>gzip</span>:
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>level</span>: <span style=color:#bd93f9>6</span>
+  <span style=color:#ff79c6>cookie</span>:
+    <span style=color:#ff79c6>store</span>: <span style=color:#f1fa8c>&#34;cookie&#34;</span>
+    <span style=color:#ff79c6>secure</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>httponly</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>max_age</span>: <span style=color:#bd93f9>2592000</span>
+    <span style=color:#ff79c6>path</span>: <span style=color:#f1fa8c>&#34;/&#34;</span>
+  <span style=color:#ff79c6>ui</span>:
+    <span style=color:#ff79c6>local</span>:
+      <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+      <span style=color:#ff79c6>path</span>: <span style=color:#f1fa8c>&#34;./web/dist&#34;</span>
+    <span style=color:#ff79c6>vfs</span>:
+      <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>false</span>
+  <span style=color:#ff79c6>embedding_api</span>: <span style=color:#ff79c6>false</span>
+</code></pre></div><h2 id=handler-definition>Handler Definition
+<a class=anchor href=#handler-definition>#</a></h2><h3 id=basic-handler-structure>Basic Handler Structure
+<a class=anchor href=#basic-handler-structure>#</a></h3><p>Create a handler by embedding the base <code>api.Handler</code>:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#ff79c6>package</span> mymodule
+
+<span style=color:#ff79c6>import</span> (
+    <span style=color:#f1fa8c>&#34;infini.sh/framework/core/api&#34;</span>
+    httprouter <span style=color:#f1fa8c>&#34;infini.sh/framework/core/api/router&#34;</span>
+    <span style=color:#f1fa8c>&#34;net/http&#34;</span>
+)
+
+<span style=color:#8be9fd;font-style:italic>type</span> APIHandler <span style=color:#8be9fd;font-style:italic>struct</span> {
+    api.Handler  <span style=color:#6272a4>// Embedding base handler for all functionality
+</span><span style=color:#6272a4></span>}
+</code></pre></div><h3 id=handler-registration>Handler Registration
+<a class=anchor href=#handler-registration>#</a></h3><p>Register handlers using the built-in routing methods:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>init</span>() {
+    <span style=color:#6272a4>// Create handler instance
+</span><span style=color:#6272a4></span>    handler <span style=color:#ff79c6>:=</span> APIHandler{}
+
+    <span style=color:#6272a4>// Register with permissions and features
+</span><span style=color:#6272a4></span>    api.<span style=color:#50fa7b>HandleUIMethod</span>(api.POST, <span style=color:#f1fa8c>&#34;/users/&#34;</span>, handler.createUser,
+        api.<span style=color:#50fa7b>RequirePermission</span>(createPermission))
+    api.<span style=color:#50fa7b>HandleUIMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/users/:id&#34;</span>, handler.getUser,
+        api.<span style=color:#50fa7b>RequirePermission</span>(readPermission))
+    api.<span style=color:#50fa7b>HandleUIMethod</span>(api.PUT, <span style=color:#f1fa8c>&#34;/users/:id&#34;</span>, handler.updateUser,
+        api.<span style=color:#50fa7b>RequirePermission</span>(updatePermission))
+    api.<span style=color:#50fa7b>HandleUIMethod</span>(api.DELETE, <span style=color:#f1fa8c>&#34;/users/:id&#34;</span>, handler.deleteUser,
+        api.<span style=color:#50fa7b>RequirePermission</span>(deletePermission))
+    api.<span style=color:#50fa7b>HandleUIMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/users/_search&#34;</span>, handler.searchUsers,
+        api.<span style=color:#50fa7b>RequirePermission</span>(searchPermission))
+}
+</code></pre></div><h2 id=route-patterns-and-parameters>Route Patterns and Parameters
+<a class=anchor href=#route-patterns-and-parameters>#</a></h2><h3 id=basic-routes>Basic Routes
+<a class=anchor href=#basic-routes>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6272a4>// Static paths
+</span><span style=color:#6272a4></span>api.<span style=color:#50fa7b>HandleUIMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/settings&#34;</span>, handler.getSettings)
+api.<span style=color:#50fa7b>HandleUIMethod</span>(api.POST, <span style=color:#f1fa8c>&#34;/settings&#34;</span>, handler.updateSettings)
+
+<span style=color:#6272a4>// Path parameters (required)
+</span><span style=color:#6272a4></span>api.<span style=color:#50fa7b>HandleUIMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/users/:id&#34;</span>, handler.getUser)
+api.<span style=color:#50fa7b>HandleUIMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/documents/:docId/comments/:commentId&#34;</span>, handler.getComment)
+
+<span style=color:#6272a4>// Catch-all parameters (optional)
+</span><span style=color:#6272a4></span>api.<span style=color:#50fa7b>HandleUIMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/files/*filepath&#34;</span>, handler.serveFile)
+</code></pre></div><h3 id=parameter-extraction>Parameter Extraction
+<a class=anchor href=#parameter-extraction>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8be9fd;font-style:italic>func</span> (h <span style=color:#ff79c6>*</span>APIHandler) <span style=color:#50fa7b>getUser</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    <span style=color:#6272a4>// Extract path parameter
+</span><span style=color:#6272a4></span>    userID <span style=color:#ff79c6>:=</span> ps.<span style=color:#50fa7b>MustGetParameter</span>(<span style=color:#f1fa8c>&#34;id&#34;</span>)
+
+    <span style=color:#6272a4>// Alternative extraction
+</span><span style=color:#6272a4></span>    userID = ps.<span style=color:#50fa7b>ByName</span>(<span style=color:#f1fa8c>&#34;id&#34;</span>)
+
+    <span style=color:#6272a4>// Query parameters
+</span><span style=color:#6272a4></span>    page <span style=color:#ff79c6>:=</span> h.<span style=color:#50fa7b>GetIntOrDefault</span>(req, <span style=color:#f1fa8c>&#34;page&#34;</span>, <span style=color:#bd93f9>1</span>)
+    size <span style=color:#ff79c6>:=</span> h.<span style=color:#50fa7b>GetIntOrDefault</span>(req, <span style=color:#f1fa8c>&#34;size&#34;</span>, <span style=color:#bd93f9>20</span>)
+
+    <span style=color:#6272a4>// Headers
+</span><span style=color:#6272a4></span>    authToken <span style=color:#ff79c6>:=</span> h.<span style=color:#50fa7b>GetHeader</span>(req, <span style=color:#f1fa8c>&#34;Authorization&#34;</span>, <span style=color:#f1fa8c>&#34;&#34;</span>)
+}
+</code></pre></div><h2 id=request-handling>Request Handling
+<a class=anchor href=#request-handling>#</a></h2><h3 id=json-input-processing>JSON Input Processing
+<a class=anchor href=#json-input-processing>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8be9fd;font-style:italic>func</span> (h <span style=color:#ff79c6>*</span>APIHandler) <span style=color:#50fa7b>createUser</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    <span style=color:#8be9fd;font-style:italic>var</span> user CreateUserRequest
+
+    <span style=color:#6272a4>// Validate and decode JSON input
+</span><span style=color:#6272a4></span>    err <span style=color:#ff79c6>:=</span> h.<span style=color:#50fa7b>DecodeJSON</span>(req, <span style=color:#ff79c6>&amp;</span>user)
+    <span style=color:#ff79c6>if</span> err <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>nil</span> {
+        h.<span style=color:#50fa7b>WriteError</span>(w, <span style=color:#f1fa8c>&#34;Invalid JSON input&#34;</span>, http.StatusBadRequest)
+        <span style=color:#ff79c6>return</span>
+    }
+
+    <span style=color:#6272a4>// OR use MustDecodeJSON for automatic error handling
+</span><span style=color:#6272a4></span>    h.<span style=color:#50fa7b>MustDecodeJSON</span>(req, <span style=color:#ff79c6>&amp;</span>user)
+}
+
+<span style=color:#8be9fd;font-style:italic>func</span> (h <span style=color:#ff79c6>*</span>APIHandler) <span style=color:#50fa7b>updateUser</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    <span style=color:#8be9fd;font-style:italic>var</span> updates <span style=color:#8be9fd;font-style:italic>map</span>[<span style=color:#8be9fd>string</span>]<span style=color:#8be9fd;font-style:italic>interface</span>{}
+
+    <span style=color:#6272a4>// Use for partial updates
+</span><span style=color:#6272a4></span>    err <span style=color:#ff79c6>:=</span> h.<span style=color:#50fa7b>DecodeJSON</span>(req, <span style=color:#ff79c6>&amp;</span>updates)
+    <span style=color:#ff79c6>if</span> err <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>nil</span> {
+        h.<span style=color:#50fa7b>WriteJSON</span>(w, util.MapStr{<span style=color:#f1fa8c>&#34;error&#34;</span>: <span style=color:#f1fa8c>&#34;Invalid input&#34;</span>}, http.StatusBadRequest)
+        <span style=color:#ff79c6>return</span>
+    }
+}
+</code></pre></div><h3 id=query-parameter-processing>Query Parameter Processing
+<a class=anchor href=#query-parameter-processing>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8be9fd;font-style:italic>func</span> (h <span style=color:#ff79c6>*</span>APIHandler) <span style=color:#50fa7b>searchUsers</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    <span style=color:#6272a4>// Required parameters
+</span><span style=color:#6272a4></span>    query <span style=color:#ff79c6>:=</span> h.<span style=color:#50fa7b>MustGetParameter</span>(w, req, <span style=color:#f1fa8c>&#34;q&#34;</span>)
+
+    <span style=color:#6272a4>// Optional parameters with defaults
+</span><span style=color:#6272a4></span>    page <span style=color:#ff79c6>:=</span> h.<span style=color:#50fa7b>GetIntOrDefault</span>(req, <span style=color:#f1fa8c>&#34;page&#34;</span>, <span style=color:#bd93f9>1</span>)
+    size <span style=color:#ff79c6>:=</span> h.<span style=color:#50fa7b>GetIntOrDefault</span>(req, <span style=color:#f1fa8c>&#34;size&#34;</span>, <span style=color:#bd93f9>10</span>)
+    sort <span style=color:#ff79c6>:=</span> h.<span style=color:#50fa7b>GetParameterOrDefault</span>(req, <span style=color:#f1fa8c>&#34;sort&#34;</span>, <span style=color:#f1fa8c>&#34;created:desc&#34;</span>)
+
+    <span style=color:#6272a4>// Boolean parameters
+</span><span style=color:#6272a4></span>    activeOnly <span style=color:#ff79c6>:=</span> h.<span style=color:#50fa7b>GetBoolOrDefault</span>(req, <span style=color:#f1fa8c>&#34;active&#34;</span>, <span style=color:#ff79c6>true</span>)
+
+    <span style=color:#6272a4>// Multiple values
+</span><span style=color:#6272a4></span>    status <span style=color:#ff79c6>:=</span> req.URL.<span style=color:#50fa7b>Query</span>()[<span style=color:#f1fa8c>&#34;status&#34;</span>]
+    tags <span style=color:#ff79c6>:=</span> req.URL.<span style=color:#50fa7b>Query</span>()[<span style=color:#f1fa8c>&#34;tags&#34;</span>]
+}
+</code></pre></div><h2 id=response-helpers>Response Helpers
+<a class=anchor href=#response-helpers>#</a></h2><h3 id=standard-json-responses>Standard JSON Responses
+<a class=anchor href=#standard-json-responses>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6272a4>// Simple JSON response
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (h <span style=color:#ff79c6>*</span>APIHandler) <span style=color:#50fa7b>getStatus</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    status <span style=color:#ff79c6>:=</span> <span style=color:#8be9fd;font-style:italic>map</span>[<span style=color:#8be9fd>string</span>]<span style=color:#8be9fd;font-style:italic>interface</span>{}{
+        <span style=color:#f1fa8c>&#34;status&#34;</span>: <span style=color:#f1fa8c>&#34;healthy&#34;</span>,
+        <span style=color:#f1fa8c>&#34;version&#34;</span>: <span style=color:#f1fa8c>&#34;1.0.0&#34;</span>,
+    }
+    h.<span style=color:#50fa7b>WriteJSON</span>(w, status, http.StatusOK)
+}
+
+<span style=color:#6272a4>// List with total count
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (h <span style=color:#ff79c6>*</span>APIHandler) <span style=color:#50fa7b>listUsers</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    users <span style=color:#ff79c6>:=</span> []User{{}, {}}
+    h.<span style=color:#50fa7b>WriteJSONListResult</span>(w, <span style=color:#bd93f9>2</span>, users, http.StatusOK)
+}
+
+<span style=color:#6272a4>// Acknowledgment response
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (h <span style=color:#ff79c6>*</span>APIHandler) <span style=color:#50fa7b>deleteUser</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    h.<span style=color:#50fa7b>WriteAckJSON</span>(w, <span style=color:#ff79c6>true</span>, http.StatusOK, <span style=color:#ff79c6>nil</span>)
+}
+
+<span style=color:#6272a4>// Creation response
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (h <span style=color:#ff79c6>*</span>APIHandler) <span style=color:#50fa7b>createUser</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    h.<span style=color:#50fa7b>WriteCreatedOKJSON</span>(w, <span style=color:#f1fa8c>&#34;user-123&#34;</span>)
+}
+
+<span style=color:#6272a4>// Update response
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (h <span style=color:#ff79c6>*</span>APIHandler) <span style=color:#50fa7b>updateUser</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    h.<span style=color:#50fa7b>WriteUpdatedOKJSON</span>(w, <span style=color:#f1fa8c>&#34;user-123&#34;</span>)
+}
+</code></pre></div><h3 id=error-handling>Error Handling
+<a class=anchor href=#error-handling>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6272a4>// Standard error response
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (h <span style=color:#ff79c6>*</span>APIHandler) <span style=color:#50fa7b>handleError</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    h.<span style=color:#50fa7b>WriteError</span>(w, <span style=color:#f1fa8c>&#34;Resource not found&#34;</span>, http.StatusNotFound)
+}
+
+<span style=color:#6272a4>// Detailed error object
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (h <span style=color:#ff79c6>*</span>APIHandler) <span style=color:#50fa7b>handleComplexError</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    err <span style=color:#ff79c6>:=</span> util.MapStr{
+        <span style=color:#f1fa8c>&#34;error&#34;</span>: <span style=color:#f1fa8c>&#34;Validation failed&#34;</span>,
+        <span style=color:#f1fa8c>&#34;field_errors&#34;</span>: <span style=color:#8be9fd;font-style:italic>map</span>[<span style=color:#8be9fd>string</span>]<span style=color:#8be9fd>string</span>{
+            <span style=color:#f1fa8c>&#34;email&#34;</span>: <span style=color:#f1fa8c>&#34;invalid format&#34;</span>,
+            <span style=color:#f1fa8c>&#34;age&#34;</span>: <span style=color:#f1fa8c>&#34;must be positive&#34;</span>,
+        },
+    }
+    h.<span style=color:#50fa7b>WriteErrorObject</span>(w, err, http.StatusBadRequest)
+}
+
+<span style=color:#6272a4>// HTTP status code errors
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> (h <span style=color:#ff79c6>*</span>APIHandler) <span style=color:#50fa7b>handleVariousErrors</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    h.<span style=color:#50fa7b>Error404</span>(w)      <span style=color:#6272a4>// 404 Not Found
+</span><span style=color:#6272a4></span>    h.<span style=color:#50fa7b>Error400</span>(w, <span style=color:#f1fa8c>&#34;Bad request&#34;</span>)  <span style=color:#6272a4>// 400 Bad Request
+</span><span style=color:#6272a4></span>    h.<span style=color:#50fa7b>Error500</span>(w, <span style=color:#f1fa8c>&#34;Internal server error&#34;</span>)  <span style=color:#6272a4>// 500 Internal Server Error
+</span><span style=color:#6272a4></span>    h.<span style=color:#50fa7b>ErrorInternalServer</span>(w, <span style=color:#f1fa8c>&#34;Something went wrong&#34;</span>)  <span style=color:#6272a4>// 500, alternative
+</span><span style=color:#6272a4></span>}
+</code></pre></div><h2 id=api-middleware-and-options>API Middleware and Options
+<a class=anchor href=#api-middleware-and-options>#</a></h2><h3 id=permission-based-access-control>Permission-based Access Control
+<a class=anchor href=#permission-based-access-control>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#ff79c6>import</span> <span style=color:#f1fa8c>&#34;infini.sh/framework/core/security&#34;</span>
+
+<span style=color:#6272a4>// Define permissions
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>var</span> createPermission = security.<span style=color:#50fa7b>GetSimplePermission</span>(<span style=color:#f1fa8c>&#34;user&#34;</span>, <span style=color:#f1fa8c>&#34;user&#34;</span>, <span style=color:#8be9fd;font-style:italic>string</span>(security.Create))
+<span style=color:#8be9fd;font-style:italic>var</span> readPermission = security.<span style=color:#50fa7b>GetSimplePermission</span>(<span style=color:#f1fa8c>&#34;user&#34;</span>, <span style=color:#f1fa8c>&#34;user&#34;</span>, <span style=color:#8be9fd;font-style:italic>string</span>(security.Read))
+<span style=color:#8be9fd;font-style:italic>var</span> updatePermission = security.<span style=color:#50fa7b>GetSimplePermission</span>(<span style=color:#f1fa8c>&#34;user&#34;</span>, <span style=color:#f1fa8c>&#34;user&#34;</span>, <span style=color:#8be9fd;font-style:italic>string</span>(security.Update))
+<span style=color:#8be9fd;font-style:italic>var</span> deletePermission = security.<span style=color:#50fa7b>GetSimplePermission</span>(<span style=color:#f1fa8c>&#34;user&#34;</span>, <span style=color:#f1fa8c>&#34;user&#34;</span>, <span style=color:#8be9fd;font-style:italic>string</span>(security.Delete))
+
+<span style=color:#6272a4>// Register with permissions
+</span><span style=color:#6272a4></span>api.<span style=color:#50fa7b>HandleUIMethod</span>(api.POST, <span style=color:#f1fa8c>&#34;/users/&#34;</span>, handler.createUser, api.<span style=color:#50fa7b>RequirePermission</span>(createPermission))
+api.<span style=color:#50fa7b>HandleUIMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/users/:id&#34;</span>, handler.getUser, api.<span style=color:#50fa7b>RequirePermission</span>(readPermission))
+
+<span style=color:#6272a4>// Multiple permissions - require all
+</span><span style=color:#6272a4></span>api.<span style=color:#50fa7b>HandleUIMethod</span>(api.DELETE, <span style=color:#f1fa8c>&#34;/admin/users/:id&#34;</span>, handler.deleteUser,
+    api.<span style=color:#50fa7b>RequirePermission</span>(deletePermission, adminPermission))
+</code></pre></div><h3 id=feature-flags>Feature Flags
+<a class=anchor href=#feature-flags>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6272a4>// Enable CORS for specific endpoints
+</span><span style=color:#6272a4></span>api.<span style=color:#50fa7b>HandleUIMethod</span>(api.OPTIONS, <span style=color:#f1fa8c>&#34;/users/_search&#34;</span>, handler.searchUsers,
+    api.<span style=color:#50fa7b>Feature</span>(core.FeatureCORS))
+
+<span style=color:#6272a4>// Note: Request logging is not yet available as a feature flag
+</span><span style=color:#6272a4>// Use manual logging in handlers if needed
+</span><span style=color:#6272a4></span>
+<span style=color:#6272a4>// Disable sensitive field exposure
+</span><span style=color:#6272a4></span>api.<span style=color:#50fa7b>HandleUIMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/users/:id&#34;</span>, handler.getUser,
+    api.<span style=color:#50fa7b>Feature</span>(core.FeatureMaskSensitiveField))
+
+<span style=color:#6272a4>// Enable JSON schema validation
+</span><span style=color:#6272a4></span>api.<span style=color:#50fa7b>HandleUIMethod</span>(api.POST, <span style=color:#f1fa8c>&#34;/users/&#34;</span>, handler.createUser,
+    api.<span style=color:#50fa7b>Feature</span>(core.FeatureValidateRequestJSON))
+</code></pre></div><h3 id=authentication-options>Authentication Options
+<a class=anchor href=#authentication-options>#</a></h3><p>The framework supports multiple authentication backends.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6272a4>// Require login with standard auth
+</span><span style=color:#6272a4></span>api.<span style=color:#50fa7b>HandleUIMethod</span>(api.POST, <span style=color:#f1fa8c>&#34;/users/&#34;</span>, handler.createUser,
+    api.<span style=color:#50fa7b>RequireLogin</span>())
+
+<span style=color:#6272a4>// Optional login - process if authenticated, allow anonymous otherwise
+</span><span style=color:#6272a4></span>api.<span style=color:#50fa7b>HandleUIMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/public/users/&#34;</span>, handler.listPublicUsers,
+    api.<span style=color:#50fa7b>OptionLogin</span>())
+
+<span style=color:#6272a4>// Public access - no authentication required
+</span><span style=color:#6272a4></span>api.<span style=color:#50fa7b>HandleUIMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/health&#34;</span>, handler.healthCheck,
+    api.<span style=color:#50fa7b>AllowPublicAccess</span>())
+</code></pre></div><h3 id=static-rules-based-authorization>Static Rules-Based Authorization
+<a class=anchor href=#static-rules-based-authorization>#</a></h3><p>The framework supports declarative, config-driven role and permission assignment via the <code>static</code> authorization backend. This allows administrators to define roles with specific permissions and map users (by ID or login name) to those roles — all without a database.</p><h4 id=configuration-1>Configuration
+<a class=anchor href=#configuration-1>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>web</span>:
+  <span style=color:#ff79c6>security</span>:
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>authorization</span>:
+      <span style=color:#ff79c6>static</span>:
+        <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+        <span style=color:#ff79c6>roles</span>:
+          - <span style=color:#ff79c6>name</span>: <span style=color:#f1fa8c>&#34;viewer&#34;</span>
+            <span style=color:#ff79c6>permissions</span>:
+              - <span style=color:#f1fa8c>&#34;generic:cluster:read&#34;</span>
+              - <span style=color:#f1fa8c>&#34;generic:cluster:search&#34;</span>
+          - <span style=color:#ff79c6>name</span>: <span style=color:#f1fa8c>&#34;operator&#34;</span>
+            <span style=color:#ff79c6>permissions</span>:
+              - <span style=color:#f1fa8c>&#34;generic:cluster:*&#34;</span>
+              - <span style=color:#f1fa8c>&#34;generic:node:*&#34;</span>
+          - <span style=color:#ff79c6>name</span>: <span style=color:#f1fa8c>&#34;superadmin&#34;</span>
+            <span style=color:#ff79c6>permissions</span>:
+              - <span style=color:#f1fa8c>&#34;*&#34;</span>   <span style=color:#6272a4># Grant all permissions</span>
+        <span style=color:#ff79c6>role_mapping</span>:
+          <span style=color:#ff79c6>admin</span>: [<span style=color:#f1fa8c>&#34;superadmin&#34;</span>]          <span style=color:#6272a4># user login &#34;admin&#34; → superadmin role</span>
+          <span style=color:#ff79c6>ci-bot</span>: [<span style=color:#f1fa8c>&#34;operator&#34;</span>]           <span style=color:#6272a4># user login &#34;ci-bot&#34; → operator role</span>
+          <span style=color:#ff79c6>readonly-user</span>: [<span style=color:#f1fa8c>&#34;viewer&#34;</span>]      <span style=color:#6272a4># user login &#34;readonly-user&#34; → viewer role</span>
+</code></pre></div><h4 id=how-it-works>How It Works
+<a class=anchor href=#how-it-works>#</a></h4><ol><li><strong>Roles</strong> define named sets of permission keys. A permission of <code>"*"</code> grants all permissions.</li><li><strong>Role mapping</strong> assigns one or more roles to users by their login name or user ID.</li><li>When <code>GetUserPermissions</code> is called for a user, the static provider&rsquo;s <code>GetPermissionKeysByUserID</code> resolves the user&rsquo;s mapped roles and returns the union of all permissions from those roles.</li><li>Both <code>userID</code> (UUID) and <code>login</code> (username) are checked against the role mapping — so you can use either as the mapping key.</li></ol><h4 id=permission-key-format>Permission Key Format
+<a class=anchor href=#permission-key-format>#</a></h4><p>Permission keys follow the pattern: <code>category:resource:action</code></p><pre><code>generic:cluster:read       # Read access to clusters
+generic:node:*             # All actions on nodes (wildcard)
+coco:datasource:create     # Create datasources in coco category
+*                          # All permissions (admin shortcut)
+</code></pre><p>Standard actions: <code>read</code>, <code>write</code>, <code>create</code>, <code>update</code>, <code>delete</code>, <code>search</code>, <code>execute</code>.</p><h4 id=architecture-1>Architecture
+<a class=anchor href=#architecture-1>#</a></h4><p>The static authorization module is one of several <code>AuthorizationBackend</code> providers. All providers are queried in parallel when resolving user permissions:</p><pre><code>┌─────────────────────────────────────────────────────────────────┐
+│                    GetUserPermissions(session)                   │
+├─────────────────────────────────────────────────────────────────┤
+│  1. Check permission cache                                      │
+│  2. If miss: call GetAllPermissionsForUser                      │
+│     ├─ static_authorization.GetPermissionKeysByUserID(...)      │
+│     │   → looks up role_mapping[userID] and role_mapping[login] │
+│     │   → resolves roles → returns permission keys              │
+│     ├─ native.GetPermissionKeysByUserID(...)                    │
+│     │   → looks up DB-stored role assignments                   │
+│     ├─ oauth.GetPermissionKeysByUserID(...)                     │
+│     │   → checks bootstrap admin users                          │
+│     └─ access_token.GetPermissionKeysByUserID(...)              │
+│         → returns token-scoped permissions                      │
+│  3. Merge + deduplicate all permission keys                     │
+│  4. Also resolve permissions from session.Roles via             │
+│     GetPermissionKeysByRoles (for DB-assigned roles)            │
+│  5. Cache result for 30 minutes                                 │
+└─────────────────────────────────────────────────────────────────┘
+</code></pre><h4 id=authorizationbackend-interface>AuthorizationBackend Interface
+<a class=anchor href=#authorizationbackend-interface>#</a></h4><p>Custom authorization providers implement:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8be9fd;font-style:italic>type</span> AuthorizationBackend <span style=color:#8be9fd;font-style:italic>interface</span> {
+    <span style=color:#6272a4>// GetPermissionKeysByUserID resolves permissions for a user identified by
+</span><span style=color:#6272a4></span>    <span style=color:#6272a4>// userID (UUID) and login (username). The provider should check both identifiers.
+</span><span style=color:#6272a4></span>    <span style=color:#50fa7b>GetPermissionKeysByUserID</span>(ctx context.Context, providerID, userID, login <span style=color:#8be9fd>string</span>) []PermissionKey
+
+    <span style=color:#6272a4>// GetPermissionKeysByRoles resolves permissions for a set of role names.
+</span><span style=color:#6272a4></span>    <span style=color:#50fa7b>GetPermissionKeysByRoles</span>(ctx context.Context, roles []<span style=color:#8be9fd>string</span>) []PermissionKey
+}
+</code></pre></div><p>Register a custom provider:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>security.<span style=color:#50fa7b>RegisterAuthorizationProvider</span>(<span style=color:#f1fa8c>&#34;my_backend&#34;</span>, <span style=color:#ff79c6>&amp;</span>myProvider{})
+</code></pre></div><h4 id=admin-role-bypass>Admin Role Bypass
+<a class=anchor href=#admin-role-bypass>#</a></h4><p>The permission filter provides a fast-path for users whose <code>session.Roles</code> contains <code>"admin"</code> — permission resolution is skipped entirely and all requests are allowed. This applies to roles stored on the user account; static role mappings contribute permissions but do not set <code>session.Roles</code> (they are resolved at permission-check time via <code>GetPermissionKeysByUserID</code>).</p><h4 id=filter-pipeline>Filter Pipeline
+<a class=anchor href=#filter-pipeline>#</a></h4><p>The security filter pipeline processes requests in priority order:</p><table><thead><tr><th>Priority</th><th>Filter</th><th>Responsibility</th></tr></thead><tbody><tr><td><code>200</code></td><td><strong>AuthFilter</strong></td><td>Authenticate request, run context resolvers, store user in context</td></tr><tr><td><code>500</code></td><td><strong>PermissionFilter</strong></td><td>Check <code>session.Roles</code> for admin bypass, then lazy-resolve permissions via <code>GetUserPermissions</code> and enforce required permissions</td></tr></tbody></table><p>The permission filter only resolves permissions when a route declares <code>RequirePermission(...)</code>. Routes without permission requirements skip authorization entirely.</p><h3 id=pluggable-auth-filter-pipeline>Pluggable Auth Filter Pipeline
+<a class=anchor href=#pluggable-auth-filter-pipeline>#</a></h3><p>Incoming requests are authenticated through a priority-ordered pipeline of <code>HTTPAuthFilterProvider</code> functions. Each provider attempts to extract and validate credentials from the request; the first one that returns valid claims short-circuits the chain.</p><h4 id=built-in-providers>Built-in Providers
+<a class=anchor href=#built-in-providers>#</a></h4><table><thead><tr><th>Priority</th><th>Name</th><th>Mechanism</th></tr></thead><tbody><tr><td><code>10</code></td><td><code>session_token</code></td><td>HTTP session / cookie</td></tr><tr><td><code>20</code></td><td><code>bearer_token</code></td><td><code>Authorization: Bearer &lt;jwt></code> header</td></tr><tr><td><code>30</code></td><td><code>api_token</code></td><td><code>X-API-TOKEN</code> header</td></tr></tbody></table><p><strong>Smaller priority values execute first</strong> (higher precedence), consistent with the framework-wide convention.</p><h4 id=registering-a-custom-provider>Registering a Custom Provider
+<a class=anchor href=#registering-a-custom-provider>#</a></h4><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#ff79c6>import</span> <span style=color:#f1fa8c>&#34;infini.sh/framework/core/security&#34;</span>
+
+<span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>init</span>() {
+    <span style=color:#6272a4>// With explicit priority (smaller value = higher precedence)
+</span><span style=color:#6272a4></span>    security.<span style=color:#50fa7b>RegisterHTTPAuthFilterProviderWithPriority</span>(
+        <span style=color:#f1fa8c>&#34;my_auth&#34;</span>,          <span style=color:#6272a4>// unique name (used in logs)
+</span><span style=color:#6272a4></span>        myAuthProvider,     <span style=color:#6272a4>// func(w http.ResponseWriter, r *http.Request) (*security.UserClaims, error)
+</span><span style=color:#6272a4></span>        <span style=color:#bd93f9>15</span>,                 <span style=color:#6272a4>// executes after session_token (10) but before bearer_token (20)
+</span><span style=color:#6272a4></span>    )
+
+    <span style=color:#6272a4>// Without priority — defaults to 100 (executes after all built-in providers)
+</span><span style=color:#6272a4></span>    security.<span style=color:#50fa7b>RegisterHTTPAuthFilterProvider</span>(<span style=color:#f1fa8c>&#34;my_auth&#34;</span>, myAuthProvider)
+}
+
+<span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>myAuthProvider</span>(w http.ResponseWriter, r <span style=color:#ff79c6>*</span>http.Request) (<span style=color:#ff79c6>*</span>security.UserClaims, <span style=color:#8be9fd>error</span>) {
+    <span style=color:#6272a4>// Extract and validate credentials; return nil claims on failure
+</span><span style=color:#6272a4></span>    <span style=color:#ff79c6>...</span>
+}
+</code></pre></div><p>Providers registered with the same priority value are tried in registration order.</p><h3 id=access-token-authentication>Access Token Authentication
+<a class=anchor href=#access-token-authentication>#</a></h3><p>The framework provides a built-in access token (API token) module for programmatic authentication. Access tokens allow services and automation tools to authenticate API requests without interactive login sessions.</p><h4 id=how-it-works-1>How It Works
+<a class=anchor href=#how-it-works-1>#</a></h4><p>Requests carrying an <code>X-API-TOKEN</code> header are automatically authenticated by the framework&rsquo;s HTTP auth filter pipeline. The token is validated against the KV store, checked for expiration, and the caller is granted the intersection of the token&rsquo;s permissions and its owner&rsquo;s current permissions (in native mode).</p><h4 id=configuration-2>Configuration
+<a class=anchor href=#configuration-2>#</a></h4><p>Enable access token authentication in the web server security configuration:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>web</span>:
+  <span style=color:#ff79c6>security</span>:
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>authentication</span>:
+      <span style=color:#ff79c6>access_token</span>:
+        <span style=color:#ff79c6>native</span>: <span style=color:#ff79c6>true</span>   <span style=color:#6272a4># Use ORM-backed persistence (requires a backend store)</span>
+</code></pre></div><p>When <code>native</code> is <code>false</code>, the module operates in KV-only mode suitable for lightweight/agent-style deployments without a full ORM backend.</p><h4 id=api-endpoints>API Endpoints
+<a class=anchor href=#api-endpoints>#</a></h4><table><thead><tr><th>Method</th><th>Path</th><th>Description</th><th>Permission</th></tr></thead><tbody><tr><td><code>POST</code></td><td><code>/auth/access_token</code></td><td>Create a new access token</td><td><code>security:auth:api-token:create</code></td></tr><tr><td><code>GET</code></td><td><code>/auth/access_token/_search</code></td><td>Search/list access tokens</td><td><code>security:auth:api-token:search</code></td></tr><tr><td><code>PUT</code></td><td><code>/auth/access_token/:token_id</code></td><td>Update an access token</td><td><code>security:auth:api-token:update</code></td></tr><tr><td><code>DELETE</code></td><td><code>/auth/access_token/:token_id</code></td><td>Delete an access token</td><td><code>security:auth:api-token:delete</code></td></tr></tbody></table><h4 id=creating-an-access-token>Creating an Access Token
+<a class=anchor href=#creating-an-access-token>#</a></h4><p>Send a <code>POST</code> request to <code>/auth/access_token</code> (requires an authenticated session):</p><p><strong>Request:</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#ff79c6>&#34;name&#34;</span>: <span style=color:#f1fa8c>&#34;my-ci-token&#34;</span>,
+  <span style=color:#ff79c6>&#34;permissions&#34;</span>: [<span style=color:#f1fa8c>&#34;category:resource:read&#34;</span>, <span style=color:#f1fa8c>&#34;category:resource:search&#34;</span>]
+}
+</code></pre></div><ul><li><code>name</code> (optional): A human-readable name for the token. Auto-generated if omitted.</li><li><code>permissions</code> (optional): A subset of the caller&rsquo;s own permissions to assign to the token. If omitted, the token inherits all of the caller&rsquo;s permissions.</li></ul><p><strong>Response:</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#ff79c6>&#34;_id&#34;</span>: <span style=color:#f1fa8c>&#34;token-uuid&#34;</span>,
+  <span style=color:#ff79c6>&#34;access_token&#34;</span>: <span style=color:#f1fa8c>&#34;generated-token-string&#34;</span>,
+  <span style=color:#ff79c6>&#34;expire_in&#34;</span>: <span style=color:#bd93f9>1748102400</span>
+}
+</code></pre></div><p>The <code>access_token</code> value is the secret string used in subsequent API calls. Store it securely — it cannot be retrieved again after creation.</p><h4 id=using-an-access-token>Using an Access Token
+<a class=anchor href=#using-an-access-token>#</a></h4><p>Include the token in the <code>X-API-TOKEN</code> HTTP header:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>curl -H <span style=color:#f1fa8c>&#34;X-API-TOKEN: &lt;your-access-token&gt;&#34;</span> https://localhost:9200/_api/resource/_search
+</code></pre></div><h4 id=updating-an-access-token>Updating an Access Token
+<a class=anchor href=#updating-an-access-token>#</a></h4><p>Send a <code>PUT</code> request to <code>/auth/access_token/:token_id</code>:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#ff79c6>&#34;name&#34;</span>: <span style=color:#f1fa8c>&#34;renamed-token&#34;</span>,
+  <span style=color:#ff79c6>&#34;permissions&#34;</span>: [<span style=color:#f1fa8c>&#34;category:resource:read&#34;</span>]
+}
+</code></pre></div><ul><li><code>name</code> (required): The new name for the token.</li><li><code>permissions</code> (optional): Updated permissions. Must be a subset of the caller&rsquo;s current permissions.</li></ul><h4 id=deleting-an-access-token>Deleting an Access Token
+<a class=anchor href=#deleting-an-access-token>#</a></h4><p>Send a <code>DELETE</code> request to <code>/auth/access_token/:token_id</code>. The token is immediately invalidated and can no longer be used for authentication.</p><h4 id=token-expiration>Token Expiration
+<a class=anchor href=#token-expiration>#</a></h4><p>Tokens are created with a default expiration of 1 year. A token with <code>expire_in</code> set to <code>-1</code> never expires. Expired tokens are rejected at authentication time.</p><h4 id=permission-model>Permission Model
+<a class=anchor href=#permission-model>#</a></h4><p>In <strong>native mode</strong>, the effective permissions of a token are computed as:</p><p>$$\text{effective} = \text{token_permissions} \cap \text{owner_current_permissions}$$</p><p>This ensures that if a user&rsquo;s permissions are revoked after a token is issued, the token&rsquo;s effective permissions are automatically narrowed. Permission changes take effect immediately (the permission cache version is incremented on every token update/delete).</p><p>In <strong>non-native (KV-only) mode</strong>, the token&rsquo;s stored permissions are used directly without intersection.</p><h4 id=programmatic-token-creation>Programmatic Token Creation
+<a class=anchor href=#programmatic-token-creation>#</a></h4><p>Tokens can also be created programmatically from Go code:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#ff79c6>import</span> <span style=color:#f1fa8c>&#34;infini.sh/framework/modules/security/access_token&#34;</span>
+
+<span style=color:#6272a4>// Create a token for a user with specific permissions
+</span><span style=color:#6272a4></span>result, err <span style=color:#ff79c6>:=</span> access_token.<span style=color:#50fa7b>CreateAPIToken</span>(
+    userSession,           <span style=color:#6272a4>// *security.UserSessionInfo - token owner
+</span><span style=color:#6272a4></span>    <span style=color:#f1fa8c>&#34;service-token&#34;</span>,       <span style=color:#6272a4>// token name
+</span><span style=color:#6272a4></span>    <span style=color:#f1fa8c>&#34;general&#34;</span>,             <span style=color:#6272a4>// token type
+</span><span style=color:#6272a4></span>    expireUnix,            <span style=color:#6272a4>// expiration as Unix timestamp
+</span><span style=color:#6272a4></span>    permissions,           <span style=color:#6272a4>// []security.PermissionKey
+</span><span style=color:#6272a4></span>)
+<span style=color:#6272a4>// result[&#34;access_token&#34;] contains the token string
+</span><span style=color:#6272a4>// result[&#34;_id&#34;] contains the token ID
+</span></code></pre></div><h3 id=label-and-metadata>Label and Metadata
+<a class=anchor href=#label-and-metadata>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6272a4>// Add metadata for logging or processing
+</span><span style=color:#6272a4></span>api.<span style=color:#50fa7b>HandleUIMethod</span>(api.POST, <span style=color:#f1fa8c>&#34;/users/&#34;</span>, handler.createUser,
+    api.<span style=color:#50fa7b>Name</span>(<span style=color:#f1fa8c>&#34;Create User&#34;</span>),
+    api.<span style=color:#50fa7b>Resource</span>(<span style=color:#f1fa8c>&#34;user&#34;</span>),
+    api.<span style=color:#50fa7b>Action</span>(<span style=color:#f1fa8c>&#34;create&#34;</span>),
+    api.<span style=color:#50fa7b>Label</span>(<span style=color:#f1fa8c>&#34;operation&#34;</span>, <span style=color:#f1fa8c>&#34;user_management&#34;</span>),
+    api.<span style=color:#50fa7b>Label</span>(<span style=color:#f1fa8c>&#34;tag&#34;</span>, <span style=color:#f1fa8c>&#34;admin&#34;</span>),
+    api.<span style=color:#50fa7b>Tags</span>([]<span style=color:#8be9fd>string</span>{<span style=color:#f1fa8c>&#34;user&#34;</span>, <span style=color:#f1fa8c>&#34;admin&#34;</span>, <span style=color:#f1fa8c>&#34;create&#34;</span>}))
+</code></pre></div><h3 id=available-features-reference>Available Features Reference
+<a class=anchor href=#available-features-reference>#</a></h3><table><thead><tr><th>Feature</th><th>Description</th><th>Usage</th></tr></thead><tbody><tr><td><code>core.FeatureCORS</code></td><td>Enable CORS headers for cross-origin requests</td><td>Standard CORS support</td></tr><tr><td><code>core.FeatureNotAllowCredentials</code></td><td>Disable credentials in CORS responses</td><td>CORS with no credentials</td></tr><tr><td><code>core.FeatureByPassCORSCheck</code></td><td>Skip CORS checking entirely</td><td>Internal endpoints</td></tr><tr><td><code>core.FeatureFingerprintThrottle</code></td><td>Enable fingerprint-based rate throttling</td><td>Rate limiting</td></tr><tr><td><code>core.FeatureMaskSensitiveField</code></td><td>Mask sensitive field values in responses</td><td>Hide data partially</td></tr><tr><td><code>core.FeatureRemoveSensitiveField</code></td><td>Remove sensitive fields from responses</td><td>Hide data completely</td></tr></tbody></table><h2 id=web-framework-features>Web Framework Features
+<a class=anchor href=#web-framework-features>#</a></h2><p>The web framework is primarily designed for serving static UI assets and handling web interfaces. Key features include:</p><h3 id=static-file-serving-with-vfs>Static File Serving with VFS
+<a class=anchor href=#static-file-serving-with-vfs>#</a></h3><p>Static files are managed through the Virtual File System (VFS) which provides both embedded and local file serving capabilities with runtime customization support:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6272a4>// Registration in main.go
+</span><span style=color:#6272a4></span>vfs.<span style=color:#50fa7b>RegisterFS</span>(public.StaticFS{
+    StaticFolder: global.<span style=color:#50fa7b>Env</span>().SystemConfig.WebAppConfig.UI.LocalPath,
+    TrimLeftPath: global.<span style=color:#50fa7b>Env</span>().SystemConfig.WebAppConfig.UI.LocalPath,
+    CheckLocalFirst: global.<span style=color:#50fa7b>Env</span>().SystemConfig.WebAppConfig.UI.LocalEnabled,
+    SkipVFS: !global.<span style=color:#50fa7b>Env</span>().SystemConfig.WebAppConfig.UI.VFSEnabled,
+})
+
+<span style=color:#6272a4>// Then register the file server
+</span><span style=color:#6272a4></span>api1.<span style=color:#50fa7b>HandleUI</span>(<span style=color:#f1fa8c>&#34;/&#34;</span>, vfs.<span style=color:#50fa7b>FileServer</span>(vfs.<span style=color:#50fa7b>VFS</span>()))
+</code></pre></div><h3 id=vfs-file-lookup-strategy>VFS File Lookup Strategy
+<a class=anchor href=#vfs-file-lookup-strategy>#</a></h3><p>The VFS system uses a &ldquo;local-first&rdquo; lookup strategy:</p><ol><li><strong>Check local files</strong> in the configured folder (default: <code>.public</code> relative to app binary)</li><li><strong>Fall back to embedded files</strong> if local file doesn&rsquo;t exist</li><li><strong>This allows runtime customization</strong> by replacing files in the local folder</li></ol><h3 id=configuration-example>Configuration Example
+<a class=anchor href=#configuration-example>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>web</span>:
+  <span style=color:#ff79c6>ui</span>:
+    <span style=color:#ff79c6>local</span>:
+      <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>      <span style=color:#6272a4># Enable local file checking</span>
+      <span style=color:#ff79c6>path</span>: <span style=color:#f1fa8c>&#34;./web/dist&#34;</span> <span style=color:#6272a4># Path to local files (relative to binary)</span>
+    <span style=color:#ff79c6>vfs</span>:
+      <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>false</span>     <span style=color:#6272a4># Use embedded files when local disabled</span>
+</code></pre></div><h3 id=customization-workflow>Customization Workflow
+<a class=anchor href=#customization-workflow>#</a></h3><ol><li>Place your static files in the local folder (default: <code>.public/</code> relative to app binary location)</li><li>Files in this folder will override embedded files with the same path</li><li>Changes take effect immediately without restart</li><li>Perfect for theme customization, branding, or emergency fixes</li></ol><h3 id=configuration-only-features>Configuration-Only Features
+<a class=anchor href=#configuration-only-features>#</a></h3><p>Unlike the API server, web framework features are primarily configuration-driven:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>web</span>:
+  <span style=color:#ff79c6>gzip</span>:
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>    <span style=color:#6272a4># Enable gzip compression</span>
+    <span style=color:#ff79c6>level</span>: <span style=color:#bd93f9>6</span>        <span style=color:#6272a4># Compression level 1-9</span>
+
+  <span style=color:#ff79c6>cookie</span>:
+    <span style=color:#ff79c6>secure</span>: <span style=color:#ff79c6>true</span>    <span style=color:#6272a4># HTTPS only cookies</span>
+    <span style=color:#ff79c6>httponly</span>: <span style=color:#ff79c6>true</span>  <span style=color:#6272a4># Prevent XSS attacks</span>
+    <span style=color:#ff79c6>path</span>: <span style=color:#f1fa8c>&#34;/&#34;</span>       <span style=color:#6272a4># Cookie scope</span>
+
+  <span style=color:#ff79c6>cors</span>:
+    <span style=color:#ff79c6>allowed_origins</span>: [<span style=color:#f1fa8c>&#34;https://example.com&#34;</span>]  <span style=color:#6272a4># CORS domains</span>
+</code></pre></div><h3 id=websocket-support>WebSocket Support
+<a class=anchor href=#websocket-support>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>api</span>:
+  <span style=color:#ff79c6>websocket</span>:
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#ff79c6>base_path</span>: <span style=color:#f1fa8c>&#34;/ws&#34;</span>
+    <span style=color:#ff79c6>permitted_hosts</span>: []
+    <span style=color:#ff79c6>skip_host_verify</span>: <span style=color:#ff79c6>false</span>
+</code></pre></div><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8be9fd;font-style:italic>func</span> (h <span style=color:#ff79c6>*</span>APIHandler) <span style=color:#50fa7b>handleWebSocket</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    roomID <span style=color:#ff79c6>:=</span> ps.<span style=color:#50fa7b>ByName</span>(<span style=color:#f1fa8c>&#34;room_id&#34;</span>)
+
+    <span style=color:#6272a4>// Upgrade HTTP to WebSocket
+</span><span style=color:#6272a4></span>    conn, err <span style=color:#ff79c6>:=</span> websocket.<span style=color:#50fa7b>Upgrade</span>(w, req)
+    <span style=color:#ff79c6>if</span> err <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>nil</span> {
+        h.<span style=color:#50fa7b>WriteError</span>(w, <span style=color:#f1fa8c>&#34;WebSocket upgrade failed&#34;</span>, http.StatusBadRequest)
+        <span style=color:#ff79c6>return</span>
+    }
+
+    <span style=color:#6272a4>// Join chat room
+</span><span style=color:#6272a4></span>    room <span style=color:#ff79c6>:=</span> websocket.<span style=color:#50fa7b>GetRoom</span>(roomID)
+    room.<span style=color:#50fa7b>Join</span>(conn)
+}
+</code></pre></div><h3 id=session-management>Session Management
+<a class=anchor href=#session-management>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8be9fd;font-style:italic>func</span> (h <span style=color:#ff79c6>*</span>APIHandler) <span style=color:#50fa7b>login</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    <span style=color:#8be9fd;font-style:italic>var</span> login LoginRequest
+    h.<span style=color:#50fa7b>MustDecodeJSON</span>(req, <span style=color:#ff79c6>&amp;</span>login)
+
+    <span style=color:#6272a4>// Validate credentials
+</span><span style=color:#6272a4></span>    user, err <span style=color:#ff79c6>:=</span> authService.<span style=color:#50fa7b>Login</span>(login.Username, login.Password)
+    <span style=color:#ff79c6>if</span> err <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>nil</span> {
+        h.<span style=color:#50fa7b>WriteError</span>(w, <span style=color:#f1fa8c>&#34;Invalid credentials&#34;</span>, http.StatusUnauthorized)
+        <span style=color:#ff79c6>return</span>
+    }
+
+    <span style=color:#6272a4>// Create session
+</span><span style=color:#6272a4></span>    session <span style=color:#ff79c6>:=</span> h.<span style=color:#50fa7b>CreateSession</span>(w, user.ID)
+    session.<span style=color:#50fa7b>Set</span>(<span style=color:#f1fa8c>&#34;user&#34;</span>, user)
+    session.<span style=color:#50fa7b>Set</span>(<span style=color:#f1fa8c>&#34;last_login&#34;</span>, time.<span style=color:#50fa7b>Now</span>())
+
+    h.<span style=color:#50fa7b>WriteJSON</span>(w, <span style=color:#8be9fd;font-style:italic>map</span>[<span style=color:#8be9fd>string</span>]<span style=color:#8be9fd;font-style:italic>interface</span>{}{
+        <span style=color:#f1fa8c>&#34;message&#34;</span>: <span style=color:#f1fa8c>&#34;Login successful&#34;</span>,
+        <span style=color:#f1fa8c>&#34;user&#34;</span>: user,
+    }, http.StatusOK)
+}
+</code></pre></div><h2 id=api-handler-base-functions>API Handler Base Functions
+<a class=anchor href=#api-handler-base-functions>#</a></h2><p>The embedded <code>api.Handler</code> provides comprehensive helper methods:</p><h3 id=http-method-handling>HTTP Method Handling
+<a class=anchor href=#http-method-handling>#</a></h3><ul><li><code>WriteJSON(w, v, code)</code> - Standard JSON response</li><li><code>WriteJSONListResult(w, total, v, code)</code> - List with total count</li><li><code>WriteError(w, message, code)</code> - Error response</li><li><code>WriteAckJSON(w, ack, code, obj)</code> - Acknowledgment response</li><li><code>WriteCreatedOKJSON(w, id)</code> - Creation confirmation</li><li><code>WriteUpdatedOKJSON(w, id)</code> - Update confirmation</li><li><code>WriteDeletedOKJSON(w, id)</code> - Deletion confirmation</li></ul><h3 id=parameter-processing>Parameter Processing
+<a class=anchor href=#parameter-processing>#</a></h3><ul><li><code>GetParameter(r, key)</code> - Get query parameter</li><li><code>GetParameterOrDefault(r, key, def)</code> - Get parameter with default</li><li><code>MustGetParameter(w, r, key)</code> - Required parameter (404 if missing)</li><li><code>GetIntOrDefault(r, key, def)</code> - Integer parameter</li><li><code>GetBoolOrDefault(r, key, def)</code> - Boolean parameter</li><li><code>GetHeader(r, header, def)</code> - HTTP header access</li></ul><h3 id=json-processing>JSON Processing
+<a class=anchor href=#json-processing>#</a></h3><ul><li><code>MustDecodeJSON(r, obj)</code> - Decode JSON with automatic error handling</li><li><code>DecodeJSON(r, obj)</code> - Decode JSON returning error</li><li><code>GetJSON(r)</code> - Get JSONQ wrapper for complex parsing</li><li><code>GetRawBody(r)</code> - Get raw request body as bytes</li></ul><h3 id=error-responses>Error Responses
+<a class=anchor href=#error-responses>#</a></h3><ul><li><code>Error500(w, msg)</code> - Internal server error</li><li><code>Error400(w, msg)</code> - Bad request</li><li><code>Error404(w)</code> - Not found</li><li><code>WriteErrorObject(w, err, code)</code> - Complex error structure</li></ul><h2 id=real-world-example-datasource-module>Real-World Example: DataSource Module
+<a class=anchor href=#real-world-example-datasource-module>#</a></h2><p>Complete API implementation from the framework:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#ff79c6>package</span> datasource
+
+<span style=color:#ff79c6>import</span> (
+    <span style=color:#f1fa8c>&#34;infini.sh/framework/core/api&#34;</span>
+    httprouter <span style=color:#f1fa8c>&#34;infini.sh/framework/core/api/router&#34;</span>
+    <span style=color:#f1fa8c>&#34;infini.sh/framework/core/security&#34;</span>
+    <span style=color:#f1fa8c>&#34;infini.sh/framework/core/util&#34;</span>
+    <span style=color:#f1fa8c>&#34;net/http&#34;</span>
+)
+
+<span style=color:#8be9fd;font-style:italic>type</span> APIHandler <span style=color:#8be9fd;font-style:italic>struct</span> {
+    api.Handler
+}
+
+<span style=color:#8be9fd;font-style:italic>const</span> Category = <span style=color:#f1fa8c>&#34;coco&#34;</span>
+<span style=color:#8be9fd;font-style:italic>const</span> Datasource = <span style=color:#f1fa8c>&#34;datasource&#34;</span>
+
+<span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>init</span>() {
+    <span style=color:#6272a4>// Define permissions
+</span><span style=color:#6272a4></span>    createPermission <span style=color:#ff79c6>:=</span> security.<span style=color:#50fa7b>GetSimplePermission</span>(Category, Datasource, <span style=color:#8be9fd;font-style:italic>string</span>(security.Create))
+    updatePermission <span style=color:#ff79c6>:=</span> security.<span style=color:#50fa7b>GetSimplePermission</span>(Category, Datasource, <span style=color:#8be9fd;font-style:italic>string</span>(security.Update))
+    readPermission <span style=color:#ff79c6>:=</span> security.<span style=color:#50fa7b>GetSimplePermission</span>(Category, Datasource, <span style=color:#8be9fd;font-style:italic>string</span>(security.Read))
+    deletePermission <span style=color:#ff79c6>:=</span> security.<span style=color:#50fa7b>GetSimplePermission</span>(Category, Datasource, <span style=color:#8be9fd;font-style:italic>string</span>(security.Delete))
+    searchPermission <span style=color:#ff79c6>:=</span> security.<span style=color:#50fa7b>GetSimplePermission</span>(Category, Datasource, <span style=color:#8be9fd;font-style:italic>string</span>(security.Search))
+
+    <span style=color:#6272a4>// Register permissions
+</span><span style=color:#6272a4></span>    security.<span style=color:#50fa7b>RegisterPermissionsToRole</span>(core.WidgetRole, searchPermission)
+
+    handler <span style=color:#ff79c6>:=</span> APIHandler{}
+
+    <span style=color:#6272a4>// Register routes with permissions and features
+</span><span style=color:#6272a4></span>    api.<span style=color:#50fa7b>HandleUIMethod</span>(api.POST, <span style=color:#f1fa8c>&#34;/datasource/&#34;</span>, handler.createDatasource,
+        api.<span style=color:#50fa7b>RequirePermission</span>(createPermission))
+
+    api.<span style=color:#50fa7b>HandleUIMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/datasource/:id&#34;</span>, handler.getDatasource,
+        api.<span style=color:#50fa7b>RequirePermission</span>(readPermission))
+
+    api.<span style=color:#50fa7b>HandleUIMethod</span>(api.PUT, <span style=color:#f1fa8c>&#34;/datasource/:id&#34;</span>, handler.updateDatasource,
+        api.<span style=color:#50fa7b>RequirePermission</span>(updatePermission))
+
+    api.<span style=color:#50fa7b>HandleUIMethod</span>(api.DELETE, <span style=color:#f1fa8c>&#34;/datasource/:id&#34;</span>, handler.deleteDatasource,
+        api.<span style=color:#50fa7b>RequirePermission</span>(deletePermission))
+
+    api.<span style=color:#50fa7b>HandleUIMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/datasource/_search&#34;</span>, handler.searchDatasource,
+        api.<span style=color:#50fa7b>RequirePermission</span>(searchPermission),
+        api.<span style=color:#50fa7b>Feature</span>(core.FeatureCORS),
+        api.<span style=color:#50fa7b>Feature</span>(core.FeatureMaskSensitiveField),
+        api.<span style=color:#50fa7b>Label</span>(core.SensitiveFields, secretKeys))
+}
+
+<span style=color:#8be9fd;font-style:italic>func</span> (h <span style=color:#ff79c6>*</span>APIHandler) <span style=color:#50fa7b>createDatasource</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    <span style=color:#8be9fd;font-style:italic>var</span> obj = <span style=color:#ff79c6>&amp;</span>core.DataSource{}
+    h.<span style=color:#50fa7b>MustDecodeJSON</span>(req, obj)
+
+    <span style=color:#6272a4>// Input validation
+</span><span style=color:#6272a4></span>    <span style=color:#ff79c6>if</span> obj.Connector.ConnectorID <span style=color:#ff79c6>==</span> <span style=color:#f1fa8c>&#34;&#34;</span> {
+        <span style=color:#8be9fd;font-style:italic>panic</span>(<span style=color:#f1fa8c>&#34;invalid connector&#34;</span>)
+    }
+
+    <span style=color:#6272a4>// Create with ORM
+</span><span style=color:#6272a4></span>    err <span style=color:#ff79c6>:=</span> orm.<span style=color:#50fa7b>Create</span>(ctx, obj)
+    <span style=color:#ff79c6>if</span> err <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>nil</span> {
+        h.<span style=color:#50fa7b>WriteError</span>(w, err.<span style=color:#50fa7b>Error</span>(), http.StatusInternalServerError)
+        <span style=color:#ff79c6>return</span>
+    }
+
+    h.<span style=color:#50fa7b>WriteCreatedOKJSON</span>(w, obj.ID)
+}
+
+<span style=color:#8be9fd;font-style:italic>func</span> (h <span style=color:#ff79c6>*</span>APIHandler) <span style=color:#50fa7b>getDatasource</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    id <span style=color:#ff79c6>:=</span> ps.<span style=color:#50fa7b>MustGetParameter</span>(<span style=color:#f1fa8c>&#34;id&#34;</span>)
+
+    obj <span style=color:#ff79c6>:=</span> core.DataSource{}
+    obj.ID = id
+
+    exists, err <span style=color:#ff79c6>:=</span> orm.<span style=color:#50fa7b>GetV2</span>(ctx, <span style=color:#ff79c6>&amp;</span>obj)
+    <span style=color:#ff79c6>if</span> err <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>nil</span> {
+        h.<span style=color:#50fa7b>WriteError</span>(w, err.<span style=color:#50fa7b>Error</span>(), http.StatusInternalServerError)
+        <span style=color:#ff79c6>return</span>
+    }
+
+    <span style=color:#ff79c6>if</span> !exists {
+        h.<span style=color:#50fa7b>WriteGetMissingJSON</span>(w, id)
+        <span style=color:#ff79c6>return</span>
+    }
+
+    h.<span style=color:#50fa7b>WriteGetOKJSON</span>(w, id, obj)
+}
+</code></pre></div><h2 id=best-practices>Best Practices
+<a class=anchor href=#best-practices>#</a></h2><h3 id=1-consistent-response-patterns>1. Consistent Response Patterns
+<a class=anchor href=#1-consistent-response-patterns>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6272a4>// Always use framework helpers for consistent responses
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>GoodExample</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    user <span style=color:#ff79c6>:=</span> <span style=color:#50fa7b>getUser</span>(id)
+    h.<span style=color:#50fa7b>WriteGetOKJSON</span>(w, id, user)
+}
+
+<span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>BadExample</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    user <span style=color:#ff79c6>:=</span> <span style=color:#50fa7b>getUser</span>(id)
+    h.<span style=color:#50fa7b>WriteJSON</span>(w, <span style=color:#8be9fd;font-style:italic>map</span>[<span style=color:#8be9fd>string</span>]<span style=color:#8be9fd;font-style:italic>interface</span>{}{
+        <span style=color:#f1fa8c>&#34;_id&#34;</span>: id,
+        <span style=color:#f1fa8c>&#34;found&#34;</span>: <span style=color:#ff79c6>true</span>,
+        <span style=color:#f1fa8c>&#34;_source&#34;</span>: user,
+    }, http.StatusOK)
+}
+</code></pre></div><h3 id=2-proper-error-handling>2. Proper Error Handling
+<a class=anchor href=#2-proper-error-handling>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>GoodErrorHandling</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    <span style=color:#ff79c6>if</span> err <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>nil</span> {
+        <span style=color:#6272a4>// Use appropriate HTTP status codes
+</span><span style=color:#6272a4></span>        <span style=color:#ff79c6>if</span> err <span style=color:#ff79c6>==</span> ErrNotFound {
+            h.<span style=color:#50fa7b>WriteError</span>(w, <span style=color:#f1fa8c>&#34;User not found&#34;</span>, http.StatusNotFound)
+            <span style=color:#ff79c6>return</span>
+        }
+        <span style=color:#ff79c6>if</span> err <span style=color:#ff79c6>==</span> ErrValidation {
+            h.<span style=color:#50fa7b>WriteError</span>(w, <span style=color:#f1fa8c>&#34;Invalid input&#34;</span>, http.StatusBadRequest)
+            <span style=color:#ff79c6>return</span>
+        }
+        h.<span style=color:#50fa7b>WriteError</span>(w, <span style=color:#f1fa8c>&#34;Internal error&#34;</span>, http.StatusInternalServerError)
+        <span style=color:#ff79c6>return</span>
+    }
+}
+</code></pre></div><h3 id=3-parameter-validation>3. Parameter Validation
+<a class=anchor href=#3-parameter-validation>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>ProperValidation</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    <span style=color:#6272a4>// Extract parameters
+</span><span style=color:#6272a4></span>    id <span style=color:#ff79c6>:=</span> ps.<span style=color:#50fa7b>MustGetParameter</span>(<span style=color:#f1fa8c>&#34;id&#34;</span>)
+
+    <span style=color:#6272a4>// Validate required parameters
+</span><span style=color:#6272a4></span>    <span style=color:#ff79c6>if</span> id <span style=color:#ff79c6>==</span> <span style=color:#f1fa8c>&#34;&#34;</span> {
+        h.<span style=color:#50fa7b>WriteError</span>(w, <span style=color:#f1fa8c>&#34;ID parameter is required&#34;</span>, http.StatusBadRequest)
+        <span style=color:#ff79c6>return</span>
+    }
+
+    <span style=color:#6272a4>// Validate optional parameters
+</span><span style=color:#6272a4></span>    page <span style=color:#ff79c6>:=</span> h.<span style=color:#50fa7b>GetIntOrDefault</span>(req, <span style=color:#f1fa8c>&#34;page&#34;</span>, <span style=color:#bd93f9>1</span>)
+    <span style=color:#ff79c6>if</span> page &lt; <span style=color:#bd93f9>1</span> {
+        h.<span style=color:#50fa7b>WriteError</span>(w, <span style=color:#f1fa8c>&#34;Page must be positive&#34;</span>, http.StatusBadRequest)
+        <span style=color:#ff79c6>return</span>
+    }
+}
+</code></pre></div><h3 id=4-security-integration>4. Security Integration
+<a class=anchor href=#4-security-integration>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>SecureEndpoint</span>(w http.ResponseWriter, req <span style=color:#ff79c6>*</span>http.Request, ps httprouter.Params) {
+    handler <span style=color:#ff79c6>:=</span> APIHandler{}
+
+    api.<span style=color:#50fa7b>HandleUIMethod</span>(api.POST, <span style=color:#f1fa8c>&#34;/admin/update&#34;</span>, handler.updateAdmin,
+        api.<span style=color:#50fa7b>RequireLogin</span>(),           <span style=color:#6272a4>// Require authentication
+</span><span style=color:#6272a4></span>        api.<span style=color:#50fa7b>RequirePermission</span>(adminPermission),  <span style=color:#6272a4>// Require specific permission
+</span><span style=color:#6272a4></span>        api.<span style=color:#50fa7b>Feature</span>(core.FeatureCORS)) <span style=color:#6272a4>// Enable CORS if needed
+</span><span style=color:#6272a4></span>}
+</code></pre></div><h2 id=application-settings>Application Settings
+<a class=anchor href=#application-settings>#</a></h2><p>The framework provides a unified mechanism for registering and accessing public application-level settings via <code>api.RegisterAppSetting</code> and <code>api.GetAppSettings</code>. Registered settings are exposed through the built-in <code>GET /setting/application</code> endpoint (available on both the API and Web servers), allowing frontend applications and external consumers to retrieve application configuration in a single request.</p><h3 id=how-it-works-2>How It Works
+<a class=anchor href=#how-it-works-2>#</a></h3><p>Settings are stored in a thread-safe <code>AppSettings</code> map managed by the <code>core/api</code> package. Each module or application can register key-value pairs at startup. The framework automatically merges all registered settings with the built-in <code>auth_enabled</code> flag and serves them as a JSON object.</p><p>The endpoint is registered with public access on the Web server, so unauthenticated UI clients can fetch application settings without requiring a login:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6272a4>// Registered automatically by the framework
+</span><span style=color:#6272a4></span>api.<span style=color:#50fa7b>HandleAPIMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/setting/application&#34;</span>, appSettingsAPIHandler)
+api.<span style=color:#50fa7b>HandleUIMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/setting/application&#34;</span>, appSettingsAPIHandler,
+    api.<span style=color:#50fa7b>AllowOPTIONSS</span>(), api.<span style=color:#50fa7b>AllowPublicAccess</span>())
+</code></pre></div><h3 id=registering-static-settings>Registering Static Settings
+<a class=anchor href=#registering-static-settings>#</a></h3><p>Use <code>api.RegisterAppSetting(key, value)</code> to register a static value at startup:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#ff79c6>import</span> <span style=color:#f1fa8c>&#34;infini.sh/framework/core/api&#34;</span>
+
+<span style=color:#6272a4>// Register a simple string value
+</span><span style=color:#6272a4></span>api.<span style=color:#50fa7b>RegisterAppSetting</span>(<span style=color:#f1fa8c>&#34;domain&#34;</span>, <span style=color:#f1fa8c>&#34;example.com&#34;</span>)
+
+<span style=color:#6272a4>// Register a structured value
+</span><span style=color:#6272a4></span>api.<span style=color:#50fa7b>RegisterAppSetting</span>(<span style=color:#f1fa8c>&#34;server&#34;</span>, util.MapStr{
+    <span style=color:#f1fa8c>&#34;endpoint&#34;</span>: <span style=color:#f1fa8c>&#34;https://api.example.com&#34;</span>,
+})
+</code></pre></div><h3 id=registering-dynamic-settings>Registering Dynamic Settings
+<a class=anchor href=#registering-dynamic-settings>#</a></h3><p>Pass a <code>func() interface{}</code> to register a setting that is evaluated on every request. This is useful for values that may change at runtime:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6272a4>// Dynamic setting — evaluated each time the endpoint is called
+</span><span style=color:#6272a4></span>api.<span style=color:#50fa7b>RegisterAppSetting</span>(<span style=color:#f1fa8c>&#34;setup_required&#34;</span>, <span style=color:#8be9fd;font-style:italic>func</span>() <span style=color:#8be9fd;font-style:italic>interface</span>{} {
+    <span style=color:#ff79c6>return</span> global.<span style=color:#50fa7b>Env</span>().<span style=color:#50fa7b>SetupRequired</span>()
+})
+
+<span style=color:#6272a4>// Dynamic setting returning a computed map
+</span><span style=color:#6272a4></span>api.<span style=color:#50fa7b>RegisterAppSetting</span>(<span style=color:#f1fa8c>&#34;system_cluster&#34;</span>, <span style=color:#8be9fd;font-style:italic>func</span>() <span style=color:#8be9fd;font-style:italic>interface</span>{} {
+    client <span style=color:#ff79c6>:=</span> elastic.<span style=color:#50fa7b>GetClient</span>(global.<span style=color:#50fa7b>MustLookupString</span>(elastic.GlobalSystemElasticsearchID))
+    settings, err <span style=color:#ff79c6>:=</span> client.<span style=color:#50fa7b>GetClusterSettings</span>(<span style=color:#ff79c6>nil</span>)
+    <span style=color:#ff79c6>if</span> err <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>nil</span> {
+        <span style=color:#ff79c6>return</span> <span style=color:#ff79c6>nil</span>
+    }
+    <span style=color:#ff79c6>return</span> <span style=color:#8be9fd;font-style:italic>map</span>[<span style=color:#8be9fd>string</span>]<span style=color:#8be9fd;font-style:italic>interface</span>{}{
+        <span style=color:#f1fa8c>&#34;rollup_enabled&#34;</span>: <span style=color:#50fa7b>isRollupEnabled</span>(settings),
+    }
+})
+</code></pre></div><h3 id=reading-settings-programmatically>Reading Settings Programmatically
+<a class=anchor href=#reading-settings-programmatically>#</a></h3><p>Besides the HTTP endpoint, settings can be read from Go code:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#6272a4>// Get all settings as a merged MapStr
+</span><span style=color:#6272a4></span>allSettings <span style=color:#ff79c6>:=</span> api.<span style=color:#50fa7b>GetAppSettings</span>()
+
+<span style=color:#6272a4>// Get a single setting by key
+</span><span style=color:#6272a4></span>value <span style=color:#ff79c6>:=</span> api.<span style=color:#50fa7b>GetAppSetting</span>(<span style=color:#f1fa8c>&#34;domain&#34;</span>)
+</code></pre></div><p>Both functions automatically resolve dynamic settings (i.e., <code>func() interface{}</code> values are called and their return values are used).</p><h3 id=api-response>API Response
+<a class=anchor href=#api-response>#</a></h3><p>A <code>GET /setting/application</code> request returns a flat JSON object with all registered settings plus the built-in <code>auth_enabled</code> field:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#ff79c6>&#34;auth_enabled&#34;</span>: <span style=color:#ff79c6>true</span>,
+  <span style=color:#ff79c6>&#34;domain&#34;</span>: <span style=color:#f1fa8c>&#34;example.com&#34;</span>,
+  <span style=color:#ff79c6>&#34;server&#34;</span>: {
+    <span style=color:#ff79c6>&#34;endpoint&#34;</span>: <span style=color:#f1fa8c>&#34;https://api.example.com&#34;</span>
+  },
+  <span style=color:#ff79c6>&#34;setup_required&#34;</span>: <span style=color:#ff79c6>false</span>
+}
+</code></pre></div><h3 id=function-reference>Function Reference
+<a class=anchor href=#function-reference>#</a></h3><table><thead><tr><th>Function</th><th>Description</th></tr></thead><tbody><tr><td><code>api.RegisterAppSetting(key, value)</code></td><td>Register a static or dynamic (<code>func() interface{}</code>) setting</td></tr><tr><td><code>api.GetAppSettings()</code></td><td>Get all settings as <code>util.MapStr</code> (resolves dynamic values)</td></tr><tr><td><code>api.GetAppSetting(key)</code></td><td>Get a single setting by key (resolves dynamic value)</td></tr></tbody></table><p>The INFINI API/Web framework provides a solid foundation for building scalable, secure, and well-structured HTTP services with minimal boilerplate while maintaining flexibility for complex applications.</p></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/infinilabs/framework/edit/v1.4.2/docs/content.en/docs/references/api_web.md target=_blank rel=noopener><img src=/framework/v1.4.2/svg/edit.svg class=book-icon alt=Edit>
+<span>Edit this page</span></a></div><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
+    import { searchbox } from "https://coco.infini.cloud/integration/cvn0g9ehpcehvsthrakg/widget";
+    searchbox({container: "#searchbox"});
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><a href=/framework/v1.4.2/docs/references/api_web/index.md class=view-markdown target=_blank><img src=/assets/icons/markdown.svg>
+<span>查看 Markdown</span></a><style>.book-toc>nav li::before{position:absolute;top:6px;left:-16px;width:2px;height:32px;content:"";transition:transform .28s cubic-bezier(.2,.8,.2,1),background-color .18s ease,opacity .18s;transform:translateY(-50%)scaleY(0);opacity:0;background:0 0}.book-toc>nav>ul>li.ancestor::before{left:-16px}.book-toc>nav>ul>li.ancestor>ul>li.active::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor>ul>li.active::before{left:-48px}.book-toc>nav li.active::before{transform:translateY(-50%)scaleY(1);opacity:1;background:#8440f1}.book-toc>nav li.active>a{font-weight:500}:target{scroll-margin-top:80px}</style><script>document.addEventListener('DOMContentLoaded',function(){const nav=document.getElementsByClassName('book-toc')[0].querySelector('nav');if(!nav)return;const links=Array.from(nav.querySelectorAll('a[href^="#"]'));const idToLi=new Map();let isProgrammatic=false;let programmaticTargetId=null;let scrollEndTimer=null;links.forEach(link=>{const href=link.getAttribute('href');if(!href||href.length<2)return;const id=decodeURIComponent(href.slice(1));const li=link.closest('li');if(li)idToLi.set(id,li);link.addEventListener('click',function(e){const target=document.getElementById(id);if(target){e.preventDefault();isProgrammatic=true;programmaticTargetId=id;setActiveById(id);target.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+id);clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},1200);}});});window.addEventListener('scroll',function(){clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},120);},{passive:true});function clearAll(){idToLi.forEach(li=>li.classList.remove('active','ancestor'));links.forEach(a=>a.removeAttribute('aria-current'));}
+function setActiveById(id){clearAll();const li=idToLi.get(id);if(!li)return;li.classList.add('active');const a=li.querySelector('a[href^="#"]');if(a)a.setAttribute('aria-current','true');let parent=li.parentElement;while(parent&&parent!==nav){const parentLi=parent.closest('li');if(parentLi&&parentLi!==li)parentLi.classList.add('ancestor');parent=parent.parentElement;}}
+const observedEls=Array.from(idToLi.keys()).map(id=>document.getElementById(id)).filter(Boolean);if(observedEls.length){const io=new IntersectionObserver((entries)=>{let candidate=null;entries.forEach(en=>{if(!en.isIntersecting)return;if(!candidate)candidate=en;else{const curTop=Math.abs(candidate.boundingClientRect.top);const newTop=Math.abs(en.boundingClientRect.top);if(newTop<curTop)candidate=en;}});if(!candidate||!candidate.target||!candidate.target.id)return;const foundId=candidate.target.id;if(isProgrammatic&&programmaticTargetId&&foundId!==programmaticTargetId){return;}
+setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.1,0.25,0.5]});observedEls.forEach(el=>io.observe(el));}
+if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#overview>Overview</a></li><li><a href=#architecture>Architecture</a><ul><li><a href=#core-components>Core Components</a></li></ul></li><li><a href=#configuration>Configuration</a><ul><li><a href=#api-server-configuration>API Server Configuration</a></li><li><a href=#web-server-configuration>Web Server Configuration</a></li></ul></li><li><a href=#handler-definition>Handler Definition</a><ul><li><a href=#basic-handler-structure>Basic Handler Structure</a></li><li><a href=#handler-registration>Handler Registration</a></li></ul></li><li><a href=#route-patterns-and-parameters>Route Patterns and Parameters</a><ul><li><a href=#basic-routes>Basic Routes</a></li><li><a href=#parameter-extraction>Parameter Extraction</a></li></ul></li><li><a href=#request-handling>Request Handling</a><ul><li><a href=#json-input-processing>JSON Input Processing</a></li><li><a href=#query-parameter-processing>Query Parameter Processing</a></li></ul></li><li><a href=#response-helpers>Response Helpers</a><ul><li><a href=#standard-json-responses>Standard JSON Responses</a></li><li><a href=#error-handling>Error Handling</a></li></ul></li><li><a href=#api-middleware-and-options>API Middleware and Options</a><ul><li><a href=#permission-based-access-control>Permission-based Access Control</a></li><li><a href=#feature-flags>Feature Flags</a></li><li><a href=#authentication-options>Authentication Options</a></li><li><a href=#static-rules-based-authorization>Static Rules-Based Authorization</a></li><li><a href=#pluggable-auth-filter-pipeline>Pluggable Auth Filter Pipeline</a></li><li><a href=#access-token-authentication>Access Token Authentication</a></li><li><a href=#label-and-metadata>Label and Metadata</a></li><li><a href=#available-features-reference>Available Features Reference</a></li></ul></li><li><a href=#web-framework-features>Web Framework Features</a><ul><li><a href=#static-file-serving-with-vfs>Static File Serving with VFS</a></li><li><a href=#vfs-file-lookup-strategy>VFS File Lookup Strategy</a></li><li><a href=#configuration-example>Configuration Example</a></li><li><a href=#customization-workflow>Customization Workflow</a></li><li><a href=#configuration-only-features>Configuration-Only Features</a></li><li><a href=#websocket-support>WebSocket Support</a></li><li><a href=#session-management>Session Management</a></li></ul></li><li><a href=#api-handler-base-functions>API Handler Base Functions</a><ul><li><a href=#http-method-handling>HTTP Method Handling</a></li><li><a href=#parameter-processing>Parameter Processing</a></li><li><a href=#json-processing>JSON Processing</a></li><li><a href=#error-responses>Error Responses</a></li></ul></li><li><a href=#real-world-example-datasource-module>Real-World Example: DataSource Module</a></li><li><a href=#best-practices>Best Practices</a><ul><li><a href=#1-consistent-response-patterns>1. Consistent Response Patterns</a></li><li><a href=#2-proper-error-handling>2. Proper Error Handling</a></li><li><a href=#3-parameter-validation>3. Parameter Validation</a></li><li><a href=#4-security-integration>4. Security Integration</a></li></ul></li><li><a href=#application-settings>Application Settings</a><ul><li><a href=#how-it-works-2>How It Works</a></li><li><a href=#registering-static-settings>Registering Static Settings</a></li><li><a href=#registering-dynamic-settings>Registering Dynamic Settings</a></li><li><a href=#reading-settings-programmatically>Reading Settings Programmatically</a></li><li><a href=#api-response>API Response</a></li><li><a href=#function-reference>Function Reference</a></li></ul></li></ul></nav></aside></main></body><script src=https://infinilabs.com/notice-widget/notice-widget.umd.cjs></script><script>NoticeWidget.init({locales:{"zh-CN":"https://infinilabs.com/notice-widget/locales/zh-CN.json","en-US":"https://infinilabs.com/notice-widget/locales/en-US.json",}});</script></html>
