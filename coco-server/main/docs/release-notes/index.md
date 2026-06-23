@@ -2,7 +2,7 @@
 title: "Release Notes"
 date: 0001-01-01
 summary: "Release Notes #  Information about release notes of Coco Server is provided here.
-Latest (In development) #  ❌ Breaking changes #   refactor: change boolean fields to use boolean mappings  🚀 Features #   feat: AI search with semantic search and hybrid search support #676 feat: add deep research assistant type for in-depth research tasks #676 feat: implement file upload support for assistants #676 feat: add default model configuration so assistants can fall back to system defaults without explicit model assignment #676 feat: update model provider templates and builtin model lists with model type attribute (language, vision, and embedding) #676 feat: implement chat functionality, now one can talk to assistants directly in Core Server #676 feat: add dropbox connector #614 feat: add simple stats module #622 feat: support team for authorization feat: add attachment status api #635 feat: implement query suggest api #642 feat: implement recommend api #643 feat: impl document raw content interface #648 feat: convert document cover/thumbnail to attachment URL for preview #645 feat: add RefineURL to convert document URL to preview format #649 feat: add llm_generation_lang config to AI-based processors #656 feat: detect content category and store it in metadata."
+Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #  0.11.0 (2026-06-23) #  ❌ Breaking changes #   refactor: change boolean fields to use boolean mappings  🚀 Features #   feat: AI search with semantic search and hybrid search support #676 feat: add deep research assistant type for in-depth research tasks #676 feat: implement file upload support for assistants #676 feat: add default model configuration so assistants can fall back to system defaults without explicit model assignment #676 feat: update model provider templates and builtin model lists with model type attribute (language, vision, and embedding) #676 feat: implement chat functionality, now one can talk to assistants directly in Core Server #676 feat: add dropbox connector #614 feat: add simple stats module #622 feat: support team for authorization feat: add attachment status api #635 feat: implement query suggest api #642 feat: implement recommend api #643 feat: impl document raw content interface #648 feat: convert document cover/thumbnail to attachment URL for preview #645 feat: add RefineURL to convert document URL to preview format #649 feat: add llm_generation_lang config to AI-based processors #656 feat: detect content category and store it in metadata."
 ---
 
 
@@ -11,6 +11,12 @@ Latest (In development) #  ❌ Breaking changes #   refactor: change boolean fie
 Information about release notes of Coco Server is provided here.
 
 ## Latest (In development)  
+### ❌ Breaking changes  
+### 🚀 Features  
+### 🐛 Bug fix  
+### ✈️ Improvements  
+
+## 0.11.0 (2026-06-23)
 ### ❌ Breaking changes  
 - refactor: change boolean fields to use boolean mappings
 
