@@ -1,0 +1,103 @@
+---
+title: "MS SQL"
+date: 0001-01-01
+summary: "MS SQL Connector #  Register MS SQL Connector #  curl -XPOST &#34;http://localhost:9000/connector&#34; -d &#39; { &#34;name&#34; : &#34;Microsoft SQL Server Connector&#34;, &#34;description&#34; : &#34;Fetch data from Microsoft SQL Serve database.&#34;, &#34;category&#34; : &#34;database&#34;, &#34;icon&#34; : &#34;/assets/icons/connector/mssql/icon.png&#34;, &#34;tags&#34; : [ &#34;sql&#34;, &#34;storage&#34;, &#34;web&#34; ], &#34;url&#34; : &#34;http://coco.rs/connectors/mssql&#34;, &#34;assets&#34; : { &#34;icons&#34; : { &#34;default&#34; : &#34;/assets/icons/connector/mssql/icon.png&#34; } }, &#34;processor&#34;: { &#34;enabled&#34;: true, &#34;name&#34;: &#34;mssql&#34; } }&#39; Use the MS SQL Connector #  The MS SQL Connector allows you to index data from your database by executing a custom SQL query."
+---
+
+# MS SQL Connector
+
+## Register MS SQL Connector
+
+```shell
+curl -XPOST "http://localhost:9000/connector" -d '
+{
+  "name" : "Microsoft SQL Server Connector",
+  "description" : "Fetch data from Microsoft SQL Serve database.",
+  "category" : "database",
+  "icon" : "/assets/icons/connector/mssql/icon.png",
+  "tags" : [
+    "sql",
+    "storage",
+    "web"
+  ],
+  "url" : "http://coco.rs/connectors/mssql",
+  "assets" : {
+    "icons" : {
+      "default" : "/assets/icons/connector/mssql/icon.png"
+    }
+  },
+     "processor": {
+       "enabled": true,
+       "name": "mssql"
+     }
+}'
+```
+## Use the MS SQL Connector
+
+The MS SQL Connector allows you to index data from your database by executing a custom SQL query.
+
+### Configure MS SQL Datasource
+
+To configure your MS SQL connection, you'll need to provide the connection details and the query to fetch the data.
+
+`Connection URI`: The full MS SQL connection string.
+
+`SQL Query`: The SQL query that will be executed to fetch the data for indexing. You can use `JOIN`s and select specific columns.
+
+`Last Modified Field`: (Optional) For incremental sync, specify a timestamp or datetime column (e.g., `updated_at`). The connector will only fetch rows where this field's value is newer than the last sync time.
+
+`Enable Pagination`: (Optional) A boolean (`true` or `false`) to enable paginated fetching. This is highly recommended for large tables to avoid high memory usage. Your SQL query must include an `ORDER BY` clause for pagination to work correctly.
+
+`Page Size`: (Optional) The number of records to fetch per page when pagination is enabled. Defaults to `500`.
+
+`Field Mapping`: (Optional) An advanced feature to map columns from your SQL query to specific document fields like `id`, `title`, `content`, and custom metadata.
+
+### Example Request
+
+Here is an example request to configure the MS SQL Connector:
+
+```shell
+curl -H 'Content-Type: application/json' -XPOST "http://localhost:9000/datasource/" -d '
+{
+    "name":"My Microsoft SQL Server Documents",
+    "type":"connector",
+    "connector":{
+        "id": "mssql",
+        "config": {
+            "connection_uri": "sqlserver://username:password@host:1433?database=your_db_name",
+            "sql": "SELECT * from DOC ORDER BY id",
+            "pagination": true,
+            "page_size": 500,
+            "last_modified_field": "updated",
+            "field_mapping": {
+                "enabled": true,
+                "mapping": {
+                    "hashed": true,
+                    "id": "id",
+                    "title": "title",
+                    "url": "url",
+                    "metadata": [
+                      {
+                        "name": "version",
+                        "value": "v"
+                      }
+                    ]
+                }
+            }
+        }
+    }
+}'
+```
+
+## Supported Config Parameters for MS SQL Connector
+Below are the configuration parameters supported by the MS SQL Connector:
+
+| **Field**              | **Type**   | **Description**                                                                                                |
+|------------------------|------------|----------------------------------------------------------------------------------------------------------------|
+| `connection_uri`       | `string`   | The full MS SQL connection URI (e.g., sqlserver://user:pass@host:port/db).                                     |
+| `sql`                  | `string`   | The SQL query to execute for fetching data. Recommend including an `ORDER BY` clause if pagination is enabled. |
+| `last_modified_field`  | `string`   | Optional. The name of a timestamp/datetime column used for incremental synchronization.                        |
+| `pagination`           | `boolean`  | Optional. Set to true to enable pagination for large queries. Defaults to false.                               |
+| `page_size`            | `integer`  | Optional. The number of records to fetch per page when pagination is enabled. Defaults to 500.                 |
+| `field_mapping`        | `object`   | Optional. Provides advanced control to map query columns to standard document fields.                          |
+
