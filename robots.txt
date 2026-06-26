@@ -40,3 +40,5 @@ Sitemap: https://docs.infinilabs.com/framework/v1.4.2/sitemap.xml
 X-llms-txt: https://docs.infinilabs.com/framework/v1.4.2/llms.txt
 Sitemap: https://docs.infinilabs.com/coco-server/v0.11.0/sitemap.xml
 X-llms-txt: https://docs.infinilabs.com/coco-server/v0.11.0/llms.txt
+Sitemap: https://docs.infinilabs.com/agent/v1.31.1/sitemap.xml
+X-llms-txt: https://docs.infinilabs.com/agent/v1.31.1/llms.txt
