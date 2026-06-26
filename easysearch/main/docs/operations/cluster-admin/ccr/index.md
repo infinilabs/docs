@@ -760,8 +760,12 @@ PUT _cluster/settings
 | replication.follower.concurrent_readers_per_shard   | 2      | 在复制的同步阶段,每个分片上追随者集群的并发请求数。                             |
 | replication.autofollow.fetch_poll_interval          | 30s    | 自动跟随任务轮询leader集群以获取新的匹配索引的频率。                          |
 | replication.follower.metadata_sync_interval         | 60s    | follower 集群轮询leader集群以获取更新的索引元数据的频率。                   |
+| replication.follower.no_progress_retry_delay        | 50ms   | **不建议修改，请保持默认。** 分片复制 GetChanges 轮询时，若 leader 返回"无新变更/检查点未同步"，follower 再次轮询前的等待间隔（内部调优参数），取值范围 1ms–1min。(**2.3.0 新增**) |
+| replication.follower.mixed_version_check_interval   | 2min   | **不建议修改，请保持默认。** 后台周期性检查 leader/follower 版本兼容性的调度间隔；发现混合版本（如滚动升级期间）会自动暂停运行中的 CCR 任务（内部调优参数），取值范围 1s–5min。(**2.3.0 新增**) |
 | replication.translog.retention_lease.pruning.enabled | true   | 如果启用,基于保留租约来修剪translog。                                |
 | replication.translog.retention_size                | 512MB  | 控制leader索引上translog的大小。                                |
+
+> **关于 2.3.0 新增的两个参数**：`replication.follower.no_progress_retry_delay` 与 `replication.follower.mixed_version_check_interval` 属于**内部调优参数，不建议修改，请保持默认值**。随意调整可能影响 follower 的同步效率，或在滚动升级期间影响 leader/follower 的版本兼容性保护行为。如确有必要修改，请控制在上述取值范围内，并在充分验证后进行。
 
 [](#top)
 

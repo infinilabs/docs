@@ -92,6 +92,8 @@ Easysearch 1.1 版本 相比 Elasticsearch 索引整体大小降低了40%~50%。
 - 如果请求了 `index.compression.zstd.jni=true`，但 native 后端不可用，新索引会自动回退为可兼容的纯 Java ZSTD 写入格式
 - 已经写成旧 `Lucene912ZSTDV3` native 格式的索引，在 native 后端不可用的节点上不会再导致进程崩溃，但会以明确错误提示该索引需要 native ZSTD 后端
 
+> 内部说明（**2.3.0 新增**）：从 2.3.0 起，每个 ZSTD 索引在创建时会由系统写入私有设置 `index.compression.zstd.resolved_format`，**把创建时解析出的 ZSTD 格式版本固化到索引元数据**（取值为枚举名 `V1` / `V2` / `V3`，分别对应底层 codec 名 `ZSTD` / `Lucene912ZSTD` / `Lucene912ZSTDV3`）。解析规则：创建版本早于 2.0.0 的旧索引解析为 `V1`；其余索引在 `index.compression.zstd.jni=true` 且运行环境 native 后端支持 V3 时解析为 `V3`，否则解析为 `V2`（纯 Java）。**该设置的一个关键用途是兼容性回退**：当请求了 `index.compression.zstd.jni=true` 但运行环境不支持 native ZSTD（如 Windows、JDK 低于 21、native 库缺失或加载失败）时，系统会在创建时把格式回退为纯 Java 的 `V2` 并固化，使索引始终以兼容的纯 Java 格式写入与读取，避免在无 native 后端的节点上崩溃；反之若创建时 native 可用解析为 `V3` 也会固化，使各节点明确该索引需要 native 后端才能读取。该设置带 `PrivateIndex`、`Final` 属性，**仅在索引创建时由系统写入、此后不可变，无需也不建议手动设置**；后续读取与后台合并时通过它识别格式并选择 codec（仅 `V3` 启用 native 后端并应用 `index.compression.zstd.level`，其余格式使用默认压缩级别）。
+
 ### 单个索引配置示例
 创建并设置索引的 codec 为ZSTD：
 ```json
