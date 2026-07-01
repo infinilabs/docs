@@ -1,6 +1,6 @@
 {
-  "name": "INFINI Easysearch (main) | 分布式搜索型数据库",
-  "short_name": "INFINI Easysearch (main) | 分布式搜索型数据库",
+  "name": "INFINI Easysearch (main) | 分布式搜索引擎",
+  "short_name": "INFINI Easysearch (main) | 分布式搜索引擎",
   "start_url": "/easysearch/main/",
   "scope": "/easysearch/main/",
   "display": "standalone",

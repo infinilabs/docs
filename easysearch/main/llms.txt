@@ -1,4 +1,4 @@
-# INFINI Easysearch (main) | 分布式搜索型数据库
+# INFINI Easysearch (main) | 分布式搜索引擎
 
 > AI-friendly index of site content.
 
