@@ -38,7 +38,7 @@ useradd -u 602 -g easysearch -m -d /home/easysearch -c 'easysearch' -s /bin/bash
 # 创建 easysearch 安装目录
 mkdir -p /data/easysearch
 # 下载 bundle 包并解压到安装目录
-wget -O - https://release.infinilabs.com/easysearch/stable/bundle/easysearch-1.14.0-2228-linux-amd64-bundle.tar.gz | tar -zx -C /data/easysearch
+wget -O - https://release.infinilabs.com/easysearch/stable/bundle/easysearch-{{< data "quick_start.easysearch.version" >}}-linux-amd64-bundle.tar.gz | tar -zx -C /data/easysearch
 # 初始化
 cd /data/easysearch && bin/initialize.sh
 # 调整目录权限

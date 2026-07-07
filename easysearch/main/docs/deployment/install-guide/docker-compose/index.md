@@ -44,8 +44,8 @@ sudo chown -R ${USER} /data/docker/compose
 > 注意：解压之后，请把镜像的 latest 版本手工更新成具体的版本，可参考下面的命令
 >  ```bash
 >  cd /data/docker/compose
-> # 替换成具体的版本, 注：如果是 MacOS 请调整为 sudo sed -i '' "s/easysearch:latest/easysearch:{{< globaldata "easysearch" "version" >}}/;s/console:latest/console:{{< globaldata "console" "version" >}}/" docker-compose.yml
-> sudo sed -i "s/easysearch:latest/easysearch:{{< globaldata "easysearch" "version" >}}/;s/console:latest/console:{{< globaldata "console" "version" >}}/" docker-compose.yml
+> # 替换成具体的版本, 注：如果是 MacOS 请调整为 sudo sed -i '' "s/easysearch:latest/easysearch:{{< data "quick_start.easysearch.version" >}}/;s/console:latest/console:{{< data "quick_start.console.version" >}}/" docker-compose.yml
+> sudo sed -i "s/easysearch:latest/easysearch:{{< data "quick_start.easysearch.version" >}}/;s/console:latest/console:{{< data "quick_start.console.version" >}}/" docker-compose.yml
 > #检查版本是否替换成功
 > grep image docker-compose.yml
 >  ```
@@ -100,6 +100,6 @@ docker tag $IMGID infinilabs/easysearch:latest
 docker images |grep -v none |grep $IMGID
 
 # 或者直接通过版本号进行镜像拉取
-docker pull infinilabs/easysearch:{{< globaldata "easysearch" "version" >}}
+docker pull infinilabs/easysearch:{{< data "quick_start.easysearch.version" >}}
 ```
 

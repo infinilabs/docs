@@ -3,7 +3,7 @@ title: "Docker"
 date: 0001-01-01
 summary: "Docker 环境下使用 Easysearch #  在使用 Docker 运行 Easysearch 之前，请确保已进行 系统调优并安装好 Docker 服务，且 Docker 服务正常运行。
  最快方式：启动临时的 docker 容器，可以从前台查看到 admin 随机生成的初始密码
- 注： Docker 环境一般用于临时验证，如需要长期使用请务必进行数据持久化   # 直接运行镜像使用随机密码（数据及配置未持久化） docker run --name easysearch --ulimit memlock=-1:-1 -p 9200:9200 infinilabs/easysearch: # 使用自定义密码，可以使用环境变量配置 （需要 1.8.2 及以后的版本才支持） echo &#34;EASYSEARCH_INITIAL_ADMIN_PASSWORD=$(printf &#34;%s%s%s@%s&#34; &#34;$(tr -dc a-z&lt;/dev/urandom|head -c4)&#34; &#34;$(tr -dc A-Z&lt;/dev/urandom|head -c3)&#34; &#34;$(tr -dc 0-9&lt;/dev/urandom|head -c2)&#34; &#34;$(tr -dc a-z0-9&lt;/dev/urandom|head -c3)&#34;)&#34; | tee .env # 通过从环境变量文件设置初始密码（数据及配置未持久化） docker run --name easysearch --env-file ."
+ 注： Docker 环境一般用于临时验证，如需要长期使用请务必进行数据持久化   # 直接运行镜像使用随机密码（数据及配置未持久化） docker run --name easysearch --ulimit memlock=-1:-1 -p 9200:9200 infinilabs/easysearch:2.3.0-2864 # 使用自定义密码，可以使用环境变量配置 （需要 1.8.2 及以后的版本才支持） echo &#34;EASYSEARCH_INITIAL_ADMIN_PASSWORD=$(printf &#34;%s%s%s@%s&#34; &#34;$(tr -dc a-z&lt;/dev/urandom|head -c4)&#34; &#34;$(tr -dc A-Z&lt;/dev/urandom|head -c3)&#34; &#34;$(tr -dc 0-9&lt;/dev/urandom|head -c2)&#34; &#34;$(tr -dc a-z0-9&lt;/dev/urandom|head -c3)&#34;)&#34; | tee .env # 通过从环境变量文件设置初始密码（数据及配置未持久化） docker run --name easysearch --env-file ."
 ---
 
 
@@ -16,13 +16,13 @@ summary: "Docker 环境下使用 Easysearch #  在使用 Docker 运行 Easysearc
 
 ```bash
 # 直接运行镜像使用随机密码（数据及配置未持久化）
-docker run --name easysearch --ulimit memlock=-1:-1 -p 9200:9200 infinilabs/easysearch:{{< globaldata "easysearch" "version" >}}
+docker run --name easysearch --ulimit memlock=-1:-1 -p 9200:9200 infinilabs/easysearch:{{< data "quick_start.easysearch.version" >}}
 
 # 使用自定义密码，可以使用环境变量配置 （需要 1.8.2 及以后的版本才支持）
 echo "EASYSEARCH_INITIAL_ADMIN_PASSWORD=$(printf "%s%s%s@%s" "$(tr -dc a-z</dev/urandom|head -c4)" "$(tr -dc A-Z</dev/urandom|head -c3)" "$(tr -dc 0-9</dev/urandom|head -c2)" "$(tr -dc a-z0-9</dev/urandom|head -c3)")" | tee .env
 
 # 通过从环境变量文件设置初始密码（数据及配置未持久化）
-docker run --name easysearch --env-file ./.env --ulimit memlock=-1:-1 -p 9200:9200 infinilabs/easysearch:{{< globaldata "easysearch" "version" >}}
+docker run --name easysearch --env-file ./.env --ulimit memlock=-1:-1 -p 9200:9200 infinilabs/easysearch:{{< data "quick_start.easysearch.version" >}}
 
 # 使用自定义密码及命名卷 (数据持久化到命名卷)
 docker run -d --name easysearch \
@@ -31,7 +31,7 @@ docker run -d --name easysearch \
   -v easysearch-data:/app/easysearch/data \
   -v easysearch-config:/app/easysearch/config \
   -v easysearch-logs:/app/easysearch/logs \
-  infinilabs/easysearch:{{< globaldata "easysearch" "version" >}}
+  infinilabs/easysearch:{{< data "quick_start.easysearch.version" >}}
 ```
 
 ## 数据持久化到本地（数据可长期使用）
@@ -61,7 +61,7 @@ sudo chown -R 602:602 /data/easysearch
 
 ```bash
 # 将镜像中的 config 目录复制到本地目录
-docker run --rm --env-file /data/easysearch/.env -v /data/easysearch:/work infinilabs/easysearch:{{< globaldata "easysearch" "version" >}} cp -rf /app/easysearch/config /work
+docker run --rm --env-file /data/easysearch/.env -v /data/easysearch:/work infinilabs/easysearch:{{< data "quick_start.easysearch.version" >}} cp -rf /app/easysearch/config /work
 ```
 
 4. 后台运行容器
@@ -79,7 +79,7 @@ docker run -d --restart always -p 9200:9200 \
               -v /data/easysearch/config:/app/easysearch/config \
               -v /data/easysearch/logs:/app/easysearch/logs \
               --name easysearch --hostname easysearch \
-              infinilabs/easysearch:{{< globaldata "easysearch" "version" >}}
+              infinilabs/easysearch:{{< data "quick_start.easysearch.version" >}}
 ```
 
 5. 升级 Easysearch 版本
@@ -120,7 +120,7 @@ docker run -d --name easysearch \
   -v easysearch-data:/app/easysearch/data \
   -v easysearch-config:/app/easysearch/config \
   -v easysearch-logs:/app/easysearch/logs \
-  infinilabs/easysearch:{{< globaldata "easysearch" "version" >}}
+  infinilabs/easysearch:{{< data "quick_start.easysearch.version" >}}
 ```
 
 查看健康状态：
