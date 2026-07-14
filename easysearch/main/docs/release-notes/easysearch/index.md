@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #   增加 disable_bulk_delete 参数，支持使用 Aliyun OSS 快照时，在 aws v4 签名协议下支持单个对象删除  2.3.0 (2026-06-18) #  Breaking changes #  Features #   新增管道管理 UI 为 Agent UI 新增 API Token 管理 新增数据流 bootstrap 创建 API PUT /_data_stream/{name}/_bootstrap，支持在缺少匹配数据流模板时按需自动创建默认模板后继续创建数据流，简化前端联调、测试验证和快速初始化流程。 在数据流页面新增“添加数据流”入口 新增修改当前用户密码 UI  Bug fix #   修复 source_reuse 在处理 tombstone 和非 JSON/二进制 _source 时解析失败并可能导致写入请求卡住的问题。 修复 Rollup mixed search 在 live 分支没有匹配字段或目标索引为空时可能产生 UnmappedTerms，导致聚合结果合并失败的问题；现在会将 unmapped terms 作为空贡献参与 reduce，避免混合查询异常。 修复安全权限过滤改写 ClusterStateRequest."
+Latest (In development) #  Breaking changes #  Features #  Bug fix #   修复 source_reuse 在 object-array、enabled: false 对象及动态 object-array 路径混合出现时，可能错误处理 skip 子树、导致重建后的 _source 不完整或字段顺序异常的问题；现在可保持 GET、查询和聚合结果与原始文档一致。 修复 source_reuse 在 object-array 写入与多种 _source 内容类型组合场景下的子树保留和回退处理，确保 JSON、YAML、SMILE、CBOR 文档均可正确重建 _source。  Improvements #   增加 disable_bulk_delete 参数，支持使用 Aliyun OSS 快照时，在 aws v4 签名协议下支持单个对象删除 优化 source_reuse 的 object-array 写入路径：复用已解析字段路径，并在首次解析时捕获需要保留的子树，减少重复路径拆分和不必要的整篇 _source 二次解析，降低写入开销。 优化 source_reuse 的 skip-path 处理：按文档记录实际遇到的不可复用子树，避免历史动态路径影响后续文档的 _source 重建，提升复杂动态 mapping 场景的稳定性和效率。  2."
 ---
 
 
@@ -14,8 +14,12 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 ### Breaking changes
 ### Features
 ### Bug fix
+- 修复 `source_reuse` 在 object-array、`enabled: false` 对象及动态 object-array 路径混合出现时，可能错误处理 skip 子树、导致重建后的 `_source` 不完整或字段顺序异常的问题；现在可保持 GET、查询和聚合结果与原始文档一致。
+- 修复 `source_reuse` 在 object-array 写入与多种 `_source` 内容类型组合场景下的子树保留和回退处理，确保 JSON、YAML、SMILE、CBOR 文档均可正确重建 `_source`。
 ### Improvements
 - 增加 `disable_bulk_delete` 参数，支持使用 Aliyun OSS 快照时，在 aws v4 签名协议下支持单个对象删除
+- 优化 `source_reuse` 的 object-array 写入路径：复用已解析字段路径，并在首次解析时捕获需要保留的子树，减少重复路径拆分和不必要的整篇 `_source` 二次解析，降低写入开销。
+- 优化 `source_reuse` 的 skip-path 处理：按文档记录实际遇到的不可复用子树，避免历史动态路径影响后续文档的 `_source` 重建，提升复杂动态 mapping 场景的稳定性和效率。
 
 ## 2.3.0 (2026-06-18)
 ### Breaking changes
