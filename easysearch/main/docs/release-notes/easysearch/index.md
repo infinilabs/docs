@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #  Bug fix #   修复 source_reuse 在 object-array、enabled: false 对象及动态 object-array 路径混合出现时，可能错误处理 skip 子树、导致重建后的 _source 不完整或字段顺序异常的问题；现在可保持 GET、查询和聚合结果与原始文档一致。 修复 source_reuse 在 object-array 写入与多种 _source 内容类型组合场景下的子树保留和回退处理，确保 JSON、YAML、SMILE、CBOR 文档均可正确重建 _source。  Improvements #   增加 disable_bulk_delete 参数，支持使用 Aliyun OSS 快照时，在 aws v4 签名协议下支持单个对象删除 优化 source_reuse 的 object-array 写入路径：复用已解析字段路径，并在首次解析时捕获需要保留的子树，减少重复路径拆分和不必要的整篇 _source 二次解析，降低写入开销。 优化 source_reuse 的 skip-path 处理：按文档记录实际遇到的不可复用子树，避免历史动态路径影响后续文档的 _source 重建，提升复杂动态 mapping 场景的稳定性和效率。  2."
+Latest (In development) #  Breaking changes #  Features #   巡检 UI 新增集群状态、模板、索引元数据、快照、集群运行时信息、节点信息、插件、节点诊断信息及分片/段信息等采集项，提升问题诊断覆盖范围。 服务管理 UI 的创建和加入集群流程新增节点角色约束，协调节点不能与 master、data、ingest 角色同时选择。 服务管理登录时增加 root 账户限制检测，避免以 root 账户访问受管服务。  Bug fix #   修复开启安全认证且根路径不允许匿名访问时，Easysearch UI 因登录前探测根路径而无法登录的问题。 修复 Agent 服务管理中可通过服务列表或巡检入口绕过服务登录状态的问题。 修复编辑集群配置时可能意外重置管理员密码的问题。 修复巡检页面无法正确解析服务版本的问题。 修复开发工具中缓存的集群名称、标识与实际集群信息不同步的问题。 修复 Java 21 环境下 CCR 初始恢复并发读取文件时可能触发 IllegalStateException: confined 并导致恢复失败的问题。  Improvements #   新增 S3 disable_bulk_delete 配置（客户端名称空间为 s3.client.&lt;name&gt;.disable_bulk_delete，默认 false）；启用后批量删除路径会逐个调用 DeleteObject，用于兼容不支持 DeleteObjects 的 S3 兼容存储。 持续完善 source_reuse 的写入和读取重建，提升复杂 mapping 场景下的兼容性和性能；包含 nested mapping 的索引改用完整 _source，已有索引动态加入 nested mapping 后需 reindex。 优化文档写入与 mapping 解析热路径，减少 JSON/XContent、日期和点号字段解析中的对象创建与重复处理，提升批量索引吞吐。 巡检任务默认不再勾选“数据样本”采集；需要时仍可手动启用，降低默认采集真实索引数据的风险。  2."
 ---
 
 
@@ -13,13 +13,21 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #   修复 so
 ## Latest (In development)
 ### Breaking changes
 ### Features
+- 巡检 UI 新增集群状态、模板、索引元数据、快照、集群运行时信息、节点信息、插件、节点诊断信息及分片/段信息等采集项，提升问题诊断覆盖范围。
+- 服务管理 UI 的创建和加入集群流程新增节点角色约束，协调节点不能与 master、data、ingest 角色同时选择。
+- 服务管理登录时增加 root 账户限制检测，避免以 root 账户访问受管服务。
 ### Bug fix
-- 修复 `source_reuse` 在 object-array、`enabled: false` 对象及动态 object-array 路径混合出现时，可能错误处理 skip 子树、导致重建后的 `_source` 不完整或字段顺序异常的问题；现在可保持 GET、查询和聚合结果与原始文档一致。
-- 修复 `source_reuse` 在 object-array 写入与多种 `_source` 内容类型组合场景下的子树保留和回退处理，确保 JSON、YAML、SMILE、CBOR 文档均可正确重建 `_source`。
+- 修复开启安全认证且根路径不允许匿名访问时，Easysearch UI 因登录前探测根路径而无法登录的问题。
+- 修复 Agent 服务管理中可通过服务列表或巡检入口绕过服务登录状态的问题。
+- 修复编辑集群配置时可能意外重置管理员密码的问题。
+- 修复巡检页面无法正确解析服务版本的问题。
+- 修复开发工具中缓存的集群名称、标识与实际集群信息不同步的问题。
+- 修复 Java 21 环境下 CCR 初始恢复并发读取文件时可能触发 `IllegalStateException: confined` 并导致恢复失败的问题。
 ### Improvements
-- 增加 `disable_bulk_delete` 参数，支持使用 Aliyun OSS 快照时，在 aws v4 签名协议下支持单个对象删除
-- 优化 `source_reuse` 的 object-array 写入路径：复用已解析字段路径，并在首次解析时捕获需要保留的子树，减少重复路径拆分和不必要的整篇 `_source` 二次解析，降低写入开销。
-- 优化 `source_reuse` 的 skip-path 处理：按文档记录实际遇到的不可复用子树，避免历史动态路径影响后续文档的 `_source` 重建，提升复杂动态 mapping 场景的稳定性和效率。
+- 新增 S3 `disable_bulk_delete` 配置（客户端名称空间为 `s3.client.<name>.disable_bulk_delete`，默认 `false`）；启用后批量删除路径会逐个调用 `DeleteObject`，用于兼容不支持 `DeleteObjects` 的 S3 兼容存储。
+- 持续完善 `source_reuse` 的写入和读取重建，提升复杂 mapping 场景下的兼容性和性能；包含 `nested` mapping 的索引改用完整 `_source`，已有索引动态加入 `nested` mapping 后需 reindex。
+- 优化文档写入与 mapping 解析热路径，减少 JSON/XContent、日期和点号字段解析中的对象创建与重复处理，提升批量索引吞吐。
+- 巡检任务默认不再勾选“数据样本”采集；需要时仍可手动启用，降低默认采集真实索引数据的风险。
 
 ## 2.3.0 (2026-06-18)
 ### Breaking changes
