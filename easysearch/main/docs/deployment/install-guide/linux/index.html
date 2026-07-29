@@ -19,6 +19,7 @@ const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{co
       }
     `;shadow.appendChild(style);});</script><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
+<option value=v2.3.1>v2.3.1</option>
 <option value=v2.3.0>v2.3.0</option>
 <option value=v2.2.0>v2.2.0</option>
 <option value=v2.1.2>v2.1.2</option>
@@ -249,7 +250,7 @@ useradd -u <span style=color:#bd93f9>602</span> -g easysearch -m -d /home/easyse
 <span style=color:#6272a4># 创建 easysearch 安装目录</span>
 mkdir -p /data/easysearch
 <span style=color:#6272a4># 下载 bundle 包并解压到安装目录</span>
-wget -O - https://release.infinilabs.com/easysearch/stable/bundle/easysearch-2.3.0-2864-linux-amd64-bundle.tar.gz | tar -zx -C /data/easysearch
+wget -O - https://release.infinilabs.com/easysearch/stable/bundle/easysearch-2.3.1-2903-linux-amd64-bundle.tar.gz | tar -zx -C /data/easysearch
 <span style=color:#6272a4># 初始化</span>
 <span style=color:#8be9fd;font-style:italic>cd</span> /data/easysearch <span style=color:#ff79c6>&amp;&amp;</span> bin/initialize.sh
 <span style=color:#6272a4># 调整目录权限</span>
