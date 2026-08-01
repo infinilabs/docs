@@ -2,7 +2,7 @@
 title: "Release Notes"
 date: 0001-01-01
 summary: "Release Notes #  Information about release notes of INFINI Loadgen is provided here.
-Latest (In development) #  ❌ Breaking changes #  🚀 Features #   feat: support ipv6 based endpoints  🐛 Bug fix #  ✈️ Improvements #   Add native Go modules support for Loadgen, including local module wiring to the sibling Framework checkout and PR checks that follow the Go version declared in go."
+Latest (In development) #  ❌ Breaking changes #  🚀 Features #   feat: support ipv6 based endpoints feat: run test suites with YAML test files and config-driven gateway probing- #60  🐛 Bug fix #  ✈️ Improvements #   Add native Go modules support for Loadgen, including local module wiring to the sibling Framework checkout and PR checks that follow the Go version declared in go."
 ---
 
 
@@ -14,6 +14,7 @@ Information about release notes of INFINI Loadgen is provided here.
 ### ❌ Breaking changes  
 ### 🚀 Features  
 - feat: support ipv6 based endpoints
+- feat: run test suites with YAML test files and config-driven gateway probing- #60
 
 ### 🐛 Bug fix  
 ### ✈️ Improvements  

@@ -2,7 +2,7 @@
 title: "版本历史"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是loadgen历史版本发布的相关说明。
-Latest (In development) #  ❌ Breaking changes #  🚀 Features #   feat: 压测地址支持 IPv6  🐛 Bug fix #  ✈️ Improvements #   为 Loadgen 增加原生 Go Modules 支持，包括与同级 Framework 本地仓库的模块联动，以及按 go.mod 声明版本执行的 PR 检查。  1.30.2 (2026-03-16) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #   此版本包含了底层 Framework v1."
+Latest (In development) #  ❌ Breaking changes #  🚀 Features #   feat: 压测地址支持 IPv6 feat: test suite 支持 loadgen.yml, 探活 Gateway 检测动态的 Gateway 端口 #60  🐛 Bug fix #  ✈️ Improvements #   为 Loadgen 增加原生 Go Modules 支持，包括与同级 Framework 本地仓库的模块联动，以及按 go.mod 声明版本执行的 PR 检查。  1.30.2 (2026-03-16) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #   此版本包含了底层 Framework v1."
 ---
 
 
@@ -14,6 +14,7 @@ Latest (In development) #  ❌ Breaking changes #  🚀 Features #   feat: 压�
 ### ❌ Breaking changes  
 ### 🚀 Features  
 - feat: 压测地址支持 IPv6
+- feat: test suite 支持 loadgen.yml, 探活 Gateway 检测动态的 Gateway 端口 #60
 
 ### 🐛 Bug fix  
 ### ✈️ Improvements  
