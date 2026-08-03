@@ -1,0 +1,367 @@
+<!doctype html><html lang=en><head><meta name=generator content="Hugo 0.79.1"><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="MCP (Model Context Protocol) Server #  The INFINI Framework provides built-in Model Context Protocol (MCP) server support, enabling AI assistants like Claude Desktop, Cursor, and any MCP-compatible client to interact with your application&rsquo;s APIs as callable tools.
+Overview #  The framework offers two complementary patterns for exposing MCP tools:
+ Auto-exposure (recommended): Annotate existing REST routes with api.MCPTool() — the framework automatically generates tool schemas, handles JSON-RPC dispatch, and enforces per-tool RBAC."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="MCP Server"><meta property="og:description" content="MCP (Model Context Protocol) Server #  The INFINI Framework provides built-in Model Context Protocol (MCP) server support, enabling AI assistants like Claude Desktop, Cursor, and any MCP-compatible client to interact with your application&rsquo;s APIs as callable tools.
+Overview #  The framework offers two complementary patterns for exposing MCP tools:
+ Auto-exposure (recommended): Annotate existing REST routes with api.MCPTool() — the framework automatically generates tool schemas, handles JSON-RPC dispatch, and enforces per-tool RBAC."><meta property="og:type" content="article"><meta property="og:url" content="https://docs.infinilabs.com/framework/main/docs/references/mcp/"><title>MCP Server | INFINI Framework | The Best Open Source Golang Framework for Easysearch/Elasticsearch/OpenSearch</title><link rel=manifest href=/framework/main/manifest.json><link rel=icon href=/framework/main/favicon.png type=image/x-icon><link rel=stylesheet href=/framework/main/book.min.a5477dc69cdc226836851fe1ccbae76d703e3ebf0cb670e9e513b00935608503.css integrity="sha256-pUd9xpzcImg2hR/hzLrnbXA+Pr8MtnDp5ROwCTVghQM="><script defer src=https://docs.infinilabs.com/framework/main/js/jquery-2.x.min.js></script><script defer src=https://docs.infinilabs.com/framework/main/js/doc.js></script><script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?64b9322783bb21716d701b15fb0b1e82";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/framework/main><img src=/framework/main/img/logo-en.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;height:36px;width:100%></div><script>function waitForShadow(host,callback){const timer=setInterval(()=>{if(host.shadowRoot){clearInterval(timer);callback(host.shadowRoot);}},50);}
+const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{const style=document.createElement('style');style.textContent=`
+      .infini__searchbox-btn {
+        width: 100% !important;
+        height: 36px !important;
+      }
+    `;shadow.appendChild(style);});</script><div class=heading><select class=version-selector>
+<option value>main (latest)</option>
+<option value=v1.4.2>v1.4.2</option>
+<option value=v1.4.1>v1.4.1</option>
+<option value=v1.4.0>v1.4.0</option>
+<option value=v1.3.0>v1.3.0</option>
+<option value=v1.2.0>v1.2.0</option>
+<option value=v1.1.9>v1.1.9</option>
+<option value=v1.1.8>v1.1.8</option>
+<option value=v1.1.7>v1.1.7</option>
+<option value=v1.1.6>v1.1.6</option>
+<option value=v1.1.5>v1.1.5</option>
+<option value=v1.1.4>v1.1.4</option>
+<option value=v1.1.3>v1.1.3</option>
+<option value=v1.1.2>v1.1.2</option>
+<option value=v1.1.0>v1.1.0</option>
+<option value=v1.0.0>v1.0.0</option></select></div><ul><li><input type=checkbox id=section-75a1b849ec817b105e0397971f02e977 class=toggle>
+<label for=section-75a1b849ec817b105e0397971f02e977 class="flex justify-between"><a href=https://docs.infinilabs.com/framework/main/docs/development/>Development</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=https://docs.infinilabs.com/framework/main/docs/development/setup_golang_environment/>Setting Up the Golang Environment</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/development/setup_intellij_idea/>Setup IntelliJ IDEA</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/development/create_new_application/>Create New Application</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/development/api/>API Development</a><ul><li><a href=https://docs.infinilabs.com/framework/main/docs/development/api/specification/>API Specification</a></li></ul></li></ul></li><li><input type=checkbox id=section-fb088f8a9be33f7f260ad2b140bb7bdc class=toggle checked>
+<label for=section-fb088f8a9be33f7f260ad2b140bb7bdc class="flex justify-between"><a href=https://docs.infinilabs.com/framework/main/docs/references/>References</a>
+<span class="expand-icon flex justify-between align-center"><svg viewBox="0 0 24 24" stroke="currentcolor" fill="none" stroke-width="2" height="12" class="x:shrink-0 x:rounded-sm x:p-0.5 x:hover:bg-gray-800/5 x:dark:hover:bg-gray-100/5 x:motion-reduce:transition-none x:origin-center x:transition-all x:rtl:-rotate-180"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label><ul><li><a href=https://docs.infinilabs.com/framework/main/docs/references/config/>Configuration Management</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/modules/>Module System</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/pipeline/>Pipeline and Processor</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/queue/>Queue</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/task/>Task Scheduling</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/service/>Service Management</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/makefile/>Makefile</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/kv/>Key-Value Store</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/stats/>Statistics Collection</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/conditions/>Conditions</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/api_web/>API & Web Framework</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/orm/>ORM (Object-Relational Mapping)</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/mcp/ class=active>MCP Server</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/http_client/>Http Client Configuration</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/keystore/>Keystore</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/query_url/>Query URL Parameters</a></li><li><a href=https://docs.infinilabs.com/framework/main/docs/references/aggs_query/>Aggregation via URL Parameters</a></li></ul></li><li><a href=https://docs.infinilabs.com/framework/main/docs/troubleshooting/>FAQs</a><ul></ul></li><li><a href=https://docs.infinilabs.com/framework/main/docs/release-notes/>Release Notes</a><ul></ul></li></ul><ul><li><a href=https://github.com/infinilabs/framework target=_blank rel=noopener>Github</a></li></ul></nav><script>(function(){var menu=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/framework/main/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>MCP Server</strong>
+<label for=toc-control><img src=/framework/main/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><style>.code-wrapper{position:relative;margin:20px 0}.code-header{position:absolute;top:8px;right:16px;font-size:12px;color:#8be9fd;font-weight:500;letter-spacing:.5px;text-transform:lowercase;pointer-events:none;transition:opacity .2s ease}.code-wrapper pre{padding:28px 18px 18px;border-radius:12px;overflow-x:auto;line-height:1.7}.copy-btn{position:absolute;top:6px;right:12px;display:flex;align-items:center;gap:6px;padding:5px 10px;font-size:12px;border-radius:8px;background:#44475a;color:#f8f8f2;border:1px solid #8440f1;cursor:pointer;opacity:0;transition:all .2s ease}.code-wrapper:hover .copy-btn{opacity:1}.code-wrapper:hover .code-header{opacity:.2}.copy-btn:hover{background:#6272a4}.copy-btn.copied{background:#fff;color:#8440f1;border-color:#8440f1}</style><script>document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll("pre > code").forEach((codeBlock)=>{const pre=codeBlock.parentElement;const className=codeBlock.className;const match=className.match(/language-(\w+)/);const language=match?match[1]:"code";const wrapper=document.createElement("div");wrapper.className="code-wrapper";pre.parentNode.insertBefore(wrapper,pre);wrapper.appendChild(pre);const header=document.createElement("div");header.className="code-header";header.innerText=language;wrapper.appendChild(header);const button=document.createElement("button");button.className="copy-btn";button.innerHTML="Copy";button.addEventListener("click",async()=>{await navigator.clipboard.writeText(codeBlock.innerText);button.classList.add("copied");button.innerText="✓ Copied";setTimeout(()=>{button.classList.remove("copied");button.innerText="Copy";},2000);});wrapper.appendChild(button);});});</script><div class="mt-2 text-right"><a href=/framework/main/docs/references/mcp/index.md class=text-sm>View as Markdown</a></div><aside class="hidden clearfix"><style>.book-toc>nav li::before{position:absolute;top:6px;left:-16px;width:2px;height:32px;content:"";transition:transform .28s cubic-bezier(.2,.8,.2,1),background-color .18s ease,opacity .18s;transform:translateY(-50%)scaleY(0);opacity:0;background:0 0}.book-toc>nav>ul>li.ancestor::before{left:-16px}.book-toc>nav>ul>li.ancestor>ul>li.active::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor>ul>li.active::before{left:-48px}.book-toc>nav li.active::before{transform:translateY(-50%)scaleY(1);opacity:1;background:#8440f1}.book-toc>nav li.active>a{font-weight:500}:target{scroll-margin-top:80px}</style><script>document.addEventListener('DOMContentLoaded',function(){const nav=document.getElementsByClassName('book-toc')[0].querySelector('nav');if(!nav)return;const links=Array.from(nav.querySelectorAll('a[href^="#"]'));const idToLi=new Map();let isProgrammatic=false;let programmaticTargetId=null;let scrollEndTimer=null;links.forEach(link=>{const href=link.getAttribute('href');if(!href||href.length<2)return;const id=decodeURIComponent(href.slice(1));const li=link.closest('li');if(li)idToLi.set(id,li);link.addEventListener('click',function(e){const target=document.getElementById(id);if(target){e.preventDefault();isProgrammatic=true;programmaticTargetId=id;setActiveById(id);target.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+id);clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},1200);}});});window.addEventListener('scroll',function(){clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},120);},{passive:true});function clearAll(){idToLi.forEach(li=>li.classList.remove('active','ancestor'));links.forEach(a=>a.removeAttribute('aria-current'));}
+function setActiveById(id){clearAll();const li=idToLi.get(id);if(!li)return;li.classList.add('active');const a=li.querySelector('a[href^="#"]');if(a)a.setAttribute('aria-current','true');let parent=li.parentElement;while(parent&&parent!==nav){const parentLi=parent.closest('li');if(parentLi&&parentLi!==li)parentLi.classList.add('ancestor');parent=parent.parentElement;}}
+const observedEls=Array.from(idToLi.keys()).map(id=>document.getElementById(id)).filter(Boolean);if(observedEls.length){const io=new IntersectionObserver((entries)=>{let candidate=null;entries.forEach(en=>{if(!en.isIntersecting)return;if(!candidate)candidate=en;else{const curTop=Math.abs(candidate.boundingClientRect.top);const newTop=Math.abs(en.boundingClientRect.top);if(newTop<curTop)candidate=en;}});if(!candidate||!candidate.target||!candidate.target.id)return;const foundId=candidate.target.id;if(isProgrammatic&&programmaticTargetId&&foundId!==programmaticTargetId){return;}
+setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.1,0.25,0.5]});observedEls.forEach(el=>io.observe(el));}
+if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#overview>Overview</a></li><li><a href=#quick-start>Quick Start</a><ul><li><a href=#1-enable-mcp-in-config>1. Enable MCP in config</a></li><li><a href=#2-annotate-routes-with-mcptool>2. Annotate routes with MCPTool</a></li><li><a href=#3-connect-an-mcp-client>3. Connect an MCP client</a></li></ul></li><li><a href=#auto-exposure-mode>Auto-Exposure Mode</a><ul><li><a href=#how-it-works>How it works</a></li><li><a href=#minimal-example--get-with-no-parameters>Minimal example — GET with no parameters</a></li><li><a href=#path-parameters>Path parameters</a></li><li><a href=#query-parameters>Query parameters</a></li><li><a href=#post-with-body>POST with body</a></li><li><a href=#auto-generated-input-schema>Auto-generated input schema</a></li><li><a href=#tool-result-structure>Tool result structure</a></li></ul></li><li><a href=#configuration-reference>Configuration Reference</a></li><li><a href=#permission-control>Permission Control</a><ul><li><a href=#custom-authorizer>Custom authorizer</a></li></ul></li><li><a href=#custom-tool-schemas>Custom Tool Schemas</a></li><li><a href=#standalone-server-mode>Standalone Server Mode</a><ul><li><a href=#when-to-use-this-mode>When to use this mode</a></li><li><a href=#complete-example>Complete example</a></li></ul></li><li><a href=#browser-compatibility>Browser Compatibility</a></li><li><a href=#client-configuration>Client Configuration</a><ul><li><a href=#claude-desktop>Claude Desktop</a></li><li><a href=#cursor>Cursor</a></li><li><a href=#curl>curl</a></li></ul></li><li><a href=#testing>Testing</a><ul><li><a href=#unit-test-pattern>Unit test pattern</a></li><li><a href=#testing-authorization>Testing authorization</a></li></ul></li><li><a href=#api-reference>API Reference</a><ul><li><a href=#options>Options</a></li><li><a href=#server-functions>Server functions</a></li><li><a href=#constants>Constants</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=mcp-model-context-protocol-server>MCP (Model Context Protocol) Server
+<a class=anchor href=#mcp-model-context-protocol-server>#</a></h1><p>The INFINI Framework provides built-in
+<a href=https://modelcontextprotocol.io/>Model Context Protocol</a> (MCP) server support, enabling AI assistants like Claude Desktop, Cursor, and any MCP-compatible client to interact with your application&rsquo;s APIs as callable tools.</p><h2 id=overview>Overview
+<a class=anchor href=#overview>#</a></h2><p>The framework offers two complementary patterns for exposing MCP tools:</p><ul><li><strong>Auto-exposure (recommended)</strong>: Annotate existing REST routes with <code>api.MCPTool()</code> — the framework automatically generates tool schemas, handles JSON-RPC dispatch, and enforces per-tool RBAC.</li><li><strong>Standalone server</strong>: Build a custom <code>MCPServer</code> with typed tool schemas for fine-grained control over parameter descriptions, read-only hints, and loopback handlers.</li></ul><p>Both patterns mount on the Streamable HTTP transport at <code>/mcp</code> by default.</p><h2 id=quick-start>Quick Start
+<a class=anchor href=#quick-start>#</a></h2><h3 id=1-enable-mcp-in-config>1. Enable MCP in config
+<a class=anchor href=#1-enable-mcp-in-config>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>web</span>:
+  <span style=color:#ff79c6>mcp</span>:
+    <span style=color:#ff79c6>enabled</span>: <span style=color:#ff79c6>true</span>
+    <span style=color:#6272a4># base_path: /mcp       # default endpoint path</span>
+    <span style=color:#6272a4># stateless: true       # stateless mode (no session management)</span>
+    <span style=color:#6272a4># name: &#34;My App&#34;        # server name shown to MCP clients</span>
+    <span style=color:#6272a4># version: &#34;1.0.0&#34;      # server version</span>
+</code></pre></div><h3 id=2-annotate-routes-with-mcptool>2. Annotate routes with MCPTool
+<a class=anchor href=#2-annotate-routes-with-mcptool>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>api.<span style=color:#50fa7b>HandleUIMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/api/things&#34;</span>, handler.ListThings, api.<span style=color:#50fa7b>RequireLogin</span>(),
+    api.<span style=color:#50fa7b>MCPTool</span>(<span style=color:#f1fa8c>&#34;list_things&#34;</span>, <span style=color:#f1fa8c>&#34;List all things with optional filtering&#34;</span>))
+</code></pre></div><h3 id=3-connect-an-mcp-client>3. Connect an MCP client
+<a class=anchor href=#3-connect-an-mcp-client>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#ff79c6>&#34;mcpServers&#34;</span>: {
+    <span style=color:#ff79c6>&#34;my-app&#34;</span>: {
+      <span style=color:#ff79c6>&#34;url&#34;</span>: <span style=color:#f1fa8c>&#34;http://localhost:29000/mcp&#34;</span>,
+      <span style=color:#ff79c6>&#34;transport&#34;</span>: <span style=color:#f1fa8c>&#34;streamable-http&#34;</span>
+    }
+  }
+}
+</code></pre></div><p>That&rsquo;s it — the framework auto-mounts the MCP server, generates tool schemas from your routes, and enforces authentication.</p><hr><h2 id=auto-exposure-mode>Auto-Exposure Mode
+<a class=anchor href=#auto-exposure-mode>#</a></h2><h3 id=how-it-works>How it works
+<a class=anchor href=#how-it-works>#</a></h3><p>When <code>web.mcp.enabled</code> is <code>true</code>, the framework:</p><ol><li>Creates a <code>StreamableHTTPServer</code> and mounts it at <code>web.mcp.base_path</code> (default <code>/mcp</code>).</li><li>Walks all registered UI routes tagged with <code>MCPTool</code> (or <code>MCPAuto</code>).</li><li>For each tagged route, auto-generates a tool with:<ul><li><strong>Name</strong>: the <code>name</code> argument from <code>MCPTool()</code>, or auto-derived from method+path (e.g. <code>get_things_id</code>).</li><li><strong>Description</strong>: the <code>description</code> argument, or a default.</li><li><strong>Input schema</strong>: structured object with <code>path_params</code>, <code>query</code>, <code>headers</code>, <code>body</code>, <code>raw_body</code>.</li></ul></li><li>Each tool call bridges to the real HTTP route via an in-process handler (no network hop).</li></ol><h3 id=minimal-example--get-with-no-parameters>Minimal example — GET with no parameters
+<a class=anchor href=#minimal-example--get-with-no-parameters>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>api.<span style=color:#50fa7b>HandleUIMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/api/status&#34;</span>, handler.GetStatus, api.<span style=color:#50fa7b>RequireLogin</span>(),
+    api.<span style=color:#50fa7b>MCPTool</span>(<span style=color:#f1fa8c>&#34;get_status&#34;</span>, <span style=color:#f1fa8c>&#34;Get the current system status&#34;</span>))
+</code></pre></div><p>The MCP client sees a tool named <code>get_status</code> with no required arguments.</p><h3 id=path-parameters>Path parameters
+<a class=anchor href=#path-parameters>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>api.<span style=color:#50fa7b>HandleUIMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/api/things/:id&#34;</span>, handler.GetThing, api.<span style=color:#50fa7b>RequireLogin</span>(),
+    api.<span style=color:#50fa7b>MCPTool</span>(<span style=color:#f1fa8c>&#34;get_thing&#34;</span>, <span style=color:#f1fa8c>&#34;Get details of a specific thing by ID&#34;</span>))
+</code></pre></div><p>The tool auto-includes a <code>path_params</code> argument:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#ff79c6>&#34;path_params&#34;</span>: { <span style=color:#ff79c6>&#34;id&#34;</span>: <span style=color:#f1fa8c>&#34;thing-123&#34;</span> }
+}
+</code></pre></div><h3 id=query-parameters>Query parameters
+<a class=anchor href=#query-parameters>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>api.<span style=color:#50fa7b>HandleUIMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/api/things&#34;</span>, handler.ListThings, api.<span style=color:#50fa7b>RequireLogin</span>(),
+    api.<span style=color:#50fa7b>MCPTool</span>(<span style=color:#f1fa8c>&#34;list_things&#34;</span>, <span style=color:#f1fa8c>&#34;List things, optionally filtered by status&#34;</span>))
+</code></pre></div><p>The client can pass:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#ff79c6>&#34;query&#34;</span>: { <span style=color:#ff79c6>&#34;status&#34;</span>: <span style=color:#f1fa8c>&#34;active&#34;</span>, <span style=color:#ff79c6>&#34;page&#34;</span>: <span style=color:#f1fa8c>&#34;1&#34;</span> }
+}
+</code></pre></div><h3 id=post-with-body>POST with body
+<a class=anchor href=#post-with-body>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>api.<span style=color:#50fa7b>HandleUIMethod</span>(api.POST, <span style=color:#f1fa8c>&#34;/api/things&#34;</span>, handler.CreateThing, api.<span style=color:#50fa7b>RequireLogin</span>(),
+    api.<span style=color:#50fa7b>MCPTool</span>(<span style=color:#f1fa8c>&#34;create_thing&#34;</span>, <span style=color:#f1fa8c>&#34;Create a new thing&#34;</span>))
+</code></pre></div><p>The client sends:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#ff79c6>&#34;body&#34;</span>: { <span style=color:#ff79c6>&#34;name&#34;</span>: <span style=color:#f1fa8c>&#34;My Thing&#34;</span>, <span style=color:#ff79c6>&#34;type&#34;</span>: <span style=color:#f1fa8c>&#34;example&#34;</span> }
+}
+</code></pre></div><h3 id=auto-generated-input-schema>Auto-generated input schema
+<a class=anchor href=#auto-generated-input-schema>#</a></h3><p>For each auto-exposed tool, the framework synthesizes a JSON-schema object:</p><table><thead><tr><th>Property</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><code>path_params</code></td><td><code>object</code></td><td>URL path parameters (e.g. <code>{id}</code> from <code>/things/:id</code>)</td></tr><tr><td><code>query</code></td><td><code>object</code></td><td>URL query string parameters</td></tr><tr><td><code>headers</code></td><td><code>object</code></td><td>Custom HTTP headers to forward</td></tr><tr><td><code>body</code></td><td><code>object</code></td><td>JSON request body (parsed object)</td></tr><tr><td><code>raw_body</code></td><td><code>string</code></td><td>Raw request body (for non-JSON payloads)</td></tr></tbody></table><p>All properties are optional (<code>additionalProperties: true</code>). The MCP client chooses which to populate.</p><h3 id=tool-result-structure>Tool result structure
+<a class=anchor href=#tool-result-structure>#</a></h3><p>Each tool call returns a structured result:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#ff79c6>&#34;status_code&#34;</span>: <span style=color:#bd93f9>200</span>,
+  <span style=color:#ff79c6>&#34;headers&#34;</span>: { <span style=color:#ff79c6>&#34;Content-Type&#34;</span>: <span style=color:#f1fa8c>&#34;application/json&#34;</span> },
+  <span style=color:#ff79c6>&#34;body&#34;</span>: <span style=color:#f1fa8c>&#34;{\&#34;id\&#34;:\&#34;thing-123\&#34;,\&#34;name\&#34;:\&#34;...\&#34;}&#34;</span>,
+  <span style=color:#ff79c6>&#34;json&#34;</span>: { <span style=color:#ff79c6>&#34;id&#34;</span>: <span style=color:#f1fa8c>&#34;thing-123&#34;</span>, <span style=color:#ff79c6>&#34;name&#34;</span>: <span style=color:#f1fa8c>&#34;...&#34;</span> }
+}
+</code></pre></div><ul><li><code>json</code> is populated only when the response body is valid JSON.</li><li>HTTP status >= 400 sets <code>isError: true</code> on the tool result.</li></ul><hr><h2 id=configuration-reference>Configuration Reference
+<a class=anchor href=#configuration-reference>#</a></h2><p>All MCP settings live under <code>web.mcp</code> in the YAML config:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=color:#ff79c6>web</span>:
+  <span style=color:#ff79c6>mcp</span>:
+    <span style=color:#ff79c6>enabled: true            # Enable the MCP server (default</span>: <span style=color:#ff79c6>false</span>)
+    <span style=color:#ff79c6>base_path: /mcp          # HTTP endpoint path (default</span>: /mcp)
+    <span style=color:#ff79c6>name</span>: <span style=color:#f1fa8c>&#34;My App&#34;</span>           <span style=color:#6272a4># Server name shown to MCP clients</span>
+    <span style=color:#ff79c6>version</span>: <span style=color:#f1fa8c>&#34;1.0.0&#34;</span>         <span style=color:#6272a4># Server version</span>
+    <span style=color:#ff79c6>stateless</span>: <span style=color:#ff79c6>true</span>          <span style=color:#6272a4># Stateless mode — no session tracking</span>
+    <span style=color:#ff79c6>disable_streaming</span>: <span style=color:#ff79c6>false</span> <span style=color:#6272a4># Disable SSE streaming (use plain HTTP responses)</span>
+</code></pre></div><table><thead><tr><th>Field</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code>enabled</code></td><td><code>false</code></td><td>Master switch for the MCP server</td></tr><tr><td><code>base_path</code></td><td><code>/mcp</code></td><td>The HTTP path where the MCP endpoint is mounted</td></tr><tr><td><code>name</code></td><td><code>"&lt;AppName> UI"</code></td><td>Server name in MCP protocol handshake</td></tr><tr><td><code>version</code></td><td>App version</td><td>Server version in MCP protocol handshake</td></tr><tr><td><code>stateless</code></td><td><code>false</code></td><td>Stateless mode — each request is independent, no session ID tracking</td></tr><tr><td><code>disable_streaming</code></td><td><code>false</code></td><td>Disable Server-Sent Events streaming transport</td></tr></tbody></table><hr><h2 id=permission-control>Permission Control
+<a class=anchor href=#permission-control>#</a></h2><p>MCP tools inherit the same RBAC as their underlying routes. When a route is registered with <code>api.RequirePermission(...)</code>, the MCP authorization filter automatically:</p><ol><li><strong>Hides</strong> the tool from clients who lack permission (filtered out of <code>tools/list</code>).</li><li><strong>Blocks</strong> calls to the tool with a &ldquo;permission denied&rdquo; error.</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>api.<span style=color:#50fa7b>HandleUIMethod</span>(api.POST, <span style=color:#f1fa8c>&#34;/api/things/:id/delete&#34;</span>, handler.DeleteThing,
+    api.<span style=color:#50fa7b>RequireLogin</span>(),
+    api.<span style=color:#50fa7b>RequirePermission</span>(<span style=color:#f1fa8c>&#34;things&#34;</span>, <span style=color:#f1fa8c>&#34;delete&#34;</span>),
+    api.<span style=color:#50fa7b>MCPTool</span>(<span style=color:#f1fa8c>&#34;delete_thing&#34;</span>, <span style=color:#f1fa8c>&#34;Delete a thing by ID&#34;</span>))
+</code></pre></div><p>The built-in <code>MCPAuthorizer</code> filter validates the user&rsquo;s session from the MCP client&rsquo;s HTTP headers and checks permissions against the route&rsquo;s <code>RequirePermission</code> keys. Admin role bypasses all checks.</p><h3 id=custom-authorizer>Custom authorizer
+<a class=anchor href=#custom-authorizer>#</a></h3><p>Register a custom authorizer for advanced scenarios:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>api.<span style=color:#50fa7b>RegisterMCPToolAuthorizer</span>(<span style=color:#8be9fd;font-style:italic>func</span>(headers http.Header, options <span style=color:#ff79c6>*</span>api.HandlerOptions) <span style=color:#8be9fd>bool</span> {
+    <span style=color:#6272a4>// Return false to hide/block this tool for this request
+</span><span style=color:#6272a4></span>    token <span style=color:#ff79c6>:=</span> headers.<span style=color:#50fa7b>Get</span>(<span style=color:#f1fa8c>&#34;Authorization&#34;</span>)
+    <span style=color:#ff79c6>return</span> <span style=color:#50fa7b>validateToken</span>(token)
+})
+</code></pre></div><hr><h2 id=custom-tool-schemas>Custom Tool Schemas
+<a class=anchor href=#custom-tool-schemas>#</a></h2><p>For routes where the auto-generated schema is too generic, provide explicit JSON schemas:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>api.<span style=color:#50fa7b>HandleUIMethod</span>(api.POST, <span style=color:#f1fa8c>&#34;/api/search&#34;</span>, handler.Search,
+    api.<span style=color:#50fa7b>RequireLogin</span>(),
+    api.<span style=color:#50fa7b>MCPTool</span>(<span style=color:#f1fa8c>&#34;search&#34;</span>, <span style=color:#f1fa8c>&#34;Full-text search across all documents&#34;</span>),
+    api.<span style=color:#50fa7b>Label</span>(api.MCPToolInputSchema, json.<span style=color:#50fa7b>RawMessage</span>(<span style=color:#f1fa8c>`{
+</span><span style=color:#f1fa8c>        &#34;type&#34;: &#34;object&#34;,
+</span><span style=color:#f1fa8c>        &#34;properties&#34;: {
+</span><span style=color:#f1fa8c>            &#34;query&#34;: { &#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;Search query text&#34; },
+</span><span style=color:#f1fa8c>            &#34;limit&#34;: { &#34;type&#34;: &#34;integer&#34;, &#34;description&#34;: &#34;Max results (default 10)&#34;, &#34;default&#34;: 10 }
+</span><span style=color:#f1fa8c>        },
+</span><span style=color:#f1fa8c>        &#34;required&#34;: [&#34;query&#34;]
+</span><span style=color:#f1fa8c>    }`</span>)),
+)
+</code></pre></div><p>When a custom <code>MCPToolInputSchema</code> is provided, it replaces the auto-generated schema entirely.</p><hr><h2 id=standalone-server-mode>Standalone Server Mode
+<a class=anchor href=#standalone-server-mode>#</a></h2><p>When you need full control over tool definitions — typed parameters, read-only hints, custom descriptions — build a standalone <code>MCPServer</code> and mount it manually.</p><h3 id=when-to-use-this-mode>When to use this mode
+<a class=anchor href=#when-to-use-this-mode>#</a></h3><ul><li>You want typed, named parameters (not generic <code>path_params</code>/<code>query</code>/<code>body</code>)</li><li>You need <code>readOnlyHint</code> / <code>destructiveHint</code> annotations for GET vs POST</li><li>You want a separate tool catalog from your REST routes</li><li>You need loopback handlers that transform parameters before calling internal APIs</li></ul><h3 id=complete-example>Complete example
+<a class=anchor href=#complete-example>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#ff79c6>import</span> (
+    <span style=color:#f1fa8c>&#34;github.com/mark3labs/mcp-go/mcp&#34;</span>
+    <span style=color:#f1fa8c>&#34;github.com/mark3labs/mcp-go/server&#34;</span>
+    <span style=color:#f1fa8c>&#34;infini.sh/framework/core/api&#34;</span>
+)
+
+<span style=color:#6272a4>// 1. Define your tools with typed parameters.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>type</span> toolDef <span style=color:#8be9fd;font-style:italic>struct</span> {
+    name   <span style=color:#8be9fd>string</span>
+    desc   <span style=color:#8be9fd>string</span>
+    method <span style=color:#8be9fd>string</span>
+    path   <span style=color:#8be9fd>string</span>
+    params []paramDef
+}
+
+<span style=color:#8be9fd;font-style:italic>type</span> paramDef <span style=color:#8be9fd;font-style:italic>struct</span> {
+    name     <span style=color:#8be9fd>string</span>
+    desc     <span style=color:#8be9fd>string</span>
+    required <span style=color:#8be9fd>bool</span>
+}
+
+<span style=color:#8be9fd;font-style:italic>var</span> myTools = []toolDef{
+    {
+        name:   <span style=color:#f1fa8c>&#34;search_logs&#34;</span>,
+        desc:   <span style=color:#f1fa8c>&#34;Search logs by keyword and time range&#34;</span>,
+        method: <span style=color:#f1fa8c>&#34;GET&#34;</span>,
+        path:   <span style=color:#f1fa8c>&#34;/api/logs&#34;</span>,
+        params: []paramDef{
+            {name: <span style=color:#f1fa8c>&#34;q&#34;</span>, desc: <span style=color:#f1fa8c>&#34;Search keyword&#34;</span>, required: <span style=color:#ff79c6>true</span>},
+            {name: <span style=color:#f1fa8c>&#34;from&#34;</span>, desc: <span style=color:#f1fa8c>&#34;Start time (ISO 8601)&#34;</span>},
+            {name: <span style=color:#f1fa8c>&#34;to&#34;</span>, desc: <span style=color:#f1fa8c>&#34;End time (ISO 8601)&#34;</span>},
+        },
+    },
+}
+
+<span style=color:#6272a4>// 2. Build the MCP server with typed tool schemas.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>buildMCPServer</span>() <span style=color:#ff79c6>*</span>server.MCPServer {
+    s <span style=color:#ff79c6>:=</span> server.<span style=color:#50fa7b>NewMCPServer</span>(<span style=color:#f1fa8c>&#34;MyApp&#34;</span>, <span style=color:#f1fa8c>&#34;1.0.0&#34;</span>,
+        server.<span style=color:#50fa7b>WithToolCapabilities</span>(<span style=color:#ff79c6>true</span>),
+        server.<span style=color:#50fa7b>WithInstructions</span>(<span style=color:#f1fa8c>&#34;MyApp API — manage things and search logs.&#34;</span>),
+    )
+    <span style=color:#ff79c6>for</span> _, def <span style=color:#ff79c6>:=</span> <span style=color:#ff79c6>range</span> myTools {
+        def <span style=color:#ff79c6>:=</span> def
+        s.<span style=color:#50fa7b>AddTool</span>(<span style=color:#50fa7b>buildTool</span>(def), <span style=color:#50fa7b>makeHandler</span>(def))
+    }
+    <span style=color:#ff79c6>return</span> s
+}
+
+<span style=color:#6272a4>// 3. Generate typed tool schemas with read-only hints.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>buildTool</span>(def toolDef) mcp.Tool {
+    opts <span style=color:#ff79c6>:=</span> []mcp.ToolOption{mcp.<span style=color:#50fa7b>WithDescription</span>(def.desc)}
+    <span style=color:#ff79c6>for</span> _, p <span style=color:#ff79c6>:=</span> <span style=color:#ff79c6>range</span> def.params {
+        propOpts <span style=color:#ff79c6>:=</span> []mcp.PropertyOption{mcp.<span style=color:#50fa7b>Description</span>(p.desc)}
+        <span style=color:#ff79c6>if</span> p.required {
+            propOpts = <span style=color:#8be9fd;font-style:italic>append</span>(propOpts, mcp.<span style=color:#50fa7b>Required</span>())
+        }
+        opts = <span style=color:#8be9fd;font-style:italic>append</span>(opts, mcp.<span style=color:#50fa7b>WithString</span>(p.name, propOpts<span style=color:#ff79c6>...</span>))
+    }
+    <span style=color:#6272a4>// Mark GET tools as read-only for client-side confirmation behavior.
+</span><span style=color:#6272a4></span>    <span style=color:#ff79c6>if</span> def.method <span style=color:#ff79c6>==</span> <span style=color:#f1fa8c>&#34;GET&#34;</span> {
+        opts = <span style=color:#8be9fd;font-style:italic>append</span>(opts,
+            mcp.<span style=color:#50fa7b>WithReadOnlyHintAnnotation</span>(<span style=color:#ff79c6>true</span>),
+            mcp.<span style=color:#50fa7b>WithDestructiveHintAnnotation</span>(<span style=color:#ff79c6>false</span>),
+        )
+    }
+    <span style=color:#ff79c6>return</span> mcp.<span style=color:#50fa7b>NewTool</span>(def.name, opts<span style=color:#ff79c6>...</span>)
+}
+
+<span style=color:#6272a4>// 4. Bridge tool calls to your internal REST API via loopback HTTP.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>makeHandler</span>(def toolDef) server.ToolHandlerFunc {
+    <span style=color:#ff79c6>return</span> <span style=color:#8be9fd;font-style:italic>func</span>(ctx context.Context, req mcp.CallToolRequest) (<span style=color:#ff79c6>*</span>mcp.CallToolResult, <span style=color:#8be9fd>error</span>) {
+        <span style=color:#6272a4>// Build URL with query params from typed arguments.
+</span><span style=color:#6272a4></span>        params <span style=color:#ff79c6>:=</span> req.Params.Arguments.(<span style=color:#8be9fd;font-style:italic>map</span>[<span style=color:#8be9fd>string</span>]<span style=color:#8be9fd;font-style:italic>interface</span>{})
+        u, _ <span style=color:#ff79c6>:=</span> url.<span style=color:#50fa7b>Parse</span>(<span style=color:#f1fa8c>&#34;http://127.0.0.1:29000&#34;</span> <span style=color:#ff79c6>+</span> def.path)
+        q <span style=color:#ff79c6>:=</span> u.<span style=color:#50fa7b>Query</span>()
+        <span style=color:#ff79c6>for</span> _, p <span style=color:#ff79c6>:=</span> <span style=color:#ff79c6>range</span> def.params {
+            <span style=color:#ff79c6>if</span> v, ok <span style=color:#ff79c6>:=</span> params[p.name]; ok {
+                q.<span style=color:#50fa7b>Set</span>(p.name, fmt.<span style=color:#50fa7b>Sprintf</span>(<span style=color:#f1fa8c>&#34;%v&#34;</span>, v))
+            }
+        }
+        u.RawQuery = q.<span style=color:#50fa7b>Encode</span>()
+
+        <span style=color:#6272a4>// Call your own REST API.
+</span><span style=color:#6272a4></span>        resp, err <span style=color:#ff79c6>:=</span> http.<span style=color:#50fa7b>Get</span>(u.<span style=color:#50fa7b>String</span>())
+        <span style=color:#ff79c6>if</span> err <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>nil</span> {
+            <span style=color:#ff79c6>return</span> mcp.<span style=color:#50fa7b>NewToolResultError</span>(err.<span style=color:#50fa7b>Error</span>()), <span style=color:#ff79c6>nil</span>
+        }
+        <span style=color:#ff79c6>defer</span> resp.Body.<span style=color:#50fa7b>Close</span>()
+        body, _ <span style=color:#ff79c6>:=</span> io.<span style=color:#50fa7b>ReadAll</span>(resp.Body)
+        <span style=color:#ff79c6>if</span> resp.StatusCode <span style=color:#ff79c6>&gt;=</span> <span style=color:#bd93f9>400</span> {
+            <span style=color:#ff79c6>return</span> mcp.<span style=color:#50fa7b>NewToolResultError</span>(fmt.<span style=color:#50fa7b>Sprintf</span>(<span style=color:#f1fa8c>&#34;HTTP %d: %s&#34;</span>, resp.StatusCode, <span style=color:#8be9fd;font-style:italic>string</span>(body))), <span style=color:#ff79c6>nil</span>
+        }
+        <span style=color:#ff79c6>return</span> mcp.<span style=color:#50fa7b>NewToolResultText</span>(<span style=color:#8be9fd;font-style:italic>string</span>(body)), <span style=color:#ff79c6>nil</span>
+    }
+}
+
+<span style=color:#6272a4>// 5. Mount the server in your route registration.
+</span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>setupRoutes</span>(apiServer <span style=color:#ff79c6>*</span>api.Handler) {
+    mcpServer <span style=color:#ff79c6>:=</span> server.<span style=color:#50fa7b>NewStreamableHTTPServer</span>(<span style=color:#50fa7b>buildMCPServer</span>(), server.<span style=color:#50fa7b>WithStateLess</span>(<span style=color:#ff79c6>true</span>))
+    api.<span style=color:#50fa7b>HandleUIFuncMethod</span>(api.POST, <span style=color:#f1fa8c>&#34;/mcp&#34;</span>, mcpServer.ServeHTTP)
+    <span style=color:#6272a4>// GET returns a help page for browser visitors.
+</span><span style=color:#6272a4></span>    api.<span style=color:#50fa7b>HandleUIFuncMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/mcp&#34;</span>, serveHelpPage)
+}
+</code></pre></div><hr><h2 id=browser-compatibility>Browser Compatibility
+<a class=anchor href=#browser-compatibility>#</a></h2><p>Since <code>/mcp</code> is an MCP endpoint (POST + JSON-RPC), browser GET requests will not produce a useful response. Register a GET handler that returns a helpful HTML page:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>api.<span style=color:#50fa7b>HandleUIFuncMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/mcp&#34;</span>, <span style=color:#8be9fd;font-style:italic>func</span>(w http.ResponseWriter, r <span style=color:#ff79c6>*</span>http.Request) {
+    w.<span style=color:#50fa7b>Header</span>().<span style=color:#50fa7b>Set</span>(<span style=color:#f1fa8c>&#34;Content-Type&#34;</span>, <span style=color:#f1fa8c>&#34;text/html; charset=utf-8&#34;</span>)
+    w.<span style=color:#50fa7b>WriteHeader</span>(http.StatusOK)
+    w.<span style=color:#50fa7b>Write</span>([]<span style=color:#8be9fd;font-style:italic>byte</span>(<span style=color:#f1fa8c>`&lt;h1&gt;MCP Server&lt;/h1&gt;
+</span><span style=color:#f1fa8c>&lt;p&gt;This endpoint is for MCP clients. Use POST with Accept: application/json.&lt;/p&gt;`</span>))
+})
+</code></pre></div><p>For invalid POST requests (missing the MCP Accept header), use a global interceptor:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8be9fd;font-style:italic>type</span> mcpInterceptor <span style=color:#8be9fd;font-style:italic>struct</span>{}
+
+<span style=color:#8be9fd;font-style:italic>func</span> (i <span style=color:#ff79c6>*</span>mcpInterceptor) <span style=color:#50fa7b>Match</span>(r <span style=color:#ff79c6>*</span>http.Request) <span style=color:#8be9fd>bool</span> {
+    <span style=color:#ff79c6>if</span> r.URL.Path <span style=color:#ff79c6>!=</span> <span style=color:#f1fa8c>&#34;/mcp&#34;</span> <span style=color:#ff79c6>||</span> r.Method <span style=color:#ff79c6>!=</span> http.MethodPost {
+        <span style=color:#ff79c6>return</span> <span style=color:#ff79c6>false</span>
+    }
+    accept <span style=color:#ff79c6>:=</span> r.Header.<span style=color:#50fa7b>Get</span>(<span style=color:#f1fa8c>&#34;Accept&#34;</span>)
+    <span style=color:#ff79c6>return</span> !strings.<span style=color:#50fa7b>Contains</span>(accept, <span style=color:#f1fa8c>&#34;application/json&#34;</span>) <span style=color:#ff79c6>&amp;&amp;</span>
+           !strings.<span style=color:#50fa7b>Contains</span>(accept, <span style=color:#f1fa8c>&#34;text/event-stream&#34;</span>)
+}
+
+<span style=color:#8be9fd;font-style:italic>func</span> (i <span style=color:#ff79c6>*</span>mcpInterceptor) <span style=color:#50fa7b>PreHandle</span>(ctx context.Context, w http.ResponseWriter, r <span style=color:#ff79c6>*</span>http.Request) (context.Context, <span style=color:#8be9fd>error</span>) {
+    <span style=color:#6272a4>// Return HTML help page for non-MCP POST requests.
+</span><span style=color:#6272a4></span>    <span style=color:#50fa7b>serveHelpPage</span>(w, r)
+    <span style=color:#ff79c6>return</span> ctx, fmt.<span style=color:#50fa7b>Errorf</span>(<span style=color:#f1fa8c>&#34;response sent&#34;</span>) <span style=color:#6272a4>// stop the handler chain
+</span><span style=color:#6272a4></span>}
+
+<span style=color:#8be9fd;font-style:italic>func</span> (i <span style=color:#ff79c6>*</span>mcpInterceptor) <span style=color:#50fa7b>PostHandle</span>(_ context.Context, _ http.ResponseWriter, _ <span style=color:#ff79c6>*</span>http.Request) {}
+<span style=color:#8be9fd;font-style:italic>func</span> (i <span style=color:#ff79c6>*</span>mcpInterceptor) <span style=color:#50fa7b>Name</span>() <span style=color:#8be9fd>string</span> { <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34;mcp-browser-compat&#34;</span> }
+
+<span style=color:#6272a4>// Register:
+</span><span style=color:#6272a4></span>api.<span style=color:#50fa7b>AddGlobalInterceptors</span>(<span style=color:#ff79c6>&amp;</span>mcpInterceptor{})
+</code></pre></div><hr><h2 id=client-configuration>Client Configuration
+<a class=anchor href=#client-configuration>#</a></h2><h3 id=claude-desktop>Claude Desktop
+<a class=anchor href=#claude-desktop>#</a></h3><p>Edit <code>claude_desktop_config.json</code>:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#ff79c6>&#34;mcpServers&#34;</span>: {
+    <span style=color:#ff79c6>&#34;my-app&#34;</span>: {
+      <span style=color:#ff79c6>&#34;url&#34;</span>: <span style=color:#f1fa8c>&#34;http://localhost:29000/mcp&#34;</span>,
+      <span style=color:#ff79c6>&#34;transport&#34;</span>: <span style=color:#f1fa8c>&#34;streamable-http&#34;</span>
+    }
+  }
+}
+</code></pre></div><h3 id=cursor>Cursor
+<a class=anchor href=#cursor>#</a></h3><p>Add to Cursor&rsquo;s MCP settings:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#ff79c6>&#34;mcpServers&#34;</span>: {
+    <span style=color:#ff79c6>&#34;my-app&#34;</span>: {
+      <span style=color:#ff79c6>&#34;url&#34;</span>: <span style=color:#f1fa8c>&#34;http://localhost:29000/mcp&#34;</span>
+    }
+  }
+}
+</code></pre></div><h3 id=curl>curl
+<a class=anchor href=#curl>#</a></h3><p>Test the MCP server with curl:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># Initialize handshake</span>
+curl -X POST http://localhost:29000/mcp <span style=color:#f1fa8c>\
+</span><span style=color:#f1fa8c></span>  -H <span style=color:#f1fa8c>&#39;Content-Type: application/json&#39;</span> <span style=color:#f1fa8c>\
+</span><span style=color:#f1fa8c></span>  -H <span style=color:#f1fa8c>&#39;Accept: application/json, text/event-stream&#39;</span> <span style=color:#f1fa8c>\
+</span><span style=color:#f1fa8c></span>  -d <span style=color:#f1fa8c>&#39;{
+</span><span style=color:#f1fa8c>    &#34;jsonrpc&#34;: &#34;2.0&#34;,
+</span><span style=color:#f1fa8c>    &#34;id&#34;: 1,
+</span><span style=color:#f1fa8c>    &#34;method&#34;: &#34;initialize&#34;,
+</span><span style=color:#f1fa8c>    &#34;params&#34;: {
+</span><span style=color:#f1fa8c>      &#34;protocolVersion&#34;: &#34;2024-11-05&#34;,
+</span><span style=color:#f1fa8c>      &#34;capabilities&#34;: {},
+</span><span style=color:#f1fa8c>      &#34;clientInfo&#34;: {&#34;name&#34;: &#34;test&#34;, &#34;version&#34;: &#34;1.0&#34;}
+</span><span style=color:#f1fa8c>    }
+</span><span style=color:#f1fa8c>  }&#39;</span>
+
+<span style=color:#6272a4># List available tools</span>
+curl -X POST http://localhost:29000/mcp <span style=color:#f1fa8c>\
+</span><span style=color:#f1fa8c></span>  -H <span style=color:#f1fa8c>&#39;Content-Type: application/json&#39;</span> <span style=color:#f1fa8c>\
+</span><span style=color:#f1fa8c></span>  -H <span style=color:#f1fa8c>&#39;Accept: application/json, text/event-stream&#39;</span> <span style=color:#f1fa8c>\
+</span><span style=color:#f1fa8c></span>  -d <span style=color:#f1fa8c>&#39;{
+</span><span style=color:#f1fa8c>    &#34;jsonrpc&#34;: &#34;2.0&#34;,
+</span><span style=color:#f1fa8c>    &#34;id&#34;: 2,
+</span><span style=color:#f1fa8c>    &#34;method&#34;: &#34;tools/list&#34;,
+</span><span style=color:#f1fa8c>    &#34;params&#34;: {}
+</span><span style=color:#f1fa8c>  }&#39;</span>
+
+<span style=color:#6272a4># Call a tool</span>
+curl -X POST http://localhost:29000/mcp <span style=color:#f1fa8c>\
+</span><span style=color:#f1fa8c></span>  -H <span style=color:#f1fa8c>&#39;Content-Type: application/json&#39;</span> <span style=color:#f1fa8c>\
+</span><span style=color:#f1fa8c></span>  -H <span style=color:#f1fa8c>&#39;Accept: application/json, text/event-stream&#39;</span> <span style=color:#f1fa8c>\
+</span><span style=color:#f1fa8c></span>  -d <span style=color:#f1fa8c>&#39;{
+</span><span style=color:#f1fa8c>    &#34;jsonrpc&#34;: &#34;2.0&#34;,
+</span><span style=color:#f1fa8c>    &#34;id&#34;: 3,
+</span><span style=color:#f1fa8c>    &#34;method&#34;: &#34;tools/call&#34;,
+</span><span style=color:#f1fa8c>    &#34;params&#34;: {
+</span><span style=color:#f1fa8c>      &#34;name&#34;: &#34;list_things&#34;,
+</span><span style=color:#f1fa8c>      &#34;arguments&#34;: {
+</span><span style=color:#f1fa8c>        &#34;query&#34;: { &#34;status&#34;: &#34;active&#34; }
+</span><span style=color:#f1fa8c>      }
+</span><span style=color:#f1fa8c>    }
+</span><span style=color:#f1fa8c>  }&#39;</span>
+</code></pre></div><hr><h2 id=testing>Testing
+<a class=anchor href=#testing>#</a></h2><h3 id=unit-test-pattern>Unit test pattern
+<a class=anchor href=#unit-test-pattern>#</a></h3><p>Test auto-exposed MCP routes using the internal <code>callMCPAutoUIRoute</code> function:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>TestMyMCPTool</span>(t <span style=color:#ff79c6>*</span>testing.T) {
+    <span style=color:#6272a4>// Register the route (done in your init/setup).
+</span><span style=color:#6272a4></span>    api.<span style=color:#50fa7b>HandleUIMethod</span>(api.GET, <span style=color:#f1fa8c>&#34;/api/things/:id&#34;</span>, testHandler,
+        api.<span style=color:#50fa7b>MCPTool</span>(<span style=color:#f1fa8c>&#34;get_thing&#34;</span>, <span style=color:#f1fa8c>&#34;Get a thing&#34;</span>))
+
+    <span style=color:#6272a4>// Simulate a tool call.
+</span><span style=color:#6272a4></span>    result, err <span style=color:#ff79c6>:=</span> api.<span style=color:#50fa7b>CallMCPAutoUIRoute</span>(<span style=color:#f1fa8c>&#34;get_thing&#34;</span>, mcp.CallToolParams{
+        Arguments: <span style=color:#8be9fd;font-style:italic>map</span>[<span style=color:#8be9fd>string</span>]<span style=color:#8be9fd;font-style:italic>interface</span>{}{
+            <span style=color:#f1fa8c>&#34;path_params&#34;</span>: <span style=color:#8be9fd;font-style:italic>map</span>[<span style=color:#8be9fd>string</span>]<span style=color:#8be9fd;font-style:italic>interface</span>{}{<span style=color:#f1fa8c>&#34;id&#34;</span>: <span style=color:#f1fa8c>&#34;thing-1&#34;</span>},
+            <span style=color:#f1fa8c>&#34;query&#34;</span>:       <span style=color:#8be9fd;font-style:italic>map</span>[<span style=color:#8be9fd>string</span>]<span style=color:#8be9fd;font-style:italic>interface</span>{}{<span style=color:#f1fa8c>&#34;detail&#34;</span>: <span style=color:#f1fa8c>&#34;full&#34;</span>},
+        },
+    })
+
+    require.<span style=color:#50fa7b>NoError</span>(t, err)
+    require.<span style=color:#50fa7b>False</span>(t, result.IsError)
+
+    <span style=color:#6272a4>// The structured content contains the HTTP response.
+</span><span style=color:#6272a4></span>    content <span style=color:#ff79c6>:=</span> result.Content[<span style=color:#bd93f9>0</span>].(mcp.TextContent)
+    assert.<span style=color:#50fa7b>Contains</span>(t, content.Text, <span style=color:#f1fa8c>&#34;thing-1&#34;</span>)
+}
+</code></pre></div><h3 id=testing-authorization>Testing authorization
+<a class=anchor href=#testing-authorization>#</a></h3><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>TestMCPToolRequiresAuth</span>(t <span style=color:#ff79c6>*</span>testing.T) {
+    <span style=color:#6272a4>// Without auth headers, the tool call should be denied.
+</span><span style=color:#6272a4></span>    result, _ <span style=color:#ff79c6>:=</span> api.<span style=color:#50fa7b>CallMCPAutoUIRoute</span>(<span style=color:#f1fa8c>&#34;get_thing&#34;</span>, mcp.CallToolParams{
+        Arguments: <span style=color:#8be9fd;font-style:italic>map</span>[<span style=color:#8be9fd>string</span>]<span style=color:#8be9fd;font-style:italic>interface</span>{}{
+            <span style=color:#f1fa8c>&#34;path_params&#34;</span>: <span style=color:#8be9fd;font-style:italic>map</span>[<span style=color:#8be9fd>string</span>]<span style=color:#8be9fd;font-style:italic>interface</span>{}{<span style=color:#f1fa8c>&#34;id&#34;</span>: <span style=color:#f1fa8c>&#34;thing-1&#34;</span>},
+        },
+    })
+    assert.<span style=color:#50fa7b>True</span>(t, result.IsError)
+}
+</code></pre></div><hr><h2 id=api-reference>API Reference
+<a class=anchor href=#api-reference>#</a></h2><h3 id=options>Options
+<a class=anchor href=#options>#</a></h3><table><thead><tr><th>Function</th><th>Description</th></tr></thead><tbody><tr><td><code>api.MCPTool(name, description string)</code></td><td>Mark a route as an MCP tool with a custom name and description</td></tr><tr><td><code>api.MCPAuto()</code></td><td>Mark a route for auto MCP exposure (name/description auto-generated)</td></tr><tr><td><code>api.Label(api.MCPToolInputSchema, schema)</code></td><td>Override the auto-generated input schema</td></tr><tr><td><code>api.Label(api.MCPToolOutputSchema, schema)</code></td><td>Set a custom output schema</td></tr><tr><td><code>api.RequirePermission(resource, action)</code></td><td>Enforce per-tool RBAC (inherited by MCP layer)</td></tr></tbody></table><h3 id=server-functions>Server functions
+<a class=anchor href=#server-functions>#</a></h3><table><thead><tr><th>Function</th><th>Description</th></tr></thead><tbody><tr><td><code>api.RegisterMCPToolAuthorizer(fn)</code></td><td>Register a custom tool authorization filter</td></tr><tr><td><code>api.WalkMCPAutoUIMethodRoutes(fn)</code></td><td>Iterate over all MCP-tagged routes (for introspection)</td></tr><tr><td><code>api.WalkRegisteredUIMethodRoutes(fn)</code></td><td>Iterate over all registered UI routes</td></tr></tbody></table><h3 id=constants>Constants
+<a class=anchor href=#constants>#</a></h3><table><thead><tr><th>Constant</th><th>Description</th></tr></thead><tbody><tr><td><code>api.FeatureMCPAuto</code></td><td>Feature flag for auto MCP exposure</td></tr><tr><td><code>api.MCPToolName</code></td><td>Label key for tool name</td></tr><tr><td><code>api.MCPToolDescription</code></td><td>Label key for tool description</td></tr><tr><td><code>api.MCPToolInputSchema</code></td><td>Label key for custom input schema</td></tr><tr><td><code>api.MCPToolOutputSchema</code></td><td>Label key for custom output schema</td></tr></tbody></table></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/infinilabs/framework/edit/main/docs/content.en/docs/references/mcp.md target=_blank rel=noopener><img src=/framework/main/%20svg/edit.svg class=book-icon alt=Edit>
+<span>Edit this page</span></a></div><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
+  import { searchbox } from "https:\/\/coco.infini.cloud\/integration\/d95hasuk7e3tu0abbeig\/widget";
+  searchbox({ container: "#searchbox" });
+</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><a href=/framework/main/docs/references/mcp/index.md class=view-markdown target=_blank><img src=/assets/icons/markdown.svg>
+<span>查看 Markdown</span></a><style>.book-toc>nav li::before{position:absolute;top:6px;left:-16px;width:2px;height:32px;content:"";transition:transform .28s cubic-bezier(.2,.8,.2,1),background-color .18s ease,opacity .18s;transform:translateY(-50%)scaleY(0);opacity:0;background:0 0}.book-toc>nav>ul>li.ancestor::before{left:-16px}.book-toc>nav>ul>li.ancestor>ul>li.active::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor::before{left:-32px}.book-toc>nav>ul>li.ancestor>ul>li.ancestor>ul>li.active::before{left:-48px}.book-toc>nav li.active::before{transform:translateY(-50%)scaleY(1);opacity:1;background:#8440f1}.book-toc>nav li.active>a{font-weight:500}:target{scroll-margin-top:80px}</style><script>document.addEventListener('DOMContentLoaded',function(){const nav=document.getElementsByClassName('book-toc')[0].querySelector('nav');if(!nav)return;const links=Array.from(nav.querySelectorAll('a[href^="#"]'));const idToLi=new Map();let isProgrammatic=false;let programmaticTargetId=null;let scrollEndTimer=null;links.forEach(link=>{const href=link.getAttribute('href');if(!href||href.length<2)return;const id=decodeURIComponent(href.slice(1));const li=link.closest('li');if(li)idToLi.set(id,li);link.addEventListener('click',function(e){const target=document.getElementById(id);if(target){e.preventDefault();isProgrammatic=true;programmaticTargetId=id;setActiveById(id);target.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState(null,'','#'+id);clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},1200);}});});window.addEventListener('scroll',function(){clearTimeout(scrollEndTimer);scrollEndTimer=setTimeout(()=>{isProgrammatic=false;programmaticTargetId=null;},120);},{passive:true});function clearAll(){idToLi.forEach(li=>li.classList.remove('active','ancestor'));links.forEach(a=>a.removeAttribute('aria-current'));}
+function setActiveById(id){clearAll();const li=idToLi.get(id);if(!li)return;li.classList.add('active');const a=li.querySelector('a[href^="#"]');if(a)a.setAttribute('aria-current','true');let parent=li.parentElement;while(parent&&parent!==nav){const parentLi=parent.closest('li');if(parentLi&&parentLi!==li)parentLi.classList.add('ancestor');parent=parent.parentElement;}}
+const observedEls=Array.from(idToLi.keys()).map(id=>document.getElementById(id)).filter(Boolean);if(observedEls.length){const io=new IntersectionObserver((entries)=>{let candidate=null;entries.forEach(en=>{if(!en.isIntersecting)return;if(!candidate)candidate=en;else{const curTop=Math.abs(candidate.boundingClientRect.top);const newTop=Math.abs(en.boundingClientRect.top);if(newTop<curTop)candidate=en;}});if(!candidate||!candidate.target||!candidate.target.id)return;const foundId=candidate.target.id;if(isProgrammatic&&programmaticTargetId&&foundId!==programmaticTargetId){return;}
+setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.1,0.25,0.5]});observedEls.forEach(el=>io.observe(el));}
+if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#overview>Overview</a></li><li><a href=#quick-start>Quick Start</a><ul><li><a href=#1-enable-mcp-in-config>1. Enable MCP in config</a></li><li><a href=#2-annotate-routes-with-mcptool>2. Annotate routes with MCPTool</a></li><li><a href=#3-connect-an-mcp-client>3. Connect an MCP client</a></li></ul></li><li><a href=#auto-exposure-mode>Auto-Exposure Mode</a><ul><li><a href=#how-it-works>How it works</a></li><li><a href=#minimal-example--get-with-no-parameters>Minimal example — GET with no parameters</a></li><li><a href=#path-parameters>Path parameters</a></li><li><a href=#query-parameters>Query parameters</a></li><li><a href=#post-with-body>POST with body</a></li><li><a href=#auto-generated-input-schema>Auto-generated input schema</a></li><li><a href=#tool-result-structure>Tool result structure</a></li></ul></li><li><a href=#configuration-reference>Configuration Reference</a></li><li><a href=#permission-control>Permission Control</a><ul><li><a href=#custom-authorizer>Custom authorizer</a></li></ul></li><li><a href=#custom-tool-schemas>Custom Tool Schemas</a></li><li><a href=#standalone-server-mode>Standalone Server Mode</a><ul><li><a href=#when-to-use-this-mode>When to use this mode</a></li><li><a href=#complete-example>Complete example</a></li></ul></li><li><a href=#browser-compatibility>Browser Compatibility</a></li><li><a href=#client-configuration>Client Configuration</a><ul><li><a href=#claude-desktop>Claude Desktop</a></li><li><a href=#cursor>Cursor</a></li><li><a href=#curl>curl</a></li></ul></li><li><a href=#testing>Testing</a><ul><li><a href=#unit-test-pattern>Unit test pattern</a></li><li><a href=#testing-authorization>Testing authorization</a></li></ul></li><li><a href=#api-reference>API Reference</a><ul><li><a href=#options>Options</a></li><li><a href=#server-functions>Server functions</a></li><li><a href=#constants>Constants</a></li></ul></li></ul></nav></aside></main></body><script src=https://infinilabs.com/notice-widget/notice-widget.umd.cjs></script><script>NoticeWidget.init({locales:{"zh-CN":"https://infinilabs.com/notice-widget/locales/zh-CN.json","en-US":"https://infinilabs.com/notice-widget/locales/en-US.json",}});</script></html>
