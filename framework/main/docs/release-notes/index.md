@@ -2,7 +2,7 @@
 title: "Release Notes"
 date: 0001-01-01
 summary: "Release Notes #  Information about release notes of INFINI Framework is provided here.
-Latest (In development) #  ❌ Breaking changes #  🚀 Features #   feat: add MCP (Model Context Protocol) server support — auto-expose UI routes as MCP tools via api.MCPTool() annotation feat: add MCP configuration section (web.mcp.enabled, web.mcp.base_path, web.mcp.stateless, web.mcp.disable_streaming) feat: add MCP authorization filter — per-tool RBAC via api.RequirePermission() + RegisterMCPToolAuthorizer() feat: support standalone StreamableHTTP MCP server with typed tool schemas and loopback handlers feat: auto-generate MCP tool input schemas (path_params/query/headers/body) from registered routes  🐛 Bug fix #   fix: expand configs."
+Latest (In development) #  ❌ Breaking changes #  🚀 Features #   feat: add MCP (Model Context Protocol) server support — auto-expose UI routes as MCP tools via api.MCPTool() annotation feat: add MCP configuration section (web.mcp.enabled, web.mcp.base_path, web.mcp.stateless, web.mcp.disable_streaming) feat: add MCP authorization filter — per-tool RBAC via api.RequirePermission() + RegisterMCPToolAuthorizer() feat: support standalone StreamableHTTP MCP server with typed tool schemas and loopback handlers feat: auto-generate MCP tool input schemas (path_params/query/headers/body) from registered routes feat: make reuse_port tri-state and watch config dir even when missing #393  🐛 Bug fix #   fix: expand configs."
 ---
 
 
@@ -19,8 +19,14 @@ Information about release notes of INFINI Framework is provided here.
 - feat: add MCP authorization filter — per-tool RBAC via `api.RequirePermission()` + `RegisterMCPToolAuthorizer()`
 - feat: support standalone StreamableHTTP MCP server with typed tool schemas and loopback handlers
 - feat: auto-generate MCP tool input schemas (`path_params`/`query`/`headers`/`body`) from registered routes
+- feat: make reuse_port tri-state and watch config dir even when missing #393
+
 ### 🐛 Bug fix  
 - fix: expand configs.template when loading templated config files #391
+- fix: register elasticsearch instance even when version probe fails #393
+- fix: health api requires a system cluster that may not exist #393
+- fix: pipeline task not visible right after creation #393
+
 ### ✈️ Improvements  
 - refactor: add EventSink support to overall utilization collector #387
 - refactor: enable CORS for GET /setting/application #390
