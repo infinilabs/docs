@@ -83,7 +83,7 @@ curl -# https://release.infinilabs.com/easysearch/jdk/21/graalvm-jdk-21_windows-
 
 # 解压并重命名
 cd /d/data/easysearch && unzip -q /d/opt/jdk.zip
-mv zulu* jdk
+mv graalvm* jdk
 
 # 设置环境变量
 export JAVA_HOME=/d/data/easysearch/jdk

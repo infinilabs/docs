@@ -69,7 +69,7 @@ Version: 1.x.x, Build: xxxxxxx/..., JVM: xx.x.x
 **使用自定义配置目录**：
 
 ```bash
-ES_PATH_CONF=/opt/easysearch/config bin/easysearch
+ES_PATH_CONF=/data/easysearch/config bin/easysearch
 ```
 
 **通过 PID 文件停止后台进程**：

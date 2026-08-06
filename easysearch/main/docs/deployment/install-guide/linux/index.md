@@ -69,7 +69,7 @@ mkdir -p /usr/local/jdk
 3. 解压文件到创建好的目录
 
 ```bash
-tar -zxf /usr/src/zulu*.tar.gz -C /usr/local/jdk --strip-components 1
+tar -zxf /usr/src/graalvm*.tar.gz -C /usr/local/jdk --strip-components 1
 ```
 
 4. 配置环境变量

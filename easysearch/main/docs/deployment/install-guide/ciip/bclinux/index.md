@@ -4,7 +4,7 @@ date: 0001-01-01
 summary: "移动云 BC-Linux 平台安装 #  移动云 BC-Linux 平台介绍 #  移动云 BC-Linux 是中国移动自主研发的企业级操作系统，基于 Linux 内核，专为云计算和大数据应用设计，具备高性能、高可靠性和强安全性，广泛应用于中国移动的云计算平台和数据中心。
 移动云 BC-Linux 平台安装参考 #  目前，Easysearch 已支持在移动云 BC-Linux 操作系统上运行，联网环境建议使用一键安装脚本进行安装，离线环境建议下载 Bundle 包进行安装，分布式集群安装请参考 分布式集群安装。
  前提条件：已参照 系统调优进行了系统优化，同时为 Easysearch 创建了专用的用户。
- 初始化系统参数及用户命令参考 #  # 调整内核配置 echo &#34;vm.max_map_count=262144&#34; &gt;&gt; /etc/sysctl.conf &amp;&amp; sysctl -p # 增加用户组与用户 groupadd -r easysearch &amp;&amp; useradd -r -g easysearch -d /home/easysearch -s /sbin/nologin -c &#34;Easysearch Service Account&#34; easysearch 安装命令参考 #  # 创建数据目录 mkdir -p /opt/easysearch # 下载最新版本的 Easysearch 并安装 curl -sSL http://get."
+ 初始化系统参数及用户命令参考 #  # 调整内核配置 echo &#34;vm.max_map_count=262144&#34; &gt;&gt; /etc/sysctl.conf &amp;&amp; sysctl -p # 增加用户组与用户 groupadd -r easysearch &amp;&amp; useradd -r -g easysearch -d /home/easysearch -s /sbin/nologin -c &#34;Easysearch Service Account&#34; easysearch 安装命令参考 #  # 创建数据目录 mkdir -p /data/easysearch # 下载最新版本的 Easysearch 并安装 curl -sSL http://get."
 ---
 
 
@@ -34,17 +34,17 @@ groupadd -r easysearch && useradd -r -g easysearch -d /home/easysearch -s /sbin/
 
 ```bash
 # 创建数据目录
-mkdir -p /opt/easysearch
+mkdir -p /data/easysearch
 # 下载最新版本的 Easysearch 并安装
-curl -sSL http://get.infini.cloud | bash -s -- -p easysearch -d /opt/easysearch
+curl -sSL http://get.infini.cloud | bash -s -- -p easysearch -d /data/easysearch
 # 进入 Easysearch 目录
-cd /opt/easysearch
+cd /data/easysearch
 # 初始化 Easysearch
 bin/initialize.sh -s
 # 调整目录权限
-chown -R easysearch:easysearch /opt/easysearch
+chown -R easysearch:easysearch /data/easysearch
 # 启动 Easysearch
-runuser -u easysearch -- /opt/easysearch/bin/easysearch -d -p /opt/easysearch/easysearch.pid
+runuser -u easysearch -- /data/easysearch/bin/easysearch -d -p /data/easysearch/easysearch.pid
 ```
 
 > 注意：初始化过程中会生成随机密码，并不会保存到日志文件中，只会在终端显示一次，请妥善保存。如果忘记 `admin` 密码，可以使用  `bin/reset_admin_password.sh` 进行重置。
