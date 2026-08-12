@@ -44,3 +44,5 @@ Sitemap: https://docs.infinilabs.com/agent/v1.31.1/sitemap.xml
 X-llms-txt: https://docs.infinilabs.com/agent/v1.31.1/llms.txt
 Sitemap: https://docs.infinilabs.com/easysearch/v2.3.1/sitemap.xml
 X-llms-txt: https://docs.infinilabs.com/easysearch/v2.3.1/llms.txt
+Sitemap: https://docs.infinilabs.com/gateway/v1.31.2/sitemap.xml
+X-llms-txt: https://docs.infinilabs.com/gateway/v1.31.2/llms.txt
