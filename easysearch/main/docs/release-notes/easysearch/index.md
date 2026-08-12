@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.3.1 (2026-07-29) #  Breaking changes #  Features #   巡检 UI 新增集群状态、模板、索引元数据、快照、集群运行时信息、节点信息、插件、节点诊断信息及分片/段信息等采集项，提升问题诊断覆盖范围。 服务管理 UI 的创建和加入集群流程新增节点角色约束，协调节点不能与 master、data、ingest 角色同时选择。 服务管理登录时增加 root 账户限制检测，避免以 root 账户访问受管服务。  Bug fix #   修复开启安全认证且根路径不允许匿名访问时，Easysearch UI 因登录前探测根路径而无法登录的问题。 修复 Agent 服务管理中可通过服务列表或巡检入口绕过服务登录状态的问题。 修复编辑集群配置时可能意外重置管理员密码的问题。 修复巡检页面无法正确解析服务版本的问题。 修复开发工具中缓存的集群名称、标识与实际集群信息不同步的问题。 修复 Java 21 环境下 CCR 初始恢复并发读取文件时可能触发 IllegalStateException: confined 并导致恢复失败的问题。  Improvements #   新增 S3 disable_bulk_delete 配置（客户端名称空间为 s3."
+Latest (In development) #  Breaking changes #  Features #  Bug fix #   修复 UI 插件创建角色无法选择粗粒度权限 action group 的问题 修复 UI 插件创建角色时集群权限与索引权限被强制必填的问题，两者放开为可选，与 API 行为保持一致。  Improvements #  2.3.1 (2026-07-29) #  Breaking changes #  Features #   巡检 UI 新增集群状态、模板、索引元数据、快照、集群运行时信息、节点信息、插件、节点诊断信息及分片/段信息等采集项，提升问题诊断覆盖范围。 服务管理 UI 的创建和加入集群流程新增节点角色约束，协调节点不能与 master、data、ingest 角色同时选择。 服务管理登录时增加 root 账户限制检测，避免以 root 账户访问受管服务。  Bug fix #   修复开启安全认证且根路径不允许匿名访问时，Easysearch UI 因登录前探测根路径而无法登录的问题。 修复 Agent 服务管理中可通过服务列表或巡检入口绕过服务登录状态的问题。 修复编辑集群配置时可能意外重置管理员密码的问题。 修复巡检页面无法正确解析服务版本的问题。 修复开发工具中缓存的集群名称、标识与实际集群信息不同步的问题。 修复 Java 21 环境下 CCR 初始恢复并发读取文件时可能触发 IllegalStateException: confined 并导致恢复失败的问题。  Improvements #   新增 S3 disable_bulk_delete 配置（客户端名称空间为 s3."
 ---
 
 
@@ -14,6 +14,9 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 ### Breaking changes
 ### Features
 ### Bug fix
+- 修复 UI 插件创建角色无法选择粗粒度权限 action group 的问题
+- 修复 UI 插件创建角色时集群权限与索引权限被强制必填的问题，两者放开为可选，与 API 行为保持一致。
+
 ### Improvements
 
 ## 2.3.1 (2026-07-29)
@@ -195,7 +198,7 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
   - 支持审计日志模块动态配置
   - 新增数据探索页面
   - 支持配置角色权限控制菜单和页面操作
-  
+
 ### Bug fix
 
 ### Improvements
