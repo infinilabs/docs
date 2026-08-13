@@ -3,7 +3,7 @@ title: "References"
 date: 2024-08-22
 lastmod: 2024-08-22
 summary: "References #  Comprehensive reference documentation for the INFINI Framework&rsquo;s core systems and APIs.
-Core Systems #    Configuration — YAML configuration management, environment variables, keystore secrets, and config file watching  Modules — Module lifecycle system for building and registering framework extensions  Pipeline &amp; Processors — Data processing pipelines with conditional logic and custom processor development  Task Scheduling — Interval-based, cron-based, and transient task execution  Queue — Pluggable message queue abstraction with disk, memory, Kafka, and Redis backends  Key-Value Store — Pluggable KV storage with Badger, Elasticsearch, and file-based backends  Statistics — Metrics collection with counters, gauges, timings, and StatsD integration  Conditions — Declarative condition evaluation with logical operators for pipeline control flow  API &amp; Data #    API &amp; Web Framework — HTTP API server, web server, routing, middleware, and security configuration  MCP Server — Model Context Protocol server support — expose APIs as AI-callable tools via api."
+Core Systems #    Configuration — YAML configuration management, environment variables, keystore secrets, and config file watching  Modules — Module lifecycle system for building and registering framework extensions  Pipeline &amp; Processors — Data processing pipelines with conditional logic and custom processor development  Task Scheduling — Interval-based, cron-based, and transient task execution  Queue — Pluggable message queue abstraction with disk, memory, Kafka, and Redis backends  Key-Value Store — Pluggable KV storage with Badger, Elasticsearch, and file-based backends  Statistics — Metrics collection with counters, gauges, timings, and StatsD integration  Conditions — Declarative condition evaluation with logical operators for pipeline control flow  API &amp; Data #    API &amp; Web Framework — HTTP API server, web server, routing, middleware, and security configuration  Security &amp; Authentication — Authentication backends (static, native, OAuth, access tokens), unified /account/login, and role-based authorization  MCP Server — Model Context Protocol server support — expose APIs as AI-callable tools via api."
 ---
 
 
@@ -25,6 +25,7 @@ Comprehensive reference documentation for the INFINI Framework's core systems an
 ## API & Data
 
 - [API & Web Framework]({{< relref "api_web" >}}) — HTTP API server, web server, routing, middleware, and security configuration
+- [Security & Authentication]({{< relref "security" >}}) — Authentication backends (static, native, OAuth, access tokens), unified `/account/login`, and role-based authorization
 - [MCP Server]({{< relref "mcp" >}}) — Model Context Protocol server support — expose APIs as AI-callable tools via `api.MCPTool()`
 - [ORM]({{< relref "orm" >}}) — Object-Relational Mapping for Elasticsearch with CRUD operations and query building
 - [Query URL Parameters]({{< relref "query_url" >}}) — URL-based query parameters for full-text search and structured filters
