@@ -2,7 +2,7 @@
 title: "Release Notes"
 date: 0001-01-01
 summary: "Release Notes #  Information about release notes of INFINI Gateway is provided here.
-Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #   Fix entry startup cleanup so failed reloads do not leave the listener port occupied. Fix PR checks to build Gateway in Go module mode without the legacy GOPATH vendor workspace dependency, and keep cross-platform builds working when floating_ip is enabled."
+Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #  1.31.2 (2026-08-12) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #   Fix entry startup cleanup so failed reloads do not leave the listener port occupied. Fix PR checks to build Gateway in Go module mode without the legacy GOPATH vendor workspace dependency, and keep cross-platform builds working when floating_ip is enabled."
 ---
 
 
@@ -11,6 +11,12 @@ Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix
 Information about release notes of INFINI Gateway is provided here.
 
 ## Latest (In development)  
+### ❌ Breaking changes  
+### 🚀 Features  
+### 🐛 Bug fix  
+### ✈️ Improvements  
+
+## 1.31.2 (2026-08-12)
 ### ❌ Breaking changes  
 ### 🚀 Features  
 ### 🐛 Bug fix  
@@ -23,6 +29,7 @@ Information about release notes of INFINI Gateway is provided here.
 - fix: index_backup never picks up indices created after startup #137
 
 ### ✈️ Improvements  
+- This release includes updates from the underlying [Framework](https://docs.infinilabs.com/framework/main), which resolves several common issues and enhances overall stability and performance. While there are no direct changes to Gateway itself, the improvements inherited from Framework benefit Gateway indirectly.
 - Pre-initialize `es_scroll` output queues, reduce noisy routing logs, and unify duration/QPS logging for scroll and bulk processing paths.
 - test: add integration test #137
 

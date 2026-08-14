@@ -2,7 +2,7 @@
 title: "版本历史"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是极限网关历史版本发布的相关说明。
-Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #   修复入口启动失败时监听端口未释放的问题，避免 reload 失败后端口仍被占用。 修复 PR 检查在 Go Modules 模式下对旧 GOPATH vendor 工作区的依赖，并保持启用 floating_ip 时跨平台构建可用。 修复心跳 ServerHandler 中因客户端连接后立即断开（如端口扫描、健康检查探针）导致的忙循环高 CPU 问题。 修复心跳和 floating_ip 模块中的多个并发 bug：使用 sync.Once 替换先关闭再发送的模式、为 PushGRT 通道写入添加超时、使用带缓冲的 aliveChan 防止 goroutine 泄漏、为 CMap 并发访问添加读锁保护。 fix: 修复入口热加载失败，报错 &ldquo;address already in use&rdquo; #137 fix: 修复 elasticsearch 配置热加载后 filter 缓存的元数据过期的问题，reload 时重建 flow 以刷新缓存 #137 fix: 修复 index_backup 无法处理 gateway 启动后新建索引的问题 #137  ✈️ Improvements #   预初始化 es_scroll 输出队列，减少 _routing 相关噪音日志，并统一 scroll 与 bulk 处理路径的耗时/QPS 日志格式。 test: 新增集成测试 #137  1."
+Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #  ✈️ Improvements #  1.31.2 (2026-08-12) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix #   修复入口启动失败时监听端口未释放的问题，避免 reload 失败后端口仍被占用。 修复 PR 检查在 Go Modules 模式下对旧 GOPATH vendor 工作区的依赖，并保持启用 floating_ip 时跨平台构建可用。 修复心跳 ServerHandler 中因客户端连接后立即断开（如端口扫描、健康检查探针）导致的忙循环高 CPU 问题。 修复心跳和 floating_ip 模块中的多个并发 bug：使用 sync.Once 替换先关闭再发送的模式、为 PushGRT 通道写入添加超时、使用带缓冲的 aliveChan 防止 goroutine 泄漏、为 CMap 并发访问添加读锁保护。 fix: 修复入口热加载失败，报错 &ldquo;address already in use&rdquo; #137 fix: 修复 elasticsearch 配置热加载后 filter 缓存的元数据过期的问题，reload 时重建 flow 以刷新缓存 #137 fix: 修复 index_backup 无法处理 gateway 启动后新建索引的问题 #137  ✈️ Improvements #   此版本包含了底层 Framework 的更新，解决了一些常见问题，并增强了整体稳定性和性能。虽然 Gateway 本身没有直接的变更，但从 Framework 中继承的改进间接地使 Gateway 受益。 预初始化 es_scroll 输出队列，减少 _routing 相关噪音日志，并统一 scroll 与 bulk 处理路径的耗时/QPS 日志格式。 test: 新增集成测试 #137  1."
 ---
 
 
@@ -11,6 +11,12 @@ Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix
 这里是极限网关历史版本发布的相关说明。
 
 ## Latest (In development)  
+### ❌ Breaking changes  
+### 🚀 Features  
+### 🐛 Bug fix  
+### ✈️ Improvements  
+
+## 1.31.2 (2026-08-12)
 ### ❌ Breaking changes  
 ### 🚀 Features  
 ### 🐛 Bug fix  
@@ -23,6 +29,7 @@ Latest (In development) #  ❌ Breaking changes #  🚀 Features #  🐛 Bug fix
 - fix: 修复 index_backup 无法处理 gateway 启动后新建索引的问题 #137
 
 ### ✈️ Improvements  
+- 此版本包含了底层 [Framework](https://docs.infinilabs.com/framework/main) 的更新，解决了一些常见问题，并增强了整体稳定性和性能。虽然 Gateway 本身没有直接的变更，但从 Framework 中继承的改进间接地使 Gateway 受益。
 - 预初始化 `es_scroll` 输出队列，减少 `_routing` 相关噪音日志，并统一 scroll 与 bulk 处理路径的耗时/QPS 日志格式。
 - test: 新增集成测试 #137
 
