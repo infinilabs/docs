@@ -182,6 +182,19 @@ elasticsearch.api_compatibility: true
 elasticsearch.api_compatibility_version: "8.9.0"
 ```
 
+对于 Elasticsearch 8.19 客户端（包括 HNSW 向量客户端协议），使用经过验证的版本标识：
+
+```bash
+cd /data/easysearch
+bin/initialize-cluster.sh -s \
+  -i 192.168.1.10,192.168.1.11,192.168.1.12 \
+  --es-compat \
+  --es-version 8.19.17
+```
+
+兼容模式只覆盖 Easysearch 已实现的部分 Elasticsearch API，不表示全部 Elasticsearch 8.x API 均可用。初始化或修改
+兼容设置后需要重启对应节点；集群设置接口会拒绝修改这两个静态配置。
+
 #### 使用 HTTP 协议（不启用 SSL）
 
 ```bash

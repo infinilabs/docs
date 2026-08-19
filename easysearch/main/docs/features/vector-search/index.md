@@ -1,92 +1,116 @@
 ---
 title: "向量搜索"
 date: 0001-01-01
-description: "使用 k-NN 插件进行高维向量相似度搜索，支持稠密浮点向量与稀疏布尔向量。"
-summary: "向量搜索 #  Easysearch 通过内置的 k-NN 插件提供高维向量相似度搜索能力，支持语义搜索、推荐系统、图像检索等 AI 应用场景。
-核心能力 #     能力 说明     两种向量类型 稠密浮点向量（knn_dense_float_vector）和稀疏布尔向量（knn_sparse_bool_vector）   多种索引模型 lsh（局部敏感哈希，近似搜索）、permutation_lsh（置换 LSH）、sparse_indexed（倒排索引）、exact（精确搜索）   多种相似度 cosine（余弦）、l1（曼哈顿距离）、l2（欧氏距离）、jaccard、hamming   与全文搜索融合 向量字段与文本字段存储在同一索引，支持 Hybrid 混合检索   function_score 集成 向量相似度可作为 function_score 的评分函数    典型应用场景 #   语义搜索：文本通过 Embedding 模型转为向量，按语义相似度检索 RAG 检索增强生成：为大语言模型提供知识库检索能力 推荐系统：用户/商品特征向量的相似推荐 图像/多模态搜索：图像特征向量的相似检索 去重与异常检测：通过向量距离判断内容相似度  快速开始 #  // 1. 创建向量索引 PUT /my-vectors { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;title&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;embedding&#34;: { &#34;type&#34;: &#34;knn_dense_float_vector&#34;, &#34;knn&#34;: { &#34;dims&#34;: 768, &#34;model&#34;: &#34;lsh&#34;, &#34;similarity&#34;: &#34;cosine&#34;, &#34;L&#34;: 99, &#34;k&#34;: 1 } } } } } // 2."
+description: "使用 2.4.0 原生 HNSW 或旧 k-NN 插件进行高维向量相似度搜索。"
+summary: "向量搜索 #  Easysearch 2.4.0 内置基于 Lucene 的原生 HNSW 向量搜索。新建向量索引时，推荐使用 dense_vector mapping 和 knn 查询， 不需要安装 k-NN 插件。旧 k-NN 插件继续用于已有索引和兼容场景。
+核心能力 #     能力 原生 HNSW 说明     向量字段 单值 dense_vector，1–4096 维 float   索引 Lucene HNSW，支持 m 和 ef_construction   相似度 cosine、dot_product、l2_norm、max_inner_product   查询 query-level knn 和协调全局 top-k 的顶层 knn   过滤 在 HNSW 搜索中使用 filter 预过滤   复合查询 query-level knn 可放入 bool、dis_max、function_score 等复合查询   客户端 已验证 Elasticsearch 8."
 ---
 
 
 # 向量搜索
 
-Easysearch 通过内置的 k-NN 插件提供高维向量相似度搜索能力，支持语义搜索、推荐系统、图像检索等 AI 应用场景。
+Easysearch 2.4.0 内置基于 Lucene 的原生 HNSW 向量搜索。新建向量索引时，推荐使用 `dense_vector` mapping 和 `knn` 查询，
+不需要安装 k-NN 插件。旧 k-NN 插件继续用于已有索引和兼容场景。
 
 ## 核心能力
 
-| 能力                    | 说明                                                                                                              |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| **两种向量类型**        | 稠密浮点向量（`knn_dense_float_vector`）和稀疏布尔向量（`knn_sparse_bool_vector`）                                |
-| **多种索引模型**        | `lsh`（局部敏感哈希，近似搜索）、`permutation_lsh`（置换 LSH）、`sparse_indexed`（倒排索引）、`exact`（精确搜索） |
-| **多种相似度**          | `cosine`（余弦）、`l1`（曼哈顿距离）、`l2`（欧氏距离）、`jaccard`、`hamming`                                      |
-| **与全文搜索融合**      | 向量字段与文本字段存储在同一索引，支持 Hybrid 混合检索                                                            |
-| **function_score 集成** | 向量相似度可作为 `function_score` 的评分函数                                                                      |
-
-## 典型应用场景
-
-- **语义搜索**：文本通过 Embedding 模型转为向量，按语义相似度检索
-- **RAG 检索增强生成**：为大语言模型提供知识库检索能力
-- **推荐系统**：用户/商品特征向量的相似推荐
-- **图像/多模态搜索**：图像特征向量的相似检索
-- **去重与异常检测**：通过向量距离判断内容相似度
+| 能力 | 原生 HNSW 说明 |
+| --- | --- |
+| 向量字段 | 单值 `dense_vector`，1–4096 维 `float` |
+| 索引 | Lucene HNSW，支持 `m` 和 `ef_construction` |
+| 相似度 | `cosine`、`dot_product`、`l2_norm`、`max_inner_product` |
+| 查询 | query-level `knn` 和协调全局 top-k 的顶层 `knn` |
+| 过滤 | 在 HNSW 搜索中使用 `filter` 预过滤 |
+| 复合查询 | query-level `knn` 可放入 `bool`、`dis_max`、`function_score` 等复合查询 |
+| 客户端 | 已验证 Elasticsearch 8.19 Java 和 Python 官方客户端 |
 
 ## 快速开始
 
+创建原生 HNSW 索引：
+
 ```json
-// 1. 创建向量索引
 PUT /my-vectors
 {
   "mappings": {
     "properties": {
-      "title": { "type": "text" },
+      "title": {
+        "type": "text"
+      },
       "embedding": {
-        "type": "knn_dense_float_vector",
-        "knn": {
-          "dims": 768,
-          "model": "lsh",
-          "similarity": "cosine",
-          "L": 99,
-          "k": 1
+        "type": "dense_vector",
+        "dims": 4,
+        "index": true,
+        "similarity": "cosine",
+        "index_options": {
+          "type": "hnsw",
+          "m": 16,
+          "ef_construction": 100
         }
       }
     }
   }
 }
+```
 
-// 2. 索引文档（向量由外部 Embedding 模型生成）
-PUT /my-vectors/_doc/1
+写入一个向量：
+
+```json
+PUT /my-vectors/_doc/1?refresh=true
 {
   "title": "Easysearch 向量搜索入门",
-  "embedding": [0.12, -0.03, 0.88, ...]
+  "embedding": [1.0, 0.0, 0.0, 0.0]
 }
+```
 
-// 3. 执行向量搜索
+执行 HNSW 搜索：
+
+```json
 POST /my-vectors/_search
 {
   "size": 10,
   "query": {
-    "knn_nearest_neighbors": {
+    "knn": {
       "field": "embedding",
-      "vec": { "values": [0.12, -0.03, 0.88, ...] },
-      "model": "lsh",
-      "similarity": "cosine",
-      "candidates": 100
+      "query_vector": [1.0, 0.0, 0.0, 0.0],
+      "k": 10,
+      "num_candidates": 100
     }
   }
 }
 ```
 
+完整参数、过滤、得分、调优、迁移和客户端示例见[原生 HNSW 搜索](./native-hnsw.md)，mapping 约束见
+[dense_vector 字段类型]({{< relref "/docs/features/mapping-and-analysis/field-types/dense-vector.md" >}})。
+
+## 选择向量接口
+
+Easysearch 2.4.0 同时保留原生 HNSW 和旧 k-NN 插件，两套接口不能混用：
+
+| 接口 | 字段类型 | 查询语法 | 适用场景 |
+| --- | --- | --- | --- |
+| [原生 HNSW](./native-hnsw.md) | `dense_vector` | `knn` query、顶层 `knn` | 2.4.0 新建的 HNSW 向量索引，推荐使用 |
+| 旧 k-NN 插件 | `knn_dense_float_vector`、`knn_sparse_bool_vector` | `knn_nearest_neighbors` | 已有旧插件索引和兼容场景 |
+
+旧插件需要单独安装，支持 `knn_dense_float_vector`、`knn_sparse_bool_vector`、LSH、exact 等既有接口。旧索引不会自动
+转换为原生 HNSW；迁移时必须创建新索引并 Reindex。旧接口参考[旧 k-NN 查询 API](./knn_api.md)和
+[旧 k-NN 字段类型]({{< relref "/docs/features/mapping-and-analysis/field-types/knn.md" >}})。
+
 ## 本章内容
 
 | 页面                                                  | 说明                                                              |
 | ----------------------------------------------------- | ----------------------------------------------------------------- |
-| [向量搜索指南](./vector-search.md)                    | 从创建索引到查询的完整流程：Hybrid 检索、function_score、性能调优 |
-| [向量字段建模](./vector-fields.md)                    | 多向量设计、维度选择、模型选型与写入策略                          |
-| [k-NN 查询 API](./knn_api.md)                         | knn_nearest_neighbors 查询参数完整参考                            |
-| [向量搜索与语义搜索](./vector-and-semantic-search.md) | 向量搜索、语义搜索、Hybrid 检索的定位区分与选择建议               |
+| [原生 HNSW 搜索](./native-hnsw.md)                    | 2.4.0 `dense_vector`、query-level `knn` 和顶层 `knn`              |
+| [向量字段建模]({{< relref "/docs/best-practices/data-modeling/vector-fields.md" >}}) | 原生 HNSW 的维度、字段数量、写入、迁移和容量设计 |
+| [旧插件向量搜索指南](./vector-search.md)              | 旧插件的复合查询、function_score 和性能调优                   |
+| [旧插件向量字段建模](./vector-fields.md)              | 旧插件多向量设计、LSH/exact 模型选型与写入策略                    |
+| [旧 k-NN 查询 API](./knn_api.md)                      | `knn_nearest_neighbors` 查询参数完整参考                           |
+| [向量搜索与语义搜索](./vector-and-semantic-search.md) | 向量搜索、语义搜索、复合查询与混合搜索的定位区分               |
 
 ## 相关资源
 
-- [向量字段类型参考]({{< relref "/docs/features/mapping-and-analysis/field-types/knn.md" >}})
+- [dense_vector 字段类型]({{< relref "/docs/features/mapping-and-analysis/field-types/dense-vector.md" >}})
+- [旧 k-NN 字段类型参考]({{< relref "/docs/features/mapping-and-analysis/field-types/knn.md" >}})
 - [Embedding 服务集成]({{< relref "/docs/integrations/ai/embedding-service" >}})
 - [向量工作流]({{< relref "/docs/integrations/ai/vector-workflow" >}})
+- [混合搜索]({{< relref "/docs/integrations/ai/hybrid-search.md" >}})：搜索管道 RRF（`hybrid_ranker_processor`）
 - [AI API 集成]({{< relref "/docs/integrations/ai/_index.md" >}})

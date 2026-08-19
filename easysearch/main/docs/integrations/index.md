@@ -6,7 +6,7 @@ summary: "生态集成 #  Easysearch 与上下游系统的集成指南，涵盖�
 数据接入 #  将各类数据源稳定地接入 Easysearch：
   Logstash 日志接入：Pipeline 配置与插件使用  Filebeat / Fluent Bit：轻量级日志采集 Agent 对比与配置  数据库同步（JDBC / ETL）：增量同步、CDC 与 ETL 方案  客户端与 SDK #  面向不同语言和场景的连接方式：
   Java 客户端：REST High Level Client 使用与生产配置  SQL / JDBC 查询：用 SQL 语法查询 Easysearch  Superset 集成：BI 看板与数据可视化  AI 与向量检索 #  让 Easysearch 成为 AI 工作流中的检索中枢：
-  Embedding 服务接入：对接文本向量化服务  向量工作流与 Hybrid 检索：向量写入与 BM25 + kNN 组合  RAG 与 LLM 集成：构建检索增强生成应用  安全与权限 #  将 Easysearch 纳入企业安全体系："
+  Embedding 服务接入：对接文本向量化服务  向量工作流与复合检索：向量写入与 BM25 + kNN 复合查询  混合搜索：搜索管道 RRF（hybrid_ranker_processor）  RAG 与 LLM 集成：构建检索增强生成应用  安全与权限 #  将 Easysearch 纳入企业安全体系："
 ---
 
 
@@ -35,7 +35,8 @@ Easysearch 与上下游系统的集成指南，涵盖客户端接入、数据管
 让 Easysearch 成为 AI 工作流中的检索中枢：
 
 - [Embedding 服务接入]({{< relref "./ai/embedding-service.md" >}})：对接文本向量化服务
-- [向量工作流与 Hybrid 检索]({{< relref "./ai/vector-workflow.md" >}})：向量写入与 BM25 + kNN 组合
+- [向量工作流与复合检索]({{< relref "./ai/vector-workflow.md" >}})：向量写入与 BM25 + kNN 复合查询
+- [混合搜索]({{< relref "./ai/hybrid-search.md" >}})：搜索管道 RRF（`hybrid_ranker_processor`）
 - [RAG 与 LLM 集成]({{< relref "./ai/rag-and-llm.md" >}})：构建检索增强生成应用
 
 ## 安全与权限

@@ -3,7 +3,7 @@ title: "语义搜索"
 date: 0001-01-01
 description: "理解查询意图而非只匹配关键词，通过 Embedding 和向量匹配提升搜索精度和召回率。"
 summary: "传统全文搜索依赖关键词精确匹配，用户必须&quot;猜对词&quot;才能命中目标文档。Easysearch 语义搜索通过理解文本的语义和上下文关系，让系统能够识别&quot;意思相近&quot;的内容——即使查询与结果不包含相同关键词，也能返回高相关性的搜索结果。
- 语义搜索 vs 全文搜索 #     对比维度 全文搜索（BM25） 语义搜索     匹配方式 关键词精确/模糊匹配 向量空间中的语义相似度   同义词处理 需手工配置同义词表 模型自动理解同义/近义   长尾查询 词汇差异大时召回率低 自然语言描述即可获取结果   语言依赖 依赖分词器、语言特定配置 多语言模型天然支持跨语言   计算成本 低 较高（需 Embedding 计算）     最佳实践：在实际业务中，推荐使用 Hybrid 检索 同时利用两者的优势。
+ 语义搜索 vs 全文搜索 #     对比维度 全文搜索（BM25） 语义搜索     匹配方式 关键词精确/模糊匹配 向量空间中的语义相似度   同义词处理 需手工配置同义词表 模型自动理解同义/近义   长尾查询 词汇差异大时召回率低 自然语言描述即可获取结果   语言依赖 依赖分词器、语言特定配置 多语言模型天然支持跨语言   计算成本 低 较高（需 Embedding 计算）     最佳实践：需要同时利用关键词和语义时，可用 复合查询 （bool + knn + match）；各路分数不可比时，使用 混合搜索 （搜索管道 RRF）。
   工作原理 #  语义搜索的核心流程：
 用户查询 ──→ Embedding 模型 ──→ 查询向量 │ k-NN 相似度计算 │ 文档库 ──→ Embedding 模型 ──→ 文档向量 ──→ 排序结果  离线阶段：将文档内容通过 Embedding 模型转换为向量，存入 Easysearch 的向量字段 在线阶段：用户输入自然语言查询，同样转换为向量，在向量空间中找到最相似的文档 融合排序：可选地与全文搜索结果融合，输出综合排序   快速上手 #  1."
 ---
@@ -23,7 +23,9 @@ summary: "传统全文搜索依赖关键词精确匹配，用户必须&quot;猜�
 | 语言依赖   | 依赖分词器、语言特定配置 | 多语言模型天然支持跨语言  |
 | 计算成本   | 低                       | 较高（需 Embedding 计算） |
 
-> **最佳实践**：在实际业务中，推荐使用 [Hybrid 检索]({{< relref "../vector-search" >}}) 同时利用两者的优势。
+> **最佳实践**：需要同时利用关键词和语义时，可用 [复合查询]({{< relref "../vector-search/vector-and-semantic-search.md" >}})
+> （`bool` + `knn` + `match`）；各路分数不可比时，使用 [混合搜索]({{< relref "../../integrations/ai/hybrid-search.md" >}})
+> （搜索管道 RRF）。
 
 ---
 
@@ -57,8 +59,15 @@ PUT /knowledge-base
       "title":   { "type": "text" },
       "content": { "type": "text" },
       "embedding": {
-        "type": "knn_dense_float_vector",
-        "knn": { "dims": 768 }
+        "type": "dense_vector",
+        "dims": 768,
+        "index": true,
+        "similarity": "cosine",
+        "index_options": {
+          "type": "hnsw",
+          "m": 16,
+          "ef_construction": 100
+        }
       }
     }
   }
@@ -85,22 +94,20 @@ POST /knowledge-base/_search
 {
   "size": 5,
   "query": {
-    "knn_nearest_neighbors": {
+    "knn": {
       "field": "embedding",
-      "vec": {
-        "values": [0.15, -0.01, 0.91, ...]
-      },
-      "model": "lsh",
-      "similarity": "cosine",
-      "candidates": 50
+      "query_vector": [0.15, -0.01, 0.91, ...],
+      "k": 5,
+      "num_candidates": 50
     }
   }
 }
 ```
 
-### 4. Hybrid 检索（推荐）
+### 4. 复合查询
 
-将语义搜索与关键词搜索结合，获得更稳定的搜索效果：
+将语义搜索与关键词搜索放进同一个 `bool` 查询，获得更稳定的搜索效果。这不是
+[混合搜索]({{< relref "../../integrations/ai/hybrid-search.md" >}})；文档中的 Hybrid 只指搜索管道 RRF。
 
 ```json
 POST /knowledge-base/_search
@@ -110,12 +117,11 @@ POST /knowledge-base/_search
     "bool": {
       "must": [
         {
-          "knn_nearest_neighbors": {
+          "knn": {
             "field": "embedding",
-            "vec": { "values": [0.15, -0.01, 0.91, ...] },
-            "model": "lsh",
-            "similarity": "cosine",
-            "candidates": 100
+            "query_vector": [0.15, -0.01, 0.91, ...],
+            "k": 10,
+            "num_candidates": 100
           }
         }
       ],
@@ -175,6 +181,7 @@ POST /knowledge-base/_search
 
 ## 相关文档
 
+- [原生 HNSW 搜索]({{< relref "../vector-search/native-hnsw.md" >}})
 - [向量搜索]({{< relref "../vector-search" >}})
 - [Embedding 服务集成]({{< relref "../../integrations/ai/embedding-service" >}})
 - [RAG 与大模型]({{< relref "../../integrations/ai/rag-and-llm" >}})

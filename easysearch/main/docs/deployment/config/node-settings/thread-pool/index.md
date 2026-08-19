@@ -125,8 +125,8 @@ GET _nodes/stats/thread_pool
 
 | 参数 | 默认值 | 属性 | 说明 |
 |------|--------|------|------|
-| `elasticsearch.api_compatibility` | `false` | 静态 | 是否启用 Elasticsearch API 兼容模式。启用后 Logstash、Filebeat 等 7.10.x OSS 客户端可直接连接 |
-| `elasticsearch.api_compatibility_version` | `7.10.2` | 静态 | 兼容的 Elasticsearch 版本号。影响 `_cat`、`_cluster/health` 等 API 返回的版本信息 |
+| `elasticsearch.api_compatibility` | `false` | 启动期 | 是否启用部分 Elasticsearch API 兼容模式；并不代表所有 Elasticsearch API 都已实现 |
+| `elasticsearch.api_compatibility_version` | `7.10.2` | 启动期 | 兼容的 Elasticsearch 版本号，影响根身份和节点信息等 API 返回的版本信息 |
 
 ### 何时启用
 
@@ -137,6 +137,8 @@ GET _nodes/stats/thread_pool
 elasticsearch.api_compatibility: true
 elasticsearch.api_compatibility_version: "7.10.2"
 ```
+
+将兼容版本切换为 `8.9.0` 或 `8.19.17` 时，也必须在节点启动配置中修改并重启节点。集群设置接口会拒绝修改这两个静态配置。
 
 ---
 

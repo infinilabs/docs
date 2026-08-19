@@ -6,7 +6,7 @@ summary: "企业中大量数据以图片、视频、音频等非结构化形式�
  工作原理 #  多模态搜索的核心在于：将不同类型的数据（文本、图片、音频等）通过多模态 Embedding 模型转换为同一向量空间中的向量表示，然后利用 Easysearch 的 向量搜索 能力进行相似度匹配。
 图片 ──→ 多模态模型 ──→ 向量 ──┐ ├──→ 向量空间相似度计算 ──→ 排序结果 文本 ──→ 多模态模型 ──→ 向量 ──┘ 关键点：
  不同模态的数据被编码到同一向量空间 向量之间的距离反映跨模态的语义相似度 Easysearch 负责高性能的向量存储与检索   索引设计 #  多模态搜索的索引需要同时存储原始元数据和多模态向量：
-PUT /multimodal-assets { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;description&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;media_type&#34;: { &#34;type&#34;: &#34;keyword&#34; }, &#34;file_url&#34;: { &#34;type&#34;: &#34;keyword&#34; }, &#34;tags&#34;: { &#34;type&#34;: &#34;keyword&#34; }, &#34;embedding&#34;: { &#34;type&#34;: &#34;knn_dense_float_vector&#34;, &#34;knn&#34;: { &#34;dims&#34;: 512 } } } } } 写入时，将图片/音频/视频先通过多模态 Embedding 模型（如 CLIP、ImageBind 等）转换为向量："
+PUT /multimodal-assets { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;description&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;media_type&#34;: { &#34;type&#34;: &#34;keyword&#34; }, &#34;file_url&#34;: { &#34;type&#34;: &#34;keyword&#34; }, &#34;tags&#34;: { &#34;type&#34;: &#34;keyword&#34; }, &#34;embedding&#34;: { &#34;type&#34;: &#34;dense_vector&#34;, &#34;dims&#34;: 512, &#34;index&#34;: true, &#34;similarity&#34;: &#34;cosine&#34;, &#34;index_options&#34;: { &#34;type&#34;: &#34;hnsw&#34;, &#34;m&#34;: 16, &#34;ef_construction&#34;: 100 } } } } } 写入时，将图片/音频/视频先通过多模态 Embedding 模型（如 CLIP、ImageBind 等）转换为向量："
 ---
 
 
@@ -46,8 +46,15 @@ PUT /multimodal-assets
       "file_url":     { "type": "keyword" },
       "tags":         { "type": "keyword" },
       "embedding": {
-        "type": "knn_dense_float_vector",
-        "knn": { "dims": 512 }
+        "type": "dense_vector",
+        "dims": 512,
+        "index": true,
+        "similarity": "cosine",
+        "index_options": {
+          "type": "hnsw",
+          "m": 16,
+          "ef_construction": 100
+        }
       }
     }
   }
@@ -80,14 +87,11 @@ POST /multimodal-assets/_search
 {
   "size": 5,
   "query": {
-    "knn_nearest_neighbors": {
+    "knn": {
       "field": "embedding",
-      "vec": {
-        "values": [0.21, -0.08, 0.42, ...]
-      },
-      "model": "lsh",
-      "similarity": "cosine",
-      "candidates": 50
+      "query_vector": [0.21, -0.08, 0.42, ...],
+      "k": 5,
+      "num_candidates": 50
     }
   }
 }
@@ -102,21 +106,16 @@ POST /multimodal-assets/_search
 {
   "size": 10,
   "query": {
-    "bool": {
-      "must": [
-        {
-          "knn_nearest_neighbors": {
-            "field": "embedding",
-            "vec": { "values": [0.24, -0.12, 0.44, ...] },
-            "model": "lsh",
-            "similarity": "cosine",
-            "candidates": 100
-          }
+    "knn": {
+      "field": "embedding",
+      "query_vector": [0.24, -0.12, 0.44, ...],
+      "k": 10,
+      "num_candidates": 100,
+      "filter": {
+        "term": {
+          "media_type": "image"
         }
-      ],
-      "filter": [
-        { "term": { "media_type": "image" } }
-      ]
+      }
     }
   }
 }
@@ -131,21 +130,22 @@ POST /multimodal-assets/_search
 {
   "size": 10,
   "query": {
-    "bool": {
-      "must": [
+    "knn": {
+      "field": "embedding",
+      "query_vector": [0.21, -0.08, 0.42, ...],
+      "k": 10,
+      "num_candidates": 50,
+      "filter": [
         {
-          "knn_nearest_neighbors": {
-            "field": "embedding",
-            "vec": { "values": [0.21, -0.08, 0.42, ...] },
-            "model": "lsh",
-            "similarity": "cosine",
-            "candidates": 50
+          "term": {
+            "media_type": "image"
+          }
+        },
+        {
+          "terms": {
+            "tags": ["outdoor", "nature"]
           }
         }
-      ],
-      "filter": [
-        { "term": { "media_type": "image" } },
-        { "terms": { "tags": ["outdoor", "nature"] } }
       ]
     }
   }
@@ -178,6 +178,7 @@ POST /multimodal-assets/_search
 
 ## 相关文档
 
+- [原生 HNSW 搜索]({{< relref "../vector-search/native-hnsw.md" >}})
 - [向量搜索]({{< relref "../vector-search" >}})
 - [语义搜索]({{< relref "../semantic-search" >}})
 - [Embedding 服务集成]({{< relref "../../integrations/ai/embedding-service" >}})

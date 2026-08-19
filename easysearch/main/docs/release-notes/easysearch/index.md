@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #   服务管理 UI 支持重置受管 Easysearch 集群的管理员密码：服务列表新增「重置密码」入口，凭创建集群时设置的管理员证书口令即可重置，无需知道旧密码。 服务创建流程新增管理员证书口令字段（必填、可随机生成并复制），用于保护管理员证书私钥，并作为后续重置管理员密码的凭证。 手动证书模式下创建集群需一并上传管理员客户端证书与私钥，Agent 无法自行签发该证书。 服务设置页支持管理管理员证书：展示证书路径与过期时间、下载证书文件（不含私钥）；更换 HTTP CA 或重新生成证书时引导重新上传管理员证书并重新输入口令。 数据探索导出文档改用PIT导出，导出数量不受限于max_result_window  Bug fix #   修复 UI 插件创建角色无法选择粗粒度权限 action group 的问题 修复 UI 插件创建角色时集群权限与索引权限被强制必填的问题，两者放开为可选，与 API 行为保持一致。 修复数据探索导出文档数量不能超过10000的限制 (向导): 修复security.enabled: false 的集群巡检报错 invalid index name [_security]  Improvements #  2.3.1 (2026-07-29) #  Breaking changes #  Features #   巡检 UI 新增集群状态、模板、索引元数据、快照、集群运行时信息、节点信息、插件、节点诊断信息及分片/段信息等采集项，提升问题诊断覆盖范围。 服务管理 UI 的创建和加入集群流程新增节点角色约束，协调节点不能与 master、data、ingest 角色同时选择。 服务管理登录时增加 root 账户限制检测，避免以 root 账户访问受管服务。  Bug fix #   修复开启安全认证且根路径不允许匿名访问时，Easysearch UI 因登录前探测根路径而无法登录的问题。 修复 Agent 服务管理中可通过服务列表或巡检入口绕过服务登录状态的问题。 修复编辑集群配置时可能意外重置管理员密码的问题。 修复巡检页面无法正确解析服务版本的问题。 修复开发工具中缓存的集群名称、标识与实际集群信息不同步的问题。 修复 Java 21 环境下 CCR 初始恢复并发读取文件时可能触发 IllegalStateException: confined 并导致恢复失败的问题。  Improvements #   新增 S3 disable_bulk_delete 配置（客户端名称空间为 s3."
+Latest (In development) #  Breaking changes #  Features #   新增 Easysearch 2.4.0 原生 HNSW 向量搜索：内置 dense_vector、Lucene HNSW、query-level knn 和顶层 knn，新建原生 HNSW 索引无需安装 k-NN 插件。  支持 1–4096 维 float 向量、cosine、dot_product、l2_norm、max_inner_product，以及 m、ef_construction 和查询 num_candidates 参数。 mapping 必须显式设置 dims、index: true 和 index_options.type: hnsw。Elasticsearch 8.19 默认的 int8_hnsw mapping 不能直接使用；2.4.0 只支持显式 hnsw 和 float 向量。 对齐已验证的 Elasticsearch 8.19.17 显式 HNSW mapping、kNN 查询和 wire 合同，并已验证 Elasticsearch Java 8."
 ---
 
 
@@ -11,8 +11,18 @@ Latest (In development) #  Breaking changes #  Features #   服务管理 UI 支�
 这里是 INFINI Easysearch 历史版本发布的相关说明。
 
 ## Latest (In development)
+
 ### Breaking changes
+
 ### Features
+
+- 新增 [Easysearch 2.4.0 原生 HNSW 向量搜索]({{< relref "/docs/features/vector-search/native-hnsw.md" >}})：内置 `dense_vector`、Lucene HNSW、query-level `knn` 和顶层 `knn`，新建原生 HNSW 索引无需安装 k-NN 插件。
+  - 支持 1–4096 维 `float` 向量、`cosine`、`dot_product`、`l2_norm`、`max_inner_product`，以及 `m`、`ef_construction` 和查询 `num_candidates` 参数。
+  - mapping 必须显式设置 `dims`、`index: true` 和 `index_options.type: hnsw`。Elasticsearch 8.19 默认的 `int8_hnsw` mapping 不能直接使用；2.4.0 只支持显式 `hnsw` 和 `float` 向量。
+  - 对齐已验证的 Elasticsearch 8.19.17 显式 HNSW mapping、kNN 查询和 wire 合同，并已验证 Elasticsearch Java 8.19.17 与 Python 8.19.3 官方客户端。使用这些客户端执行 HNSW 工作负载时，需要在所有节点上开启 `elasticsearch.api_compatibility: true`、设置 `elasticsearch.api_compatibility_version: "8.19.17"` 并重启节点。
+  - 已索引 `dense_vector` 只能添加到由 2.4.0 或更高版本创建的索引，且所有数据节点必须为 2.4.0 或更高版本；旧索引需要新建目标索引并 Reindex。
+  - 旧 k-NN 插件的 `knn_dense_float_vector`、`knn_sparse_bool_vector` 和 `knn_nearest_neighbors` 接口继续保留，用于已有旧插件索引和兼容场景；新旧字段与查询语法不能混用。
+  - 2.4.0 不支持顶层 lexical `query` 与顶层 `knn` 同时使用、多个顶层 kNN、nested kNN、量化向量和 retriever 接口。
 - 服务管理 UI 支持重置受管 Easysearch 集群的管理员密码：服务列表新增「重置密码」入口，凭创建集群时设置的管理员证书口令即可重置，无需知道旧密码。
 - 服务创建流程新增管理员证书口令字段（必填、可随机生成并复制），用于保护管理员证书私钥，并作为后续重置管理员密码的凭证。
 - 手动证书模式下创建集群需一并上传管理员客户端证书与私钥，Agent 无法自行签发该证书。

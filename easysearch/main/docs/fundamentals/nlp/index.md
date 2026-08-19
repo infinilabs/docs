@@ -169,9 +169,9 @@ better → better (不规则变化需要词典)
 ```
 文本 → Embedding 模型 → 向量 [0.12, -0.34, 0.56, ...]
                               ↓
-               存入 Easysearch knn_dense_float_vector 字段
+                  存入 Easysearch dense_vector 字段
                               ↓
-             使用 knn_nearest_neighbors 查询最近邻
+                     使用 knn 查询最近邻
 ```
 
 ### 向量字段定义
@@ -183,13 +183,14 @@ PUT /semantic-index
     "properties": {
       "title": { "type": "text" },
       "title_vector": {
-        "type": "knn_dense_float_vector",
-        "knn": {
-          "dims": 768,
-          "model": "lsh",
-          "similarity": "cosine",
-          "L": 99,
-          "k": 1
+        "type": "dense_vector",
+        "dims": 768,
+        "index": true,
+        "similarity": "cosine",
+        "index_options": {
+          "type": "hnsw",
+          "m": 16,
+          "ef_construction": 100
         }
       }
     }
@@ -203,36 +204,32 @@ PUT /semantic-index
 GET /semantic-index/_search
 {
   "query": {
-    "knn_nearest_neighbors": {
+    "knn": {
       "field": "title_vector",
-      "vec": {
-        "values": [0.12, -0.34, ...]
-      },
-      "model": "lsh",
-      "similarity": "cosine",
-      "candidates": 50
+      "query_vector": [0.12, -0.34, ...],
+      "k": 10,
+      "num_candidates": 50
     }
   }
 }
 ```
 
-### 混合搜索
+### 复合查询
 
 将关键词搜索与向量搜索结合，兼顾精确性和语义理解：
 
 ```json
-GET /my-index/_search
+GET /semantic-index/_search
 {
   "query": {
     "bool": {
       "must": [
         {
-          "knn_nearest_neighbors": {
+          "knn": {
             "field": "title_vector",
-            "vec": { "values": [...] },
-            "model": "lsh",
-            "similarity": "cosine",
-            "candidates": 50
+            "query_vector": [0.12, -0.34, ...],
+            "k": 10,
+            "num_candidates": 50
           }
         }
       ],
@@ -244,7 +241,8 @@ GET /my-index/_search
 }
 ```
 
-> 詳見 [向量搜索]({{< relref "/docs/features/vector-search/_index.md" >}}) 和 [AI 集成]({{< relref "/docs/integrations/ai/" >}})。
+> 详见 [原生 HNSW 搜索]({{< relref "/docs/features/vector-search/native-hnsw.md" >}}) 和
+> [AI 集成]({{< relref "/docs/integrations/ai/" >}})。
 
 ## 选型建议
 
@@ -254,7 +252,7 @@ GET /my-index/_search
 | 多语言搜索 | 对应语言的分析器 | 低 |
 | 拼写纠错 | fuzzy + suggest | 中 |
 | 语义搜索 / 问答 | Embedding + kNN | 高 |
-| 最佳效果 | 混合搜索（关键词 + 向量） | 高 |
+| 最佳效果 | 复合查询（关键词 + 向量） | 高 |
 
 ## 延伸阅读
 
@@ -266,7 +264,7 @@ GET /my-index/_search
 
 ### 最佳实践
 
-- [AI 搜索与向量检索架构]({{< relref "/docs/best-practices/ai-search-architecture.md" >}})：多路召回、Hybrid 搜索、LLM 集成
+- [AI 搜索与向量检索架构]({{< relref "/docs/best-practices/ai-search-architecture.md" >}})：多路召回、复合查询、混合搜索、LLM 集成
 - [向量字段建模]({{< relref "/docs/best-practices/data-modeling/vector-fields.md" >}})：向量维度选择、写入策略、成本控制
 - [查询调优]({{< relref "/docs/best-practices/query-tuning.md" >}})：NLP 查询的性能优化
 

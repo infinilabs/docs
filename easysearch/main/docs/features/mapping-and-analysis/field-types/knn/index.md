@@ -1,14 +1,17 @@
 ---
-title: "向量字段类型（K-NN）"
+title: "旧 K-NN 插件向量字段类型"
 date: 0001-01-01
-summary: "K-NN 向量字段类型 #  相关指南（先读这些） #    向量搜索  向量字段建模  映射基础  关于向量 #  在索引文档和运行查询时都需要指定向量类型。在这两种情况下，您都使用相同的 JSON 结构来定义向量类型。每个向量类型还有一个简写形式，这在使用不支持嵌套文档的工具时会很方便。以下示例展示了如何在索引向量时指定它们。
+summary: "K-NN 向量字段类型 #   本页记录旧 k-NN 插件的 knn_dense_float_vector 和 knn_sparse_bool_vector。Easysearch 2.4.0 原生 HNSW 使用 dense_vector 字段类型。
+ 相关指南（先读这些） #    向量搜索  向量字段建模  映射基础  关于向量 #  在索引文档和运行查询时都需要指定向量类型。在这两种情况下，您都使用相同的 JSON 结构来定义向量类型。每个向量类型还有一个简写形式，这在使用不支持嵌套文档的工具时会很方便。以下示例展示了如何在索引向量时指定它们。
 knn_dense_float_vector 密集向量类型 #  假设您已经定义了一个映射，其中 my_vec 的类型为 knn_dense_float_vector。
-POST /my-index/_doc { &#34;my_vec&#34;: { &#34;values&#34;: [0.1, 0.2, 0.3, ...] # 1 } } POST /my-index/_doc { &#34;my_vec&#34;: [0.1, 0.2, 0.3, ...] # 2 } 说明 #  1	向量中所有浮点值的 JSON 列表。长度应与映射中的dims匹配。 2	#1 的简写形式。
-knn_sparse_bool_vector 稀疏向量类型 #  假设您已经定义了一个映射，其中 my_vec 的类型为 knn_sparse_bool_vector。"
+POST /my-index/_doc { &#34;my_vec&#34;: { &#34;values&#34;: [0.1, 0.2, 0.3, ...] # 1 } } POST /my-index/_doc { &#34;my_vec&#34;: [0.1, 0.2, 0.3, ...] # 2 } 说明 #  1	向量中所有浮点值的 JSON 列表。长度应与映射中的dims匹配。 2	#1 的简写形式。"
 ---
 
 
 # K-NN 向量字段类型
+
+> 本页记录旧 k-NN 插件的 `knn_dense_float_vector` 和 `knn_sparse_bool_vector`。Easysearch 2.4.0 原生 HNSW 使用
+> [dense_vector 字段类型]({{< relref "/docs/features/mapping-and-analysis/field-types/dense-vector.md" >}})。
 
 ## 相关指南（先读这些）
 
@@ -331,3 +334,4 @@ PUT /my-index/_mapping
 3	模型类型。
 4	选择的顶部索引数量。
 5	是否根据其排名重复索引。请参见上面的重复注释。
+

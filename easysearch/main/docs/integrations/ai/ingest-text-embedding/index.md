@@ -3,10 +3,10 @@ title: "写入数据文本向量化"
 date: 0001-01-01
 summary: "写入数据文本向量化 #  Easysearch 使用 Ingest 管道中的一系列处理器，可以对写入的数据进行处理，并且支持对文本进行向量化。本文档介绍如何在 Easysearch 中使用 text_embedding 处理器对写入数据进行向量化。
 相关指南（先读这些） #    向量搜索  向量字段建模  AI 集成  先决条件 #  支持与 OpenAI API 兼容的 embedding 接口，支持 Ollama embedding 接口。
-需要安装 Easysearch 的 knn 和 ai 插件。
+text_embedding 处理器需要安装 Easysearch 的 ai 插件。Easysearch 2.4.0 原生 HNSW 不需要安装 knn 插件。
 在生产环境中使用数据采集时，您的集群应至少包含一个节点，且该节点的节点角色权限设置为 ingest 。
-创建带有向量字段的索引 #  首先，需要创建一个包含 knn mapping 的索引，text_vector 是存储向量的字段，向量维度是 768。
-PUT /my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;text_vector&#34;: { &#34;type&#34;: &#34;knn_dense_float_vector&#34;, &#34;knn&#34;: { &#34;dims&#34;: 768, &#34;model&#34;: &#34;lsh&#34;, &#34;similarity&#34;: &#34;cosine&#34;, &#34;L&#34;: 99, &#34;k&#34;: 1 } } } } } 创建或更新 text_embedding 处理器 #  请求路径："
+创建带有向量字段的索引 #  首先创建原生 HNSW 索引。text_vector 是保存模型输出的字段，mapping 维度必须与处理器的 dims 和模型输出一致。
+PUT /my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;text_vector&#34;: { &#34;type&#34;: &#34;dense_vector&#34;, &#34;dims&#34;: 768, &#34;index&#34;: true, &#34;similarity&#34;: &#34;cosine&#34;, &#34;index_options&#34;: { &#34;type&#34;: &#34;hnsw&#34;, &#34;m&#34;: 16, &#34;ef_construction&#34;: 100 } } } } } 创建或更新 text_embedding 处理器 #  请求路径："
 ---
 
 
@@ -24,13 +24,13 @@ Easysearch 使用 Ingest 管道中的一系列处理器，可以对写入的数�
 
 支持与 OpenAI API 兼容的 embedding 接口，支持 Ollama embedding 接口。
 
-需要安装 Easysearch 的 `knn` 和 `ai` 插件。
+`text_embedding` 处理器需要安装 Easysearch 的 `ai` 插件。Easysearch 2.4.0 原生 HNSW 不需要安装 `knn` 插件。
 
 在生产环境中使用数据采集时，您的集群应至少包含一个节点，且该节点的节点角色权限设置为 `ingest` 。
 
 ## 创建带有向量字段的索引
 
-首先，需要创建一个包含 knn mapping 的索引，text_vector 是存储向量的字段，向量维度是 768。
+首先创建原生 HNSW 索引。`text_vector` 是保存模型输出的字段，mapping 维度必须与处理器的 `dims` 和模型输出一致。
 
 ```auto
 PUT /my-index
@@ -38,13 +38,14 @@ PUT /my-index
   "mappings": {
     "properties": {
       "text_vector": {
-        "type": "knn_dense_float_vector",
-        "knn": {
-          "dims": 768,
-          "model": "lsh",
-          "similarity": "cosine",
-          "L": 99,
-          "k": 1
+        "type": "dense_vector",
+        "dims": 768,
+        "index": true,
+        "similarity": "cosine",
+        "index_options": {
+          "type": "hnsw",
+          "m": 16,
+          "ef_construction": 100
         }
       }
     }
@@ -94,11 +95,12 @@ PUT _ingest/pipeline/<pipeline-id>
 | `description`        | 可选     | 字符串 | 管道的描述信息，用于说明用途（如“生成文本嵌入向量”）。                                                   |
 | **`url`**            | 必填     | 字符串 | Embedding API 的完整 URL（如 https://api.openai.com/v1/embeddings ）。                                   |
 | **`vendor`**         | 必填     | 字符串 | 服务提供商标识，固定为 `"openai"` 或 `"ollama"`。                                                        |
-| **`api_key`**        | 必填     | 字符串 | API 密钥，需替换为实际值（如 `"sk-xxx"`）。                                                              |
+| **`api_key`**        | 可选     | 字符串 | Embedding 服务的 API 密钥。OpenAI 等需要认证的服务必须提供；不需要认证的 Ollama 服务可以省略。             |
 | **`text_field`**     | 必填     | 字符串 | 输入文本的字段名（如 `"input_text"`），需与索引中的字段匹配。                                            |
-| **`vector_field`**   | 必填     | 字符串 | 存储向量的目标字段名（如 `"text_vector"`），必须包含在索引的 knn mapping 里。                            |
+| **`vector_field`**   | 必填     | 字符串 | 存储向量的目标字段名（如 `"text_vector"`），必须与索引的 `dense_vector` mapping 一致。                  |
 | **`model_id`**       | 必填     | 字符串 | 模型名称（如 `"text-embedding-3-small"` 或 `"text-embedding-v3"`）。                                     |
-| **`dims`**           | 必填     | 整数   | 向量维度（需与所选模型匹配，如 `768` 对应 `text-embedding-3-small`）,并与 mapping 里的 `dims` 保持一致。 |
+| **`dims`**           | 可选     | 整数   | 请求服务返回的向量维度；省略时使用模型默认输出。最终维度必须与 mapping 中的 `dims` 一致。                  |
+| **`batch_size`**     | 可选     | 整数   | 批处理请求中的文档数量，必须大于 `0`，默认 `1`。                                                         |
 | **`ignore_missing`** | 可选     | 布尔值 | 若 `text_field` 不存在是否跳过处理（默认 `false`）。                                                     |
 | **`ignore_failure`** | 可选     | 布尔值 | 若处理失败是否继续执行后续处理器（默认 `false`）。                                                       |
 

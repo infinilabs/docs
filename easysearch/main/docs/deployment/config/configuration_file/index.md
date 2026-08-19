@@ -118,21 +118,31 @@ discovery.seed_hosts: ${SEED_HOSTS}
 
 ## Elasticsearch 兼容性
 
-Easysearch 支持与 Elasticsearch 8.x API 的兼容性模式：
+Easysearch 提供部分 Elasticsearch API 的兼容性模式。该模式用于客户端协议、产品身份和已实现 API 的兼容，
+不表示所有 Elasticsearch 8.x API 都已实现或可直接替换。常规增删改查操作对 Elasticsearch 7.x–8.x 客户端基本兼容；
+HNSW 向量（dense_vector/kNN）存储与查询以 Elasticsearch 8.19.17 为精确验证基线。
 
 ```yaml
 elasticsearch.api_compatibility: true
-elasticsearch.api_compatibility_version: "8.9.0"
+elasticsearch.api_compatibility_version: "8.19.17"
 ```
 
 | 参数 | 默认值 | 说明 |
 |------|--------|------|
-| `elasticsearch.api_compatibility` | `false` | 是否启用 Elasticsearch 兼容性模式。启用后，Easysearch 将支持部分 Elasticsearch 8.x API 接口 |
-| `elasticsearch.api_compatibility_version` | 无 | 指定兼容的 Elasticsearch 版本。例如 `"8.9.0"` 表示兼容到 Elasticsearch 8.9.0 |
+| `elasticsearch.api_compatibility` | `false` | 是否启用 Elasticsearch 兼容性模式。启用后，Easysearch 以 `elasticsearch.api_compatibility_version` 声明的版本身份响应并开放对应的兼容接口。仅启用本开关而不设置版本时，按默认的 7.10.2（ES 7.x）身份响应 |
+| `elasticsearch.api_compatibility_version` | `7.10.2` | 指定兼容的 Elasticsearch 版本，取与你所用 ES 客户端一致的版本号，例如 `"7.10.2"`、`"8.9.0"`、`"8.19.17"`。HNSW 向量工作负载请使用经过验证的 `"8.19.17"` |
+
+这两个参数是静态节点配置，必须在节点启动配置（`easysearch.yml`）中设置并重启节点后生效。集群设置接口
+（`PUT /_cluster/settings`）会拒绝修改并返回 `not dynamically updateable`。
+
+从早期版本升级时，cluster metadata 中已有的同名 persistent/transient 值会自动迁移到 `archived.*`，保留用于审计但不再生效。
+如不需要保留，可通过集群设置接口将对应的 `archived.elasticsearch.*` 配置设为 `null` 后删除。
+
+使用 Elasticsearch 8.19 客户端（包括 HNSW 向量工作负载的客户端协议）时，请使用经过验证的 8.19.17 身份（如上例所示）。
 
 **使用场景**：
-- 从 Elasticsearch 迁移到 Easysearch 时，保持现有应用无需修改
-- 需要逐步迁移的环境
+- 从 Elasticsearch 迁移到 Easysearch 时，逐步验证已支持的客户端请求
+- 需要保留 Elasticsearch 客户端协议的环境
 
 ---
 

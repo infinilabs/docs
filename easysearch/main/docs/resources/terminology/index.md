@@ -4,7 +4,7 @@ date: 0001-01-01
 description: "Easysearch 文档中英文术语对照，统一用词规范。"
 tags: ["术语", "Glossary"]
 summary: "术语表 #  本页汇总文档中常用的中英文术语对照，方便写作时统一用词，也方便读者建立清晰的心智模型。
- 一、数据结构与存储 #     英文术语 中文叫法 说明     Index 索引 逻辑上的数据集合，通常一类业务一组索引，可按时间/租户再拆前缀。   Document 文档 索引中的基本数据单元，以 JSON 形式表示。   Shard 分片 水平切分单位，number_of_shards 只在建索引时生效。   Primary Shard 主分片 负责接受写入并复制到副本。   Replica Shard 副本分片 / 副本 提供高可用与读扩展，副本数可在线调整。   Segment 段 Lucene 的不可变索引文件块，刷新/合并都围绕它展开。   Inverted Index 倒排索引 从词项到文档的映射结构，全文搜索的核心数据结构。   _source _source 文档原文 建议默认保留，是检索展示与重建索引的&quot;真相来源&quot;。   Stored Fields 存储字段 只在少数场景单独使用，更多依赖 _source + doc_values。   doc_values doc_values 列式存储 聚合与排序的核心支撑，应在大多数可聚合/排序字段上启用。   Fielddata fielddata 仅在 text 字段聚合/排序时使用，能不用尽量不用。   Translog 事务日志 写入操作的预写日志（WAL），保证 flush 前的数据不丢失。   Routing 路由 控制文档写入和查询时定向到特定分片的机制，默认按 _id 哈希。    二、Mapping 与文本分析 #     英文术语 中文叫法 说明     Mapping 映射 / Mapping 描述字段类型与索引规则，是一切查询/聚合行为的基础。   text Field 文本字段（text） 做全文检索，用分析器拆分为词项，不适合精确过滤/聚合。   keyword Field 关键字字段（keyword） 精确匹配、过滤、聚合、排序使用，不做分词。   integer / long / float / double 数值字段 数值类型字段，支持范围查询和聚合运算。   date Field 日期字段 支持多种日期格式，底层以毫秒时间戳存储。   boolean Field 布尔字段 仅存储 true/false 值。   geo_point 地理点 存储经纬度坐标，支持地理距离和区域查询。   geo_shape 地理形状 存储多边形、线段等复杂地理形状，支持空间关系查询。   nested 嵌套类型 保持对象数组中字段关联关系的特殊映射类型。   join (Parent/Child) 父子关系 同一索引内建立文档间的层级关系。   object 对象类型 JSON 对象映射为扁平化的点分字段名，不保持数组内对象边界。   knn_dense_float_vector 向量字段类型 用于存储 dense 浮点向量，支持近似最近邻搜索。   Multi-fields 多字段 / multi-fields 一份源数据多个视图，如 title + title."
+ 一、数据结构与存储 #     英文术语 中文叫法 说明     Index 索引 逻辑上的数据集合，通常一类业务一组索引，可按时间/租户再拆前缀。   Document 文档 索引中的基本数据单元，以 JSON 形式表示。   Shard 分片 水平切分单位，number_of_shards 只在建索引时生效。   Primary Shard 主分片 负责接受写入并复制到副本。   Replica Shard 副本分片 / 副本 提供高可用与读扩展，副本数可在线调整。   Segment 段 Lucene 的不可变索引文件块，刷新/合并都围绕它展开。   Inverted Index 倒排索引 从词项到文档的映射结构，全文搜索的核心数据结构。   _source _source 文档原文 建议默认保留，是检索展示与重建索引的&quot;真相来源&quot;。   Stored Fields 存储字段 只在少数场景单独使用，更多依赖 _source + doc_values。   doc_values doc_values 列式存储 聚合与排序的核心支撑，应在大多数可聚合/排序字段上启用。   Fielddata fielddata 仅在 text 字段聚合/排序时使用，能不用尽量不用。   Translog 事务日志 写入操作的预写日志（WAL），保证 flush 前的数据不丢失。   Routing 路由 控制文档写入和查询时定向到特定分片的机制，默认按 _id 哈希。    二、Mapping 与文本分析 #     英文术语 中文叫法 说明     Mapping 映射 / Mapping 描述字段类型与索引规则，是一切查询/聚合行为的基础。   text Field 文本字段（text） 做全文检索，用分析器拆分为词项，不适合精确过滤/聚合。   keyword Field 关键字字段（keyword） 精确匹配、过滤、聚合、排序使用，不做分词。   integer / long / float / double 数值字段 数值类型字段，支持范围查询和聚合运算。   date Field 日期字段 支持多种日期格式，底层以毫秒时间戳存储。   boolean Field 布尔字段 仅存储 true/false 值。   geo_point 地理点 存储经纬度坐标，支持地理距离和区域查询。   geo_shape 地理形状 存储多边形、线段等复杂地理形状，支持空间关系查询。   nested 嵌套类型 保持对象数组中字段关联关系的特殊映射类型。   join (Parent/Child) 父子关系 同一索引内建立文档间的层级关系。   object 对象类型 JSON 对象映射为扁平化的点分字段名，不保持数组内对象边界。   dense_vector 原生向量字段 Easysearch 2."
 ---
 
 
@@ -47,7 +47,8 @@ summary: "术语表 #  本页汇总文档中常用的中英文术语对照，方
 | `nested` | 嵌套类型 | 保持对象数组中字段关联关系的特殊映射类型。 |
 | `join` (Parent/Child) | 父子关系 | 同一索引内建立文档间的层级关系。 |
 | `object` | 对象类型 | JSON 对象映射为扁平化的点分字段名，不保持数组内对象边界。 |
-| `knn_dense_float_vector` | 向量字段类型 | 用于存储 dense 浮点向量，支持近似最近邻搜索。 |
+| `dense_vector` | 原生向量字段 | Easysearch 2.4.0 原生 HNSW 使用的单值浮点向量字段，需显式设置 `index: true` 和 `index_options.type: hnsw`。 |
+| `knn_dense_float_vector` | 旧插件向量字段 | 旧 k-NN 插件的稠密浮点向量类型，仅用于已有旧插件索引和兼容场景。 |
 | Multi-fields | 多字段 / multi-fields | 一份源数据多个视图，如 `title` + `title.keyword`。 |
 | Dynamic Mapping | 动态映射 | 自动推断新字段类型，推荐配合 `dynamic_templates` 使用。 |
 | Dynamic Template | 动态模板 | 按字段名模式或数据类型自动套用指定的字段映射规则。 |
@@ -247,8 +248,9 @@ summary: "术语表 #  本页汇总文档中常用的中英文术语对照，方
 |----------|----------|------|
 | Embedding | 向量表示 / Embedding | 由模型生成，存储在向量字段中。 |
 | kNN / ANN Search | 向量 / 近似最近邻搜索 | 通过近似算法在高维向量空间中快速找到最相似的结果。 |
-| Hybrid Search (BM25+Vector) | 混合检索 | BM25 全文搜索 + 向量搜索的组合策略。 |
-| RRF (Reciprocal Rank Fusion) | 倒数排名融合 | 融合多路检索结果排序的算法，用于混合搜索。 |
+| Hybrid Search | 混合搜索 | 仅指搜索管道中的 `hybrid` 查询与 `hybrid_ranker_processor`（RRF）。不要把 `bool`（`knn` + `match`）叫做 Hybrid。 |
+| Compound Query (`bool` + `knn` + `match`) | 复合查询 / 多路召回 | 同一请求中用 query-level `knn` 与 `match` 等子句组合分数，不是混合搜索。 |
+| RRF (Reciprocal Rank Fusion) | 倒数排名融合 | 按各路排名取倒数后相加，是混合搜索管道的融合算法。 |
 | RAG | 检索增强生成（RAG） | Easysearch 作为检索层，LLM 作为生成层。 |
 | Multimodal Search | 多模态搜索 | 跨文本/图片/音频等数据形态的统一向量检索。 |
 

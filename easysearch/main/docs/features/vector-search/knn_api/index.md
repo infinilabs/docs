@@ -1,8 +1,9 @@
 ---
 title: "k-NN 查询 API"
 date: 0001-01-01
-description: "knn_nearest_neighbors 查询的完整参数参考：所有模型、相似度函数和查询选项。"
-summary: "k-NN 查询 API #  先决条件 #  要运行 k-NN 搜索，必须安装 knn 插件，参考 插件安装。
+description: "旧 k-NN 插件 knn_nearest_neighbors 查询的参数参考。"
+summary: "k-NN 查询 API #   本页记录旧 k-NN 插件的 knn_nearest_neighbors 接口。Easysearch 2.4.0 新增的 dense_vector 原生 HNSW 使用 原生 HNSW 搜索，不需要安装 k-NN 插件。
+ 先决条件 #  要运行 k-NN 搜索，必须安装 knn 插件，参考 插件安装。
  注意：从 1.11.1 版本起，创建 k-NN 索引时不再需要配置 index.knn 参数。
   向量字段的映射参数、各索引模型和相似度函数的详细说明，请参阅 向量字段类型参考。
  查询语法 #  所有向量搜索都通过 knn_nearest_neighbors 查询完成：
@@ -11,6 +12,9 @@ GET /&lt;index&gt;/_search { &#34;query&#34;: { &#34;knn_nearest_neighbors&#34;:
 
 
 # k-NN 查询 API
+
+> 本页记录旧 k-NN 插件的 `knn_nearest_neighbors` 接口。Easysearch 2.4.0 新增的 `dense_vector` 原生 HNSW 使用
+> [原生 HNSW 搜索]({{< relref "/docs/features/vector-search/native-hnsw.md" >}})，不需要安装 k-NN 插件。
 
 ## 先决条件
 
@@ -372,6 +376,6 @@ GET /my-vectors/_search
 ## 相关页面
 
 - [向量字段类型参考]({{< relref "/docs/features/mapping-and-analysis/field-types/knn.md" >}})：字段类型、映射参数、各索引模型详解
-- [向量搜索指南](./vector-search.md)：完整的使用流程与 Hybrid 检索
+- [向量搜索指南](./vector-search.md)：完整的使用流程与复合查询
 - [向量字段建模](./vector-fields.md)：多向量设计、维度选择、模型选型策略
 

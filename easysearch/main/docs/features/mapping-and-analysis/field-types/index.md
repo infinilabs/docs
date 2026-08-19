@@ -111,7 +111,8 @@ Easysearch 提供丰富的字段类型，用于存储和索引不同类型的数
 
 | 类型 | 说明 | 典型用途 |
 |------|------|----------|
-| [knn_vector](knn.md) | k-NN 向量 | 语义搜索、图像相似、向量近邻搜索 |
+| [dense_vector](dense-vector.md) | 2.4.0 原生 HNSW 稠密浮点向量 | 语义搜索、图像相似、向量近邻搜索 |
+| [旧 k-NN 插件向量](knn.md) | `knn_dense_float_vector`、`knn_sparse_bool_vector` | 已有旧插件索引和兼容场景 |
 
 ### 特殊类型
 
@@ -145,7 +146,7 @@ Easysearch 提供丰富的字段类型，用于存储和索引不同类型的数
 | 嵌套评论 | `nested` | 保持评论完整性 |
 | 动态属性 | `flattened` | 键名不固定 |
 | 搜索建议 | `completion` | 自动补全 |
-| 语义搜索 | `knn_vector` | 向量相似度 |
+| 语义搜索 | `dense_vector` | 2.4.0 原生 HNSW 向量相似度 |
 
 ---
 

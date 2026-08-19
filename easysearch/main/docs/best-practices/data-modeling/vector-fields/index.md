@@ -1,576 +1,257 @@
 ---
 title: "向量字段建模"
 date: 0001-01-01
-description: "语义搜索中的向量字段设计、存储优化与性能权衡。覆盖字段设计、维度选择、多向量模式、写入策略等关键决策。"
-summary: "向量字段建模 #  概述 #  向量字段是实现语义搜索（向量/kNN 搜索）的基础设施。本指南覆盖 Easysearch 中向量字段的设计原则、存储优化、性能权衡，帮助你做出合理的架构决策。
-核心出发点： 向量字段的设计直接影响三个维度——存储成本、索引性能、查询效率。在业务约束下找到最优平衡是关键。
- 1. 文档模型设计 #  1.1 基本模式：混合字段设计 #  在支持语义搜索的系统中，典型文档包含三类字段：
-{ &#34;_id&#34;: &#34;doc-001&#34;, &#34;metadata&#34;: { &#34;title&#34;: &#34;Easysearch 向量搜索最佳实践&#34;, &#34;created_at&#34;: &#34;2026-02-13&#34;, &#34;category&#34;: &#34;AI搜索&#34; }, &#34;content&#34;: &#34;完整的正文内容……&#34;, &#34;embedding&#34;: [0.124, -0.031, 0.092, ...], &#34;snippet&#34;: &#34;用于快速展示的摘要&#34; } 字段分工：
-   字段类型 典型字段名 数据类型 用途 存储开销     文本字段 title, content text BM25 全文搜索、分面过滤 低   元数据字段 created_at, category keyword, date 精确过滤、排序、聚合 低   向量字段 embedding, vector dense_vector kNN 语义相似度查询 高   展示字段 snippet, summary text（不分词） 快速返回、避免重查询 中    设计要点："
+description: "Easysearch 2.4.0 原生 HNSW 向量字段的维度、字段数量、写入、迁移和容量设计。"
+summary: "向量字段建模 #  本页说明如何为 Easysearch 2.4.0 原生 HNSW 设计向量字段。新索引使用 dense_vector 和 knn 查询，无需安装 k-NN 插件。 已有旧插件索引仍使用 knn_dense_float_vector、knn_sparse_bool_vector 和 knn_nearest_neighbors，两套字段与查询语法不能混用。
+完整参数和查询合同分别见 dense_vector 字段类型和 原生 HNSW 搜索。
+基本映射 #  典型语义搜索文档同时保存全文字段、过滤字段和一个向量字段：
+PUT /documents-v1 { &#34;settings&#34;: { &#34;number_of_shards&#34;: 2, &#34;number_of_replicas&#34;: 1 }, &#34;mappings&#34;: { &#34;properties&#34;: { &#34;title&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;content&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;category&#34;: { &#34;type&#34;: &#34;keyword&#34; }, &#34;embedding&#34;: { &#34;type&#34;: &#34;dense_vector&#34;, &#34;dims&#34;: 384, &#34;index&#34;: true, &#34;similarity&#34;: &#34;cosine&#34;, &#34;index_options&#34;: { &#34;type&#34;: &#34;hnsw&#34;, &#34;m&#34;: 16, &#34;ef_construction&#34;: 100 } } } } } Easysearch 2."
 ---
 
 
 # 向量字段建模
 
-## 概述
+本页说明如何为 Easysearch 2.4.0 原生 HNSW 设计向量字段。新索引使用 `dense_vector` 和 `knn` 查询，无需安装 k-NN 插件。
+已有旧插件索引仍使用 `knn_dense_float_vector`、`knn_sparse_bool_vector` 和 `knn_nearest_neighbors`，两套字段与查询语法不能混用。
 
-向量字段是实现语义搜索（向量/kNN 搜索）的基础设施。本指南覆盖 Easysearch 中向量字段的设计原则、存储优化、性能权衡，帮助你做出合理的架构决策。
+完整参数和查询合同分别见 [dense_vector 字段类型]({{< relref "/docs/features/mapping-and-analysis/field-types/dense-vector.md" >}})和
+[原生 HNSW 搜索]({{< relref "/docs/features/vector-search/native-hnsw.md" >}})。
 
-**核心出发点：** 向量字段的设计直接影响三个维度——存储成本、索引性能、查询效率。在业务约束下找到最优平衡是关键。
+## 基本映射
 
----
-
-## 1. 文档模型设计
-
-### 1.1 基本模式：混合字段设计
-
-在支持**语义搜索**的系统中，典型文档包含三类字段：
+典型语义搜索文档同时保存全文字段、过滤字段和一个向量字段：
 
 ```json
+PUT /documents-v1
 {
-  "_id": "doc-001",
-  "metadata": {
-    "title": "Easysearch 向量搜索最佳实践",
-    "created_at": "2026-02-13",
-    "category": "AI搜索"
+  "settings": {
+    "number_of_shards": 2,
+    "number_of_replicas": 1
   },
-  "content": "完整的正文内容……",
-  "embedding": [0.124, -0.031, 0.092, ...],
-  "snippet": "用于快速展示的摘要"
-}
-```
-
-**字段分工：**
-
-| 字段类型 | 典型字段名 | 数据类型 | 用途 | 存储开销 |
-|---------|----------|--------|------|---------|
-| 文本字段 | `title`, `content` | `text` | BM25 全文搜索、分面过滤 | 低 |
-| 元数据字段 | `created_at`, `category` | `keyword`, `date` | 精确过滤、排序、聚合 | 低 |
-| 向量字段 | `embedding`, `vector` | `dense_vector` | kNN 语义相似度查询 | **高** |
-| 展示字段 | `snippet`, `summary` | `text`（不分词） | 快速返回、避免重查询 | 中 |
-
-**设计要点：**
-- 文本字段和向量字段**并存**，支持混合查询（BM25 + kNN）
-- 向量字段**不需要分词、不需要倒排索引**，但需要特殊的向量索引（如 HNSW）
-- 避免冗余存储：已有 `embedding` 时，一般不需要额外的 `content_vector` 除非有多种语义模式
-
-### 1.2 映射定义示例
-
-```json
-{
   "mappings": {
     "properties": {
       "title": {
-        "type": "text",
-        "analyzer": "standard"
+        "type": "text"
       },
       "content": {
-        "type": "text",
-        "analyzer": "ik_smart"
+        "type": "text"
       },
       "category": {
         "type": "keyword"
-      },
-      "created_at": {
-        "type": "date"
       },
       "embedding": {
         "type": "dense_vector",
         "dims": 384,
         "index": true,
-        "similarity": "cosine"
-      },
-      "snippet": {
-        "type": "text",
-        "index": false,
-        "enabled": true
+        "similarity": "cosine",
+        "index_options": {
+          "type": "hnsw",
+          "m": 16,
+          "ef_construction": 100
+        }
       }
     }
   }
 }
 ```
 
----
+Easysearch 2.4.0 的原生 `dense_vector` 有以下建模约束：
 
-## 2. 维度选择与成本控制
+| 决策 | 2.4.0 合同 |
+| --- | --- |
+| 维度 | `dims` 必填，范围为 1–4096，写入和查询向量必须完全一致 |
+| 元素类型 | 仅支持 `float` |
+| 索引 | 必须显式设置 `index: true` |
+| 索引类型 | 必须显式设置 `index_options.type: hnsw` |
+| 字段值 | 单值向量；同一字段不能保存多个向量 |
+| 相似度 | `cosine`、`dot_product`、`l2_norm` 或 `max_inner_product` |
+| 存储 | 向量保留在 `_source`，同时写入 Lucene 向量索引；不支持 doc values、排序或聚合 |
 
-### 2.1 维度对成本的影响
+## 选择维度和相似度
 
-向量维度（`dims`）是影响系统资源消耗的最重要因素：
+`dims` 由 Embedding 模型输出决定，不能在 Easysearch 中任意缩放。更换维度意味着更换字段或新建索引，不能原地修改已有字段。
 
-```
-单条文档开销 ≈ dims × 4 字节（float32）
+仅计算 float32 数据时，每条向量至少需要约 `dims × 4` 字节。这个数值不包含 `_source` 中的 JSON、HNSW 图、Lucene 元数据、
+其他字段、segment 合并临时空间和副本，不能直接当作最终 store size。
 
-示例：
-- 维度 128  →  512 字节/文档
-- 维度 384  →  1.5 KB/文档
-- 维度 768  →  3 KB/文档
-- 维度 1536 →  6 KB/文档（如 OpenAI 的 embedding）
-```
+| 维度 | float32 原始数据下限/文档 |
+| ---: | ---: |
+| 128 | 512 B |
+| 384 | 1.5 KiB |
+| 768 | 3 KiB |
+| 1536 | 6 KiB |
 
-**100 万文档的存储对比：**
+选择模型时先以业务 Recall、NDCG 等效果指标为门槛，再比较写入吞吐、查询延迟和存储。不要仅根据“常见维度”决定生产模型，也不要
+假定更高维度一定带来更好的业务效果。
 
-| 维度 | 向量存储大小 | 索引开销 | 总体影响 |
-|-----|-----------|--------|--------|
-| 128 | ~512 MB | 低 | ✅ 极优 |
-| 384 | ~1.5 GB | 中 | ✅ 推荐 |
-| 768 | ~3 GB | 高 | ⚠️ 中等 |
-| 1536 | ~6 GB | 很高 | ⚠️ 需评估 |
+相似度必须与模型训练和输出约定一致：
 
-### 2.2 维度选择策略
+- `cosine` 适合按夹角比较的 Embedding；零向量会被拒绝，Easysearch 会为索引和查询执行归一化；
+- `dot_product` 要求写入和查询向量均为单位向量；
+- `l2_norm` 使用欧氏距离，适合未归一化的连续向量；
+- `max_inner_product` 允许向量幅值影响排序。
 
-**优先级原则（从高到低）：**
+## 单向量和多向量
 
-1. **业务精度要求** → 必须满足搜索效果
-2. **成本-效果平衡** → 在保证效果的前提下最小化维度
-3. **基础设施约束** → 内存、存储、网络带宽限制
-
-**实践建议：**
-
-```
-场景 1：通用语义搜索（推荐）
-└─ 使用 384 维模型（如 sentence-transformers 系列）
-   └─ 成本合理 + 效果充分
-   
-场景 2：精细领域应用（金融、医疗）
-└─ 使用 768 维模型
-   └─ 更强的表达能力，但需评估存储成本
-   
-场景 3：大规模系统（超 5000 万文档）
-└─ 使用 128～256 维压缩模型
-   └─ 或使用量化（binary/int8）模式（如果引擎支持）
-
-场景 4：超大维度（>1000）
-└─ 评估是否真的必要
-└─ 考虑降维：PCA、LSH 等预处理
-└─ 或采用多阶段检索：粗排用低维，精排用高维
-```
-
-### 2.3 动态维度策略
-
-对于**演进中的系统**，可采用多字段策略：
-
-```json
-{
-  "properties": {
-    "embedding_v1": {
-      "type": "dense_vector",
-      "dims": 384,
-      "index": true,    // 线上用
-      "similarity": "cosine"
-    },
-    "embedding_v2": {
-      "type": "dense_vector",
-      "dims": 768,
-      "index": false,   // 过渡阶段，暂不用于查询
-      "similarity": "cosine"
-    }
-  }
-}
-```
-
-**好处：** 逐步升级模型，减少迁移成本。  
-**成本：** 额外的存储开销（短期）。
-
----
-
-## 3. 多向量模式
-
-### 3.1 何时需要多向量
-
-**场景判断：**
-
-| 场景 | 是否需要多向量 | 说明 |
-|-----|------------|------|
-| 单一搜索场景（通用搜索） | ❌ 否 | 一个 embedding 足够 |
-| 多语言文档库 | ✅ 是 | 不同语言用不同向量模型 |
-| 标题和正文语义不同 | ⚠️ 可选 | 取决于是否分别查询 |
-| 不同时间段数据用不同模型 | ⚠️ 可选 | 如无必要，应该做离线重算 |
-| A/B 测试新模型 | ✅ 是（临时） | 双向量并行验证，验证后清理 |
-
-### 3.2 多向量设计示例
+只有线上需要独立查询的语义视角才应建立独立向量字段。例如标题和正文确实需要分别召回时，可以使用两个字段：
 
 ```json
 {
   "mappings": {
     "properties": {
-      "title": { "type": "text" },
-      "content": { "type": "text" },
       "title_embedding": {
         "type": "dense_vector",
         "dims": 384,
         "index": true,
-        "similarity": "cosine"
+        "similarity": "cosine",
+        "index_options": {
+          "type": "hnsw",
+          "m": 16,
+          "ef_construction": 100
+        }
       },
       "content_embedding": {
         "type": "dense_vector",
         "dims": 384,
         "index": true,
-        "similarity": "cosine"
+        "similarity": "cosine",
+        "index_options": {
+          "type": "hnsw",
+          "m": 16,
+          "ef_construction": 100
+        }
       }
     }
   }
 }
 ```
 
-**查询时：**
-```python
-# 基于标题的语义查询
-response = es.search(
-    index="docs",
-    body={
-        "query": {
-            "knn": {
-                "title_embedding": {
-                    "vector": [0.12, -0.03, ...],
-                    "k": 10
-                }
-            }
-        }
-    }
-)
+每个 `dense_vector` 字段都会为每个 segment 建立独立的 HNSW 图，增加写入 CPU、store、文件系统缓存需求和查询成本。模型 A/B
+测试可以暂时双写两个字段，但验证完成后应通过新索引移除不再使用的字段。
 
-# 或使用 bool 组合（标题权重更高）
-# 详见搜索章节的 Hybrid 检索指南
+Easysearch 2.4.0 不支持 `dense_vector` 的 `index: false`。如果只想在 `_source` 中保留一份不参与 HNSW 查询的浮点数组，可使用
+普通 `float` 字段并关闭索引和 doc values：
+
+```json
+"embedding_archive": {
+  "type": "float",
+  "index": false,
+  "doc_values": false
+}
 ```
 
-### 3.3 多向量的成本警告
+这种普通浮点数组不能用于原生 `knn` 查询。
 
-⚠️ **每增加一个向量字段，成本翻倍：**
+## 写入和一致性
 
-```
-2 个向量字段 = 2× 存储 + 2× 索引构建时间 + 2× 内存占用
-```
+向量通常由外部 Embedding 服务生成。无论同步生成还是异步回填，都应在写入前验证：
 
-**决策框架：**
+- 模型版本与目标字段一致；
+- 数组长度等于 `dims`；
+- 所有元素都是有限数值；
+- `dot_product` 向量已经归一化，`cosine` 向量不是零向量；
+- 文档中的文本版本和向量版本可以追踪，避免文本已更新而向量仍然陈旧。
 
-```
-是否真的必须分别查询这两个向量？
-  ↓
-  是 → 需要多向量
-  ↓
-  否 → 考虑：
-      a) 用单向量拼接/融合（如 concat([title_embedding, content_embedding]))
-      b) 用 boosting 给标题更高权重（在查询侧解决）
-      c) 在应用层做分步检索（先查标题，再查内容）
-```
+初始导入和大规模回填应使用 Bulk，并检查每个 Bulk item 的状态。HTTP 请求成功不代表所有文档都已写入。可以根据业务需要延长
+`refresh_interval`、暂时减少副本，但导入结束后必须恢复生产设置，等待集群健康，并用代表性查询验证 Recall 和错误率。
 
----
-
-## 4. 写入与数据一致性
-
-### 4.1 同步 vs 异步策略
-
-**策略对比：**
-
-| 方案 | 延迟 | 一致性 | 模型服务负载 | 适用场景 |
-|-----|-----|------|-----------|--------|
-| **同步生成** | 高（秒级） | ✅ 强一致 | 高 | 对搜索精度敏感的应用 |
-| **异步补齐** | 低（毫秒） | ⚠️ 最终一致 | 低 | 实时性要求不高，数据量大 |
-| **混合策略** | 中等 | ✅ 可控 | 中等 | **推荐** |
-
-### 4.2 同步写入实现
-
-```python
-from elasticsearch import Elasticsearch
-import requests
-
-es = Elasticsearch(["localhost:9200"])
-embedding_service = "http://localhost:8001"  # 向量服务
-
-def index_document(doc):
-    # 1. 调用模型生成向量
-    embedding_response = requests.post(
-        f"{embedding_service}/embed",
-        json={"text": doc["content"]},
-        timeout=5
-    )
-    
-    if embedding_response.status_code != 200:
-        # 降级策略：生成失败后如何处理？
-        # 选项 A：中断写入，返回错误
-        # 选项 B：仅写文本，标记为"缺向量"，后续异步补齐
-        logger.warning(f"Embedding failed for doc {doc['_id']}, marking for async")
-        doc["_embedding_status"] = "pending"
-    else:
-        doc["embedding"] = embedding_response.json()["vector"]
-    
-    # 2. 写入 Easysearch
-    es.index(
-        index="documents",
-        id=doc.get("_id"),
-        body=doc
-    )
-```
-
-**注意事项：**
-- 设置合理的**超时时间**（建议 5～10 秒）
-- 实现**失败重试机制**和**降级策略**
-- 监控向量服务的延迟和错误率
-
-### 4.3 异步补齐实现
-
-```python
-# 方案：使用 Kafka/消息队列解耦
-
-def index_document_async(doc):
-    # 1. 立即写入文档（不含向量）
-    es.index(
-        index="documents",
-        id=doc.get("_id"),
-        body={
-            **doc,
-            "_embedding_status": "pending"
-        }
-    )
-    
-    # 2. 发送到异步任务队列
-    kafka_producer.send("embedding_tasks", {
-        "doc_id": doc["_id"],
-        "text": doc["content"]
-    })
-
-# 异步 Worker 处理：
-def embedding_worker():
-    for message in kafka_consumer.consume("embedding_tasks"):
-        task = json.loads(message.value)
-        
-        # 批量处理，提升效率
-        embeddings = model.encode([task["text"]])
-        
-        # 更新文档的向量字段
-        es.update(
-            index="documents",
-            id=task["doc_id"],
-            body={
-                "doc": {
-                    "embedding": embeddings[0],
-                    "_embedding_status": "completed"
-                }
-            }
-        )
-```
-
-### 4.4 混合策略（推荐）
-
-```
-实时性高的业务逻辑 → 同步生成 + 写入
-  ↓
-后台数据导入 → 异步补齐
-  ↓
-批量更新 → 定时离线处理
-```
-
-**好处：** 在用户体验和系统负载间找到平衡。
-
----
-
-## 5. 存储与索引优化
-
-### 5.1 禁用不必要的索引
-
-如果**不在线上查询某个向量**，应禁用其索引以节省资源：
+异步生成时，文档可以先不包含向量字段；向量生成完成后再通过 Update 写入。建议增加模型版本和处理状态字段，例如：
 
 ```json
 {
-  "properties": {
-    "embedding_online": {
-      "type": "dense_vector",
-      "dims": 384,
-      "index": true,      // ✅ 用于 kNN 查询
-      "similarity": "cosine"
-    },
-    "embedding_offline": {
-      "type": "dense_vector",
-      "dims": 768,
-      "index": false,     // ❌ 仅存储，不索引
-      "similarity": "cosine"
+  "embedding_model": "text-model-v3",
+  "embedding_status": "ready",
+  "embedding": [0.12, -0.03, 0.08, ...]
+}
+```
+
+应用查询时应过滤或跳过尚未生成向量的文档，并监控待处理数量和最长等待时间。
+
+## 模型升级和迁移
+
+以下变化需要新字段或新索引，不能直接修改已有 `dense_vector` 字段：
+
+- Embedding 维度或相似度变化；
+- 从旧 k-NN 插件字段迁移到原生 HNSW；
+- 希望减小 HNSW 的 `m`；
+- 希望移除旧向量字段或回收其 store。
+
+短期模型 A/B 可以在同一新索引中增加 `embedding_v2` 并双写；要彻底回收旧字段空间，仍需创建目标索引并 Reindex。迁移时保留模型
+版本，核对文档数、失败项、Recall、延迟和 store，再通过 alias 原子切换。完整步骤见
+[迁移现有索引]({{< relref "/docs/features/vector-search/native-hnsw.md#迁移现有索引" >}})。
+
+## 查询建模
+
+需要与全文查询组合时，使用 query-level `knn`。过滤条件应放在 `knn.filter` 中，以便在 HNSW 搜索期间预过滤：
+
+```json
+POST /documents-v1/_search
+{
+  "size": 10,
+  "query": {
+    "bool": {
+      "must": {
+        "knn": {
+          "field": "embedding",
+          "query_vector": [0.12, -0.03, 0.08, ...],
+          "k": 10,
+          "num_candidates": 100,
+          "filter": {
+            "term": {
+              "category": "manual"
+            }
+          }
+        }
+      },
+      "should": {
+        "match": {
+          "content": {
+            "query": "向量索引配置",
+            "boost": 0.5
+          }
+        }
+      }
     }
   }
 }
 ```
 
-**开销对比（100 万文档）：**
-- `index: true` → 存储 + 索引，共约 2.5～3 GB（384 维）
-- `index: false` → 仅存储，约 1.5 GB
+`num_candidates` 通常越大 Recall 越高，但 CPU 和延迟也越高。使用代表真实业务的查询集调参，并同时记录 Recall、P50/P95/P99、
+QPS 和错误率。顶层 `knn` 适合多分片严格全局 top-k，但 Easysearch 2.4.0 不能把顶层 `knn` 与普通顶层 `query` 并列使用。
 
-### 5.2 向量量化（如果支持）
+## 容量和运维
 
-某些搜索引擎支持 **int8/binary 量化**，可进一步节省空间：
+容量评估必须使用真实数据和自然 segment 拓扑。HNSW 图按 segment 构建；过于频繁的 refresh 会产生大量小 segment，后台 merge
+又会增加 CPU、I/O 和临时磁盘开销。force merge 后的单 segment 结果不能代表持续写入场景。
 
-```
-原始 float32 向量: 4 字节 × 384 = 1.5 KB
-量化为 int8:      1 字节 × 384 = 384 字节  (节省 75%)
-量化为 binary:    ~48 字节 × 1  = 48 字节  (节省 97%)
-```
+上线前至少验证：
 
-**权衡：** 精度下降 vs 资源节省。需实际评估对搜索效果的影响。
+| 项目 | 应记录的证据 |
+| --- | --- |
+| 检索效果 | Recall@K、NDCG 或业务标注指标 |
+| 查询 | 并发 QPS、P50/P95/P99、错误率、查询 CPU |
+| 写入 | Bulk 吞吐、失败项、refresh/merge 时间、GC |
+| 存储 | store size、segment 数、分片和副本总占用 |
+| 资源 | JVM heap、进程 RSS、文件系统缓存、磁盘水位和 thread-pool rejection |
 
-### 5.3 分片与副本策略
+不同数据分布、过滤选择性、维度、`m` 和 `num_candidates` 的结果不能直接互相替代。调参时一次只改变一个关键变量，并保留可复现的
+mapping、语料、查询集和结果。
 
-向量索引通常**比文本索引更消耗内存**，需要特别关注集群资源：
+## 建模检查清单
 
-```json
-{
-  "settings": {
-    "number_of_shards": 5,      // 根据数据量调整
-    "number_of_replicas": 1,    // 高可用性
-    "index.store.type": "niofs"  // 使用内存映射，加速 kNN
-  }
-}
-```
-
-**建议：**
-- 向量索引的**分片大小**控制在 30～50 GB
-- 如果单个向量字段超过 100 GB，考虑**独立分片**或**多索引**
-
----
-
-## 6. 多向量融合与降维
-
-### 6.1 向量拼接融合
-
-**场景：** 需要同时考虑标题和内容的语义
-
-**方案 1：应用层融合（推荐）**
-
-```python
-def fuse_embeddings(title_emb, content_emb, weights=(0.3, 0.7)):
-    """
-    线性加权融合两个向量
-    标题权重 30%，内容权重 70%
-    """
-    fused = (
-        np.array(title_emb) * weights[0] +
-        np.array(content_emb) * weights[1]
-    )
-    # 归一化
-    return fused / np.linalg.norm(fused)
-
-# 写入
-doc["embedding"] = fuse_embeddings(
-    model.encode(doc["title"]),
-    model.encode(doc["content"])
-)
-```
-
-**优点：** 单向量，成本最低；权重可灵活调整。
-
-**方案 2：多向量并行查询（见搜索章节）**
-
-允许用户同时对标题和内容向量查询，系统端融合排序。
-
-### 6.2 PCA 降维
-
-对于维度过高的向量（如 1536），可以用 **PCA 预处理降至 384 维**，保留 95%+ 的信息：
-
-```python
-from sklearn.decomposition import PCA
-
-# 离线：对样本向量做降维
-pca = PCA(n_components=384)
-original_vectors = [...]  # shape: (N, 1536)
-reduced_vectors = pca.fit_transform(original_vectors)
-
-# 保存 PCA 模型
-joblib.dump(pca, "pca_model.pkl")
-
-# 在线：新来的向量也要用同一个 PCA 模型降维
-new_vector = model.encode("some text")  # shape: (1536,)
-new_reduced = pca.transform([new_vector])[0]  # shape: (384,)
-```
-
-**成本变化：**
-- 从 1536 维 → 384 维 ≈ **节省 75% 存储**
-- **查询速度提升** 10～15 倍
-- **精度损失** 通常在可接受范围（1～3%）
-
----
-
-## 7. 监控与运维
-
-### 7.1 关键指标
-
-监控以下指标确保系统健康：
-
-```
-存储相关：
-├─ 单个文档平均大小（向量占比）
-├─ 索引总大小 vs 原始数据大小（压缩率）
-└─ 磁盘使用趋势
-
-性能相关：
-├─ kNN 查询延迟（P50, P99）
-├─ 向量索引构建时间
-├─ 内存使用率
-└─ 向量生成服务的吞吐量和错误率
-
-数据相关：
-├─ 缺向量文档数量（`_embedding_status: pending`）
-├─ 向量更新延迟
-└─ 多向量同步率（如有多个向量字段）
-```
-
-### 7.2 告警规则示例
-
-```yaml
-告警: 向量生成服务超时率 > 5%
-  └─ 行动：扩容服务 / 优化模型推理
-
-告警: 缺向量文档数量 > 文档总数的 1%
-  └─ 行动：检查异步补齐任务 / 查看错误日志
-
-告警: kNN 查询 P99 延迟 > 1 秒
-  └─ 行动：检查节点负载 / 评估是否需要优化维度
-```
-
----
-
-## 8. 总结与决策树
-
-### 快速决策流程
-
-```
-Q1: 需要做向量/语义搜索吗？
-├─ 否 → 使用纯文本索引
-└─ 是 ↓
-
-Q2: 数据量大小？
-├─ < 100 万 → 维度可用 768
-├─ 100 万～1000 万 → 推荐 384
-└─ > 1000 万 → 谨慎选择，推荐 256～384 + 量化 ↓
-
-Q3: 有多种语义视角吗（标题 vs 内容等）？
-├─ 否 → 单向量 + 应用层融合
-└─ 是 ↓
-
-Q4: 必须分别查询吗？
-├─ 否 → 融合为单向量
-└─ 是 → 多向量（但评估成本） ↓
-
-Q5: 向量从何而来？
-├─ 实时生成 → 同步写入 + 降级策略
-├─ 离线预算 → 异步补齐
-└─ 混合 → 混合策略
-```
-
-### 核心最佳实践
-
-| 原则 | 说明 |
-|-----|------|
-| **够用最优** | 在满足效果的前提下最小化维度和字段数 |
-| **明确用途** | 每个向量字段都要清楚其查询需求 |
-| **异步解耦** | 向量生成不应阻塞主业务流程 |
-| **可观测性** | 监控向量生成、存储、查询的全链路 |
-| **灰度迁移** | 更换模型时用多字段并行验证，而非全量切换 |
-
----
+- 确认新索引使用原生 HNSW 还是已有旧插件接口，不混用字段和查询语法；
+- 冻结 Embedding 模型、版本、维度、归一化和相似度合同；
+- 为每个 `dense_vector` 显式设置 `index: true` 和 `index_options.type: hnsw`；
+- 只为实际需要独立查询的语义视角建立向量字段；
+- 设计同步或异步写入的失败恢复、模型版本和陈旧向量检测；
+- 用生产预期的文档量、过滤条件、并发和 segment 拓扑验收效果、性能与容量；
+- 模型或 mapping 合同变化时通过新字段或新索引迁移，并保留 alias 回滚路径。
 
 ## 相关章节
 
-- [向量查询与语义搜索]({{< relref "/docs/features/vector-search/knn_api.md" >}}) - 如何查询向量字段
-- [Hybrid 检索]({{< relref "/docs/features/fulltext-search" >}}) - 混合文本和向量搜索
-- [字段类型参考]({{< relref "/docs/features/mapping-and-analysis/field-types/knn.md" >}}) - dense_vector 字段详细参数
-- [Mapping 与文本分析]({{< relref "/docs/fundamentals/mapping-analysis-intro.md" >}}) - 基础概念
-
+- [原生 HNSW 搜索]({{< relref "/docs/features/vector-search/native-hnsw.md" >}})
+- [dense_vector 字段类型]({{< relref "/docs/features/mapping-and-analysis/field-types/dense-vector.md" >}})
+- [向量搜索与语义搜索]({{< relref "/docs/features/vector-search/vector-and-semantic-search.md" >}})
+- [向量工作流]({{< relref "/docs/integrations/ai/vector-workflow.md" >}})
+- [旧 k-NN 插件字段]({{< relref "/docs/features/mapping-and-analysis/field-types/knn.md" >}})
 

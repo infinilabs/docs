@@ -1,17 +1,20 @@
 ---
 title: "向量搜索指南"
 date: 0001-01-01
-description: "从向量字段配置到 kNN 查询、Hybrid 检索的完整指南。"
-summary: "向量搜索指南 #  本页介绍如何在 Easysearch 中使用向量搜索——从创建索引到执行查询的完整流程。
+description: "旧 k-NN 插件从向量字段配置到查询和复合检索的完整指南。"
+summary: "向量搜索指南 #   本页保留旧 k-NN 插件的字段和查询流程。Easysearch 2.4.0 原生 HNSW 的使用方法参考 原生 HNSW 搜索。
+ 本页介绍如何在 Easysearch 中使用向量搜索——从创建索引到执行查询的完整流程。
 前提条件 #  向量搜索需要 k-NN 插件。安装方法参见 插件安装。
  注意：从 1.11.1 版本起，创建 k-NN 索引时不再需要配置 index.knn 参数。
  步骤一：创建向量索引 #  稠密浮点向量（最常用） #  适用于文本 Embedding、图像特征等场景：
-PUT /my-vectors { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;title&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;embedding&#34;: { &#34;type&#34;: &#34;knn_dense_float_vector&#34;, &#34;knn&#34;: { &#34;dims&#34;: 768, &#34;model&#34;: &#34;lsh&#34;, &#34;similarity&#34;: &#34;cosine&#34;, &#34;L&#34;: 99, &#34;k&#34;: 1 } } } } }  映射参数、各索引模型和相似度函数的完整说明，请参阅 向量字段类型参考。
- 步骤二：索引文档 #  向量通常由外部 Embedding 模型生成，写入时附带向量数据："
+PUT /my-vectors { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;title&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;embedding&#34;: { &#34;type&#34;: &#34;knn_dense_float_vector&#34;, &#34;knn&#34;: { &#34;dims&#34;: 768, &#34;model&#34;: &#34;lsh&#34;, &#34;similarity&#34;: &#34;cosine&#34;, &#34;L&#34;: 99, &#34;k&#34;: 1 } } } } }  映射参数、各索引模型和相似度函数的完整说明，请参阅 向量字段类型参考。"
 ---
 
 
 # 向量搜索指南
+
+> 本页保留旧 k-NN 插件的字段和查询流程。Easysearch 2.4.0 原生 HNSW 的使用方法参考
+> [原生 HNSW 搜索]({{< relref "/docs/features/vector-search/native-hnsw.md" >}})。
 
 本页介绍如何在 Easysearch 中使用向量搜索——从创建索引到执行查询的完整流程。
 
@@ -183,9 +186,10 @@ POST /my-vectors/_search
 
 > **注意**：过滤在向量召回之后执行（post-filtering），先通过 kNN 召回候选集，再用 filter 筛选。
 
-## Hybrid 检索（混合搜索）
+## 复合查询
 
-将向量相似度与 BM25 全文搜索融合，同时利用关键词匹配和语义理解：
+将向量相似度与 BM25 全文搜索放进同一个 `bool` 查询，同时利用关键词匹配和语义理解。
+这不是 [混合搜索]({{< relref "/docs/integrations/ai/hybrid-search.md" >}})；文档中的 Hybrid 只指搜索管道 RRF。
 
 ```json
 POST /my-vectors/_search
@@ -282,5 +286,6 @@ POST /my-vectors/_search
 - [向量字段建模](./vector-fields.md)：多向量设计、维度选择、模型选型策略
 - [k-NN 查询 API](./knn_api.md)：完整的 API 参数参考
 - [Embedding 服务集成]({{< relref "/docs/integrations/ai/embedding-service" >}})：接入外部 Embedding 模型
-- [AI API 集成]({{< relref "/docs/integrations/ai/_index.md" >}})：Hybrid Search API 等高级功能
+- [混合搜索]({{< relref "/docs/integrations/ai/hybrid-search.md" >}})：搜索管道 RRF（`hybrid_ranker_processor`）
+- [AI API 集成]({{< relref "/docs/integrations/ai/_index.md" >}})：Embedding、向量工作流与混合搜索
 

@@ -61,7 +61,7 @@ Easysearch 重点负责第 2～4 段中的“存储 + 检索”能力。
 - **数据接入层**：Logstash、自研服务等，负责把文档和向量写进 Easysearch
 - **Easysearch 集群**：
   - 存储原始文档、结构化字段
-  - 存储向量字段，并对外提供 kNN / Hybrid 搜索接口
+  - 存储向量字段，并对外提供 kNN、复合查询和混合搜索接口
 - **应用层 / API 网关**：
   - 根据请求类型路由到不同检索策略
   - 负责把搜索结果转成前端/下游系统易消费的形态
@@ -70,13 +70,14 @@ Easysearch 重点负责第 2～4 段中的“存储 + 检索”能力。
 
 Easysearch 不负责模型训练，但负责把“检索”这一环做到稳定可控。
 
-## 4. 实战：Hybrid Search 配置示例
+## 4. 实战：复合查询配置示例
 
-> **前置条件**：需要安装 knn 插件，参考 [插件安装]({{< relref "../deployment/install-guide#插件安装" >}})。
+以下示例使用 Easysearch 2.4.0 内置的原生 HNSW，不需要安装 k-NN 插件。已有旧插件索引继续使用旧字段和查询语法，
+不要在同一字段上混用两套接口。
 
 ### 索引设计
 
-Easysearch 使用 `knn_dense_float_vector` 类型存储密集型浮点向量，支持 LSH（近似搜索）和 Exact（精确搜索）两种模型。
+Easysearch 使用 `dense_vector` 存储密集型浮点向量，并通过显式的 `index_options.type: hnsw` 创建原生 HNSW 索引。
 
 ```json
 PUT /ai-knowledge-base
@@ -91,13 +92,14 @@ PUT /ai-knowledge-base
       "content": { "type": "text", "analyzer": "ik_max_word" },
       "category": { "type": "keyword" },
       "embedding": {
-        "type": "knn_dense_float_vector",
-        "knn": {
-          "dims": 768,
-          "model": "lsh",
-          "similarity": "cosine",
-          "L": 99,
-          "k": 1
+        "type": "dense_vector",
+        "dims": 768,
+        "index": true,
+        "similarity": "cosine",
+        "index_options": {
+          "type": "hnsw",
+          "m": 16,
+          "ef_construction": 100
         }
       },
       "created_at": { "type": "date" }
@@ -107,15 +109,16 @@ PUT /ai-knowledge-base
 ```
 
 **参数说明**：
-- `dims`：向量维度
-- `model`：索引模型，`lsh` 为近似搜索，`exact` 为精确搜索
-- `similarity`：相似度类型，支持 `cosine`、`l1`、`l2`
-- `L`：哈希表数量，增大可提高召回率
-- `k`：哈希函数数量，增大可提高精度
 
-### Hybrid Search 查询
+- `dims`：向量维度，必须与 Embedding 模型输出一致；
+- `similarity`：相似度类型，可使用 `cosine`、`dot_product`、`l2_norm` 或 `max_inner_product`；
+- `m`：图中每个节点保留的最大连接数；
+- `ef_construction`：构图候选队列大小。
 
-Easysearch 使用 `knn_nearest_neighbors` 查询进行向量检索，可与 `bool` 查询组合实现混合检索：
+### 复合查询
+
+原生 query-level `knn` 可以放入 `bool` 查询，与全文查询组合实现多路召回。这不是
+[混合搜索]({{< relref "/docs/integrations/ai/hybrid-search.md" >}})；分数不可比、需要按排名融合时，使用搜索管道 RRF。
 
 ```json
 POST /ai-knowledge-base/_search
@@ -125,14 +128,16 @@ POST /ai-knowledge-base/_search
     "bool": {
       "must": [
         {
-          "knn_nearest_neighbors": {
+          "knn": {
             "field": "embedding",
-            "vec": {
-              "values": [0.12, -0.34, 0.56, ...]
-            },
-            "model": "lsh",
-            "similarity": "cosine",
-            "candidates": 100
+            "query_vector": [0.12, -0.34, 0.56, ...],
+            "k": 10,
+            "num_candidates": 100,
+            "filter": {
+              "term": {
+                "category": "技术文档"
+              }
+            }
           }
         }
       ],
@@ -146,9 +151,7 @@ POST /ai-knowledge-base/_search
           }
         }
       ],
-      "filter": [
-        { "term": { "category": "技术文档" } }
-      ]
+      "minimum_should_match": 0
     }
   },
   "_source": ["title", "content", "category"]
@@ -156,29 +159,31 @@ POST /ai-knowledge-base/_search
 ```
 
 **查询参数说明**：
-- `field`：向量字段名
-- `vec.values`：查询向量
-- `model`：必须与索引时指定的模型一致
-- `similarity`：相似度函数
-- `candidates`：候选数量，增大可提高召回率
 
-> **权重调参建议**：通过调整 `should` 子句的 `boost` 值控制全文与向量的相对权重。关键词检索场景可提高 BM25 权重，自然语言问答场景可减小或移除 `should` 中的全文查询。
+- `field`：原生 `dense_vector` 字段名；
+- `query_vector`：与 `dims` 一致的查询向量；
+- `k`：每个分片保留的近邻候选数量；
+- `num_candidates`：每个分片探索的候选数量，通常增大可提高 Recall，也会增加 CPU 和延迟；
+- `filter`：在 HNSW 搜索中执行的预过滤条件。
+
+> **权重调参建议**：通过调整子句的 `boost` 控制全文与向量分数的相对影响。BM25 与向量分数的分布不同，必须使用标注查询集验证
+> Recall、NDCG 等指标，不能把 `boost` 直接解释为固定百分比。
 
 ## 5. 性能与成本权衡
 
 | 维度       | 建议                                                         |
 | ---------- | ------------------------------------------------------------ |
-| 向量维度   | 50~768 维兼顾效果与性能；维度越高内存开销越大                |
-| LSH 参数   | `L=99, k=1` 为常用起点，追求召回率可增大 `L`，追求精度可增大 `k` |
-| 分片策略   | 向量索引建议单分片 5~10GB，避免过多小分片                     |
-| 精确搜索   | 小数据量（<10 万文档）可用 `exact` 模型，无需配置额外参数     |
-| 过滤优化   | 先用 `filter` 缩小范围再做向量检索，避免全量扫描             |
+| 向量维度   | 由模型输出决定；在满足效果门槛后比较不同模型的写入、查询和存储成本 |
+| HNSW 构图  | 从 `m=16`、`ef_construction=100` 起步，同时验证 Recall、写入吞吐和 store size |
+| 查询候选   | `num_candidates` 从 `k` 的数倍起步，用真实查询集评估 Recall 与延迟 |
+| 分片策略   | 用真实数据评估分片大小、恢复时间和查询并发；避免套用固定大小或创建过多小分片 |
+| 过滤优化   | 将选择性条件放入 `knn.filter` 做预过滤，并验证过滤后的 Recall |
 
 ## 6. 和现有文档的关系
 
 - 字段设计与向量存储：见 [向量字段]({{< relref "./data-modeling/vector-fields.md" >}})
+- 原生 HNSW 完整合同：见 [原生 HNSW 搜索]({{< relref "/docs/features/vector-search/native-hnsw.md" >}})
 - 向量工作流与写入方式：见 [向量工作流]({{< relref "../integrations/ai/vector-workflow.md" >}})
 - RAG 与 LLM 集成细节：见 [RAG 与 LLM 集成]({{< relref "../integrations/ai/rag-and-llm.md" >}})
 - Embedding 服务对接：见 [Embedding 服务接入]({{< relref "../integrations/ai/embedding-service.md" >}})
-
 

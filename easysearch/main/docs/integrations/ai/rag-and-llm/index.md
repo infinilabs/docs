@@ -3,8 +3,8 @@ title: "RAG 与 LLM 集成"
 date: 0001-01-01
 description: "以 Easysearch 为检索层，构建检索增强生成（RAG）与问答系统的整体方案。"
 summary: "RAG 与 LLM 集成 #  检索增强生成（Retrieval-Augmented Generation，RAG）是一种将搜索引擎与大语言模型（LLM）结合的架构模式。Easysearch 作为高性能检索层，可以为 LLM 提供精准的上下文信息，显著提升生成质量。
-相关指南（先读这些） #    Embedding 服务接入  向量工作流与 Hybrid 检索  Hybrid Search API  LangChain 集成  RAG 架构概览 #  典型的 RAG 流程如下：
-用户提问 ↓ 1. 查询改写（可选） ↓ 2. 检索阶段：在 Easysearch 中搜索相关文档 - 全文搜索（BM25） - 向量搜索（kNN） - 混合搜索（Hybrid） ↓ 3. 结果裁剪：选取 Top-K 段落，控制 token 数量 ↓ 4. Prompt 组装：将检索结果 + 用户问题拼接为 Prompt ↓ 5. LLM 生成：调用 LLM API 生成答案 ↓ 6."
+相关指南（先读这些） #    Embedding 服务接入  向量工作流与复合检索  混合搜索：搜索管道 RRF（hybrid_ranker_processor）  LangChain 集成  RAG 架构概览 #  典型的 RAG 流程如下：
+用户提问 ↓ 1. 查询改写（可选） ↓ 2. 检索阶段：在 Easysearch 中搜索相关文档 - 全文搜索（BM25） - 向量搜索（kNN） - 复合查询（`bool` + `knn` + `match`） - 混合搜索（搜索管道 RRF） ↓ 3. 结果裁剪：选取 Top-K 段落，控制 token 数量 ↓ 4. Prompt 组装：将检索结果 + 用户问题拼接为 Prompt ↓ 5."
 ---
 
 
@@ -15,8 +15,8 @@ summary: "RAG 与 LLM 集成 #  检索增强生成（Retrieval-Augmented Generat
 ## 相关指南（先读这些）
 
 - [Embedding 服务接入]({{< relref "./embedding-service.md" >}})
-- [向量工作流与 Hybrid 检索]({{< relref "./vector-workflow.md" >}})
-- [Hybrid Search API]({{< relref "./hybrid-search.md" >}})
+- [向量工作流与复合检索]({{< relref "./vector-workflow.md" >}})
+- [混合搜索]({{< relref "./hybrid-search.md" >}})：搜索管道 RRF（`hybrid_ranker_processor`）
 - [LangChain 集成]({{< relref "../third-party/langchain.md" >}})
 
 ## RAG 架构概览
@@ -31,7 +31,8 @@ summary: "RAG 与 LLM 集成 #  检索增强生成（Retrieval-Augmented Generat
 2. 检索阶段：在 Easysearch 中搜索相关文档
    - 全文搜索（BM25）
    - 向量搜索（kNN）
-   - 混合搜索（Hybrid）
+   - 复合查询（`bool` + `knn` + `match`）
+   - 混合搜索（搜索管道 RRF）
   ↓
 3. 结果裁剪：选取 Top-K 段落，控制 token 数量
   ↓
@@ -50,11 +51,12 @@ summary: "RAG 与 LLM 集成 #  检索增强生成（Retrieval-Augmented Generat
 | ------ | -------------------- | ------------------- | ------------------ |
 | BM25   | 精确匹配，无需向量化 | 无法理解语义相似性  | 关键词明确的 FAQ   |
 | kNN    | 语义理解，跨表述匹配 | 需要 Embedding 服务 | 语义搜索、知识问答 |
-| Hybrid | 兼顾精确和语义       | 复杂度稍高          | 推荐首选方案       |
+| 复合查询 | 同一请求兼顾精确和语义 | 分数分布不同，需调 `boost` | 需要同时召回关键词和近邻 |
+| 混合搜索 | 按排名融合多路结果 | 需要搜索管道和 `hybrid` 查询 | 各路分数不可比时的首选 |
 
-### Hybrid 检索示例
+### 复合查询示例
 
-```
+```json
 POST knowledge_base/_search
 {
   "size": 5,
@@ -63,14 +65,11 @@ POST knowledge_base/_search
     "bool": {
       "must": [
         {
-          "knn_nearest_neighbors": {
+          "knn": {
             "field": "content_vector",
-            "vec": {
-              "values": [0.12, -0.34, ...]
-            },
-            "model": "lsh",
-            "similarity": "cosine",
-            "candidates": 50
+            "query_vector": [0.12, -0.34, ...],
+            "k": 5,
+            "num_candidates": 50
           }
         }
       ],
