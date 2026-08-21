@@ -28,6 +28,7 @@ Latest (In development) #  Breaking changes #  Features #   新增 Easysearch 2.
 - 手动证书模式下创建集群需一并上传管理员客户端证书与私钥，Agent 无法自行签发该证书。
 - 服务设置页支持管理管理员证书：展示证书路径与过期时间、下载证书文件（不含私钥）；更换 HTTP CA 或重新生成证书时引导重新上传管理员证书并重新输入口令。
 - 数据探索导出文档改用PIT导出，导出数量不受限于max_result_window
+- UI: 新增 keystore 管理页面
 ### Bug fix
 - 修复 UI 插件创建角色无法选择粗粒度权限 action group 的问题
 - 修复 UI 插件创建角色时集群权限与索引权限被强制必填的问题，两者放开为可选，与 API 行为保持一致。
