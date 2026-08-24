@@ -9,11 +9,10 @@ curl -sSL http://get.infini.cloud | bash -s -- -p agent Windows 用户可以手�
   Linux / macOS
 cd agent-x.y.z-xxxx ./agent-x.y.z   Windows
 cd agent-x.y.z-xxxx .\agent-x.y.z.exe     浏览器访问 Agent
-Agent UI 默认监听在 http://127.0.0.1:9000，浏览器打开此地址。
-  登录 Agent
-见 服务管理登录
-  创建 Easysearch 集群
-图形化部署支持 2 种创建集群的方式，见:"
+Agent UI 默认监听在 http://127.0.0.1:23000，浏览器打开此地址。
+ Agent &lt;= 1.31.2 默认监听 http://127.0.0.1:9000。
+   登录 Agent
+见 服务管理登录"
 ---
 
 
@@ -52,7 +51,9 @@ Agent 支持图形化一键拉起新集群（开发/生产双模式），用户�
 
 4. 浏览器访问 Agent
 
-   Agent UI 默认监听在 `http://127.0.0.1:9000`，浏览器打开此地址。
+   Agent UI 默认监听在 `http://127.0.0.1:23000`，浏览器打开此地址。
+
+   > Agent <= 1.31.2 默认监听 `http://127.0.0.1:9000`。
 
 5. 登录 Agent
 

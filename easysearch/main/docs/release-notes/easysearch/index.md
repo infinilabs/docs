@@ -29,14 +29,16 @@ Latest (In development) #  Breaking changes #  Features #   新增 Easysearch 2.
 - 服务设置页支持管理管理员证书：展示证书路径与过期时间、下载证书文件（不含私钥）；更换 HTTP CA 或重新生成证书时引导重新上传管理员证书并重新输入口令。
 - 数据探索导出文档改用PIT导出，导出数量不受限于max_result_window
 - UI: 新增 keystore 管理页面
+- 生命周期策略编辑器（新建/编辑）全面增强：支持完整 action 配置
 ### Bug fix
 - 修复 UI 插件创建角色无法选择粗粒度权限 action group 的问题
 - 修复 UI 插件创建角色时集群权限与索引权限被强制必填的问题，两者放开为可选，与 API 行为保持一致。
 - 修复数据探索导出文档数量不能超过10000的限制
 - (向导): 修复security.enabled: false 的集群巡检报错 invalid index name [_security]
+- 移除了生命周期策略编辑器中错误的节点标签缺失实时提醒
 
 ### Improvements
-
+- 生命周期策略「索引优先级」改为可选开关：编辑原本未配置 index_priority 的策略时不再被强制注入默认值。
 ## 2.3.1 (2026-07-29)
 ### Breaking changes
 ### Features
