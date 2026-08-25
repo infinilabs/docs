@@ -30,6 +30,10 @@ Latest (In development) #  Breaking changes #  Features #   新增 Easysearch 2.
 - 数据探索导出文档改用PIT导出，导出数量不受限于max_result_window
 - UI: 新增 keystore 管理页面
 - 生命周期策略编辑器（新建/编辑）全面增强：支持完整 action 配置
+- UI 恢复快照支持恢复成为可搜索快照
+- 给可搜索快照索引在索引列表中添加图标标记
+- 创建API token/角色，分配索引权限时，索引列表提供下拉选择和搜索功能
+
 ### Bug fix
 - 修复 UI 插件创建角色无法选择粗粒度权限 action group 的问题
 - 修复 UI 插件创建角色时集群权限与索引权限被强制必填的问题，两者放开为可选，与 API 行为保持一致。
