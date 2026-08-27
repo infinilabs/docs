@@ -38,6 +38,7 @@ Latest (In development) #  Breaking changes #  Features #   新增 Easysearch 2.
 - 修复 UI 插件创建角色无法选择粗粒度权限 action group 的问题
 - 修复 UI 插件创建角色时集群权限与索引权限被强制必填的问题，两者放开为可选，与 API 行为保持一致。
 - 修复数据探索导出文档数量不能超过10000的限制
+- 修复获取集群准入凭据失败时无任何提示的问题：Agent 外置模式下 `/home` 页错误被全局静默，直接模式下全局 toast 与弹窗提示重复报错；现改为失败原因统一在弹窗内展示（登出、token 过期等全局行为不受影响）。
 - (向导): 修复security.enabled: false 的集群巡检报错 invalid index name [_security]
 - 移除了生命周期策略编辑器中错误的节点标签缺失实时提醒
 
