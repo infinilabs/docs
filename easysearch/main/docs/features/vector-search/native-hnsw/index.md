@@ -96,14 +96,14 @@ POST /native-hnsw-demo/_search
 | --- | --- | --- |
 | `field` | 是 | 已索引的 `dense_vector` 字段名 |
 | `query_vector` | 是 | 查询向量，维度必须与字段 mapping 一致 |
-| `k` | 否 | 每个分片返回的最近邻数量，必须大于 0；省略时使用请求的 `size` |
+| `k` | 否 | 每个分片返回的最近邻数量，必须大于 0；省略时以请求的 `size` 为基准；仅在省略 `k` 时，如果同时设置了更小的 `num_candidates`，有效值会被限制为 `num_candidates` |
 | `num_candidates` | 否 | 每个分片搜索的候选数量，必须不小于 `k`，最大为 10000 |
 | `filter` | 否 | 在 HNSW 搜索过程中应用的预过滤查询，可传单个查询或查询数组 |
 | `similarity` | 否 | 最低相似度阈值，含义取决于字段 mapping 的 `similarity` |
 | `boost` | 否 | 对向量得分应用的权重 |
 | `_name` | 否 | 命名查询，命中结果会返回对应的 `matched_queries` |
 
-省略 `num_candidates` 时，其值按 `min(1.5 × k, 10000)` 计算并四舍五入。增大候选数量通常可以提高召回率，但会增加查询开销。
+省略 `num_candidates` 时，其值按 `min(1.5 × k, 10000)` 计算并四舍五入。省略 `k` 时先以请求的 `size` 作为 `k`；如果显式设置的 `num_candidates` 小于该值，`k` 和候选数都会使用这个较小值。增大候选数量通常可以提高召回率，但会增加查询开销。
 
 query-level `k` 是每个分片的候选数量，最终响应条数仍由外层 `size` 控制。需要跨分片严格执行全局 `k` 时，使用顶层 `knn`。
 

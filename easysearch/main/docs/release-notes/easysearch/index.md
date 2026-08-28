@@ -33,6 +33,7 @@ Latest (In development) #  Breaking changes #  Features #   新增 Easysearch 2.
 - UI 恢复快照支持恢复成为可搜索快照
 - 给可搜索快照索引在索引列表中添加图标标记
 - 创建API token/角色，分配索引权限时，索引列表提供下拉选择和搜索功能
+- UI: 插件列表页支持手动上传插件：可从文件夹或 zip 压缩包上传，上传前由 Agent 侧完成插件包校验（含内置模块重名检测），确认后安装插件并重启服务；插件描述按界面语言展示本地化文案
 
 ### Bug fix
 - 修复 UI 插件创建角色无法选择粗粒度权限 action group 的问题
@@ -41,6 +42,7 @@ Latest (In development) #  Breaking changes #  Features #   新增 Easysearch 2.
 - 修复获取集群准入凭据失败时无任何提示的问题：Agent 外置模式下 `/home` 页错误被全局静默，直接模式下全局 toast 与弹窗提示重复报错；现改为失败原因统一在弹窗内展示（登出、token 过期等全局行为不受影响）。
 - (向导): 修复security.enabled: false 的集群巡检报错 invalid index name [_security]
 - 移除了生命周期策略编辑器中错误的节点标签缺失实时提醒
+- 允许 Agent 拉起来的节点在连接 Agent 时配置 API Token
 
 ### Improvements
 - 生命周期策略「索引优先级」改为可选开关：编辑原本未配置 index_priority 的策略时不再被强制注入默认值。

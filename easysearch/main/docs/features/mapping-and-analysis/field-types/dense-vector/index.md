@@ -67,6 +67,8 @@ PUT /native-hnsw-demo
 | `m` | 否 | `16` | 1–512 | 每个节点保留的最大连接数。增大该值通常提高召回率，同时增加内存、存储和构建成本 |
 | `ef_construction` | 否 | `100` | 1–3200 | 构建图时使用的候选队列大小。增大该值通常提高图质量，同时降低写入速度 |
 
+`m` 和 `ef_construction` 的取值范围由底层 Lucene HNSW vectors format 校验。mapping 解析阶段会保存这两个值，但不一定立即创建该 format；因此非法值可能不会在创建或更新 mapping 时报告，而会在首次写入包含该向量字段的文档、为该字段创建 segment writer 时失败。生产配置应在写入前使用有效范围。
+
 未指定 `m` 和 `ef_construction` 时，可以使用简化写法：
 
 ```json

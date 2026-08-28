@@ -359,7 +359,7 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
     }
   }
 }
-</code></pre></div><blockquote><p>⚠️ 精确搜索的时间复杂度为 O(n²)，适用于文档数量较少的场景。</p></blockquote><p>精确搜索支持的相似度：</p><table><thead><tr><th>向量类型</th><th>可用相似度</th></tr></thead><tbody><tr><td><code>knn_dense_float_vector</code></td><td><code>cosine</code>、<code>l1</code>、<code>l2</code></td></tr><tr><td><code>knn_sparse_bool_vector</code></td><td><code>jaccard</code>、<code>hamming</code></td></tr></tbody></table><hr><h2 id=引用已索引向量>引用已索引向量
+</code></pre></div><blockquote><p>⚠️ 精确搜索需要遍历包含向量的文档，并对每个向量按维度计算相似度，单次查询的主要成本约为 O(n × dims)，再加上维护 top-k 结果的开销。成本会随文档数线性增长，适用于文档数量较少的场景。</p></blockquote><p>精确搜索支持的相似度：</p><table><thead><tr><th>向量类型</th><th>可用相似度</th></tr></thead><tbody><tr><td><code>knn_dense_float_vector</code></td><td><code>cosine</code>、<code>l1</code>、<code>l2</code></td></tr><tr><td><code>knn_sparse_bool_vector</code></td><td><code>jaccard</code>、<code>hamming</code></td></tr></tbody></table><hr><h2 id=引用已索引向量>引用已索引向量
 <a class=anchor href=#%e5%bc%95%e7%94%a8%e5%b7%b2%e7%b4%a2%e5%bc%95%e5%90%91%e9%87%8f>#</a></h2><p>使用索引中已有文档的向量作为查询向量，适用于"查找相似文档"的场景：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>GET /my-vectors/_search
 {
   <span style=color:#ff79c6>&#34;size&#34;</span>: <span style=color:#bd93f9>10</span>,
