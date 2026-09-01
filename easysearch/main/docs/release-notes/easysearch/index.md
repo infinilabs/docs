@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #   新增 Easysearch 2.4.0 原生 HNSW 向量搜索：内置 dense_vector、Lucene HNSW、query-level knn 和顶层 knn，新建原生 HNSW 索引无需安装 k-NN 插件。  支持 1–4096 维 float 向量、cosine、dot_product、l2_norm、max_inner_product，以及 m、ef_construction 和查询 num_candidates 参数。 mapping 必须显式设置 dims、index: true 和 index_options.type: hnsw。Elasticsearch 8.19 默认的 int8_hnsw mapping 不能直接使用；2.4.0 只支持显式 hnsw 和 float 向量。 对齐已验证的 Elasticsearch 8.19.17 显式 HNSW mapping、kNN 查询和 wire 合同，并已验证 Elasticsearch Java 8."
+Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.4.0 (2026-09-01) #  Breaking changes #  Features #   新增 Easysearch 2.4.0 原生 HNSW 向量搜索：内置 dense_vector、Lucene HNSW、query-level knn 和顶层 knn，新建原生 HNSW 索引无需安装 k-NN 插件。  支持 1–4096 维 float 向量、cosine、dot_product、l2_norm、max_inner_product，以及 m、ef_construction 和查询 num_candidates 参数。 mapping 必须显式设置 dims 和 index: true。 省略 index_options 时，Easysearch 2."
 ---
 
 
@@ -11,18 +11,30 @@ Latest (In development) #  Breaking changes #  Features #   新增 Easysearch 2.
 这里是 INFINI Easysearch 历史版本发布的相关说明。
 
 ## Latest (In development)
-
 ### Breaking changes
-
 ### Features
+### Bug fix
+### Improvements
 
+
+## 2.4.0 (2026-09-01)
+### Breaking changes
+### Features
 - 新增 [Easysearch 2.4.0 原生 HNSW 向量搜索]({{< relref "/docs/features/vector-search/native-hnsw.md" >}})：内置 `dense_vector`、Lucene HNSW、query-level `knn` 和顶层 `knn`，新建原生 HNSW 索引无需安装 k-NN 插件。
   - 支持 1–4096 维 `float` 向量、`cosine`、`dot_product`、`l2_norm`、`max_inner_product`，以及 `m`、`ef_construction` 和查询 `num_candidates` 参数。
-  - mapping 必须显式设置 `dims`、`index: true` 和 `index_options.type: hnsw`。Elasticsearch 8.19 默认的 `int8_hnsw` mapping 不能直接使用；2.4.0 只支持显式 `hnsw` 和 `float` 向量。
-  - 对齐已验证的 Elasticsearch 8.19.17 显式 HNSW mapping、kNN 查询和 wire 合同，并已验证 Elasticsearch Java 8.19.17 与 Python 8.19.3 官方客户端。使用这些客户端执行 HNSW 工作负载时，需要在所有节点上开启 `elasticsearch.api_compatibility: true`、设置 `elasticsearch.api_compatibility_version: "8.19.17"` 并重启节点。
+  - mapping 必须显式设置 `dims` 和 `index: true`。
+  - 省略 `index_options` 时，Easysearch 2.4.0 默认使用并在 mapping 中回显 `hnsw(m=16, ef_construction=100)`。
+    该默认值使用未量化的 `float` 向量，与 Elasticsearch 8.19 默认的 `int8_hnsw` 存储不等价；Easysearch 2.4.0 仍不支持
+    显式 `int8_hnsw` 和其他量化向量类型。
+  - **Elasticsearch 8.19 兼容范围：** 已验证 Elasticsearch 8.19.17 显式 float HNSW mapping、省略 `index_options` 的
+    `dense_vector` mapping、Bulk、kNN 查询和 wire 行为，以及 Elasticsearch Java 8.19.17 与 Python 8.19.3 官方客户端。
+    该兼容范围不包含 `int8_hnsw` 等量化格式，也不表示 Elasticsearch segment、索引目录或快照可以与 Easysearch
+    直接互换。使用这些客户端执行 HNSW 工作负载时，需要在所有节点上开启
+    `elasticsearch.api_compatibility: true`、设置 `elasticsearch.api_compatibility_version: "8.19.17"` 并重启节点。
   - 已索引 `dense_vector` 只能添加到由 2.4.0 或更高版本创建的索引，且所有数据节点必须为 2.4.0 或更高版本；旧索引需要新建目标索引并 Reindex。
   - 旧 k-NN 插件的 `knn_dense_float_vector`、`knn_sparse_bool_vector` 和 `knn_nearest_neighbors` 接口继续保留，用于已有旧插件索引和兼容场景；新旧字段与查询语法不能混用。
-  - 2.4.0 不支持顶层 lexical `query` 与顶层 `knn` 同时使用、多个顶层 kNN、nested kNN、量化向量和 retriever 接口。
+  - 支持一个顶层 lexical `query` 与一个顶层 `knn` 同时使用：两个分支取 OR 并集，重叠文档的 boost 后分数相加。
+    2.4.0 仍不支持多个顶层 kNN、nested kNN、量化向量和 retriever 接口。
 - 服务管理 UI 支持重置受管 Easysearch 集群的管理员密码：服务列表新增「重置密码」入口，凭创建集群时设置的管理员证书口令即可重置，无需知道旧密码。
 - 服务创建流程新增管理员证书口令字段（必填、可随机生成并复制），用于保护管理员证书私钥，并作为后续重置管理员密码的凭证。
 - 手动证书模式下创建集群需一并上传管理员客户端证书与私钥，Agent 无法自行签发该证书。
@@ -35,8 +47,12 @@ Latest (In development) #  Breaking changes #  Features #   新增 Easysearch 2.
 - 创建API token/角色，分配索引权限时，索引列表提供下拉选择和搜索功能
 - UI: 插件列表页支持手动上传插件：可从文件夹或 zip 压缩包上传，上传前由 Agent 侧完成插件包校验（含内置模块重名检测），确认后安装插件并重启服务；插件描述按界面语言展示本地化文案
 - UI 设置页新增集群设置：完整展示集群全部动态配置项，支持临时/持久/默认三层查看与编辑、清空临时层、按来源筛选和搜索，配置 key 一键复制，当前生效的配置层高亮显示
-
 ### Bug fix
+- 修复授权弹窗打开后“授权提示”页签可能自动消失的问题，页签列表现在只随授权状态变化。
+- 修复授权信息中未授权状态的类型显示为不规范英文的问题，现在按界面语言显示“未授权 / Unlicensed”。
+- 修复删除关联了多个索引的别名时请求失败的问题，现在可正常删除多索引别名。
+- 修复列表页左侧聚合过滤侧边栏的搜索框输入关键字后无法筛选选项的问题，现在可正常按关键字过滤聚合值列表。
+- 修复分片列表页点击刷新按钮不重新加载数据的问题，现在刷新后列表中的分片与索引健康状态都会更新。
 - 修复 UI 插件创建角色无法选择粗粒度权限 action group 的问题
 - 修复 UI 插件创建角色时集群权限与索引权限被强制必填的问题，两者放开为可选，与 API 行为保持一致。
 - 修复数据探索导出文档数量不能超过10000的限制
@@ -44,9 +60,9 @@ Latest (In development) #  Breaking changes #  Features #   新增 Easysearch 2.
 - (向导): 修复security.enabled: false 的集群巡检报错 invalid index name [_security]
 - 移除了生命周期策略编辑器中错误的节点标签缺失实时提醒
 - 允许 Agent 拉起来的节点在连接 Agent 时配置 API Token
-
 ### Improvements
 - 生命周期策略「索引优先级」改为可选开关：编辑原本未配置 index_priority 的策略时不再被强制注入默认值。
+
 ## 2.3.1 (2026-07-29)
 ### Breaking changes
 ### Features

@@ -4,8 +4,8 @@ date: 0001-01-01
 description: "Easysearch 2.4.0 原生 HNSW dense_vector 字段的映射参数、约束和使用示例。"
 summary: "dense_vector 字段类型 #  dense_vector 用于保存稠密浮点向量，并通过 Lucene 原生 HNSW 索引执行近似最近邻搜索。该能力从 Easysearch 2.4.0 开始内置，不需要安装 k-NN 插件。
 旧 k-NN 插件的 knn_dense_float_vector 和 knn_sparse_bool_vector 字段仍然保留，参考 K-NN 向量字段类型。两套字段和查询语法不同， 新建原生 HNSW 索引时使用本页的 dense_vector。
-创建映射 #  Easysearch 2.4.0 要求显式指定 dims、index: true 和 index_options.type: hnsw：
-PUT /native-hnsw-demo { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;title&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;embedding&#34;: { &#34;type&#34;: &#34;dense_vector&#34;, &#34;dims&#34;: 4, &#34;element_type&#34;: &#34;float&#34;, &#34;index&#34;: true, &#34;similarity&#34;: &#34;cosine&#34;, &#34;index_options&#34;: { &#34;type&#34;: &#34;hnsw&#34;, &#34;m&#34;: 16, &#34;ef_construction&#34;: 100 } } } } } 映射参数 #     参数 是否必填 默认值 说明     type 是 - 必须为 dense_vector   dims 是 - 向量维度，取值范围为 1–4096   element_type 否 float 2."
+创建映射 #  Easysearch 2.4.0 要求显式指定 dims 和 index: true。以下示例省略 index_options：
+PUT /native-hnsw-demo { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;title&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;embedding&#34;: { &#34;type&#34;: &#34;dense_vector&#34;, &#34;dims&#34;: 4, &#34;element_type&#34;: &#34;float&#34;, &#34;index&#34;: true, &#34;similarity&#34;: &#34;cosine&#34; } } } }  重要：省略 index_options 后仍会建立 HNSW 索引。 Easysearch 2."
 ---
 
 
@@ -20,7 +20,7 @@ PUT /native-hnsw-demo { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;title
 
 ## 创建映射
 
-Easysearch 2.4.0 要求显式指定 `dims`、`index: true` 和 `index_options.type: hnsw`：
+Easysearch 2.4.0 要求显式指定 `dims` 和 `index: true`。以下示例省略 `index_options`：
 
 ```json
 PUT /native-hnsw-demo
@@ -35,17 +35,16 @@ PUT /native-hnsw-demo
         "dims": 4,
         "element_type": "float",
         "index": true,
-        "similarity": "cosine",
-        "index_options": {
-          "type": "hnsw",
-          "m": 16,
-          "ef_construction": 100
-        }
+        "similarity": "cosine"
       }
     }
   }
 }
 ```
+
+> **重要：省略 `index_options` 后仍会建立 HNSW 索引。** Easysearch 2.4.0 默认使用
+> `hnsw(m=16, ef_construction=100)`，并会在 mapping 响应中回显这组实际参数。该默认值使用未量化的 `float`
+> 向量，与 Elasticsearch 8.19 默认的 `int8_hnsw` 存储不等价。
 
 ## 映射参数
 
@@ -56,10 +55,10 @@ PUT /native-hnsw-demo
 | `element_type` | 否 | `float` | 2.4.0 仅支持 `float` |
 | `index` | 是 | - | 2.4.0 必须显式设置为 `true` |
 | `similarity` | 否 | `cosine` | 向量相似度，取值见下表 |
-| `index_options` | 是 | - | 2.4.0 必须显式指定原生 HNSW 配置 |
+| `index_options` | 否 | `hnsw(m=16, ef_construction=100)` | 原生 HNSW 配置；需要调整构图参数时显式设置 |
 | `meta` | 否 | - | 字段元数据 |
 
-`index_options` 支持以下参数：
+显式设置 `index_options` 时支持以下参数：
 
 | 参数 | 是否必填 | 默认值 | 取值范围 | 说明 |
 | --- | --- | --- | --- | --- |
@@ -69,7 +68,7 @@ PUT /native-hnsw-demo
 
 `m` 和 `ef_construction` 的取值范围由底层 Lucene HNSW vectors format 校验。mapping 解析阶段会保存这两个值，但不一定立即创建该 format；因此非法值可能不会在创建或更新 mapping 时报告，而会在首次写入包含该向量字段的文档、为该字段创建 segment writer 时失败。生产配置应在写入前使用有效范围。
 
-未指定 `m` 和 `ef_construction` 时，可以使用简化写法：
+显式提供 `index_options` 但不需要自定义 `m` 和 `ef_construction` 时，也可以使用以下写法：
 
 ```json
 "embedding": {

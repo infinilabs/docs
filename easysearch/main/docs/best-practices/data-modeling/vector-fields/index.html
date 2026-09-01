@@ -254,17 +254,13 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
         <span style=color:#ff79c6>&#34;type&#34;</span>: <span style=color:#f1fa8c>&#34;dense_vector&#34;</span>,
         <span style=color:#ff79c6>&#34;dims&#34;</span>: <span style=color:#bd93f9>384</span>,
         <span style=color:#ff79c6>&#34;index&#34;</span>: <span style=color:#ff79c6>true</span>,
-        <span style=color:#ff79c6>&#34;similarity&#34;</span>: <span style=color:#f1fa8c>&#34;cosine&#34;</span>,
-        <span style=color:#ff79c6>&#34;index_options&#34;</span>: {
-          <span style=color:#ff79c6>&#34;type&#34;</span>: <span style=color:#f1fa8c>&#34;hnsw&#34;</span>,
-          <span style=color:#ff79c6>&#34;m&#34;</span>: <span style=color:#bd93f9>16</span>,
-          <span style=color:#ff79c6>&#34;ef_construction&#34;</span>: <span style=color:#bd93f9>100</span>
-        }
+        <span style=color:#ff79c6>&#34;similarity&#34;</span>: <span style=color:#f1fa8c>&#34;cosine&#34;</span>
       }
     }
   }
 }
-</code></pre></div><p>Easysearch 2.4.0 的原生 <code>dense_vector</code> 有以下建模约束：</p><table><thead><tr><th>决策</th><th>2.4.0 合同</th></tr></thead><tbody><tr><td>维度</td><td><code>dims</code> 必填，范围为 1–4096，写入和查询向量必须完全一致</td></tr><tr><td>元素类型</td><td>仅支持 <code>float</code></td></tr><tr><td>索引</td><td>必须显式设置 <code>index: true</code></td></tr><tr><td>索引类型</td><td>必须显式设置 <code>index_options.type: hnsw</code></td></tr><tr><td>字段值</td><td>单值向量；同一字段不能保存多个向量</td></tr><tr><td>相似度</td><td><code>cosine</code>、<code>dot_product</code>、<code>l2_norm</code> 或 <code>max_inner_product</code></td></tr><tr><td>存储</td><td>向量保留在 <code>_source</code>，同时写入 Lucene 向量索引；不支持 doc values、排序或聚合</td></tr></tbody></table><h2 id=选择维度和相似度>选择维度和相似度
+</code></pre></div><blockquote><p><strong>重要：上述 mapping 省略了 <code>index_options</code>，但向量仍会使用 HNSW 索引。</strong> Easysearch 2.4.0 默认使用并回显
+<code>hnsw(m=16, ef_construction=100)</code>。只有需要调整构图参数时，才需要显式设置 <code>index_options</code>。</p></blockquote><p>Easysearch 2.4.0 的原生 <code>dense_vector</code> 有以下建模约束：</p><table><thead><tr><th>决策</th><th>2.4.0 合同</th></tr></thead><tbody><tr><td>维度</td><td><code>dims</code> 必填，范围为 1–4096，写入和查询向量必须完全一致</td></tr><tr><td>元素类型</td><td>仅支持 <code>float</code></td></tr><tr><td>索引</td><td>必须显式设置 <code>index: true</code></td></tr><tr><td>索引类型</td><td><code>index_options</code> 可省略；默认使用 <code>hnsw(m=16, ef_construction=100)</code></td></tr><tr><td>字段值</td><td>单值向量；同一字段不能保存多个向量</td></tr><tr><td>相似度</td><td><code>cosine</code>、<code>dot_product</code>、<code>l2_norm</code> 或 <code>max_inner_product</code></td></tr><tr><td>存储</td><td>向量保留在 <code>_source</code>，同时写入 Lucene 向量索引；不支持 doc values、排序或聚合</td></tr></tbody></table><h2 id=选择维度和相似度>选择维度和相似度
 <a class=anchor href=#%e9%80%89%e6%8b%a9%e7%bb%b4%e5%ba%a6%e5%92%8c%e7%9b%b8%e4%bc%bc%e5%ba%a6>#</a></h2><p><code>dims</code> 由 Embedding 模型输出决定，不能在 Easysearch 中任意缩放。更换维度意味着更换字段或新建索引，不能原地修改已有字段。</p><p>仅计算 float32 数据时，每条向量至少需要约 <code>dims × 4</code> 字节。这个数值不包含 <code>_source</code> 中的 JSON、HNSW 图、Lucene 元数据、
 其他字段、segment 合并临时空间和副本，不能直接当作最终 store size。</p><table><thead><tr><th style=text-align:right>维度</th><th style=text-align:right>float32 原始数据下限/文档</th></tr></thead><tbody><tr><td style=text-align:right>128</td><td style=text-align:right>512 B</td></tr><tr><td style=text-align:right>384</td><td style=text-align:right>1.5 KiB</td></tr><tr><td style=text-align:right>768</td><td style=text-align:right>3 KiB</td></tr><tr><td style=text-align:right>1536</td><td style=text-align:right>6 KiB</td></tr></tbody></table><p>选择模型时先以业务 Recall、NDCG 等效果指标为门槛，再比较写入吞吐、查询延迟和存储。不要仅根据“常见维度”决定生产模型，也不要
 假定更高维度一定带来更好的业务效果。</p><p>相似度必须与模型训练和输出约定一致：</p><ul><li><code>cosine</code> 适合按夹角比较的 Embedding；零向量会被拒绝，Easysearch 会为索引和查询执行归一化；</li><li><code>dot_product</code> 要求写入和查询向量均为单位向量；</li><li><code>l2_norm</code> 使用欧氏距离，适合未归一化的连续向量；</li><li><code>max_inner_product</code> 允许向量幅值影响排序。</li></ul><h2 id=单向量和多向量>单向量和多向量
@@ -305,50 +301,55 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
 }
 </code></pre></div><p>这种普通浮点数组不能用于原生 <code>knn</code> 查询。</p><h2 id=写入和一致性>写入和一致性
 <a class=anchor href=#%e5%86%99%e5%85%a5%e5%92%8c%e4%b8%80%e8%87%b4%e6%80%a7>#</a></h2><p>向量通常由外部 Embedding 服务生成。无论同步生成还是异步回填，都应在写入前验证：</p><ul><li>模型版本与目标字段一致；</li><li>数组长度等于 <code>dims</code>；</li><li>所有元素都是有限数值；</li><li><code>dot_product</code> 向量已经归一化，<code>cosine</code> 向量不是零向量；</li><li>文档中的文本版本和向量版本可以追踪，避免文本已更新而向量仍然陈旧。</li></ul><p>初始导入和大规模回填应使用 Bulk，并检查每个 Bulk item 的状态。HTTP 请求成功不代表所有文档都已写入。可以根据业务需要延长
-<code>refresh_interval</code>、暂时减少副本，但导入结束后必须恢复生产设置，等待集群健康，并用代表性查询验证 Recall 和错误率。</p><p>异步生成时，文档可以先不包含向量字段；向量生成完成后再通过 Update 写入。建议增加模型版本和处理状态字段，例如：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
-  <span style=color:#ff79c6>&#34;embedding_model&#34;</span>: <span style=color:#f1fa8c>&#34;text-model-v3&#34;</span>,
-  <span style=color:#ff79c6>&#34;embedding_status&#34;</span>: <span style=color:#f1fa8c>&#34;ready&#34;</span>,
-  <span style=color:#ff79c6>&#34;embedding&#34;</span>: [<span style=color:#bd93f9>0.12</span>, <span style=color:#bd93f9>-0.03</span>, <span style=color:#bd93f9>0.08</span>, ...]
+<code>refresh_interval</code>、暂时减少副本，但导入结束后必须恢复生产设置，等待集群健康，并用代表性查询验证 Recall 和错误率。</p><p>异步生成时，文档可以先不包含向量字段；向量生成完成后再通过 Update 写入。建议增加模型版本和处理状态字段。
+以下仅展示文档结构，向量元素已省略，不能直接作为写入请求发送；实际写入必须提供完整的 384 维向量：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>{
+  &#34;embedding_model&#34;: &#34;text-model-v3&#34;,
+  &#34;embedding_status&#34;: &#34;ready&#34;,
+  &#34;embedding&#34;: [0.12, -0.03, 0.08 /* 省略其余元素，共 384 维 */]
 }
 </code></pre></div><p>应用查询时应过滤或跳过尚未生成向量的文档，并监控待处理数量和最长等待时间。</p><h2 id=模型升级和迁移>模型升级和迁移
 <a class=anchor href=#%e6%a8%a1%e5%9e%8b%e5%8d%87%e7%ba%a7%e5%92%8c%e8%bf%81%e7%a7%bb>#</a></h2><p>以下变化需要新字段或新索引，不能直接修改已有 <code>dense_vector</code> 字段：</p><ul><li>Embedding 维度或相似度变化；</li><li>从旧 k-NN 插件字段迁移到原生 HNSW；</li><li>希望减小 HNSW 的 <code>m</code>；</li><li>希望移除旧向量字段或回收其 store。</li></ul><p>短期模型 A/B 可以在同一新索引中增加 <code>embedding_v2</code> 并双写；要彻底回收旧字段空间，仍需创建目标索引并 Reindex。迁移时保留模型
 版本，核对文档数、失败项、Recall、延迟和 store，再通过 alias 原子切换。完整步骤见
 <a href=/easysearch/main/docs/features/vector-search/native-hnsw/#迁移现有索引>迁移现有索引</a>。</p><h2 id=查询建模>查询建模
-<a class=anchor href=#%e6%9f%a5%e8%af%a2%e5%bb%ba%e6%a8%a1>#</a></h2><p>需要与全文查询组合时，使用 query-level <code>knn</code>。过滤条件应放在 <code>knn.filter</code> 中，以便在 HNSW 搜索期间预过滤：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>POST /documents-v<span style=color:#bd93f9>1</span>/_search
+<a class=anchor href=#%e6%9f%a5%e8%af%a2%e5%bb%ba%e6%a8%a1>#</a></h2><p>需要与全文查询组合时，应先确定融合语义：</p><ul><li>需要全文召回与全局 kNN top-k 取 OR 并集、重叠文档分数相加时，并列使用一个普通顶层 <code>query</code> 和一个顶层 <code>knn</code>；</li><li>需要 AND、<code>minimum_should_match</code> 或更复杂的布尔关系时，将 query-level <code>knn</code> 放入 <code>bool</code> 等复合查询。</li></ul><p>只约束向量候选的过滤条件应放在 <code>knn.filter</code> 中，以便在 HNSW 搜索期间预过滤。如果同一业务约束必须同时作用于全文和向量
+分支，应在两个分支中分别表达。下面是使用 query-level <code>knn</code> 的复合查询结构示例。其中向量仅展示前三个元素，
+不能直接执行；实际查询必须提供完整的 384 维向量：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>POST /documents-v1/_search
 {
-  <span style=color:#ff79c6>&#34;size&#34;</span>: <span style=color:#bd93f9>10</span>,
-  <span style=color:#ff79c6>&#34;query&#34;</span>: {
-    <span style=color:#ff79c6>&#34;bool&#34;</span>: {
-      <span style=color:#ff79c6>&#34;must&#34;</span>: {
-        <span style=color:#ff79c6>&#34;knn&#34;</span>: {
-          <span style=color:#ff79c6>&#34;field&#34;</span>: <span style=color:#f1fa8c>&#34;embedding&#34;</span>,
-          <span style=color:#ff79c6>&#34;query_vector&#34;</span>: [<span style=color:#bd93f9>0.12</span>, <span style=color:#bd93f9>-0.03</span>, <span style=color:#bd93f9>0.08</span>, ...],
-          <span style=color:#ff79c6>&#34;k&#34;</span>: <span style=color:#bd93f9>10</span>,
-          <span style=color:#ff79c6>&#34;num_candidates&#34;</span>: <span style=color:#bd93f9>100</span>,
-          <span style=color:#ff79c6>&#34;filter&#34;</span>: {
-            <span style=color:#ff79c6>&#34;term&#34;</span>: {
-              <span style=color:#ff79c6>&#34;category&#34;</span>: <span style=color:#f1fa8c>&#34;manual&#34;</span>
+  &#34;size&#34;: 10,
+  &#34;query&#34;: {
+    &#34;bool&#34;: {
+      &#34;must&#34;: {
+        &#34;knn&#34;: {
+          &#34;field&#34;: &#34;embedding&#34;,
+          &#34;query_vector&#34;: [0.12, -0.03, 0.08 /* 省略其余元素，共 384 维 */],
+          &#34;k&#34;: 10,
+          &#34;num_candidates&#34;: 100,
+          &#34;filter&#34;: {
+            &#34;term&#34;: {
+              &#34;category&#34;: &#34;manual&#34;
             }
           }
         }
       },
-      <span style=color:#ff79c6>&#34;should&#34;</span>: {
-        <span style=color:#ff79c6>&#34;match&#34;</span>: {
-          <span style=color:#ff79c6>&#34;content&#34;</span>: {
-            <span style=color:#ff79c6>&#34;query&#34;</span>: <span style=color:#f1fa8c>&#34;向量索引配置&#34;</span>,
-            <span style=color:#ff79c6>&#34;boost&#34;</span>: <span style=color:#bd93f9>0.5</span>
+      &#34;should&#34;: {
+        &#34;match&#34;: {
+          &#34;content&#34;: {
+            &#34;query&#34;: &#34;向量索引配置&#34;,
+            &#34;boost&#34;: 0.5
           }
         }
       }
     }
   }
 }
-</code></pre></div><p><code>num_candidates</code> 通常越大 Recall 越高，但 CPU 和延迟也越高。使用代表真实业务的查询集调参，并同时记录 Recall、P50/P95/P99、
-QPS 和错误率。顶层 <code>knn</code> 适合多分片严格全局 top-k，但 Easysearch 2.4.0 不能把顶层 <code>knn</code> 与普通顶层 <code>query</code> 并列使用。</p><h2 id=容量和运维>容量和运维
+</code></pre></div><p>该示例要求 query-level <code>knn</code> 命中，全文 <code>match</code> 只参与加分。如果要求向量和全文都命中，应将两个子句都放入 <code>bool.must</code>。</p><p><code>num_candidates</code> 通常越大 Recall 越高，但 CPU 和延迟也越高。使用代表真实业务的查询集调参，并同时记录 Recall、P50/P95/P99、
+QPS 和错误率。顶层 <code>knn</code> 适合在多分片候选中协调选取全局 top-k。Easysearch 2.4.0 也支持一个普通顶层
+<code>query</code> 与一个顶层 <code>knn</code> 并列使用：两个分支取 OR 并集，重叠文档的 boost 后分数相加，<code>knn.filter</code> 只约束向量分支。多个顶层 <code>knn</code> 仍不支持。</p><h2 id=容量和运维>容量和运维
 <a class=anchor href=#%e5%ae%b9%e9%87%8f%e5%92%8c%e8%bf%90%e7%bb%b4>#</a></h2><p>容量评估必须使用真实数据和自然 segment 拓扑。HNSW 图按 segment 构建；过于频繁的 refresh 会产生大量小 segment，后台 merge
 又会增加 CPU、I/O 和临时磁盘开销。force merge 后的单 segment 结果不能代表持续写入场景。</p><p>上线前至少验证：</p><table><thead><tr><th>项目</th><th>应记录的证据</th></tr></thead><tbody><tr><td>检索效果</td><td>Recall@K、NDCG 或业务标注指标</td></tr><tr><td>查询</td><td>并发 QPS、P50/P95/P99、错误率、查询 CPU</td></tr><tr><td>写入</td><td>Bulk 吞吐、失败项、refresh/merge 时间、GC</td></tr><tr><td>存储</td><td>store size、segment 数、分片和副本总占用</td></tr><tr><td>资源</td><td>JVM heap、进程 RSS、文件系统缓存、磁盘水位和 thread-pool rejection</td></tr></tbody></table><p>不同数据分布、过滤选择性、维度、<code>m</code> 和 <code>num_candidates</code> 的结果不能直接互相替代。调参时一次只改变一个关键变量，并保留可复现的
 mapping、语料、查询集和结果。</p><h2 id=建模检查清单>建模检查清单
-<a class=anchor href=#%e5%bb%ba%e6%a8%a1%e6%a3%80%e6%9f%a5%e6%b8%85%e5%8d%95>#</a></h2><ul><li>确认新索引使用原生 HNSW 还是已有旧插件接口，不混用字段和查询语法；</li><li>冻结 Embedding 模型、版本、维度、归一化和相似度合同；</li><li>为每个 <code>dense_vector</code> 显式设置 <code>index: true</code> 和 <code>index_options.type: hnsw</code>；</li><li>只为实际需要独立查询的语义视角建立向量字段；</li><li>设计同步或异步写入的失败恢复、模型版本和陈旧向量检测；</li><li>用生产预期的文档量、过滤条件、并发和 segment 拓扑验收效果、性能与容量；</li><li>模型或 mapping 合同变化时通过新字段或新索引迁移，并保留 alias 回滚路径。</li></ul><h2 id=相关章节>相关章节
+<a class=anchor href=#%e5%bb%ba%e6%a8%a1%e6%a3%80%e6%9f%a5%e6%b8%85%e5%8d%95>#</a></h2><ul><li>确认新索引使用原生 HNSW 还是已有旧插件接口，不混用字段和查询语法；</li><li>冻结 Embedding 模型、版本、维度、归一化和相似度合同；</li><li>为每个 <code>dense_vector</code> 显式设置 <code>index: true</code>；如果省略 <code>index_options</code>，确认默认的 <code>hnsw(m=16, ef_construction=100)</code>
+符合效果和容量需求；</li><li>只为实际需要独立查询的语义视角建立向量字段；</li><li>设计同步或异步写入的失败恢复、模型版本和陈旧向量检测；</li><li>用生产预期的文档量、过滤条件、并发和 segment 拓扑验收效果、性能与容量；</li><li>模型或 mapping 合同变化时通过新字段或新索引迁移，并保留 alias 回滚路径。</li></ul><h2 id=相关章节>相关章节
 <a class=anchor href=#%e7%9b%b8%e5%85%b3%e7%ab%a0%e8%8a%82>#</a></h2><ul><li><a href=/easysearch/main/docs/features/vector-search/native-hnsw/>原生 HNSW 搜索</a></li><li><a href=/easysearch/main/docs/features/mapping-and-analysis/field-types/dense-vector/>dense_vector 字段类型</a></li><li><a href=/easysearch/main/docs/features/vector-search/vector-and-semantic-search/>向量搜索与语义搜索</a></li><li><a href=/easysearch/main/docs/integrations/ai/vector-workflow/>向量工作流</a></li><li><a href=/easysearch/main/docs/features/mapping-and-analysis/field-types/knn/>旧 k-NN 插件字段</a></li></ul></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div class="flex align-center footer">©INFINI.LTD, All Rights Reserved.</div><script async src="https://www.googletagmanager.com/gtag/js?id=G-RJPTVP614C"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
 gtag('js',new Date());gtag('config','G-RJPTVP614C');</script><script type=text/javascript>var _smartsupp=_smartsupp||{};_smartsupp.key='691ff544d18a237005a011a7290b839d8fe811a4';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script></div><script type=module>
   import { searchbox } from "https:\/\/coco.infini.cloud\/integration\/cvn0g9ehpcehvsthrakg\/widget";

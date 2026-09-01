@@ -3,8 +3,7 @@ title: "原生 HNSW 搜索"
 date: 0001-01-01
 description: "使用 Easysearch 2.4.0 原生 dense_vector、knn query 和顶层 knn 执行 HNSW 向量搜索。"
 summary: "原生 HNSW 搜索 #  Easysearch 2.4.0 内置基于 Lucene 的 HNSW 向量索引。新建原生 HNSW 索引不需要安装插件，使用 dense_vector mapping 和 标准 _search API 即可完成写入和检索。
-旧 k-NN 插件继续使用 knn_dense_float_vector、knn_sparse_bool_vector 和 knn_nearest_neighbors。旧接口的使用方法参考 旧 k-NN 查询 API。不要在同一个字段上混用两套语法。
-完整示例 #  创建索引 #  PUT /native-hnsw-demo { &#34;settings&#34;: { &#34;number_of_shards&#34;: 1, &#34;number_of_replicas&#34;: 0 }, &#34;mappings&#34;: { &#34;properties&#34;: { &#34;title&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;tenant&#34;: { &#34;type&#34;: &#34;keyword&#34; }, &#34;embedding&#34;: { &#34;type&#34;: &#34;dense_vector&#34;, &#34;dims&#34;: 4, &#34;element_type&#34;: &#34;float&#34;, &#34;index&#34;: true, &#34;similarity&#34;: &#34;cosine&#34;, &#34;index_options&#34;: { &#34;type&#34;: &#34;hnsw&#34;, &#34;m&#34;: 16, &#34;ef_construction&#34;: 100 } } } } } 完整的 mapping 参数参考 dense_vector 字段类型。"
+ Elasticsearch 8.19 兼容范围： Easysearch 2.4.0 已验证 Elasticsearch 8.19.17 的显式 float HNSW mapping，以及省略 index_options 的 dense_vector mapping、Bulk、query-level kNN、顶层 kNN、单个顶层 query + knn 的 OR/加分语义。 Java 8.19.17 和 Python 8.19.3 官方客户端也已验证。这里的“兼容”指已验证的 API、wire 和查询行为。省略 index_options 时， Easysearch 使用 float HNSW，不表示支持 Elasticsearch 默认的 int8_hnsw，也不表示 Elasticsearch segment、索引目录或快照 可以与 Easysearch 直接互换。使用 Elasticsearch 8.19 官方客户端时，还必须开启本页 Elasticsearch 8."
 ---
 
 
@@ -12,6 +11,13 @@ summary: "原生 HNSW 搜索 #  Easysearch 2.4.0 内置基于 Lucene 的 HNSW �
 
 Easysearch 2.4.0 内置基于 Lucene 的 HNSW 向量索引。新建原生 HNSW 索引不需要安装插件，使用 `dense_vector` mapping 和
 标准 `_search` API 即可完成写入和检索。
+
+> **Elasticsearch 8.19 兼容范围：** Easysearch 2.4.0 已验证 Elasticsearch 8.19.17 的显式 float HNSW mapping，以及省略
+> `index_options` 的 `dense_vector` mapping、Bulk、query-level kNN、顶层 kNN、单个顶层 `query` + `knn` 的 OR/加分语义。
+> Java 8.19.17 和 Python 8.19.3 官方客户端也已验证。这里的“兼容”指已验证的 API、wire 和查询行为。省略 `index_options` 时，
+> Easysearch 使用 float HNSW，不表示支持 Elasticsearch 默认的 `int8_hnsw`，也不表示 Elasticsearch segment、索引目录或快照
+> 可以与 Easysearch 直接互换。使用 Elasticsearch 8.19 官方客户端时，还必须开启本页
+> [Elasticsearch 8.19 客户端](#elasticsearch-819-客户端)一节说明的 API 兼容模式。
 
 旧 k-NN 插件继续使用 `knn_dense_float_vector`、`knn_sparse_bool_vector` 和 `knn_nearest_neighbors`。旧接口的使用方法参考
 [旧 k-NN 查询 API]({{< relref "/docs/features/vector-search/knn_api.md" >}})。不要在同一个字段上混用两套语法。
@@ -40,17 +46,15 @@ PUT /native-hnsw-demo
         "dims": 4,
         "element_type": "float",
         "index": true,
-        "similarity": "cosine",
-        "index_options": {
-          "type": "hnsw",
-          "m": 16,
-          "ef_construction": 100
-        }
+        "similarity": "cosine"
       }
     }
   }
 }
 ```
+
+> **重要：本示例省略 `index_options`。** Easysearch 2.4.0 会默认建立 `hnsw(m=16, ef_construction=100)` 索引，
+> 并在 mapping 响应中回显这组参数。如果需要调整 `m` 或 `ef_construction`，再显式提供 `index_options`。
 
 完整的 mapping 参数参考
 [dense_vector 字段类型]({{< relref "/docs/features/mapping-and-analysis/field-types/dense-vector.md" >}})。
@@ -105,7 +109,8 @@ POST /native-hnsw-demo/_search
 
 省略 `num_candidates` 时，其值按 `min(1.5 × k, 10000)` 计算并四舍五入。省略 `k` 时先以请求的 `size` 作为 `k`；如果显式设置的 `num_candidates` 小于该值，`k` 和候选数都会使用这个较小值。增大候选数量通常可以提高召回率，但会增加查询开销。
 
-query-level `k` 是每个分片的候选数量，最终响应条数仍由外层 `size` 控制。需要跨分片严格执行全局 `k` 时，使用顶层 `knn`。
+query-level `k` 是每个分片的候选数量，最终响应条数仍由外层 `size` 控制。需要由协调节点从各分片候选中选出全局 `k` 个结果时，
+使用顶层 `knn`。HNSW 仍是近似最近邻搜索，这里的“全局”指跨分片协调选取，不表示 exact kNN。
 
 ### 带过滤条件
 
@@ -164,36 +169,56 @@ POST /native-hnsw-demo/_search
 
 ## 顶层 knn
 
-将 `knn` 放在搜索请求顶层，可以在多分片搜索中协调候选结果并返回全局 top-k。
+将 `knn` 放在搜索请求顶层，可以在多分片搜索中协调候选结果并返回全局 top-k。Easysearch 2.4.0 支持在同一个请求中并列使用
+一个普通顶层 `query` 和一个顶层 `knn`，用于关键词与向量的加权复合检索。
 
-> Easysearch 2.4.0 不支持在同一个请求中同时使用顶层 `knn` 和普通 `query`。需要组合 lexical 查询和向量查询时，
-> 请将 query-level `knn` 放入 `bool` 等复合查询；不要把 `query` 与顶层 `knn` 并列发送。
+### 与普通 query 组合
 
-例如，以下请求会失败：
+下面的请求同时执行全文查询和全局 kNN：
 
 ```json
 POST /native-hnsw-demo/_search
 {
+  "size": 5,
   "query": {
     "match": {
-      "title": "向量"
+      "title": {
+        "query": "向量",
+        "boost": 0.5,
+        "_name": "lexical"
+      }
     }
   },
   "knn": {
     "field": "embedding",
     "query_vector": [1.0, 0.0, 0.0, 0.0],
-    "k": 3
+    "k": 2,
+    "num_candidates": 4,
+    "filter": {
+      "term": {
+        "tenant": "a"
+      }
+    },
+    "boost": 0.7,
+    "_name": "vector"
   }
 }
 ```
 
-错误响应的 `reason` 为：
+组合请求采用本项目已验证的 Elasticsearch 8.19.17 OR/加分语义：
 
-```text
-P0 does not support combining a lexical [query] with top-level [knn]
-```
+- 只命中 `query` 的文档保留全文分数；
+- 只进入全局 kNN top-k 的文档保留向量分数；
+- 同时命中两个分支的文档在结果中只出现一次，最终 `_score` 为两个分支应用各自 `boost` 后的分数之和；
+- 两个分支都设置 `_name` 时，重叠文档的 `matched_queries` 同时包含两个名称；
+- `knn.filter` 只限制向量候选，不会过滤普通 `query` 分支的命中；需要约束两个分支时，应在两个分支中分别表达约束；
+- `hits.total` 统计最终并集的命中数（受 `track_total_hits` 设置影响），可以大于 kNN 的 `k`；响应中的 hit 数组仍由 `from`
+  和 `size` 截取。
 
-### 正确的顶层 knn
+顶层组合适合“全文召回 OR 向量召回”的加权复合检索。如果需要 AND、`minimum_should_match` 或更复杂的布尔关系，应将
+query-level `knn` 放入 `bool` 等复合查询，由复合查询明确控制组合逻辑。
+
+### 单独使用顶层 knn
 
 ```json
 POST /native-hnsw-demo/_search
@@ -226,7 +251,7 @@ POST /native-hnsw-demo/_search
 }
 ```
 
-数组中不能包含多个 `knn` 对象。多路 kNN，以及在同一请求中同时使用顶层 `knn` 和 lexical `query`，不属于 2.4.0 的原生 HNSW 支持范围。
+数组中不能包含多个 `knn` 对象。Easysearch 2.4.0 支持一个普通顶层 `query` 与一个顶层 `knn` 组合，但不支持多路顶层 kNN。
 
 ## 相似度阈值
 
@@ -293,9 +318,11 @@ POST /native-hnsw-demo/_search
 | 场景 | 推荐形式 |
 | --- | --- |
 | 单分片索引或需要嵌入复合查询 | query-level `knn` |
-| 多分片索引并要求严格全局 top-k | 顶层 `knn` |
+| 多分片索引并需要协调后的全局 top-k | 单独使用顶层 `knn` |
+| 全文召回与全局向量召回取 OR 并集并累加重叠分数 | 普通顶层 `query` + 一个顶层 `knn` |
+| 需要 AND、`minimum_should_match` 或复杂布尔逻辑 | 将 query-level `knn` 放入复合查询 |
 | 需要在 HNSW 搜索中预过滤 | 两种形式均可使用 `filter` |
-| 多路 kNN，或顶层 `knn` 与 lexical `query` 并列 | 2.4.0 暂不支持 |
+| 多路顶层 kNN | 2.4.0 暂不支持 |
 
 ## 生产调优
 
@@ -505,6 +532,9 @@ Easysearch 2.4.0 原生 HNSW 不提供以下 Elasticsearch 向量接口：
 - `_source.exclude_vectors`；
 - nested kNN 和 `inner_hits`；
 - byte、bit 和量化向量查询。
+
+一个普通顶层 `query` 与一个顶层 `knn` 并列使用属于支持范围；上面的“多个顶层 `knn` 子句”限制不应理解为禁止单 kNN
+加权复合检索。
 
 这些限制只针对本页的原生 HNSW。旧 k-NN 插件能力和语法继续按旧插件文档使用。
 

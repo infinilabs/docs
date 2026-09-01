@@ -170,10 +170,12 @@ print(response["result"])
 
 ## 复合检索（关键词 + 向量）
 
-Easysearch 2.4.0 **不支持** `ElasticsearchStore.ApproxRetrievalStrategy(hybrid=True)`。该策略会发送并列的
-顶层 `knn` 和 `query`，并可能带上 Elasticsearch `rank.rrf`；Easysearch 2.4.0 会拒绝这种请求。
+Easysearch 2.4.0 在协议层支持一个普通顶层 `query` 与一个顶层 `knn` 并列使用，但不支持 Elasticsearch
+`rank.rrf`、多个顶层 kNN 和 retriever 接口。`ElasticsearchStore.ApproxRetrievalStrategy(hybrid=True)` 生成的请求会随
+LangChain 版本和策略配置变化：只包含上述单个顶层组合时属于 Easysearch 支持范围；如果带有 `rank`、多个顶层 kNN
+或 retriever 字段，Easysearch 2.4.0 会拒绝请求。使用前应核对当前 LangChain 版本实际生成的请求体。
 
-需要关键词和向量复合检索时，使用 Elasticsearch Python 客户端发送 query-level `knn` + `bool` 查询。
+为避免 LangChain 版本差异，可以使用 Elasticsearch Python 客户端发送 query-level `knn` + `bool` 查询。
 查询向量由与写入时相同的 Embedding 模型生成：
 
 ```python
@@ -217,7 +219,7 @@ response = es.search(
 | Embedding 维度 | 必须与 `dense_vector` 的 `dims` 以及模型输出一致 |
 | HTTPS | Easysearch 默认启用 HTTPS，注意证书配置 |
 | API 兼容 | 开启 `elasticsearch.api_compatibility: true`，HNSW 工作负载使用 `"8.19.17"` |
-| LangChain Hybrid | 不要使用 `ApproxRetrievalStrategy(hybrid=True)`；Easysearch 2.4.0 不支持它生成的顶层组合请求 |
+| LangChain Hybrid | 先核对当前版本生成的请求体；单个顶层 `query` + `knn` 受支持，`rank.rrf`、多个顶层 kNN 和 retriever 不受支持 |
 | 旧 k-NN 插件 | 新索引不需要安装 k-NN 插件；不要把字段建成 `knn_dense_float_vector` |
 
 ## 延伸阅读

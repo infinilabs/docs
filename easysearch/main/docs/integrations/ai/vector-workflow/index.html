@@ -255,20 +255,16 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
         <span style=color:#ff79c6>&#34;type&#34;</span>: <span style=color:#f1fa8c>&#34;dense_vector&#34;</span>,
         <span style=color:#ff79c6>&#34;dims&#34;</span>: <span style=color:#bd93f9>768</span>,
         <span style=color:#ff79c6>&#34;index&#34;</span>: <span style=color:#ff79c6>true</span>,
-        <span style=color:#ff79c6>&#34;similarity&#34;</span>: <span style=color:#f1fa8c>&#34;cosine&#34;</span>,
-        <span style=color:#ff79c6>&#34;index_options&#34;</span>: {
-          <span style=color:#ff79c6>&#34;type&#34;</span>: <span style=color:#f1fa8c>&#34;hnsw&#34;</span>,
-          <span style=color:#ff79c6>&#34;m&#34;</span>: <span style=color:#bd93f9>16</span>,
-          <span style=color:#ff79c6>&#34;ef_construction&#34;</span>: <span style=color:#bd93f9>100</span>
-        }
+        <span style=color:#ff79c6>&#34;similarity&#34;</span>: <span style=color:#f1fa8c>&#34;cosine&#34;</span>
       },
       <span style=color:#ff79c6>&#34;category&#34;</span>: { <span style=color:#ff79c6>&#34;type&#34;</span>: <span style=color:#f1fa8c>&#34;keyword&#34;</span> },
       <span style=color:#ff79c6>&#34;created_at&#34;</span>: { <span style=color:#ff79c6>&#34;type&#34;</span>: <span style=color:#f1fa8c>&#34;date&#34;</span> }
     }
   }
 }
-</code></pre></div><h3 id=向量字段参数>向量字段参数
-<a class=anchor href=#%e5%90%91%e9%87%8f%e5%ad%97%e6%ae%b5%e5%8f%82%e6%95%b0>#</a></h3><table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td><code>dims</code></td><td>向量维度，必须与 Embedding 模型输出维度一致</td></tr><tr><td><code>index</code></td><td>2.4.0 原生 <code>dense_vector</code> 必须显式设置为 <code>true</code></td></tr><tr><td><code>similarity</code></td><td><code>cosine</code>、<code>dot_product</code>、<code>l2_norm</code> 或 <code>max_inner_product</code></td></tr><tr><td><code>index_options.type</code></td><td>2.4.0 必须显式设置为 <code>hnsw</code></td></tr><tr><td><code>m</code></td><td>HNSW 图中每个节点保留的最大连接数</td></tr><tr><td><code>ef_construction</code></td><td>构图候选队列大小</td></tr></tbody></table><h2 id=向量写入>向量写入
+</code></pre></div><blockquote><p><strong>重要：省略 <code>index_options</code> 后仍会使用 HNSW。</strong> Easysearch 2.4.0 默认使用并回显
+<code>hnsw(m=16, ef_construction=100)</code>；需要调整构图参数时再显式配置 <code>index_options</code>。</p></blockquote><h3 id=向量字段参数>向量字段参数
+<a class=anchor href=#%e5%90%91%e9%87%8f%e5%ad%97%e6%ae%b5%e5%8f%82%e6%95%b0>#</a></h3><table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td><code>dims</code></td><td>向量维度，必须与 Embedding 模型输出维度一致</td></tr><tr><td><code>index</code></td><td>2.4.0 原生 <code>dense_vector</code> 必须显式设置为 <code>true</code></td></tr><tr><td><code>similarity</code></td><td><code>cosine</code>、<code>dot_product</code>、<code>l2_norm</code> 或 <code>max_inner_product</code></td></tr><tr><td><code>index_options</code></td><td>可省略；默认为 <code>hnsw(m=16, ef_construction=100)</code></td></tr><tr><td><code>m</code></td><td>显式设置 <code>index_options</code> 时可调；HNSW 图中每个节点保留的最大连接数</td></tr><tr><td><code>ef_construction</code></td><td>显式设置 <code>index_options</code> 时可调；构图候选队列大小</td></tr></tbody></table><h2 id=向量写入>向量写入
 <a class=anchor href=#%e5%90%91%e9%87%8f%e5%86%99%e5%85%a5>#</a></h2><h3 id=方式一ingest-pipeline-自动向量化>方式一：Ingest Pipeline 自动向量化
 <a class=anchor href=#%e6%96%b9%e5%bc%8f%e4%b8%80ingest-pipeline-%e8%87%aa%e5%8a%a8%e5%90%91%e9%87%8f%e5%8c%96>#</a></h3><p>该方式需要安装 AI 插件。配置 Ingest Pipeline 在写入时自动调用 Embedding 服务；<code>dims</code> 必须与目标 <code>dense_vector</code> mapping 和模型
 输出一致：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>PUT _ingest/pipeline/vectorize

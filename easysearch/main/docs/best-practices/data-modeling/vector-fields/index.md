@@ -5,7 +5,7 @@ description: "Easysearch 2.4.0 原生 HNSW 向量字段的维度、字段数量�
 summary: "向量字段建模 #  本页说明如何为 Easysearch 2.4.0 原生 HNSW 设计向量字段。新索引使用 dense_vector 和 knn 查询，无需安装 k-NN 插件。 已有旧插件索引仍使用 knn_dense_float_vector、knn_sparse_bool_vector 和 knn_nearest_neighbors，两套字段与查询语法不能混用。
 完整参数和查询合同分别见 dense_vector 字段类型和 原生 HNSW 搜索。
 基本映射 #  典型语义搜索文档同时保存全文字段、过滤字段和一个向量字段：
-PUT /documents-v1 { &#34;settings&#34;: { &#34;number_of_shards&#34;: 2, &#34;number_of_replicas&#34;: 1 }, &#34;mappings&#34;: { &#34;properties&#34;: { &#34;title&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;content&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;category&#34;: { &#34;type&#34;: &#34;keyword&#34; }, &#34;embedding&#34;: { &#34;type&#34;: &#34;dense_vector&#34;, &#34;dims&#34;: 384, &#34;index&#34;: true, &#34;similarity&#34;: &#34;cosine&#34;, &#34;index_options&#34;: { &#34;type&#34;: &#34;hnsw&#34;, &#34;m&#34;: 16, &#34;ef_construction&#34;: 100 } } } } } Easysearch 2."
+PUT /documents-v1 { &#34;settings&#34;: { &#34;number_of_shards&#34;: 2, &#34;number_of_replicas&#34;: 1 }, &#34;mappings&#34;: { &#34;properties&#34;: { &#34;title&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;content&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;category&#34;: { &#34;type&#34;: &#34;keyword&#34; }, &#34;embedding&#34;: { &#34;type&#34;: &#34;dense_vector&#34;, &#34;dims&#34;: 384, &#34;index&#34;: true, &#34;similarity&#34;: &#34;cosine&#34; } } } }  重要：上述 mapping 省略了 index_options，但向量仍会使用 HNSW 索引。 Easysearch 2."
 ---
 
 
@@ -43,17 +43,15 @@ PUT /documents-v1
         "type": "dense_vector",
         "dims": 384,
         "index": true,
-        "similarity": "cosine",
-        "index_options": {
-          "type": "hnsw",
-          "m": 16,
-          "ef_construction": 100
-        }
+        "similarity": "cosine"
       }
     }
   }
 }
 ```
+
+> **重要：上述 mapping 省略了 `index_options`，但向量仍会使用 HNSW 索引。** Easysearch 2.4.0 默认使用并回显
+> `hnsw(m=16, ef_construction=100)`。只有需要调整构图参数时，才需要显式设置 `index_options`。
 
 Easysearch 2.4.0 的原生 `dense_vector` 有以下建模约束：
 
@@ -62,7 +60,7 @@ Easysearch 2.4.0 的原生 `dense_vector` 有以下建模约束：
 | 维度 | `dims` 必填，范围为 1–4096，写入和查询向量必须完全一致 |
 | 元素类型 | 仅支持 `float` |
 | 索引 | 必须显式设置 `index: true` |
-| 索引类型 | 必须显式设置 `index_options.type: hnsw` |
+| 索引类型 | `index_options` 可省略；默认使用 `hnsw(m=16, ef_construction=100)` |
 | 字段值 | 单值向量；同一字段不能保存多个向量 |
 | 相似度 | `cosine`、`dot_product`、`l2_norm` 或 `max_inner_product` |
 | 存储 | 向量保留在 `_source`，同时写入 Lucene 向量索引；不支持 doc values、排序或聚合 |
@@ -155,13 +153,14 @@ Easysearch 2.4.0 不支持 `dense_vector` 的 `index: false`。如果只想在 `
 初始导入和大规模回填应使用 Bulk，并检查每个 Bulk item 的状态。HTTP 请求成功不代表所有文档都已写入。可以根据业务需要延长
 `refresh_interval`、暂时减少副本，但导入结束后必须恢复生产设置，等待集群健康，并用代表性查询验证 Recall 和错误率。
 
-异步生成时，文档可以先不包含向量字段；向量生成完成后再通过 Update 写入。建议增加模型版本和处理状态字段，例如：
+异步生成时，文档可以先不包含向量字段；向量生成完成后再通过 Update 写入。建议增加模型版本和处理状态字段。
+以下仅展示文档结构，向量元素已省略，不能直接作为写入请求发送；实际写入必须提供完整的 384 维向量：
 
-```json
+```jsonc
 {
   "embedding_model": "text-model-v3",
   "embedding_status": "ready",
-  "embedding": [0.12, -0.03, 0.08, ...]
+  "embedding": [0.12, -0.03, 0.08 /* 省略其余元素，共 384 维 */]
 }
 ```
 
@@ -182,9 +181,16 @@ Easysearch 2.4.0 不支持 `dense_vector` 的 `index: false`。如果只想在 `
 
 ## 查询建模
 
-需要与全文查询组合时，使用 query-level `knn`。过滤条件应放在 `knn.filter` 中，以便在 HNSW 搜索期间预过滤：
+需要与全文查询组合时，应先确定融合语义：
 
-```json
+- 需要全文召回与全局 kNN top-k 取 OR 并集、重叠文档分数相加时，并列使用一个普通顶层 `query` 和一个顶层 `knn`；
+- 需要 AND、`minimum_should_match` 或更复杂的布尔关系时，将 query-level `knn` 放入 `bool` 等复合查询。
+
+只约束向量候选的过滤条件应放在 `knn.filter` 中，以便在 HNSW 搜索期间预过滤。如果同一业务约束必须同时作用于全文和向量
+分支，应在两个分支中分别表达。下面是使用 query-level `knn` 的复合查询结构示例。其中向量仅展示前三个元素，
+不能直接执行；实际查询必须提供完整的 384 维向量：
+
+```jsonc
 POST /documents-v1/_search
 {
   "size": 10,
@@ -193,7 +199,7 @@ POST /documents-v1/_search
       "must": {
         "knn": {
           "field": "embedding",
-          "query_vector": [0.12, -0.03, 0.08, ...],
+          "query_vector": [0.12, -0.03, 0.08 /* 省略其余元素，共 384 维 */],
           "k": 10,
           "num_candidates": 100,
           "filter": {
@@ -216,8 +222,11 @@ POST /documents-v1/_search
 }
 ```
 
+该示例要求 query-level `knn` 命中，全文 `match` 只参与加分。如果要求向量和全文都命中，应将两个子句都放入 `bool.must`。
+
 `num_candidates` 通常越大 Recall 越高，但 CPU 和延迟也越高。使用代表真实业务的查询集调参，并同时记录 Recall、P50/P95/P99、
-QPS 和错误率。顶层 `knn` 适合多分片严格全局 top-k，但 Easysearch 2.4.0 不能把顶层 `knn` 与普通顶层 `query` 并列使用。
+QPS 和错误率。顶层 `knn` 适合在多分片候选中协调选取全局 top-k。Easysearch 2.4.0 也支持一个普通顶层
+`query` 与一个顶层 `knn` 并列使用：两个分支取 OR 并集，重叠文档的 boost 后分数相加，`knn.filter` 只约束向量分支。多个顶层 `knn` 仍不支持。
 
 ## 容量和运维
 
@@ -241,7 +250,8 @@ mapping、语料、查询集和结果。
 
 - 确认新索引使用原生 HNSW 还是已有旧插件接口，不混用字段和查询语法；
 - 冻结 Embedding 模型、版本、维度、归一化和相似度合同；
-- 为每个 `dense_vector` 显式设置 `index: true` 和 `index_options.type: hnsw`；
+- 为每个 `dense_vector` 显式设置 `index: true`；如果省略 `index_options`，确认默认的 `hnsw(m=16, ef_construction=100)`
+  符合效果和容量需求；
 - 只为实际需要独立查询的语义视角建立向量字段；
 - 设计同步或异步写入的失败恢复、模型版本和陈旧向量检测；
 - 用生产预期的文档量、过滤条件、并发和 segment 拓扑验收效果、性能与容量；
