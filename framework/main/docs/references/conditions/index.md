@@ -1,17 +1,16 @@
 ---
 title: "Conditions"
 date: 0001-01-01
-summary: "Conditions #  The INFINI Framework provides a powerful conditions system for evaluating events against configurable rules. Conditions are used throughout the framework — most notably in pipeline if/then/else branching — to make runtime decisions based on field values, patterns, numeric ranges, network membership, and logical combinations.
-The conditions package is located at core/conditions/.
-Condition Interface #  Every condition implements the Condition interface:
-type Condition interface { Check(event ValuesMap) bool String() string }    Method Description     Check(event ValuesMap) bool Evaluates the condition against an event."
+summary: "Conditions #  The INFINI Framework provides a conditions system for evaluating events against configurable rules. Conditions are used throughout the framework — most notably in pipeline if/then/else branching — to make runtime decisions based on field values, patterns, numeric ranges, network membership, and logical combinations.
+Each operator has its own reference page under this section, kept in a uniform format: what it tests, its parameters, and examples.
+Condition Interface #  Every condition implements the Condition interface:"
 ---
 
 # Conditions
 
-The INFINI Framework provides a powerful conditions system for evaluating events against configurable rules. Conditions are used throughout the framework — most notably in pipeline `if`/`then`/`else` branching — to make runtime decisions based on field values, patterns, numeric ranges, network membership, and logical combinations.
+The INFINI Framework provides a conditions system for evaluating events against configurable rules. Conditions are used throughout the framework — most notably in pipeline `if`/`then`/`else` branching — to make runtime decisions based on field values, patterns, numeric ranges, network membership, and logical combinations.
 
-The conditions package is located at `core/conditions/`.
+Each operator has its own reference page under this section, kept in a uniform format: what it tests, its parameters, and examples.
 
 ## Condition Interface
 
@@ -37,11 +36,18 @@ type ValuesMap interface {
 }
 ```
 
-Fields are referenced using dot notation (e.g., `_ctx.request.method`, `http.response.status_code`). If a field does not exist, `GetValue` returns an error and the condition typically evaluates to `false`.
+## Evaluation Scope
+
+The condition's field lookups resolve against different sources depending on where the `if` block runs:
+
+- **Per-record sub-chains** (e.g. inside `for_each`): conditions evaluate against the **current record**, and field names refer to the record's own attributes (`file.path`, `log_level`, ...) — dot notation walks nested fields.
+- **Pipeline level** (no record bound): conditions evaluate against the **pipeline context**, where fields are referenced through the `_ctx.` prefix (e.g. `_ctx.request.method`).
+
+If a field does not exist, `GetValue` returns an error and the condition typically evaluates to `false`.
 
 ## Config Struct
 
-Conditions are declared in YAML configuration and deserialized into the `Config` struct:
+Conditions are declared in YAML configuration and deserialized into the `Config` struct (`core/conditions/`):
 
 ```go
 type Config struct {
@@ -64,264 +70,28 @@ type Config struct {
 }
 ```
 
-A `Config` is converted into a live `Condition` using the factory functions:
-
-```go
-func NewCondition(config *Config) (Condition, error)
-func NewConditionList(config []Config) ([]Condition, error)
-```
-
-Each `Config` must contain exactly **one** top-level operator. To combine multiple operators, use the logical operators `and`, `or`, or `not`.
-
-## Value Operators
-
-### equals
-
-Tests whether a field value is exactly equal to an expected value. Supports `string`, `int`, `float`, and `bool` types. When multiple fields are specified, **all** must match (implicit AND).
-
-```yaml
-equals:
-  _ctx.request.method: "GET"
-```
-
-```yaml
-# Multiple fields — all must match
-equals:
-  type: "process"
-  proc.pid: 305
-```
-
-### contains
-
-Tests whether a string field contains a given substring. Also works on arrays of strings — returns `true` if any element contains the substring.
-
-```yaml
-contains:
-  _ctx.request.uri: "/api"
-```
-
-### regexp
-
-Tests whether a string field matches a regular expression pattern. Also supports matching against arrays of strings.
-
-```yaml
-regexp:
-  source: "apache2/error.*"
-```
-
-```yaml
-regexp:
-  message: "[Ee]rror|[Ff]ailed"
-```
-
-### prefix
-
-Tests whether a string field starts with a given prefix. Accepts exactly one field.
-
-```yaml
-prefix:
-  hostname: "prod-"
-```
-
-### suffix
-
-Tests whether a string field ends with a given suffix. Accepts exactly one field.
-
-```yaml
-suffix:
-  filename: ".log"
-```
-
-### in
-
-Tests whether a field value is contained in a list of allowed values. Supports both string and integer values.
-
-```yaml
-in:
-  _ctx.response.status_code: [200, 201, 204]
-```
-
-```yaml
-in:
-  env: ["production", "staging"]
-```
-
-### range
-
-Tests whether a numeric field falls within a specified range. Supports the following comparison operators:
-
-| Operator | Meaning |
-|----------|---------|
-| `gte` | Greater than or equal to (>=) |
-| `gt` | Greater than (>) |
-| `lte` | Less than or equal to (<=) |
-| `lt` | Less than (<) |
-
-Range operators are appended to the field name with a dot separator:
-
-```yaml
-# 200 <= status_code < 300
-range:
-  _ctx.response.status_code:
-    gte: 200
-    lt: 300
-```
-
-```yaml
-# CPU usage above 90%
-range:
-  proc.cpu.total_p:
-    gt: 0.9
-```
-
-Supports `int`, `uint`, and `float` numeric types.
-
-### exists
-
-Tests whether one or more fields exist and are non-empty. Accepts a list of field names. All fields must exist for the condition to match.
-
-```yaml
-exists:
-  - username
-  - email
-  - session_id
-```
-
-### length
-
-Tests whether the length of a field's value equals an expected integer. Works with slices, arrays, strings, maps, and channels.
-
-```yaml
-length:
-  tags: 3
-```
-
-### network
-
-Tests whether an IP address field belongs to a specific network. Accepts named network identifiers or CIDR notation.
-
-**Named networks:**
-
-| Name | Description |
-|------|-------------|
-| `loopback` | Loopback addresses (e.g., `127.0.0.1`, `::1`) |
-| `private` | RFC 1918 (IPv4) and RFC 4193 (IPv6) private addresses |
-| `public` | Any address that is not local or private |
-| `global_unicast` | Global unicast addresses |
-| `unicast` | Alias for `global_unicast` |
-| `link_local_unicast` | Link-local unicast addresses |
-| `multicast` | Multicast addresses |
-| `link_local_multicast` | Link-local multicast addresses |
-| `interface_local_multicast` | Interface-local multicast addresses |
-| `unspecified` | The unspecified address (`0.0.0.0` or `::`) |
-
-```yaml
-# Named network
-network:
-  client_ip: private
-```
-
-```yaml
-# CIDR notation
-network:
-  source.ip: "192.168.1.0/24"
-```
-
-Multiple networks can be specified as a list — the field matches if it belongs to **any** of them:
-
-```yaml
-network:
-  client_ip: ["private", "loopback"]
-```
-
-## Logical Operators
-
-Logical operators combine or negate conditions to build complex expressions.
-
-### and
-
-Evaluates to `true` only when **all** inner conditions are true. Uses short-circuit evaluation — stops checking on the first `false`.
-
-```yaml
-and:
-  - equals:
-      _ctx.request.method: "POST"
-  - contains:
-      _ctx.request.uri: "/api"
-```
-
-### or
-
-Evaluates to `true` when **any** inner condition is true. Uses short-circuit evaluation — stops checking on the first `true`.
-
-```yaml
-or:
-  - equals:
-      _ctx.response.status_code: 401
-  - equals:
-      _ctx.response.status_code: 403
-```
-
-### not
-
-Negates a single inner condition. Evaluates to `true` when the inner condition is `false`.
-
-```yaml
-not:
-  contains:
-    _ctx.request.uri: "/health"
-```
-
-### Nesting Logical Operators
-
-Logical operators can be nested to any depth:
-
-```yaml
-and:
-  - equals:
-      _ctx.request.method: "GET"
-  - not:
-      contains:
-        _ctx.request.uri: "/internal"
-  - or:
-      - prefix:
-          _ctx.request.uri: "/api/v1"
-      - prefix:
-          _ctx.request.uri: "/api/v2"
-```
-
-## Domain-Specific Conditions
-
-### queue_has_lag
-
-Tests whether a message queue has unconsumed messages. Accepts a list of queue specifiers. An optional `> max_depth` threshold can be appended:
-
-```yaml
-queue_has_lag:
-  - "my_queue"
-  - "my_queue > 1000"
-```
-
-### consumer_has_lag
-
-Tests whether a consumer group has fallen behind the producer on a queue:
-
-```yaml
-consumer_has_lag:
-  queue: "my_queue"
-  group: "consumer_group"
-  name: "consumer_1"
-```
-
-### cluster_available
-
-Tests whether one or more Elasticsearch clusters are available:
-
-```yaml
-cluster_available:
-  - "primary_cluster"
-  - "backup_cluster"
-```
+A `Config` must contain exactly **one** top-level operator. To combine multiple operators, use the logical operators [`and`](and/), [`or`](or/), or [`not`](not/).
+
+## Operator Reference
+
+| Operator | Kind | Description |
+|----------|------|-------------|
+| [`equals`](equals/) | Value | Exact value match (string, int, float, bool) |
+| [`contains`](contains/) | Value | Substring match on strings or string arrays |
+| [`regexp`](regexp/) | Value | Regular expression match |
+| [`prefix`](prefix/) | Value | String starts-with check |
+| [`suffix`](suffix/) | Value | String ends-with check |
+| [`in`](in/) | Value | Value membership in a list |
+| [`range`](range/) | Value | Numeric range comparison (`gt`, `gte`, `lt`, `lte`) |
+| [`exists`](exists/) | Value | Field existence and non-empty check |
+| [`length`](length/) | Value | Collection/string length equality |
+| [`network`](network/) | Value | IP address network membership |
+| [`and`](and/) | Logical | Logical AND (all must match) |
+| [`or`](or/) | Logical | Logical OR (any must match) |
+| [`not`](not/) | Logical | Logical negation |
+| [`queue_has_lag`](queue_has_lag/) | Domain | Message queue lag detection |
+| [`consumer_has_lag`](consumer_has_lag/) | Domain | Consumer group lag detection |
+| [`cluster_available`](cluster_available/) | Domain | Elasticsearch cluster availability |
 
 ## Using Conditions in Pipelines
 
@@ -346,29 +116,23 @@ pipeline:
               message: "Non-POST request"
 ```
 
-### Range-Based Routing
+### Per-Record Routing
 
 ```yaml
-pipeline:
-  - name: error_handler
-    auto_start: true
-    keep_running: true
-    processor:
-      - if:
-          range:
-            _ctx.response.status_code:
-              gte: 400
-              lt: 500
-        then:
-          - echo:
-              message: "Client error (4xx)"
-      - if:
-          range:
-            _ctx.response.status_code:
-              gte: 500
-        then:
-          - echo:
-              message: "Server error (5xx)"
+processor:
+  - for_each:
+      processor:
+        - if:
+            contains:
+              file.path: "nginx"
+          then:
+            - mutate:
+                add:
+                  route: nginx-pipeline
+          else:
+            - mutate:
+                add:
+                  route: default-pipeline
 ```
 
 ### Complex Conditions
@@ -388,42 +152,14 @@ pipeline:
                   _ctx.request.uri: "/health"
             - exists:
                 - _ctx.request.header.Authorization
-        then:
-          - echo:
-              message: "Authenticated GET request (non-health)"
-```
-
-### Nested If/Then/Else
-
-```yaml
-pipeline:
-  - name: nested_routing
-    auto_start: true
-    keep_running: true
-    processor:
-      - if:
-          equals:
-            _ctx.request.method: "POST"
-        then:
-          - if:
-              prefix:
-                _ctx.request.uri: "/api/"
-            then:
-              - echo:
-                  message: "POST to API"
-            else:
-              - echo:
-                  message: "POST to non-API"
-        else:
-          - echo:
-              message: "Non-POST request"
+          then:
+            - echo:
+                message: "Authenticated GET request (non-health)"
 ```
 
 ## Using Conditions Programmatically
 
 You can create and evaluate conditions directly from Go code:
-
-### Creating a Condition from Config
 
 ```go
 import "infini.sh/framework/core/conditions"
@@ -451,8 +187,6 @@ if cond.Check(event) {
 ### Building Compound Conditions
 
 ```go
-import "infini.sh/framework/core/conditions"
-
 cfg := &conditions.Config{
     AND: []conditions.Config{
         {
@@ -469,9 +203,6 @@ cfg := &conditions.Config{
 }
 
 cond, err := conditions.NewCondition(cfg)
-if err != nil {
-    log.Fatal(err)
-}
 ```
 
 ### Using the Context Helper
@@ -487,103 +218,3 @@ if cond.Check(ctx) {
     // Fields are looked up across all added contexts in order
 }
 ```
-
-## Complete Example
-
-The following YAML shows a pipeline that uses multiple condition types together:
-
-```yaml
-pipeline:
-  - name: request_classifier
-    auto_start: true
-    keep_running: true
-    processor:
-      # Block requests from private networks to admin endpoints
-      - if:
-          and:
-            - network:
-                client_ip: private
-            - prefix:
-                _ctx.request.uri: "/admin"
-        then:
-          - echo:
-              message: "Blocked private network access to admin"
-
-      # Route API errors
-      - if:
-          and:
-            - prefix:
-                _ctx.request.uri: "/api/"
-            - range:
-                _ctx.response.status_code:
-                  gte: 400
-        then:
-          - if:
-              range:
-                _ctx.response.status_code:
-                  lt: 500
-            then:
-              - echo:
-                  message: "API client error"
-            else:
-              - echo:
-                  message: "API server error"
-
-      # Match specific status codes
-      - if:
-          in:
-            _ctx.response.status_code: [301, 302, 307, 308]
-        then:
-          - echo:
-              message: "Redirect detected"
-
-      # Check required fields exist
-      - if:
-          not:
-            exists:
-              - _ctx.request.header.X-Request-ID
-        then:
-          - echo:
-              message: "Missing request ID header"
-
-      # Pattern matching on log sources
-      - if:
-          or:
-            - regexp:
-                source: "nginx/access.*"
-            - regexp:
-                source: "apache2/access.*"
-        then:
-          - echo:
-              message: "Web server access log"
-
-      # Queue-based routing
-      - if:
-          queue_has_lag:
-            - "indexing_queue > 5000"
-        then:
-          - echo:
-              message: "Indexing queue has significant lag"
-```
-
-## Operator Summary
-
-| Operator | YAML Key | Description |
-|----------|----------|-------------|
-| Equals | `equals` | Exact value match (string, int, float, bool) |
-| Contains | `contains` | Substring match on strings or string arrays |
-| Regexp | `regexp` | Regular expression match |
-| Prefix | `prefix` | String starts-with check |
-| Suffix | `suffix` | String ends-with check |
-| In | `in` | Value membership in a list |
-| Range | `range` | Numeric range comparison (`gt`, `gte`, `lt`, `lte`) |
-| Exists | `exists` | Field existence and non-empty check |
-| Length | `length` | Collection/string length equality |
-| Network | `network` | IP address network membership |
-| AND | `and` | Logical AND (all must match) |
-| OR | `or` | Logical OR (any must match) |
-| NOT | `not` | Logical negation |
-| Queue Has Lag | `queue_has_lag` | Message queue lag detection |
-| Consumer Has Lag | `consumer_has_lag` | Consumer group lag detection |
-| Cluster Available | `cluster_available` | Elasticsearch cluster availability |
-
