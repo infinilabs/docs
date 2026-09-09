@@ -3,8 +3,7 @@ title: "离线安装"
 date: 0001-01-01
 summary: "离线安装 Easysearch #  本文档介绍如何在没有网络连接的环境中安装 Easysearch。离线安装常见于内网、政务、金融等对网络隔离有严格要求的场景。
 准备工作（在有网络的环境中） #  在可联网的机器上提前下载所有需要的安装包：
-必需文件 #     文件 用途 下载地址     Easysearch Bundle 包 包含 Easysearch + 内置 JDK  Linux AMD64   插件包（按需） IK 分词、Pinyin、KNN 等  插件列表     Bundle 包内置了 JDK，是离线安装的最简方式，无需单独准备 JDK。
- 可选文件 #     文件 用途     INFINI Console 安装包 集群管理和监控   INFINI Gateway 安装包 查询代理和网关    Linux 环境离线安装 #  步骤 1：系统调优 #  在安装 Easysearch 之前，先完成操作系统调优（此步骤不需要网络）："
+必需文件 #     文件 用途 下载地址     Easysearch Bundle 包 包含 Easysearch + 内置 JDK + 内置插件  Linux AMD64    可选文件 #     文件 用途     INFINI Console 安装包 集群管理和监控   INFINI Gateway 安装包 查询代理和网关    Linux 环境离线安装 #  步骤 1：系统调优 #  在安装 Easysearch 之前，先完成操作系统调优（此步骤不需要网络）："
 ---
 
 
@@ -20,10 +19,7 @@ summary: "离线安装 Easysearch #  本文档介绍如何在没有网络连接�
 
 | 文件 | 用途 | 下载地址 |
 |------|------|----------|
-| Easysearch Bundle 包 | 包含 Easysearch + 内置 JDK | [Linux AMD64](https://release.infinilabs.com/easysearch/stable/) |
-| 插件包（按需） | IK 分词、Pinyin、KNN 等 | [插件列表](https://release.infinilabs.com/easysearch/stable/plugins/) |
-
-> Bundle 包内置了 JDK，是离线安装的最简方式，无需单独准备 JDK。
+| Easysearch Bundle 包 | 包含 Easysearch + 内置 JDK + 内置插件 | [Linux AMD64](https://release.infinilabs.com/easysearch/stable/bundle/) |
 
 ### 可选文件
 
@@ -63,7 +59,7 @@ useradd -u 602 -g easysearch -m -d /home/easysearch -c 'easysearch' -s /bin/bash
 
 ### 步骤 3：解压安装
 
-将预先下载的 Bundle 包传输到目标机器（通过 U 盘、SCP 等方式），然后解压安装：
+将预先下载的 Bundle 包传输到目标机器（通过 U 盘、scp 等方式），然后解压安装：
 
 ```bash
 # 创建安装目录
@@ -81,17 +77,17 @@ chown -R easysearch:easysearch /data/easysearch
 
 > 初始化完成后，admin 密码会在终端输出中显示，请务必记录。
 
-### 步骤 4：安装插件（可选）
+### 步骤 4：安装第三方插件（可选）
 
-如需使用分词等插件，将提前下载的插件包传输到目标机器后安装：
+如需使用第三方插件，将提前下载的插件包传输到目标机器后安装：
 
 ```bash
 # 切换到 easysearch 用户
 su - easysearch
 
-# 离线安装插件（以 analysis-ik 为例）
+# 离线安装插件
 cd /data/easysearch
-bin/easysearch-plugin install file:///tmp/analysis-ik-*.zip
+bin/easysearch-plugin install file:///tmp/plugin.zip
 
 # 查看已安装的插件
 bin/easysearch-plugin list
@@ -142,21 +138,19 @@ sudo systemctl start easysearch
 
 在有网络的环境中下载：
 
-- [Easysearch Windows 版](https://release.infinilabs.com/easysearch/stable/)
-- [JDK 21 Windows 版](https://release.infinilabs.com/easysearch/jdk/21/graalvm-jdk-21_windows-x64_bin.zip)
+- [Easysearch Bundle 包 Windows 版](https://release.infinilabs.com/easysearch/stable/bundle/)
 
 ### 安装步骤
 
 1. 解压 Easysearch 到目标目录（如 `D:\easysearch`）
-2. 解压 JDK 到 Easysearch 目录下，重命名为 `jdk`
-3. 修改配置文件 `config/easysearch.yml`：
+2. 修改配置文件 `config/easysearch.yml`：
 
 ```yaml
 # 如果无法在 Windows 环境生成证书，可临时禁用安全模块
 security.enabled: false
 ```
 
-4. 运行：
+3. 运行：
 
 ```bat
 bin\easysearch.bat
