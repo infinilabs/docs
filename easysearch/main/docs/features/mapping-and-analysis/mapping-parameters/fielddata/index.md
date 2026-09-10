@@ -3,7 +3,7 @@ title: "字段数据参数（Fielddata）"
 date: 0001-01-01
 summary: "Fielddata 参数 #  fielddata 参数控制 text 字段是否可以用于排序、聚合和脚本。
 默认情况下，text 字段不支持排序和聚合——因为 text 字段使用倒排索引，按词项而非完整值存储，无法高效地做正排查找。fielddata 通过将整个倒排索引加载到 JVM 堆内存来实现这一功能，但这 非常消耗内存，通常不推荐使用。
-相关指南（先读这些） #    映射基础  映射模式与最佳实践  Doc Values 参数  参数选项 #     值 说明     false 禁用 fielddata。对 text 字段执行排序/聚合会报错。默认值。   true 启用 fielddata。允许对 text 字段排序和聚合，但会大量消耗堆内存。    示例 #  PUT my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;content&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;fielddata&#34;: true } } } }  ⚠️ 警告：在生产环境中启用 fielddata 可能导致大量内存消耗，甚至触发断路器（circuit breaker）或 OOM。"
+相关指南（先读这些） #   映射基础 映射模式与最佳实践 Doc Values 参数  参数选项 #     值 说明     false 禁用 fielddata。对 text 字段执行排序/聚合会报错。默认值。   true 启用 fielddata。允许对 text 字段排序和聚合，但会大量消耗堆内存。    示例 #  PUT my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;content&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;fielddata&#34;: true } } } }  ⚠️ 警告：在生产环境中启用 fielddata 可能导致大量内存消耗，甚至触发断路器（circuit breaker）或 OOM。"
 ---
 
 

@@ -3,7 +3,7 @@ title: "百分位排名聚合（Percentile Ranks）"
 date: 0001-01-01
 summary: "百分位排名聚合 #  percentile_ranks 聚合估计低于或等于给定阈值的观测值百分比。这对于了解特定值在值分布中的相对位置很有用。
 例如，您可以使用百分位排名聚合来学习交易金额 45 与数据集中其他交易值相比如何。百分位排名聚合返回一个值，如 82.3，这意味着 82.3% 的交易额低于或等于 45。
-相关指南（先读这些） #    聚合基础  聚合场景实践  参数说明 #  percentile_ranks 聚合采用以下参数。
+相关指南（先读这些） #   聚合基础 聚合场景实践  参数说明 #  percentile_ranks 聚合采用以下参数。
    参数 必需/可选 数据类型 描述     field 必需 String 用于计算百分位数的数值字段。   values 必需 Array of doubles 用于计算百分位数的值。   keyed 可选 Boolean 如果设置为 false ，则将结果作为数组返回。否则将结果作为 JSON 对象返回。默认值为 true 。   tdigest.compression 可选 Double 控制 tdigest 算法的准确性和内存使用。参见使用 tdigest 进行精度调整。   hdr."
 ---
 

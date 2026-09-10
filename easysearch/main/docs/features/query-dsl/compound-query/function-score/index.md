@@ -2,7 +2,7 @@
 title: "Function Score 查询"
 date: 0001-01-01
 summary: "Function Score 查询 #  如果您需要更改结果中返回的文档的相关性评分，请使用 function_score 查询。function_score 查询定义了一个查询和一个或多个函数，这些函数可以应用于所有结果或结果的一部分，以重新计算它们的相关性评分。
-相关指南（先读这些） #    查询 DSL 基础  相关性：加权与调参  使用一个评分函数 #  最基础的 function_score 查询示例使用一个函数来重新计算分数。以下查询使用一个 weight 函数将所有相关性分数加倍。此函数适用于所有结果文档，因为没有在 function_score 中指定 query 参数：
+相关指南（先读这些） #   查询 DSL 基础 相关性：加权与调参  使用一个评分函数 #  最基础的 function_score 查询示例使用一个函数来重新计算分数。以下查询使用一个 weight 函数将所有相关性分数加倍。此函数适用于所有结果文档，因为没有在 function_score 中指定 query 参数：
 GET shakespeare/_search { &#34;query&#34;: { &#34;function_score&#34;: { &#34;weight&#34;: &#34;2&#34; } } } 将评分函数应用于文档子集 #  要将评分函数应用于文档子集，在函数中提供一个查询：
 GET shakespeare/_search { &#34;query&#34;: { &#34;function_score&#34;: { &#34;query&#34;: { &#34;match&#34;: { &#34;play_name&#34;: &#34;Hamlet&#34; } }, &#34;weight&#34;: &#34;2&#34; } } } 支持的功能 #  function_score 查询类型支持以下功能："
 ---

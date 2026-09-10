@@ -5,7 +5,7 @@ summary: "扩展统计桶聚合 #  extended_stats_bucket 聚合是 stats_bucket 
  平方和 方差 总体方差 抽样方差 标准差 总体标准差 抽样标准差 标准差界限： ** 上限 ** 下限 ** 种群上限 ** 种群下限 ** 采样上限 ** 采样下限  标准差和方差是总体统计量；它们分别始终等于总体标准差和方差。
 std_deviation_bounds 对象定义了一个范围，该范围在均值（默认为两个标准差）的上方和下方跨越指定的标准差数量。此对象始终包含在输出中，但仅对正态分布的数据才有意义。在解释这些值之前，请验证您的数据集是否遵循正态分布。
 指定的指标必须是数值型，并且同级聚合必须是多分组聚合。
-相关指南（先读这些） #    聚合基础  聚合场景实践  参数说明 #  extended_stats_bucket 聚合采用以下参数。
+相关指南（先读这些） #   聚合基础 聚合场景实践  参数说明 #  extended_stats_bucket 聚合采用以下参数。
    参数 必需/可选 数据类型 描述     buckets_path 必需 String 要聚合的聚合分组的路径。参见分组路径。   gap_policy 可选 String 应用于缺失数据的策略。有效值为 skip 和 insert_zeros 。默认为 skip 。参见数据间隙。   format 可选 String DecimalFormat 格式字符串。返回聚合的 value_as_string 属性中的格式化输出。   sigma 可选 Double 非负） 用于计算 std_deviation_bounds 区间的均值上方和下方的标准差数量。默认值为 2 。参见 extended_stats 中定义范围。    参考样例 #  以下示例创建一个以一个月为间隔的日期直方图。 sum 子聚合计算每个月的字节总和。最后， extended_stats_bucket 聚合返回这些总和的扩展统计信息："
 ---
 

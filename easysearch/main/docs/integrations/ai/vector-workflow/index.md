@@ -3,8 +3,8 @@ title: "向量工作流与复合检索"
 date: 0001-01-01
 description: "围绕向量字段设计，从写入到检索的一整套工作流与 BM25 + 向量复合查询实践。"
 summary: "向量工作流与复合检索 #  本文完整介绍在 Easysearch 中使用向量检索的全流程——从索引设计、向量写入到复合查询。
-以下 mapping 和查询默认使用 Easysearch 2.4.0 原生 HNSW，不需要安装 k-NN 插件。旧插件索引的字段与查询语法不同， 参考 旧插件向量搜索指南。
-相关指南（先读这些） #    Embedding 服务接入  向量检索功能  原生 HNSW 搜索  混合搜索：搜索管道 RRF（hybrid_ranker_processor）  索引设计 #  创建向量索引 #  PUT knowledge_base { &#34;settings&#34;: { &#34;number_of_shards&#34;: 2, &#34;number_of_replicas&#34;: 1 }, &#34;mappings&#34;: { &#34;properties&#34;: { &#34;title&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;analyzer&#34;: &#34;ik_max_word&#34;, &#34;search_analyzer&#34;: &#34;ik_smart&#34; }, &#34;content&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;analyzer&#34;: &#34;ik_max_word&#34; }, &#34;content_vector&#34;: { &#34;type&#34;: &#34;dense_vector&#34;, &#34;dims&#34;: 768, &#34;index&#34;: true, &#34;similarity&#34;: &#34;cosine&#34; }, &#34;category&#34;: { &#34;type&#34;: &#34;keyword&#34; }, &#34;created_at&#34;: { &#34;type&#34;: &#34;date&#34; } } } }  重要：省略 index_options 后仍会使用 HNSW。 Easysearch 2."
+以下 mapping 和查询默认使用 Easysearch 2.4.0 原生 HNSW，不需要安装 k-NN 插件。旧插件索引的字段与查询语法不同， 参考旧插件向量搜索指南。
+相关指南（先读这些） #   Embedding 服务接入 向量检索功能 原生 HNSW 搜索 混合搜索：搜索管道 RRF（hybrid_ranker_processor）  索引设计 #  创建向量索引 #  PUT knowledge_base { &#34;settings&#34;: { &#34;number_of_shards&#34;: 2, &#34;number_of_replicas&#34;: 1 }, &#34;mappings&#34;: { &#34;properties&#34;: { &#34;title&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;analyzer&#34;: &#34;ik_max_word&#34;, &#34;search_analyzer&#34;: &#34;ik_smart&#34; }, &#34;content&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;analyzer&#34;: &#34;ik_max_word&#34; }, &#34;content_vector&#34;: { &#34;type&#34;: &#34;dense_vector&#34;, &#34;dims&#34;: 768, &#34;index&#34;: true, &#34;similarity&#34;: &#34;cosine&#34; }, &#34;category&#34;: { &#34;type&#34;: &#34;keyword&#34; }, &#34;created_at&#34;: { &#34;type&#34;: &#34;date&#34; } } } }  重要：省略 index_options 后仍会使用 HNSW。 Easysearch 2."
 ---
 
 

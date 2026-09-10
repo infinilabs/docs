@@ -2,7 +2,7 @@
 title: "Match 查询"
 date: 0001-01-01
 summary: "Match 查询 #  使用 match 查询在特定文档字段上执行全文搜索。如果你在 text 字段上运行 match 查询，match 查询会分析提供的搜索字符串，并返回匹配字符串中任意词的文档。如果你在精确值字段上运行 match 查询，它会返回匹配精确值的文档。搜索精确值字段的推荐方式是使用过滤（filter）查询，因为与普通查询不同，过滤（filter）查询会被缓存。
-相关指南（先读这些） #    全文检索  Query DSL 基础  以下示例展示了在 title 中对 wind 的基本 match 查询：
+相关指南（先读这些） #   全文检索 Query DSL 基础  以下示例展示了在 title 中对 wind 的基本 match 查询：
 GET _search { &#34;query&#34;: { &#34;match&#34;: { &#34;title&#34;: &#34;wind&#34; } } } 通过传递其他参数，您可以使用扩展语法：
 GET _search { &#34;query&#34;: { &#34;match&#34;: { &#34;title&#34;: { &#34;query&#34;: &#34;wind&#34;, &#34;analyzer&#34;: &#34;stop&#34; } } } } 参考样例 #  在以下示例中，您将使用包含以下文档的索引：
 PUT testindex/_doc/1 { &#34;title&#34;: &#34;Let the wind rise&#34; } PUT testindex/_doc/2 { &#34;title&#34;: &#34;Gone with the wind&#34; } PUT testindex/_doc/3 { &#34;title&#34;: &#34;Rise is gone&#34; } 运算符（operator） #  operator 参数控制多个词元之间的逻辑关系：or（默认）或 and。默认操作符是 OR，查询 wind rise 会被改为 wind OR rise。要指定 and 操作符，请使用以下查询："

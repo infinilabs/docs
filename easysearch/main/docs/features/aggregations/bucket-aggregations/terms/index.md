@@ -2,7 +2,7 @@
 title: "词项聚合（Terms）"
 date: 0001-01-01
 summary: "词项聚合 #  terms 聚合会动态为字段中的每个唯一词条创建一个分组。
-相关指南（先读这些） #    聚合基础  聚合场景实践  以下示例使用 terms 聚合来查找网络日志数据中每个响应代码的文档数量：
+相关指南（先读这些） #   聚合基础 聚合场景实践  以下示例使用 terms 聚合来查找网络日志数据中每个响应代码的文档数量：
 GET sample_data_logs/_search { &#34;size&#34;: 0, &#34;aggs&#34;: { &#34;response_codes&#34;: { &#34;terms&#34;: { &#34;field&#34;: &#34;response.keyword&#34;, &#34;size&#34;: 10 } } } } 返回内容
 ... &#34;aggregations&#34; : { &#34;response_codes&#34; : { &#34;doc_count_error_upper_bound&#34; : 0, &#34;sum_other_doc_count&#34; : 0, &#34;buckets&#34; : [ { &#34;key&#34; : &#34;200&#34;, &#34;doc_count&#34; : 12832 }, { &#34;key&#34; : &#34;404&#34;, &#34;doc_count&#34; : 801 }, { &#34;key&#34; : &#34;503&#34;, &#34;doc_count&#34; : 441 } ] } } } 值以 key 键返回。 doc_count 指定每个分组中的文档数量。默认情况下，分组按 doc-count 的降序排列。"
 ---

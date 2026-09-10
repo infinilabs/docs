@@ -3,8 +3,8 @@ title: "矩阵统计聚合（Matrix Stats）"
 date: 0001-01-01
 summary: "矩阵统计聚合 #  matrix_stats 聚合是一个多值指标聚合，以矩阵形式为两个或多个字段生成协方差统计。
  注意：matrix_stats 聚合不支持脚本。
- 相关指南（先读这些） #    聚合基础  聚合场景实践  参数说明 #  matrix_stats 聚合采用以下参数。
-   参数 必需/可选 数据类型 描述     field 必需 String 用于计算矩阵统计的一组字段。   missing 可选 Object 用于替代缺失值的值。默认情况下，会忽略缺失值。参见缺失值。   mode 可选 String 用作多值或数组字段样本的值。允许的值是 avg 、 min 、 max 、 sum 和 median 。默认是 avg 。    参考样例 #  以下示例返回数据中 taxful_total_price 和 products."
+ 相关指南（先读这些） #   聚合基础 聚合场景实践  参数说明 #  matrix_stats 聚合采用以下参数。
+   参数 必需/可选 数据类型 描述     field 必需 String 用于计算矩阵统计的一组字段。   missing 可选 Object 用于替代缺失值的值。默认情况下，会忽略缺失值。参见缺失值。   mode 可选 String 用作多值或数组字段样本的值。允许的值是 avg 、 min 、 max 、 sum 和 median 。默认是 avg 。    参考样例 #  以下示例返回数据中 taxful_total_price 和 products.base_price 字段的统计信息："
 ---
 
 

@@ -1,8 +1,8 @@
 ---
 title: "URL 邮箱分词器（UAX URL Email）"
 date: 0001-01-01
-summary: "UAX URL Email 分词器 #  除了常规文本之外，uax_url_email 分词器还专门用于处理网址、电子邮件地址和域名。它基于 Unicode 文本分割算法（ UAX #29），这使得它能够正确地对复杂文本（包括网址和电子邮件地址）进行分词处理。
-相关指南（先读这些） #    文本分析：识别词元  文本分析基础  参考样例 #  以下示例请求创建了一个名为 my_index 的新索引，并配置了一个使用 UAX URL 邮件词元生成器的分词器：
+summary: "UAX URL Email 分词器 #  除了常规文本之外，uax_url_email 分词器还专门用于处理网址、电子邮件地址和域名。它基于 Unicode 文本分割算法（UAX #29），这使得它能够正确地对复杂文本（包括网址和电子邮件地址）进行分词处理。
+相关指南（先读这些） #   文本分析：识别词元 文本分析基础  参考样例 #  以下示例请求创建了一个名为 my_index 的新索引，并配置了一个使用 UAX URL 邮件词元生成器的分词器：
 PUT /my_index { &#34;settings&#34;: { &#34;analysis&#34;: { &#34;tokenizer&#34;: { &#34;uax_url_email_tokenizer&#34;: { &#34;type&#34;: &#34;uax_url_email&#34; } }, &#34;analyzer&#34;: { &#34;my_uax_analyzer&#34;: { &#34;type&#34;: &#34;custom&#34;, &#34;tokenizer&#34;: &#34;uax_url_email_tokenizer&#34; } } } }, &#34;mappings&#34;: { &#34;properties&#34;: { &#34;content&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;analyzer&#34;: &#34;my_uax_analyzer&#34; } } } } 产生的词元 #  使用以下请求来检查使用该分词器生成的词元："
 ---
 

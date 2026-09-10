@@ -3,7 +3,7 @@ title: "接入企业认证体系"
 date: 0001-01-01
 description: "将 Easysearch 纳入现有 SSO/LDAP 等身份认证体系的整体方案与配置要点。"
 summary: "接入企业认证体系 #  在企业环境中，Easysearch 通常需要与已有的身份认证系统集成，实现统一的用户管理和单点登录。本文介绍常见的集成模式与配置要点。
-相关指南 #    安全 API 概述  用户与角色管理  多租户与权限模型  认证模式概览 #     模式 适用场景 复杂度 说明     内置用户 小型团队、开发测试 低 直接在 Easysearch 中管理用户和密码   LDAP/AD 已有 Active Directory 中 对接企业目录服务，集中管理用户   OIDC/OAuth 2.0 SSO 场景、云原生架构 中 对接 Keycloak、Auth0、Azure AD 等   反向代理 + Header 已有统一认证网关 低 由网关完成认证，Header 传递身份信息   SAML 2.0 企业级 SSO 高 对接 ADFS、Okta 等 SAML IdP    LDAP/Active Directory 集成 #  LDAP 是最常见的企业认证集成方式，将 Easysearch 的用户验证委派给现有的 LDAP 或 Active Directory。"
+相关指南 #   安全 API 概述 用户与角色管理 多租户与权限模型  认证模式概览 #     模式 适用场景 复杂度 说明     内置用户 小型团队、开发测试 低 直接在 Easysearch 中管理用户和密码   LDAP/AD 已有 Active Directory 中 对接企业目录服务，集中管理用户   OIDC/OAuth 2.0 SSO 场景、云原生架构 中 对接 Keycloak、Auth0、Azure AD 等   反向代理 + Header 已有统一认证网关 低 由网关完成认证，Header 传递身份信息   SAML 2.0 企业级 SSO 高 对接 ADFS、Okta 等 SAML IdP    LDAP/Active Directory 集成 #  LDAP 是最常见的企业认证集成方式，将 Easysearch 的用户验证委派给现有的 LDAP 或 Active Directory。"
 ---
 
 

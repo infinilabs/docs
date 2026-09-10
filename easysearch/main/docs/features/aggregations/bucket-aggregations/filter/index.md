@@ -2,7 +2,7 @@
 title: "过滤器聚合（Filter）"
 date: 0001-01-01
 summary: "过滤器聚合 #  filter 聚合是一个查询子句，就像一个搜索查询一样 — match 或 term 或 range。您可以使用 filter 聚合在创建分组之前将整个文档集缩小到特定的文档集。
-相关指南（先读这些） #    聚合基础  聚合场景实践  以下示例展示了 avg 聚合在过滤上下文中运行的情况。 avg 聚合仅聚合与 range 查询匹配的文档：
+相关指南（先读这些） #   聚合基础 聚合场景实践  以下示例展示了 avg 聚合在过滤上下文中运行的情况。 avg 聚合仅聚合与 range 查询匹配的文档：
 GET sample_data_ecommerce/_search { &#34;size&#34;: 0, &#34;aggs&#34;: { &#34;low_value&#34;: { &#34;filter&#34;: { &#34;range&#34;: { &#34;taxful_total_price&#34;: { &#34;lte&#34;: 50 } } }, &#34;aggs&#34;: { &#34;avg_amount&#34;: { &#34;avg&#34;: { &#34;field&#34;: &#34;taxful_total_price&#34; } } } } } } 返回内容
 ... &#34;aggregations&#34; : { &#34;low_value&#34; : { &#34;doc_count&#34; : 1633, &#34;avg_amount&#34; : { &#34;value&#34; : 38."
 ---

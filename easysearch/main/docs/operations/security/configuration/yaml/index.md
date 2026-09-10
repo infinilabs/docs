@@ -2,8 +2,8 @@
 title: "本地配置"
 date: 0001-01-01
 summary: "本地配置（YAML） #  config/security/ 目录下包含 Easysearch 安全模块的本地 YAML 配置文件。这些文件在 bin/initialize.sh 初始化时自动加载到安全索引中，也可以手动编辑后重新加载。默认发行版在首次初始化阶段会调用 bin/update_password.sh 生成默认内置账户对应的 user.yml 内容；如果 user.yml 已存在，重复执行 initialize.sh 会保留该文件，不会重置已有密码。
-通过本地 YAML 配置文件可以管理默认的内置用户或 隐藏的保留资源，例如 admin、infini、infini_agent 等默认账户。除内置资源外，通过 INFINI Console 或 REST API 来创建其他用户、角色、映射和权限组通常更方便。
-相关指南（先读这些） #    安全与多租户最佳实践  权限控制总览   配置文件概览 #     文件 用途 编辑方式     user.yml 内置用户定义（首次初始化时由脚本生成；重复初始化会保留已有文件） 手动编辑或 API   role.yml 角色定义 手动编辑或 API   role_mapping.yml 角色映射 手动编辑或 API   privilege."
+通过本地 YAML 配置文件可以管理默认的内置用户或隐藏的保留资源，例如 admin、infini、infini_agent 等默认账户。除内置资源外，通过 INFINI Console 或 REST API 来创建其他用户、角色、映射和权限组通常更方便。
+相关指南（先读这些） #   安全与多租户最佳实践 权限控制总览   配置文件概览 #     文件 用途 编辑方式     user.yml 内置用户定义（首次初始化时由脚本生成；重复初始化会保留已有文件） 手动编辑或 API   role.yml 角色定义 手动编辑或 API   role_mapping.yml 角色映射 手动编辑或 API   privilege.yml 权限组（Action Group） 手动编辑或 API   config."
 ---
 
 

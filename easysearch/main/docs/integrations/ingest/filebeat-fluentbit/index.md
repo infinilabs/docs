@@ -3,7 +3,7 @@ title: "轻量 Agent 接入：Filebeat / Fluent Bit"
 date: 0001-01-01
 description: "使用轻量日志 Agent 将日志采集到 Easysearch 或其前置缓冲层的推荐实践。"
 summary: "轻量 Agent 接入：Filebeat / Fluent Bit #  Filebeat 和 Fluent Bit 是两款常用的轻量级日志采集 Agent，均可将日志数据直接发送到 Easysearch。
-相关指南（先读这些） #    Logstash 接入  摄取管道  Agent 对比 #     特性 Filebeat Fluent Bit     语言 Go C   内存占用 ~30-50 MB ~5-10 MB   配置方式 YAML INI / YAML   输出到 ES ✅ 原生支持 ✅ 原生支持（es output）   Ingest Pipeline ✅ 支持指定 ✅ 支持指定   多行日志 ✅ multiline 模块 ✅ multiline parser   生态模块 丰富（modules for nginx等） 较少，但灵活的 parser 体系   适用场景 通用日志采集 边缘设备、资源受限环境    Filebeat 配置示例 #  基础配置 #  # filebeat."
+相关指南（先读这些） #   Logstash 接入 摄取管道  Agent 对比 #     特性 Filebeat Fluent Bit     语言 Go C   内存占用 ~30-50 MB ~5-10 MB   配置方式 YAML INI / YAML   输出到 ES ✅ 原生支持 ✅ 原生支持（es output）   Ingest Pipeline ✅ 支持指定 ✅ 支持指定   多行日志 ✅ multiline 模块 ✅ multiline parser   生态模块 丰富（modules for nginx等） 较少，但灵活的 parser 体系   适用场景 通用日志采集 边缘设备、资源受限环境    Filebeat 配置示例 #  基础配置 #  # filebeat."
 ---
 
 

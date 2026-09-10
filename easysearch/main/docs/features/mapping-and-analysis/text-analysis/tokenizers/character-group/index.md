@@ -2,7 +2,7 @@
 title: "字符组分词器（Character Group）"
 date: 0001-01-01
 summary: "Character Group 分词器 #  char_group 分词器使用特定字符作为分隔符将文本拆分为词元。它适用于需要简单直接进行分词的场景，为基于分词器的匹配模式提供了一种更简单的替代方案，避免了额外的复杂性。
-相关指南（先读这些） #    文本分析：识别词元  文本分析基础  参考样例 #  以下示例请求创建了一个名为my_index的新索引，并配置了一个带有 char_group 字符组词元生成器的分词器。该词元生成器会依据空格、连字符 - 和冒号 : 来分割文本。
+相关指南（先读这些） #   文本分析：识别词元 文本分析基础  参考样例 #  以下示例请求创建了一个名为my_index的新索引，并配置了一个带有 char_group 字符组词元生成器的分词器。该词元生成器会依据空格、连字符 - 和冒号 : 来分割文本。
 PUT /my_index { &#34;settings&#34;: { &#34;analysis&#34;: { &#34;tokenizer&#34;: { &#34;my_char_group_tokenizer&#34;: { &#34;type&#34;: &#34;char_group&#34;, &#34;tokenize_on_chars&#34;: [ &#34;whitespace&#34;, &#34;-&#34;, &#34;:&#34; ] } }, &#34;analyzer&#34;: { &#34;my_char_group_analyzer&#34;: { &#34;type&#34;: &#34;custom&#34;, &#34;tokenizer&#34;: &#34;my_char_group_tokenizer&#34; } } } }, &#34;mappings&#34;: { &#34;properties&#34;: { &#34;content&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;analyzer&#34;: &#34;my_char_group_analyzer&#34; } } } } 产生的词元 #  使用以下请求来检查使用该分词器生成的词元："
 ---
 

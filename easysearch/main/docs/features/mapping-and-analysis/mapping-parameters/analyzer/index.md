@@ -2,7 +2,7 @@
 title: "分析器参数（Analyzer）"
 date: 0001-01-01
 summary: "Analyzer 参数 #  analyzer 映射参数用于定义在索引和搜索期间应用于文本字段的文本分析过程。
-相关指南（先读这些） #    映射基础  文本分析基础  代码样例 #  以下示例配置定义了一个名为 my_custom_analyzer 的自定义分词器：
+相关指南（先读这些） #   映射基础 文本分析基础  代码样例 #  以下示例配置定义了一个名为 my_custom_analyzer 的自定义分词器：
 PUT my_index { &#34;settings&#34;: { &#34;analysis&#34;: { &#34;analyzer&#34;: { &#34;my_custom_analyzer&#34;: { &#34;type&#34;: &#34;custom&#34;, &#34;tokenizer&#34;: &#34;standard&#34;, &#34;filter&#34;: [ &#34;lowercase&#34;, &#34;my_stop_filter&#34;, &#34;my_stemmer&#34; ] } }, &#34;filter&#34;: { &#34;my_stop_filter&#34;: { &#34;type&#34;: &#34;stop&#34;, &#34;stopwords&#34;: [&#34;the&#34;, &#34;a&#34;, &#34;and&#34;, &#34;or&#34;] }, &#34;my_stemmer&#34;: { &#34;type&#34;: &#34;stemmer&#34;, &#34;language&#34;: &#34;english&#34; } } } }, &#34;mappings&#34;: { &#34;properties&#34;: { &#34;my_text_field&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;analyzer&#34;: &#34;my_custom_analyzer&#34;, &#34;search_analyzer&#34;: &#34;standard&#34;, &#34;search_quote_analyzer&#34;: &#34;my_custom_analyzer&#34; } } } } 在此示例中，my_custom_analyzer 使用标准分词器，将所有标记转换为小写，应用自定义停用词过滤器，并应用英语词干提取器。"
 ---
 

@@ -3,7 +3,7 @@ title: "Span Near 查询"
 date: 0001-01-01
 summary: "Span Near 查询 #  span_near 查询匹配彼此靠近的跨度。您可以指定跨度之间的距离，并指定它们是否需要按特定顺序出现。
 例如，您可以使用 span_near 查询来：
- 查找彼此之间距离在特定范围内的词项。 匹配词语按特定顺序出现的短语。 查找文本中彼此靠近的相关概念。  相关指南（先读这些） #    Span 查询  邻近匹配  查询 DSL 基础  参考样例 #  以下查询搜索任何形式的“sleeve”和“long”相邻出现，顺序不限：
+ 查找彼此之间距离在特定范围内的词项。 匹配词语按特定顺序出现的短语。 查找文本中彼此靠近的相关概念。  相关指南（先读这些） #   Span 查询 邻近匹配 查询 DSL 基础  参考样例 #  以下查询搜索任何形式的“sleeve”和“long”相邻出现，顺序不限：
 GET /clothing/_search { &#34;query&#34;: { &#34;span_near&#34;: { &#34;clauses&#34;: [ { &#34;span_term&#34;: { &#34;description.stemmed&#34;: &#34;sleev&#34; } }, { &#34;span_term&#34;: { &#34;description.stemmed&#34;: &#34;long&#34; } } ], &#34;slop&#34;: 1, &#34;in_order&#34;: false } } } 该查询匹配文档 1（“Long-sleeved…”）和文档 2（“…long fluttered sleeves…”）。在文档 1 中，词语是相邻的，而在文档 2 中，它们在指定的 slop 距离 1 内（它们之间有一个词）。"
 ---
 

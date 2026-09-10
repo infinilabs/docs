@@ -3,7 +3,7 @@ title: "文档值参数（Doc Values）"
 date: 0001-01-01
 summary: "Doc Values 参数 #  默认情况下，Easysearch 会为搜索目的索引大多数字段的字段值。doc_values 参数启用文档到词项的正排查找，用于排序、聚合和脚本等操作。
 doc_values 参数接受以下选项：
-   选项 描述     true 启用字段的 doc_values。默认值为 true。   false 禁用字段的 doc_values。    相关指南（先读这些） #    映射基础  映射模式  示例：创建启用和禁用 doc_values 的索引 #  以下示例请求创建一个索引，其中一个字段启用 doc_values，另一个字段禁用：
+   选项 描述     true 启用字段的 doc_values。默认值为 true。   false 禁用字段的 doc_values。    相关指南（先读这些） #   映射基础 映射模式  示例：创建启用和禁用 doc_values 的索引 #  以下示例请求创建一个索引，其中一个字段启用 doc_values，另一个字段禁用：
 PUT my-index-001 { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;status_code&#34;: { &#34;type&#34;: &#34;keyword&#34; }, &#34;session_id&#34;: { &#34;type&#34;: &#34;keyword&#34;, &#34;doc_values&#34;: false } } } } 工作原理 #  doc_values 是一种列式存储结构，与倒排索引互补："
 ---
 

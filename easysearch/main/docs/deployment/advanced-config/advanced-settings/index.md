@@ -4,7 +4,7 @@ date: 0001-01-01
 summary: "高级配置参数 #  本页面详细列举 Easysearch 的所有高级配置参数，包括集群、节点、索引等多层级配置。
  概述 #  Easysearch 配置涉及多个层级：
  节点级：影响单个节点的行为（node., path., 等） 集群级：影响整个集群的行为（cluster., discovery., 等） 索引级：影响单个索引的行为（index.*, 等） 传输层：网络通信相关（transport., http., 等）   集群协调配置 #  集群选举、节点发现和主节点选择的相关配置。
-选举配置 #     参数 默认值 动态 说明     cluster.election.initial_timeout 100ms ✗ 初始选举超时   cluster.election.back_off_time 100ms ✗ 选举退避时间   cluster.election.max_timeout 10s ✗ 最大选举超时   cluster.election.duration 30s ✗ 选举持续时间    主节点检查配置 #     参数 默认值 动态 说明     cluster."
+选举配置 #     参数 默认值 动态 说明     cluster.election.initial_timeout 100ms ✗ 初始选举超时   cluster.election.back_off_time 100ms ✗ 选举退避时间   cluster.election.max_timeout 10s ✗ 最大选举超时   cluster.election.duration 500ms ✗ 单次选举尝试的最长持续时间    主节点检查配置 #     参数 默认值 动态 说明     cluster."
 ---
 
 
@@ -36,26 +36,26 @@ Easysearch 配置涉及多个层级：
 | `cluster.election.initial_timeout` | 100ms | ✗ | 初始选举超时 |
 | `cluster.election.back_off_time` | 100ms | ✗ | 选举退避时间 |
 | `cluster.election.max_timeout` | 10s | ✗ | 最大选举超时 |
-| `cluster.election.duration` | 30s | ✗ | 选举持续时间 |
+| `cluster.election.duration` | 500ms | ✗ | 单次选举尝试的最长持续时间 |
 
 ### 主节点检查配置
 
 | 参数 | 默认值 | 动态 | 说明 |
 |------|-------|------|------|
-| `cluster.leader_check.interval` | 1s | ✗ | 主节点检查间隔 |
-| `cluster.leader_check.timeout` | 10s | ✗ | 主节点检查超时 |
-| `cluster.leader_check.retry_count` | 3 | ✗ | 主节点检查重试次数 |
-| `cluster.follower_check.interval` | 1s | ✗ | 追随节点检查间隔 |
-| `cluster.follower_check.timeout` | 10s | ✗ | 追随节点检查超时 |
-| `cluster.follower_check.retry_count` | 3 | ✗ | 追随节点检查重试次数 |
+| `cluster.fault_detection.leader_check.interval` | 1s | ✗ | 主节点检查间隔 |
+| `cluster.fault_detection.leader_check.timeout` | 10s | ✗ | 主节点检查超时 |
+| `cluster.fault_detection.leader_check.retry_count` | 3 | ✗ | 主节点检查重试次数 |
+| `cluster.fault_detection.follower_check.interval` | 1s | ✗ | 追随节点检查间隔 |
+| `cluster.fault_detection.follower_check.timeout` | 10s | ✗ | 追随节点检查超时 |
+| `cluster.fault_detection.follower_check.retry_count` | 3 | ✗ | 追随节点检查重试次数 |
 
 ### 集群形成配置
 
 | 参数 | 默认值 | 动态 | 说明 |
 |------|-------|------|------|
-| `cluster.initial_master_nodes` | - | ✗ | 初始主节点列表（引导集群时必需） |
-| `cluster.bootstrap_unconfigured_timeout` | 15s | ✗ | 集群初始化超时 |
-| `cluster.publish_info.timeout` | 30s | ✗ | 发布信息超时 |
+| `cluster.initial_master_nodes` | [] | ✗ | 仅用于新集群首次引导的候选主节点列表 |
+| `discovery.unconfigured_bootstrap_timeout` | 3s | ✗ | 未配置发现参数时尝试自动引导的等待时间 |
+| `cluster.publish.info_timeout` | 10s | ✗ | 发布耗时超过此值时记录 INFO 日志 |
 | `cluster.publish.timeout` | 30s | ✗ | 发布配置超时 |
 | `cluster.auto_shrink_voting_configuration` | true | ✓ | 自动收缩投票配置 |
 
@@ -63,9 +63,8 @@ Easysearch 配置涉及多个层级：
 
 | 参数 | 默认值 | 动态 | 说明 |
 |------|-------|------|------|
-| `cluster.follower_lag_timeout` | 60s | ✗ | 节点滞后超时 |
-| `cluster.formation_warning_timeout` | 10s | ✗ | 集群形成警告超时 |
-| `discovery.cluster_formation_warning_timeout` | 10s | ✗ | 同上（别名） |
+| `cluster.follower_lag.timeout` | 90s | ✗ | follower 应用集群状态超时后被移出集群的等待时间 |
+| `discovery.cluster_formation_warning_timeout` | 10s | ✗ | 集群尚未形成时输出警告日志的等待时间 |
 
 ---
 
@@ -167,17 +166,17 @@ Easysearch 配置涉及多个层级：
 
 | 参数 | 默认值 | 动态 | 说明 |
 |------|-------|------|------|
-| `indices.queries.cache.size` | 10% | ✓ | 查询缓存大小 |
-| `indices.queries.cache.count` | 10000 | ✓ | 缓存条目数限制 |
-| `indices.queries.cache.all_segments` | false | ✓ | 是否缓存所有 segment 过滤器 |
-| `index.queries.cache.enabled` | true | ✓ | 该索引是否启用查询缓存 |
+| `indices.queries.cache.size` | 10% | ✗ | 节点查询缓存大小，修改后需要重启节点 |
+| `indices.queries.cache.count` | 10000 | ✗ | 节点查询缓存条目数限制，修改后需要重启节点 |
+| `indices.queries.cache.all_segments` | false | ✗ | 是否缓存所有 segment 过滤器，修改后需要重启节点 |
+| `index.queries.cache.enabled` | true | ✗ | 是否为索引启用查询缓存，创建索引时或关闭索引后设置 |
 
 ### Request Cache（请求缓存）
 
 | 参数 | 默认值 | 动态 | 说明 |
 |------|-------|------|------|
-| `indices.requests.cache.size` | 1% | ✓ | 请求缓存大小 |
-| `indices.requests.cache.expire` | -1 | ✓ | 缓存过期时间 |
+| `indices.requests.cache.size` | 1% | ✗ | 节点请求缓存大小，修改后需要重启节点 |
+| `indices.requests.cache.expire` | 未设置 | ✗ | 节点请求缓存过期时间，默认不按时间过期 |
 | `index.requests.cache.enable` | true | ✓ | 该索引是否启用请求缓存 |
 
 ---
@@ -198,7 +197,7 @@ Easysearch 配置涉及多个层级：
 | `network.breaker.inflight_requests.limit` | 100% | ✓ | 传输请求断路器 |
 | `network.breaker.inflight_requests.overhead` | 2.0 | ✓ | 传输请求开销系数 |
 | `indices.breaker.type` | hierarchy | ✗ | 断路器类型 |
-| `indices.breaker.total.use_real_memory` | true | ✓ | 使用真实内存计算 |
+| `indices.breaker.total.use_real_memory` | true | ✗ | 使用真实内存计算，修改后需要重启节点 |
 
 ---
 
@@ -227,7 +226,7 @@ Easysearch 配置涉及多个层级：
 |------|-------|------|------|
 | `index.number_of_shards` | 1 | ✗ | 主分片数 |
 | `index.number_of_replicas` | 1 | ✓ | 副本数 |
-| `index.codec` | best_compression | ✗ | 压缩编码器 |
+| `index.codec` | default | ✗ | 压缩编码器 |
 | `index.force_memory_term_dictionary` | false | ✗ | 强制 term dictionary 使用内存 |
 
 ### 索引排序
@@ -417,86 +416,71 @@ Easysearch 配置涉及多个层级：
 
 ---
 
-## 常见优化建议
+## 调优原则
 
-### 高吞吐量集群
+不存在适用于所有集群的缓存、刷新、合并或 PIT 参数组合。修改前应记录当前配置和基线指标，每次只调整一类参数，并验证查询延迟、
+写入吞吐、GC、磁盘 I/O、拒绝数和恢复时间。不要通过扩大缓存、线程数、超时或 PIT 上限来掩盖容量不足或请求设计问题。
 
-```yaml
-# 禁用请求缓存（如果大量不同查询）
-indices.requests.cache.size: 0%
-
-# 增大查询缓存
-indices.queries.cache.size: 15%
-
-# 调整刷新间隔
-index.refresh_interval: 30s
-
-# 增加合并线程
-index.merge.scheduler.max_thread_count: 4
-```
-
-### 内存受限环境
-
-```yaml
-# 降低缓存大小
-indices.queries.cache.size: 5%
-indices.requests.cache.size: 0.5%
-
-# 启用断路器保护
-indices.breaker.total.limit: 70%
-
-# 减少刷新间隔（更多内存使用）
-index.refresh_interval: 5s
-
-# 降低合并并发
-index.merge.policy.max_merge_at_once: 10
-```
-
-### 搜索优化
-
-```yaml
-# 启用请求缓存
-index.requests.cache.enable: true
-
-# 调整搜索超时
-search.default_search_timeout: 30s
-
-# 禁用 PIT 自动清理（如需要）
-search.max_open_pit_context: 1000
-```
+| 场景 | 优先检查 | 调整边界 |
+|------|---------|---------|
+| 查询缓存命中率低 | `_stats/query_cache,request_cache`、查询是否可缓存 | 节点缓存容量是静态设置；扩大缓存会占用更多堆 |
+| 写入吞吐不足 | refresh、indexing、merge 和磁盘统计 | 延长 refresh interval 会增加数据可见延迟；默认保留 merge 自动节流 |
+| 搜索超时 | 慢日志、Profile API、线程池和热点线程 | 增大超时不会降低单次查询成本 |
+| PIT 上下文接近上限 | 当前 PIT 数量、keep alive 和客户端关闭行为 | 扩大上限会增加 reader、segment 和文件句柄占用 |
 
 ---
 
 ## 配置更新方法
 
-### 从文件配置（需重启）
+### 节点级静态设置
 
-编辑 `config/easysearch.yml` 或 `config/easysearch.properties`，修改后重启节点。
+没有 `Dynamic` 属性的 NodeScope 设置必须写入每个节点的 `config/easysearch.yml`，然后滚动重启节点。例如：
 
-### 动态更新（推荐）
-
-使用集群设置 API 动态更新标记为"✓"的参数：
-
-```json
-PUT /_cluster/settings
-{
-  "transient": {
-    "indices.queries.cache.size": "15%",
-    "index.refresh_interval": "30s"
-  }
-}
+```yaml
+indices.queries.cache.size: 10%
+indices.requests.cache.size: 1%
 ```
 
-**持久化更新**（集群重启后仍生效）：
+示例值是当前默认值，不是通用调优建议。修改缓存容量前必须评估堆占用和缓存命中收益。
+
+### 动态集群设置
+
+已注册为动态集群设置的参数可以通过集群设置 API 更新。以下命令仅演示更新方式，`80mb` 必须根据恢复流量、网络和磁盘能力评估：
 
 ```json
 PUT /_cluster/settings
 {
   "persistent": {
-    "indices.queries.cache.size": "15%"
+    "indices.recovery.max_bytes_per_sec": "80mb"
   }
 }
 ```
+
+使用 `null` 删除显式配置并恢复默认值：
+
+```json
+PUT /_cluster/settings
+{
+  "persistent": {
+    "indices.recovery.max_bytes_per_sec": null
+  }
+}
+```
+
+### 动态索引设置
+
+标记为动态的 IndexScope 设置必须通过目标索引的 `_settings` API 更新，不能写入 `/_cluster/settings`：
+
+```json
+PUT /my-index/_settings
+{
+  "index.refresh_interval": "30s",
+  "index.requests.cache.enable": false
+}
+```
+
+静态索引设置不能作为动态设置写入已打开的索引。`index.queries.cache.enabled` 可在索引关闭后修改；`index.sort.*` 必须在创建
+索引时配置，已有数据需要通过新索引重建。
 
 ---
 

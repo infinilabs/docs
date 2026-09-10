@@ -1985,9 +1985,12 @@ HEAD {index}/_mapping/{type}
 
 ## indices.field_usage_stats
 
-返回一个或多个索引的字段使用统计信息，显示各字段被查询和使用的情况。
+返回一个或多个索引中各 shard 的字段使用统计信息。统计值表示搜索执行期间使用字段底层数据结构的次数，可用于识别实际使用的字段和访问方式。
 
-该接口的统计采集受索引级动态配置 `index.field_usage_stats.enabled` 控制；当该配置为 `false` 时，不再记录字段访问统计，并返回空统计结果。
+统计按 shard search session 去重：在同一个 session 内，即使多次访问相同字段的同一种数据结构，对应计数也只增加一次。一次客户端搜索可能因
+can-match、query 等阶段在同一个 shard 上建立多个 session，因此这些计数不等同于客户端请求数或文档访问次数。
+
+调用方需要对目标索引具有 `indices:monitor/field_usage_stats` 权限。
 
 ```
 GET {index}/_field_usage_stats
@@ -1997,10 +2000,120 @@ GET {index}/_field_usage_stats
 
 | 参数 | 类型 | 说明 |
 | :----------------- | :------ | :----------------------------------------------------------------------- |
-| fields             | list    | 逗号分隔的字段列表，指定要报告使用情况的字段（默认：所有字段） |
+| fields             | list    | 要返回的字段名称或通配符表达式，多个值使用逗号分隔（默认：所有已记录字段） |
 | expand_wildcards   | enum    | 是否将通配符表达式扩展为打开的、关闭的或全部索引 |
 | ignore_unavailable | boolean | 当指定的具体索引不可用时是否忽略 |
 | allow_no_indices   | boolean | 当通配符表达式不匹配任何具体索引时是否忽略 |
+
+`fields` 只过滤本次响应，不改变后续字段访问统计的采集范围。
+
+例如，以下请求只返回 `message` 和名称匹配 `labels.*` 的字段：
+
+```
+GET logs-*/_field_usage_stats?fields=message,labels.*&human=true
+```
+
+#### 响应
+
+```json
+{
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "failed": 0
+  },
+  "logs-2026.09.10": {
+    "shards": [
+      {
+        "tracking_id": "MpOl0QlTQ4SYYhEe6KgJoQ",
+        "tracking_started_at_millis": 1788998400000,
+        "tracking_started_at": "2026-09-10T00:00:00.000Z",
+        "routing": {
+          "state": "STARTED",
+          "primary": true,
+          "node": "gA6KeeVzQkGURFCUyV-e8Q",
+          "relocating_node": null
+        },
+        "stats": {
+          "all_fields": {
+            "any": 3,
+            "inverted_index": {
+              "terms": 3,
+              "postings": 3,
+              "term_frequencies": 2,
+              "positions": 1,
+              "offsets": 0,
+              "payloads": 0,
+              "proximity": 1
+            },
+            "stored_fields": 1,
+            "doc_values": 0,
+            "points": 0,
+            "norms": 3,
+            "term_vectors": 0
+          },
+          "fields": {
+            "message": {
+              "any": 3,
+              "inverted_index": {
+                "terms": 3,
+                "postings": 3,
+                "term_frequencies": 2,
+                "positions": 1,
+                "offsets": 0,
+                "payloads": 0,
+                "proximity": 1
+              },
+              "stored_fields": 1,
+              "doc_values": 0,
+              "points": 0,
+              "norms": 3,
+              "term_vectors": 0
+            }
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+每个索引的 `shards` 数组会分别报告主分片和副本分片；各 shard 独立累计统计。主要响应字段如下：
+
+| 字段 | 说明 |
+| :--------------------------- | :----------------------------------------------------------------------- |
+| `tracking_id`                | 当前 shard 实例的统计标识，用于判断两次采样是否来自同一统计生命周期 |
+| `tracking_started_at_millis` | 当前 shard 实例开始统计的 Unix 时间戳，单位为毫秒 |
+| `tracking_started_at`        | `human=true` 时返回的可读开始时间 |
+| `routing`                    | shard 的状态、主副本角色、当前节点及正在迁移到的节点 |
+| `stats.all_fields`           | 本次字段过滤结果中所有字段的汇总统计 |
+| `stats.fields`               | 按字段名称划分的统计；未被访问或不匹配 `fields` 的字段不会出现 |
+
+每个 `all_fields` 或具体字段对象包含以下 13 项计数：
+
+| 计数器 | 说明 |
+| :------------------------------------ | :----------------------------------------------------------------------- |
+| `any`                                 | session 内以任意方式使用该字段 |
+| `inverted_index.terms`                | 访问倒排索引的 term 字典 |
+| `inverted_index.postings`             | 访问倒排索引的 posting list |
+| `inverted_index.term_frequencies`     | 访问 term frequency 信息 |
+| `inverted_index.positions`            | 访问 term position 信息 |
+| `inverted_index.offsets`              | 访问 term offset 信息 |
+| `inverted_index.payloads`             | 访问 term payload 信息 |
+| `inverted_index.proximity`            | 使用 `positions`、`offsets` 或 `payloads` 中的任意一种；session 内最多增加一次 |
+| `stored_fields`                       | 访问 stored fields，包括默认存储的 `_source` 和 `_id` |
+| `doc_values`                          | 访问 doc values，例如用于排序或聚合 |
+| `points`                              | 访问 Lucene point values，例如用于数值或日期范围查询 |
+| `norms`                               | 访问用于相关性评分的 norms |
+| `term_vectors`                        | 访问 term vectors |
+
+统计保存在各 shard 实例的内存中。普通 refresh 以及由其触发的 Lucene reader reopen 会保留当前 `tracking_id` 和累计值；shard
+重建、迁移到其他节点或节点重启后，`tracking_id` 可能变化，计数会从新的 shard 生命周期重新开始。因此，比较两次采样的增量前应先确认
+`tracking_id` 相同。
+
+统计采集受索引级动态设置 `index.field_usage_stats.enabled` 控制。关闭后不再新增计数，接口仍返回 shard 元数据，`stats.fields` 为空且
+`stats.all_fields` 的计数均为 0；同一 shard 实例重新开启后，关闭前的历史统计会重新可见并继续累计。详见
+[索引设置]({{< relref "/docs/operations/data-management/index-settings.md" >}})。
 
 ## indices.flush
 

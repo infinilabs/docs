@@ -3,7 +3,7 @@ title: "移动函数聚合（Moving Function）"
 date: 0001-01-01
 summary: "移动函数聚合 #  moving_fn 聚合是一个父级管道聚合，它在滑动窗口上执行脚本。滑动窗口在从父级 histogram 或 date_histogram 聚合中提取的一系列值上移动。窗口一次向右移动一个分组；moving_fn 每次窗口移动时都会运行脚本。
 使用 moving_fn 聚合在滑动窗口内的数据上执行任何数值计算。你可以使用 moving_fn 用于以下目的：
- 趋势分析 异常值检测 自定义时间序列分析 自定义平滑算法 数字信号处理 (DSP)  相关指南（先读这些） #    聚合基础  聚合场景实践  参数说明 #  moving_fn 聚合采用以下参数。
+ 趋势分析 异常值检测 自定义时间序列分析 自定义平滑算法 数字信号处理 (DSP)  相关指南（先读这些） #   聚合基础 聚合场景实践  参数说明 #  moving_fn 聚合采用以下参数。
    参数 必需/可选 数据类型 描述     buckets_path 必需 String 要聚合的聚合分组的路径。参见分组路径。   script 必需 String 或 Object 为每个数据窗口计算值的脚本。可以是内联脚本、存储脚本或脚本文件。该脚本可以访问在 buckets_path 参数中定义的变量名。   window 必需 Integer 滑动窗口中的分组的数量。必须是正整数。   gap_policy 可选 String 应用于缺失数据的策略。有效值为 skip 和 insert_zeros 。默认为 skip 。参见数据间隙。   format 可选 String DecimalFormat 格式字符串。返回聚合的 value_as_string 属性中的格式化输出。   shift 可选 Integer 窗口要移动的分组的数量。可以是正数（向未来的分组右移）或负数（向过去的分组左移）。默认是 0 ，将窗口立即放置在当前分组的左侧。参见移动窗口。    移动函数的工作原理 #  moving_fn 聚合操作在有序分组序列上的滑动窗口上。从父聚合中的第一个分组开始， moving_fn 执行以下操作："
 ---
 

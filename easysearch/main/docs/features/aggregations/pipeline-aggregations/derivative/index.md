@@ -3,8 +3,9 @@ title: "导数聚合（Derivative）"
 date: 0001-01-01
 summary: "导数聚合 #  derivative 聚合是一个父聚合，用于计算聚合每个分组的一阶和二阶导数。
 对于有序的分组序列，derivative 将当前分组和前一个分组中的指标值之差近似为一阶导数。
-相关指南（先读这些） #    聚合基础  聚合场景实践  参数说明 #  derivative 聚合采用以下参数。
-   参数 必需/可选 数据类型 描述     buckets_path 必需 String 要聚合的聚合分组的路径。参见分组路径。   gap_policy 可选 String 应用于缺失数据的策略。有效值为 skip 和 insert_zeros 。默认为 skip 。参见数据间隙。   format 可选 String DecimalFormat 格式字符串。返回聚合的 value_as_string 属性中的格式化输出。    示例：一阶导数 #  以下示例创建一个每月间隔的日期直方图。 sum 子聚合计算每个月所有字节的和。最后， derivative 聚合计算 sum 子聚合的一阶导数。一阶导数估计为当前月份和上个月字节数之间的差值："
+相关指南（先读这些） #   聚合基础 聚合场景实践  参数说明 #  derivative 聚合采用以下参数。
+   参数 必需/可选 数据类型 描述     buckets_path 必需 String 要聚合的聚合分组的路径。参见分组路径。   gap_policy 可选 String 应用于缺失数据的策略。有效值为 skip 和 insert_zeros 。默认为 skip 。参见数据间隙。   format 可选 String DecimalFormat 格式字符串。返回聚合的 value_as_string 属性中的格式化输出。    示例：一阶导数 #  以下示例创建一个每月间隔的日期直方图。 sum 子聚合计算每个月所有字节的和。最后， derivative 聚合计算 sum 子聚合的一阶导数。一阶导数估计为当前月份和上个月字节数之间的差值：
+GET sample_data_logs/_search { &#34;size&#34;: 0, &#34;aggs&#34;: { &#34;sales_per_month&#34;: { &#34;date_histogram&#34;: { &#34;field&#34;: &#34;@timestamp&#34;, &#34;calendar_interval&#34;: &#34;month&#34; }, &#34;aggs&#34;: { &#34;number_of_bytes&#34;: { &#34;sum&#34;: { &#34;field&#34;: &#34;bytes&#34; } }, &#34;bytes_deriv&#34;: { &#34;derivative&#34;: { &#34;buckets_path&#34;: &#34;number_of_bytes&#34; } } } } } } 返回内容显示了为第二和第三个分组计算出的导数："
 ---
 
 

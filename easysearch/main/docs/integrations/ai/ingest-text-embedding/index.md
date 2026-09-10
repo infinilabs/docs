@@ -2,7 +2,7 @@
 title: "写入数据文本向量化"
 date: 0001-01-01
 summary: "写入数据文本向量化 #  Easysearch 使用 Ingest 管道中的一系列处理器，可以对写入的数据进行处理，并且支持对文本进行向量化。本文档介绍如何在 Easysearch 中使用 text_embedding 处理器对写入数据进行向量化。
-相关指南（先读这些） #    向量搜索  向量字段建模  AI 集成  先决条件 #  支持与 OpenAI API 兼容的 embedding 接口，支持 Ollama embedding 接口。
+相关指南（先读这些） #   向量搜索 向量字段建模 AI 集成  先决条件 #  支持与 OpenAI API 兼容的 embedding 接口，支持 Ollama embedding 接口。
 text_embedding 处理器需要安装 Easysearch 的 ai 插件。Easysearch 2.4.0 原生 HNSW 不需要安装 knn 插件。
 在生产环境中使用数据采集时，您的集群应至少包含一个节点，且该节点的节点角色权限设置为 ingest 。
 创建带有向量字段的索引 #  首先创建原生 HNSW 索引。text_vector 是保存模型输出的字段，mapping 维度必须与处理器的 dims 和模型输出一致。

@@ -3,7 +3,7 @@ title: "Match Phrase 查询"
 date: 0001-01-01
 summary: "Match Phrase 查询 #  使用 match_phrase 查询来匹配包含指定顺序中确切的短语的文档。您可以通过提供 slop 参数来增加短语匹配的灵活性。
 match_phrase 查询创建一个匹配词项序列的短语查询。
-相关指南（先读这些） #    邻近匹配  全文搜索  以下示例展示了一个基本的 match_phrase 查询：
+相关指南（先读这些） #   邻近匹配 全文搜索  以下示例展示了一个基本的 match_phrase 查询：
 GET _search { &#34;query&#34;: { &#34;match_phrase&#34;: { &#34;title&#34;: &#34;the wind&#34; } } } 要传递额外的参数，您可以使用扩展语法：
 GET _search { &#34;query&#34;: { &#34;match_phrase&#34;: { &#34;title&#34;: { &#34;query&#34;: &#34;the wind&#34;, &#34;analyzer&#34;: &#34;stop&#34; } } } } 参考用例 #  例如，创建一个包含以下文档的索引：
 PUT testindex/_doc/1 { &#34;title&#34;: &#34;The wind rises&#34; } PUT testindex/_doc/2 { &#34;title&#34;: &#34;Gone with the wind&#34; } 以下 match_phrase 查询搜索短语 wind rises ，其中单词 wind 后面跟着单词 rises ："

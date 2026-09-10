@@ -3,7 +3,7 @@ title: "可变宽度直方图聚合（Variable Width Histogram）"
 date: 0001-01-01
 summary: "可变宽度直方图聚合 #  variable_width_histogram 聚合与标准 histogram 聚合类似，但它会自动调整每个桶的宽度，使数据点在各桶之间尽可能均匀分布。该聚合使用聚类算法，根据数据的实际分布动态确定最优的桶边界，而不是使用固定间隔。
 这在数据分布不均匀时特别有用 —— 例如，大部分值集中在某个范围内，但也有少量离群值。使用固定间隔的 histogram 可能导致大量空桶或单个桶内文档过多，而 variable_width_histogram 能自适应地解决这些问题。
-相关指南（先读这些） #    聚合基础  聚合场景实践  直方图聚合（固定宽度版本）  参数说明 #     参数 必需/可选 数据类型 描述     field 必填 String 要聚合的数值字段。必须为数值类型。也可使用 script 替代。   buckets 可选 Integer 期望的桶数量。实际返回的桶数量可能小于或等于此值。默认 10。必须大于 0。   shard_size 可选 Integer 每个分片上用于聚类的文档数量。值越大结果越精确，但内存消耗越大。默认为 buckets * 50。必须大于 1。   initial_buffer 可选 Integer 初始缓冲区大小，用于收集初始数据点以启动聚类算法。默认为 min(10 * shard_size, 50000)。必须大于 0 且不小于 buckets。   script 可选 Object 使用脚本动态生成聚合值。   missing 可选 Numeric 缺少字段值的文档所使用的替代值。    基本用法 #  以下示例将商品价格分成 5 个自适应宽度的桶："
+相关指南（先读这些） #   聚合基础 聚合场景实践 直方图聚合（固定宽度版本）  参数说明 #     参数 必需/可选 数据类型 描述     field 必填 String 要聚合的数值字段。必须为数值类型。也可使用 script 替代。   buckets 可选 Integer 期望的桶数量。实际返回的桶数量可能小于或等于此值。默认 10。必须大于 0。   shard_size 可选 Integer 每个分片上用于聚类的文档数量。值越大结果越精确，但内存消耗越大。默认为 buckets * 50。必须大于 1。   initial_buffer 可选 Integer 初始缓冲区大小，用于收集初始数据点以启动聚类算法。默认为 min(10 * shard_size, 50000)。必须大于 0 且不小于 buckets。   script 可选 Object 使用脚本动态生成聚合值。   missing 可选 Numeric 缺少字段值的文档所使用的替代值。    基本用法 #  以下示例将商品价格分成 5 个自适应宽度的桶："
 ---
 
 

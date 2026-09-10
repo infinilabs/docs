@@ -1,10 +1,10 @@
 ---
 title: "标准分词器（Standard）"
 date: 0001-01-01
-summary: "Standard 分词器 #  standard 分词器是 Easysearch 中的默认分词器。它基于单词边界，采用一种基于语法的方法对文本进行分词，这种方法能够识别字母、数字以及标点等其他字符。它具有高度的通用性，适用于多种语言，它使用了 Unicode 文本分割规则（ UAX#29）来将文本分割成词元。
-相关指南（先读这些） #    词汇识别  文本分析基础  参考样例 #  以下示例请求创建了一个名为 my_index 的新索引，并配置了一个使用标准词元生成器的分词器：
+summary: "Standard 分词器 #  standard 分词器是 Easysearch 中的默认分词器。它基于单词边界，采用一种基于语法的方法对文本进行分词，这种方法能够识别字母、数字以及标点等其他字符。它具有高度的通用性，适用于多种语言，它使用了 Unicode 文本分割规则（UAX#29）来将文本分割成词元。
+相关指南（先读这些） #   词汇识别 文本分析基础  参考样例 #  以下示例请求创建了一个名为 my_index 的新索引，并配置了一个使用标准词元生成器的分词器：
 PUT /my_index { &#34;settings&#34;: { &#34;analysis&#34;: { &#34;analyzer&#34;: { &#34;my_standard_analyzer&#34;: { &#34;type&#34;: &#34;standard&#34; } } } }, &#34;mappings&#34;: { &#34;properties&#34;: { &#34;content&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;analyzer&#34;: &#34;my_standard_analyzer&#34; } } } } 产生的词元 #  使用以下请求来检查使用该分词器生成的词元：
-POST /my_index/_analyze { &#34;analyzer&#34;: &#34;my_standard_analyzer&#34;, &#34;text&#34;: &#34;Easysearch is powerful, fast, and scalable."
+POST /my_index/_analyze { &#34;analyzer&#34;: &#34;my_standard_analyzer&#34;, &#34;text&#34;: &#34;Easysearch is powerful, fast, and scalable.&#34; } 返回内容包含产生的词元"
 ---
 
 

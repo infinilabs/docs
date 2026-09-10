@@ -2,7 +2,7 @@
 title: "HTML 标签字符过滤器（HTML Strip）"
 date: 0001-01-01
 summary: "HTML Strip 字符过滤器 #  html_strip 字符过滤器会从输入文本中移除 HTML 标签（例如 &lt;div&gt;、&lt;p&gt; 和 &lt;a&gt; 等）并输出纯文本。该过滤器可以配置保留某些标签，或者配置把特定的 HTML 标签实体（如 &amp;nbsp;）解码为空格。
-相关指南（先读这些） #    文本分析基础  文本分析：识别词元  参考样例 #  以下请求展示将 html_strip 字符过滤器应用于文本：
+相关指南（先读这些） #   文本分析基础 文本分析：识别词元  参考样例 #  以下请求展示将 html_strip 字符过滤器应用于文本：
 GET /_analyze { &#34;tokenizer&#34;: &#34;keyword&#34;, &#34;char_filter&#34;: [ &#34;html_strip&#34; ], &#34;text&#34;: &#34;&lt;p&gt;Commonly used calculus symbols include &amp;alpha;, &amp;beta; and &amp;theta; &lt;/p&gt;&#34; } 返回内容中包含的词元里，可以看到 HTML 字符已被转换为它们的解码后的值：
 { &#34;tokens&#34;: [ { &#34;token&#34;: &#34;\nCommonly used calculus symbols include α, β and θ \n&#34;, &#34;start_offset&#34;: 0, &#34;end_offset&#34;: 74, &#34;type&#34;: &#34;word&#34;, &#34;position&#34;: 0 } ] } 参数说明 #  html_strip 字符过滤器可以使用以下参数进行配置。"
 ---

@@ -4,9 +4,9 @@ date: 0001-01-01
 description: "字段映射参数详解，控制字段的索引、存储和搜索行为"
 summary: "映射参数 #  映射参数用于控制字段的索引方式、存储行为和搜索特性。合理配置这些参数可以优化查询性能和存储效率。
  概念指南 → 了解如何设计映射，请阅读：
-  映射基础  映射模式与常见坑    按功能分类 #  索引控制 #  控制字段是否可被搜索以及如何索引。
-   参数 说明 默认值      index 是否索引该字段（可搜索） true    enabled 是否解析和索引该对象字段 true    doc_values 是否存储列式数据（用于排序/聚合） true    store 是否独立存储字段值 false    norms 是否存储长度归一化因子 text: true    文本分析 #  控制文本字段的分词和搜索行为。
-   参数 说明 默认值      analyzer 索引和搜索时的分词器 standard    search_analyzer 仅搜索时使用的分词器 同 analyzer    search_quote_analyzer 带引号短语查询时使用的分词器 同 search_analyzer    normalizer keyword 字段的归一化器 无    term_vector 是否存储词条向量 no    position_increment_gap 数组元素间的位置间隔 100    fielddata_frequency_filter 字段数据频率过滤器配置 无    index_phrases 是否为短语查询构建额外索引 false    index_prefixes 是否为前缀查询构建额外索引 false    split_queries_on_whitespace 查询是否在空白处拆分 false    数据转换 #  控制数据类型转换和格式化。"
+ 映射基础 映射模式与常见坑    按功能分类 #  索引控制 #  控制字段是否可被搜索以及如何索引。
+   参数 说明 默认值     index 是否索引该字段（可搜索） true   enabled 是否解析和索引该对象字段 true   doc_values 是否存储列式数据（用于排序/聚合） true   store 是否独立存储字段值 false   norms 是否存储长度归一化因子 text: true    文本分析 #  控制文本字段的分词和搜索行为。
+   参数 说明 默认值     analyzer 索引和搜索时的分词器 standard   search_analyzer 仅搜索时使用的分词器 同 analyzer   search_quote_analyzer 带引号短语查询时使用的分词器 同 search_analyzer   normalizer keyword 字段的归一化器 无   term_vector 是否存储词条向量 no   position_increment_gap 数组元素间的位置间隔 100   fielddata_frequency_filter 字段数据频率过滤器配置 无   index_phrases 是否为短语查询构建额外索引 false   index_prefixes 是否为前缀查询构建额外索引 false   split_queries_on_whitespace 查询是否在空白处拆分 false    数据转换 #  控制数据类型转换和格式化。"
 ---
 
 

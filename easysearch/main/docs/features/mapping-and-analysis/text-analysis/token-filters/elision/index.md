@@ -3,8 +3,9 @@ title: "省略词分词过滤器（Elision）"
 date: 0001-01-01
 summary: "Elision 分词过滤器 #  elision 分词过滤器用于从某些语言的单词中去除省略的字符。省略现象通常出现在像法语这样的语言中，在这些语言里，单词常常会发生缩合，并与后面的单词结合，常见的方式是省略一个元音字母，并用一个撇号来替代。
  注意：elision 分词过滤器已经在以下语言分词器中预先配置好了：加泰罗尼亚语（catalan）、法语（french）、爱尔兰语（irish）和意大利语（italian）。
- 相关指南（先读这些） #    文本分析：规范化  文本分析：识别词元  参数说明 #  自定义省略词分词过滤器可使用以下参数进行配置。
-   参数 必需/可选 数据类型 描述     articles 若未配置 articles_path 则为必需 字符串数组 定义当某些冠词或短词作为省略形式的一部分出现时，哪些应该被移除。   articles_path 若未配置 articles 则为必需 字符串 指定在分析过程中应被移除的自定义冠词列表的路径。   articles_case 可选 布尔值 指定在匹配省略形式时，该过滤器是否区分大小写。默认值为 false。    参考样例 #  法语中默认的省略形式集合包括 l'、m'、t'、qu'、n'、s'、j'、d'、c'、jusqu'、quoiqu'、lorsqu' 和 puisqu'。你可以通过配置 french_elision 分词过滤器来更新这个集合。以下示例请求创建了一个名为 french_texts 的新索引，并配置了一个带有 french_elision 过滤器的分词器："
+ 相关指南（先读这些） #   文本分析：规范化 文本分析：识别词元  参数说明 #  自定义省略词分词过滤器可使用以下参数进行配置。
+   参数 必需/可选 数据类型 描述     articles 若未配置 articles_path 则为必需 字符串数组 定义当某些冠词或短词作为省略形式的一部分出现时，哪些应该被移除。   articles_path 若未配置 articles 则为必需 字符串 指定在分析过程中应被移除的自定义冠词列表的路径。   articles_case 可选 布尔值 指定在匹配省略形式时，该过滤器是否区分大小写。默认值为 false。    参考样例 #  法语中默认的省略形式集合包括 l'、m'、t'、qu'、n'、s'、j'、d'、c'、jusqu'、quoiqu'、lorsqu' 和 puisqu'。你可以通过配置 french_elision 分词过滤器来更新这个集合。以下示例请求创建了一个名为 french_texts 的新索引，并配置了一个带有 french_elision 过滤器的分词器：
+PUT /french_texts { &#34;settings&#34;: { &#34;analysis&#34;: { &#34;filter&#34;: { &#34;french_elision&#34;: { &#34;type&#34;: &#34;elision&#34;, &#34;articles&#34;: [ &#34;l&#34;, &#34;t&#34;, &#34;m&#34;, &#34;d&#34;, &#34;n&#34;, &#34;s&#34;, &#34;j&#34; ] } }, &#34;analyzer&#34;: { &#34;french_analyzer&#34;: { &#34;type&#34;: &#34;custom&#34;, &#34;tokenizer&#34;: &#34;standard&#34;, &#34;filter&#34;: [&#34;lowercase&#34;, &#34;french_elision&#34;] } } } }, &#34;mappings&#34;: { &#34;properties&#34;: { &#34;text&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;analyzer&#34;: &#34;french_analyzer&#34; } } } } 产生的词元 #  使用以下请求来检查使用该分词器生成的词元："
 ---
 
 

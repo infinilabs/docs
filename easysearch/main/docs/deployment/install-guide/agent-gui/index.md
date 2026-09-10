@@ -4,7 +4,7 @@ date: 0001-01-01
 summary: "通过 Agent 图形界面部署 Easysearch #  Agent 支持图形化一键拉起新集群（开发/生产双模式），用户无需手动编辑任何配置文件，通过图形界面即可完成 Easysearch 集群的安装、配置和日常管理。
   安装 Agent
 macOS/Linux 用户可以通过如下脚本进行快速安装：
-curl -sSL http://get.infini.cloud | bash -s -- -p agent Windows 用户可以手动下载安装包进行安装，见 安装 INFINI Agent。
+curl -sSL http://get.infini.cloud | bash -s -- -p agent Windows 用户可以手动下载安装包进行安装，见安装 INFINI Agent。
   运行 Agent
   Linux / macOS
 cd agent-x.y.z-xxxx ./agent-x.y.z   Windows
@@ -12,7 +12,8 @@ cd agent-x.y.z-xxxx .\agent-x.y.z.exe     浏览器访问 Agent
 Agent UI 默认监听在 http://127.0.0.1:23000，浏览器打开此地址。
  Agent &lt;= 1.31.2 默认监听 http://127.0.0.1:9000。
    登录 Agent
-见 服务管理登录"
+见服务管理登录
+  创建 Easysearch 集群"
 ---
 
 

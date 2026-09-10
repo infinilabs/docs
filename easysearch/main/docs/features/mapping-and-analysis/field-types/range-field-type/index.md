@@ -2,7 +2,7 @@
 title: "范围字段类型（Range）"
 date: 0001-01-01
 summary: "Range 字段类型 #  以下表格列出了 Easysearch 支持的所有范围字段类型。
-   字段数据类型 描述     integer_range 整数值范围。   long_range 长整型值范围。   double_range 双精度浮点值范围。   float_range 浮点值范围。   ip_range IPv4 或 IPv6 地址范围，起始和结束地址可使用不同格式。   date_range 日期值范围，起始和结束日期可采用不同格式。内部以 64 位无符号整数存储，自纪元以来的毫秒数表示。    相关指南（先读这些） #    映射基础  结构化搜索  参考代码 #  创建一个有双精度浮点数范围字段和日期范围字段的映射
+   字段数据类型 描述     integer_range 整数值范围。   long_range 长整型值范围。   double_range 双精度浮点值范围。   float_range 浮点值范围。   ip_range IPv4 或 IPv6 地址范围，起始和结束地址可使用不同格式。   date_range 日期值范围，起始和结束日期可采用不同格式。内部以 64 位无符号整数存储，自纪元以来的毫秒数表示。    相关指南（先读这些） #   映射基础 结构化搜索  参考代码 #  创建一个有双精度浮点数范围字段和日期范围字段的映射
 PUT testindex { &#34;mappings&#34; : { &#34;properties&#34; : { &#34;gpa&#34; : { &#34;type&#34; : &#34;double_range&#34; }, &#34;graduation_date&#34; : { &#34;type&#34; : &#34;date_range&#34;, &#34;format&#34; : &#34;strict_year_month||strict_year_month_day&#34; } } } } 索引一个包含这两个字段的文档"
 ---
 

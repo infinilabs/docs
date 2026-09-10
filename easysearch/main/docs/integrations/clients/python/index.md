@@ -4,7 +4,7 @@ date: 0001-01-01
 description: "使用 Python 客户端连接 Easysearch，完成基础 CRUD 与搜索调用。"
 summary: "Python 客户端 #  本页面帮助你快速跑通 Python 客户端连接 Easysearch 的完整流程。
 推荐：Easysearch 官方 Python 客户端 #  Easysearch 提供了官方 Python 客户端 easysearch-py（Apache 2.0 开源），包名 easysearch。
- 兼容说明：也可继续使用 elasticsearch-py 7.10.x 兼容连接，API 调用方式相同，仅导入路径不同。下文示例以官方客户端为主，兼容用法见 备选方案。
+ 兼容说明：也可继续使用 elasticsearch-py 7.10.x 兼容连接，API 调用方式相同，仅导入路径不同。下文示例以官方客户端为主，兼容用法见备选方案。
  安装依赖 #  # 官方客户端（推荐） pip install https://github.com/infinilabs/easysearch-py/releases/download/v0.1.0/easysearch-0.1.0-py2.py3-none-any.whl # 如需 async/await 支持 pip install &#34;easysearch[async] @ https://github.com/infinilabs/easysearch-py/releases/download/v0.1.0/easysearch-0.1.0-py2.py3-none-any.whl&#34; 建立连接 #  from easysearch import Easysearch es = Easysearch( [&#34;https://localhost:9200&#34;], http_auth=(&#34;admin&#34;, &#34;your_password&#34;), verify_certs=False, # 开发环境；生产环境请配置 CA 证书 timeout=30, max_retries=3, retry_on_timeout=True, ) # 验证连接 print(es."
 ---
 

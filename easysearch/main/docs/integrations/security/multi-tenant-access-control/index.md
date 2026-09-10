@@ -3,7 +3,7 @@ title: "多租户与权限模型实践"
 date: 0001-01-01
 description: "结合 Easysearch 的索引/文档/字段级安全能力，设计多租户与权限模型。"
 summary: "多租户与权限模型实践 #  在 SaaS 平台或企业多部门共享 Easysearch 集群的场景下，需要一套完善的多租户隔离与权限控制方案。Easysearch 提供了索引级、文档级和字段级三层安全能力来支撑这一需求。
-相关指南 #    用户与角色管理  接入企业认证体系  多租户隔离模式 #  模式一：按索引隔离 #  每个租户使用独立的索引（或索引前缀），通过角色控制访问范围。
+相关指南 #   用户与角色管理 接入企业认证体系  多租户隔离模式 #  模式一：按索引隔离 #  每个租户使用独立的索引（或索引前缀），通过角色控制访问范围。
 tenant_a_orders tenant_a_products tenant_b_orders tenant_b_products 角色定义示例：
 PUT _security/role/tenant_a_role { &#34;cluster_permissions&#34;: [&#34;cluster_composite_ops_ro&#34;], &#34;index_permissions&#34;: [ { &#34;index_patterns&#34;: [&#34;tenant_a_*&#34;], &#34;allowed_actions&#34;: [&#34;crud&#34;, &#34;create_index&#34;] } ] }    优点 缺点     隔离彻底，互不影响 索引数量随租户增长   性能可独立调优 跨租户查询需要额外聚合   易于理解和调试 集群管理复杂度较高    模式二：按字段标记隔离 #  所有租户共享索引，通过 tenant_id 字段区分，利用文档级安全（DLS）实现隔离。"
 ---

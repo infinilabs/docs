@@ -2,7 +2,7 @@
 title: "加权平均聚合（Weighted Avg）"
 date: 0001-01-01
 summary: "加权平均聚合 #  weighted_avg 聚合计算跨文档数值的加权平均值。当您想计算平均值，但希望某些数据点的权重大于其他数据点时，此功能非常有用。
-相关指南（先读这些） #    聚合基础  聚合场景实践  加权平均值使用公式 $\frac{\sum_{i=1}^n value_i \cdot weight_i}{\sum_{i=1}^n weight_i}$ 计算。
+相关指南（先读这些） #   聚合基础 聚合场景实践  加权平均值使用公式 $\frac{\sum_{i=1}^n value_i \cdot weight_i}{\sum_{i=1}^n weight_i}$ 计算。
 参数说明 #  weighted_avg 聚合采用以下参数。
    参数 必需/可选 描述     value 必需 定义如何获取要计算平均值的数值。需要 field 或 script 。   weight 必需 定义如何获取每个值的权重。需要 field 或 script 。   format 可选 DecimalFormat 格式字符串。返回聚合的 value_as_string 属性中的格式化输出。   value_type 可选 使用脚本或未映射字段时的值的类型提示。    可以在 value 或 weight 内指定以下参数。"
 ---

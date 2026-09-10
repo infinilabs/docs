@@ -3,7 +3,7 @@ title: "多样性采样聚合（Diversified Sampler）"
 date: 0001-01-01
 summary: "多样性采样聚合 #  diversified_sampler 聚合允许你通过去重包含相同 field 的文档来减少样本池分布的偏差。它通过使用 max_docs_per_value 和 field 设置来实现，这些设置限制了在分片上收集的 field 的最大文档数。max_docs_per_value 设置是一个可选参数，用于确定每个 field 将返回的最大文档数。此设置的默认值为 1。
 与 sampler 聚合类似，你可以使用 shard_size 设置来控制在任何单个分片上收集的最大文档数，如下面的示例所示：
-相关指南（先读这些） #    聚合基础  聚合性能优化  聚合场景实践  GET sample_data_logs/_search { &#34;size&#34;: 0, &#34;aggs&#34;: { &#34;sample&#34;: { &#34;diversified_sampler&#34;: { &#34;shard_size&#34;: 1000, &#34;field&#34;: &#34;response.keyword&#34; }, &#34;aggs&#34;: { &#34;terms&#34;: { &#34;terms&#34;: { &#34;field&#34;: &#34;agent.keyword&#34; } } } } } } 返回内容
+相关指南（先读这些） #   聚合基础 聚合性能优化 聚合场景实践  GET sample_data_logs/_search { &#34;size&#34;: 0, &#34;aggs&#34;: { &#34;sample&#34;: { &#34;diversified_sampler&#34;: { &#34;shard_size&#34;: 1000, &#34;field&#34;: &#34;response.keyword&#34; }, &#34;aggs&#34;: { &#34;terms&#34;: { &#34;terms&#34;: { &#34;field&#34;: &#34;agent.keyword&#34; } } } } } } 返回内容
 ... &#34;aggregations&#34; : { &#34;sample&#34; : { &#34;doc_count&#34; : 3, &#34;terms&#34; : { &#34;doc_count_error_upper_bound&#34; : 0, &#34;sum_other_doc_count&#34; : 0, &#34;buckets&#34; : [ { &#34;key&#34; : &#34;Mozilla/5."
 ---
 

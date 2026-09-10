@@ -3,7 +3,7 @@ title: "分页与滚动"
 date: 0001-01-01
 description: "from/size 基础分页、Scroll 批量拉取、search_after 深分页、Point in Time (PIT) 的 API 与参数说明。"
 summary: "分页与滚动 #  Easysearch 提供多种分页机制，适用于不同场景：
-   方式 适用场景 一致性 深度限制     from/size 小规模翻页（前几页） 无（实时数据） 默认 10,000   search_after + sort 深分页、增量翻页 无（实时数据） 无   search_after + PIT 深分页、一致性翻页 快照一致 无   Scroll 批量导出、离线处理 快照一致 无    相关指南 #    分页与排序   from/size 基础分页 #  最基础的分页依赖 from 和 size 两个参数：
+   方式 适用场景 一致性 深度限制     from/size 小规模翻页（前几页） 无（实时数据） 默认 10,000   search_after + sort 深分页、增量翻页 无（实时数据） 无   search_after + PIT 深分页、一致性翻页 快照一致 无   Scroll 批量导出、离线处理 快照一致 无    相关指南 #   分页与排序   from/size 基础分页 #  最基础的分页依赖 from 和 size 两个参数：
    参数 说明 默认值     from 起始偏移（0 基） 0   size 本页返回条数 10    GET shakespeare/_search { &#34;from&#34;: 0, &#34;size&#34;: 10, &#34;query&#34;: { &#34;match&#34;: { &#34;play_name&#34;: &#34;Hamlet&#34; } } } 计算页码对应的 from：from = size × (page_number - 1)"
 ---
 

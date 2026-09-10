@@ -3,7 +3,7 @@ title: "从数据库同步数据（JDBC / ETL）"
 date: 0001-01-01
 description: "从关系型数据库批量或增量同步数据到 Easysearch 的常见模式。"
 summary: "从数据库同步数据（JDBC / ETL） #  将关系型数据库（MySQL、PostgreSQL 等）中的数据同步到 Easysearch 是一个常见需求。本文介绍全量导入和增量同步的主要方案和实践。
-相关指南（先读这些） #    Logstash 接入  SeaTunnel 集成  Bulk API  同步方案概览 #     方案 全量 增量 实时性 复杂度 说明     Logstash JDBC Input ✅ ✅ 分钟级 低 定时轮询数据库，适合中小规模   SeaTunnel ✅ ✅ 分钟级 中 分布式 ETL，适合大数据量   Canal / Debezium (CDC) ❌ ✅ 秒级 高 基于 binlog，实时捕获变更   自研同步程序 ✅ ✅ 灵活 高 完全自定义，适合特殊需求    Logstash JDBC Input（推荐入门） #  基本配置 #  # logstash-jdbc."
+相关指南（先读这些） #   Logstash 接入 SeaTunnel 集成 Bulk API  同步方案概览 #     方案 全量 增量 实时性 复杂度 说明     Logstash JDBC Input ✅ ✅ 分钟级 低 定时轮询数据库，适合中小规模   SeaTunnel ✅ ✅ 分钟级 中 分布式 ETL，适合大数据量   Canal / Debezium (CDC) ❌ ✅ 秒级 高 基于 binlog，实时捕获变更   自研同步程序 ✅ ✅ 灵活 高 完全自定义，适合特殊需求    Logstash JDBC Input（推荐入门） #  基本配置 #  # logstash-jdbc."
 ---
 
 

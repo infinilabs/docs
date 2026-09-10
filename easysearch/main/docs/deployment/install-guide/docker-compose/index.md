@@ -1,7 +1,7 @@
 ---
 title: "Docker Compose"
 date: 0001-01-01
-summary: "Docker Compose 环境下使用 Easysearch #  在使用 docker-compose 运行 Easysearch 集群之前，请确保已进行 系统调优并安装好 Docker 服务，且 Docker 服务正常运行。
+summary: "Docker Compose 环境下使用 Easysearch #  在使用 docker-compose 运行 Easysearch 集群之前，请确保已进行系统调优并安装好 Docker 服务，且 Docker 服务正常运行。
 # 安装docker-compose curl -L &#34;https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-$(uname -s)-$(uname -m)&#34; -o /usr/local/bin/docker-compose # 增加执行权限 chmod +x /usr/local/bin/docker-compose # 检查版本信息 docker-compose -v 运行 2 节点 docker compose 项目 #  从官网下载文件并解压，然后运行初始化脚本，最后运行启动脚本。
  在宿主机上创建工作目录  # 创建操作目录 sudo mkdir -p /data/docker/compose 下载文件并解压   如需测试 3 节点，只需把下面的下载文件名改为 3node.tar.gz 即可。
  curl -sSL https://release.infinilabs.com/easysearch/archive/compose/2node.tar.gz | sudo tar -xzC /data/docker/compose --strip-components=1 # 调整目录权限 sudo chown -R ${USER} /data/docker/compose  注意：解压之后，请把镜像的 latest 版本手工更新成具体的版本，可参考下面的命令"

@@ -3,7 +3,7 @@ title: "高亮"
 date: 0001-01-01
 description: "高亮命中词的 API 参数、高亮器类型选择、自定义标签、片段控制。"
 summary: "高亮 #  高亮用于在返回结果中突出显示命中的查询词，方便用户快速定位关键信息。
-相关指南 #    高亮   基础用法 #  在查询体中添加 highlight 段即可启用：
+相关指南 #   高亮   基础用法 #  在查询体中添加 highlight 段即可启用：
 GET shakespeare/_search { &#34;query&#34;: { &#34;match&#34;: { &#34;text_entry&#34;: &#34;life&#34; } }, &#34;highlight&#34;: { &#34;fields&#34;: { &#34;text_entry&#34;: {} } } } 响应中每条命中文档会带一个 highlight 对象，默认使用 &lt;em&gt; 标签包裹：
 &#34;highlight&#34;: { &#34;text_entry&#34;: [ &#34;my &lt;em&gt;life&lt;/em&gt;, except my &lt;em&gt;life&lt;/em&gt;.&#34; ] }  自定义标签 #  通过 pre_tags / post_tags 自定义包裹标签：
 GET shakespeare/_search { &#34;query&#34;: { &#34;match&#34;: { &#34;play_name&#34;: &#34;Henry IV&#34; } }, &#34;highlight&#34;: { &#34;pre_tags&#34;: [&#34;&lt;strong&gt;&#34;], &#34;post_tags&#34;: [&#34;&lt;/strong&gt;&#34;], &#34;fields&#34;: { &#34;play_name&#34;: {} } } } 也可以使用 &quot;tags_schema&quot;: &quot;styled&quot; 启用内置的多级标签样式（&lt;em class=&quot;hlt1&quot;&gt;、&lt;em class=&quot;hlt2&quot;&gt; 等）。"

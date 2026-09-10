@@ -3,10 +3,10 @@ title: "快速开始"
 date: 0001-01-01
 description: "15 分钟快速起步，安装、连接与核心功能体验。"
 summary: "快速开始 #  15 分钟快速上手 Easysearch，完成安装 → 连接 → 写入 → 查询的完整链路。
-第一步：安装 #  选择适合你的方式快速安装，详见  如何安装。
+第一步：安装 #  选择适合你的方式快速安装，详见 如何安装。
 # 最快方式：一键安装（Linux） curl -sSL http://get.infini.cloud | bash -s -- -p easysearch cd /data/easysearch &amp;&amp; bin/initialize.sh -s chown -R easysearch:easysearch /data/easysearch su easysearch -c &#34;/data/easysearch/bin/easysearch -d&#34; 第二步：验证与连接 #  初始化完成后，admin 密码会直接输出在终端中，请务必记住。也可以通过环境变量 EASYSEARCH_INITIAL_ADMIN_PASSWORD 预先指定密码。
-# 验证服务（将 YOUR_PASSWORD 替换为初始化时终端输出的密码） curl -ku admin:YOUR_PASSWORD https://localhost:9200 更多访问方式见  如何使用：
-  使用 Curl 访问：命令行方式  使用 Easysearch UI：内置 Web 界面，开箱即用  使用 INFINI Console：多集群统一管理平台  Java 客户端：Java 应用集成  Python 客户端：Python 应用集成  第三步：动手实践 #  通过  入门教程 学习核心操作："
+# 验证服务（将 YOUR_PASSWORD 替换为初始化时终端输出的密码） curl -ku admin:YOUR_PASSWORD https://localhost:9200 更多访问方式见 如何使用：
+ 使用 Curl 访问：命令行方式 使用 Easysearch UI：内置 Web 界面，开箱即用 使用 INFINI Console：多集群统一管理平台 Java 客户端：Java 应用集成 Python 客户端：Python 应用集成  第三步：动手实践 #  通过 入门教程 学习核心操作："
 ---
 
 

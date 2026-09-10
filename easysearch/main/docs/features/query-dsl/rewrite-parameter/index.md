@@ -4,7 +4,7 @@ date: 0001-01-01
 summary: "Rewrite 参数 #  像 wildcard、prefix、regexp、fuzzy 和 range 这样的多词查询在内部会重组成一组词。rewrite 参数允许你控制这些词重写的执行和评分。
 当多词查询扩展成很多词（例如 prefix: &quot;error*&quot; 匹配数百个词）时，它们在内部会转换成 term 查询。这个过程可能会有以下缺点：
  超出 indices.query.bool.max_clause_count 限制（默认是 1024）。 影响匹配文档的评分计算方式。 根据所使用的重写方法，影响内存和延迟。  rewrite 参数让你能够控制多词查询的内部行为。
-   模式 评分规则 性能 注释     constant_score 所有匹配具有相同分数 最佳 默认模式，适合过滤器   scoring_boolean 基于 TF/IDF 中等 完整相关性评分   constant_score_boolean 相同分数但使用布尔结构 中等 与 must_not 或 minimum_should_match 一起使用   top_terms_N 在顶部 N 个词上使用 TF/IDF 高效 截断扩展   top_terms_boost_N 静态提升 快速 较低准确度   top_terms_blended_freqs_N 混合评分 平衡 最佳评分/效率权衡    相关指南（先读这些） #    部分匹配  查询 DSL 基础  可用的重写方法 #  下表总结了可用的重写方法。"
+   模式 评分规则 性能 注释     constant_score 所有匹配具有相同分数 最佳 默认模式，适合过滤器   scoring_boolean 基于 TF/IDF 中等 完整相关性评分   constant_score_boolean 相同分数但使用布尔结构 中等 与 must_not 或 minimum_should_match 一起使用   top_terms_N 在顶部 N 个词上使用 TF/IDF 高效 截断扩展   top_terms_boost_N 静态提升 快速 较低准确度   top_terms_blended_freqs_N 混合评分 平衡 最佳评分/效率权衡    相关指南（先读这些） #   部分匹配 查询 DSL 基础  可用的重写方法 #  下表总结了可用的重写方法。"
 ---
 
 

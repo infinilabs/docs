@@ -2,7 +2,7 @@
 title: "元数据参数（Meta）"
 date: 0001-01-01
 summary: "Meta 参数 #  meta 参数允许为字段附加自定义元数据。这些元数据不影响搜索或索引行为，仅用于记录字段的业务含义或管理信息。
-相关指南 #    映射基础  示例 #  PUT my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;latency&#34;: { &#34;type&#34;: &#34;long&#34;, &#34;meta&#34;: { &#34;unit&#34;: &#34;ms&#34;, &#34;description&#34;: &#34;接口响应延迟&#34; } }, &#34;cpu_usage&#34;: { &#34;type&#34;: &#34;float&#34;, &#34;meta&#34;: { &#34;unit&#34;: &#34;percent&#34;, &#34;metric_type&#34;: &#34;gauge&#34; } } } } } 典型用途 #     场景 示例 meta 键值     标注计量单位 &quot;unit&quot;: &quot;ms&quot;, &quot;unit&quot;: &quot;bytes&quot;   标记指标类型 &quot;metric_type&quot;: &quot;counter&quot;, &quot;metric_type&quot;: &quot;gauge&quot;   记录字段用途 &quot;description&quot;: &quot;用户最后登录时间&quot;   标记数据来源 &quot;source&quot;: &quot;nginx_access_log&quot;   团队归属信息 &quot;owner&quot;: &quot;data-team&quot;    通过 API 查看 #  字段元数据会在 Get Mapping API 的响应中返回："
+相关指南 #   映射基础  示例 #  PUT my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;latency&#34;: { &#34;type&#34;: &#34;long&#34;, &#34;meta&#34;: { &#34;unit&#34;: &#34;ms&#34;, &#34;description&#34;: &#34;接口响应延迟&#34; } }, &#34;cpu_usage&#34;: { &#34;type&#34;: &#34;float&#34;, &#34;meta&#34;: { &#34;unit&#34;: &#34;percent&#34;, &#34;metric_type&#34;: &#34;gauge&#34; } } } } } 典型用途 #     场景 示例 meta 键值     标注计量单位 &quot;unit&quot;: &quot;ms&quot;, &quot;unit&quot;: &quot;bytes&quot;   标记指标类型 &quot;metric_type&quot;: &quot;counter&quot;, &quot;metric_type&quot;: &quot;gauge&quot;   记录字段用途 &quot;description&quot;: &quot;用户最后登录时间&quot;   标记数据来源 &quot;source&quot;: &quot;nginx_access_log&quot;   团队归属信息 &quot;owner&quot;: &quot;data-team&quot;    通过 API 查看 #  字段元数据会在 Get Mapping API 的响应中返回："
 ---
 
 

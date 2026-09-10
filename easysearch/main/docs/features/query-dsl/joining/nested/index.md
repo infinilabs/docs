@@ -2,7 +2,7 @@
 title: "Nested 查询"
 date: 0001-01-01
 summary: "Nested 查询 #  nested 查询充当其他查询的包装器，用于搜索嵌套字段。嵌套字段对象被视为单独的文档进行搜索。如果对象匹配搜索条件，nested 查询将返回根级别的父文档。
-相关指南（先读这些） #    Nested 建模  关联查询（Joining）  参考样例 #  在运行 nested 查询之前，您的索引必须包含一个嵌套字段。
+相关指南（先读这些） #   Nested 建模 关联查询（Joining）  参考样例 #  在运行 nested 查询之前，您的索引必须包含一个嵌套字段。
 要配置一个包含嵌套字段的示例索引，请发送以下请求：
 PUT /testindex { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;patient&#34;: { &#34;type&#34;: &#34;nested&#34;, &#34;properties&#34;: { &#34;name&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;age&#34;: { &#34;type&#34;: &#34;integer&#34; } } } } } } 接下来，将一个文档索引到示例索引中：
 PUT /testindex/_doc/1 { &#34;patient&#34;: { &#34;name&#34;: &#34;John Doe&#34;, &#34;age&#34;: 56 } } 要搜索嵌套的 patient 字段，请将您的查询包裹在 nested 查询中，并提供 path 给嵌套字段："

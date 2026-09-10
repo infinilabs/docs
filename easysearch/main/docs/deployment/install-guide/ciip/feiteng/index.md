@@ -2,9 +2,9 @@
 title: "飞腾平台安装"
 date: 0001-01-01
 summary: "飞腾平台安装 #  飞腾平台介绍 #  飞腾平台基于 ARM 架构，由飞腾公司自主研发，提供高性能、低功耗的 CPU 产品，广泛应用于信创桌面、服务器及嵌入式领域，全面适配统信 UOS、麒麟等国产操作系统，支撑党政、金融、电信等行业国产化替代需求。
-飞腾平台安装参考 #  目前，Easysearch 已支持在飞腾芯片的国产操作系统上运行，联网环境建议使用一键安装脚本进行安装，离线环境建议下载 Bundle 包进行安装，分布式集群安装请参考 分布式集群安装。
- 前提条件：已参照 系统调优进行了系统优化，同时为 Easysearch 创建了专用的用户。
- 初始化系统参数及用户命令参考 #  # 调整内核配置 echo &#34;vm.max_map_count=262144&#34; &gt;&gt; /etc/sysctl.conf &amp;&amp; sysctl -p # 增加用户组与用户 groupadd -r easysearch &amp;&amp; useradd -r -g easysearch -d /home/easysearch -s /sbin/nologin -c &#34;Easysearch Service Account&#34; easysearch 安装命令参考 #  # 创建数据目录 mkdir -p /data/easysearch # 下载最新版本的 Easysearch 并安装 curl -sSL http://get."
+飞腾平台安装参考 #  目前，Easysearch 已支持在飞腾芯片的国产操作系统上运行，联网环境建议使用一键安装脚本进行安装，离线环境建议下载 Bundle 包进行安装，分布式集群安装请参考分布式集群安装。
+ 前提条件：已参照系统调优进行了系统优化，同时为 Easysearch 创建了专用的用户。
+ 初始化系统参数及用户命令参考 #  # 调整内核配置 echo &#34;vm.max_map_count=262144&#34; &gt;&gt; /etc/sysctl.conf &amp;&amp; sysctl -p # 增加用户组与用户 groupadd -r easysearch &amp;&amp; useradd -r -g easysearch -d /home/easysearch -s /sbin/nologin -c &#34;Easysearch Service Account&#34; easysearch 安装命令参考 #  # 创建数据目录 mkdir -p /data/easysearch # 下载最新版本的 Easysearch 并安装 curl -sSL http://get.infini.cloud | bash -s -- -p easysearch -d /data/easysearch # 进入 Easysearch 目录 cd /data/easysearch # 初始化 Easysearch bin/initialize."
 ---
 
 

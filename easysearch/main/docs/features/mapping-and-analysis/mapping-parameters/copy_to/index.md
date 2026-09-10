@@ -3,7 +3,7 @@ title: "复制到参数（Copy To）"
 date: 0001-01-01
 summary: "Copy To 参数 #  copy_to 参数允许您将多个字段的值复制到单个字段中。如果您经常跨多个字段搜索，此参数会很有用，因为这样可以达到搜索一组字段的效果。
 只有字段值被复制，而不是分析器产生的词项。原始的 _source 字段保持不变，并且可以使用 copy_to 参数将相同的值复制到多个字段。但是，字段间不支持递归复制；相反，应该直接使用 copy_to 从源字段复制到多个目标字段。
-相关指南（先读这些） #    映射基础  多字段搜索  代码样例 #  以下示例使用 copy_to 参数通过产品的名称和描述进行搜索，并将这些值复制到单个字段中：
+相关指南（先读这些） #   映射基础 多字段搜索  代码样例 #  以下示例使用 copy_to 参数通过产品的名称和描述进行搜索，并将这些值复制到单个字段中：
 PUT my-products-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;name&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;copy_to&#34;: &#34;product_info&#34; }, &#34;description&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;copy_to&#34;: &#34;product_info&#34; }, &#34;product_info&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;price&#34;: { &#34;type&#34;: &#34;float&#34; } } } } PUT my-products-index/_doc/1 { &#34;name&#34;: &#34;Wireless Headphones&#34;, &#34;description&#34;: &#34;High-quality wireless headphones with noise cancellation&#34;, &#34;price&#34;: 99."
 ---
 

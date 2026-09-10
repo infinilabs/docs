@@ -4,7 +4,7 @@ date: 0001-01-01
 summary: "百分位数聚合 #  percentiles 聚合估计数值字段在给定百分位处的值。这对于理解分布边界很有用。
 例如，load_time 的 95th 百分位 = 120ms 表示 95% 的值小于或等于 120 毫秒。
 与 cardinality 指标类似，percentiles 指标也是近似的。
-相关指南（先读这些） #    聚合基础  聚合场景实践  参数说明 #  percentiles 聚合采用以下参数。
+相关指南（先读这些） #   聚合基础 聚合场景实践  参数说明 #  percentiles 聚合采用以下参数。
    参数 必需/可选 数据类型 描述     field 必需 String 用于计算百分位数的数值字段。   percents 可选 Array of doubles 返回百分位数列表。默认为 [1, 5, 25, 50, 75, 95, 99] 。   keyed 可选 Boolean 如果设置为 false ，则将结果作为数组返回。否则将结果作为 JSON 对象返回。默认值为 true 。   tdigest."
 ---
 

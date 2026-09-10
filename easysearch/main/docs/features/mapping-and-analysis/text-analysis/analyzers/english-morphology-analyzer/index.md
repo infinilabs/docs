@@ -4,7 +4,7 @@ date: 0001-01-01
 summary: "English Morphology 分析器 #  english_morphology 分析器专为处理复杂的英语文本而设计。与仅执行简单算法剪裁的常规分析器不同，它基于词形还原（Lemmatization）技术，能够精准识别英语词汇的形态变化，并将其还原为词典中的标准原型。
 这确保了用户在搜索单词的不同形态（如动词时态 ran/running、名词单复数 foxes/fox、或不规则变化 feet/foot）时，能够实现精准的跨形态匹配。
 该分析器由以下分词器和分词过滤器组成：
- standard 分词器：去除大部分标点符号，并依据空格和其他常见分隔符对文本进行分割。 lowercase 分词过滤器：将所有词元转换为小写，以确保匹配时不区分大小写。 english_morphology 分词过滤器：执行英语词汇的形态分析，将动词的时态、形容词的比较级以及名词的复数形式映射到其唯一的语义原型。  相关指南（先读这些） #    文本分析：词干提取  文本分析基础  安装 #  英语形态分词器包含在Morphological Analysis插件中。此插件已包含在Easysearch的bundle包中。
+ standard 分词器：去除大部分标点符号，并依据空格和其他常见分隔符对文本进行分割。 lowercase 分词过滤器：将所有词元转换为小写，以确保匹配时不区分大小写。 english_morphology 分词过滤器：执行英语词汇的形态分析，将动词的时态、形容词的比较级以及名词的复数形式映射到其唯一的语义原型。  相关指南（先读这些） #   文本分析：词干提取 文本分析基础  安装 #  英语形态分词器包含在Morphological Analysis插件中。此插件已包含在Easysearch的bundle包中。
 analysis-morphology插件安装命令如下：
 bin/easysearch-plugin install analysis-morphology 参考样例 #  以下命令创建一个名为 my_morphology_index 的索引，并为 my_field 字段配置俄语形态分词器的索引：
 PUT /my_morphology_index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;my_field&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;analyzer&#34;: &#34;english_morphology&#34; } } } } 配置自定义分词器 #  在生产环境中，为了兼顾性能和准确度，建议定义一个包含小写化、形态还原和停用词过滤的自定义分析器：

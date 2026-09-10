@@ -2,8 +2,8 @@
 title: "Java 客户端"
 date: 0001-01-01
 summary: "Java 客户端 #  Easysearch Java API Client 是 Easysearch 的官方 Java 客户端，提供了简洁、强大且类型安全的 API 接口。
-相关指南（先读这些） #     Java 客户端集成
-   客户端集成
+相关指南（先读这些） #    Java 客户端集成
+  客户端集成
   全新重构的 2.0.x 版本，更轻量级的设计，移除冗余依赖。
   兼容 Easysearch 各个版本。
   为常用 Easysearch API 提供强类型的请求和响应。
@@ -11,7 +11,8 @@ summary: "Java 客户端 #  Easysearch Java API Client 是 Easysearch 的官方 
   使用流式构建器和函数式模式，以在创建复杂嵌套结构时编写简洁易读的代码。
   通过使用 Jackson 无缝集成应用程序类。
   快速开始 #  本页指导您完成Java客户端的安装过程，展示了如何实例化客户端，以及如何使用它执行基本的 Easysearch 操作。
-安装 #  easysearch-client 已经发布到 Maven https://mvnrepository.com/artifact/com.infinilabs/easysearch-client/2.0.2"
+安装 #  easysearch-client 已经发布到 Maven https://mvnrepository.com/artifact/com.infinilabs/easysearch-client/2.0.2
+安装需要 jdk8 或以上版本"
 ---
 
 

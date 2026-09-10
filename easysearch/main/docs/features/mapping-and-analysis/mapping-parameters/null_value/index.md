@@ -2,7 +2,7 @@
 title: "空值参数（Null Value）"
 date: 0001-01-01
 summary: "Null Value 参数 #  null_value 参数指定一个替代值，用于在字段值为 null 或缺失时代替索引。这使得 null 值可以被搜索和聚合。
-相关指南（先读这些） #    映射基础  结构化搜索  基本用法 #  PUT my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;status&#34;: { &#34;type&#34;: &#34;keyword&#34;, &#34;null_value&#34;: &#34;UNKNOWN&#34; } } } } 写入和查询：
+相关指南（先读这些） #   映射基础 结构化搜索  基本用法 #  PUT my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;status&#34;: { &#34;type&#34;: &#34;keyword&#34;, &#34;null_value&#34;: &#34;UNKNOWN&#34; } } } } 写入和查询：
 PUT my-index/_doc/1 { &#34;status&#34;: null } PUT my-index/_doc/2 { &#34;status&#34;: &#34;active&#34; } # 搜索 null 值的文档 GET my-index/_search { &#34;query&#34;: { &#34;term&#34;: { &#34;status&#34;: &#34;UNKNOWN&#34; } } } 文档 1 会被上面的查询找到，因为 null 被替换为 &quot;UNKNOWN&quot; 进行索引。"
 ---
 

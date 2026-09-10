@@ -2,7 +2,7 @@
 title: "空白分析器（Whitespace）"
 date: 0001-01-01
 summary: "Whitespace 分析器 #  whitespace 分析器仅基于空白字符（例如，空格和制表符）将文本拆分为词元。比如转换为小写形式或移除停用词这样的转换操作，它都不会应用，因此文本的原始大小写形式会被保留，并且标点符号也会作为词元的一部分包含在内。
-相关指南（先读这些） #    文本分析基础  文本分析：识别词元  参考样例 #  以下命令创建一个名为 my_whitespace_index 并使用空格分词器的索引：
+相关指南（先读这些） #   文本分析基础 文本分析：识别词元  参考样例 #  以下命令创建一个名为 my_whitespace_index 并使用空格分词器的索引：
 PUT /my_whitespace_index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;my_field&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;analyzer&#34;: &#34;whitespace&#34; } } } } 配置自定义分词器 #  以下命令来配置一个自定义分词器的索引，该自定义分词器的作用等同于空格分词器：
 PUT /my_custom_whitespace_index { &#34;settings&#34;: { &#34;analysis&#34;: { &#34;analyzer&#34;: { &#34;my_custom_whitespace_analyzer&#34;: { &#34;type&#34;: &#34;custom&#34;, &#34;tokenizer&#34;: &#34;whitespace&#34;, &#34;filter&#34;: [&#34;lowercase&#34;] } } } }, &#34;mappings&#34;: { &#34;properties&#34;: { &#34;my_field&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;analyzer&#34;: &#34;my_custom_whitespace_analyzer&#34; } } } } 产生的词元 #  以下请求用来检查分词器生成的词元："
 ---

@@ -3,7 +3,7 @@ title: "Span Within 查询"
 date: 0001-01-01
 summary: "Span Within 查询 #  span_within 查询匹配被另一个 span 查询所包围的跨度。它是 span_containing 的相反操作：span_containing 返回包含较小跨度的较大跨度，而 span_within 返回被较大跨度包围的较小跨度。
 例如，您可以使用 span_within 查询来：
- 查找出现在较长短语中的较短短语。 匹配在特定上下文中出现的词项。 识别被较大模式包围的小模式。  相关指南（先读这些） #    Span 查询  邻近匹配  查询 DSL 基础  参考样例 #  以下查询在包含“shirt”和“long”的跨度中搜索单词“dress”：
+ 查找出现在较长短语中的较短短语。 匹配在特定上下文中出现的词项。 识别被较大模式包围的小模式。  相关指南（先读这些） #   Span 查询 邻近匹配 查询 DSL 基础  参考样例 #  以下查询在包含“shirt”和“long”的跨度中搜索单词“dress”：
 GET /clothing/_search { &#34;query&#34;: { &#34;span_within&#34;: { &#34;little&#34;: { &#34;span_term&#34;: { &#34;description&#34;: &#34;dress&#34; } }, &#34;big&#34;: { &#34;span_near&#34;: { &#34;clauses&#34;: [ { &#34;span_term&#34;: { &#34;description&#34;: &#34;shirt&#34; } }, { &#34;span_term&#34;: { &#34;description&#34;: &#34;long&#34; } } ], &#34;slop&#34;: 2, &#34;in_order&#34;: false } } } } } 该查询匹配文档 1 的原因是："
 ---
 

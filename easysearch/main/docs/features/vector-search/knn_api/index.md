@@ -3,7 +3,7 @@ title: "k-NN 查询 API"
 date: 0001-01-01
 description: "旧 k-NN 插件 knn_nearest_neighbors 查询的参数参考。"
 summary: "k-NN 查询 API #   本页记录旧 k-NN 插件的 knn_nearest_neighbors 接口。Easysearch 2.4.0 新增的 dense_vector 原生 HNSW 使用 原生 HNSW 搜索，不需要安装 k-NN 插件。
- 先决条件 #  要运行 k-NN 搜索，必须安装 knn 插件，参考 插件安装。
+ 先决条件 #  要运行 k-NN 搜索，必须安装 knn 插件，参考插件安装。
  注意：从 1.11.1 版本起，创建 k-NN 索引时不再需要配置 index.knn 参数。
   向量字段的映射参数、各索引模型和相似度函数的详细说明，请参阅 向量字段类型参考。
  查询语法 #  所有向量搜索都通过 knn_nearest_neighbors 查询完成：

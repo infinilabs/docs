@@ -3,7 +3,7 @@ title: "离线安装"
 date: 0001-01-01
 summary: "离线安装 Easysearch #  本文档介绍如何在没有网络连接的环境中安装 Easysearch。离线安装常见于内网、政务、金融等对网络隔离有严格要求的场景。
 准备工作（在有网络的环境中） #  在可联网的机器上提前下载所有需要的安装包：
-必需文件 #     文件 用途 下载地址     Easysearch Bundle 包 包含 Easysearch + 内置 JDK + 内置插件  Linux AMD64    可选文件 #     文件 用途     INFINI Console 安装包 集群管理和监控   INFINI Gateway 安装包 查询代理和网关    Linux 环境离线安装 #  步骤 1：系统调优 #  在安装 Easysearch 之前，先完成操作系统调优（此步骤不需要网络）："
+必需文件 #     文件 用途 下载地址     Easysearch Bundle 包 包含 Easysearch + 内置 JDK + 内置插件 Linux AMD64    可选文件 #     文件 用途     INFINI Console 安装包 集群管理和监控   INFINI Gateway 安装包 查询代理和网关    Linux 环境离线安装 #  步骤 1：系统调优 #  在安装 Easysearch 之前，先完成操作系统调优（此步骤不需要网络）："
 ---
 
 

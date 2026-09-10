@@ -2,7 +2,7 @@
 title: "地理中心点聚合（Geo Centroid）"
 date: 0001-01-01
 summary: "地理中心点聚合 #  geo_centroid 聚合计算一组 geo_point 值的地理中心或焦点。它将中心位置作为纬度-经度对返回。
-相关指南（先读这些） #    聚合基础  地理位置搜索  Geo 场景实践  参数说明 #  geo_centroid 聚合采用以下参数。
+相关指南（先读这些） #   聚合基础 地理位置搜索 Geo 场景实践  参数说明 #  geo_centroid 聚合采用以下参数。
    参数 必需/可选 数据类型 描述     field 必需 String 包含计算中心的地理点的字段的名称。    参考样例 #  以下示例返回数据中每个订单的 geo_centroid 的 geoip.location 。每个 geoip.location 都是一个地理点：
 GET /sample_data_ecommerce/_search { &#34;size&#34;: 0, &#34;aggs&#34;: { &#34;centroid&#34;: { &#34;geo_centroid&#34;: { &#34;field&#34;: &#34;geoip.location&#34; } } } } 返回内容 #  返回内容包括一个 centroid 对象，该对象具有 lat 和 lon 属性，表示所有索引数据点的中心位置："
 ---

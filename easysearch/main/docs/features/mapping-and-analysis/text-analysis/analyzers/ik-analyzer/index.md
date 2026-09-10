@@ -2,7 +2,7 @@
 title: "IK 中文分析器（IK）"
 date: 0001-01-01
 summary: "IK 分析器 #  IK 分析器是一款专为处理中文文本设计的分析器，高效且智能。支持 ik_smart 和 ik_max_word 两种分词模式。
-相关指南（先读这些） #    文本分析基础  文本分析：识别词元  IK 分词器安装 #  IK 分词插件安装命令如下：
+相关指南（先读这些） #   文本分析基础 文本分析：识别词元  IK 分词器安装 #  IK 分词插件安装命令如下：
 bin/easysearch-plugin install analysis-ik 同时也需要安装 ingest-common 插件：
 bin/easysearch-plugin install ingest-common 如果觉得比较麻烦，也可以直接使用 Easysearch 的 bundle 包安装部署。
 使用样例 #  下面的命令样例展示了 IK 的使用方式。

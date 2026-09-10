@@ -154,9 +154,14 @@ POST /my-index/_refresh
 
 | 设置 | 默认值 | 类型 | 说明 |
 |------|--------|------|------|
-| `index.field_usage_stats.enabled` | `true` | Dynamic | 是否采集 `_field_usage_stats` 字段访问统计；关闭后不再记录字段使用情况 |
+| `index.field_usage_stats.enabled` | `true` | Dynamic | 是否采集 `_field_usage_stats` 的 shard 级字段访问统计；关闭后不再新增计数 |
 
-该配置用于控制搜索阶段是否采集字段访问统计信息。关闭后不会附加字段使用统计采集逻辑，`/{index}/_field_usage_stats` 将返回空统计结果。
+该配置用于控制搜索阶段是否采集字段访问统计信息。设置为 `false` 后，新创建的 shard search session 不再采集字段访问，
+`/{index}/_field_usage_stats` 仍返回 shard 元数据，`stats.fields` 为空且 `stats.all_fields` 的计数均为 0。
+
+禁用该配置不会清除当前 shard 实例已经累计的历史。对同一 shard 实例重新设置为 `true` 后，禁用前的统计会重新可见，后续搜索在其基础上继续累计。
+这些历史只保存在 shard 内存中，不保证跨 shard 重建、迁移或节点重启保留；发生这些情况时，应通过响应中的 `tracking_id` 判断统计生命周期是否变化。
+普通 refresh 以及由其触发的 Lucene reader reopen 不会重置统计。
 
 常见使用场景：
 

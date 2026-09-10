@@ -5,8 +5,8 @@ summary: "百分位桶聚合 #  percentiles_bucket 聚合是一个同级聚合�
 percentiles_bucket 聚合精确计算分位数，不使用近似或插值。每个分位数都返回为目标分位数小于或等于的最近值。
 percentiles_bucket 聚合需要将整个值列表临时保存在内存中，即使对于大型数据集也是如此。相比之下，percentiles 指标聚合使用更少的内存，但会近似百分比。
 指定的指标必须是数值型，并且同级聚合必须是多分组聚合。
-相关指南（先读这些） #    聚合基础  聚合场景实践  参数说明 #  percentiles_bucket聚合采用以下参数。
-   参数 必需/可选 数据类型 描述     buckets_path 必需 String 要聚合的聚合分组的路径。参见分组路径。   gap_policy 可选 String 应用于缺失数据的策略。有效值为 skip 和 insert_zeros 。默认为 skip 。参见数据间隙。   format 可选 String DecimalFormat 格式字符串。返回聚合的 value_as _string 属性中的格式化输出。   percents 可选 List 一个包含任意数量数值百分比值的列表，这些值将被包含在输出中。有效值为 0.0 到 100.0（含）。默认为 [1."
+相关指南（先读这些） #   聚合基础 聚合场景实践  参数说明 #  percentiles_bucket聚合采用以下参数。
+   参数 必需/可选 数据类型 描述     buckets_path 必需 String 要聚合的聚合分组的路径。参见分组路径。   gap_policy 可选 String 应用于缺失数据的策略。有效值为 skip 和 insert_zeros 。默认为 skip 。参见数据间隙。   format 可选 String DecimalFormat 格式字符串。返回聚合的 value_as _string 属性中的格式化输出。   percents 可选 List 一个包含任意数量数值百分比值的列表，这些值将被包含在输出中。有效值为 0.0 到 100.0（含）。默认为 [1.0, 5.0, 25."
 ---
 
 

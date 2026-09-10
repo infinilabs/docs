@@ -2,10 +2,11 @@
 title: "父子关系字段类型（Join）"
 date: 0001-01-01
 summary: "Join 字段类型 #  join 字段类型用于在同一索引中的文档之间建立父/子关系。
-相关指南（先读这些） #    Parent-Child 建模  映射模式  代码样例 #  模拟创建一个映射来建立一个产品和其品牌之间的父/子关系：
+相关指南（先读这些） #   Parent-Child 建模 映射模式  代码样例 #  模拟创建一个映射来建立一个产品和其品牌之间的父/子关系：
 PUT testindex1 { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;product_to_brand&#34;: { &#34;type&#34;: &#34;join&#34;, &#34;relations&#34;: { &#34;brand&#34;: &#34;product&#34; } } } } } 索引一个父文档：
 PUT testindex1/_doc/1 { &#34;name&#34;: &#34;Brand 1&#34;, &#34;product_to_brand&#34;: { &#34;name&#34;: &#34;brand&#34; } } 您也可以使用更简单的格式：
-PUT testindex1/_doc/1 { &#34;name&#34;: &#34;Brand 1&#34;, &#34;product_to_brand&#34;: &#34;brand&#34; }  路由要求：在索引子文档时，您需要指定 routing 查询参数，因为同一父/子层级中的父文档和子文档必须索引在同一分片上。每个子文档在 parent 字段中引用其父文档的 ID。更多路由与性能考虑，请参考 Parent-Child 建模章节。"
+PUT testindex1/_doc/1 { &#34;name&#34;: &#34;Brand 1&#34;, &#34;product_to_brand&#34;: &#34;brand&#34; }  路由要求：在索引子文档时，您需要指定 routing 查询参数，因为同一父/子层级中的父文档和子文档必须索引在同一分片上。每个子文档在 parent 字段中引用其父文档的 ID。更多路由与性能考虑，请参考Parent-Child 建模章节。
+ 为每个父文档索引两个子文档："
 ---
 
 

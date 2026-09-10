@@ -2,8 +2,8 @@
 title: "Fuzzy 查询"
 date: 0001-01-01
 summary: "Fuzzy 查询 #  fuzzy 查询用于搜索包含与搜索词相似的词条的文档，相似度在允许的最大 Damerau-Levenshtein 距离范围内。Damerau-Levenshtein 距离衡量将一个词条变为另一个词条所需的一字符变化的数量。这些变化包括：
-相关指南（先读这些） #     文本分析：模糊匹配
-   全文搜索
+相关指南（先读这些） #    文本分析：模糊匹配
+  全文搜索
   Replacements: 替换，cat 变为 bat
   Insertions: 插入，cat 变为 cats
   Deletions: 删除，cat 变为 at

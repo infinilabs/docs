@@ -2,7 +2,7 @@
 title: "Exists 查询"
 date: 0001-01-01
 summary: "Exists 查询 #  使用 exists 查询来搜索包含特定字段的文档。
-相关指南（先读这些） #    结构化搜索  Query DSL 基础  如果出现以下任一情况，索引值将不会存在于文档字段中：
+相关指南（先读这些） #   结构化搜索 Query DSL 基础  如果出现以下任一情况，索引值将不会存在于文档字段中：
  该字段在映射中指定了 &quot;index&quot; : false 。 源 JSON 中的字段为 null 或 [] 。 字段值的长度超过了映射中 ignore_above 的设置。 字段值格式错误，并且映射中定义了 ignore_malformed 。  索引值将在以下情况下存在于文档字段中：
  该值是一个包含一个或多个 null 元素和一个或多个非 null 元素的数组（例如， [&quot;one&quot;, null] ）。 该值是一个空字符串（ &quot;&quot; 或 &quot;-&quot; ）。 该值是一个自定义的 null_value ，如字段映射中所定义。  参考样例 #  例如，假设索引包含以下两个文档：
 PUT testindex/_doc/1 { &#34;title&#34;: &#34;The wind rises&#34; } PUT testindex/_doc/2 { &#34;title&#34;: &#34;Gone with the wind&#34;, &#34;description&#34;: &#34;A 1939 American epic historical film&#34; } 以下查询搜索包含 description 字段的文档："

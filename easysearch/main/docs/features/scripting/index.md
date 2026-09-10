@@ -2,7 +2,7 @@
 title: "脚本"
 date: 0001-01-01
 summary: "脚本 #  Easysearch 提供了内置的脚本语言，可以在查询、聚合、摄入管道、更新操作等多种场景中使用脚本来实现自定义逻辑。
-支持的脚本语言 #     语言 用途 沙盒安全 性能      Painless 通用脚本语言，推荐默认使用 ✅ 是 高（编译为字节码）    Mustache 搜索模板（参数化查询） ✅ 是 高    Expressions 高性能数学表达式（排序和评分） ✅ 是 极高（编译为字节码）    脚本使用方式 #  Easysearch 中使用脚本有三种方式：
+支持的脚本语言 #     语言 用途 沙盒安全 性能     Painless 通用脚本语言，推荐默认使用 ✅ 是 高（编译为字节码）   Mustache 搜索模板（参数化查询） ✅ 是 高   Expressions 高性能数学表达式（排序和评分） ✅ 是 极高（编译为字节码）    脚本使用方式 #  Easysearch 中使用脚本有三种方式：
 1. 内联脚本（Inline） #  直接在请求体中编写脚本代码，适合临时性操作：
 GET my_index/_search { &#34;script_fields&#34;: { &#34;total_price&#34;: { &#34;script&#34;: { &#34;lang&#34;: &#34;painless&#34;, &#34;source&#34;: &#34;doc[&#39;price&#39;].value * doc[&#39;quantity&#39;].value&#34; } } } } 2."
 ---

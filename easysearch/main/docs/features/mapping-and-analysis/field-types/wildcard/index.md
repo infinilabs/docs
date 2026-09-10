@@ -5,8 +5,8 @@ summary: "Wildcard 字段类型 #  wildcard 字段是 keyword 字段的一种变
 当您的内容由&quot;字符串&quot;而非&quot;文本&quot;组成时，应使用 wildcard 字段。示例包括非结构化日志行和计算机代码。
 wildcard 字段类型的索引方式与 keyword 字段类型不同。keyword 字段将原始字段值写入索引，而 wildcard 字段类型则将字段值拆分为长度小于或等于 3 的子字符串，并将这些子字符串写入索引。例如，字符串 test 被拆分为 t、te、tes、e、es 和 est 这些子字符串。
 在搜索时，将查询模式中所需的子字符串与索引进行匹配以生成候选文档，然后根据查询中的模式对这些文档进行过滤。例如，对于搜索词 test，Easysearch 执行索引搜索 tes AND est。如果搜索词包含少于三个字符，Easysearch 会使用长度为一或二的字符子字符串。对于每个匹配的文档，如果源值为 test，则该文档将出现在结果中。这样可以排除误报值，如 nikola tesla felt alternating current was best。
-通常，精确匹配查询（如 term 或 terms 查询）在 wildcard 字段上的表现不如在 keyword 字段上有效，而 wildcard、 prefix 和 regexp 查询在 wildcard 字段上表现更好。
-相关指南（先读这些） #    映射基础  部分匹配  结构化搜索  示例 #  创建带有 wildcard 字段的映射："
+通常，精确匹配查询（如 term 或 terms 查询）在 wildcard 字段上的表现不如在 keyword 字段上有效，而 wildcard、prefix 和 regexp 查询在 wildcard 字段上表现更好。
+相关指南（先读这些） #   映射基础 部分匹配 结构化搜索  示例 #  创建带有 wildcard 字段的映射："
 ---
 
 

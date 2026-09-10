@@ -3,7 +3,7 @@ title: "Access Token"
 date: 0001-01-01
 summary: "Access Token #  Access Token 提供了一种面向程序调用的认证方式。客户端可以先由管理员签发 token，后续通过 HTTP 头 X-API-TOKEN 访问 Easysearch API，而不需要在每次请求中传递用户名和密码。
 这一能力适合以下场景：
- 服务到服务的 API 调用 临时授予只读或特定动作权限 为自动化脚本、采集任务、运维工具发放独立凭据  相关指南（先读这些） #    权限控制总览  用户与角色  权限列表  安全 API  使用前提 #  在使用 Access Token 之前，请先确认：
+ 服务到服务的 API 调用 临时授予只读或特定动作权限 为自动化脚本、采集任务、运维工具发放独立凭据  相关指南（先读这些） #   权限控制总览 用户与角色 权限列表 安全 API  使用前提 #  在使用 Access Token 之前，请先确认：
  安全模块已经启用。 你可以使用 superadmin 身份或 superuser 角色访问安全 API。 调用方已经明确需要的权限范围。   当前实现中，创建 Access Token 需要 superadmin 身份，或拥有 superuser 角色。在默认发行配置下，初始化后的 admin 用户通常会映射到 superuser；如果你修改过默认密码或角色映射，请改用实际具备相应权限的账户。
  接口概览 #     操作 方法 路径     创建 token POST /_security/access_token   更新 token PUT /_security/access_token/{token_id}   删除 token DELETE /_security/access_token/{token_id}   搜索 token GET / POST /_security/access_token/search    创建 Access Token #  创建请求至少需要指定："
 ---

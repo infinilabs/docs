@@ -3,7 +3,7 @@ title: "排序"
 date: 0001-01-01
 description: "字段排序、多级排序、地理距离排序、脚本排序、missing 值处理的 API 与参数说明。"
 summary: "排序 #  默认情况下，全文查询按相关性 _score 排序。你也可以按任意字段值升序/降序排序，或使用地理距离、脚本等高级排序方式。
-相关指南 #    分页与排序   基础字段排序 #  通过 sort 参数指定排序字段和顺序：
+相关指南 #   分页与排序   基础字段排序 #  通过 sort 参数指定排序字段和顺序：
 GET shakespeare/_search { &#34;query&#34;: { &#34;term&#34;: { &#34;play_name&#34;: { &#34;value&#34;: &#34;Henry IV&#34; } } }, &#34;sort&#34;: [ { &#34;line_id&#34;: { &#34;order&#34;: &#34;desc&#34; } } ] } 排序参数 #     参数 说明 可选值     order 排序方向 asc（升序）、desc（降序）   mode 多值字段的聚合模式 min、max、avg、sum、median   missing 缺失值的处理方式 _first（排最前）、_last（排最后）、自定义值   unmapped_type 未映射字段的假设类型 字段类型名（如 long、date）     多级排序 #  sort 是数组，可以配置多级排序。当主排序键相同时，使用次排序键："
 ---
 

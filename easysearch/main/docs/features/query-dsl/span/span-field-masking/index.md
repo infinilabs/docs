@@ -4,8 +4,8 @@ date: 0001-01-01
 summary: "Span Field Masking 查询 #  field_masking_span 查询允许 span 查询通过&quot;掩饰&quot;查询的真实字段来匹配不同字段。这在处理多字段（相同内容使用不同分析器索引）或需要跨不同字段运行 span 查询（如 span_near 或 span_or，这通常是不允许的）时特别有用。
 例如，您可以使用 field_masking_span 查询来：
  匹配原始字段及其词干版本中的词项。 在一个 span 操作中组合不同字段的 span 查询。 使用不同分析器索引的相同内容进行操作。   注意：在使用字段遮罩时，相关性分数是根据遮罩字段的特性（范数）计算的，而不是实际搜索的字段。这意味着如果遮罩字段与被搜索字段具有不同的属性（如长度或提升值），您可能会收到意外的评分结果。
- 相关指南（先读这些） #    Span 查询  多字段搜索  查询 DSL 基础  参考样例 #  以下查询在词干化字段中搜索单词“long”，并查找“sleeve”一词的变体附近：
-GET /clothing/_search { &#34;query&#34;: { &#34;span_near&#34;: { &#34;clauses&#34;: [ { &#34;span_term&#34;: { &#34;description&#34;: &#34;long&#34; } }, { &#34;field_masking_span&#34;: { &#34;query&#34;: { &#34;span_term&#34;: { &#34;description."
+ 相关指南（先读这些） #   Span 查询 多字段搜索 查询 DSL 基础  参考样例 #  以下查询在词干化字段中搜索单词“long”，并查找“sleeve”一词的变体附近：
+GET /clothing/_search { &#34;query&#34;: { &#34;span_near&#34;: { &#34;clauses&#34;: [ { &#34;span_term&#34;: { &#34;description&#34;: &#34;long&#34; } }, { &#34;field_masking_span&#34;: { &#34;query&#34;: { &#34;span_term&#34;: { &#34;description.stemmed&#34;: &#34;sleev&#34; } }, &#34;field&#34;: &#34;description&#34; } } ], &#34;slop&#34;: 1, &#34;in_order&#34;: true } } } 查询匹配文档 1 和文档 4："
 ---
 
 

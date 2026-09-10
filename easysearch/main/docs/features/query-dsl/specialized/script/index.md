@@ -2,7 +2,7 @@
 title: "Script 查询"
 date: 0001-01-01
 summary: "Script 查询 #  使用 script 查询基于 Painless 脚本语言编写的自定义条件来过滤文档。此查询返回脚本评估结果为 true 的文档，从而实现无法使用标准查询表达的高级过滤逻辑。
-相关指南（先读这些） #    Query DSL 基础  结构化搜索  专业查询（Specialized queries）   性能注意：script 查询计算成本高，应谨慎使用。仅在必要时使用，并确保 search.allow_expensive_queries 已启用（默认为 true ）。有关更多信息，请参阅昂贵查询。
+相关指南（先读这些） #   Query DSL 基础 结构化搜索 专业查询（Specialized queries）   性能注意：script 查询计算成本高，应谨慎使用。仅在必要时使用，并确保 search.allow_expensive_queries 已启用（默认为 true ）。有关更多信息，请参阅昂贵查询。
  参考样例 #  使用以下映射创建一个名为 products 的索引：
 PUT /products { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;title&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;price&#34;: { &#34;type&#34;: &#34;float&#34; }, &#34;rating&#34;: { &#34;type&#34;: &#34;float&#34; } } } } 使用以下请求索引示例文档：
 POST /products/_bulk { &#34;index&#34;: { &#34;_id&#34;: 1 } } { &#34;title&#34;: &#34;Wireless Earbuds&#34;, &#34;price&#34;: 99."

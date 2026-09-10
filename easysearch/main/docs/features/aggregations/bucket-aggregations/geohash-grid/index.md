@@ -2,7 +2,7 @@
 title: "Geohash 网格聚合"
 date: 0001-01-01
 summary: "Geohash 网格聚合 #  geohash_grid 聚合将 geo_point 值按照 Geohash 编码分组到网格单元中。这对于在地图上可视化大量地理坐标点非常有用——将密集的点聚合成可管理的网格，每个网格显示该区域的统计信息。
-相关指南（先读这些） #    聚合基础教程  地理位置搜索  Geohash 编码原理   参数说明 #     参数 必需/可选 类型 说明     field 必需 String 包含 geo_point 值的字段名   precision 可选 Integer/String Geohash 精度级别（1-12）或距离字符串（如 1km）。默认 5   bounds 可选 Object 限制聚合的地理边界框，只处理该范围内的点   size 可选 Integer 返回的最大 bucket 数量。默认 10000   shard_size 可选 Integer 每个分片返回的 bucket 数量，用于提高精度。默认 max(10, size)    精度级别参考 #     精度 网格尺寸 适用场景     1 ~ 5,000km 大洲级别   2 ~ 1,250km 国家级别   3 ~ 156km 大区域   4 ~ 39km 城市群   5 ~ 4."
+相关指南（先读这些） #   聚合基础教程 地理位置搜索 Geohash 编码原理   参数说明 #     参数 必需/可选 类型 说明     field 必需 String 包含 geo_point 值的字段名   precision 可选 Integer/String Geohash 精度级别（1-12）或距离字符串（如 1km）。默认 5   bounds 可选 Object 限制聚合的地理边界框，只处理该范围内的点   size 可选 Integer 返回的最大 bucket 数量。默认 10000   shard_size 可选 Integer 每个分片返回的 bucket 数量，用于提高精度。默认 max(10, size)    精度级别参考 #     精度 网格尺寸 适用场景     1 ~ 5,000km 大洲级别   2 ~ 1,250km 国家级别   3 ~ 156km 大区域   4 ~ 39km 城市群   5 ~ 4."
 ---
 
 

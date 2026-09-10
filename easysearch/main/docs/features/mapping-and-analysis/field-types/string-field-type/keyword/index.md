@@ -4,7 +4,7 @@ date: 0001-01-01
 summary: "Keyword 字段类型 #  keyword 字段类型包含未经分析的字符串。它只允许精确的大小写敏感匹配。
 默认情况下，keyword 字段既被索引（因为 index 已启用）也存储在磁盘上（因为 doc_values 已启用）。为了减少磁盘空间，您可以通过将 index 设置为 false 来指定不索引 keyword 字段。
  提示：如果您需要对字段进行全文搜索，请将其映射为 text 类型。
- 相关指南（先读这些） #    映射基础  映射模式  结构化搜索  代码样例 #  以下查询创建了一个带有 keyword 字段的映射。将 index 设置为 false 指定将 genre 字段存储在磁盘上，并使用 doc_values 检索它：
+ 相关指南（先读这些） #   映射基础 映射模式 结构化搜索  代码样例 #  以下查询创建了一个带有 keyword 字段的映射。将 index 设置为 false 指定将 genre 字段存储在磁盘上，并使用 doc_values 检索它：
 PUT movies { &#34;mappings&#34; : { &#34;properties&#34; : { &#34;genre&#34; : { &#34;type&#34; : &#34;keyword&#34;, &#34;index&#34; : false } } } } 参数说明 #  下表列出了 keyword 字段类型接受的参数。所有参数都是可选的。"
 ---
 

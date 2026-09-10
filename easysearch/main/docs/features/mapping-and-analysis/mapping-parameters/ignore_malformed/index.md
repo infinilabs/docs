@@ -3,7 +3,7 @@ title: "忽略格式错误参数（Ignore Malformed）"
 date: 0001-01-01
 summary: "Ignore Malformed 参数 #  ignore_malformed 参数控制在写入格式错误的数据时，是否忽略该值而不是拒绝整个文档。
 默认情况下，写入一个类型不匹配的值（如向数值字段写入字符串）会导致整个文档被拒绝。启用 ignore_malformed 后，格式错误的值会被静默忽略，文档的其他字段仍然正常索引。
-相关指南（先读这些） #    映射基础  Index API  参数选项 #     值 说明     false 格式错误的值导致整个文档被拒绝。默认值。   true 格式错误的值被忽略，文档其余部分正常索引。    字段级示例 #  PUT my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;price&#34;: { &#34;type&#34;: &#34;integer&#34;, &#34;ignore_malformed&#34;: true }, &#34;name&#34;: { &#34;type&#34;: &#34;keyword&#34; } } } } PUT my-index/_doc/1 { &#34;price&#34;: &#34;not_a_number&#34;, &#34;name&#34;: &#34;测试产品&#34; } 文档 1 会被成功写入："
+相关指南（先读这些） #   映射基础 Index API  参数选项 #     值 说明     false 格式错误的值导致整个文档被拒绝。默认值。   true 格式错误的值被忽略，文档其余部分正常索引。    字段级示例 #  PUT my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;price&#34;: { &#34;type&#34;: &#34;integer&#34;, &#34;ignore_malformed&#34;: true }, &#34;name&#34;: { &#34;type&#34;: &#34;keyword&#34; } } } } PUT my-index/_doc/1 { &#34;price&#34;: &#34;not_a_number&#34;, &#34;name&#34;: &#34;测试产品&#34; } 文档 1 会被成功写入："
 ---
 
 

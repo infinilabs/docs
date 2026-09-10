@@ -3,7 +3,7 @@ title: "Span Not 查询"
 date: 0001-01-01
 summary: "Span Not 查询 #  span_not 查询会排除与另一个 span 查询重叠的跨度。您还可以指定在排除的跨度之前或之后不允许匹配的距离范围。
 例如，您可以使用 span_not 查询来：
- 查找除在特定短语中出现时的词项外。 除非它们靠近特定词项，否则匹配跨度。 排除在特定距离内出现的其他模式匹配。  相关指南（先读这些） #    Span 查询  查询 DSL 基础  参考样例 #  以下查询搜索单词“dress”，但当它出现在短语“dress shirt”中时不搜索：
+ 查找除在特定短语中出现时的词项外。 除非它们靠近特定词项，否则匹配跨度。 排除在特定距离内出现的其他模式匹配。  相关指南（先读这些） #   Span 查询 查询 DSL 基础  参考样例 #  以下查询搜索单词“dress”，但当它出现在短语“dress shirt”中时不搜索：
 GET /clothing/_search { &#34;query&#34;: { &#34;span_not&#34;: { &#34;include&#34;: { &#34;span_term&#34;: { &#34;description&#34;: &#34;dress&#34; } }, &#34;exclude&#34;: { &#34;span_near&#34;: { &#34;clauses&#34;: [ { &#34;span_term&#34;: { &#34;description&#34;: &#34;dress&#34; } }, { &#34;span_term&#34;: { &#34;description&#34;: &#34;shirt&#34; } } ], &#34;slop&#34;: 0, &#34;in_order&#34;: true } } } } } 该查询匹配文档 2，因为它包含单词“dress”（“Beautiful long dress…”）。文档 1 未匹配，因为它包含短语“dress shirt”，该短语被排除。文档 3 和 4 未匹配，因为它们包含单词“dress”的变体（“dressed”和“dresses”），并且查询是在原始字段中进行的。"
 ---
 

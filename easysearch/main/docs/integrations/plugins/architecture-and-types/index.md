@@ -2,7 +2,7 @@
 title: "结构与类型"
 date: 0001-01-01
 description: "插件项目结构、关键配置与常见类型的代码示例。"
-summary: "结构与类型 #  本页聚焦“结构与选型参考”。如果你要先跑通一个可安装的最小插件，请先看： 插件开发入门。
+summary: "结构与类型 #  本页聚焦“结构与选型参考”。如果你要先跑通一个可安装的最小插件，请先看：插件开发入门。
 项目结构 #  my-plugin/ ├── build.gradle # 构建配置 ├── settings.gradle # 项目名称 └── src/ ├── main/java/com/example/myplugin/ │ ├── MyPlugin.java # 插件入口 │ └── analysis/ │ └── MyTokenFilterFactory.java └── test/java/com/example/myplugin/ └── MyPluginTests.java 关键文件 #  plugin-descriptor.properties（构建生成） #  该文件由 Gradle 插件在构建时生成，通常不需要在插件项目里手写；加载时仍会对字段做校验。
 name=my-plugin description=My Easysearch Plugin version=0.1.0 easysearch.version=2.1.2 java.version=11 classname=com.example.myplugin.MyPlugin    字段 说明     name 插件唯一标识，用于安装和卸载命令（来源于 esplugin.name）   classname 插件入口类全限定名，必须与代码一致   easysearch."
 ---

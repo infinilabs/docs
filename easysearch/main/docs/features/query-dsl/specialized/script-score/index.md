@@ -2,7 +2,7 @@
 title: "Script Score 查询"
 date: 0001-01-01
 summary: "Script Score 查询 #  使用 script_score 查询通过脚本自定义分数计算。对于昂贵的评分函数，您可以使用 script_score 查询仅计算已过滤的返回文档的分数。
-相关指南（先读这些） #    相关性与打分策略  Query DSL 基础  参考样例 #  例如，以下请求创建一个包含一个文档的索引：
+相关指南（先读这些） #   相关性与打分策略 Query DSL 基础  参考样例 #  例如，以下请求创建一个包含一个文档的索引：
 PUT testindex1/_doc/1 { &#34;name&#34;: &#34;John Doe&#34;, &#34;multiplier&#34;: 0.5 } 您可以使用 match 查询返回所有在 name 字段中包含 John 的文档：
 GET testindex1/_search { &#34;query&#34;: { &#34;match&#34;: { &#34;name&#34;: &#34;John&#34; } } } 在返回内容中，文档 1 的得分为 0.2876821 ：
 { &#34;took&#34;: 7, &#34;timed_out&#34;: false, &#34;_shards&#34;: { &#34;total&#34;: 1, &#34;successful&#34;: 1, &#34;skipped&#34;: 0, &#34;failed&#34;: 0 }, &#34;hits&#34;: { &#34;total&#34;: { &#34;value&#34;: 1, &#34;relation&#34;: &#34;eq&#34; }, &#34;max_score&#34;: 0."

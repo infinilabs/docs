@@ -2,8 +2,8 @@
 title: "Bboss 集成"
 date: 0001-01-01
 description: "Bboss 与 Easysearch 原生集成，一个高性能高兼容性的 Elasticsearch/Easysearch/Opensearch Java 客户端框架"
-summary: "Bboss 集成 #   Bboss 是一款高性能、高兼容性的搜索引擎 Java REST 客户端框架，基于 Apache License 2.0 开源，原生支持 Elasticsearch、Easysearch 和 Opensearch。自带客户端集群节点负载均衡和容灾，多集群多数据源，自动索引托管，多种分页机制，傻瓜级 CRUD，脚本，SQL，JDBC，高亮，权重，聚合，IP，GEO 地理位置，父子嵌套，应有尽有。
- 源码仓库： https://gitee.com/bboss/bboss-elastic 官方文档： https://esdoc.bbossgroups.com/ Maven 中央仓库： bboss-datatran-jdbc   核心优势 #     特性 说明     学习成本低 无需学习额外 API，只需掌握 Elasticsearch DSL，极简使用方式   原生多引擎支持 完美支持 ES 1.x ~ 9.x、Easysearch 1.x ~ 2.x+、Opensearch 1.x ~ 2.x+   开箱即用 Spring Boot 自动配置，无需复杂设置   高效异步处理 内置 BulkProcessor 异步批处理器，大幅提升写入性能   灵活查询方式 支持 DSL、SQL、O/R Mapping 多种查询模式   多数据源支持 一个应用可同时操作多个不同版本的搜索引擎集群   完整的结果封装 返回结果支持 JSON、PO 对象、List 集合、Map 等多种类型   客户端负载均衡 默认启用客户端负载均衡，容灾性更好     快速开始 #  1."
+summary: "Bboss 集成 #  Bboss 是一款高性能、高兼容性的搜索引擎 Java REST 客户端框架，基于 Apache License 2.0 开源，原生支持 Elasticsearch、Easysearch 和 Opensearch。自带客户端集群节点负载均衡和容灾，多集群多数据源，自动索引托管，多种分页机制，傻瓜级 CRUD，脚本，SQL，JDBC，高亮，权重，聚合，IP，GEO 地理位置，父子嵌套，应有尽有。
+ 源码仓库：https://gitee.com/bboss/bboss-elastic 官方文档：https://esdoc.bbossgroups.com/ Maven 中央仓库：bboss-datatran-jdbc   核心优势 #     特性 说明     学习成本低 无需学习额外 API，只需掌握 Elasticsearch DSL，极简使用方式   原生多引擎支持 完美支持 ES 1.x ~ 9.x、Easysearch 1.x ~ 2.x+、Opensearch 1.x ~ 2.x+   开箱即用 Spring Boot 自动配置，无需复杂设置   高效异步处理 内置 BulkProcessor 异步批处理器，大幅提升写入性能   灵活查询方式 支持 DSL、SQL、O/R Mapping 多种查询模式   多数据源支持 一个应用可同时操作多个不同版本的搜索引擎集群   完整的结果封装 返回结果支持 JSON、PO 对象、List 集合、Map 等多种类型   客户端负载均衡 默认启用客户端负载均衡，容灾性更好     快速开始 #  1."
 ---
 
 

@@ -3,7 +3,7 @@ title: "More Like This 查询"
 date: 0001-01-01
 summary: "More Like This 查询 #  使用 more_like_this 查询查找与一个或多个给定文档相似的文档。这对于推荐引擎、内容发现以及识别数据集中的相关项目很有用。
 more_like_this 查询分析输入文档或文本，并选择最能描述它们的词项。然后，它搜索包含这些重要词项的其他文档。
-相关指南（先读这些） #    相关性与打分策略  Query DSL 基础  前提条件 #  在使用 more_like_this 查询之前，请确保您目标字段已索引，且其数据类型为 text 或 keyword 。
+相关指南（先读这些） #   相关性与打分策略 Query DSL 基础  前提条件 #  在使用 more_like_this 查询之前，请确保您目标字段已索引，且其数据类型为 text 或 keyword 。
 如果您在 like 部分引用文档，Easysearch 需要访问其内容。这通常通过 _source 字段完成，该字段默认启用。如果 _source 被禁用，您必须单独存储这些字段，或配置它们以保存 term_vector 数据。
  在索引文档时保存 term_vector 信息可以大大加速 more_like_this 查询，因为引擎可以直接检索重要词项，而无需在查询时重新分析字段文本。
  示例：无词向量优化 #  使用以下映射创建名为 articles-basic 的索引：

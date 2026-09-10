@@ -3,8 +3,9 @@ title: "Dis Max 查询"
 date: 0001-01-01
 summary: "Dis Max 查询 #  dis_max 查询返回与一个或多个查询子句匹配的任何文档。对于与多个查询子句匹配的文档，相关性得分设置为所有匹配查询子句中的最高相关性得分。
 当返回的文档的相关性分数相同时，您可以使用 tie_breaker 参数来增加匹配多个查询子句的文档的权重。
-相关指南（先读这些） #    多字段搜索  Query DSL 基础  参考样例 #  考虑一个包含两个文档的索引，您按照以下方式索引这些文档：
-PUT testindex1/_doc/1 { &#34;title&#34;: &#34; The Top 10 Shakespeare Poems&#34;, &#34;description&#34;: &#34;Top 10 sonnets of England&#39;s national poet and the Bard of Avon&#34; } PUT testindex1/_doc/2 { &#34;title&#34;: &#34;Sonnets of the 16th Century&#34;, &#34;body&#34;: &#34;The poems written by various 16-th century poets&#34; } 使用 dis_max 查询来搜索包含单词“莎士比亚诗歌”的文档"
+相关指南（先读这些） #   多字段搜索 Query DSL 基础  参考样例 #  考虑一个包含两个文档的索引，您按照以下方式索引这些文档：
+PUT testindex1/_doc/1 { &#34;title&#34;: &#34; The Top 10 Shakespeare Poems&#34;, &#34;description&#34;: &#34;Top 10 sonnets of England&#39;s national poet and the Bard of Avon&#34; } PUT testindex1/_doc/2 { &#34;title&#34;: &#34;Sonnets of the 16th Century&#34;, &#34;body&#34;: &#34;The poems written by various 16-th century poets&#34; } 使用 dis_max 查询来搜索包含单词“莎士比亚诗歌”的文档
+GET testindex1/_search { &#34;query&#34;: { &#34;dis_max&#34;: { &#34;queries&#34;: [ { &#34;match&#34;: { &#34;title&#34;: &#34;Shakespeare poems&#34; }}, { &#34;match&#34;: { &#34;body&#34;: &#34;Shakespeare poems&#34; }} ] } } } 返回内容包含两个文档："
 ---
 
 

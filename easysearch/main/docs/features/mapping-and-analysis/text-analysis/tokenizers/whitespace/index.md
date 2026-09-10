@@ -2,7 +2,7 @@
 title: "空白分词器（Whitespace）"
 date: 0001-01-01
 summary: "Whitespace 分词器 #  whitespace 分词器会依据空白字符（如空格、制表符和换行符）对文本进行拆分。它将由空白字符分隔开的每个单词都视为一个词元，并且不会执行诸如转换为小写形式或去除标点符号等额外的规范化操作。
-相关指南（先读这些） #    文本分析：识别词元  文本分析基础  参考样例 #  以下示例请求创建一个名为 my_index 的新索引，并配置一个使用空格词元生成器的分词器：
+相关指南（先读这些） #   文本分析：识别词元 文本分析基础  参考样例 #  以下示例请求创建一个名为 my_index 的新索引，并配置一个使用空格词元生成器的分词器：
 PUT /my_index { &#34;settings&#34;: { &#34;analysis&#34;: { &#34;tokenizer&#34;: { &#34;whitespace_tokenizer&#34;: { &#34;type&#34;: &#34;whitespace&#34; } }, &#34;analyzer&#34;: { &#34;my_whitespace_analyzer&#34;: { &#34;type&#34;: &#34;custom&#34;, &#34;tokenizer&#34;: &#34;whitespace_tokenizer&#34; } } } }, &#34;mappings&#34;: { &#34;properties&#34;: { &#34;content&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;analyzer&#34;: &#34;my_whitespace_analyzer&#34; } } } } 产生的词元 #  使用以下请求来检查使用该分词器生成的词元：
 POST /my_index/_analyze { &#34;analyzer&#34;: &#34;my_whitespace_analyzer&#34;, &#34;text&#34;: &#34;Easysearch is fast!"
 ---

@@ -2,7 +2,7 @@
 title: "Parent ID 查询"
 date: 0001-01-01
 summary: "Parent ID 查询 #  parent_id 查询返回具有指定 ID 的父文档的子文档。您可以通过使用连接字段类型在相同索引中的文档之间建立父子关系。
-相关指南（先读这些） #    Parent-Child 建模  关联查询（Joining）  参考样例 #  在您运行一个 parent_id 查询之前，您的索引必须包含一个连接字段，以便建立父子关系。索引映射请求使用以下格式：
+相关指南（先读这些） #   Parent-Child 建模 关联查询（Joining）  参考样例 #  在您运行一个 parent_id 查询之前，您的索引必须包含一个连接字段，以便建立父子关系。索引映射请求使用以下格式：
 PUT /example_index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;relationship_field&#34;: { &#34;type&#34;: &#34;join&#34;, &#34;relations&#34;: { &#34;parent_doc&#34;: &#34;child_doc&#34; } } } } } 对于此示例，首先配置一个包含代表产品和其品牌的文档的索引，这些文档在 has_child 查询示例中有所描述。
 要搜索特定父文档的子文档，请使用 parent_id 查询。以下查询返回具有 ID 1 的父文档的子文档（产品）：
 GET testindex1/_search { &#34;query&#34;: { &#34;parent_id&#34;: { &#34;type&#34;: &#34;product&#34;, &#34;id&#34;: &#34;1&#34; } } } 返回子产品：

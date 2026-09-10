@@ -2,7 +2,7 @@
 title: "LangChain 集成"
 date: 0001-01-01
 description: "LangChain 与 Easysearch 的 RAG 集成。"
-summary: "LangChain 集成 #   LangChain 是最流行的 LLM 应用开发框架。通过将 Easysearch 作为 Vector Store，可以构建 RAG（Retrieval-Augmented Generation）应用，让大模型基于企业知识库进行问答。
+summary: "LangChain 集成 #  LangChain 是最流行的 LLM 应用开发框架。通过将 Easysearch 作为 Vector Store，可以构建 RAG（Retrieval-Augmented Generation）应用，让大模型基于企业知识库进行问答。
 架构概览 #  用户提问 → LangChain ↓ 1. Embedding 模型将问题转为向量 ↓ 2. Easysearch 向量检索（kNN）找到相关文档 ↓ 3. 将相关文档 + 问题发送给 LLM ↓ 4. LLM 生成基于上下文的回答 ↓ 用户得到答案 安装 #  pip install langchain langchain-community elasticsearch 连接 Easysearch #  from elasticsearch import Elasticsearch es = Elasticsearch( hosts=[&#34;https://localhost:9200&#34;], basic_auth=(&#34;admin&#34;, &#34;your-password&#34;), verify_certs=False # 自签名证书时使用 ) # 验证连接 print(es.info()) 作为 Vector Store 使用 #  Easysearch 2."
 ---
 

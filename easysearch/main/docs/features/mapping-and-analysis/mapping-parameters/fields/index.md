@@ -2,7 +2,7 @@
 title: "多字段参数（Fields）"
 date: 0001-01-01
 summary: "Fields 参数（Multi-fields） #  fields 参数允许你对同一个字段以多种方式进行索引。这是 Easysearch 中最常用的映射技巧之一，典型场景是：一个字段同时需要全文搜索（text）和精确匹配/排序/聚合（keyword）。
-相关指南（先读这些） #    映射基础  映射模式与最佳实践  基本语法 #  PUT my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;title&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;fields&#34;: { &#34;raw&#34;: { &#34;type&#34;: &#34;keyword&#34; } } } } } } 上面的映射中，title 字段被索引为 text（用于全文搜索），同时通过 fields.raw 创建了一个 keyword 子字段（用于精确匹配、排序和聚合）。
+相关指南（先读这些） #   映射基础 映射模式与最佳实践  基本语法 #  PUT my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;title&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;fields&#34;: { &#34;raw&#34;: { &#34;type&#34;: &#34;keyword&#34; } } } } } } 上面的映射中，title 字段被索引为 text（用于全文搜索），同时通过 fields.raw 创建了一个 keyword 子字段（用于精确匹配、排序和聚合）。
 查询时使用方式：
  全文搜索：&quot;match&quot;: { &quot;title&quot;: &quot;搜索引擎&quot; } 精确匹配：&quot;term&quot;: { &quot;title.raw&quot;: &quot;Easysearch 分布式搜索引擎&quot; } 排序：&quot;sort&quot;: [{ &quot;title.raw&quot;: &quot;asc&quot; }] 聚合：&quot;aggs&quot;: { &quot;titles&quot;: { &quot;terms&quot;: { &quot;field&quot;: &quot;title."
 ---

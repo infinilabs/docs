@@ -2,7 +2,7 @@
 title: "Multi Match 查询"
 date: 0001-01-01
 summary: "Multi Match 查询 #  multi_match 查询与 match 查询类似。您可以使用 multi_match 查询来搜索多个字段。
-相关指南（先读这些） #    多字段搜索  全文搜索  字段权重 #  ^ 会&quot;提升&quot;某些字段的权重。提升是乘数，用于使一个字段中的匹配比其他字段中的匹配更重要。在以下示例中，title字段中匹配 &ldquo;wind&rdquo; 的权重比 plot 字段中匹配的权重高 _score 四倍：
+相关指南（先读这些） #   多字段搜索 全文搜索  字段权重 #  ^ 会&quot;提升&quot;某些字段的权重。提升是乘数，用于使一个字段中的匹配比其他字段中的匹配更重要。在以下示例中，title字段中匹配 &ldquo;wind&rdquo; 的权重比 plot 字段中匹配的权重高 _score 四倍：
 GET _search { &#34;query&#34;: { &#34;multi_match&#34;: { &#34;query&#34;: &#34;wind&#34;, &#34;fields&#34;: [&#34;title^4&#34;, &#34;plot&#34;] } } } 结果是，像《The Wind Rises》和《Gone with the Wind》这样的电影出现在搜索结果的顶部附近，而像《Twister》这样的电影，其剧情简介中可能包含“wind”字，则出现在底部附近。
 您可以在字段名中使用通配符。例如，以下查询将搜索 speaker 字段以及所有以 play_ 开头的字段，例如 play_name 或 play_title ：
 GET _search { &#34;query&#34;: { &#34;multi_match&#34;: { &#34;query&#34;: &#34;hamlet&#34;, &#34;fields&#34;: [&#34;speaker&#34;, &#34;play_*&#34;] } } } 如果您不提供 fields 参数，multi_match 查询将搜索 index."

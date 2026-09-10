@@ -3,7 +3,7 @@ title: "Embedding 服务接入"
 date: 0001-01-01
 description: "如何对接文本/多模态 Embedding 服务，为 Easysearch 提供向量特征。"
 summary: "Embedding 服务接入 #  要在 Easysearch 中使用向量检索，首先需要将文本（或其他数据）转换为向量表示。这个过程需要 Embedding 模型服务的支持。
-相关指南（先读这些） #    向量检索  Ingest Text Embedding  Search Text Embedding  LangChain 集成  部署模式 #  模式一：写入链路嵌入（推荐） #  在数据写入 Easysearch 时，通过 Ingest Pipeline 自动调用 Embedding 服务：
+相关指南（先读这些） #   向量检索 Ingest Text Embedding Search Text Embedding LangChain 集成  部署模式 #  模式一：写入链路嵌入（推荐） #  在数据写入 Easysearch 时，通过 Ingest Pipeline 自动调用 Embedding 服务：
 应用数据 → Easysearch Ingest Pipeline → 调用 Embedding API → 写入向量字段 优势是写入后即可搜索，无需维护外部向量化流程。参见 Ingest Text Embedding。
 模式二：查询链路嵌入 #  搜索时实时将查询文本转换为向量，在 Easysearch 中做 kNN 检索：
 用户查询 → 调用 Embedding API → 向量化 → Easysearch kNN 搜索 参见 Search Text Embedding。"

@@ -2,7 +2,7 @@
 title: "Prefix 查询"
 date: 0001-01-01
 summary: "Prefix 查询 #  使用 prefix 查询可以搜索以特定前缀开头的词。例如，以下查询会搜索 speaker 字段包含以 KING H 开头的词的文档。
-相关指南（先读这些） #    部分匹配  结构化搜索  GET shakespeare/_search { &#34;query&#34;: { &#34;prefix&#34;: { &#34;speaker&#34;: &#34;KING H&#34; } } } 为了提供参数，您可以使用与前面的查询相同的形式，并使用以下扩展语法
+相关指南（先读这些） #   部分匹配 结构化搜索  GET shakespeare/_search { &#34;query&#34;: { &#34;prefix&#34;: { &#34;speaker&#34;: &#34;KING H&#34; } } } 为了提供参数，您可以使用与前面的查询相同的形式，并使用以下扩展语法
 GET shakespeare/_search { &#34;query&#34;: { &#34;prefix&#34;: { &#34;speaker&#34;: { &#34;value&#34;: &#34;KING H&#34; } } } } 参数说明 #  查询接受字段名称（ &lt;field&gt; ）作为顶级参数：
 GET _search { &#34;query&#34;: { &#34;prefix&#34;: { &#34;&lt;field&gt;&#34;: { &#34;value&#34;: &#34;sample&#34;, ... } } } } &lt;field&gt; 接受以下参数。除了 value 之外，所有参数都是可选的。"
 ---

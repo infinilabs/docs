@@ -3,7 +3,7 @@ title: "排名特征字段类型（Rank Feature）"
 date: 0001-01-01
 summary: "Rank 字段类型 #  下表列出了 Easysearch 支持的所有 rank 字段类型。
    字段数据类型 描述     rank_feature 提升或降低文档的相关性得分。   rank_features 提升或降低文档的相关性得分。用于特征列表稀疏的情况。     注意：rank_feature 和 rank_features 字段只能使用 rank_feature 查询进行查询。它们不支持聚合或排序。
- 相关指南（先读这些） #    映射基础  相关性：加权与调参  排序功能查询  Rank feature 字段类型 #  Rank feature 字段类型使用正浮点值来提升或降低文档在 rank_feature 查询中的相关性得分。默认情况下，该值会提升相关性得分。要降低相关性得分，请将可选参数 positive_score_impact 设置为 false。
+ 相关指南（先读这些） #   映射基础 相关性：加权与调参 排序功能查询  Rank feature 字段类型 #  Rank feature 字段类型使用正浮点值来提升或降低文档在 rank_feature 查询中的相关性得分。默认情况下，该值会提升相关性得分。要降低相关性得分，请将可选参数 positive_score_impact 设置为 false。
 示例 #  创建一个包含 rank feature 字段的映射：
 PUT chessplayers { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;name&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;rating&#34;: { &#34;type&#34;: &#34;rank_feature&#34; }, &#34;age&#34;: { &#34;type&#34;: &#34;rank_feature&#34;, &#34;positive_score_impact&#34;: false } } } } 索引三个文档，其中包含一个提升得分的 rank_feature 字段（rating）和一个降低得分的 rank_feature 字段（age）："
 ---

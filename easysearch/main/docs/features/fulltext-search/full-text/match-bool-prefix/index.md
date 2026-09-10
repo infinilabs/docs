@@ -2,7 +2,7 @@
 title: "Match Bool Prefix 查询"
 date: 0001-01-01
 summary: "Match Bool Prefix 查询 #  match_bool_prefix 查询分析提供的搜索字符串，并从字符串的词项中创建一个布尔查询。它将除最后一个词项外的每个词项作为完整单词进行匹配。最后一个词项用作前缀。match_bool_prefix 查询返回包含完整单词词项或以前缀词项开头的词项的文档，顺序不限。
-相关指南（先读这些） #    部分匹配  全文搜索  以下示例展示了一个基本的 match_bool_prefix 查询：
+相关指南（先读这些） #   部分匹配 全文搜索  以下示例展示了一个基本的 match_bool_prefix 查询：
 GET _search { &#34;query&#34;: { &#34;match_bool_prefix&#34;: { &#34;title&#34;: &#34;the wind&#34; } } } 要传递额外参数，您可以使用扩展语法：
 GET _search { &#34;query&#34;: { &#34;match_bool_prefix&#34;: { &#34;title&#34;: { &#34;query&#34;: &#34;the wind&#34;, &#34;analyzer&#34;: &#34;stop&#34; } } } } 参考样例 #  例如，考虑一个包含以下文档的索引：
 PUT testindex/_doc/1 { &#34;title&#34;: &#34;The wind rises&#34; } PUT testindex/_doc/2 { &#34;title&#34;: &#34;Gone with the wind&#34; } 以下 match_bool_prefix 查询会搜索整个词 rises 以及以 wi 开头的词，顺序不限："

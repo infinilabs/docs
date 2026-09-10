@@ -4,7 +4,7 @@ date: 0001-01-01
 description: "easysearch.yml 静态配置项详细参考。"
 summary: "节点配置 #  本章详细介绍 easysearch.yml 中每个节点需要配置的静态设置。这些设置在修改后需要重启对应节点才能生效。
  集群级别的动态配置（可通过 _cluster/settings API 在线修改的配置）请参见 集群配置。
- 配置子文档 #     文档 涵盖内容      集群与节点 cluster.name、node.name、node.roles、node.attr.*    路径配置 path.data、path.logs、path.repo    网络配置 network.host、http.port、transport.port、HTTP 调优、CORS    集群发现 discovery.seed_hosts、cluster.initial_master_nodes、故障检测    网关与恢复 gateway.recover_after_*、分片恢复行为    内存与缓存 bootstrap.memory_lock、fielddata / query / request 缓存    安全配置 security.* TLS、审计、DN、REST API、系统索引保护    JVM 配置 jvm."
+ 配置子文档 #     文档 涵盖内容     集群与节点 cluster.name、node.name、node.roles、node.attr.*   路径配置 path.data、path.logs、path.repo   网络配置 network.host、http.port、transport.port、HTTP 调优、CORS   集群发现 discovery.seed_hosts、cluster.initial_master_nodes、故障检测   网关与恢复 gateway.recover_after_*、分片恢复行为   内存与缓存 bootstrap.memory_lock、fielddata / query / request 缓存   安全配置 security.* TLS、审计、DN、REST API、系统索引保护   JVM 配置 jvm.options 堆内存、GC、OOM dump   日志配置 log4j2.properties、日志文件、慢日志   线程池与断路器 thread_pool."
 ---
 
 

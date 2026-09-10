@@ -2,7 +2,7 @@
 title: "SeaTunnel 集成"
 date: 0001-01-01
 description: "SeaTunnel 数据同步与 Easysearch 集成。"
-summary: "SeaTunnel 集成 #   Apache SeaTunnel 是一款高性能分布式数据集成平台，支持海量数据的实时和离线同步。
+summary: "SeaTunnel 集成 #  Apache SeaTunnel 是一款高性能分布式数据集成平台，支持海量数据的实时和离线同步。
 SeaTunnel 从 2.3.4 版本开始内置了原生的 INFINI Easysearch Connector，同时支持 Source（读取）和 Sink（写入），使用 easysearch-client 专用客户端，无需依赖 Elasticsearch 兼容层。
  Sink 关键特性：Exactly-Once 语义、CDC（INSERT / UPDATE / DELETE）、HTTPS/TLS。 Source 关键特性：Batch / Stream 模式、Exactly-Once、列投影、并行读取、自定义分片。
  典型场景 #     场景 Source → Sink     MySQL 全量/增量同步 MySQL → Easysearch   日志接入 Kafka → Easysearch   数据仓库导出 Hive / ClickHouse → Easysearch   跨集群迁移 Elasticsearch → Easysearch   Easysearch 数据导出 Easysearch → ClickHouse / Kafka / 文件   CDC 实时同步 MySQL CDC → Easysearch    安装 SeaTunnel #  # 下载（建议使用 2."

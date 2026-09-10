@@ -3,7 +3,7 @@ title: "使用 INFINI Console 管理"
 date: 0001-01-01
 description: "通过 INFINI Console 统一管理一个或多个 Easysearch 集群，提供监控、告警、数据探索等企业级功能。"
 summary: "使用 INFINI Console 管理 #  如果你需要多集群统一管理、告警通知、数据探索等企业级功能，推荐使用 INFINI Console。它是 INFINI Labs 提供的独立可视化管理平台，支持同时管理 Easysearch 和 Elasticsearch 集群。
- 💡 如果你只需要管理单个集群并进行日常开发调试，Easysearch 还提供了 内置 Web UI，零部署，开箱即用。
+ 💡 如果你只需要管理单个集群并进行日常开发调试，Easysearch 还提供了内置 Web UI，零部署，开箱即用。
  安装 Console #  方式一：一键启动（推荐） #  同时启动 Console + Easysearch，最快体验完整管理功能：
 curl -fsSL http://get.infini.cloud/start-local | sh -s 支持更多参数：
 # 启动 3 个 Easysearch 节点，自定义密码，开启 Agent 指标采集 curl -fsSL http://get.infini.cloud/start-local | sh -s -- up \  --nodes 3 --password &#34;MyDevPass123.&#34; --metrics-agent 方式二：单独安装 #  # Linux 一键安装 curl -sSL http://get."

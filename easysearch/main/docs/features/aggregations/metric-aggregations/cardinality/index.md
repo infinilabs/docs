@@ -3,8 +3,9 @@ title: "基数聚合（Cardinality）"
 date: 0001-01-01
 summary: "基数聚合 #  cardinality 聚合是一种单值指标聚合，用于计算字段的唯一值或不同值的数量。
 基数计数为近似值。有关更多信息，请参阅下面的控制精度。
-相关指南（先读这些） #    聚合基础  聚合场景实践  参数说明 #  cardinality 聚合采用以下参数。
-   参数 必需/可选 数据类型 描述     field 必需的 String 估计基数的字段。   precision_threshold 可选 Numeric 阈值，低于该阈值的计数预计接近准确值。有关更多信息，请参阅控制精度 。   execution_hint 可选 String 如何运行聚合，该参数会影响资源使用和聚合效率。有效值为 ordinals 和 direct 。   missing 可选 与 field 类型相同 用于存储字段缺失实例的 bucket。如果未提供，则忽略缺失值。    参考样例 #  以下示例请求查找数据中唯一产品 ID 的数量："
+相关指南（先读这些） #   聚合基础 聚合场景实践  参数说明 #  cardinality 聚合采用以下参数。
+   参数 必需/可选 数据类型 描述     field 必需的 String 估计基数的字段。   precision_threshold 可选 Numeric 阈值，低于该阈值的计数预计接近准确值。有关更多信息，请参阅控制精度 。   execution_hint 可选 String 如何运行聚合，该参数会影响资源使用和聚合效率。有效值为 ordinals 和 direct 。   missing 可选 与 field 类型相同 用于存储字段缺失实例的 bucket。如果未提供，则忽略缺失值。    参考样例 #  以下示例请求查找数据中唯一产品 ID 的数量：
+GET sample_data_ecommerce/_search { &#34;size&#34;: 0, &#34;aggs&#34;: { &#34;unique_products&#34;: { &#34;cardinality&#34;: { &#34;field&#34;: &#34;products."
 ---
 
 

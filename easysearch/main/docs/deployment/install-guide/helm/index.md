@@ -4,9 +4,9 @@ date: 0001-01-01
 summary: "Helm Chart 部署 #  INFINI Easysearch 从 1.5.0 版本开始支持 Helm Chart 方式部署。
 仓库信息 #  INFINI Easysearch Helm Chart 仓库地址: https://helm.infinilabs.com。
 可以使用以下命令添加仓库
-helm repo add infinilabs https://helm.infinilabs.com 依赖项 #   StorageClass  INFINI Easysearch Helm Chart 包中默认使用 local-path 进行数据持久化存储，可参考 local-path官方文档进行安装。
+helm repo add infinilabs https://helm.infinilabs.com 依赖项 #   StorageClass  INFINI Easysearch Helm Chart 包中默认使用 local-path 进行数据持久化存储，可参考local-path官方文档进行安装。
 如果使用其他 StorageClass，请修改 Chart 包中的 storageClassName: local-path配置项。
- Secret  INFINI Easysearch Helm Chart 默认使用 cert-manager 进行自签 CA 证书创建及分发, 可参考 cert-manager 官方文档进行安装。
+ Secret  INFINI Easysearch Helm Chart 默认使用 cert-manager 进行自签 CA 证书创建及分发, 可参考cert-manager 官方文档进行安装。
 安装示例 #  cat &lt;&lt; EOF | kubectl apply -n &lt;namespace&gt; -f - apiVersion: cert-manager."
 ---
 

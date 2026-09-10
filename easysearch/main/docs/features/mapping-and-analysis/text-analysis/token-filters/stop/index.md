@@ -3,7 +3,7 @@ title: "停用词分词过滤器（Stop）"
 date: 0001-01-01
 summary: "Stop 分词过滤器 #  stop 分词过滤器用于在分词过程中从词元流中去除常见词汇（也称为停用词）。停用词通常是冠词和介词，比如 &ldquo;a&rdquo; 或 &ldquo;for&rdquo;。这些词在搜索查询中意义不大，并且常常被排除在外，以提高搜索效率和相关性。
 默认的英语停用词列表包含以下单词：a、an、and、are、as、at、be、but、by、for、if、in、into、is、it、no、not、of、on、or、such、that、the、their、then、there、these、they、this、to、was、will 以及 with。
-相关指南（先读这些） #    停用词  文本分析基础  参数说明 #  停用词分词过滤器可以使用以下参数进行配置：
+相关指南（先读这些） #   停用词 文本分析基础  参数说明 #  停用词分词过滤器可以使用以下参数进行配置：
    参数 必需/可选 数据类型 描述     stopwords 可选 字符串 既可以指定自定义的停用词数组，也可以指定一种语言以获取预定义的 Lucene 停用词列表。可指定的语言如下：
 - _arabic_
 - _armenian_
@@ -18,7 +18,8 @@ summary: "Stop 分词过滤器 #  stop 分词过滤器用于在分词过程中�
 - _dutch_
 - _english_（默认值）
 - _estonian_
-- _finnish_"
+- _finnish_
+- _french_"
 ---
 
 

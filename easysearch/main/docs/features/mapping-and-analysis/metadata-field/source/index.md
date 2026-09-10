@@ -4,8 +4,8 @@ date: 0001-01-01
 summary: "_source 元数据字段 #  _source 字段包含已索引的原始 JSON 文档主体。虽然此字段不可搜索，但它会被存储，以便在执行获取请求（如 get 和 search）时可以返回完整文档。
 禁用 _source #  您可以通过将 enabled 参数设置为 false 来禁用 _source 字段，如以下示例所示：
 PUT sample-index1 { &#34;mappings&#34;: { &#34;_source&#34;: { &#34;enabled&#34;: false } } }  注意：禁用 _source 字段可能会影响某些功能的可用性，例如 update、update_by_query 和 reindex API，以及使用原始索引文档查询或聚合的能力。
- 相关指南（先读这些） #    映射基础  元数据字段  包含或排除某些字段 #  您可以使用 includes 和 excludes 参数选择 _source 字段的内容。如以下示例：
-PUT logs { &#34;mappings&#34;: { &#34;_source&#34;: { &#34;includes&#34;: [ &#34;*."
+ 相关指南（先读这些） #   映射基础 元数据字段  包含或排除某些字段 #  您可以使用 includes 和 excludes 参数选择 _source 字段的内容。如以下示例：
+PUT logs { &#34;mappings&#34;: { &#34;_source&#34;: { &#34;includes&#34;: [ &#34;*.count&#34;, &#34;meta."
 ---
 
 

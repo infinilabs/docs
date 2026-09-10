@@ -2,10 +2,10 @@
 title: "扁平化文本字段类型（Flattened Text）"
 date: 0001-01-01
 summary: "Flattened Text 字段类型 #  flattened_text 类型是一种特殊的数据结构，适用于存储和查询嵌套层次的数据，同时保留类似于 text 类型的灵活搜索特性，例如分词和全文匹配。它在处理结构化或者半结构化数据时非常有用，例如 JSON 对象或动态键值对映射。
-相关指南（先读这些） #    映射基础  映射模式  全文搜索  定义映射 #  { &#34;properties&#34;: { &#34;my_field&#34;: { &#34;type&#34;: &#34;flattened_text&#34; } } } 特性 #    扁平化存储
+相关指南（先读这些） #   映射基础 映射模式 全文搜索  定义映射 #  { &#34;properties&#34;: { &#34;my_field&#34;: { &#34;type&#34;: &#34;flattened_text&#34; } } } 特性 #    扁平化存储
  将嵌套的 JSON 对象转换为扁平结构 保留完整的路径信息 支持点号访问内部字段    文本分析
  支持标准分词器 支持短语查询 支持全文搜索功能    内部索引结构 每个 flattened_text 字段在 lucene 层面会创建多个子字段:
- {field} - 存储所有键 {field}._value - 存储所有值 {field}."
+ {field} - 存储所有键 {field}._value - 存储所有值 {field}._valueAndPath - 存储 &ldquo;path=value&rdquo; 格式    索引示例 #  PUT my_index/_doc/1 { &#34;my_field&#34;: { &#34;key1&#34;: { &#34;subkey1&#34;: { &#34;subkey2&#34;: &#34;quick brown fox&#34; } } } } 查询示例 #  精确路径匹配 #  // Match Query - 指定完整路径 GET my_index/_search { &#34;query&#34;: { &#34;match&#34;: { &#34;my_field."
 ---
 
 

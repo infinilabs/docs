@@ -3,7 +3,7 @@ title: "Java 客户端集成与示例"
 date: 0001-01-01
 description: "使用 Easysearch 官方 Java 客户端连接 Easysearch，完成基础 CRUD 与搜索调用。"
 summary: "Java 客户端集成与示例 #  Easysearch Java API Client 是 Easysearch 的官方 Java 客户端，提供了强类型、流式构建器风格的 API 接口。新项目推荐使用此客户端。
- 全新重构的 2.0.x 版本，更轻量，移除冗余依赖 兼容 Easysearch 各版本 支持阻塞和异步两种调用方式 使用流式构建器和函数式模式，代码简洁易读 通过 Jackson 无缝集成应用类  相关指南 #    官方 Java Client API 文档  如何使用 Curl 操作  依赖引入 #  Maven #  &lt;dependency&gt; &lt;groupId&gt;com.infinilabs&lt;/groupId&gt; &lt;artifactId&gt;easysearch-client&lt;/artifactId&gt; &lt;version&gt;2.0.2&lt;/version&gt; &lt;/dependency&gt; Gradle #  implementation &#39;com.infinilabs:easysearch-client:2.0.2&#39;  已发布到 Maven 中央仓库： mvnrepository.com/artifact/com.infinilabs/easysearch-client，需要 JDK 8 或以上。
+ 全新重构的 2.0.x 版本，更轻量，移除冗余依赖 兼容 Easysearch 各版本 支持阻塞和异步两种调用方式 使用流式构建器和函数式模式，代码简洁易读 通过 Jackson 无缝集成应用类  相关指南 #   官方 Java Client API 文档 如何使用 Curl 操作  依赖引入 #  Maven #  &lt;dependency&gt; &lt;groupId&gt;com.infinilabs&lt;/groupId&gt; &lt;artifactId&gt;easysearch-client&lt;/artifactId&gt; &lt;version&gt;2.0.2&lt;/version&gt; &lt;/dependency&gt; Gradle #  implementation &#39;com.infinilabs:easysearch-client:2.0.2&#39;  已发布到 Maven 中央仓库：mvnrepository.com/artifact/com.infinilabs/easysearch-client，需要 JDK 8 或以上。
  连接配置 #  基础连接（带认证 + HTTPS） #  Easysearch 默认启用安全认证和 HTTPS，以下代码展示完整的连接初始化："
 ---
 

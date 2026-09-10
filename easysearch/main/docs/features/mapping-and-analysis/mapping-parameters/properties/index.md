@@ -2,7 +2,7 @@
 title: "属性参数（Properties）"
 date: 0001-01-01
 summary: "Properties 参数 #  properties 参数用于定义对象（object）和嵌套（nested）类型字段的子字段映射。它是构建层级文档结构的核心参数。
-相关指南 #    映射基础  dynamic 参数  使用位置 #  properties 出现在三个层级：
+相关指南 #   映射基础 dynamic 参数  使用位置 #  properties 出现在三个层级：
    层级 说明     mappings.properties 顶层字段定义   mappings.properties.&lt;object&gt;.properties 对象字段的子字段   mappings.properties.&lt;nested&gt;.properties 嵌套字段的子字段    示例 #  基本层级结构 #  PUT my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;name&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;address&#34;: { &#34;type&#34;: &#34;object&#34;, &#34;properties&#34;: { &#34;city&#34;: { &#34;type&#34;: &#34;keyword&#34; }, &#34;zip&#34;: { &#34;type&#34;: &#34;keyword&#34; } } } } } } 嵌套类型 #  PUT my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;comments&#34;: { &#34;type&#34;: &#34;nested&#34;, &#34;properties&#34;: { &#34;author&#34;: { &#34;type&#34;: &#34;keyword&#34; }, &#34;content&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;date&#34;: { &#34;type&#34;: &#34;date&#34; } } } } } } 多层嵌套 #  PUT my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;department&#34;: { &#34;properties&#34;: { &#34;name&#34;: { &#34;type&#34;: &#34;keyword&#34; }, &#34;manager&#34;: { &#34;properties&#34;: { &#34;name&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;email&#34;: { &#34;type&#34;: &#34;keyword&#34; } } } } } } } } 对应的文档字段以 ."
 ---
 

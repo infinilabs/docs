@@ -2,7 +2,7 @@
 title: "Geotile 网格聚合"
 date: 0001-01-01
 summary: "Geotile 网格聚合 #  geotile_grid 聚合将 geo_point 值按照地图瓦片坐标分组。与 geohash_grid 类似，但使用的是 Web 地图标准的瓦片坐标系统（x/y/zoom），这使得它与 Google Maps、OpenStreetMap、Mapbox 等瓦片地图服务的集成更加方便。
-相关指南（先读这些） #    聚合基础教程  地理位置搜索  Geohash Grid 聚合   瓦片坐标系统 #  Web 地图使用 Slippy Map 瓦片坐标系统：
+相关指南（先读这些） #   聚合基础教程 地理位置搜索 Geohash Grid 聚合   瓦片坐标系统 #  Web 地图使用 Slippy Map 瓦片坐标系统：
  zoom：缩放级别（0-29），级别越高网格越精细 x：水平瓦片索引（从左到右） y：垂直瓦片索引（从上到下）  瓦片标识符格式：{zoom}/{x}/{y}，如 14/8532/5765
 缩放级别与覆盖范围 #     Zoom 瓦片数量 每个瓦片覆盖范围     0 1 整个世界   1 4 ~ 20,000km   5 1,024 ~ 1,250km   10 ~100万 ~ 39km   15 ~10亿 ~ 1."
 ---

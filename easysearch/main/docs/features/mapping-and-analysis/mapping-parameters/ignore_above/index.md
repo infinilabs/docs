@@ -3,7 +3,7 @@ title: "忽略超长参数（Ignore Above）"
 date: 0001-01-01
 summary: "Ignore Above 参数 #  ignore_above 参数指定字符串的最大长度限制。超过此长度的字符串不会被索引或存储在 doc_values 中，但仍会出现在 _source 中。
 该参数主要用于 keyword 字段类型，防止超长字符串占用过多索引空间。
-相关指南（先读这些） #    映射基础  Keyword 字段类型  参数选项 #     值 说明     正整数 超过此字符数的值不被索引。   默认值 2147483647（几乎不限制）。动态映射创建的 keyword 子字段默认为 256。    示例 #  PUT my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;tag&#34;: { &#34;type&#34;: &#34;keyword&#34;, &#34;ignore_above&#34;: 100 } } } } 写入测试：
+相关指南（先读这些） #   映射基础 Keyword 字段类型  参数选项 #     值 说明     正整数 超过此字符数的值不被索引。   默认值 2147483647（几乎不限制）。动态映射创建的 keyword 子字段默认为 256。    示例 #  PUT my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;tag&#34;: { &#34;type&#34;: &#34;keyword&#34;, &#34;ignore_above&#34;: 100 } } } } 写入测试：
 PUT my-index/_doc/1 { &#34;tag&#34;: &#34;short_tag&#34; } PUT my-index/_doc/2 { &#34;tag&#34;: &#34;this_is_a_very_long_tag_value_that_exceeds_one_hundred_characters_and_therefore_should_not_be_indexed_at_all_in_the_inverted_index&#34; }  文档 1 的 tag 会被正常索引，可以搜索和聚合 文档 2 的 tag 不会被索引，无法通过 term 查询找到，也不会出现在聚合结果中，但仍然存在于 _source 中  动态映射的默认行为 #  当 Easysearch 动态检测到字符串字段时，会自动创建如下映射："
 ---
 

@@ -3,7 +3,7 @@ title: "Match Phrase Prefix 查询"
 date: 0001-01-01
 summary: "Match Phrase Prefix 查询 #  使用 match_phrase_prefix 查询来指定要匹配的短语。包含您指定短语的文档将被返回。短语中的最后一个部分词被解释为前缀，因此任何包含以该短语和最后一个词的前缀开头的短语的文档都将被返回。
 与 match_phrase 类似，但会从查询字符串中的最后一个词创建一个前缀查询。
-相关指南（先读这些） #    部分匹配  邻近匹配  对于 match_phrase_prefix 和 match_bool_prefix 查询之间的差异，请参阅 match_bool_prefix 和 match_phrase_prefix 查询。
+相关指南（先读这些） #   部分匹配 邻近匹配  对于 match_phrase_prefix 和 match_bool_prefix 查询之间的差异，请参阅 match_bool_prefix 和 match_phrase_prefix 查询。
 以下示例展示了一个基本的 match_phrase_prefix 查询：
 GET _search { &#34;query&#34;: { &#34;match_phrase_prefix&#34;: { &#34;title&#34;: &#34;the wind&#34; } } } 要传递附加参数，您可以使用扩展语法：
 GET _search { &#34;query&#34;: { &#34;match_phrase_prefix&#34;: { &#34;title&#34;: { &#34;query&#34;: &#34;the wind&#34;, &#34;analyzer&#34;: &#34;stop&#34; } } } } 参考用例 #  例如，创建一个包含以下文档的索引：

@@ -2,7 +2,7 @@
 title: "格式参数（Format）"
 date: 0001-01-01
 summary: "Format 参数 #  format 参数指定日期字段的解析格式。Easysearch 内置了多种日期格式，也支持自定义格式字符串。
-相关指南（先读这些） #    映射基础  Date 字段类型  基本用法 #  PUT my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;created_at&#34;: { &#34;type&#34;: &#34;date&#34;, &#34;format&#34;: &#34;yyyy-MM-dd HH:mm:ss&#34; } } } } 多格式支持 #  使用 || 分隔符可以指定多个格式，Easysearch 会依次尝试每种格式进行解析：
+相关指南（先读这些） #   映射基础 Date 字段类型  基本用法 #  PUT my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;created_at&#34;: { &#34;type&#34;: &#34;date&#34;, &#34;format&#34;: &#34;yyyy-MM-dd HH:mm:ss&#34; } } } } 多格式支持 #  使用 || 分隔符可以指定多个格式，Easysearch 会依次尝试每种格式进行解析：
 &#34;created_at&#34;: { &#34;type&#34;: &#34;date&#34;, &#34;format&#34;: &#34;yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis&#34; } 内置日期格式 #     格式 说明 示例     epoch_millis 毫秒时间戳 1618000000000   epoch_second 秒时间戳 1618000000   date_optional_time / strict_date_optional_time ISO 8601 日期，时间部分可选 2021-04-10T08:00:00Z   basic_date yyyyMMdd 20210410   basic_date_time yyyyMMdd&rsquo;T&rsquo;HHmmss."
 ---
 

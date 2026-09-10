@@ -3,7 +3,7 @@ title: "显著词项聚合（Significant Terms）"
 date: 0001-01-01
 summary: "显著词项聚合 #  significant_terms 聚合可以帮助你在相对于索引中其他数据的过滤子集中识别不寻常或有趣的分组出现情况。
 前景集是指你进行过滤的文档集合，背景集是指索引中所有文档的集合。significant_terms 聚合会检查前景集中的所有文档，并与背景集中的文档进行对比，从而为重要出现情况找到相应的分数。
-相关指南（先读这些） #    聚合基础  聚合场景实践  在示例网络日志数据中，每个文档都有一个包含访客 user-agent 的字段。此示例搜索来自 iOS 操作系统的所有请求。对这一前景集进行常规的 terms 聚合返回 Firefox，因为它在这个分组内有最多的文档数量。另一方面， significant_terms 聚合返回 Internet Explorer（IE），因为 IE 在前景集中的出现频率显著高于背景集。
+相关指南（先读这些） #   聚合基础 聚合场景实践  在示例网络日志数据中，每个文档都有一个包含访客 user-agent 的字段。此示例搜索来自 iOS 操作系统的所有请求。对这一前景集进行常规的 terms 聚合返回 Firefox，因为它在这个分组内有最多的文档数量。另一方面， significant_terms 聚合返回 Internet Explorer（IE），因为 IE 在前景集中的出现频率显著高于背景集。
 GET sample_data_logs/_search { &#34;size&#34;: 0, &#34;query&#34;: { &#34;terms&#34;: { &#34;machine.os.keyword&#34;: [ &#34;ios&#34; ] } }, &#34;aggs&#34;: { &#34;significant_response_codes&#34;: { &#34;significant_terms&#34;: { &#34;field&#34;: &#34;agent.keyword&#34; } } } } 返回内容
 ... &#34;aggregations&#34; : { &#34;significant_response_codes&#34; : { &#34;doc_count&#34; : 2737, &#34;bg_count&#34; : 14074, &#34;buckets&#34; : [ { &#34;key&#34; : &#34;Mozilla/4."
 ---

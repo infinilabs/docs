@@ -2,7 +2,7 @@
 title: "相似度算法参数（Similarity）"
 date: 0001-01-01
 summary: "Similarity 参数 #  similarity 参数指定字段使用的相关性评分算法。不同的算法适合不同类型的数据和搜索场景。
-相关指南（先读这些） #    评分基础  映射基础  内置算法 #     值 算法 说明     BM25 Okapi BM25 默认值。适合大多数全文搜索场景。   boolean 布尔模型 不计算相关性分数，匹配的文档得分为查询的 boost 值。适合不需要相关性排序的过滤场景。   DFR Divergence from Randomness 基于随机性散度模型的评分算法。   DFI Divergence from Independence 基于独立性散度模型的评分算法。   IB Information Based 基于信息论的评分算法。   LMDirichlet Dirichlet 语言模型 使用 Dirichlet 先验的语言模型平滑方法。   LMJelinekMercer Jelinek-Mercer 语言模型 使用线性插值的语言模型平滑方法。   自定义名称 自定义相似度 在索引 settings 中定义的自定义评分算法。    示例 #  PUT my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;content&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;similarity&#34;: &#34;BM25&#34; }, &#34;status&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;similarity&#34;: &#34;boolean&#34; } } } } BM25 参数调优 #  BM25 的行为可以通过索引 settings 自定义："
+相关指南（先读这些） #   评分基础 映射基础  内置算法 #     值 算法 说明     BM25 Okapi BM25 默认值。适合大多数全文搜索场景。   boolean 布尔模型 不计算相关性分数，匹配的文档得分为查询的 boost 值。适合不需要相关性排序的过滤场景。   DFR Divergence from Randomness 基于随机性散度模型的评分算法。   DFI Divergence from Independence 基于独立性散度模型的评分算法。   IB Information Based 基于信息论的评分算法。   LMDirichlet Dirichlet 语言模型 使用 Dirichlet 先验的语言模型平滑方法。   LMJelinekMercer Jelinek-Mercer 语言模型 使用线性插值的语言模型平滑方法。   自定义名称 自定义相似度 在索引 settings 中定义的自定义评分算法。    示例 #  PUT my-index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;content&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;similarity&#34;: &#34;BM25&#34; }, &#34;status&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;similarity&#34;: &#34;boolean&#34; } } } } BM25 参数调优 #  BM25 的行为可以通过索引 settings 自定义："
 ---
 
 

@@ -2,7 +2,7 @@
 title: "Query String 查询"
 date: 0001-01-01
 summary: "Query String 查询 #  query_string 查询根据查询字符串语法解析查询字符串。它提供了创建强大而简洁的查询的功能，这些查询可以包含通配符并搜索多个字段。
-相关指南（先读这些） #    全文搜索  Query DSL 基础  查询字符串语法 — 通配符、模糊、范围、布尔等完整语法参考   使用注意：使用 query_string 查询的搜索不会返回嵌套文档。要搜索嵌套字段，请使用 nested 查询。
+相关指南（先读这些） #   全文搜索 Query DSL 基础 查询字符串语法 — 通配符、模糊、范围、布尔等完整语法参考   使用注意：使用 query_string 查询的搜索不会返回嵌套文档。要搜索嵌套字段，请使用 nested 查询。
   语法严格性：查询字符串查询具有严格的语法，在语法无效时会返回错误。因此，它不适合搜索框应用程序。对于不太严格的替代方案，可以考虑使用 simple_query_string 查询。如果你不需要查询语法支持，使用 match 查询。
  参考样例 #  运行以下搜索时， query_string 查询会将 (new york city) OR (big apple) 拆分为两部分： new york city 和 big apple 。 content 字段的分词器随后会分别将每个部分转换为标记，然后返回匹配的文档。由于查询语法不使用空格作为运算符，因此 new york city 会按原样传递给分词器。
 GET /_search { &#34;query&#34;: { &#34;query_string&#34;: { &#34;query&#34;: &#34;(new york city) OR (big apple)&#34;, &#34;default_field&#34;: &#34;content&#34; } } } 参数说明 #  下表列出了 query_string 查询支持的参数。除 query 外，所有参数都是可选的。"

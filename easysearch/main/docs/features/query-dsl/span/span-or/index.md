@@ -3,7 +3,7 @@ title: "Span Or 查询"
 date: 0001-01-01
 summary: "Span Or 查询 #  span_or 查询组合多个 span 查询，并匹配它们 span 的并集。如果其中至少一个包含的 span 查询匹配，则发生匹配。
 例如，您可以使用 span_or 查询来：
- 查找匹配多个模式中的任意一个的 span。 将不同的 span 模式作为备选项组合。 在一个查询中匹配多个 span 变体。  相关指南（先读这些） #    Span 查询  查询 DSL 基础  参考样例 #  以下查询搜索“formal collar”或“button collar”在彼此 2 个词距离内出现：
+ 查找匹配多个模式中的任意一个的 span。 将不同的 span 模式作为备选项组合。 在一个查询中匹配多个 span 变体。  相关指南（先读这些） #   Span 查询 查询 DSL 基础  参考样例 #  以下查询搜索“formal collar”或“button collar”在彼此 2 个词距离内出现：
 GET /clothing/_search { &#34;query&#34;: { &#34;span_or&#34;: { &#34;clauses&#34;: [ { &#34;span_near&#34;: { &#34;clauses&#34;: [ { &#34;span_term&#34;: { &#34;description&#34;: &#34;formal&#34; } }, { &#34;span_term&#34;: { &#34;description&#34;: &#34;collar&#34; } } ], &#34;slop&#34;: 0, &#34;in_order&#34;: true } }, { &#34;span_near&#34;: { &#34;clauses&#34;: [ { &#34;span_term&#34;: { &#34;description&#34;: &#34;button&#34; } }, { &#34;span_term&#34;: { &#34;description&#34;: &#34;collar&#34; } } ], &#34;slop&#34;: 2, &#34;in_order&#34;: true } } ] } } } 该查询在指定的 slop 距离内匹配文档 1（“…formal collar…”）和文档 3（“…button-down collar…”）。"
 ---
 

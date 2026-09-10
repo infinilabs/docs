@@ -2,7 +2,7 @@
 title: "平均值聚合（Avg）"
 date: 0001-01-01
 summary: "平均值聚合 #  avg 聚合是一个单值指标聚合，它返回某个字段的平均值。
-相关指南（先读这些） #    聚合基础  聚合场景实践  参数说明 #  avg 聚合采用以下参数。
+相关指南（先读这些） #   聚合基础 聚合场景实践  参数说明 #  avg 聚合采用以下参数。
    参数 必需/可选 数据类型 描述     field 必需 String 计算平均值的字段。   missing 可选 Float 要分配给字段缺失实例的值。默认情况下， avg 会在计算中忽略缺失值。    参考样例 #  以下示例请求计算示例数据中 taxful_total_price 字段的平均值：
 GET sample_data_ecommerce/_search { &#34;size&#34;: 0, &#34;aggs&#34;: { &#34;avg_taxful_total_price&#34;: { &#34;avg&#34;: { &#34;field&#34;: &#34;taxful_total_price&#34; } } } } 返回内容 #  返回内容包含 taxful_total_price 的平均值："
 ---

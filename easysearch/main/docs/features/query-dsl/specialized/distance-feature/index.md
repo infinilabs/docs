@@ -3,7 +3,7 @@ title: "Distance Feature 查询"
 date: 0001-01-01
 summary: "Distance Feature 查询 #  使用 distance_feature 查询来提升与特定日期或地理位置更近的文档的相关性。这可以帮助你在搜索结果中优先显示更近期的或附近的内容。例如，你可以为近期生产的产品分配更高的权重，或提升最接近用户指定位置的项目。
 你可以将此查询应用于包含日期或位置数据的字段。它通常用于 bool 查询的 should 子句中，以改进相关性评分而不过滤掉结果。
-相关指南（先读这些） #    相关性与打分策略  地理位置搜索  Query DSL 基础  配置索引 #  在使用 distance_feature 查询之前，请确保您的索引至少包含以下字段类型之一：date,date_nanos,geo_point
+相关指南（先读这些） #   相关性与打分策略 地理位置搜索 Query DSL 基础  配置索引 #  在使用 distance_feature 查询之前，请确保您的索引至少包含以下字段类型之一：date,date_nanos,geo_point
 在此示例中，您将配置 opening_date 和 coordinates 字段，用于运行距离特征查询：
 PUT /stores { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;opening_date&#34;: { &#34;type&#34;: &#34;date&#34; }, &#34;coordinates&#34;: { &#34;type&#34;: &#34;geo_point&#34; } } } } 向索引中添加示例文档：
 PUT /stores/_doc/1 { &#34;store_name&#34;: &#34;Green Market&#34;, &#34;opening_date&#34;: &#34;2025-03-10&#34;, &#34;coordinates&#34;: [74.00, 40.70] } PUT /stores/_doc/2 { &#34;store_name&#34;: &#34;Fresh Foods&#34;, &#34;opening_date&#34;: &#34;2025-04-01&#34;, &#34;coordinates&#34;: [73."

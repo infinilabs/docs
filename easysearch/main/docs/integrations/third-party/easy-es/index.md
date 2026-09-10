@@ -2,9 +2,9 @@
 title: "Easy-ES 查询框架"
 date: 0001-01-01
 description: "Easy-ES 与 Easysearch 原生集成，MyBatis-Plus 风格的搜索引擎 ORM 框架。"
-summary: "Easy-ES 查询框架 #   Easy-ES 是 Dromara 开源社区下的搜索引擎 ORM 框架，类似于 MyBatis-Plus 之于 MySQL。它在 Java 客户端的基础上只做增强不做改变，提供 Lambda 风格的简洁 API，可减少 50%~80% 的代码量。
+summary: "Easy-ES 查询框架 #  Easy-ES 是 Dromara 开源社区下的搜索引擎 ORM 框架，类似于 MyBatis-Plus 之于 MySQL。它在 Java 客户端的基础上只做增强不做改变，提供 Lambda 风格的简洁 API，可减少 50%~80% 的代码量。
 Easy-ES 提供了专门的 Easysearch 原生分支，底层直接使用 Easysearch Java Client，无需 ES API 兼容模式，具备完整的原生性能和功能支持。
- 源码仓库： https://gitee.com/dromara/easy-es/tree/easy-es4easySearch Maven 中央仓库： easy-es-boot-starter 2.1.0-easysearch  核心优势 #     特性 说明     极简开发 一行代码完成查询，相比原生 API 代码量减少 50%~80%   自动索引管理 索引全生命周期由框架自动托管，零停机更新，无需手动管理   SQL 语法兼容 支持 MySQL 风格的 and、or、like、in 等常用语法查询   Lambda 表达式 类型安全的字段访问，避免手写字段名导致的错误   Spring Boot 集成 开箱即用的自动配置，完美融入 Spring Boot 生态   原生 Easysearch 支持 底层使用 Easysearch Java Client，无需兼容层     快速开始 #  1."
+ 源码仓库：https://gitee.com/dromara/easy-es/tree/easy-es4easySearch Maven 中央仓库：easy-es-boot-starter 2.1.0-easysearch  核心优势 #     特性 说明     极简开发 一行代码完成查询，相比原生 API 代码量减少 50%~80%   自动索引管理 索引全生命周期由框架自动托管，零停机更新，无需手动管理   SQL 语法兼容 支持 MySQL 风格的 and、or、like、in 等常用语法查询   Lambda 表达式 类型安全的字段访问，避免手写字段名导致的错误   Spring Boot 集成 开箱即用的自动配置，完美融入 Spring Boot 生态   原生 Easysearch 支持 底层使用 Easysearch Java Client，无需兼容层     快速开始 #  1."
 ---
 
 

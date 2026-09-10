@@ -2,9 +2,10 @@
 title: "规范化分词过滤器（Normalization）"
 date: 0001-01-01
 summary: "Normalization 分词过滤器 #  归一化分词过滤器旨在以减少文本差异（尤其是特殊字符差异）的方式对文本进行调整和简化。它主要用于通过对特定语言中的字符进行标准化处理，来应对书写上的差异。
-相关指南（先读这些） #    文本分析：规范化  文本分析基础  以下是可用的归一化分词过滤器：
- 阿拉伯语归一化: arabic_normalization 德语归一化: german_normalization 印地语归一化: hindi_normalization 印度语系归一化: indic_normalization 索拉尼语归一化: sorani_normalization 波斯语归一化: persian_normalization 斯堪的纳维亚语归一化: scandinavian_normalization 斯堪的纳维亚语折叠处理归一化: scandinavian_folding 塞尔维亚语归一化: serbian_normalization  参考样例 #  以下示例请求创建了一个名为 german_normalizer_example 的新索引，并配置了一个带有 german_normalization的分词器：
-PUT /german_normalizer_example { &#34;settings&#34;: { &#34;analysis&#34;: { &#34;filter&#34;: { &#34;german_normalizer&#34;: { &#34;type&#34;: &#34;german_normalization&#34; } }, &#34;analyzer&#34;: { &#34;german_normalizer_analyzer&#34;: { &#34;tokenizer&#34;: &#34;standard&#34;, &#34;filter&#34;: [ &#34;lowercase&#34;, &#34;german_normalizer&#34; ] } } } } } 产生的词元 #  使用以下请求来检查使用该分词器生成的词元："
+相关指南（先读这些） #   文本分析：规范化 文本分析基础  以下是可用的归一化分词过滤器：
+ 阿拉伯语归一化:arabic_normalization 德语归一化:german_normalization 印地语归一化:hindi_normalization 印度语系归一化:indic_normalization 索拉尼语归一化:sorani_normalization 波斯语归一化:persian_normalization 斯堪的纳维亚语归一化:scandinavian_normalization 斯堪的纳维亚语折叠处理归一化:scandinavian_folding 塞尔维亚语归一化:serbian_normalization  参考样例 #  以下示例请求创建了一个名为 german_normalizer_example 的新索引，并配置了一个带有 german_normalization的分词器：
+PUT /german_normalizer_example { &#34;settings&#34;: { &#34;analysis&#34;: { &#34;filter&#34;: { &#34;german_normalizer&#34;: { &#34;type&#34;: &#34;german_normalization&#34; } }, &#34;analyzer&#34;: { &#34;german_normalizer_analyzer&#34;: { &#34;tokenizer&#34;: &#34;standard&#34;, &#34;filter&#34;: [ &#34;lowercase&#34;, &#34;german_normalizer&#34; ] } } } } } 产生的词元 #  使用以下请求来检查使用该分词器生成的词元：
+POST /german_normalizer_example/_analyze { &#34;text&#34;: &#34;Straße München&#34;, &#34;analyzer&#34;: &#34;german_normalizer_analyzer&#34; } 返回内容包含产生的词元"
 ---
 
 

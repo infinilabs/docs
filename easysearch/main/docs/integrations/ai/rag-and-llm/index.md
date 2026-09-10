@@ -3,8 +3,8 @@ title: "RAG 与 LLM 集成"
 date: 0001-01-01
 description: "以 Easysearch 为检索层，构建检索增强生成（RAG）与问答系统的整体方案。"
 summary: "RAG 与 LLM 集成 #  检索增强生成（Retrieval-Augmented Generation，RAG）是一种将搜索引擎与大语言模型（LLM）结合的架构模式。Easysearch 作为高性能检索层，可以为 LLM 提供精准的上下文信息，显著提升生成质量。
-相关指南（先读这些） #    Embedding 服务接入  向量工作流与复合检索  混合搜索：搜索管道 RRF（hybrid_ranker_processor）  LangChain 集成  RAG 架构概览 #  典型的 RAG 流程如下：
-用户提问 ↓ 1. 查询改写（可选） ↓ 2. 检索阶段：在 Easysearch 中搜索相关文档 - 全文搜索（BM25） - 向量搜索（kNN） - 复合查询（`bool` + `knn` + `match`） - 混合搜索（搜索管道 RRF） ↓ 3. 结果裁剪：选取 Top-K 段落，控制 token 数量 ↓ 4. Prompt 组装：将检索结果 + 用户问题拼接为 Prompt ↓ 5."
+相关指南（先读这些） #   Embedding 服务接入 向量工作流与复合检索 混合搜索：搜索管道 RRF（hybrid_ranker_processor） LangChain 集成  RAG 架构概览 #  典型的 RAG 流程如下：
+用户提问 ↓ 1. 查询改写（可选） ↓ 2. 检索阶段：在 Easysearch 中搜索相关文档 - 全文搜索（BM25） - 向量搜索（kNN） - 复合查询（`bool` + `knn` + `match`） - 混合搜索（搜索管道 RRF） ↓ 3. 结果裁剪：选取 Top-K 段落，控制 token 数量 ↓ 4. Prompt 组装：将检索结果 + 用户问题拼接为 Prompt ↓ 5. LLM 生成：调用 LLM API 生成答案 ↓ 6."
 ---
 
 

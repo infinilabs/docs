@@ -2,7 +2,7 @@
 title: "脚本指标聚合（Scripted Metric）"
 date: 0001-01-01
 summary: "脚本指标聚合 #  scripted_metric 聚合是一个多值指标聚合，它返回根据指定脚本计算的指标。脚本有四个阶段：init、map、combine 和 reduce，每个聚合按顺序运行这些阶段，组合来自文档的结果。
-相关指南（先读这些） #    聚合基础  聚合场景实践  所有四个脚本共享一个可变对象，称为 state，该对象由你定义。state 在 init、map 和 combine 阶段时对每个分片是局部的。结果被传递到 states 数组中用于 reduce 阶段。因此，每个分片的 state 在分片在 reduce 步骤中组合之前是独立的。
+相关指南（先读这些） #   聚合基础 聚合场景实践  所有四个脚本共享一个可变对象，称为 state，该对象由你定义。state 在 init、map 和 combine 阶段时对每个分片是局部的。结果被传递到 states 数组中用于 reduce 阶段。因此，每个分片的 state 在分片在 reduce 步骤中组合之前是独立的。
 参数说明 #  scripted_metric 聚合采用以下参数。
    参数 必需/可选 数据类型 描述     init_script 可选 String 一个脚本，在每个分片上处理任何文档之前执行一次。用于设置初始 state（例如，在 state 对象中初始化计数器或列表）。如果没有提供，state 在每个分片上开始时是一个空对象。   map_script 必需 String 一个脚本，针对聚合收集的每个文档执行。此脚本根据文档的数据更新 state。例如，您可以检查字段的值，然后递增计数器或在 state 中计算运行总和。   combine_script 必需 String 一个脚本，在每个分片上处理完所有文档后由 map_script 执行一次。此脚本将分片的 state 聚合为单个结果发送回协调节点。此脚本用于完成一个分片的计算（例如，汇总存储在 state 中的计数器或总计）。脚本应返回其分片的汇总值或结构。   reduce_script 必需 String 一个脚本在接收到所有分片的合并结果后，在协调节点上执行一次。这个脚本接收一个特殊变量 states，它是一个包含每个分片从 combine_script 输出的数组。reduce_script 遍历状态并生成最终的聚合输出（例如，添加分片总和或合并计数的映射）。reduce_script 返回的值是在聚合结果中报告的值。   params 可选 Object 除 reduce_script 外，所有脚本都可以访问用户定义的参数。    可返回的类型 #  脚本可以在内部使用任何有效的操作和对象。然而，存储在 state 或从任何脚本返回的数据必须属于允许的类型之一。这个限制存在是因为中间 state 需要在节点之间发送。允许的类型如下："
 ---

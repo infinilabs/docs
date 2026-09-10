@@ -4,8 +4,8 @@ date: 0001-01-01
 description: "全文检索、多字段搜索、邻近匹配、高亮、建议、相关性调优。"
 summary: "全文搜索是 Easysearch 最常用的搜索场景。本章节涵盖从基础教程到高级调优的全文搜索能力，包括分词、相关性评分、多字段搜索等。
 快速入门 #  从最基础的全文查询开始：
-  全文检索基础：BM25 算法、分词、匹配机制  多字段搜索：best_fields、most_fields、cross_fields 策略  邻近匹配：短语匹配、slop 参数、多值字段  部分匹配：前缀、通配符、正则、模糊查询  高亮：标记匹配文本片段  自动建议：自动补全、拼写纠正  全文查询类型 #  所有全文查询都支持分词与相关性计分。详细用法见 全文查询 章节：
-   查询 说明 常见用途      match 基础全文查询，单字段 简单关键词搜索    match_phrase 短语匹配 短语搜索    match_phrase_prefix 短语前缀 搜索框自动补全    match_bool_prefix 布尔前缀匹配 跨字段自动补全    multi_match 多字段全文查询 在多个字段中搜索    query_string 查询字符串（支持布尔操作符） 高级用户输入    simple_query_string 简化查询字符串 用户输入容错    intervals 高级文本匹配 精细文本匹配控制    Span 查询 #  Span 查询提供了文本级的精细控制，常用于高级文本分析与法律文档检索。详见 查询 DSL &gt; Span 查询 章节。"
+ 全文检索基础：BM25 算法、分词、匹配机制 多字段搜索：best_fields、most_fields、cross_fields 策略 邻近匹配：短语匹配、slop 参数、多值字段 部分匹配：前缀、通配符、正则、模糊查询 高亮：标记匹配文本片段 自动建议：自动补全、拼写纠正  全文查询类型 #  所有全文查询都支持分词与相关性计分。详细用法见 全文查询 章节：
+   查询 说明 常见用途     match 基础全文查询，单字段 简单关键词搜索   match_phrase 短语匹配 短语搜索   match_phrase_prefix 短语前缀 搜索框自动补全   match_bool_prefix 布尔前缀匹配 跨字段自动补全   multi_match 多字段全文查询 在多个字段中搜索   query_string 查询字符串（支持布尔操作符） 高级用户输入   simple_query_string 简化查询字符串 用户输入容错   intervals 高级文本匹配 精细文本匹配控制    Span 查询 #  Span 查询提供了文本级的精细控制，常用于高级文本分析与法律文档检索。详见 查询 DSL &gt; Span 查询 章节。"
 ---
 
 

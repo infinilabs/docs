@@ -3,7 +3,7 @@ title: "查询字符串语法"
 date: 0001-01-01
 description: "Lucene 查询解析器语法：词项、字段、通配符、模糊、邻近、范围、布尔操作符、分组与转义。"
 summary: "查询字符串语法 #  Easysearch 的 query_string 和 simple_query_string 查询底层使用 Lucene 查询解析器（Query Parser）将查询字符串解析为查询对象。本页详细描述查询解析器支持的完整语法。
-相关指南 #    Query String 查询 — query_string 查询的 API 参数  Simple Query String 查询 — 更宽松的查询字符串语法  正则表达式语法 — regexp 查询和 query_string 中使用的正则语法   词项（Terms） #  查询字符串由词项和操作符组成。词项有两种类型：
+相关指南 #   Query String 查询 — query_string 查询的 API 参数 Simple Query String 查询 — 更宽松的查询字符串语法 正则表达式语法 — regexp 查询和 query_string 中使用的正则语法   词项（Terms） #  查询字符串由词项和操作符组成。词项有两种类型：
  单个词项：一个单词，如 test、hello 短语：用双引号包围的一组词，如 &quot;hello dolly&quot;  多个词项可以通过布尔操作符组合成更复杂的查询。
  注意：查询字符串中的词项和短语会经过索引时使用的相同分析器处理。因此，选择不会干扰查询词项的分析器非常重要。
   字段（Fields） #  Easysearch 支持按字段搜索。搜索时可以指定字段名，也可以使用默认字段。

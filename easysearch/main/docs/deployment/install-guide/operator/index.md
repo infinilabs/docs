@@ -1,7 +1,7 @@
 ---
 title: "k8s Operator"
 date: 0001-01-01
-summary: "Easysearch Operator 概述 #  介绍 #  Easysearch Operator 为 Kubernetes 环境下的 Easysearch 集群提供了自动化管理和操作能力。该 Operator 借助 Kubernetes 的 Operator 框架 Kubebuilder，通过自定义资源定义（ CRD）以及相应的控制逻辑对 Easysearch 进行管理和操作，以实现在 Kubernetes 上管理 Easysearch 服务生命周期的需求。
+summary: "Easysearch Operator 概述 #  介绍 #  Easysearch Operator 为 Kubernetes 环境下的 Easysearch 集群提供了自动化管理和操作能力。该 Operator 借助 Kubernetes 的 Operator 框架 Kubebuilder，通过自定义资源定义（CRD）以及相应的控制逻辑对 Easysearch 进行管理和操作，以实现在 Kubernetes 上管理 Easysearch 服务生命周期的需求。
 Operator 将运维经验沉淀为代码，实现运维的代码化、自动化、智能化。以往的高可用、扩展收缩、故障恢复等运维操作，都通过 Operator 进行沉淀下来，将运维经验通过代码的方式进行固化和传承，减少人为故障的概率，提升整个运维的效率。与原生的资源（Pod/SVC/PV/PVC 等）一样，Operator 将应用集群也视为一种资源，借助 Kubernetes 已有的工作机制和框架更为便捷灵活地实现。
 特性和优势 #     特性 说明     生命周期管理 自动化处理集群的部署、升级、扩容、备份、密码修改及恢复等复杂操作   声明式配置 用户只需声明所需的最终状态，Operator 自动确保集群的当前状态与期望状态匹配   配置简化 通过 SearchCluster CRD、ConfigMap 和 Secrets 管理集群参数和敏感信息   水平/垂直伸缩 支持节点水平扩缩容（修改 replicas）和资源垂直扩容（CPU/内存/磁盘）   滚动升级 逐节点滚动升级，升级过程中集群保持可用   自我修复 监控集群状态，出现问题时自动进行故障转移和恢复   证书自动管理 集成 cert-manager，自动颁发和续期 TLS 证书（transport/http/admin 三套）   S3 定期备份 通过 SLM API 实现自动化快照备份策略    架构原理 #  Operator 遵循 Kubernetes 控制器模式，核心工作流如下："
 ---

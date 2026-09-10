@@ -3,7 +3,7 @@ title: "插件开发入门"
 date: 0001-01-01
 description: "基于官方模板快速完成第一个插件的完整闭环。"
 summary: "插件开发入门 #  本页带你从克隆模板到本地验证，跑通第一个 Easysearch 插件。
-1. 环境准备 #  # 检查 Java（需要 11+） java -version # 检查 Gradle ./gradlew -v 2. 从官方模板初始化项目 #  git clone https://github.com/infinilabs/easysearch-plugin-template.git my-plugin cd my-plugin 重命名包名和类名后即可开始开发。项目结构说明见： 结构与类型。
+1. 环境准备 #  # 检查 Java（需要 11+） java -version # 检查 Gradle ./gradlew -v 2. 从官方模板初始化项目 #  git clone https://github.com/infinilabs/easysearch-plugin-template.git my-plugin cd my-plugin 重命名包名和类名后即可开始开发。项目结构说明见：结构与类型。
 3. 配置 build.gradle（插件元信息） #  plugin-descriptor.properties 由构建过程自动生成，通常不需要手写。你可以直接使用以下完整示例：
 buildscript { ext { easysearchVersion = System.getProperty(&#34;easysearch.version&#34;, &#34;2.1.2&#34;) } repositories { mavenCentral() gradlePluginPortal() maven { url &#34;https://maven.aliyun.com/repository/central&#34; } maven { url &#34;https://maven.aliyun.com/repository/gradle-plugin&#34; } } dependencies { classpath &#34;com.infinilabs.easysearch.gradle:build-tools:${easysearchVersion}&#34; } } apply plugin: &#39;easysearch."
 ---

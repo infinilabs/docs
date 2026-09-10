@@ -3,7 +3,7 @@ title: "自动补全"
 date: 0001-01-01
 description: "前缀匹配、Edge N-gram、Completion Suggester 等自动补全实现方式的 API 与参数说明。"
 summary: "自动补全 #  自动补全是在用户输入过程中，实时给出可能的搜索词建议。Easysearch 支持三种实现方式，各有适用场景：
-   方式 时机 性能 适用场景     前缀匹配（match_phrase_prefix） 查询时 一般 快速原型，无需特殊 mapping   Edge N-gram 索引时 好 大规模数据的前缀补全   Completion Suggester 索引时 最优 高并发自动补全，支持权重控制    相关指南 #    建议与纠错  部分匹配   前缀匹配（match_phrase_prefix） #  前缀匹配会在查询时，对最后一个 term 做前缀展开。典型做法是使用 match_phrase_prefix 在 text 字段上做查询。
+   方式 时机 性能 适用场景     前缀匹配（match_phrase_prefix） 查询时 一般 快速原型，无需特殊 mapping   Edge N-gram 索引时 好 大规模数据的前缀补全   Completion Suggester 索引时 最优 高并发自动补全，支持权重控制    相关指南 #   建议与纠错 部分匹配   前缀匹配（match_phrase_prefix） #  前缀匹配会在查询时，对最后一个 term 做前缀展开。典型做法是使用 match_phrase_prefix 在 text 字段上做查询。
 不需要特殊 mapping，可以直接在现有 text 字段上使用。
 GET shakespeare/_search { &#34;query&#34;: { &#34;match_phrase_prefix&#34;: { &#34;text_entry&#34;: { &#34;query&#34;: &#34;qui&#34;, &#34;slop&#34;: 3 } } } } 参数说明 #     参数 说明 默认值     query 查询文本 必填   slop 允许的词项位置偏移量 0   max_expansions 最后一个词项的最大前缀展开数量 50   analyzer 覆盖默认分析器 字段默认分析器   zero_terms_query 当分析器移除所有词项时的行为（none 或 all） none     性能注意：前缀匹配属于相对昂贵的查询。例如前缀为 a 时，可能会匹配到几十万 terms。建议通过 max_expansions 限制展开规模："
 ---

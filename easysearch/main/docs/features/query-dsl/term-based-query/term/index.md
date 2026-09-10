@@ -2,7 +2,7 @@
 title: "Term 查询"
 date: 0001-01-01
 summary: "Term 查询 #  使用 term 查询在字段中搜索确切的词项。例如，以下查询搜索包含确切的行号的行：
-相关指南（先读这些） #    结构化搜索  Query DSL 基础  GET shakespeare/_search { &#34;query&#34;: { &#34;term&#34;: { &#34;line_id&#34;: { &#34;value&#34;: &#34;61809&#34; } } } }  注意：term 查询仅匹配确切的词项，不会对查询文本进行分词。避免在 text 字段上使用 term 查询，应使用 keyword 字段或 match 查询。更多信息，请参阅 结构化搜索。
+相关指南（先读这些） #   结构化搜索 Query DSL 基础  GET shakespeare/_search { &#34;query&#34;: { &#34;term&#34;: { &#34;line_id&#34;: { &#34;value&#34;: &#34;61809&#34; } } } }  注意：term 查询仅匹配确切的词项，不会对查询文本进行分词。避免在 text 字段上使用 term 查询，应使用 keyword 字段或 match 查询。更多信息，请参阅结构化搜索。
  您可以在 case_insensitive 参数中指定查询应不区分大小写：
 GET shakespeare/_search { &#34;query&#34;: { &#34;term&#34;: { &#34;speaker&#34;: { &#34;value&#34;: &#34;HAMLET&#34;, &#34;case_insensitive&#34;: true } } } } 返回内容包含匹配的文档，无论大小写是否有差异：
 &#34;hits&#34;: { &#34;total&#34;: { &#34;value&#34;: 1582, &#34;relation&#34;: &#34;eq&#34; }, &#34;max_score&#34;: 2, &#34;hits&#34;: [ { &#34;_index&#34;: &#34;shakespeare&#34;, &#34;_id&#34;: &#34;32700&#34;, &#34;_score&#34;: 2, &#34;_source&#34;: { &#34;type&#34;: &#34;line&#34;, &#34;line_id&#34;: 32701, &#34;play_name&#34;: &#34;Hamlet&#34;, &#34;speech_number&#34;: 9, &#34;line_number&#34;: &#34;1."

@@ -2,7 +2,7 @@
 title: "Constant Score 查询"
 date: 0001-01-01
 summary: "Constant Score 查询 #  如果您需要返回包含某个词的文档，而不管该词出现多少次，您可以使用 constant_score 查询。constant_score 查询包装一个过滤器查询，并将结果中的所有文档的关联分数设置为 boost 参数的值。因此，所有返回的文档具有相同的关联分数，并且不考虑词频/逆文档频率（TF/IDF）。过滤器查询不会计算关联分数。此外，Easysearch 会缓存常用的过滤器查询以提高性能。
-相关指南（先读这些） #    查询 DSL 基础  结构化搜索  参考样例 #  使用以下查询返回 shakespeare 索引中包含单词“Hamlet”的文档：
+相关指南（先读这些） #   查询 DSL 基础 结构化搜索  参考样例 #  使用以下查询返回 shakespeare 索引中包含单词“Hamlet”的文档：
 GET shakespeare/_search { &#34;query&#34;: { &#34;constant_score&#34;: { &#34;filter&#34;: { &#34;match&#34;: { &#34;text_entry&#34;: &#34;Hamlet&#34; } }, &#34;boost&#34;: 1.2 } } } 结果中的所有文档都被分配了 1.2 的相关性分数：
 { &#34;took&#34;: 8, &#34;timed_out&#34;: false, &#34;_shards&#34;: { &#34;total&#34;: 1, &#34;successful&#34;: 1, &#34;skipped&#34;: 0, &#34;failed&#34;: 0 }, &#34;hits&#34;: { &#34;total&#34;: { &#34;value&#34;: 96, &#34;relation&#34;: &#34;eq&#34; }, &#34;max_score&#34;: 1."
 ---

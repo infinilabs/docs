@@ -2,7 +2,7 @@
 title: "路径层次分词器（Path Hierarchy）"
 date: 0001-01-01
 summary: "Path Hierarchy 分词器 #  path_hierarchy 分词器可以把文件路径（或类似的层次结构）的文本按照各个层级分解为词元。当处理诸如文件路径、网址或其他有分隔符的层次结构数据时，这个分词器特别有用。
-相关指南（先读这些） #    文本分析：识别词元  文本分析基础  参考样例 #  以下示例请求创建一个名为 my_index 的新索引，并配置一个使用路径词元生成器的分词器：
+相关指南（先读这些） #   文本分析：识别词元 文本分析基础  参考样例 #  以下示例请求创建一个名为 my_index 的新索引，并配置一个使用路径词元生成器的分词器：
 PUT /my_index { &#34;settings&#34;: { &#34;analysis&#34;: { &#34;tokenizer&#34;: { &#34;my_path_tokenizer&#34;: { &#34;type&#34;: &#34;path_hierarchy&#34; } }, &#34;analyzer&#34;: { &#34;my_path_analyzer&#34;: { &#34;type&#34;: &#34;custom&#34;, &#34;tokenizer&#34;: &#34;my_path_tokenizer&#34; } } } } } 生成的词元 #  使用以下请求来检查使用该分词器生成的词元：
 POST /my_index/_analyze { &#34;analyzer&#34;: &#34;my_path_analyzer&#34;, &#34;text&#34;: &#34;/users/john/documents/report.txt&#34; } 返回内容包含产生的词元
 { &#34;tokens&#34;: [ { &#34;token&#34;: &#34;/users&#34;, &#34;start_offset&#34;: 0, &#34;end_offset&#34;: 6, &#34;type&#34;: &#34;word&#34;, &#34;position&#34;: 0 }, { &#34;token&#34;: &#34;/users/john&#34;, &#34;start_offset&#34;: 0, &#34;end_offset&#34;: 11, &#34;type&#34;: &#34;word&#34;, &#34;position&#34;: 0 }, { &#34;token&#34;: &#34;/users/john/documents&#34;, &#34;start_offset&#34;: 0, &#34;end_offset&#34;: 21, &#34;type&#34;: &#34;word&#34;, &#34;position&#34;: 0 }, { &#34;token&#34;: &#34;/users/john/documents/report."

@@ -2,7 +2,7 @@
 title: "中位数绝对偏差聚合（Median Absolute Deviation）"
 date: 0001-01-01
 summary: "中位数绝对偏差聚合 #  median_absolute_deviation 聚合是一个单值指标聚合。中位数绝对偏差是一种变异性指标，用于衡量相对于中位数的离散程度。
-相关指南（先读这些） #    聚合基础  聚合场景实践  与依赖平方误差项的标准偏差相比，中位数绝对偏差受异常值的影响较小，适用于描述非正态分布的数据。
+相关指南（先读这些） #   聚合基础 聚合场景实践  与依赖平方误差项的标准偏差相比，中位数绝对偏差受异常值的影响较小，适用于描述非正态分布的数据。
 中位数绝对偏差按以下方式计算：
 median_absolute_deviation = median( | x&lt;sub&gt;i&lt;/sub&gt; - median(x&lt;sub&gt;i&lt;/sub&gt;) | )
 由于内存限制，Easysearch 估计 median_absolute_deviation ，而不是直接计算它。这种估计在计算上很昂贵。您可以调整估计精度和性能之间的权衡。有关更多信息，请参阅调整估计精度。

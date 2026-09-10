@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.4.0 (2026-09-01) #  Breaking changes #  Features #   新增 Easysearch 2.4.0 原生 HNSW 向量搜索：内置 dense_vector、Lucene HNSW、query-level knn 和顶层 knn，新建原生 HNSW 索引无需安装 k-NN 插件。  支持 1–4096 维 float 向量、cosine、dot_product、l2_norm、max_inner_product，以及 m、ef_construction 和查询 num_candidates 参数。 mapping 必须显式设置 dims 和 index: true。 省略 index_options 时，Easysearch 2."
+Latest (In development) #  Breaking changes #  Features #   新增 ingest-pattern-tagger 插件：写入时为日志文档识别 LogPilot Pattern 并打标（pattern_tagger 摄取处理器，写入 @pattern_id / @pattern_hash / @pattern_severity / @pattern_status 等字段），可选变量抽取与高置信度丢弃原始消息以节省存储，并配套 pattern_restore 搜索管道处理器在查询时从模板 + 变量还原原始消息。  Bug fix #  Improvements #  2.4.0 (2026-09-10) #  Breaking changes #  Features #   新增 Easysearch 2.4.0 原生 HNSW 向量搜索：内置 dense_vector、Lucene HNSW、query-level knn 和顶层 knn，新建原生 HNSW 索引无需安装 k-NN 插件。  支持 1–4096 维 float 向量、cosine、dot_product、l2_norm、max_inner_product，以及 m、ef_construction 和查询 num_candidates 参数。 mapping 必须显式设置 dims 和 index: true。 省略 index_options 时，Easysearch 2."
 ---
 
 
@@ -13,11 +13,12 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 ## Latest (In development)
 ### Breaking changes
 ### Features
+- 新增 [`ingest-pattern-tagger` 插件]({{< relref "/docs/features/ingest-pipelines/index-processors/pattern-tagger.md" >}})：写入时为日志文档识别 LogPilot Pattern 并打标（`pattern_tagger` 摄取处理器，写入 `@pattern_id` / `@pattern_hash` / `@pattern_severity` / `@pattern_status` 等字段），可选变量抽取与高置信度丢弃原始消息以节省存储，并配套 [`pattern_restore` 搜索管道处理器]({{< relref "/docs/features/query-dsl/search-pipelines/pattern-restore-processor.md" >}})在查询时从模板 + 变量还原原始消息。
 ### Bug fix
 ### Improvements
 
 
-## 2.4.0 (2026-09-01)
+## 2.4.0 (2026-09-10)
 ### Breaking changes
 ### Features
 - 新增 [Easysearch 2.4.0 原生 HNSW 向量搜索]({{< relref "/docs/features/vector-search/native-hnsw.md" >}})：内置 `dense_vector`、Lucene HNSW、query-level `knn` 和顶层 `knn`，新建原生 HNSW 索引无需安装 k-NN 插件。
@@ -50,6 +51,13 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 - `rate` 聚合新增 `sum`、`value_count` 计算模式，并支持在包含单一日期源的 `composite` 聚合中计算速率。
 - DevTools 控制台支持 SQL 一等体验：SQL 关键词高亮与补全、多行语句正确解析，查询结果默认以 CSV 格式返回
 ### Bug fix
+- 修复 Remote Reindex 错误使用 Easysearch 全局版本顺序判断远端 Elasticsearch REST 协议版本的问题。此前从 Elasticsearch
+  6.8.x、7.x 或 8.x 拉取数据时，scroll 或 clear-scroll 请求可能被误判为 2.0 之前的格式，并以 `text/plain` 发送裸
+  scroll ID，导致远端返回 400 或 406；现在会按远端协议版本发送结构正确的 JSON 请求，同时保留 Elasticsearch 0.90.x
+  和 1.x 所需的旧格式。
+- 修复 transport 可变头长度的版本阈值与最低兼容 wire 版本不一致的问题。此前节点以 Elasticsearch 7.10.0 兼容版本通信时，
+  握手请求可能写入错误的可变头长度，导致多节点组集群、节点重连或分片恢复失败；现在该阈值与最低支持的 wire 版本保持一致，
+  Elasticsearch 7.10.2 及更高版本的现有协议分支不变。
 - 修复授权弹窗打开后“授权提示”页签可能自动消失的问题，页签列表现在只随授权状态变化。
 - 修复授权信息中未授权状态的类型显示为不规范英文的问题，现在按界面语言显示“未授权 / Unlicensed”。
 - 修复删除关联了多个索引的别名时请求失败的问题，现在可正常删除多索引别名。
@@ -74,6 +82,11 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 ### Improvements
 - 生命周期策略「索引优先级」改为可选开关：编辑原本未配置 index_priority 的策略时不再被强制注入默认值。
 - 重构 `_disk_usage` 同步分析链路，增加有界请求调度和独立 `disk_usage` 线程池，降低并发磁盘用量分析对普通分析请求的影响，并保持现有 API 兼容。
+- 重构 `_field_usage_stats` 的 shard 级字段访问采集链路，按每次 shard search session 对相同字段和访问类型去重，并完善 Lucene 9
+  reader、stored fields、term vectors、can-match、refresh/reopen 及主副分片场景的统计覆盖。现有 REST/wire 格式、13 项计数器、
+  字段过滤、tracking identity 和 `index.field_usage_stats.enabled` 动态开关保持兼容。
+- 优化 `_field_usage_stats` 在高并发查询和大字段 registry 场景下的 session 提交与 snapshot 实现，减少密集 session close 的处理开销
+  以及统计快照的临时对象分配。
 
 ## 2.3.1 (2026-07-29)
 ### Breaking changes

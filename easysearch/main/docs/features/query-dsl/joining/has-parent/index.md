@@ -2,7 +2,7 @@
 title: "Has Parent 查询"
 date: 0001-01-01
 summary: "Has Parent 查询 #  has_parent 查询返回匹配特定查询的父文档的子文档。您可以通过使用连接字段类型在相同索引中的文档之间建立父子关系。
-相关指南（先读这些） #    Parent-Child 建模  关联查询（Joining）   性能注意：has_parent 查询比其他查询慢，因为它执行了连接操作。随着匹配的父文档数量的增加，性能会降低。您搜索中的每个 has_parent 查询都可能显著影响查询性能。如果您优先考虑速度，请避免使用此查询或尽可能限制其使用。更多性能考虑，请参考 Parent-Child 建模章节。
+相关指南（先读这些） #   Parent-Child 建模 关联查询（Joining）   性能注意：has_parent 查询比其他查询慢，因为它执行了连接操作。随着匹配的父文档数量的增加，性能会降低。您搜索中的每个 has_parent 查询都可能显著影响查询性能。如果您优先考虑速度，请避免使用此查询或尽可能限制其使用。更多性能考虑，请参考Parent-Child 建模章节。
  参考样例 #  在您运行一个 has_parent 查询之前，您的索引必须包含一个连接字段，以便建立父子关系。索引映射请求使用以下格式：
 PUT /example_index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;relationship_field&#34;: { &#34;type&#34;: &#34;join&#34;, &#34;relations&#34;: { &#34;parent_doc&#34;: &#34;child_doc&#34; } } } } } 对于这个示例，首先配置一个包含代表产品和其品牌的文档的索引，这些文档如查询示例 has_child 中所述。
 要搜索父项的子项，请使用 has_parent 查询。以下查询返回与查询 economy 匹配的品牌生产的子文档（产品）：

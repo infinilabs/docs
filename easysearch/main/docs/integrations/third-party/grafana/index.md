@@ -3,7 +3,7 @@ title: "Grafana 集成"
 date: 0001-01-01
 description: "将 Easysearch 作为数据源接入 Grafana，构建监控看板与数据可视化。"
 summary: "Grafana 集成 #  Grafana 是主流的开源可观测平台，通过内置的 Elasticsearch 数据源插件可以直接连接 Easysearch，构建实时监控看板和数据分析面板。
-相关指南 #    Superset 集成  监控告警  前置条件 #     条件 说明     Grafana 版本 8.0+ 推荐（内置 Elasticsearch 数据源）   网络可达 Grafana 服务器能够访问 Easysearch 的 9200 端口   认证信息 Easysearch 用户名和密码    配置步骤 #  1. 添加数据源 #   进入 Grafana → Configuration → Data Sources → Add data source 搜索并选择 Elasticsearch 填写连接信息：     配置项 值     URL https://easysearch-host:9200   Access Server（推荐）   Basic Auth 开启   User / Password Easysearch 用户名 / 密码   Skip TLS Verify 开发环境可开启；生产环境配置 CA 证书   Version 选择 7."
+相关指南 #   Superset 集成 监控告警  前置条件 #     条件 说明     Grafana 版本 8.0+ 推荐（内置 Elasticsearch 数据源）   网络可达 Grafana 服务器能够访问 Easysearch 的 9200 端口   认证信息 Easysearch 用户名和密码    配置步骤 #  1. 添加数据源 #   进入 Grafana → Configuration → Data Sources → Add data source 搜索并选择 Elasticsearch 填写连接信息：     配置项 值     URL https://easysearch-host:9200   Access Server（推荐）   Basic Auth 开启   User / Password Easysearch 用户名 / 密码   Skip TLS Verify 开发环境可开启；生产环境配置 CA 证书   Version 选择 7."
 ---
 
 

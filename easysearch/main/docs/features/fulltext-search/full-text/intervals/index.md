@@ -2,7 +2,7 @@
 title: "Intervals 查询"
 date: 0001-01-01
 summary: "Intervals 查询 #  intervals 查询根据匹配词的邻近度和顺序来匹配文档。它将一组匹配规则应用于指定字段中的词。该查询生成跨越文本中词的最小间隔序列。你可以组合间隔并按父源进行过滤。
-相关指南（先读这些） #    邻近匹配  全文搜索  考虑一个包含以下文档的索引：
+相关指南（先读这些） #   邻近匹配 全文搜索  考虑一个包含以下文档的索引：
 PUT testindex/_doc/1 { &#34;title&#34;: &#34;key-value pairs are efficiently stored in a hash table&#34; } PUT /testindex/_doc/2 { &#34;title&#34;: &#34;store key-value pairs in a hash map&#34; } 例如，以下查询搜索包含短语 key-value pairs （词之间没有间隔）后跟 hash table 或 hash map 的文档：
 GET /testindex/_search { &#34;query&#34;: { &#34;intervals&#34;: { &#34;title&#34;: { &#34;all_of&#34;: { &#34;ordered&#34;: true, &#34;intervals&#34;: [ { &#34;match&#34;: { &#34;query&#34;: &#34;key-value pairs&#34;, &#34;max_gaps&#34;: 0, &#34;ordered&#34;: true } }, { &#34;any_of&#34;: { &#34;intervals&#34;: [ { &#34;match&#34;: { &#34;query&#34;: &#34;hash table&#34; } }, { &#34;match&#34;: { &#34;query&#34;: &#34;hash map&#34; } } ] } } ] } } } } } 该查询返回两个文档："
 ---

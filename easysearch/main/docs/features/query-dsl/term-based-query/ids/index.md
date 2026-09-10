@@ -2,8 +2,8 @@
 title: "IDs 查询"
 date: 0001-01-01
 summary: "IDs 查询 #  使用 ids 查询在 _id 字段中搜索具有一个或多个特定文档 ID 值的文档。例如，以下查询请求 ID 为 34229 和 91296 的文档：
-相关指南（先读这些） #    结构化搜索  Query DSL 基础  GET shakespeare/_search { &#34;query&#34;: { &#34;ids&#34;: { &#34;values&#34;: [ 34229, 91296 ] } } } 参数说明 #  查询接受以下参数。
-   参数 数据类型 描述     values Array of strings 要搜索的文档 ID。必填。   boost Float 一个浮点值，用于指定此字段相对于相关性分数的权重。值高于 1.0 会增加字段的相关性。值介于 0."
+相关指南（先读这些） #   结构化搜索 Query DSL 基础  GET shakespeare/_search { &#34;query&#34;: { &#34;ids&#34;: { &#34;values&#34;: [ 34229, 91296 ] } } } 参数说明 #  查询接受以下参数。
+   参数 数据类型 描述     values Array of strings 要搜索的文档 ID。必填。   boost Float 一个浮点值，用于指定此字段相对于相关性分数的权重。值高于 1.0 会增加字段的相关性。值介于 0.0 和 1."
 ---
 
 

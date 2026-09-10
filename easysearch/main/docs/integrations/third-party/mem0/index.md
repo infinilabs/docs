@@ -2,7 +2,7 @@
 title: "Mem0 集成"
 date: 0001-01-01
 description: "将 Mem0 与 Easysearch 集成，为 AI Agent 提供持久化语义记忆能力。"
-summary: "Mem0 集成 #   Mem0 是一个为 AI Agent 提供持久化记忆的开源框架。通过将 Easysearch 作为向量存储后端，Mem0 可以对记忆进行语义检索，让 Agent 在跨会话、跨项目的场景下依然能精准调取历史上下文。
+summary: "Mem0 集成 #  Mem0 是一个为 AI Agent 提供持久化记忆的开源框架。通过将 Easysearch 作为向量存储后端，Mem0 可以对记忆进行语义检索，让 Agent 在跨会话、跨项目的场景下依然能精准调取历史上下文。
 架构概览 #  用户对话 → AI Agent ↓ MCP Server (Mem0 OpenMemory) ↓ ┌─────────────────────┐ │ Easysearch │ │ · 记忆向量索引 │ │ · kNN 语义检索 │ └─────────────────────┘ 整体流程：
  Agent 通过 MCP 协议调用 add_memories 将重要信息写入 Easysearch； Agent 通过 MCP 协议调用 search_memory 对 Easysearch 进行 kNN 语义检索，取回相关记忆； 检索结果注入 Prompt，辅助 Agent 决策。  前置条件 #     条件 说明     Easysearch 集群 已部署并可访问的 Easysearch 集群   Python 3."
 ---

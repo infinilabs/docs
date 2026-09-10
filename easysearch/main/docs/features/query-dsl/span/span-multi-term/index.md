@@ -4,7 +4,7 @@ date: 0001-01-01
 summary: "Span Multi Term 查询 #  span_multi 查询允许您将多词查询（如 wildcard、fuzzy、prefix、range 或 regexp）包装为 span 查询。这使您能够在其他 span 查询中使用这些更灵活的匹配查询。
 例如，您可以使用 span_multi 查询来：
  查找具有相同前缀的词语，并与其他词语靠近。 匹配跨度内单词的模糊变体。 在跨度查询中使用正则表达式。   注意：span_multi 查询可能匹配多个词。为了避免过度内存使用，您可以：
- 为多词查询设置 rewrite 参数。 使用 top_terms_* 重写方法。 如果你仅使用 span_multi 进行 prefix 查询，请考虑为文本字段启用 index_prefixes 选项。这将自动将字段上的任何 prefix 查询重写为匹配索引前缀的单词查询。   相关指南（先读这些） #    Span 查询  部分匹配  查询 DSL 基础  参考样例 #  span_multi 查询使用以下语法来包装 prefix 查询：
+ 为多词查询设置 rewrite 参数。 使用 top_terms_* 重写方法。 如果你仅使用 span_multi 进行 prefix 查询，请考虑为文本字段启用 index_prefixes 选项。这将自动将字段上的任何 prefix 查询重写为匹配索引前缀的单词查询。   相关指南（先读这些） #   Span 查询 部分匹配 查询 DSL 基础  参考样例 #  span_multi 查询使用以下语法来包装 prefix 查询：
 &#34;span_multi&#34;: { &#34;match&#34;: { &#34;prefix&#34;: { &#34;description&#34;: { &#34;value&#34;: &#34;flutter&#34; } } } } 以下查询搜索以“dress”开头的单词，在彼此最多 5 个单词的距离内靠近任何形式的“sleeve”："
 ---
 

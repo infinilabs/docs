@@ -6,7 +6,7 @@ Geo-shapes 可以用来判断查询的形状与索引的形状的关系：
  intersects：查询的形状与索引的形状有重叠（默认） disjoint：查询的形状与索引的形状完全不重叠 within：索引的形状完全被包含在查询的形状中 contains：索引的形状完全包含查询的形状   注意：Geo-shapes 不能用于计算距离、排序、打分以及聚合。如需距离排序，请使用 geo_point 字段。
  代码样例 #  创建一个带有地理形状字段类型的映射：
 PUT testindex { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;location&#34;: { &#34;type&#34;: &#34;geo_shape&#34; } } } } 格式说明 #  地理形状可以用以下格式索引：
-  GeoJSON  Well-Known Text (WKT)   在 GeoJSON 和 WKT 中，坐标必须在坐标数组中按照 经度, 纬度 的顺序指定。注意在这种格式中经度是在前面的。
+ GeoJSON Well-Known Text (WKT)   在 GeoJSON 和 WKT 中，坐标必须在坐标数组中按照 经度, 纬度 的顺序指定。注意在这种格式中经度是在前面的。
  地理形状类型 #  下表描述了可能的地理形状类型以及它们与 GeoJSON 和 WKT 类型的关系。"
 ---
 

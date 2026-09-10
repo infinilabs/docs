@@ -6,7 +6,7 @@ summary: "字符过滤器（Character Filters） #  字符过滤器是分析链�
  概念指南 → 理解文本预处理，请阅读 词元归一化
   字符过滤器的位置 #  原始文本 ──→ [字符过滤器] ──→ 分词器 ──→ 词元过滤器 ──→ 索引 ↑ 预处理阶段 关键区别：
  字符过滤器：处理原始字符流（分词前） 词元过滤器：处理词元流（分词后）   内置字符过滤器 #  Easysearch 提供 3 种内置字符过滤器：
-   字符过滤器 说明 典型用途      html_strip 移除 HTML 标签，解码实体 网页内容索引    mapping 字符/字符串替换映射 符号标准化、特殊字符处理    pattern_replace 正则表达式替换 复杂模式清洗、格式转换    插件提供的字符过滤器 #     字符过滤器 插件 说明 典型用途      icu_normalizer analysis-icu ICU Unicode 归一化 多语言字符统一    stconvert analysis-stconvert 中文简繁体转换 简繁体互搜     字符过滤器详解 #  html_strip — HTML 清理 #  移除 HTML/XML 标签，将 HTML 实体解码为对应字符。"
+   字符过滤器 说明 典型用途     html_strip 移除 HTML 标签，解码实体 网页内容索引   mapping 字符/字符串替换映射 符号标准化、特殊字符处理   pattern_replace 正则表达式替换 复杂模式清洗、格式转换    插件提供的字符过滤器 #     字符过滤器 插件 说明 典型用途     icu_normalizer analysis-icu ICU Unicode 归一化 多语言字符统一   stconvert analysis-stconvert 中文简繁体转换 简繁体互搜     字符过滤器详解 #  html_strip — HTML 清理 #  移除 HTML/XML 标签，将 HTML 实体解码为对应字符。"
 ---
 
 

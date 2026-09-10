@@ -4,7 +4,7 @@ date: 0001-01-01
 summary: "摄取处理器 #  摄取处理器是摄取管道的核心组件——每个处理器在文档被索引前执行一个特定的数据转换操作，例如删除字段、从文本中提取值、转换数据格式或补充衍生信息。
 查看当前节点可用的处理器列表：
 GET /_nodes/ingest?filter_path=nodes.*.ingest.processors 通用参数 #  所有处理器都支持以下通用参数，可与处理器自身参数一起配置：
-   参数 类型 默认值 说明     tag string — 为处理器打标签，在 _simulate verbose 输出和节点统计指标中可见   description string — 处理器描述，出现在 _simulate verbose 响应的 description 字段中   if string —  Painless 脚本条件，返回 true 时才执行   ignore_failure boolean false 为 true 时，处理器出错后跳过继续执行后续处理器   on_failure array — 处理器失败后的备用处理器列表，详见 处理管道故障    示例——为 set 处理器添加条件、标签和错误处理："
+   参数 类型 默认值 说明     tag string — 为处理器打标签，在 _simulate verbose 输出和节点统计指标中可见   description string — 处理器描述，出现在 _simulate verbose 响应的 description 字段中   if string — Painless 脚本条件，返回 true 时才执行   ignore_failure boolean false 为 true 时，处理器出错后跳过继续执行后续处理器   on_failure array — 处理器失败后的备用处理器列表，详见 处理管道故障    示例——为 set 处理器添加条件、标签和错误处理："
 ---
 
 

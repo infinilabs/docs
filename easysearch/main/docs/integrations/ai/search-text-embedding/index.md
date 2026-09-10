@@ -2,10 +2,10 @@
 title: "搜索请求文本向量化"
 date: 0001-01-01
 summary: "搜索请求文本向量化 #  Easysearch 使用搜索管道的 semantic_query_enricher 处理器，协助 semantic query，将文本转为向量。
-相关指南（先读这些） #    向量搜索  搜索管道  AI 集成  先决条件 #    服务兼容性 需满足以下任一条件：
+相关指南（先读这些） #   向量搜索 搜索管道 AI 集成  先决条件 #    服务兼容性 需满足以下任一条件：
  支持与 OpenAI API 兼容的 embedding 接口 支持 Ollama embedding 接口    插件要求 必须安装 Easysearch 的以下插件：
 knn ai   数据准备 需预先完成：
- 创建向量索引 写入向量数据 参考 写入数据文本向量化    创建或更新 semantic_query_enricher 处理器 #  PUT /_search/pipeline/default_model_pipeline { &#34;rewrite_processors&#34;: [ { &#34;semantic_query_enricher&#34; : { &#34;tag&#34;: &#34;tag1&#34;, &#34;description&#34;: &#34;Sets the default embedding model&#34;, &#34;url&#34;: &#34;https://api."
+ 创建向量索引 写入向量数据 参考写入数据文本向量化    创建或更新 semantic_query_enricher 处理器 #  PUT /_search/pipeline/default_model_pipeline { &#34;rewrite_processors&#34;: [ { &#34;semantic_query_enricher&#34; : { &#34;tag&#34;: &#34;tag1&#34;, &#34;description&#34;: &#34;Sets the default embedding model&#34;, &#34;url&#34;: &#34;https://api."
 ---
 
 

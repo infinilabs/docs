@@ -2,7 +2,7 @@
 title: "正则表达式分词器（Pattern）"
 date: 0001-01-01
 summary: "Pattern 分词器 #  pattern 分词器是一种高度灵活的分词器，它允许你根据自定义的 Java 正则表达式将文本拆分为词元。与使用 Lucene 正则表达式的 simple_pattern 分词器和 simple_pattern_split 分词器不同，pattern 分词器能够处理更复杂、更细致的正则表达式模式，从而让你对文本的分词方式拥有更强的掌控力。
-相关指南（先读这些） #    文本分析：识别词元  文本分析基础  参考样例 #  以下示例请求创建了一个名为 my_index 的新索引，并配置了一个使用匹配词元生成器的分词器。该分词器会在 -、_ 或 . 字符处对文本进行分割。
+相关指南（先读这些） #   文本分析：识别词元 文本分析基础  参考样例 #  以下示例请求创建了一个名为 my_index 的新索引，并配置了一个使用匹配词元生成器的分词器。该分词器会在 -、_ 或 . 字符处对文本进行分割。
 PUT /my_index { &#34;settings&#34;: { &#34;analysis&#34;: { &#34;tokenizer&#34;: { &#34;my_pattern_tokenizer&#34;: { &#34;type&#34;: &#34;pattern&#34;, &#34;pattern&#34;: &#34;[-_.]&#34; } }, &#34;analyzer&#34;: { &#34;my_pattern_analyzer&#34;: { &#34;type&#34;: &#34;custom&#34;, &#34;tokenizer&#34;: &#34;my_pattern_tokenizer&#34; } } } }, &#34;mappings&#34;: { &#34;properties&#34;: { &#34;content&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;analyzer&#34;: &#34;my_pattern_analyzer&#34; } } } } 产生的词元 #  使用以下请求来检查使用该分词器生成的词元："
 ---
 

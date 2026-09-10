@@ -3,7 +3,7 @@ title: "SkyWalking 存储后端集成"
 date: 0001-01-01
 description: "将 SkyWalking 的指标与 Trace 存储后端指向 Easysearch 的配置与索引规划。"
 summary: "SkyWalking 存储后端集成 #  Apache SkyWalking 是一款广泛使用的分布式应用性能监控（APM）系统。Easysearch 可以作为其存储后端，存储链路追踪和指标数据。
-相关指南（先读这些） #    OpenTelemetry 集成  集群监控  架构说明 #  应用服务（Agent） ↓ gRPC / HTTP SkyWalking OAP Server ↓ ES 协议 Easysearch（存储后端） ↓ SkyWalking UI / Grafana（可视化） SkyWalking OAP Server 使用 Elasticsearch 协议写入和查询数据。由于 Easysearch 兼容 ES 7.x API，可以直接配置为存储后端。
+相关指南（先读这些） #   OpenTelemetry 集成 集群监控  架构说明 #  应用服务（Agent） ↓ gRPC / HTTP SkyWalking OAP Server ↓ ES 协议 Easysearch（存储后端） ↓ SkyWalking UI / Grafana（可视化） SkyWalking OAP Server 使用 Elasticsearch 协议写入和查询数据。由于 Easysearch 兼容 ES 7.x API，可以直接配置为存储后端。
 配置步骤 #  1. 修改 OAP Server 配置 #  编辑 application.yml，将存储类型设为 elasticsearch：
 storage: selector: elasticsearch elasticsearch: namespace: sw clusterNodes: https://easysearch-node1:9200 protocol: https user: admin password: your_password trustStorePath: /path/to/truststore."
 ---

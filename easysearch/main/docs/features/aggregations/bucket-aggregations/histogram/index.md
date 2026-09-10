@@ -3,7 +3,7 @@ title: "直方图聚合（Histogram）"
 date: 0001-01-01
 summary: "直方图聚合 #  histogram 聚合根据指定的间隔对文档进行分组。
 使用 histogram 聚合，您可以非常轻松地可视化给定范围内文档中值的分布。
-相关指南（先读这些） #    聚合基础  聚合场景实践  以下示例将 number_of_bytes 字段按 10,000 个间隔进行分组：
+相关指南（先读这些） #   聚合基础 聚合场景实践  以下示例将 number_of_bytes 字段按 10,000 个间隔进行分组：
 GET sample_data_logs/_search { &#34;size&#34;: 0, &#34;aggs&#34;: { &#34;number_of_bytes&#34;: { &#34;histogram&#34;: { &#34;field&#34;: &#34;bytes&#34;, &#34;interval&#34;: 10000 } } } } 返回内容
 ... &#34;aggregations&#34; : { &#34;number_of_bytes&#34; : { &#34;buckets&#34; : [ { &#34;key&#34; : 0.0, &#34;doc_count&#34; : 13372 }, { &#34;key&#34; : 10000.0, &#34;doc_count&#34; : 702 } ] } } 参数说明 #  histogram 聚合支持以下参数。"
 ---

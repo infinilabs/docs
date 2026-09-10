@@ -3,7 +3,7 @@ title: "俄语形态分析器（Russian Morphology）"
 date: 0001-01-01
 summary: "Russian Morphology 分析器 #  russian_morphology 分析器专为处理俄语文本而设计。与 standard 分析器不同，它能够识别俄语词汇的形态变化，将单词还原为其词干或原型（Lemmatization）。这使得用户在搜索某个单词的特定形式（如单复数、格的变化）时，能够匹配到该单词的其他形态。
 该分析器由以下分词器和分词过滤器组成：
- standard 分词器：去除大部分标点符号，并依据空格和其他常见分隔符对文本进行分割。 lowercase 分词过滤器：将所有词元转换为小写，以确保匹配时不区分大小写。 russian_morphology 分词过滤器：执行俄语词汇的形态分析，将不同格、性、数的单词映射到统一原型。  相关指南（先读这些） #    文本分析：词干提取  文本分析基础  安装 #  俄语形态分词器包含在Morphological Analysis插件中。此插件已包含在Easysearch的bundle包中。
+ standard 分词器：去除大部分标点符号，并依据空格和其他常见分隔符对文本进行分割。 lowercase 分词过滤器：将所有词元转换为小写，以确保匹配时不区分大小写。 russian_morphology 分词过滤器：执行俄语词汇的形态分析，将不同格、性、数的单词映射到统一原型。  相关指南（先读这些） #   文本分析：词干提取 文本分析基础  安装 #  俄语形态分词器包含在Morphological Analysis插件中。此插件已包含在Easysearch的bundle包中。
 analysis-morphology插件安装命令如下：
 bin/easysearch-plugin install analysis-morphology 参考样例 #  以下命令创建一个名为 my_morphology_index 的索引，并为 my_field 字段配置俄语形态分词器的索引：
 PUT /my_morphology_index { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;my_field&#34;: { &#34;type&#34;: &#34;text&#34;, &#34;analyzer&#34;: &#34;russian_morphology&#34; } } } } 配置自定义分词器 #  在生产环境中，为了兼顾性能和准确度，建议定义一个包含小写化、形态还原和停用词过滤的自定义分析器：

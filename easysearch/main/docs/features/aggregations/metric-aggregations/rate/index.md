@@ -3,7 +3,7 @@ title: "速率聚合（Rate）"
 date: 0001-01-01
 summary: "速率聚合 #  rate 聚合是一个指标聚合，用于计算文档或字段值在指定时间单位内的速率。它必须位于 date_histogram 内， 或者作为恰好包含一个 date_histogram 源的 composite 聚合的直接子聚合。
 rate 聚合特别适合将不同时间粒度的数据统一到相同的速率单位进行对比。例如，当 date_histogram 按月分桶时，你可以用 rate 聚合将每个月的值换算为&quot;每天&quot;或&quot;每年&quot;的速率。
-相关指南（先读这些） #    聚合基础  日期直方图聚合  聚合场景实践  参数说明 #     参数 必需/可选 数据类型 描述     field 可选 String 要计算速率的数值或布尔字段。如果同时省略 field 和 script，每个物理文档计数 1。   unit 可选 String 速率的时间单位。有效值：second、minute、hour、day、week、month、quarter、year。省略时不做时间单位换算。   mode 可选 String 字段值统计方式：sum 或 value_count，默认为 sum。只有设置了 field 或 script 时才能显式指定。   script 可选 Object 使用脚本动态计算速率值。   missing 可选 Numeric 缺少字段值的文档所使用的替代值。   format 可选 String 数值输出格式；设置后响应会包含 value_as_string。    基本用法：文档速率 #  计算每月的文档数量，并将其换算为每天的速率："
+相关指南（先读这些） #   聚合基础 日期直方图聚合 聚合场景实践  参数说明 #     参数 必需/可选 数据类型 描述     field 可选 String 要计算速率的数值或布尔字段。如果同时省略 field 和 script，每个物理文档计数 1。   unit 可选 String 速率的时间单位。支持 second（1s）、minute（1m）、hour（1h）、day（1d）、week（1w）、month（1M）、quarter（1q）和 year（1y）。省略时不做时间单位换算。   mode 可选 String 字段值统计方式：sum 或 value_count，默认为 sum。只有设置了 field 或 script 时才能显式指定。   script 可选 Object 使用脚本动态计算速率值。   missing 可选 Numeric 缺少字段值的文档所使用的替代值。   format 可选 String 数值输出格式；设置后响应会包含 value_as_string。    基本用法：文档速率 #  计算每月的文档数量，并将其换算为每天的速率："
 ---
 
 
@@ -25,7 +25,7 @@ rate 聚合特别适合将不同时间粒度的数据统一到相同的速率单
 | 参数      | 必需/可选 | 数据类型 | 描述 |
 | --------- | --------- | -------- | ---- |
 | `field`   | 可选      | String   | 要计算速率的数值或布尔字段。如果同时省略 `field` 和 `script`，每个物理文档计数 1。 |
-| `unit`    | 可选      | String   | 速率的时间单位。有效值：`second`、`minute`、`hour`、`day`、`week`、`month`、`quarter`、`year`。省略时不做时间单位换算。 |
+| `unit`    | 可选      | String   | 速率的时间单位。支持 `second`（`1s`）、`minute`（`1m`）、`hour`（`1h`）、`day`（`1d`）、`week`（`1w`）、`month`（`1M`）、`quarter`（`1q`）和 `year`（`1y`）。省略时不做时间单位换算。 |
 | `mode`    | 可选      | String   | 字段值统计方式：`sum` 或 `value_count`，默认为 `sum`。只有设置了 `field` 或 `script` 时才能显式指定。 |
 | `script`  | 可选      | Object   | 使用脚本动态计算速率值。 |
 | `missing` | 可选      | Numeric  | 缺少字段值的文档所使用的替代值。 |
@@ -153,7 +153,12 @@ GET events/_search
 - `date_histogram` 按 `month` 分桶，`rate` 使用 `unit: year` → 结果 = 月总值 × 12
 - `date_histogram` 按 `day` 分桶，`rate` 使用 `unit: hour` → 结果 = 日总值 ÷ 24
 
-基于天、小时、分钟或秒的分桶不能换算为 `month`、`quarter` 或 `year`；此类请求会被拒绝。
+使用 `fixed_interval` 的分桶只能换算为 `week`、`day`、`hour`、`minute` 或 `second`。使用 `calendar_interval` 的
+`week`、`day`、`hour`、`minute` 或 `second` 分桶，也不能换算为 `month`、`quarter` 或 `year`；此类请求会被拒绝。
+
+`rate` 不要求是 `date_histogram` 的直接子聚合。例如，`date_histogram -> terms -> rate` 可以使用 `day -> hour` 这类不依赖
+具体日期 bucket key 的固定宽度换算。但是，`month -> day` 的宽度取决于具体月份；如果中间夹有其他 bucket 聚合，`rate` 无法取得
+日期 bucket key，请求会被拒绝。存在多个 `date_histogram` 祖先时，由距离 `rate` 最近的一个决定 bucket 宽度。
 
 ## 与 composite 聚合配合
 
@@ -218,7 +223,7 @@ GET logs/_search
 
 ## 注意事项
 
-1. `rate` 必须嵌套在 `date_histogram` 内，或作为恰好包含一个 `date_histogram` 源的 `composite` 的直接子聚合，否则会报错。
+1. `rate` 必须具有 `date_histogram` 祖先，或作为恰好包含一个 `date_histogram` 源的 `composite` 的直接子聚合，否则会报错。
 2. `rate` 是叶子聚合（Leaf Aggregation），不能包含子聚合。
 3. 如果省略 `field` 和 `script`，`rate` 按每个物理文档计数 1，不采用 `_doc_count` 权重；显式设置 `mode` 需要同时提供 `field` 或 `script`。
 4. 当前日期舍入语义把日历日换算为小时数时固定按 24 小时处理。DST 向前切换日内总值为 23 时结果是 `23/24`，向后切换日内总值为 25 时结果是 `25/24`。

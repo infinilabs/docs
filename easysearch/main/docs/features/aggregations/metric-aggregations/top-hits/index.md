@@ -2,10 +2,10 @@
 title: "热门匹配聚合（Top Hits）"
 date: 0001-01-01
 summary: "热门匹配聚合 #  top_hits 聚合是一种多值指标聚合，它根据聚合字段的相关性评分对匹配文档进行排名。
-相关指南（先读这些） #    聚合基础  聚合场景实践  您可以指定以下选项：
+相关指南（先读这些） #   聚合基础 聚合场景实践  您可以指定以下选项：
  from : 命中的起始位置。 size : 返回命中的最大数量。默认值为 3。 sort : 匹配命中的排序方式。默认情况下，命中的排序依据聚合查询的相关性得分。  以下示例返回数据中的前 5 个产品：
 GET sample_data_ecommerce/_search { &#34;size&#34;: 0, &#34;aggs&#34;: { &#34;top_hits_products&#34;: { &#34;top_hits&#34;: { &#34;size&#34;: 5 } } } } 返回内容
-... &#34;aggregations&#34; : { &#34;top_hits_products&#34; : { &#34;hits&#34; : { &#34;total&#34; : { &#34;value&#34; : 4675, &#34;relation&#34; : &#34;eq&#34; }, &#34;max_score&#34; : 1."
+... &#34;aggregations&#34; : { &#34;top_hits_products&#34; : { &#34;hits&#34; : { &#34;total&#34; : { &#34;value&#34; : 4675, &#34;relation&#34; : &#34;eq&#34; }, &#34;max_score&#34; : 1.0, &#34;hits&#34; : [ { &#34;_index&#34; : &#34;sample_data_ecommerce&#34;, &#34;_type&#34; : &#34;_doc&#34;, &#34;_id&#34; : &#34;glMlwXcBQVLeQPrkHPtI&#34;, &#34;_score&#34; : 1."
 ---
 
 

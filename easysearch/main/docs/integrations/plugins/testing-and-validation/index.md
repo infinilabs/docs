@@ -2,7 +2,7 @@
 title: "测试与验证"
 date: 0001-01-01
 description: "插件测试框架、Gradle 任务、运行态验证与常见问题排查。"
-summary: "测试与验证 #  本文档聚焦 Easysearch 插件的测试与验证，包括测试基类的选择、Gradle 任务、运行态验证以及常见问题排查。插件初始化、打包安装和本地开发闭环请参考： 插件开发入门。
+summary: "测试与验证 #  本文档聚焦 Easysearch 插件的测试与验证，包括测试基类的选择、Gradle 任务、运行态验证以及常见问题排查。插件初始化、打包安装和本地开发闭环请参考：插件开发入门。
 引入 test-framework 依赖 #  Easysearch 官方提供了 test-framework 包，内置随机化测试、嵌入式节点、Hamcrest 断言等工具，所有测试基类均来自这个包。
 在插件项目中添加依赖 #  若你的插件项目与 Easysearch 源码在同一 Gradle 多项目构建中，使用项目引用：
 dependencies { testImplementation project(&#39;:test:framework&#39;) } 若你的插件是独立项目（如从官方模板克隆），使用 Maven 坐标：

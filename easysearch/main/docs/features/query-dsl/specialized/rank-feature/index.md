@@ -3,7 +3,7 @@ title: "Rank Feature 查询"
 date: 0001-01-01
 summary: "Rank Feature 查询 #  使用 rank_feature 查询根据文档中的数值（如相关性分数、人气或新鲜度）提升文档分数。如果你希望使用数值特征微调相关性排名，这种查询非常理想。与全文检索不同，rank_feature 仅关注数值信号；在复合查询（如 bool）中与其他查询结合时效果最佳。
 rank_feature 查询要求目标字段映射为 rank_feature 字段类型。这可以启用内部优化的评分，从而实现快速高效的提升。
-相关指南（先读这些） #    相关性与打分策略  Query DSL 基础  分数影响取决于字段值以及可选的 saturation 、 log 或 sigmoid 函数。这些函数在查询时动态应用以计算最终文档分数；它们不会更改或存储文档中的任何值。
+相关指南（先读这些） #   相关性与打分策略 Query DSL 基础  分数影响取决于字段值以及可选的 saturation 、 log 或 sigmoid 函数。这些函数在查询时动态应用以计算最终文档分数；它们不会更改或存储文档中的任何值。
 参数说明 #  rank_feature 查询支持以下参数。
    参数 数据类型 必需/可选 描述     field String 必需 一个 rank_feature 或 rank_features 字段，用于影响文档评分。   boost Float 可选 应用于评分的乘数。默认值为 1.0 。0 到 1 之间的值会降低评分；大于 1 的值会提高评分。   saturation Object 可选 对特征值应用饱和函数。随着值的增加，增益会增长，但在 pivot 之后会趋于平稳。如果没有提供其他函数，则使用此默认函数。一次只能使用 saturation 、 log 或 sigmoid 中的一个函数。   log Object 可选 使用基于字段值的对数评分函数。适用于大范围值的场景。一次只能使用 saturation 、 log 或 sigmoid 中的一个函数。   sigmoid Object 可选 对评分影响应用 S 形曲线，由 pivot 和 exponent 控制。一次只能使用 saturation 、 log 或 sigmoid 中的一个函数。   positive_score_impact Boolean 可选 当 false 时，较低值会获得更高的评分。适用于像价格这样的特征，其中较小值更好。作为映射的一部分定义。默认值为 true 。    参考样例 #  以下示例展示了如何定义和使用 rank_feature 字段来影响文档评分。"
 ---

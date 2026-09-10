@@ -2,7 +2,7 @@
 title: "全局聚合（Global）"
 date: 0001-01-01
 summary: "全局聚合 #  global 聚合让你能跳出过滤聚合的聚合上下文。即使你包含了一个缩小文档集的过滤查询，global 聚合仍然对所有文档进行聚合，就好像过滤查询不存在一样。它忽略 filter 聚合，并隐式地假设 match_all 查询。
-相关指南（先读这些） #    聚合基础  聚合场景实践  以下示例返回索引中所有文档的 taxful_total_price 字段的 avg 值：
+相关指南（先读这些） #   聚合基础 聚合场景实践  以下示例返回索引中所有文档的 taxful_total_price 字段的 avg 值：
 GET sample_data_ecommerce/_search { &#34;size&#34;: 0, &#34;query&#34;: { &#34;range&#34;: { &#34;taxful_total_price&#34;: { &#34;lte&#34;: 50 } } }, &#34;aggs&#34;: { &#34;total_avg_amount&#34;: { &#34;global&#34;: {}, &#34;aggs&#34;: { &#34;avg_price&#34;: { &#34;avg&#34;: { &#34;field&#34;: &#34;taxful_total_price&#34; } } } } } } 返回内容
 ... &#34;aggregations&#34; : { &#34;total_avg_amount&#34; : { &#34;doc_count&#34; : 4675, &#34;avg_price&#34; : { &#34;value&#34; : 75."
 ---

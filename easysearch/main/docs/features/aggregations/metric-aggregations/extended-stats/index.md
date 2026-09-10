@@ -2,8 +2,8 @@
 title: "扩展统计聚合（Extended Stats）"
 date: 0001-01-01
 summary: "扩展统计聚合 #  extended_stats 聚合是 stats 聚合的更全面版本。除了 stats 提供的基本统计指标外，extended_stats 还计算以下内容：
-相关指南（先读这些） #     聚合基础
-   聚合场景实践
+相关指南（先读这些） #    聚合基础
+  聚合场景实践
   平方和
   方差
   总体方差

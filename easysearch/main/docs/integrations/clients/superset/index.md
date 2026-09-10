@@ -3,7 +3,7 @@ title: "Superset 集成"
 date: 0001-01-01
 description: "将 Easysearch 作为数据源接入 Apache Superset，构建可视化报表与数据看板。"
 summary: "Apache Superset 集成 #  Apache Superset 是一款强大的开源数据可视化与 BI 平台。通过 Elasticsearch 连接器，Superset 可以直接查询 Easysearch 中的数据并构建交互式看板。
-相关指南 #    SQL 查询接口  Grafana 集成  前置条件 #     条件 说明     Superset 版本 2.0+ 推荐   Python 驱动 elasticsearch-dbapi 包   网络可达 Superset 服务器能够访问 Easysearch 端口   Easysearch SQL 功能 确保 SQL 插件已启用    安装驱动 #  在 Superset 运行环境中安装 Elasticsearch 驱动："
+相关指南 #   SQL 查询接口 Grafana 集成  前置条件 #     条件 说明     Superset 版本 2.0+ 推荐   Python 驱动 elasticsearch-dbapi 包   网络可达 Superset 服务器能够访问 Easysearch 端口   Easysearch SQL 功能 确保 SQL 插件已启用    安装驱动 #  在 Superset 运行环境中安装 Elasticsearch 驱动："
 ---
 
 

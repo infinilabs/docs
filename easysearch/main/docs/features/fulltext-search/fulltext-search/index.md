@@ -4,12 +4,13 @@ date: 0001-01-01
 description: "match/match_phrase/multi_match 等全文检索查询的用法与注意事项。"
 summary: "全文检索 #  全文检索的核心特点是：对 text 字段做分词与评分，用“相关性”来排序结果。本页只关注最常用的几类查询及常见坑。
 前提：字段必须是可分析（text）类型 #  全文查询（match/match_phrase/multi_match 等）应该作用在 text 字段 上：
- 写入时会通过 analyzer 做分词、归一化（大小写、同义词等） 查询时会用同一个 analyzer 处理查询词，再去匹配倒排索引  如果字段是 keyword/数值/日期，更适合使用 Term 级别查询。
+ 写入时会通过 analyzer 做分词、归一化（大小写、同义词等） 查询时会用同一个 analyzer 处理查询词，再去匹配倒排索引  如果字段是 keyword/数值/日期，更适合使用Term 级别查询。
 match：最常用的全文查询 #  match 会：
  对查询字符串分词 按字段的 analyzer 处理 把多个词项组合成一个全文查询，并参与 _score 计算  示例：
 { &#34;query&#34;: { &#34;match&#34;: { &#34;title&#34;: &#34;分布式 搜索 引擎&#34; } } } 常见参数：
  operator：or（默认）或 and minimum_should_match：要求最少命中多少词  一个直觉对比：
- operator: &quot;and&quot;：所有词都必须出现，召回会明显变少，但结果通常更“干净” minimum_should_match: &quot;75%&quot;：允许部分词缺失，在“可搜到”和“不要太多噪声”之间找折中  示例（用户搜索“分布式 搜索 引擎 调优”）："
+ operator: &quot;and&quot;：所有词都必须出现，召回会明显变少，但结果通常更“干净” minimum_should_match: &quot;75%&quot;：允许部分词缺失，在“可搜到”和“不要太多噪声”之间找折中  示例（用户搜索“分布式 搜索 引擎 调优”）：
+{ &#34;match&#34;: { &#34;title&#34;: { &#34;query&#34;: &#34;分布式 搜索 引擎 调优&#34;, &#34;minimum_should_match&#34;: &#34;75%&#34; } } } 这样“差一个词”的结果还能被召回，但完全不相关的长条内容会被剪掉。"
 ---
 
 

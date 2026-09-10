@@ -8,7 +8,7 @@ summary: "我们拿着纸质地图漫步城市的日子一去不复返了。得�
 Easysearch 提供了两种表示地理位置的方式：用纬度－经度表示的坐标点使用 geo_point 字段类型，以 GeoJSON 格式定义的复杂地理形状，使用 geo_shape 字段类型。
 Geo-points 允许你找到距离另一个坐标点一定范围内的坐标点、计算出两点之间的距离来排序或进行相关性打分、或者聚合到显示在地图上的一个网格。另一方面，Geo-shapes 纯粹是用来过滤的。它们可以用来判断两个地理形状是否有重合或者某个地理形状是否完全包含了其他地理形状。
 推荐阅读顺序：
-  地理位置实践：按场景整理的 Geo 实践：附近的人、围栏、路径等  字段类型参考 #     字段类型 说明      geo_point 经纬度坐标点：建模、坐标格式、距离排序与打分    geo_shape 地理形状：GeoJSON/WKT、精度控制、空间关系查询    Geohash 编码 Geohash 编码原理、精度级别与网格聚合    地理查询类型 #     查询类型 说明 字段类型      geo_bounding_box 矩形区域内的点 geo_point    geo_distance 指定距离内的点 geo_point    geo_polygon 多边形区域内的点 geo_point    geo_shape 形状空间关系（INTERSECTS、WITHIN、DISJOINT、CONTAINS） geo_point、geo_shape    地理聚合 #  地理位置数据的可视化与统计分析："
+ 地理位置实践：按场景整理的 Geo 实践：附近的人、围栏、路径等  字段类型参考 #     字段类型 说明     geo_point 经纬度坐标点：建模、坐标格式、距离排序与打分   geo_shape 地理形状：GeoJSON/WKT、精度控制、空间关系查询   Geohash 编码 Geohash 编码原理、精度级别与网格聚合    地理查询类型 #     查询类型 说明 字段类型     geo_bounding_box 矩形区域内的点 geo_point   geo_distance 指定距离内的点 geo_point   geo_polygon 多边形区域内的点 geo_point   geo_shape 形状空间关系（INTERSECTS、WITHIN、DISJOINT、CONTAINS） geo_point、geo_shape    地理聚合 #  地理位置数据的可视化与统计分析："
 ---
 
 
