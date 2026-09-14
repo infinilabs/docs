@@ -80,10 +80,12 @@ bin/reset_admin_password.sh
 
 如果通过 Chrome 等浏览器下载并解压安装包，macOS 可能会给解压后的文件附加 `com.apple.quarantine` 隔离标签。此时启动时可能出现 `"java" cannot be opened because the developer cannot be verified` 或“无法验证开发者”的提示，即使 bundled JDK 的代码签名本身是合法的。
 
-`bin/initialize.sh` 会在 macOS 上自动检测并清理 Easysearch 启动脚本和 bundled JDK 可执行文件上的隔离标签。正常情况下只需要重新执行初始化脚本：
+`bin/initialize.sh` 会在 macOS 上自动检测并清理 Easysearch 启动脚本和 bundled JDK 可执行文件上的隔离标签。如果跳过初始化、直接执行 `bin/easysearch`，启动脚本也会先检查 `bin/easysearch` 和 bundled `java` 是否带有隔离标签；存在则先清理再启动。
 
 ```bash
 bin/initialize.sh
+# 或直接启动，启动脚本会在拉起 Java 之前自动清理
+bin/easysearch
 ```
 
 如需手动确认某个文件是否带有隔离标签，可以执行：
