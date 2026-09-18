@@ -1894,6 +1894,13 @@ POST {index}/_disk_usage
 | ignore_unavailable   | boolean | 当指定的具体索引不可用时是否忽略 |
 | allow_no_indices     | boolean | 当通配符表达式不匹配任何具体索引时是否忽略 |
 
+#### 结果说明
+
+- `store_size` 和 `store_size_in_bytes` 表示已分析分片中固定索引提交的总大小。
+- `all_fields.total` 是各字段组件用量的合计，通常小于 `store_size`；索引元数据等不属于任何字段组件的文件不会计入该值。
+- stored fields、倒排索引等共享物理文件需要在多个字段之间分摊，因此逐字段结果是估算值，不表示每个字段具有独立且可精确拆分的物理文件大小。
+- `flush=false` 时不会在分析前主动刷新索引，响应可能不包含尚未提交的数据。
+
 ## indices.exists
 
 检查指定索引是否存在。

@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #   新增 ingest-pattern-tagger 插件：写入时为日志文档识别 LogPilot Pattern 并打标（pattern_tagger 摄取处理器，写入 @pattern_id / @pattern_hash / @pattern_severity / @pattern_status 等字段），可选变量抽取与高置信度丢弃原始消息以节省存储，并配套 pattern_restore 搜索管道处理器在查询时从模板 + 变量还原原始消息。  Bug fix #  Improvements #  2.4.0 (2026-09-10) #  Breaking changes #  Features #   新增 Easysearch 2.4.0 原生 HNSW 向量搜索：内置 dense_vector、Lucene HNSW、query-level knn 和顶层 knn，新建原生 HNSW 索引无需安装 k-NN 插件。  支持 1–4096 维 float 向量、cosine、dot_product、l2_norm、max_inner_product，以及 m、ef_construction 和查询 num_candidates 参数。 mapping 必须显式设置 dims 和 index: true。 省略 index_options 时，Easysearch 2."
+Latest (In development) #  Breaking changes #  Features #   新增 ingest-pattern-tagger 插件：写入时为日志文档识别 LogPilot Pattern 并打标（pattern_tagger 摄取处理器，写入 @pattern_id / @pattern_hash / @pattern_severity / @pattern_status 等字段），可选变量抽取与高置信度丢弃原始消息以节省存储，并配套 pattern_restore 搜索管道处理器在查询时从模板 + 变量还原原始消息。  Bug fix #  Improvements #  2.4.0 (2026-09-18) #  Breaking changes #  Features #   新增 Easysearch 2.4.0 原生 HNSW 向量搜索：内置 dense_vector、Lucene HNSW、query-level knn 和顶层 knn，新建原生 HNSW 索引无需安装 k-NN 插件。  支持 1–4096 维 float 向量、cosine、dot_product、l2_norm、max_inner_product，以及 m、ef_construction 和查询 num_candidates 参数。 mapping 必须显式设置 dims 和 index: true。 省略 index_options 时，Easysearch 2."
 ---
 
 
@@ -18,7 +18,7 @@ Latest (In development) #  Breaking changes #  Features #   新增 ingest-patter
 ### Improvements
 
 
-## 2.4.0 (2026-09-10)
+## 2.4.0 (2026-09-18)
 ### Breaking changes
 ### Features
 - 新增 [Easysearch 2.4.0 原生 HNSW 向量搜索]({{< relref "/docs/features/vector-search/native-hnsw.md" >}})：内置 `dense_vector`、Lucene HNSW、query-level `knn` 和顶层 `knn`，新建原生 HNSW 索引无需安装 k-NN 插件。
@@ -51,6 +51,17 @@ Latest (In development) #  Breaking changes #  Features #   新增 ingest-patter
 - `rate` 聚合新增 `sum`、`value_count` 计算模式，并支持在包含单一日期源的 `composite` 聚合中计算速率。
 - DevTools 控制台支持 SQL 一等体验：SQL 关键词高亮与补全、多行语句正确解析，查询结果默认以 CSV 格式返回
 ### Bug fix
+- 修复 `_disk_usage` 在大索引、compound segment、已删除文档及 doc values 更新场景下可能遗漏部分 stored fields、倒排索引、
+  doc values、points、norms 和 term vectors 文件的问题；接口与响应格式保持兼容。
+- 修复安全模块过滤 `.model_provider`、`.match_rules` 和 `audit_log` 等受保护资源时，全量请求可能被展开为大量索引与别名、
+  造成 transport 请求异常膨胀的问题；现在使用紧凑排除表达式，并在 cluster-state 响应侧过滤受保护资源，同时保留普通索引和
+  全局 metadata。
+- 修复安全模式下 Rollup 任务在 `FAILED && force` 后重新启动时，无索引的内部请求被误判为全索引并触发
+  `NullPointerException` 的问题。
+- 修复 Windows Git Bash、MSYS 和 Cygwin 环境下密码生成及管理员密码重置脚本因路径格式、classpath 分隔符或 curl TLS
+  后端不兼容而失败的问题。
+- 修复 macOS 用户跳过初始化、直接运行 `bin/easysearch` 时，浏览器下载包携带的 `com.apple.quarantine` 属性可能导致
+  bundled Java 被 Gatekeeper 拦截的问题。
 - 修复 Remote Reindex 错误使用 Easysearch 全局版本顺序判断远端 Elasticsearch REST 协议版本的问题。此前从 Elasticsearch
   6.8.x、7.x 或 8.x 拉取数据时，scroll 或 clear-scroll 请求可能被误判为 2.0 之前的格式，并以 `text/plain` 发送裸
   scroll ID，导致远端返回 400 或 406；现在会按远端协议版本发送结构正确的 JSON 请求，同时保留 Elasticsearch 0.90.x
