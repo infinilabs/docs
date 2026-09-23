@@ -67,29 +67,39 @@ Invoke-RestMethod -Uri "http://localhost:9200"
 
 安装 [Git for Windows](https://git-scm.com/download/win)，使用其内置的 Bash 环境来执行初始化脚本，可正常生成证书并启用 HTTPS。
 
+由于 windows 环境下，Git Bash 自带的 curl 与 liunx 不兼容，可能会导致初始化脚本生成证书格式不匹配等兼容性问题，建议下载  [curl for Windows](https://curl.se/windows/) ，并替换 Git Bash 自带的 curl。
+
 > 注意：以下操作在 **Git Bash** 终端中执行。
 
-1. 通过在线脚本安装 Easysearch
+1. 下载 [curl for Windows](https://curl.se/windows/) 
+
+```bash
+# 下载并解压 [curl for Windows]，假设解压后路径：/xxx/curl-xx/bin/curl.exe （具体路径请以本地环境为准）
+# 执行 curl.exe 文件覆盖替换
+sudo cp /xxx/curl-xx/bin/curl.exe /mingw64/bin/curl.exe
+```
+
+2. 通过在线脚本安装 Easysearch
 
 ```bash
 curl -sSL http://get.infini.cloud | bash -s -- -p easysearch -d /d/data/easysearch
 ```
 
-2. 下载并配置 JDK
+3. 下载并配置 JDK
 
 ```bash
 # 下载 JDK
-curl -# https://release.infinilabs.com/easysearch/jdk/21/graalvm-jdk-21_windows-x64_bin.zip -o /d/opt/jdk.zip
+curl -# https://release.infinilabs.com/easysearch/jdk/21/graalvm-jdk-21_windows-x64_bin.zip -o /d/data/easysearch/jdk.zip
 
 # 解压并重命名
-cd /d/data/easysearch && unzip -q /d/opt/jdk.zip
+cd /d/data/easysearch && unzip -q jdk.zip
 mv graalvm* jdk
 
 # 设置环境变量
 export JAVA_HOME=/d/data/easysearch/jdk
 ```
 
-3. 初始化证书、密码及插件
+4. 初始化证书、密码及插件
 
 ```bash
 bin/initialize.sh
@@ -97,13 +107,13 @@ bin/initialize.sh
 
 > 初始化过程中会生成随机密码，只会在终端显示一次，请妥善保存。
 
-4. 运行 Easysearch
+5. 运行 Easysearch
 
 ```bat
 bin\easysearch.bat
 ```
 
-5. 验证安装
+6. 验证安装
 
 ```bash
 # 在 Git Bash 中（使用初始化时输出的密码）
@@ -111,6 +121,16 @@ curl -ku admin:YOUR_PASSWORD https://localhost:9200
 ```
 
 ## 常见问题
+
+### 初始化脚本报错
+
+执行初始化脚本 `bin/initialize.sh` 报错如下：
+
+```
+错误：找不到或无法加载主类 com.infinilabs.securlty.tools.Hasner
+原因: java.lang.ClassNotFoundException: com.infinilabs.security.tools.Hasher
+```
+可能原因是本机系统自带的 curl.exe 与脚本生成证书的格式兼容问题。解决办法是下载最新版 [curl for Windows](https://curl.se/windows/) 并替换 Git Bash 自带的 curl.exe （自带 curl 程序路径通常位于：/mingw64/bin/curl.exe）
 
 ### 端口被占用
 
