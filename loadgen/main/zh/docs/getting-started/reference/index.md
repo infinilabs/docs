@@ -2,7 +2,7 @@
 title: "参数参考"
 date: 0001-01-01
 summary: "参数参考 #  本页是 Loadgen 所有配置项的完整参考。
- 命令行参数 #  loadgen [选项]    参数 类型 默认值 说明     -run string loadgen.dsl DSL 测试文件路径   -config string loadgen.yml YAML 配置文件路径   -d int 5 测试持续时间（秒）   -c int 1 并发线程数   -r int -1（不限） 每秒最大请求数（固定 QPS）   -l int -1（不限） 请求总数上限   -compress bool false 使用 gzip 压缩请求体   -timeout int 60 请求超时时间（秒）   -dial-timeout int 3 连接超时时间（秒）   -read-timeout int 0（使用 -timeout） 读超时时间（秒）   -write-timeout int 0（使用 -timeout） 写超时时间（秒）   -cpu int -1（全部） 使用的 CPU 核数   -mem int -1（不限） 内存软上限（MB）   -log string — 日志级别：trace, debug, info, warn, error, off   -debug bool false 调试模式，panic 时立即退出并打印完整栈   -v bool — 输出版本信息     环境变量（env） #  在 YAML 或 DSL 中定义环境变量默认值，运行时可通过命令行环境变量覆盖。"
+ 命令行参数 #  loadgen [选项]    参数 类型 默认值 说明     -run string loadgen.dsl DSL 测试文件路径   -result-file string — 将最终指标报告（请求数、QPS、状态码分布、毫秒级延迟分位数）以 JSON 格式写入该文件   -config string loadgen.yml YAML 配置文件路径   -d int 5 测试持续时间（秒）   -c int 1 并发线程数   -r int -1（不限） 每秒最大请求数（固定 QPS）   -l int -1（不限） 请求总数上限   -compress bool false 使用 gzip 压缩请求体   -timeout int 60 请求超时时间（秒）   -dial-timeout int 3 连接超时时间（秒）   -read-timeout int 0（使用 -timeout） 读超时时间（秒）   -write-timeout int 0（使用 -timeout） 写超时时间（秒）   -cpu int -1（全部） 使用的 CPU 核数   -mem int -1（不限） 内存软上限（MB）   -log string — 日志级别：trace, debug, info, warn, error, off   -debug bool false 调试模式，panic 时立即退出并打印完整栈   -v bool — 输出版本信息     环境变量（env） #  在 YAML 或 DSL 中定义环境变量默认值，运行时可通过命令行环境变量覆盖。"
 ---
 
 
@@ -21,6 +21,7 @@ loadgen [选项]
 | 参数 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
 | `-run` | string | `loadgen.dsl` | DSL 测试文件路径 |
+| `-result-file` | string | — | 将最终指标报告（请求数、QPS、状态码分布、毫秒级延迟分位数）以 JSON 格式写入该文件 |
 | `-config` | string | `loadgen.yml` | YAML 配置文件路径 |
 | `-d` | int | `5` | 测试持续时间（秒） |
 | `-c` | int | `1` | 并发线程数 |
@@ -170,6 +171,8 @@ ES_ENDPOINT="http://[fe81::18df:9883:1e27:b040%25en0]:9200" loadgen -run loadgen
 | `path` | 外部文本文件路径，每行一个值 |
 | `data` | 追加到文件内容之后的额外数据列表 |
 | `replace` | 对取到的值做字符替换（用于转义特殊字符） |
+| `weighted` | 开启按频次加权采样——每行格式为 `值<分隔符>权重` |
+| `weight_separator` | 值与权重之间的分隔符（默认：TAB） |
 
 **NDJSON 语料支持：**
 
@@ -208,6 +211,30 @@ $[[doc]]
 - 用真实数据做写入压测
 - 批量导入已有数据集
 - 保持文档结构多样性
+
+**加权词典支持：**
+
+对 `file` 变量设置 `weighted: true`，即可按频次加权采样。词典每行为 `值<分隔符>权重`——每个值一行，无需重复书写（权重缺省为 `1`）：
+
+```text
+# dict/countries.txt — 值<TAB>次数
+US	196116
+CN	61724
+NO	52772
+```
+
+变量定义：
+
+```text
+{
+  name: "country",
+  type: "file",
+  path: "dict/countries.txt",
+  weighted: true,
+}
+```
+
+采样通过累积权重的二分查找实现，命中概率严格跟随真实分布（例如 `US` 的命中频率约为 `NO` 的 5 倍）。若值本身包含 TAB，可通过 `weight_separator` 自定义分隔符。
 
 #### list
 
