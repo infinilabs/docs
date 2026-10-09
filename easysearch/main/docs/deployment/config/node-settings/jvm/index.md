@@ -180,12 +180,28 @@ Easysearch 默认启用 GC 日志，不同 JDK 版本的配置方式不同：
 -Djava.io.tmpdir=${ES_TMPDIR}
 ```
 
-### Java Security Manager（JDK 17+）
+### 安全检查（JDK 21、JDK 25）
 
 ```bash
-# JDK 17+：允许 Java Security Manager
-17-:-Djava.security.manager=allow
+# 发行包中的实际文件名包含对应 Easysearch 版本
+-Djava.security.manager=disallow
+21:-javaagent:lib/easysearch-security-agent-2.4.1.jar
+25:-javaagent:lib/easysearch-security-agent-2.4.1.jar
 ```
+
+发行启动配置针对 JDK 21 和 JDK 25 加载同一个 Java agent 执行安全检查。
+两种运行时均通过 `java.security.manager=disallow` 禁用 JDK 自身的 SecurityManager；
+JDK 21 不使用旧 SecurityManager 作为安全检查路径。
+请保留发行包生成的 agent 参数及相邻的 bootstrap jar；缺少 agent 时服务会拒绝启动。
+升级 Easysearch 时应使用新发行包的实际 jar 文件名。
+JDK 21 还需保留发行配置中的 `--enable-preview` 和 native access 参数，以加载相应的 Lucene 和 custom-codecs 实现。
+这些版本配置不代表 JDK 22～24 或 JDK 26 已受支持。
+
+agent 读取核心策略和 `plugin-security.policy`，结合配置目录、数据目录等动态权限，
+检查选定的文件操作、`Socket`/`SocketChannel` 连接及 `System.exit`/`Runtime.halt` 调用。
+这些检查不覆盖所有文件或网络 API，也不复刻旧 SecurityManager 的反射、线程组或异步权限上下文。
+插件安装时会标明已跳过的权限类型；声明这些权限不代表相应操作仍受强制检查。
+第三方插件仍需作为可信代码管理。
 
 ### Locale 配置
 
@@ -218,7 +234,8 @@ Easysearch 默认启用 GC 日志，不同 JDK 版本的配置方式不同：
 | 参数 | 说明 |
 |------|------|
 | `-Djava.io.tmpdir` | JVM 临时文件目录 |
-| `-Djava.security.manager` | JDK 17+ 的安全管理器（allow 表示允许使用） |
+| `-javaagent` | JDK 21、JDK 25 加载发行包提供的安全 agent |
+| `-Djava.security.manager=disallow` | 禁用 JDK 自身的 SecurityManager |
 | `-Djava.locale.providers` | JVM 使用的 Locale 提供者 |
 
 ---

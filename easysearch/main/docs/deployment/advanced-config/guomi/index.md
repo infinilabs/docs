@@ -34,9 +34,35 @@ summary: "国密 / TLCP 配置指南 #  在政务、金融等信创场景中，�
 
 ---
 
+## Linux 系统依赖
+
+Easysearch 当前使用 `tongsuo-openjdk 1.0.11` 提供 TLCP JNI 原生库。Linux 节点的运行依赖如下：
+
+| 平台 | 最低系统版本或 ABI | 节点运行时动态库要求 |
+|------|-------------------|----------------------|
+| Linux x86_64 | glibc 2.35 | 铜锁提供的 `libssl.so.3`、`libcrypto.so.3`（需导出 `OPENSSL_3.0.3` 符号版本），以及系统 `libm.so.6`、`libc.so.6`、`ld-linux-x86-64.so.2` |
+| Linux aarch64 | glibc 2.34 | 铜锁提供的 `libssl.so.3`、`libcrypto.so.3`（需导出 `OPENSSL_3.0.3` 符号版本），以及系统 `libc.so.6`、`ld-linux-aarch64.so.1` |
+
+> Linux 上不能使用普通 OpenSSL 3 替代铜锁动态库。JNI 会调用 `NTLS_client_method`、`SSL_CTX_enable_ntls`、双证书装载等铜锁扩展符号。推荐使用下文脚本安装的 Tongsuo 8.4.0，并在启动节点前执行 `use_tongsuo`；伪分布式初始化生成的 `config/tongsuo-env.sh` 会自动设置对应的 `LD_LIBRARY_PATH`。
+
+Linux 节点可以通过以下命令检查基础环境；JNI 库首次启动后会解压到 `modules/security/native/`，此时可用 `ldd` 确认实际加载的铜锁和系统动态库：
+
+```bash
+uname -m
+getconf GNU_LIBC_VERSION
+tongsuo version
+ldd modules/security/native/libconscrypt_openjdk_jni-linux-$(uname -m).so
+```
+
+`OPENSSL_3.0.3` 是 JNI 制品要求的动态库 ABI 符号版本，不等同于操作系统软件包显示的版本号。若 glibc 版本过低、铜锁动态库缺失，或加载到不包含上述扩展符号的普通 OpenSSL，节点会因原生库加载失败而无法启用国密 TLS。
+
+---
+
 ## Linux 安装 Tongsuo（宿主机）
 
 当你在 Linux 宿主机上执行 `bin/generate-tlcp-certs.sh` 时，需要系统可直接找到 `tongsuo` 命令。`bin/initialize-cluster.sh --tlcp` 在 Linux 伪分布式模式下可自动安装并切换本地 Tongsuo 环境（见下文说明）。
+
+源码安装脚本仅支持 Linux 非 root 用户。编译前需要准备 `tar`、`make`、`perl` 和 `gcc` 或 `cc`；在线下载源码时还需要 `curl`，使用 `--sha256` 校验时还需要 `sha256sum` 或 `shasum`。
 
 推荐使用发行包内置脚本安装（仅安装到当前用户目录，不替换系统 OpenSSL）：
 

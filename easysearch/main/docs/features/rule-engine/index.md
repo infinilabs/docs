@@ -62,6 +62,38 @@ expression\t#offset#description
 3. 已重启节点并确认插件加载成功
 4. 已安装启用 `rule-engine` 特性的有效 License
 
+### glibc 最低版本
+
+Rules 插件使用的 native 库是预编译产物，不随部署环境本地编译，因此对系统 glibc 版本有最低要求：
+
+| 平台 | 最低 glibc 版本 |
+| --- | --- |
+| Linux x64 | 2.25 |
+| Linux aarch64 | 2.38 |
+
+Linux x64 版本的 native 库还要求系统动态库至少提供以下 ABI 符号版本：
+
+| 动态库 | 能力 | 最低版本 |
+| --- | --- | --- |
+| `libstdc++.so.6` | GLIBCXX | `GLIBCXX_3.4.32` |
+| `libstdc++.so.6` | CXXABI | `CXXABI_1.3.13` |
+| `libc.so.6` | GLIBC | `GLIBC_2.25` |
+| `libgcc_s.so.1` | GCC | `GCC_4.3.0` |
+| `libm.so.6` | GLIBC | `GLIBC_2.15` |
+| `libpthread.so.0` | GLIBC | `GLIBC_2.12` |
+| `ld-linux` | GLIBC | `GLIBC_2.3` |
+
+其中 `GLIBCXX_*`、`CXXABI_*` 和 `GCC_*` 表示动态库导出的 ABI 符号版本，不等同于操作系统的软件包版本或 GCC 编译器版本。
+
+低于上表版本时，节点加载插件会因 native 库所需的符号缺失而失败（`UnsatisfiedLinkError`）。
+
+安装前可以先自检目标节点的 CPU 架构和 glibc 版本：
+
+```bash
+uname -m
+ldd --version | head -1
+```
+
 ### 节点配置
 
 Rules 插件依赖 JNI native 库（`libruledb-r.so`）完成规则编译和匹配。默认情况下，编译后的规则库会写入第一个 `path.data` 目录下的 `rules/output`；也可以显式配置规则库目录：
