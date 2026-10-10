@@ -2,9 +2,8 @@
 title: "macOS"
 date: 0001-01-01
 summary: "MacOS 环境下使用 Easysearch #  目前，有多种方案可以在 MacOS 下体验 Easysearch。可以选择使用 Docker 方式安装，或者使用本地安装包进行安装。
-前置要求 #   macOS 10.15 (Catalina) 或更高版本 JDK 11+（推荐 JDK 17）。Bundle 包已内置 JDK，无需单独安装。 至少 4 GB 可用内存  方案一：Docker 安装（推荐） #  如果您的 MacOS 环境上有 Docker（Docker Desktop、OrbStack 等），可以用最简单的方式启动 Easysearch：
-docker run -d --name easysearch \  -p 9200:9200 \  -e &#34;EASYSEARCH_INITIAL_ADMIN_PASSWORD=EasysearchP@ssw0rd!&#34; \  -e &#34;ES_JAVA_OPTS=-Xms512m -Xmx512m&#34; \  infinilabs/easysearch:latest  详细 Docker 配置请参考 Docker 环境下使用 Easysearch。
- 方案二：本地安装 #  使用一键安装脚本进行安装，请按照以下步骤操作："
+前置要求 #   macOS 10.15 (Catalina) 或更高版本 Easysearch 2.5.0 推荐使用 JDK 25，Bundle 包默认内置 JDK 25；JDK 21 仅用于兼容已有客户环境。详细要求见安装指南。 至少 4 GB 可用内存  方案一：Docker 安装（推荐） #  如果您的 MacOS 环境上有 Docker（Docker Desktop、OrbStack 等），可以用最简单的方式启动 Easysearch：
+docker run -d --name easysearch \  -p 9200:9200 \  -e &#34;EASYSEARCH_INITIAL_ADMIN_PASSWORD=EasysearchP@ssw0rd!&#34; \  -e &#34;ES_JAVA_OPTS=-Xms512m -Xmx512m&#34; \  infinilabs/easysearch:latest  详细 Docker 配置请参考 Docker 环境下使用 Easysearch。"
 ---
 
 
@@ -15,7 +14,7 @@ docker run -d --name easysearch \  -p 9200:9200 \  -e &#34;EASYSEARCH_INITIAL_AD
 ## 前置要求
 
 - macOS 10.15 (Catalina) 或更高版本
-- JDK 11+（推荐 JDK 17）。Bundle 包已内置 JDK，无需单独安装。
+- Easysearch 2.5.0 推荐使用 JDK 25，Bundle 包默认内置 JDK 25；JDK 21 仅用于兼容已有客户环境。详细要求见[安装指南]({{< relref "./_index.md" >}})。
 - 至少 4 GB 可用内存
 
 ## 方案一：Docker 安装（推荐）

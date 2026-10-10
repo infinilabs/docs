@@ -272,8 +272,8 @@ mkfs.ext4 /dev/vdb
 mount -o noatime /dev/vdb /data
 <span style=color:#8be9fd;font-style:italic>echo</span> <span style=color:#f1fa8c>&#34;/dev/vdb /data ext4 noatime 0 0&#34;</span> &gt;&gt; /etc/fstab
 
-<span style=color:#6272a4># 5. 配置 JDK</span>
-ln -s /usr/lib/jvm/java-17 /data/easysearch/jdk
+<span style=color:#6272a4># 5. 配置预先安装的 JDK 25（路径按实际修改，Bundle 包已内置，跳过此步）</span>
+ln -s /usr/local/jdk /data/easysearch/jdk
 
 <span style=color:#6272a4># 6. 修改配置文件（见上方节点配置示例）</span>
 

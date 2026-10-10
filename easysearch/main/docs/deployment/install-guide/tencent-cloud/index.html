@@ -271,8 +271,8 @@ useradd -u <span style=color:#bd93f9>602</span> -g easysearch -m easysearch
 <span style=color:#6272a4># 4. 安装</span>
 curl -sSL http://get.infini.cloud | bash -s -- -p easysearch
 
-<span style=color:#6272a4># 5. 配置 JDK</span>
-ln -s /usr/lib/jvm/java-17 /data/easysearch/jdk
+<span style=color:#6272a4># 5. 配置预先安装的 JDK 25（路径按实际修改，Bundle 包已内置，跳过此步）</span>
+ln -s /usr/local/jdk /data/easysearch/jdk
 
 <span style=color:#6272a4># 6. 修改 easysearch.yml</span>
 

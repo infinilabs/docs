@@ -2,7 +2,7 @@
 title: "测试环境部署"
 date: 0001-01-01
 summary: "测试环境部署指南 #  用最少资源快速搭建一个可运行的 Easysearch 实例，适合功能验证、开发联调和学习使用。
-最低硬件要求 #     项目 最低配置 建议配置     CPU 2 核 4 核   内存 4 GB 8 GB   磁盘 20 GB 50 GB SSD   JDK 11+ 17+     测试环境可使用 HDD，但 SSD 体验更佳。
+最低硬件要求 #     项目 最低配置 建议配置     CPU 2 核 4 核   内存 4 GB 8 GB   磁盘 20 GB 50 GB SSD   JDK（Easysearch 2.5.0） 21（兼容已有环境） 25（Bundle 包默认内置）     测试环境可使用 HDD，但 SSD 体验更佳。
  一键安装（推荐） #  # 使用一键安装脚本 curl -sSL http://get.infini.cloud | bash -s -- -p easysearch # 调小 JVM 堆（测试环境 512MB 即可） sed -i &#39;s/1g/512m/g&#39; /data/easysearch/config/jvm."
 ---
 
@@ -18,7 +18,7 @@ summary: "测试环境部署指南 #  用最少资源快速搭建一个可运行
 | CPU | 2 核 | 4 核 |
 | 内存 | 4 GB | 8 GB |
 | 磁盘 | 20 GB | 50 GB SSD |
-| JDK | 11+ | 17+ |
+| JDK（Easysearch 2.5.0） | 21（兼容已有环境） | **25**（Bundle 包默认内置） |
 
 > 测试环境可使用 HDD，但 SSD 体验更佳。
 
@@ -61,11 +61,8 @@ docker run -d \
 ## MacOS 快速体验
 
 ```bash
-# Homebrew 安装 JDK
-brew install openjdk@17
-
-# 下载并解压 Easysearch
-# 具体下载地址见官方页面
+# 推荐下载并解压 Easysearch Bundle 包（2.5.0 默认内置 JDK 25）
+# no-JDK 包请先安装 JDK 25，具体下载与配置见 macOS 安装指南
 
 cd easysearch
 bin/initialize.sh -s

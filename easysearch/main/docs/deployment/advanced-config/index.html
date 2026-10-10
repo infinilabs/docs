@@ -291,7 +291,8 @@ GET /_cat/thread_pool?v&amp;h=node_name,name,active,queue,rejected
 # 对照 JVM GC、查询、写入和合并统计
 GET /_nodes/stats/process,jvm,indices?filter_path=nodes.*.process.cpu,nodes.*.jvm.gc,nodes.*.indices.search,nodes.*.indices.indexing,nodes.*.indices.merges
 </code></pre></div><p><strong>常见原因和解决方案：</strong></p><table><thead><tr><th>原因</th><th>症状</th><th>解决方案</th></tr></thead><tbody><tr><td>复杂查询或聚合</td><td>search 线程持续占用 CPU</td><td>使用 Profile API 定位高成本阶段，减少脚本、前导通配符、高基数聚合或过大的结果集</td></tr><tr><td>集中写入触发大量合并</td><td>merge 线程和磁盘 I/O 同时升高</td><td>削平写入峰值或提升存储能力，默认保留 merge 自动节流，不要直接修改 merge policy</td></tr><tr><td>GC 频繁</td><td>GC 线程 CPU 高且暂停增加</td><td>检查 GC 日志、分配速率、缓存和 breaker，再根据证据调整工作负载或 JVM</td></tr><tr><td>高成本排序</td><td>search 线程 CPU 高</td><td>减少命中文档和排序字段；只有固定排序长期匹配时，才在新建索引上验证索引排序并重建数据</td></tr></tbody></table><hr><h3 id=q7-如何选择合适的-gc-算法>Q7: 如何选择合适的 GC 算法？
-<a class=anchor href=#q7-%e5%a6%82%e4%bd%95%e9%80%89%e6%8b%a9%e5%90%88%e9%80%82%e7%9a%84-gc-%e7%ae%97%e6%b3%95>#</a></h3><p>Easysearch 2.4.0 要求 JDK 21 或更高版本，发行配置默认使用 G1GC。堆大小本身不能作为切换 GC 的唯一依据；通常应保留发行包
+<a class=anchor href=#q7-%e5%a6%82%e4%bd%95%e9%80%89%e6%8b%a9%e5%90%88%e9%80%82%e7%9a%84-gc-%e7%ae%97%e6%b3%95>#</a></h3><p>Easysearch 2.5.0 默认使用 JDK 25，Bundle 包默认内置 JDK 25，发行配置使用 G1GC；JDK 21 仅用于兼容已有客户环境。
+堆大小本身不能作为切换 GC 的唯一依据；通常应保留发行包
 默认设置，并先通过 GC 日志确认吞吐、暂停时间和对象分配问题。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>jcmd &lt;pid&gt; VM.flags
 jcmd &lt;pid&gt; GC.heap_info
 </code></pre></div><p>CMS 不适用于当前支持的运行时。ZGC 等其他收集器也不是默认配置，只能在固定 JDK、真实业务负载和完整稳定性测试下验证后使用，

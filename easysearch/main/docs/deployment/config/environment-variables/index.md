@@ -2,7 +2,7 @@
 title: "环境变量参考"
 date: 0001-01-01
 summary: "环境变量参考 #  Easysearch 支持通过环境变量控制启动行为、JVM 设置和运行路径等。本页提供所有支持的环境变量的完整参考。
-核心环境变量 #     变量 说明 默认值     ES_HOME Easysearch 安装根目录 从启动脚本位置自动推断   ES_PATH_CONF 配置文件目录路径 $ES_HOME/config   ES_JAVA_HOME 自定义 Java 安装路径（推荐使用此变量） 未设置（优先使用内置 JDK）   JAVA_HOME Java 安装路径（后备方案，ES_JAVA_HOME 优先） 系统默认   ES_JAVA_OPTS 附加 JVM 选项，如堆大小 空   ES_TMPDIR 临时文件目录 自动创建   ES_STARTUP_SLEEP_TIME 后台启动后的等待时间（秒） 未设置    JDK 选择优先级 #  Easysearch 按以下优先级选择 Java 运行环境："
+核心环境变量 #     变量 说明 默认值     ES_HOME Easysearch 安装根目录 从启动脚本位置自动推断   ES_PATH_CONF 配置文件目录路径 $ES_HOME/config   ES_JAVA_HOME 自定义 Java 安装路径（推荐使用此变量） 未设置（优先使用内置 JDK）   JAVA_HOME Java 安装路径（后备方案，ES_JAVA_HOME 优先） 系统默认   ES_JAVA_OPTS 附加 JVM 选项，如堆大小 空   ES_TMPDIR 临时文件目录 自动创建   ES_STARTUP_SLEEP_TIME 后台启动后的等待时间（秒） 未设置    JDK 选择优先级 #  Linux/macOS 启动器按以下优先级选择 Java 运行环境："
 ---
 
 
@@ -24,7 +24,7 @@ Easysearch 支持通过环境变量控制启动行为、JVM 设置和运行路�
 
 ## JDK 选择优先级
 
-Easysearch 按以下优先级选择 Java 运行环境：
+Linux/macOS 启动器按以下优先级选择 Java 运行环境：
 
 ```
 1. 内置 JDK（$ES_HOME/jdk）       ← 最优先，推荐使用
@@ -32,7 +32,12 @@ Easysearch 按以下优先级选择 Java 运行环境：
 3. JAVA_HOME 环境变量             ← 最终后备方案
 ```
 
-> **建议**：使用 Easysearch 自带的内置 JDK，除非有特殊需求需要使用其他 Java 版本。
+Windows `bin\easysearch.bat` 使用安装目录下的 `jdk/`，没有该目录时使用 `JAVA_HOME`。
+安装目录已有 `jdk/` 时，上述环境变量不会覆盖它。
+
+Easysearch 2.5.0 Bundle 包默认内置 JDK 25，新部署及 no-JDK 包推荐使用 JDK 25。
+JDK 21 仅用于兼容已部署且暂不方便升级 JDK 的客户环境；历史版本要求见[安装指南]({{< relref "../install-guide/_index.md" >}})。
+切换运行时也必须保留安全 agent 和 `-Djava.security.manager=disallow`，见[JVM 配置]({{< relref "./node-settings/jvm.md" >}})。
 
 ## 路径相关
 

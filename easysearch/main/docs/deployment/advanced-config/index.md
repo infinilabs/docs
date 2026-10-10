@@ -220,7 +220,8 @@ GET /_nodes/stats/process,jvm,indices?filter_path=nodes.*.process.cpu,nodes.*.jv
 
 ### Q7: 如何选择合适的 GC 算法？
 
-Easysearch 2.4.0 要求 JDK 21 或更高版本，发行配置默认使用 G1GC。堆大小本身不能作为切换 GC 的唯一依据；通常应保留发行包
+Easysearch 2.5.0 默认使用 JDK 25，Bundle 包默认内置 JDK 25，发行配置使用 G1GC；JDK 21 仅用于兼容已有客户环境。
+堆大小本身不能作为切换 GC 的唯一依据；通常应保留发行包
 默认设置，并先通过 GC 日志确认吞吐、暂停时间和对象分配问题。
 
 ```bash

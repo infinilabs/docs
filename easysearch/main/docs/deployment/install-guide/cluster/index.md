@@ -3,10 +3,8 @@ title: "分布式集群"
 date: 0001-01-01
 summary: "分布式集群安装 #  本文档介绍如何使用 initialize-cluster.sh 脚本快速搭建 Easysearch 分布式集群。该脚本支持伪分布式（单机多节点）和真分布式（多服务器）两种部署模式。
  要求 Easysearch 版本 &gt;= 2.0.3。
- 前置要求 #   已完成系统调优 JDK 21 或更高版本（脚本可自动下载） 已安装 OpenSSL 真分布式部署需要：  服务器间网络互通 已配置 SSH 互信（无密码登录） 目标路径有写入权限     说明：
- 本地伪分布式 (--nodes N 或全部 127.0.0.1) 在缺失 jdk/ 且使用 -s/--silent 时，会自动下载 JDK。 真分布式 -s/--silent 不会自动为目标节点选择架构并下载 JDK；请预先准备 Java，或使用交互模式选择目标架构后下载 bundled JDK。   快速开始 #  交互式安装（推荐） #  交互式模式会引导您输入集群配置信息：
-cd /data/easysearch bin/initialize-cluster.sh 脚本会依次提示您输入：
- 集群名称：默认为 easysearch-cluster 证书域名：默认为 infini."
+ 前置要求 #   已完成系统调优 推荐使用 Easysearch 2.5.0 Bundle 包内置的 JDK 25；no-JDK 包请预先准备 JDK 25。JDK 21 仅用于兼容已有客户环境，见安装指南 已安装 OpenSSL 真分布式部署需要：  服务器间网络互通 已配置 SSH 互信（无密码登录） 目标路径有写入权限     说明：
+ 新部署推荐使用内置 JDK 25 的 Bundle 包，或预先准备 JDK 25；脚本在需要下载 JDK 时默认下载 JDK 25。 本地伪分布式 (--nodes N 或全部 127.0.0.1) 在缺失 jdk/ 且使用 -s/--silent 时，会自动下载 JDK。 真分布式 -s/--silent 不会自动为目标节点选择架构并下载 JDK；请预先准备 Java，或使用交互模式选择目标架构后下载 bundled JDK。   快速开始 #  交互式安装（推荐） #  交互式模式会引导您输入集群配置信息："
 ---
 
 
@@ -19,7 +17,7 @@ cd /data/easysearch bin/initialize-cluster.sh 脚本会依次提示您输入：
 ## 前置要求
 
 1. 已完成[系统调优]({{< relref "/docs/deployment/config/settings" >}})
-2. JDK 21 或更高版本（脚本可自动下载）
+2. 推荐使用 Easysearch 2.5.0 Bundle 包内置的 JDK 25；no-JDK 包请预先准备 JDK 25。JDK 21 仅用于兼容已有客户环境，见[安装指南]({{< relref "./_index.md" >}})
 3. 已安装 OpenSSL
 4. 真分布式部署需要：
    - 服务器间网络互通
@@ -27,6 +25,7 @@ cd /data/easysearch bin/initialize-cluster.sh 脚本会依次提示您输入：
    - 目标路径有写入权限
 
 > 说明：
+> - 新部署推荐使用内置 JDK 25 的 Bundle 包，或预先准备 JDK 25；脚本在需要下载 JDK 时默认下载 JDK 25。
 > - 本地伪分布式 (`--nodes N` 或全部 `127.0.0.1`) 在缺失 `jdk/` 且使用 `-s/--silent` 时，会自动下载 JDK。
 > - 真分布式 `-s/--silent` 不会自动为目标节点选择架构并下载 JDK；请预先准备 Java，或使用交互模式选择目标架构后下载 bundled JDK。
 

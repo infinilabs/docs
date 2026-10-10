@@ -4,7 +4,7 @@ date: 0001-01-01
 summary: "安装指南 #  本章介绍如何安装和运行 Easysearch。无论是开发测试还是生产部署，都可以在这里找到适合的安装方式。
  快速开始 #  最快的方式是使用一键安装脚本，在 Linux 上几分钟内完成安装：
 # 1. 安装 Easysearch（默认安装到 /data/easysearch） curl -sSL http://get.infini.cloud | bash -s -- -p easysearch # 2. 初始化（生成证书和 admin 密码） cd /data/easysearch &amp;&amp; bin/initialize.sh -s # 3. 调整目录权限 chown -R easysearch:easysearch /data/easysearch # 4. 以 easysearch 用户启动 su easysearch -c &#34;/data/easysearch/bin/easysearch -d&#34; # 5. 验证（使用初始化时终端输出的密码） curl -ku admin:YOUR_PASSWORD https://localhost:9200  安全提示：初始化完成后 admin 密码将直接输出在终端中，只显示一次，请务必妥善保存。也可以通过环境变量 EASYSEARCH_INITIAL_ADMIN_PASSWORD 预先指定自定义密码（需要 1.8.2 及以后版本）。
- 展开查看完整安装演示代码 # 使用 root 用户操作 whoami &amp;&amp; cat /etc/redhat-release &amp;&amp; uptime # 安装 JDK yum -y install java-11 # 创建 easysearch 用户 groupadd -g 602 easysearch useradd -u 602 -g easysearch -m -d /home/easysearch -c &#39;easysearch&#39; -s /bin/bash easysearch # 安装 Easysearch curl -sSL http://get."
+ 展开查看完整安装演示代码 # 使用 root 用户操作 whoami &amp;&amp; cat /etc/redhat-release &amp;&amp; uptime # no-JDK 包：提前安装适合本机系统和架构的 JDK 25（Bundle 包已内置，跳过此步） # 以下假设 JDK 已解压到 /usr/local/jdk /usr/local/jdk/bin/java -version # 创建 easysearch 用户 groupadd -g 602 easysearch useradd -u 602 -g easysearch -m -d /home/easysearch -c &#39;easysearch&#39; -s /bin/bash easysearch # 安装 Easysearch curl -sSL http://get."
 ---
 
 
@@ -42,15 +42,16 @@ curl -ku admin:YOUR_PASSWORD https://localhost:9200
 ```bash
 # 使用 root 用户操作
 whoami && cat /etc/redhat-release && uptime
-# 安装 JDK
-yum -y install java-11
+# no-JDK 包：提前安装适合本机系统和架构的 JDK 25（Bundle 包已内置，跳过此步）
+# 以下假设 JDK 已解压到 /usr/local/jdk
+/usr/local/jdk/bin/java -version
 # 创建 easysearch 用户
 groupadd -g 602 easysearch
 useradd -u 602 -g easysearch -m -d /home/easysearch -c 'easysearch' -s /bin/bash easysearch
 # 安装 Easysearch
 curl -sSL http://get.infini.cloud | bash -s -- -p easysearch
-# 配置 Easysearch JDK
-ln -s /usr/lib/jvm/java-11-openjdk-11.0.20.0.8-1.el7_9.x86_64 /data/easysearch/jdk
+# 配置 Easysearch JDK（Bundle 包已内置 JDK，跳过此步）
+ln -s /usr/local/jdk /data/easysearch/jdk
 sed -i 's/1g/512m/g' /data/easysearch/config/jvm.options
 # 初始化
 cd /data/easysearch && bin/initialize.sh -s
@@ -78,14 +79,28 @@ Easysearch 支持 Linux（x86_64 / ARM64 / LoongArch）、macOS 和 Windows。�
 
 | Easysearch 版本 | JDK 最低要求 | 推荐 JDK | 说明 |
 |:----------------|:-----------:|:--------:|------|
-| **2.0.3 及以上** | JDK 21 | JDK 21+ | 新版本强制要求 |
+| **2.5.0** | JDK 21（兼容） | **JDK 25** | Bundle 包默认内置 JDK 25；JDK 21 用于兼容已有客户环境 |
+| **2.0.3 ~ 2.4.x** | JDK 21 | JDK 21 | 历史版本要求，其他运行时以对应版本说明为准 |
 | **1.x ~ 2.0.2** | JDK 11 | JDK 17 | JDK 15+ 性能更优 |
 
-> **推荐使用 Bundle 包**（内置 JDK），免去手动配置 JDK 的步骤。Bundle 包[下载地址](https://release.infinilabs.com/easysearch/stable/bundle/)。
+> **推荐使用 Bundle 包**：Easysearch 2.5.0 默认内置 **JDK 25**，免去手动配置 JDK 的步骤。Bundle 包[下载地址](https://release.infinilabs.com/easysearch/stable/bundle/)。
 >
-> 如需使用自行安装的 JDK，有两种方式：
-> 1. 将 `JAVA_HOME` 环境变量指向 JDK 安装路径
-> 2. 将 JDK 软链接到 Easysearch 安装目录下并命名为 `jdk`
+> 新部署和 no-JDK 包推荐使用 JDK 25。JDK 21 仅作为已有客户部署且暂不方便升级 JDK 的兼容选项，
+> 不作为新部署推荐版本；兼容 JDK 21 不代表任意更高 JDK 版本都受支持。
+>
+> 如需使用自行安装的 JDK，可将其放置或软链接为安装目录下的 `jdk`，或在没有 `jdk/` 时设置 Java 环境变量。
+> Linux/macOS 启动器的选择顺序为 `jdk/` > `ES_JAVA_HOME` > `JAVA_HOME`；Windows `bin\easysearch.bat` 使用 `jdk/` > `JAVA_HOME`。
+> 安装目录已有 `jdk/` 时，设置环境变量不会切换运行时。
+
+2.5.0 启动时会显式检查 JDK SecurityManager 已禁用。请保留发行包的 `config/jvm.options` 中
+`-Djava.security.manager=disallow` 和对应 JDK 的 `-javaagent` 参数。升级并保留旧配置时，需同步新包的必要 JVM 参数和 agent 文件名，
+详见 [JVM 安全检查]({{< relref "../config/node-settings/jvm.md" >}})与[升级手册]({{< relref "../../upgrade/_index.md" >}})。
+
+`bin/initialize.sh` 会优先解压随包提供的 `jdk.tar.gz` 或使用已有的 `jdk/`；没有内置 JDK 时，
+可复用 `JAVA_HOME` 指向的 JDK 25 或兼容运行时 JDK 21。需要下载时，Linux/macOS 的 x86_64、ARM64 及 Linux LoongArch
+平台默认从官网下载 JDK 25；交互模式需确认，`-s` 模式会自动确认。
+龙芯默认下载 `loongson25.5.22-fx-jdk25.0.4_7-linux-loongarch64.tar.gz`，另一种 `glibc2.34` 构建的选择见
+[龙芯平台安装]({{< relref "./ciip/loongson.md" >}})。
 
 ### JVM 堆内存
 

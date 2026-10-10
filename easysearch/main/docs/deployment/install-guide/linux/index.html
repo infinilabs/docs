@@ -3,13 +3,13 @@
  curl -sSL http://get.infini.cloud | bash -s -- -p easysearch  脚本的可选参数如下：
 -v [版本号]（默认采用最新版本号）
 -d [安装目录]（默认安装到/data/easysearch）
- bundle 包运行 #   bundle 是内置 JDK 的安装包，不需要额外下载 JDK，可直接解压运行。
+ bundle 包运行 #   Easysearch 2.5.0 Bundle 包默认内置 JDK 25，推荐使用，不需要额外下载 JDK。
  # 创建 easysearch 用户 groupadd -g 602 easysearch useradd -u 602 -g easysearch -m -d /home/easysearch -c 'easysearch' -s /bin/bash easysearch # 创建 easysearch 安装目录 mkdir -p /data/easysearch # 下载 bundle 包并解压到安装目录 wget -O - https://release."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content="Linux"><meta property="og:description" content="Linux 环境下使用 Easysearch #   为了安全起见，Easysearch 不支持通过 root 身份来运行，需要新建普通用户，如 easysearch 用户来快速运行 Easysearch。
  一键安装 #   通过我们提供的自动安装脚本可自动下载最新版本的 easysearch 进行解压安装，默认解压到 /data/easysearch
  curl -sSL http://get.infini.cloud | bash -s -- -p easysearch  脚本的可选参数如下：
 -v [版本号]（默认采用最新版本号）
 -d [安装目录]（默认安装到/data/easysearch）
- bundle 包运行 #   bundle 是内置 JDK 的安装包，不需要额外下载 JDK，可直接解压运行。
+ bundle 包运行 #   Easysearch 2.5.0 Bundle 包默认内置 JDK 25，推荐使用，不需要额外下载 JDK。
  # 创建 easysearch 用户 groupadd -g 602 easysearch useradd -u 602 -g easysearch -m -d /home/easysearch -c 'easysearch' -s /bin/bash easysearch # 创建 easysearch 安装目录 mkdir -p /data/easysearch # 下载 bundle 包并解压到安装目录 wget -O - https://release."><meta property="og:type" content="article"><meta property="og:url" content="https://docs.infinilabs.com/easysearch/main/docs/deployment/install-guide/linux/"><title>Linux | INFINI Easysearch (main) | 分布式搜索引擎</title><link rel=manifest href=/easysearch/main/manifest.json><link rel=icon href=/easysearch/main/favicon.png type=image/x-icon><link rel=stylesheet href=/easysearch/main/book.min.a5477dc69cdc226836851fe1ccbae76d703e3ebf0cb670e9e513b00935608503.css integrity="sha256-pUd9xpzcImg2hR/hzLrnbXA+Pr8MtnDp5ROwCTVghQM="><link rel=stylesheet type=text/css href=https://docs.infinilabs.com/easysearch/main/css/asciinema-player.css><script defer src=https://docs.infinilabs.com/easysearch/main/js/jquery-2.x.min.js></script><script defer src=https://docs.infinilabs.com/easysearch/main/js/doc.js></script><script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?64b9322783bb21716d701b15fb0b1e82";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script></head><body><input type=checkbox class="hidden toggle" id=menu-control>
 <input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><nav><h2 class=book-brand><a href=/easysearch/main><img src=/easysearch/main/img/logo-zh.svg alt=Logo></a></h2><div id=searchbox style=margin-bottom:10px;height:36px;width:100%></div><script>function waitForShadow(host,callback){const timer=setInterval(()=>{if(host.shadowRoot){clearInterval(timer);callback(host.shadowRoot);}},50);}
 const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{const style=document.createElement('style');style.textContent=`
@@ -245,7 +245,7 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
 <a class=anchor href=#linux-%e7%8e%af%e5%a2%83%e4%b8%8b%e4%bd%bf%e7%94%a8-easysearch>#</a></h1><blockquote><p>为了安全起见，Easysearch 不支持通过 root 身份来运行，需要新建普通用户，如 <code>easysearch</code> 用户来快速运行 Easysearch。</p></blockquote><h2 id=一键安装>一键安装
 <a class=anchor href=#%e4%b8%80%e9%94%ae%e5%ae%89%e8%a3%85>#</a></h2><blockquote><p>通过我们提供的自动安装脚本可自动下载最新版本的 easysearch 进行解压安装，默认解压到 /data/easysearch</p></blockquote><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>curl -sSL http://get.infini.cloud | bash -s -- -p easysearch
 </code></pre></div><blockquote><p>脚本的可选参数如下：<br>    -v [版本号]（默认采用最新版本号）<br>    -d [安装目录]（默认安装到/data/easysearch）</p></blockquote><h2 id=bundle-包运行>bundle 包运行
-<a class=anchor href=#bundle-%e5%8c%85%e8%bf%90%e8%a1%8c>#</a></h2><blockquote><p>bundle 是内置 JDK 的安装包，不需要额外下载 JDK，可直接解压运行。</p></blockquote><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># 创建 easysearch 用户</span>
+<a class=anchor href=#bundle-%e5%8c%85%e8%bf%90%e8%a1%8c>#</a></h2><blockquote><p>Easysearch 2.5.0 Bundle 包默认内置 JDK 25，推荐使用，不需要额外下载 JDK。</p></blockquote><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># 创建 easysearch 用户</span>
 groupadd -g <span style=color:#bd93f9>602</span> easysearch
 useradd -u <span style=color:#bd93f9>602</span> -g easysearch -m -d /home/easysearch -c <span style=color:#f1fa8c>&#39;easysearch&#39;</span> -s /bin/bash easysearch
 <span style=color:#6272a4># 创建 easysearch 安装目录</span>
@@ -261,8 +261,8 @@ su easysearch -c <span style=color:#f1fa8c>&#34;/data/easysearch/bin/easysearch 
 <span style=color:#6272a4># 停止 Easysearch</span>
 <span style=color:#8be9fd;font-style:italic>kill</span> -9 <span style=color:#ff79c6>$(</span>cat pid<span style=color:#ff79c6>)</span>
 </code></pre></div><h2 id=手动安装>手动安装
-<a class=anchor href=#%e6%89%8b%e5%8a%a8%e5%ae%89%e8%a3%85>#</a></h2><p>以 root 用户进行下面的操作</p><ol><li>下载 JDK</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4>#下载JDK并存储到/usr/src目录</span>
-wget -N https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_linux-x64_bin.tar.gz -P /usr/src
+<a class=anchor href=#%e6%89%8b%e5%8a%a8%e5%ae%89%e8%a3%85>#</a></h2><p>以 root 用户进行下面的操作</p><ol><li>下载 JDK 25（新部署推荐；JDK 21 仅用于兼容已有客户环境）</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4>#下载 JDK 25 并存储到 /usr/src 目录（Linux x86_64 示例）</span>
+wget -N https://release.infinilabs.com/easysearch/jdk/25/graalvm-jdk-25_linux-x64_bin.tar.gz -P /usr/src
 </code></pre></div><ol start=2><li>创建 JDK 解压后存储路径</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>mkdir -p /usr/local/jdk
 </code></pre></div><ol start=3><li>解压文件到创建好的目录</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>tar -zxf /usr/src/graalvm*.tar.gz -C /usr/local/jdk --strip-components <span style=color:#bd93f9>1</span>
 </code></pre></div><ol start=4><li>配置环境变量</li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4>#下载文件到/etc/profile.d</span>

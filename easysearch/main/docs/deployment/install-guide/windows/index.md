@@ -2,7 +2,7 @@
 title: "Windows"
 date: 0001-01-01
 summary: "Windows 环境下使用 Easysearch #  目前，有多种方案可以在 Windows 下体验 Easysearch。
-前置要求 #   Windows 10 / Windows Server 2016 或更高版本 至少 4 GB 可用内存 JDK 11+（推荐 JDK 17+，2.0.3 及以上版本要求 JDK 21+）。Bundle 包已内置 JDK，无需单独安装。  方案一：Docker 安装（推荐） #  如果您的 Windows 环境上有 Docker Desktop，可以用最简单的方式启动：
+前置要求 #   Windows 10 / Windows Server 2016 或更高版本 至少 4 GB 可用内存 Easysearch 2.5.0 推荐使用 JDK 25，Bundle 包默认内置 JDK 25；JDK 21 仅用于兼容已有客户环境。详细要求见安装指南。  方案一：Docker 安装（推荐） #  如果您的 Windows 环境上有 Docker Desktop，可以用最简单的方式启动：
 docker run -d --name easysearch ` -p 9200:9200 ` -e &#34;EASYSEARCH_INITIAL_ADMIN_PASSWORD=EasysearchP@ssw0rd&#34; ` -e &#34;ES_JAVA_OPTS=-Xms512m -Xmx512m&#34; ` infinilabs/easysearch:latest  详细 Docker 配置请参考 Docker 环境下使用 Easysearch。
  方案二：手工安装（无 HTTPS） #   由于 Windows 环境下默认没有 OpenSSL，生成证书不太方便。如果仅用于开发测试，可以先关闭安全模块快速体验。生产环境请务必启用安全功能（参见方案三）。"
 ---
@@ -16,7 +16,7 @@ docker run -d --name easysearch ` -p 9200:9200 ` -e &#34;EASYSEARCH_INITIAL_ADMI
 
 - Windows 10 / Windows Server 2016 或更高版本
 - 至少 4 GB 可用内存
-- JDK 11+（推荐 JDK 17+，2.0.3 及以上版本要求 JDK 21+）。Bundle 包已内置 JDK，无需单独安装。
+- Easysearch 2.5.0 推荐使用 JDK 25，Bundle 包默认内置 JDK 25；JDK 21 仅用于兼容已有客户环境。详细要求见[安装指南]({{< relref "./_index.md" >}})。
 
 ## 方案一：Docker 安装（推荐）
 
@@ -37,9 +37,9 @@ docker run -d --name easysearch `
 > 由于 Windows 环境下默认没有 OpenSSL，生成证书不太方便。如果仅用于开发测试，可以先关闭安全模块快速体验。生产环境**请务必启用安全功能**（参见方案三）。
 
 1. 手工下载 [Easysearch](https://release.infinilabs.com/easysearch/stable/easysearch-{{< data "quick_start.easysearch.version" >}}-windows-amd64.zip)，解压到目标目录（如 `D:\easysearch`）。
-2. 手工下载 [JDK](https://release.infinilabs.com/easysearch/jdk/21/graalvm-jdk-21_windows-x64_bin.zip)，解压到 Easysearch 安装目录下，并将目录名称重命名为 `jdk`。
+2. 手工下载 [JDK 25](https://release.infinilabs.com/easysearch/jdk/25/graalvm-jdk-25_windows-x64_bin.zip)，解压到 Easysearch 安装目录下，并将目录名称重命名为 `jdk`。
 
-> 也可以下载 Bundle 包（内置 JDK），省去手动配置 JDK 的步骤。Bundle 包[下载地址](https://release.infinilabs.com/easysearch/stable/bundle/)。
+> 推荐下载 Bundle 包（2.5.0 默认内置 JDK 25），省去手动配置 JDK 的步骤。Bundle 包[下载地址](https://release.infinilabs.com/easysearch/stable/bundle/)。
 
 3. 用记事本打开 `config\easysearch.yml`，修改配置：
 
@@ -88,8 +88,8 @@ curl -sSL http://get.infini.cloud | bash -s -- -p easysearch -d /d/data/easysear
 3. 下载并配置 JDK
 
 ```bash
-# 下载 JDK
-curl -# https://release.infinilabs.com/easysearch/jdk/21/graalvm-jdk-21_windows-x64_bin.zip -o /d/data/easysearch/jdk.zip
+# 下载 JDK 25
+curl -# https://release.infinilabs.com/easysearch/jdk/25/graalvm-jdk-25_windows-x64_bin.zip -o /d/data/easysearch/jdk.zip
 
 # 解压并重命名
 cd /d/data/easysearch && unzip -q jdk.zip

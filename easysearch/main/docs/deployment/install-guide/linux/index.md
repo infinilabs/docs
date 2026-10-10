@@ -6,7 +6,7 @@ summary: "Linux 环境下使用 Easysearch #   为了安全起见，Easysearch �
  curl -sSL http://get.infini.cloud | bash -s -- -p easysearch  脚本的可选参数如下：
 -v [版本号]（默认采用最新版本号）
 -d [安装目录]（默认安装到/data/easysearch）
- bundle 包运行 #   bundle 是内置 JDK 的安装包，不需要额外下载 JDK，可直接解压运行。
+ bundle 包运行 #   Easysearch 2.5.0 Bundle 包默认内置 JDK 25，推荐使用，不需要额外下载 JDK。
  # 创建 easysearch 用户 groupadd -g 602 easysearch useradd -u 602 -g easysearch -m -d /home/easysearch -c &#39;easysearch&#39; -s /bin/bash easysearch # 创建 easysearch 安装目录 mkdir -p /data/easysearch # 下载 bundle 包并解压到安装目录 wget -O - https://release."
 ---
 
@@ -29,7 +29,7 @@ curl -sSL http://get.infini.cloud | bash -s -- -p easysearch
 
 ## bundle 包运行
 
-> bundle 是内置 JDK 的安装包，不需要额外下载 JDK，可直接解压运行。
+> Easysearch 2.5.0 Bundle 包默认内置 JDK 25，推荐使用，不需要额外下载 JDK。
 
 ```bash
 # 创建 easysearch 用户
@@ -53,11 +53,11 @@ kill -9 $(cat pid)
 
 以 root 用户进行下面的操作
 
-1. 下载 JDK
+1. 下载 JDK 25（新部署推荐；JDK 21 仅用于兼容已有客户环境）
 
 ```bash
-#下载JDK并存储到/usr/src目录
-wget -N https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_linux-x64_bin.tar.gz -P /usr/src
+#下载 JDK 25 并存储到 /usr/src 目录（Linux x86_64 示例）
+wget -N https://release.infinilabs.com/easysearch/jdk/25/graalvm-jdk-25_linux-x64_bin.tar.gz -P /usr/src
 ```
 
 2. 创建 JDK 解压后存储路径

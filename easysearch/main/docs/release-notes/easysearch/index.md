@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #   新增 ingest-pattern-tagger 插件：写入时为日志文档识别 LogPilot Pattern 并打标（pattern_tagger 摄取处理器，写入 @pattern_id / @pattern_hash / @pattern_severity / @pattern_status 等字段），可选变量抽取与高置信度丢弃原始消息以节省存储，并配套 pattern_restore 搜索管道处理器在查询时从模板 + 变量还原原始消息。  Bug fix #  Improvements #  2.4.0 (2026-09-18) #  Breaking changes #  Features #   新增 Easysearch 2.4.0 原生 HNSW 向量搜索：内置 dense_vector、Lucene HNSW、query-level knn 和顶层 knn，新建原生 HNSW 索引无需安装 k-NN 插件。  支持 1–4096 维 float 向量、cosine、dot_product、l2_norm、max_inner_product，以及 m、ef_construction 和查询 num_candidates 参数。 mapping 必须显式设置 dims 和 index: true。 省略 index_options 时，Easysearch 2."
+2.5.0 (In development) #  Breaking changes #   JVM 安全检查改用随发行包提供的安全 agent，停止使用 JDK 自身的 SecurityManager。启动时必须保留 -Djava.security.manager=disallow 和对应运行时的 -javaagent 参数；缺少必要配置或已安装 JDK SecurityManager 时拒绝启动。 升级时保留旧 jvm.options 或自定义配置目录的用户，需同步新包的必要参数和 agent 文件名，详见 2.5.0 升级说明。 安全 agent 的检查范围与旧 SecurityManager 不完全相同，第三方插件需按新的运行时检查范围验证； security.enabled: false 不会关闭安全 agent 或取消 SecurityManager 禁用校验，详见 JVM 安全检查。  Features #   默认运行时升级至 JDK 25，Bundle 包默认内置 JDK 25，新部署与 no-JDK 包推荐使用 JDK 25。 为已部署 JDK 21 且暂不方便升级 JDK 的客户环境保留兼容能力；JDK 21 同样使用安全 agent，并禁用 JDK SecurityManager。 新增 ingest-pattern-tagger 插件：写入时为日志文档识别 LogPilot Pattern 并打标（pattern_tagger 摄取处理器，写入 @pattern_id / @pattern_hash / @pattern_severity / @pattern_status 等字段），可选变量抽取与高置信度丢弃原始消息以节省存储，并配套 pattern_restore 搜索管道处理器在查询时从模板 + 变量还原原始消息。  Bug fix #   修复启动失败后，残留的非守护线程可能导致进程持续运行的问题；现在启动失败会以非零状态退出，并执行正常的 JVM shutdown hooks。  Improvements #   initialize."
 ---
 
 
@@ -10,13 +10,34 @@ Latest (In development) #  Breaking changes #  Features #   新增 ingest-patter
 
 这里是 INFINI Easysearch 历史版本发布的相关说明。
 
-## Latest (In development)
+## 2.5.0 (In development)
+
 ### Breaking changes
+
+- JVM 安全检查改用随发行包提供的安全 agent，停止使用 JDK 自身的 SecurityManager。启动时必须保留
+  `-Djava.security.manager=disallow` 和对应运行时的 `-javaagent` 参数；缺少必要配置或已安装 JDK SecurityManager 时拒绝启动。
+  升级时保留旧 `jvm.options` 或自定义配置目录的用户，需同步新包的必要参数和 agent 文件名，详见
+  [2.5.0 升级说明]({{< relref "/docs/upgrade/_index.md" >}})。
+- 安全 agent 的检查范围与旧 SecurityManager 不完全相同，第三方插件需按新的运行时检查范围验证；
+  `security.enabled: false` 不会关闭安全 agent 或取消 SecurityManager 禁用校验，详见
+  [JVM 安全检查]({{< relref "/docs/deployment/config/node-settings/jvm.md" >}})。
+
 ### Features
+
+- 默认运行时升级至 **JDK 25**，Bundle 包默认内置 JDK 25，新部署与 no-JDK 包推荐使用 JDK 25。
+  为已部署 JDK 21 且暂不方便升级 JDK 的客户环境保留兼容能力；JDK 21 同样使用安全 agent，并禁用 JDK SecurityManager。
 - 新增 [`ingest-pattern-tagger` 插件]({{< relref "/docs/features/ingest-pipelines/index-processors/pattern-tagger.md" >}})：写入时为日志文档识别 LogPilot Pattern 并打标（`pattern_tagger` 摄取处理器，写入 `@pattern_id` / `@pattern_hash` / `@pattern_severity` / `@pattern_status` 等字段），可选变量抽取与高置信度丢弃原始消息以节省存储，并配套 [`pattern_restore` 搜索管道处理器]({{< relref "/docs/features/query-dsl/search-pipelines/pattern-restore-processor.md" >}})在查询时从模板 + 变量还原原始消息。
+
 ### Bug fix
+
+- 修复启动失败后，残留的非守护线程可能导致进程持续运行的问题；现在启动失败会以非零状态退出，并执行正常的 JVM shutdown hooks。
+
 ### Improvements
 
+- `initialize.sh` 与 `initialize-cluster.sh` 在 Linux/macOS 的 x86_64、ARM64 及 Linux LoongArch 平台需要下载 JDK 时，默认从官网下载 JDK 25；
+  继续保留已有 JDK 21 环境的兼容能力。
+- Linux/macOS 启动脚本预先提取并复用 TLS 所需的 Conscrypt 原生库；首次提取时，启动用户需能写入
+  `modules/security/native/` 目录，详见[JVM 配置]({{< relref "/docs/deployment/config/node-settings/jvm.md" >}})。
 
 ## 2.4.0 (2026-09-18)
 ### Breaking changes
