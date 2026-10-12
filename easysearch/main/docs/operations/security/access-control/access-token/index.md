@@ -695,6 +695,132 @@ curl -k -u admin:admin -X DELETE \
 4. 新调用方应优先使用 `endpoints`，以便在首个地址不可用时尝试其他节点。
 5. `endpoints` 中的成员来自节点的 HTTP publish address，因此成员可能是 IPv4、hostname 或 IPv6。
 6. `endpoints` 只反映节点发布地址，调用方仍需确保这些地址对自身网络环境可达。
+7. 当前实现统一按签发 token 的节点配置为地址添加协议：`security.ssl.http.enabled=true` 时使用 `https`，关闭时使用 `http`。
+   如果集群各节点的 HTTP TLS 设置不同，应核对目标节点的实际协议；接口不会逐节点检查 TLS 开关。
+
+## 获取节点 enrollment 配置
+
+`POST /_cluster/enroll/node` 返回节点加入集群所需的配置、证书材料和只读引导用的 access token。这个请求用于获取引导信息，
+实际启动新节点、写入配置和加入集群仍由调用方完成。
+
+安全模块必须启用，且不能处于 `security.ssl_only=true` 的模式；仅 SSL 模式不会注册此接口。
+HTTP TLS 可以关闭，节点间通信的 transport TLS 仍须开启并提供完整材料。
+
+### 请求
+
+先通过 `POST /_cluster/enroll/token` 获取 enrollment token，并按上节说明 Base64 解码顶层 `token`。
+签发请求需要具有该安全 REST API 的访问权限；角色访问由 `security.restapi.roles_enabled` 及相应的接口禁用配置控制，也支持管理员证书认证。
+取解码后 payload 的 `access_token` 作为请求头 `X-API-TOKEN`，请求体可以为空。
+不要把顶层 Base64 字符串或通用 Access Token 直接作为此请求的 token。
+
+```bash
+curl -X POST "http://192.168.1.10:9200/_cluster/enroll/node" \
+  -H "X-API-TOKEN: <解码后 payload 中的 access_token>"
+```
+
+上例对应 HTTP TLS 关闭的节点。开启时使用 payload 中返回的 `https` 地址，并为客户端配置相应 CA 信任。
+
+### 成功响应
+
+以下为 HTTP TLS 关闭时的主要响应字段示例，省略了其他安全配置、JDK 和健康信息。
+尖括号中的值为占位符；证书字段实际返回 PEM 内容，包括 JSON 转义后的换行。
+
+```json
+{
+  "cluster_name": "easysearch_test",
+  "cluster_uuid": "3LvNNqCXQ1Kq2zn6wyuGwg",
+  "security.enabled": true,
+  "security.ssl.http.enabled": false,
+  "security.ssl.transport.enabled": true,
+  "security.ssl_only": false,
+  "security.ssl.transport.cert_file": "<PEM 节点证书内容>",
+  "security.ssl.transport.key_file": "<PEM 节点私钥内容>",
+  "security.ssl.transport.ca_file": "<PEM CA 内容>",
+  "seed_addresses": ["192.168.1.10:9300", "192.168.1.11:9300"],
+  "version": "2.5.0",
+  "plugins": [],
+  "access_token": "<节点引导用的 access token>"
+}
+```
+
+字段名中带点的键是**顶层字段名**，例如应读取 `response["security.ssl.transport.enabled"]`。
+安全配置值来自处理请求的节点；未显式配置的开关按该配置的默认值返回。
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `cluster_name`、`cluster_uuid` | 字符串 | 集群名称和唯一标识 |
+| `security.enabled` | 布尔值 | 安全模块开关，配置默认值为 `true` |
+| `security.ssl.http.enabled` | 布尔值 | HTTP TLS 开关，配置默认值为 `false` |
+| `security.ssl.transport.enabled` | 布尔值 | Transport TLS 开关，配置默认值为 `true`；2.5.0 新增返回字段 |
+| `security.ssl_only` | 布尔值 | 仅 SSL 模式开关，配置默认值为 `false`；2.5.0 新增返回字段。当前此接口在仅 SSL 模式下不可用 |
+| `security.ssl.http_ca_file` | 字符串 | HTTP 信任材料的 PEM 内容，仅 HTTP TLS 开启时返回；优先取配置的 CA，存在回退到节点证书的情况，见下文 |
+| `security.ssl.http.cert_file`、`security.ssl.http.key_file` | 字符串 | HTTP 节点证书、私钥的 PEM 内容，仅 HTTP TLS 开启时返回 |
+| `security.ssl.transport.cert_file`、`security.ssl.transport.key_file`、`security.ssl.transport.ca_file` | 字符串 | Transport 节点证书、私钥、CA 的 PEM 内容，成功响应中必需 |
+| `security.allow_default_init_securityindex` | 布尔值 | 默认安全索引初始化开关 |
+| `security.nodes_dn` | 字符串数组 | 节点静态配置中的 DN 列表，不反映动态 nodes_dn API 管理的值 |
+| `security.restapi.roles_enabled` | 字符串数组 | 允许访问安全 REST API 的角色 |
+| `security.system_indices.enabled` | 布尔值 | 系统索引保护开关 |
+| `security.system_indices.indices` | 字符串数组 | 系统索引模式 |
+| `security.ssl.http.clientauth_mode` | 字符串 | HTTP 客户端证书认证模式；HTTP TLS 关闭时该字段仍返回，但不表示启用了客户端证书认证 |
+| `security.authcz.admin_dn` | 字符串数组 | 管理员证书 DN 列表 |
+| `seed_addresses` | 字符串数组 | 去重并排序后的节点 transport 发布地址，用于集群发现；不是 HTTP 访问地址 |
+| `version`、`plugins` | 字符串、字符串数组 | 响应节点的版本及插件目录中的插件名称列表；内置 modules 不计入该列表 |
+| `jdk` | 对象 | 响应节点的 JDK 信息，包含 `version` 和 `vendor` |
+| `health` | 对象 | 当前集群状态，包含状态、节点数和分片统计 |
+| `access_token` | 字符串 | 新签发或复用的 enrollment access token，权限与续期规则见上文；它与请求头中的 enrollment token 用途不同 |
+
+### HTTP TLS 与证书材料处理
+
+从 2.5.0 起，`security.ssl.http.enabled=false` 时不要求 HTTP CA、证书或私钥，响应会省略这三个 HTTP 材料字段，
+而不是返回 `null` 或空字符串。只配置完整的 transport PEM 三件套也能获取 enrollment 配置。
+调用方应先检查 HTTP TLS 开关，再按需读取 HTTP 材料；不要假定成功响应总包含它们。
+
+HTTP TLS 开启时，这三个 HTTP 材料字段仍是必需的。任一材料经过回退后仍无法取得，或读取文件、加载 keystore/truststore 时发生异常，会返回 `500`。
+HTTP 材料的读取顺序如下；使用 TLCP 时，相应的签名证书、签名私钥和可信 CA 文件优先于普通 PEM 配置。
+
+| 响应材料 | 读取顺序 |
+|----------|----------|
+| HTTP 节点证书 | HTTP 证书文件 → HTTP keystore → transport keystore |
+| HTTP 私钥 | HTTP 私钥文件 → HTTP keystore → transport keystore |
+| HTTP CA 字段 | HTTP CA 文件 → HTTP 节点证书文件 → HTTP truststore → 按 HTTP 节点证书的读取规则回退 |
+
+因此，未单独配置 HTTP CA 文件不一定报错；`security.ssl.http_ca_file` 可能包含回退取得的节点证书，不能仅根据字段名认定它是独立 CA 证书。
+该响应字段名与节点配置项 `security.ssl.http.ca_file` 不同。接口不会自动把 transport PEM 三件套作为 HTTP 材料；
+transport 材料在成功响应中始终必需。
+
+回退针对没有取得材料的情况；已配置文件读取或 keystore 加载发生异常时，接口返回错误，不会忽略异常继续尝试后续来源。
+文件形式的材料会被读取并转换为 PEM 文本，此接口不会完整验证证书链、有效期或私钥与证书是否匹配；
+不能以 enrollment 请求成功代替新节点的 TLS 配置验证。
+
+这些 `*_file` 字段返回的是**证书或私钥内容，不是源节点上的文件路径**。
+如果调用方据此生成新节点配置，需要把内容写到相应文件，并在新节点的配置项中填写文件路径。
+
+### 错误响应
+
+以下为节点 enrollment 处理逻辑返回的错误；HTTP 层的认证或请求检查也可能在进入该逻辑前返回错误。
+
+| HTTP | `error.type` | 场景 |
+|------|--------------|------|
+| `400` | `cluster_mismatch_exception` | token 对应的集群名称或 UUID 与当前集群不一致 |
+| `401` | `invalid_token_exception` | 缺少 `X-API-TOKEN`，或 token 无效、记录已被清理 |
+| `403` | `forbidden_token_scope` | token 的 scope 不允许节点 enrollment |
+| `410` | `token_expired_exception` | 找到了 token 记录，但已过期；检测到过期后尝试删除记录 |
+| `503` | `service_unavailable` | 集群 UUID 尚未提交 |
+| `500` | `internal_server_error` | 必需材料缺失、文件无法读取或解析，或签发引导 access token 时发生内部错误 |
+
+过期 token 如果已被定时清理或先前的校验删除，再次请求会返回 `401`；调用方需要重新签发 enrollment token。
+
+例如，HTTP TLS 开启且 HTTP CA 字段按上述回退规则仍无法取得时：
+
+```json
+{
+  "error": {
+    "type": "internal_server_error",
+    "reason": "missing enrollment material: security.ssl.http_ca_file"
+  },
+  "status": 500
+}
+```
 
 ## 实践建议
 
