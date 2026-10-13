@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-2.5.0 (In development) #  Breaking changes #   JVM 安全检查改用随发行包提供的安全 agent，停止使用 JDK 自身的 SecurityManager。启动时必须保留 -Djava.security.manager=disallow 和对应运行时的 -javaagent 参数；缺少必要配置或已安装 JDK SecurityManager 时拒绝启动。 升级时保留旧 jvm.options 或自定义配置目录的用户，需同步新包的必要参数和 agent 文件名，详见 2.5.0 升级说明。 安全 agent 的检查范围与旧 SecurityManager 不完全相同，第三方插件需按新的运行时检查范围验证； security.enabled: false 不会关闭安全 agent 或取消 SecurityManager 禁用校验，详见 JVM 安全检查。  Features #   默认运行时升级至 JDK 25，Bundle 包默认内置 JDK 25，新部署与 no-JDK 包推荐使用 JDK 25。 为已部署 JDK 21 且暂不方便升级 JDK 的客户环境保留兼容能力；JDK 21 同样使用安全 agent，并禁用 JDK SecurityManager。 新增 ingest-pattern-tagger 插件：写入时为日志文档识别 LogPilot Pattern 并打标（pattern_tagger 摄取处理器，写入 @pattern_id / @pattern_hash / @pattern_severity / @pattern_status 等字段），可选变量抽取与高置信度丢弃原始消息以节省存储，并配套 pattern_restore 搜索管道处理器在查询时从模板 + 变量还原原始消息。  Bug fix #   修复关闭 HTTP TLS 且仅配置 transport PEM 材料时，POST /_cluster/enroll/node 因要求 HTTP 证书而返回 500 的问题。 关闭 HTTP TLS 时，成功响应省略 HTTP CA、证书和私钥三个材料字段；开启时仍严格校验，详见 节点 enrollment 响应说明。 修复启动失败后，残留的非守护线程可能导致进程持续运行的问题；现在启动失败会以非零状态退出，并执行正常的 JVM shutdown hooks。  Improvements #   POST /_cluster/enroll/node 响应新增布尔字段 security."
+2.5.0 (In development) #  Breaking changes #   JVM 安全检查改用随发行包提供的安全 agent，停止使用 JDK 自身的 SecurityManager。启动时必须保留 -Djava.security.manager=disallow 和对应运行时的 -javaagent 参数；缺少必要配置或已安装 JDK SecurityManager 时拒绝启动。 升级时保留旧 jvm.options 或自定义配置目录的用户，需同步新包的必要参数和 agent 文件名，详见 2.5.0 升级说明。 安全 agent 的检查范围与旧 SecurityManager 不完全相同，第三方插件需按新的运行时检查范围验证； security.enabled: false 不会关闭安全 agent 或取消 SecurityManager 禁用校验，详见 JVM 安全检查。  Features #   默认运行时升级至 JDK 25，Bundle 包默认内置 JDK 25，新部署与 no-JDK 包推荐使用 JDK 25。 为已部署 JDK 21 且暂不方便升级 JDK 的客户环境保留兼容能力；JDK 21 同样使用安全 agent，并禁用 JDK SecurityManager。 新增 ingest-pattern-tagger 插件：写入时为日志文档识别 LogPilot Pattern 并打标（pattern_tagger 摄取处理器，写入 @pattern_id / @pattern_hash / @pattern_severity / @pattern_status 等字段），可选变量抽取与高置信度丢弃原始消息以节省存储，并配套 pattern_restore 搜索管道处理器在查询时从模板 + 变量还原原始消息。  Bug fix #   修复审计日志列表为空时，点击导出显示翻译 key 的问题，现在按界面语言显示无数据提示。 修复关闭 HTTP TLS 且仅配置 transport PEM 材料时，POST /_cluster/enroll/node 因要求 HTTP 证书而返回 500 的问题。 关闭 HTTP TLS 时，成功响应省略 HTTP CA、证书和私钥三个材料字段；开启时仍严格校验，详见 节点 enrollment 响应说明。 修复启动失败后，残留的非守护线程可能导致进程持续运行的问题；现在启动失败会以非零状态退出，并执行正常的 JVM shutdown hooks。  Improvements #   POST /_cluster/enroll/node 响应新增布尔字段 security."
 ---
 
 
@@ -30,6 +30,7 @@ summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布�
 
 ### Bug fix
 
+- 修复审计日志列表为空时，点击导出显示翻译 key 的问题，现在按界面语言显示无数据提示。
 - 修复关闭 HTTP TLS 且仅配置 transport PEM 材料时，`POST /_cluster/enroll/node` 因要求 HTTP 证书而返回 `500` 的问题。
   关闭 HTTP TLS 时，成功响应省略 HTTP CA、证书和私钥三个材料字段；开启时仍严格校验，详见
   [节点 enrollment 响应说明]({{< relref "/docs/operations/security/access-control/access-token.md" >}})。
