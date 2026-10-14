@@ -57,7 +57,20 @@ echo "EASYSEARCH_INITIAL_ADMIN_PASSWORD=$(printf "%s%s%s@%s" "$(tr -dc a-z</dev/
 sudo chown -R 602:602 /data/easysearch
 ```
 
+> **不要用 `--user` 指定运行用户。** 容器应保持默认（root）启动：entrypoint 会先把
+> `/app/easysearch/{data,config,logs}` 的属主修正为 `602:602`，再用 `gosu` 降权到 `easysearch`
+> （uid 602）启动 Java 进程。若以 `--user 602:602` 启动，`gosu` 无法降权，容器会报
+> `failed switching to "easysearch": operation not permitted` 后立即退出。
+> 因此上面的 `chown 602:602` 只是为保证数据目录可写（在容器无法自行 chown 的环境，如 rootless
+> Docker 或开启了 root squash 的 NFS 上才有必要），运行用户本身不需要、也不能改成 602。
+
 3. 从镜像初始化 config 目录
+
+> **必需步骤，不能省略。** 绑定挂载不像命名卷那样会自动填充镜像内容。如果挂载的 `config` 目录为空，
+> 镜像自带的 `config/security/` 会被整体遮住，容器初始化时找不到
+> `/app/easysearch/config/security/user.yml`，报 `ERROR: Admin password generation failed` 并立即退出
+> （`docker logs` 中可见 `No such file or directory`）。
+> 本步骤同时会把证书等初始化产物一并导出，复制出的文件属主为容器内 `easysearch` 用户（uid 602）。
 
 ```bash
 # 将镜像中的 config 目录复制到本地目录
@@ -84,11 +97,44 @@ docker run -d --restart always -p 9200:9200 \
 
 5. 升级 Easysearch 版本
 
+> **升级时必须同步版本相关的配置文件。** 镜像内置的 JDK 与 `config/jvm.options` 是按版本绑定的，
+> 而 `config` 目录被持久化，旧版本留下的 `jvm.options` 会让新版本容器起不来。
+> 以 `2.4.0`（内置 JDK 21）升到 `2.5.0`（内置 JDK 25）为例：
+> - 旧配置里的 `-Djava.security.manager=allow` 在 JDK 25 上直接报
+>   `A command line option has attempted to allow or enable the Security Manager`，VM 初始化失败；
+> - 新版新增的 `-javaagent:lib/easysearch-security-agent-<版本>.jar` 在旧配置里不存在，
+>   因此**只改前一个参数也不够**，会接着报 `java.lang.IllegalStateException: security agent is not loaded`。
+>
+> 结论：**不要只改单个参数，直接用新版本镜像同步整份 `jvm.options`**。
+
 ```bash
-# 先停止并删除正在运行的容器
+# 1. 先停止并删除正在运行的容器
 docker stop easysearch && docker rm easysearch
-# 再修改第 4 步中镜像的版本，重新运行命令即可
+
+# 2. 对比新旧 jvm.options 是否一致（容器内没有 diff/cmp，用 sha256sum 判断；哈希不同即需要同步）
+docker run --rm -v /data/easysearch/config:/c infinilabs/easysearch:<新版本> \
+  sha256sum /app/easysearch/config/jvm.options /c/jvm.options
+
+# 3. 用新版本镜像同步版本相关的配置
+#    该命令以容器内 easysearch 用户执行，属主保持 602，无需再 chown
+docker run --rm -v /data/easysearch/config:/c infinilabs/easysearch:<新版本> \
+  cp -f /app/easysearch/config/jvm.options /c/jvm.options
+
+# 4. 按第 4 步、使用新的镜像版本重新运行容器
 ```
+
+> 需要查看具体差异时，先把新版本的 `jvm.options` 复制出来，再在宿主机上比对（容器内没有 `diff`）：
+> ```bash
+> docker run --rm -v /data/easysearch:/work infinilabs/easysearch:<新版本> \
+>   cp -f /app/easysearch/config/jvm.options /work/jvm.options.new
+> diff /data/easysearch/config/jvm.options /data/easysearch/jvm.options.new
+> ```
+>
+> 用命名卷存 `config` 时（见文首"使用自定义密码及命名卷"）同样需要同步，把上面的
+> `-v /data/easysearch/config:/c` 换成 `-v easysearch-config:/c` 即可。
+>
+> 除 `jvm.options` 外，其它配置文件是否也要同步，按上面第 2 条命令的哈希比对结果判断；含自定义内容的
+> 文件（如 `easysearch.yml`）不要直接覆盖。
 
 ## 验证安装
 
@@ -112,7 +158,7 @@ docker run -d --name easysearch \
   --ulimit memlock=-1:-1 \
   --env-file ./.env -p 9200:9200 \
   -e ES_JAVA_OPTS="-Xms512m -Xmx512m" \
-  --health-cmd='curl -sku admin:${EASYSEARCH_INITIAL_ADMIN_PASSWORD} https://localhost:9200/_cluster/health || exit 1' \
+  --health-cmd='curl -skf -u "admin:${EASYSEARCH_INITIAL_ADMIN_PASSWORD}" https://localhost:9200/_cluster/health || exit 1' \
   --health-interval=30s \
   --health-timeout=10s \
   --health-retries=3 \
@@ -154,7 +200,21 @@ docker logs easysearch
 # 2. 权限问题 — 调整挂载目录权限为 chown 602:602 /data/easysearch
 # 3. 端口冲突 — 更换映射端口
 # 4. 容器名称冲突 - 删除异常容器 docker rm easysearch
+# 5. 用了 --user 指定运行用户 — 去掉 --user，容器需以默认 root 启动（entrypoint 用 gosu 降权）
+# 6. 挂载的 config 目录为空 — 按"数据持久化到本地"第 3 步从镜像初始化 config
 ```
+
+### 升级后容器无法启动
+
+`docker logs` 中出现以下任一报错，通常是持久化的 `config` 目录里 `jvm.options` 与新版本镜像不匹配：
+
+```
+A command line option has attempted to allow or enable the Security Manager
+java.lang.IllegalStateException: security agent is not loaded
+```
+
+按前文"数据持久化到本地"一节的第 5 步，用新版本镜像同步 `config/jvm.options` 后再重新运行容器。
+**只修改单个 JVM 参数不够**，需整体同步该文件。
 
 #### 具体错误示例
 

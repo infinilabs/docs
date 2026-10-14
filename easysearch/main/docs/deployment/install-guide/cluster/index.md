@@ -3,8 +3,8 @@ title: "分布式集群"
 date: 0001-01-01
 summary: "分布式集群安装 #  本文档介绍如何使用 initialize-cluster.sh 脚本快速搭建 Easysearch 分布式集群。该脚本支持伪分布式（单机多节点）和真分布式（多服务器）两种部署模式。
  要求 Easysearch 版本 &gt;= 2.0.3。
- 前置要求 #   已完成系统调优 推荐使用 Easysearch 2.5.0 Bundle 包内置的 JDK 25；no-JDK 包请预先准备 JDK 25。JDK 21 仅用于兼容已有客户环境，见安装指南 已安装 OpenSSL 真分布式部署需要：  服务器间网络互通 已配置 SSH 互信（无密码登录） 目标路径有写入权限     说明：
- 新部署推荐使用内置 JDK 25 的 Bundle 包，或预先准备 JDK 25；脚本在需要下载 JDK 时默认下载 JDK 25。 本地伪分布式 (--nodes N 或全部 127.0.0.1) 在缺失 jdk/ 且使用 -s/--silent 时，会自动下载 JDK。 真分布式 -s/--silent 不会自动为目标节点选择架构并下载 JDK；请预先准备 Java，或使用交互模式选择目标架构后下载 bundled JDK。   快速开始 #  交互式安装（推荐） #  交互式模式会引导您输入集群配置信息："
+ 前置要求 #   已完成系统调优 推荐使用 Easysearch 2.5.0 Bundle 包内置的 JDK 25；no-JDK 包请预先准备 JDK 25。JDK 21 仅用于兼容已有客户环境，见安装指南 已安装 OpenSSL 真分布式部署需要：  服务器间网络互通 自动分发时，初始化主机已配置到各目标服务器的 SSH 无密码登录 目标路径有写入权限 已创建用于运行服务的非 root 用户（本文使用 easysearch），Easysearch 不支持以 root 启动     说明：
+ 新部署推荐使用内置 JDK 25 的 Bundle 包，或预先准备 JDK 25；脚本在需要下载 JDK 时默认下载 JDK 25。 本地伪分布式 (--nodes N 或全部 127."
 ---
 
 
@@ -21,13 +21,16 @@ summary: "分布式集群安装 #  本文档介绍如何使用 initialize-cluste
 3. 已安装 OpenSSL
 4. 真分布式部署需要：
    - 服务器间网络互通
-   - 已配置 SSH 互信（无密码登录）
+   - 自动分发时，初始化主机已配置到各目标服务器的 SSH 无密码登录
    - 目标路径有写入权限
+   - 已创建用于运行服务的非 root 用户（本文使用 `easysearch`），Easysearch 不支持以 root 启动
 
 > 说明：
 > - 新部署推荐使用内置 JDK 25 的 Bundle 包，或预先准备 JDK 25；脚本在需要下载 JDK 时默认下载 JDK 25。
 > - 本地伪分布式 (`--nodes N` 或全部 `127.0.0.1`) 在缺失 `jdk/` 且使用 `-s/--silent` 时，会自动下载 JDK。
 > - 真分布式 `-s/--silent` 不会自动为目标节点选择架构并下载 JDK；请预先准备 Java，或使用交互模式选择目标架构后下载 bundled JDK。
+> - 分布式节点的 JDK 必须匹配目标服务器的操作系统与架构；初始化主机也需要可用 Java 来生成密码。
+> - 初始化前应在源发行包中准备好所需插件，推荐直接使用 Bundle 包；脚本先复制节点目录，随后安装的插件不会自动同步到已复制的节点。Bundle 已含所需插件时，在重装提示处选择 `N`。
 
 ## 快速开始
 
@@ -43,44 +46,16 @@ bin/initialize-cluster.sh
 脚本会依次提示您输入：
 - **集群名称**：默认为 `easysearch-cluster`
 - **证书域名**：默认为 `infini.cloud`
+- **API 兼容性**：是否启用 Elasticsearch API 兼容模式
 - **节点数量**：默认为 `3`
 - **每个节点的配置**：IP 地址、HTTP 端口、节点名称、节点角色
-- **协议选择**：HTTP 或 HTTPS（默认 HTTPS）
-- **API 兼容性**：是否启用 Elasticsearch API 兼容模式
-- **证书信息**：国家、省份、城市、组织、有效期等（可选）
+- **初始化确认**，以及 JDK、插件安装和 SSH 自动分发的相关提示
 
-输入示例：
-```
-======================================
-Easysearch Cluster Initialization
-======================================
+例如，三台不同服务器可分别输入 IP `192.168.1.10`、`192.168.1.11`、`192.168.1.12`，HTTP 端口均为 `9200`，节点名分别为 `node1`、`node2`、`node3`。默认每个节点具有 `master,data,ingest,remote_cluster_client` 角色；同一 IP 的多个节点才会默认递增 HTTP 端口。
 
-Enter cluster name [easysearch-cluster]: my-cluster
-Enter domain for certificates [infini.cloud]: infinilabs.com
-How many nodes in the cluster [3]: 3
+HTTP/HTTPS 和证书信息通过 `--http`、`--cert-subject`、`--cert-days` 参数指定，没有单独的交互提示。
 
-Configure 3 cluster node(s):
-
-Node 1:
-  IP address [127.0.0.1]: 192.168.1.10
-  HTTP port [9200]: 9200
-  Node name [node1]: master1
-✓ Added: master1 @ 192.168.1.10:9200
-
-Node 2:
-  IP address [127.0.0.1]: 192.168.1.11
-  HTTP port [9201]: 9200
-  Node name [node2]: master2
-✓ Added: master2 @ 192.168.1.11:9200
-
-Node 3:
-  IP address [127.0.0.1]: 192.168.1.12
-  HTTP port [9202]: 9200
-  Node name [node3]: data1
-✓ Added: data1 @ 192.168.1.12:9200
-```
-
-> **提示**：所有提示项都可以直接回车使用默认值。
+> **提示**：配置输入可回车使用默认值；初始化及自动分发确认需按提示输入 `y`。
 
 ### 静默安装
 
@@ -95,7 +70,7 @@ bin/initialize-cluster.sh -s
 
 若当前发行包目录下没有 `jdk/`，脚本会在静默模式下自动下载适用于当前宿主机架构的 JDK，再继续初始化。
 
-这将创建 `/data/cluster/3nodes/` 目录，包含：
+这将创建 `/data/3nodes/` 目录，包含：
 - **easysearch1**: 127.0.0.1:9200 (transport: 9300)
 - **easysearch2**: 127.0.0.1:9201 (transport: 9301)
 - **easysearch3**: 127.0.0.1:9202 (transport: 9302)
@@ -104,36 +79,33 @@ bin/initialize-cluster.sh -s
 
 #### 真实分布式（3 台服务器）
 
-为 3 台服务器创建集群配置，并自动通过 SSH 分发：
+为 3 台服务器静默生成集群配置，随后按[手动部署](#手动部署)步骤打包和分发：
 
 ```bash
 cd /data/easysearch
 bin/initialize-cluster.sh -s \
-  -c prod-cluster \
+  -n prod-cluster \
   -i 192.168.64.3,192.168.64.4,192.168.64.5
 ```
 
-脚本会自动：
-1. 生成每个节点的完整配置和证书
-2. 通过 SSH 将节点包复制到对应服务器的 `/data/easysearch`
-3. 自动解压并配置
+脚本会在 `/data/cluster-prod-cluster/` 生成每个节点的完整配置、证书和包含密码的 `README.md`。`-s` 模式不会自动 SSH 分发，也不会预先生成供手动分发的压缩包。
 
-> **前提**：当前主机已与目标服务器建立 SSH 互信。
+如需脚本自动 SSH 分发，去掉 `-s`，并在分发提示处输入 `y`。
 
 #### 自定义节点配置
 
-精确控制每个节点的配置：
+通过 IP、HTTP 端口和节点名列表指定节点：
 
 ```bash
 cd /data/easysearch
 bin/initialize-cluster.sh -s \
-  -c my-cluster \
-  -n 192.168.1.10:9200:master1:master,data,ingest \
-  -n 192.168.1.11:9200:master2:master,data,ingest \
-  -n 192.168.1.12:9200:data1:data,ingest
+  -n my-cluster \
+  --ips 192.168.1.10,192.168.1.11,192.168.1.12 \
+  --ports 9200,9200,9200 \
+  --names node1,node2,node3
 ```
 
-节点配置格式：`IP:HTTP_PORT:NODE_NAME:ROLES`
+三组列表的元素数量必须一致。`-n` 仅用于集群名，脚本没有 `--node` 或命令行角色参数；需要分别指定角色时，使用不带节点列表的交互模式，或在启动前编辑各节点的 `node.roles`。`cluster.initial_master_nodes` 应只列出具有 `master` 角色的节点。
 
 #### 自定义证书信息
 
@@ -143,11 +115,7 @@ bin/initialize-cluster.sh -s \
 cd /data/easysearch
 bin/initialize-cluster.sh -s \
   -i 192.168.1.10,192.168.1.11,192.168.1.12 \
-  --cert-country IN \
-  --cert-state FI \
-  --cert-locality NI \
-  --cert-org "ORG" \
-  --cert-ou "UNIT"
+  --cert-subject "/C=IN/ST=FI/L=NI/O=ORG/OU=UNIT/CN="
 ```
 
 生成的证书 DN 将是：
@@ -172,8 +140,7 @@ bin/initialize-cluster.sh -s \
 cd /data/easysearch
 bin/initialize-cluster.sh -s \
   -i 192.168.1.10,192.168.1.11,192.168.1.12 \
-  --es-compat \
-  --es-version 8.9.0
+  --enable-es-compat 8.9.0
 ```
 
 将在配置中添加：
@@ -188,25 +155,26 @@ elasticsearch.api_compatibility_version: "8.9.0"
 cd /data/easysearch
 bin/initialize-cluster.sh -s \
   -i 192.168.1.10,192.168.1.11,192.168.1.12 \
-  --es-compat \
-  --es-version 8.19.17
+  --enable-es-compat 8.19.17
 ```
 
 兼容模式只覆盖 Easysearch 已实现的部分 Elasticsearch API，不表示全部 Elasticsearch 8.x API 均可用。初始化或修改
 兼容设置后需要重启对应节点；集群设置接口会拒绝修改这两个静态配置。
 
-#### 使用 HTTP 协议（不启用 SSL）
+#### 使用 HTTP 协议（关闭 HTTP TLS）
 
 ```bash
 cd /data/easysearch
 bin/initialize-cluster.sh -s \
   -i 192.168.1.10,192.168.1.11,192.168.1.12 \
-  --protocol http
+  --http
 ```
+
+该参数只关闭 HTTP 接口的 TLS，节点间 Transport TLS 仍保留。
 
 ## TLCP 集群初始化（当前脚本）
 
-> 本节基于当前 `bin/initialize-cluster.sh` 的 `--tlcp` 实现。若与本文其他旧示例冲突，以本节为准。
+本节介绍 `bin/initialize-cluster.sh --tlcp` 的使用方式。
 
 ### TLCP 常用参数
 
@@ -224,7 +192,7 @@ bin/initialize-cluster.sh -s \
 `--tlcp` 在 Linux 下需要可用的国密加密命令。
 
 - 伪分布式（如 `--nodes 2` 或全部 `127.0.0.1`）：脚本会自动检测，缺失时自动调用 `bin/install-tongsuo-local.sh` 安装到当前用户目录。
-- 真分布式（多台机器）：请在每台目标机器提前安装并验证 `tongsuo`。
+- 真分布式（多台机器）：请在初始化主机及每台目标机器提前安装并验证 `tongsuo`。
 
 如需手工预安装，可在 Easysearch 发行包目录执行：
 
@@ -285,6 +253,8 @@ bin/initialize-cluster.sh --tlcp \
   -y
 ```
 
+真分布式 TLCP 同样需要按下文部署步骤分发，并在启动前对齐 `transport.port` 与 `discovery.seed_hosts`；本例两台不同服务器均使用9300。
+
 ### TLCP 产物与启动验证
 
 每个节点 `config/` 下会包含 TLCP 相关证书：
@@ -306,7 +276,7 @@ cd /data/easysearch/../2nodes
 `start-all.sh` 会在启动时自动：
 
 - 优先加载每个节点的 `config/tongsuo-env.sh`（若存在）
-- 探测 Java 并回填 `JAVA_HOME`/`ES_JAVA_HOME`（优先级：`ES_JAVA_HOME` > `JAVA_HOME` > PATH 中 `java`）
+- 探测 Java 并回填 `JAVA_HOME`/`ES_JAVA_HOME`（优先级：`ES_JAVA_HOME` > `JAVA_HOME` > macOS 的 `java_home` > PATH 中 `java`）
 
 验证集群：
 
@@ -354,7 +324,7 @@ bin/reset_admin_password.sh 'https://127.0.0.1:9200'
 ### TLCP 注意事项
 
 - `--tlcp` 与 `--http` 互斥，不能同时使用
-- Linux 真分布式部署需确保目标机器已准备好可用 `tongsuo`；伪分布式缺失时脚本会自动安装到当前用户目录
+- Linux 真分布式部署需确保初始化主机和目标机器都已准备好可用 `tongsuo`；伪分布式缺失时脚本会自动安装到当前非 root 用户目录
 - `start-all.sh` / `stop-all.sh` 仅在伪分布式模式生成
 
 ## 命令行参数
@@ -363,22 +333,20 @@ bin/reset_admin_password.sh 'https://127.0.0.1:9200'
 |------|------|------|
 | `-h, --help` | 显示帮助信息 | `--help` |
 | `-s, --silent` | 静默模式，使用默认值；本地伪分布式缺失 bundled JDK 时会自动下载 | `-s` |
-| `-y, --yes` | 跳过确认提示 | `-y` |
-| `-c, --cluster-name` | 集群名称 | `-c prod-cluster` |
+| `-y, --yes` | 跳过生成配置前的汇总确认 | `-y` |
+| `-n, --cluster-name` | 集群名称 | `-n prod-cluster` |
 | `-d, --domain` | 证书域名 | `-d example.com` |
-| `-n, --node` | 添加节点（可多次使用）<br>格式：IP:HTTP_PORT:NODE_NAME:ROLES | `-n 192.168.1.10:9200:node1:master,data` |
-| `-i, --ips` | IP 列表（逗号分隔）<br>自动生成端口和节点名 | `-i 192.168.1.10,192.168.1.11` |
-| `--http-port-start` | HTTP 起始端口 | `--http-port-start 9200` |
-| `--transport-port-start` | Transport 起始端口 | `--transport-port-start 9300` |
-| `--protocol` | HTTP 协议（http 或 https） | `--protocol https` |
-| `--cert-country` | 证书国家代码 | `--cert-country CN` |
-| `--cert-state` | 证书州/省 | `--cert-state Hunan` |
-| `--cert-locality` | 证书城市 | `--cert-locality Changsha` |
-| `--cert-org` | 证书组织 | `--cert-org "INFINI Ltd"` |
-| `--cert-ou` | 证书组织单位 | `--cert-ou "Engineering"` |
+| `-i, --ips` | IP 列表（逗号分隔）；未指定端口和节点名时，各 HTTP 端口默认为9200，节点名依次为node1、node2等 | `-i 192.168.1.10,192.168.1.11` |
+| `-p, --ports` | HTTP 端口列表（逗号分隔） | `-p 9200,9201` |
+| `--names` | 节点名称列表（逗号分隔） | `--names node1,node2` |
+| `--nodes` | 本地多节点，HTTP 从9200、Transport 从9300递增 | `--nodes 3` |
+| `--http` | 关闭 HTTP TLS，默认使用 HTTPS | `--http` |
+| `--tlcp` | 生成 TLCP 双证书；与 `--http` 互斥 | `--tlcp` |
+| `--cert-subject` | 证书 Subject 前缀，应以 `CN=` 结尾 | `--cert-subject "/C=CN/ST=Hunan/L=Changsha/O=MyOrg/OU=IT/CN="` |
 | `--cert-days` | 证书有效期（天）| `--cert-days 7300` (20年) |
-| `--es-compat` | 启用 Elasticsearch API 兼容性 | `--es-compat` |
-| `--es-version` | Elasticsearch 兼容版本 | `--es-version 8.9.0` |
+| `--enable-es-compat` | 启用 Elasticsearch API 兼容性并指定版本 | `--enable-es-compat 8.9.0` |
+
+`-y` 不会跳过已有目录删除、JDK、插件或 SSH 分发的交互确认。需要静默生成配置时使用 `-s`；输出目录已存在时，仍会要求确认是否删除。
 
 ## 生成的目录结构
 
@@ -387,7 +355,7 @@ bin/reset_admin_password.sh 'https://127.0.0.1:9200'
 脚本会在当前 Easysearch 的父目录创建集群目录：
 
 ```
-/data/cluster/
+/data/
 └── 3nodes/                           # 节点数量命名
     ├── easysearch1/                  # 完整的 Easysearch 实例 1
     │   ├── bin/
@@ -419,12 +387,11 @@ bin/reset_admin_password.sh 'https://127.0.0.1:9200'
 
 ### 真分布式模式
 
-脚本会创建独立的节点包，并自动分发到各服务器：
+以安装目录 `/data/easysearch`、集群名 `prod-cluster` 为例，脚本创建以下节点目录。只有非静默模式下确认自动分发，才会通过 SSH 部署：
 
 ```
-/data/cluster/
-└── cluster-easysearch-cluster/       # 集群配置目录
-    ├── tmp/                          # 临时目录（用于生成证书）
+/data/
+└── cluster-prod-cluster/             # 集群配置目录
     ├── 192-168-64-3/                # 节点 1 包（待分发）
     │   ├── bin/
     │   ├── lib/
@@ -436,11 +403,10 @@ bin/reset_admin_password.sh 'https://127.0.0.1:9200'
     │   └── ...
     ├── 192-168-64-5/                # 节点 3 包
     │   └── ...
-    ├── 192-168-64-3.tar.gz          # 压缩包（用于手动分发）
-    ├── 192-168-64-4.tar.gz
-    ├── 192-168-64-5.tar.gz
-    └── README.md                     # 部署说明
+    └── README.md                     # 部署说明和管理员密码
 ```
+
+证书生成临时目录不保留在该目录下。手动部署需自行打包；自动部署中的压缩包是临时文件，不能依赖其在部署后继续存在。
 
 分发到目标服务器后的结构（每台服务器）：
 
@@ -472,7 +438,7 @@ bin/initialize-cluster.sh -s
 2. **启动所有节点**
 
 ```bash
-cd /data/cluster/3nodes
+cd /data/3nodes
 ./start-all.sh
 ```
 
@@ -480,7 +446,7 @@ cd /data/cluster/3nodes
 
 ```bash
 # 获取管理员密码
-cat README.md | grep "Admin Password"
+grep -F 'Admin Password' README.md
 
 # 检查集群健康状态
 curl -ku 'admin:YOUR_PASSWORD' "https://127.0.0.1:9200/_cluster/health?pretty"
@@ -500,7 +466,7 @@ ip        heap.percent ram.percent cpu load_1m load_5m load_15m node.role master
 4. **停止集群**
 
 ```bash
-cd /data/cluster/3nodes
+cd /data/3nodes
 ./stop-all.sh
 ```
 
@@ -516,14 +482,18 @@ cd /data/cluster/3nodes
 - 当前主机已与目标服务器建立 SSH 互信
 - 目标服务器的 `/data` 目录有写入权限
 
+自动部署会替换目标服务器的 `/data/easysearch`，仅用于已确认可替换的安装目录；已有服务需先停止并备份数据。
+
 **步骤 1：生成并自动部署**
 
 ```bash
 cd /data/easysearch
-bin/initialize-cluster.sh -s \
-  -c prod-cluster \
+bin/initialize-cluster.sh \
+  -n prod-cluster \
   -i 192.168.64.3,192.168.64.4,192.168.64.5
 ```
+
+在 `Automatically deploy to remote servers via SSH?` 提示处输入 `y`。保留 `-s` 时只会生成配置。
 
 脚本会自动：
 1. 生成所有节点的配置和证书
@@ -533,18 +503,21 @@ bin/initialize-cluster.sh -s \
 
 **步骤 2：在各服务器上启动节点**
 
-在每台服务器上执行：
+启动前，在各服务器上将 `config/easysearch.yml` 中的 `transport.port` 配置为 `9300`，与生成的 `discovery.seed_hosts` 对齐。当前脚本会给节点依次写入9300、9301、9302，但分布式发现地址均使用9300，因此需要完成这一步；不要在同一台服务器的多节点场景中统一端口。
+
+在每台服务器上准备目录权限，并以非 root 用户启动：
 
 ```bash
 cd /data/easysearch
-bin/easysearch -d -p pid
+sudo chown -R easysearch:easysearch /data/easysearch
+sudo -u easysearch bin/easysearch -d -p pid
 ```
 
 或者在管理节点上通过 SSH 批量启动：
 
 ```bash
 for ip in 192.168.64.3 192.168.64.4 192.168.64.5; do
-  ssh $ip "cd /data/easysearch && bin/easysearch -d -p pid"
+  ssh "$ip" 'sudo chown -R easysearch:easysearch /data/easysearch && cd /data/easysearch && sudo -u easysearch bin/easysearch -d -p pid'
 done
 ```
 
@@ -557,18 +530,22 @@ done
 ```bash
 cd /data/easysearch
 bin/initialize-cluster.sh -s \
-  -c prod-cluster \
+  -n prod-cluster \
   -i 192.168.64.3,192.168.64.4,192.168.64.5
 ```
 
-当 SSH 自动部署失败时，脚本会生成压缩包供手动分发。
+此命令只生成 `/data/cluster-prod-cluster/` 下的节点目录。启动前需将各节点的 `transport.port` 与 `discovery.seed_hosts` 对齐；本例三台不同服务器均使用9300。若此前仅部分节点分发成功，直接使用本轮已生成的节点目录继续打包分发，保留同一套证书和密码。
 
 **步骤 2：手动分发**
 
-将生成的压缩包复制到对应服务器：
+先打包各节点目录，再将压缩包复制到对应服务器：
 
 ```bash
-cd /data/cluster/cluster-prod-cluster
+cd /data/cluster-prod-cluster
+
+for node in 192-168-64-3 192-168-64-4 192-168-64-5; do
+  tar -czf "$node.tar.gz" "$node"
+done
 
 # 复制到服务器 1
 scp 192-168-64-3.tar.gz root@192.168.64.3:/tmp/
@@ -583,6 +560,8 @@ scp 192-168-64-5.tar.gz root@192.168.64.5:/tmp/
 **步骤 3：在各服务器上解压**
 
 在每台服务器上执行：
+
+下面以服务器1为例；服务器2、3分别替换成自己的压缩包及目录名。`/data/easysearch` 应不存在，避免 `mv` 将节点目录嵌入已有安装。
 
 ```bash
 cd /tmp
@@ -604,7 +583,7 @@ su easysearch -c "bin/easysearch -d -p pid"
 
 ```bash
 # 获取管理员密码（在生成配置的服务器上）
-cat /data/cluster/cluster-prod-cluster/README.md | grep "Admin Password"
+grep -F 'Admin Password' /data/cluster-prod-cluster/README.md
 
 # 检查集群健康状态
 curl -ku 'admin:YOUR_PASSWORD' "https://192.168.64.3:9200/_cluster/health?pretty"
@@ -683,6 +662,7 @@ security.authcz.admin_dn:
 > - `security.authcz.admin_dn` 定义管理员证书 DN
 > - `path.data` 和 `path.logs` 使用统一的相对路径
 > - 所有节点使用相同的集群发现配置
+> - 此处是三台服务器统一 Transport 端口后的配置；启动前应核对实际生成配置中的端口
 
 ## 证书和节点认证
 
@@ -712,11 +692,7 @@ security.authcz.admin_dn:
 ```bash
 bin/initialize-cluster.sh -s \
   -i 192.168.1.10,192.168.1.11 \
-  --cert-country IN \
-  --cert-state FI \
-  --cert-locality NI \
-  --cert-org "ORG" \
-  --cert-ou "UNIT" \
+  --cert-subject "/C=IN/ST=FI/L=NI/O=ORG/OU=UNIT/CN=" \
   --cert-days 7300 \
   --domain infini.cloud
 ```
@@ -738,33 +714,34 @@ CN=node1.infini.cloud,OU=UNIT,O=ORG,L=NI,ST=FI,C=IN
 
 ```bash
 # 查看节点证书的 CN
-openssl x509 -in cluster-config/my-cluster/certs/node1.crt -noout -subject
+cd /data/easysearch
+openssl x509 -in config/instance.crt -noout -subject
 
 # 查看证书的有效期
-openssl x509 -in cluster-config/my-cluster/certs/node1.crt -noout -dates
+openssl x509 -in config/instance.crt -noout -dates
 
 # 查看证书的 SAN（Subject Alternative Names）
-openssl x509 -in cluster-config/my-cluster/certs/node1.crt -noout -text | grep -A1 "Subject Alternative Name"
+openssl x509 -in config/instance.crt -noout -text | grep -A1 "Subject Alternative Name"
 
 # 查看证书的完整信息
-openssl x509 -in cluster-config/my-cluster/certs/node1.crt -noout -text
+openssl x509 -in config/instance.crt -noout -text
 ```
 
 **示例输出**：
 ```bash
 # 查看主题
-$ openssl x509 -in cluster-config/my-cluster/certs/node1.crt -noout -subject
+$ openssl x509 -in config/instance.crt -noout -subject
 subject=C = IN, ST = FI, L = NI, O = ORG, OU = UNIT, CN = node1.infini.cloud
 
 # 查看有效期
-$ openssl x509 -in cluster-config/my-cluster/certs/node1.crt -noout -dates
+$ openssl x509 -in config/instance.crt -noout -dates
 notBefore=Jan 02 06:00:00 2026 GMT
 notAfter=Dec 30 06:00:00 2035 GMT
 ```
 
 ## 配置为系统服务
 
-> **注意**：配置系统服务主要针对生产环境的真实分布式部署。本地伪分布式测试环境直接使用 `start-all.sh` 脚本即可。
+> **注意**：以下服务示例用于 TLS 真分布式部署，创建服务前应准备 `easysearch` 用户和目录权限，并停止此前手动启动的实例。TLCP 部署还需为服务账户准备 Tongsuo 环境；本地伪分布式测试环境可使用 `start-all.sh`。
 
 在每台生产服务器上创建 systemd 服务文件，以便系统启动时自动运行。所有服务器使用相同的服务配置，通过 `config/easysearch.yml` 中的 `network.host` 和 `node.name` 来区分不同节点。
 
@@ -845,8 +822,8 @@ sudo systemctl status easysearch
 
 **解决方案**：
 - 确保所有节点使用相同的 CA 证书（`ca.crt`）
-- 检查证书中的 SAN 是否包含节点 IP
-- 如果是跨网络部署，确保证书中包含所有可能的 IP 地址
+- 当前 TLS 脚本生成的 SAN 为证书域名及其通配域名，不包含节点 IP；默认 Transport 配置使用 `security.ssl.transport.skip_domain_verify: true`
+- 如需开启节点主机名验证，使用覆盖实际连接地址的证书 SAN，并核对对应验证配置；直接通过 IP 访问 HTTPS 时也需要匹配的 IP SAN
 
 ### 3. 端口冲突
 
@@ -854,7 +831,7 @@ sudo systemctl status easysearch
 
 **解决方案**：
 - 检查端口占用：`netstat -tuln | grep 9200`
-- 使用 `--http-port-start` 和 `--transport-port-start` 指定不同的端口范围
+- 使用 `--ports` 显式指定各节点 HTTP 端口；Transport 端口需在各节点的 `config/easysearch.yml` 中修改，并同步对应的 `discovery.seed_hosts`
 
 ### 4. 内存不足
 
