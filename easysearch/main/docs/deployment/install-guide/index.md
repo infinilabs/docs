@@ -79,7 +79,7 @@ Easysearch 支持 Linux（x86_64 / ARM64 / LoongArch）、macOS 和 Windows。�
 
 | Easysearch 版本 | JDK 最低要求 | 推荐 JDK | 说明 |
 |:----------------|:-----------:|:--------:|------|
-| **2.5.0** | JDK 21（兼容） | **JDK 25** | Bundle 包默认内置 JDK 25；JDK 21 用于兼容已有客户环境 |
+| **2.5.0** | JDK 21（兼容） | **JDK 25** | Bundle 包默认内置 JDK 25；兼容 JDK 21；JDK 26、27 已通过实际启动验证 |
 | **2.0.3 ~ 2.4.x** | JDK 21 | JDK 21 | 历史版本要求，其他运行时以对应版本说明为准 |
 | **1.x ~ 2.0.2** | JDK 11 | JDK 17 | JDK 15+ 性能更优 |
 
@@ -92,8 +92,13 @@ Easysearch 支持 Linux（x86_64 / ARM64 / LoongArch）、macOS 和 Windows。�
 > Linux/macOS 启动器的选择顺序为 `jdk/` > `ES_JAVA_HOME` > `JAVA_HOME`；Windows `bin\easysearch.bat` 使用 `jdk/` > `JAVA_HOME`。
 > 安装目录已有 `jdk/` 时，设置环境变量不会切换运行时。
 
+安全 agent 的默认加载条件为 `21-:`，在 JDK 21 及以上加载同一个 agent。JDK 26、27 已通过 Easysearch 2.5.0
+发行包的实际启动验证，可正常运行；默认和推荐运行时仍为 JDK 25。切换到 JDK 27 时需同步新版 `jvm.options`，
+将 JVMCI 编译器相关三行参数限定为 `21-26:`，详见[JVM 配置]({{< relref "../config/node-settings/jvm.md" >}})。
+Lucene 的 Vector API 默认启用上限仍为 JDK 25，JDK 26、27 会回退到默认实现，保留搜索功能。
+
 2.5.0 启动时会显式检查 JDK SecurityManager 已禁用。请保留发行包的 `config/jvm.options` 中
-`-Djava.security.manager=disallow` 和对应 JDK 的 `-javaagent` 参数。升级并保留旧配置时，需同步新包的必要 JVM 参数和 agent 文件名，
+`-Djava.security.manager=disallow` 和 `21-:-javaagent` 参数。升级并保留旧配置时，需同步新包的必要 JVM 参数和 agent 文件名，
 详见 [JVM 安全检查]({{< relref "../config/node-settings/jvm.md" >}})与[升级手册]({{< relref "../../upgrade/_index.md" >}})。
 
 `bin/initialize.sh` 会优先解压随包提供的 `jdk.tar.gz` 或使用已有的 `jdk/`；没有内置 JDK 时，

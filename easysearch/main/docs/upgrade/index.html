@@ -235,12 +235,16 @@ if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.
 <a class=anchor href=#%e5%8d%87%e7%ba%a7%e5%89%8d%e5%bb%ba%e8%ae%ae>#</a></h2><ol><li>查阅目标版本的 <a href=/easysearch/main/docs/release-notes/>发布日志</a>，了解变更与破坏性更新</li><li>在测试环境验证升级流程</li><li>做好数据备份</li></ol><h2 id=升级到-250jdk-与-jvm-安全配置>升级到 2.5.0：JDK 与 JVM 安全配置
 <a class=anchor href=#%e5%8d%87%e7%ba%a7%e5%88%b0-250jdk-%e4%b8%8e-jvm-%e5%ae%89%e5%85%a8%e9%85%8d%e7%bd%ae>#</a></h2><p>Easysearch 2.5.0 默认使用并推荐 <strong>JDK 25</strong>，Bundle 包默认内置 JDK 25。
 对于已部署 JDK 21 且暂不方便升级 JDK 的客户环境，保留 JDK 21 兼容运行能力。
-两种运行时都使用发行包提供的安全 agent，并要求禁用 JDK 自身的 SecurityManager。</p><p>如果升级时保留了旧的 <code>config/jvm.options</code>、<code>config/jvm.options.d/*.options</code> 或自定义 <code>ES_PATH_CONF</code>，
+安全 agent 在 JDK 21 及以上统一加载，并要求禁用 JDK 自身的 SecurityManager。
+JDK 26、27 已通过发行包实际启动验证，可正常运行；切换 JDK 时仍需同步下述必要启动参数。
+详见<a href=/easysearch/main/docs/deployment/install-guide/>安装指南</a>。</p><p>如果升级时保留了旧的 <code>config/jvm.options</code>、<code>config/jvm.options.d/*.options</code> 或自定义 <code>ES_PATH_CONF</code>，
 需对照新发行包逐项同步必要参数，不能只替换程序文件：</p><ol><li><p>保留 <code>-Djava.security.manager=disallow</code>，移除旧的 <code>allow</code>、启用 SecurityManager 的参数及其他冲突覆盖。
-也检查 <code>ES_JAVA_OPTS</code> 等额外参数。启动时会检查该属性严格为 <code>disallow</code> 且没有安装 JDK SecurityManager，否则拒绝启动。</p></li><li><p>将 JDK 21、JDK 25 的 agent 引用同步为新包中的文件名：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>21:-javaagent:lib/easysearch-security-agent-2.5.0.jar
-25:-javaagent:lib/easysearch-security-agent-2.5.0.jar
-</code></pre></div><p>两行分别仅在对应 JDK 上生效，每次启动加载一个安全 agent。保留随包提供的 bootstrap jar，避免混用旧版本文件。</p></li><li><p>保留新包的 <code>21-:--enable-preview</code>、<code>19-:--enable-native-access=ALL-UNNAMED</code> 等必要 JVM 参数，
-再迁移自定义堆大小、GC 日志路径等配置。不要直接用旧配置覆盖新包配置。</p></li><li><p>确认实际选中的 JDK。Linux/macOS 启动器使用 <code>jdk/</code> > <code>ES_JAVA_HOME</code> > <code>JAVA_HOME</code>；
+也检查 <code>ES_JAVA_OPTS</code> 等额外参数。启动时会检查该属性严格为 <code>disallow</code> 且没有安装 JDK SecurityManager，否则拒绝启动。</p></li><li><p>将旧的 <code>21:</code>、<code>25:</code> 两条 agent 配置替换为新包的单条 <code>21-:</code> 配置，并同步 jar 文件名：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>21-:-javaagent:lib/easysearch-security-agent-2.5.0.jar
+</code></pre></div><p><code>21-:</code> 在 JDK 21 及以上生效。移除旧的重复引用，并检查 <code>jvm.options.d/</code> 和 <code>ES_JAVA_OPTS</code>，
+确保每次启动只加载一个安全 agent。保留随包提供的 bootstrap jar，避免混用旧版本文件。</p></li><li><p>保留新包的 <code>21-:--enable-preview</code>、<code>19-:--enable-native-access=ALL-UNNAMED</code> 等必要 JVM 参数，
+再迁移自定义堆大小、GC 日志路径等配置。不要直接用旧配置覆盖新包配置。
+JVMCI 编译器相关的解锁、禁用及重新锁定三行使用 <code>21-26:</code> 条件；JDK 27 不再识别 <code>UseJVMCICompiler</code>，
+旧的 <code>21-:-XX:-UseJVMCICompiler</code> 会导致 JVM 启动失败。</p></li><li><p>确认实际选中的 JDK。Linux/macOS 启动器使用 <code>jdk/</code> > <code>ES_JAVA_HOME</code> > <code>JAVA_HOME</code>；
 Windows <code>bin\easysearch.bat</code> 使用 <code>jdk/</code> > <code>JAVA_HOME</code>。已有 <code>jdk/</code> 时，仅设置环境变量不会切换运行时。</p></li></ol><p>启动后可核对各节点实际运行时：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># 使用现有管理员密码</span>
 curl -ku <span style=color:#f1fa8c>&#39;admin:YOUR_PASSWORD&#39;</span> <span style=color:#f1fa8c>&#39;https://localhost:9200/_cat/nodes?h=name,jdk&amp;v&#39;</span>
 </code></pre></div><p>升级时保留原有数据目录、认证与 TLS 配置；上述 JVM 安全配置不要求重新生成证书或管理员密码。
