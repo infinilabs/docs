@@ -3,10 +3,10 @@ title: "规则引擎"
 date: 0001-01-01
 description: "高性能实时规则匹配引擎，支持在数据入库瞬间完成关键词检测、自动打标与内容清洗。"
 summary: "Rules 规则引擎 #  Rules 插件是 Easysearch 的规则匹配引擎，可在数据写入时自动匹配规则库，为文档添加标签字段，实现高效的内容分类、审核和标注。
-功能特性 #   ✅ 实时匹配：数据写入时自动匹配规则，无需后处理 ✅ 高性能：基于优化的 C++ 规则引擎，支持复杂规则和大规则库 ✅ 灵活配置：支持自定义字段、正则表达式、数值范围匹配 ✅ 多规则匹配：一条文档可匹配多个规则，所有标签保留到数组中 ✅ 集群广播：多节点环境自动编译规则到所有 Ingest 节点   基本概念 #  规则库 (Repository) #  规则库是规则的集合，每个规则库有唯一的 repo_id，存储在 .match_rules 索引中。
+功能特性 #   ✅ 实时匹配：数据写入时自动匹配规则，无需后处理 ✅ 高性能：基于优化的 C++ 规则引擎，支持复杂规则和大规则库 ✅ 灵活配置：支持自定义字段、正则表达式、整数范围匹配 ✅ 多规则匹配：一条文档可匹配多个规则，所有标签保留到数组中 ✅ 集群广播：多节点环境自动编译规则到所有 Ingest 节点   基本概念 #  规则库 (Repository) #  规则库是规则的集合，每个规则库有唯一的 repo_id，存储在 .match_rules 索引中。
 规则 (Rule) #  规则由表达式和描述组成：
-expression\t#offset#description  expression: 匹配表达式（支持 AND/OR/NOT、正则、范围等） offset: 规则序号（从 0 开始，系统自动生成，用于区分不同规则） description: 规则描述（匹配时作为标签返回）  重要说明：
- offset 是导入到规则索引后系统自动生成的，本身没有业务含义 通过 _import API 导入规则时不需要手动指定 offset 导入时只需提供 expression 和 description，系统会自动分配 offset  标签 (Tag) #  文档匹配规则后，规则的 description 会作为标签添加到文档的 tags 字段。#offset#description 是 ."
+expression\t#offset#description  expression: 匹配表达式（支持 AND/OR/NOT、正则、范围等） offset: 规则序号（从 0 开始，系统自动生成，用于区分不同规则） description: 规则描述，与 offset 一起组成命中标签  重要说明：
+ offset 是导入到规则索引后系统自动生成的，本身没有业务含义 通过 _import API 导入规则时不需要手动指定 offset 导入时只需提供 expression 和 description，系统会自动分配 offset  标签 (Tag) #  文档匹配规则后，完整的 #offset#description 会作为标签添加到文档的 tags 字段，规则模拟接口的 matched_rules 也返回相同格式。"
 ---
 
 
@@ -18,7 +18,7 @@ Rules 插件是 Easysearch 的规则匹配引擎，可在数据写入时自动�
 
 - ✅ **实时匹配**：数据写入时自动匹配规则，无需后处理
 - ✅ **高性能**：基于优化的 C++ 规则引擎，支持复杂规则和大规则库
-- ✅ **灵活配置**：支持自定义字段、正则表达式、数值范围匹配
+- ✅ **灵活配置**：支持自定义字段、正则表达式、整数范围匹配
 - ✅ **多规则匹配**：一条文档可匹配多个规则，所有标签保留到数组中
 - ✅ **集群广播**：多节点环境自动编译规则到所有 Ingest 节点
 
@@ -40,7 +40,7 @@ expression\t#offset#description
 
 - **expression**: 匹配表达式（支持 AND/OR/NOT、正则、范围等）
 - **offset**: 规则序号（从 0 开始，系统自动生成，用于区分不同规则）
-- **description**: 规则描述（匹配时作为标签返回）
+- **description**: 规则描述，与 offset 一起组成命中标签
 
 **重要说明**：
 - `offset` 是导入到规则索引后系统自动生成的，本身没有业务含义
@@ -49,7 +49,7 @@ expression\t#offset#description
 
 ### 标签 (Tag)
 
-文档匹配规则后，规则的 `description` 会作为标签添加到文档的 `tags` 字段。`#offset#description` 是 `.match_rules` 内部保存规则文本时使用的格式，不会作为默认命中标签写入文档。
+文档匹配规则后，完整的 `#offset#description` 会作为标签添加到文档的 `tags` 字段，规则模拟接口的 `matched_rules` 也返回相同格式。
 
 ---
 
@@ -373,7 +373,7 @@ POST /_match_rules/security_v1/_simulate
     {
       "_id": "doc-1",
       "matched": true,
-      "matched_rules": ["涉枪武器关键词"]
+      "matched_rules": ["#0#涉枪武器关键词"]
     },
     {
       "_id": "doc-2",
@@ -397,7 +397,7 @@ POST /_match_rules/security_v1/_simulate
 - 这不是 ingest pipeline 的 `/_simulate`，它只返回规则命中结果，不会执行后续处理器
 - 如果你希望模拟结果尽量贴近 `check_match_rules` 的字段行为，可以在请求体中传 `fields`、`default_match_field`、`regex_start_at_word`
 - 如果该规则库在 `_compile` 时声明了 `composite`，模拟会直接使用这套已编译的联合索引结果；但 `/_simulate` 请求本身不支持临时传 `composite`
-- 通过 `_import` API 导入的规则会自动生成 offset；offset 只用于内部规则文本和规则 ID 映射，命中标签返回的是规则 `description`
+- 通过 `_import` API 导入的规则会自动生成 offset；命中标签返回完整的 `#offset#description`
 - 如果你要验证的是完整 ingest 效果，而不只是规则命中，仍然建议再用 `POST /_ingest/pipeline/{id}/_simulate` 做最终验证
 
 ### 步骤 4: 创建 Ingest Pipeline
@@ -462,7 +462,7 @@ POST security-events/_doc?pipeline=security-check
     "title": "枪支交易案",
     "content": "网上出售手枪，价格5000元",
     "timestamp": "2025-12-31T10:00:00Z",
-    "tags": ["涉枪武器关键词"]
+    "tags": ["#0#涉枪武器关键词"]
   }
 }
 ```
@@ -477,8 +477,8 @@ GET /_match_rules?page=1&size=1&q=security_v1
 
 重点关注以下字段：
 
-- `items[0].status`：应为 `compiled` 或 `partial`
-- `items[0].compiled_at`：最近一次成功编译时间
+- `items[0].status`：应为 `compiled`，`partial` 表示部分节点编译失败
+- `items[0].compiled_at`：最近一次编译状态更新时间
 - `items[0].compiled_nodes`：已成功编译该规则库的节点
 - `items[0].fields` / `items[0].composite`：是否与当前编译参数一致
 
@@ -497,7 +497,7 @@ expression\t#offset#description
 **格式说明**：
 - `expression`: 规则表达式（匹配条件）
 - `#offset#`: 规则序号（从 0 开始，由系统自动生成）
-- `description`: 规则描述（匹配时作为标签返回）
+- `description`: 规则描述，与 `#offset#` 一起组成返回标签
 
 **导入时格式**：通过 `_import` API 导入时，只需提供 `expression` 和 `description`，系统会自动生成 offset：
 ```json
@@ -607,7 +607,7 @@ status[已审核]
 2. **配置 Pipeline `fields`**：白名单字段按原字段名参与匹配，其他字段的值会拼接到 `default_match_field`（默认 `content`）
    - 例如 `fields: ["title", "content"]` 时，`author`、`source` 等字段值会汇总到 `content`
 
-3. **数值字段**：用于范围匹配的数值字段（如 `range(100, 500)`）**必须**在编译时通过 `_compile` 的 `fields` 参数声明
+3. **数值字段**：用于范围匹配的数值字段（如 `range[{i{100,500}}]`）**必须**在编译时通过 `_compile` 的 `fields` 参数声明
    - 未声明的数值字段会导致编译失败
 
 **字段声明示例**：
@@ -625,7 +625,7 @@ POST /_match_rules/repo/_compile
 
 ```json
 {
-  "expression": "title(手机) and price(3000, 5000)"
+  "expression": "title(手机) and price[{i{3000,5000}}]"
 }
 ```
 
@@ -686,17 +686,17 @@ author({{张.*}})
 (中国 or 中华 or 华夏) near/3 (人民 or 百姓) near/5 (勤劳 or 勤奋)
 ```
 
-#### 数值范围匹配
+#### 整数范围匹配
 
 ```
-range(400, 600)
-price(1000, 5000)
+range[{i{400,600}}]
+price[{i{1000,5000}}]
 ```
 
-匹配数值在指定范围内的文档（闭区间 [min, max]）。
+匹配整数在指定范围内的文档（闭区间 [min, max]）。
 
 **要求**：
-1. 字段类型必须是数值
+1. 字段值必须是整数
 2. 编译时必须声明字段名（使用 `fields` 参数）
 
 **示例**：
@@ -705,7 +705,7 @@ POST /_match_rules/opinion_check/_import
 {
   "rules": [
     {
-      "expression": "title(威马M5) and content(续航) and range(0, 500)",
+      "expression": "title(威马M5) and content(续航) and range[{i{0,500}}]",
       "description": "威马M5续航不足"
     }
   ]
@@ -801,7 +801,7 @@ author({{张.*}})
 规则中使用了 `range` 字段：
 
 ```json
-"expression": "range(100, 500)"
+"expression": "range[{i{100,500}}]"
 ```
 
 但编译时忘记声明：
@@ -850,7 +850,7 @@ POST /_match_rules/repo/_compile
 
 ### 示例 1: 舆情监控
 
-使用数值范围匹配来监控产品评价中的数值异常。
+使用整数范围匹配来监控产品评价中的数值异常。
 
 **导入规则**：
 ```json
@@ -859,11 +859,11 @@ POST /_match_rules/opinion_check/_import
   "name": "舆情监控规则",
   "rules": [
     {
-      "expression": "title(威马M5) and content(续航) and range(0, 500)",
+      "expression": "title(威马M5) and content(续航) and range[{i{0,500}}]",
       "description": "威马M5续航不足"
     },
     {
-      "expression": "title(威马M7) and content(续航) and range(2500, 9999)",
+      "expression": "title(威马M7) and content(续航) and range[{i{2500,9999}}]",
       "description": "威马M7续航异常高"
     }
   ]
@@ -879,7 +879,7 @@ POST /_match_rules/opinion_check/_compile
 }
 ```
 
-**说明**：编译时只需声明规则中**实际使用**的数值字段。上述规则中使用了 `range(0, 500)` 和 `range(2500, 9999)`，所以至少需要声明 `range` 字段。
+**说明**：编译时只需声明规则中**实际使用**的数值字段。上述规则中使用了 `range[{i{0,500}}]` 和 `range[{i{2500,9999}}]`，所以至少需要声明 `range` 字段。
 
 **Pipeline 配置**：
 ```json
@@ -891,6 +891,8 @@ PUT _ingest/pipeline/opinion_check
       "check_match_rules": {
         "id": "opinion_check",
         "fields": [
+          "title",
+          "content",
           "range",
           "price",
           "energy_kwh",
@@ -906,7 +908,7 @@ PUT _ingest/pipeline/opinion_check
 }
 ```
 
-**说明**：Pipeline 中的 `fields` 参数可以包含更多数值字段，以便支持文档中可能出现的其他数值字段匹配。这些字段不需要在当前规则库中使用，但如果文档包含这些字段，规则引擎会正确处理。
+**说明**：Pipeline 中的 `fields` 是匹配输入白名单，需保留规则使用的 `title`、`content` 和数值字段；未列入白名单的字段值会合并到默认 `content`，无法按原字段名匹配。
 
 **测试匹配**：
 ```json
@@ -945,7 +947,7 @@ POST /_ingest/pipeline/opinion_check/_simulate
           "title": "威马M5续航测试",
           "content": "威马M5的续航表现一般，实测续航里程偏低",
           "range": 450,
-          "tags": ["威马M5续航不足"]
+          "tags": ["#0#威马M5续航不足"]
         }
       }
     },
@@ -955,7 +957,7 @@ POST /_ingest/pipeline/opinion_check/_simulate
           "title": "威马M7续航表现",
           "content": "威马M7的续航非常出色",
           "range": 2650,
-          "tags": ["威马M7续航异常高"]
+          "tags": ["#1#威马M7续航异常高"]
         }
       }
     }
@@ -990,7 +992,7 @@ POST /_ingest/pipeline/opinion_check/_simulate
 | `version` | long | ✅ | 规则库版本（自动递增；当前 API 响应中通常展示为字符串，如 `"1"`、`"2"`） |
 | `status` | keyword | ✅ | 编译状态：`pending`/`compiled`/`partial`/`failed` |
 | `total_rules` | integer | ❌ | 编译后的规则总数（导入后可能为空） |
-| `compiled_at` | date | ❌ | 编译完成时间 |
+| `compiled_at` | date | ❌ | 最近一次编译状态更新时间 |
 | `compiled_nodes` | keyword[] | ❌ | 已编译节点列表 |
 | `fields` | keyword[] | ❌ | 编译时声明的字段列表 |
 | `composite` | keyword[] | ❌ | 联合索引定义列表（2026-01-18 新增） |
@@ -1056,7 +1058,7 @@ GET /_match_rules/security_v1
 
 #### POST /_match_rules/{repo_id}/_import
 
-覆盖导入（删除旧规则，创建新规则）。
+覆盖导入（新建或替换索引中的规则文本，不立即删除已编译的物理规则库）。
 
 **请求体**：
 ```json
@@ -1192,8 +1194,8 @@ PUT /_match_rules/security_v1/_import
     {
       "_id": "doc-1",
       "_source": {
-        "title": "信用卡逾期",
-        "content": "银行催收投诉"
+        "title": "枪支交易案",
+        "content": "出售手枪和AK47"
       }
     }
   ]
@@ -1237,7 +1239,7 @@ PUT /_match_rules/security_v1/_import
     {
       "_id": "doc-1",
       "matched": true,
-      "matched_rules": ["涉枪武器关键词", "枪支型号"]
+      "matched_rules": ["#0#涉枪武器关键词", "#1#枪支型号"]
     }
   ]
 }
@@ -1245,7 +1247,7 @@ PUT /_match_rules/security_v1/_import
 
 **说明**：
 
-- `matched_rules` 返回的是编译后规则库中的规则标签，和 `check_match_rules` 写入目标字段的值保持一致；通过 `_import` API 导入时，该标签来自规则的 `description`
+- `matched_rules` 返回的是编译后规则库中的规则标签，和 `check_match_rules` 写入目标字段的值保持一致；通过 `_import` API 导入时，该标签为完整的 `#offset#description`
 - 未命中时，`matched = false` 且 `matched_rules = []`
 - 如果本节点找不到已编译的规则库目录，会返回 `404`
 - 如果请求体里显式传了 `fields`、`default_match_field`、`regex_start_at_word`，匹配行为会按这些参数执行
@@ -1398,7 +1400,7 @@ GET /_match_rules/security_v1
 | `version` | long | 规则库版本（每次导入递增；当前 API 响应中通常展示为字符串，如 `"1"`、`"2"`） |
 | `status` | keyword | 编译状态：`pending`（待编译）、`compiled`（已编译）、`partial`（部分编译）、`failed`（失败） |
 | `total_rules` | integer | 编译后的规则总数（未编译时可能为空） |
-| `compiled_at` | date | 编译完成时间（最后一次成功编译的时间戳） |
+| `compiled_at` | date | 最近一次编译状态更新时间（失败或部分成功也可能更新） |
 | `compiled_nodes` | keyword[] | 已编译节点列表（已成功编译此规则库的节点名称） |
 | `fields` | keyword[] | 编译时声明的字段列表（用于字段限定与范围匹配等） |
 | `composite` | keyword[] | 联合索引定义列表（用于多字段组合匹配，如 ["(price,range)", "(title,content)"]） |
@@ -1473,14 +1475,14 @@ DELETE /_match_rules/security_v1
 
 节点启动时，Rules 插件会自动检查并同步缺失的规则库：
 
-1. **检查本地规则库**：对比 `.match_rules` 索引中的规则库
-2. **自动编译缺失库**：对于本地不存在的规则库，自动执行编译
+1. **检查本地规则库**：检查 `.match_rules` 中状态为 `compiled` 或 `partial` 的规则库
+2. **自动编译缺失库**：对于本地目录或 `rule_id_map.txt` 缺失的上述规则库，自动执行编译
 3. **更新节点状态**：同步完成后更新 `compiled_nodes` 列表
 
 **预期行为**：
-- 首次启动：自动编译所有规则库（通常 10-20 秒）
-- 集群重启：验证本地规则库，如有缺失自动恢复
-- 新节点加入：后台静默同步，不影响集群服务
+- 首次启动：自动编译上述符合条件的规则库（通常 10-20 秒）
+- 集群重启：检查本地目录和 `rule_id_map.txt`，如有缺失自动恢复
+- 新节点加入：后台同步，写入可能等待、重试或失败
 
 ### 同步期间的写入行为
 
@@ -1573,7 +1575,7 @@ GET security-events/_search
 {
   "query": {
     "terms": {
-      "tags": ["涉枪内容", "涉毒内容"]
+      "tags.keyword": ["#0#涉枪内容", "#1#涉毒内容"]
     }
   }
 }
@@ -1604,11 +1606,11 @@ GET security-events/_search
 {
   "rules": [
     {
-      "expression": "category(手机) and price(3000, 5000)",
+      "expression": "category(手机) and price[{i{3000,5000}}]",
       "description": "中端手机"
     },
     {
-      "expression": "category(笔记本) and ram_gb(16, 32)",
+      "expression": "category(笔记本) and ram_gb[{i{16,32}}]",
       "description": "高性能笔记本"
     }
   ]
@@ -1617,7 +1619,7 @@ GET security-events/_search
 
 ### 4. 舆情监控
 
-**规则示例**（见上文"数值范围匹配"章节）
+**规则示例**（见上文"整数范围匹配"章节）
 
 ---
 
@@ -1648,7 +1650,7 @@ GET security-events/_search
 1. **License 要求**：需要启用 `rule-engine` 特性的有效 License
 2. **系统配置要求**：如果 native 规则库编译或加载被 system call filter 拦截，需要在运行 Rules 插件的节点上配置 `bootstrap.system_call_filter: false`（见"环境要求"章节）
 3. **目标字段可配置**：默认写入 `tags` 字段，可通过 `target_field` 参数自定义
-4. **数值字段类型**：数值范围匹配要求字段值为数值类型
+4. **数值字段类型**：整数范围匹配要求字段值为整数
 5. **正则语法**：建议统一使用 `{{...}}` 语法，不要混用其他写法
 6. **编译依赖导入**：编译前必须先通过 `/_match_rules/.../_import` API 导入规则；不要直接写入 `.match_rules` 内部索引
 7. **节点启动同步**：节点启动时会自动同步规则库，写入操作可能等待、重试或由其他可用 Ingest 节点处理

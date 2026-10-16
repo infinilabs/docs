@@ -7,6 +7,7 @@ const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{co
       }
     `;shadow.appendChild(style);});</script><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
+<option value=v2.5.0>v2.5.0</option>
 <option value=v2.4.0>v2.4.0</option>
 <option value=v2.3.1>v2.3.1</option>
 <option value=v2.3.0>v2.3.0</option>
@@ -241,7 +242,9 @@ JDK 26、27 已通过发行包实际启动验证，可正常运行；切换 JDK 
 需对照新发行包逐项同步必要参数，不能只替换程序文件：</p><ol><li><p>保留 <code>-Djava.security.manager=disallow</code>，移除旧的 <code>allow</code>、启用 SecurityManager 的参数及其他冲突覆盖。
 也检查 <code>ES_JAVA_OPTS</code> 等额外参数。启动时会检查该属性严格为 <code>disallow</code> 且没有安装 JDK SecurityManager，否则拒绝启动。</p></li><li><p>将旧的 <code>21:</code>、<code>25:</code> 两条 agent 配置替换为新包的单条 <code>21-:</code> 配置，并同步 jar 文件名：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>21-:-javaagent:lib/easysearch-security-agent-2.5.0.jar
 </code></pre></div><p><code>21-:</code> 在 JDK 21 及以上生效。移除旧的重复引用，并检查 <code>jvm.options.d/</code> 和 <code>ES_JAVA_OPTS</code>，
-确保每次启动只加载一个安全 agent。保留随包提供的 bootstrap jar，避免混用旧版本文件。</p></li><li><p>保留新包的 <code>21-:--enable-preview</code>、<code>19-:--enable-native-access=ALL-UNNAMED</code> 等必要 JVM 参数，
+确保每次启动只加载一个安全 agent。保留随包提供的 bootstrap jar，避免混用旧版本文件。
+Windows NIO Selector 临时 socket 清理权限修复还涉及核心程序和相关模块策略，需使用配套的完整发行包，
+不能仅替换 agent jar 或修改 <code>jvm.options</code>。</p></li><li><p>保留新包的 <code>21-:--enable-preview</code>、<code>19-:--enable-native-access=ALL-UNNAMED</code> 等必要 JVM 参数，
 再迁移自定义堆大小、GC 日志路径等配置。不要直接用旧配置覆盖新包配置。
 JVMCI 编译器相关的解锁、禁用及重新锁定三行使用 <code>21-26:</code> 条件；JDK 27 不再识别 <code>UseJVMCICompiler</code>，
 旧的 <code>21-:-XX:-UseJVMCICompiler</code> 会导致 JVM 启动失败。</p></li><li><p>确认实际选中的 JDK。Linux/macOS 启动器使用 <code>jdk/</code> > <code>ES_JAVA_HOME</code> > <code>JAVA_HOME</code>；

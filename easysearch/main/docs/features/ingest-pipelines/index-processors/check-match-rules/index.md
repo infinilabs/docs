@@ -139,7 +139,7 @@ POST /_ingest/pipeline/rules_pipeline/_simulate
         "_source": {
           "title": "测试文档",
           "content": "这是需要进行规则检测的文本内容",
-          "tags": ["敏感词规则A", "内容分类规则B"]
+          "tags": ["#0#敏感词规则A", "#1#内容分类规则B"]
         }
       }
     }
@@ -164,7 +164,7 @@ PUT /my_index/_doc/1?pipeline=rules_pipeline
   "_source": {
     "title": "测试文档",
     "content": "这是需要进行规则检测的文本内容",
-    "tags": ["敏感词规则A", "内容分类规则B"]
+    "tags": ["#0#敏感词规则A", "#1#内容分类规则B"]
   }
 }
 ```
@@ -222,7 +222,7 @@ PUT /my_index/_doc/1?pipeline=rules_pipeline
 
 - `title` 仍以 `title` 字段参与匹配
 - `content` 仍以 `content` 字段参与匹配
-- `author` 和 `source` 的值会追加进 `content`
+- `author` 和 `source` 的值会合并到匹配输入的 `content`，不会改写原文档的 `content`
 
 ## 注意事项
 

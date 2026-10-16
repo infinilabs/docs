@@ -125,9 +125,12 @@ Easysearch 2.5.0 在默认 JDK 25 和兼容运行时 JDK 21 上均使用 G1GC。
 20-:--add-modules=jdk.incubator.vector
 ```
 
-Vector API 可以加速向量计算。当前 Lucene 默认仅在 JDK 20～25 范围内尝试启用 Vector API，
-还需满足 JVM 类型、模块可用性等条件；此范围是向量化实现的版本条件，不是 Easysearch 的运行时支持范围。
-JDK 26、27 超出当前上限时会回退到默认实现，搜索功能保留，但不启用该 Vector API 加速路径。
+Vector API 可以加速向量计算。启动器会自动将 `org.apache.lucene.vectorization.upperJavaFeatureVersion`
+设置为实际运行 JDK 的主版本，使 Lucene 在 JDK 26、27 上也会尝试启用 Vector API；还需满足 JVM 类型、模块可用性等条件。
+满足启用条件时，JDK 25 及以上使用发行包中的 JDK 25 向量化实现，该实现已在 JDK 26、27 上验证向量计算及 HNSW 持久化重开查询。
+该参数由启动器生成，无须写入 `jvm.options`；这些启用条件不等于任意未来 JDK 的兼容保证。
+如需覆盖自动值，可在 `jvm.options.d/*.options` 或 `ES_JAVA_OPTS` 中设置同名 `-D` 参数，后者优先；
+Lucene 对该值与内置默认上限 25 取较大值，因此设为 25 可在 JDK 26、27 上恢复按版本回退的行为。
 `--add-modules` 只负责加载模块，不能单独保证 Lucene 启用向量化；`Using incubator modules` 提示仍可能出现。
 JDK 27 已不再识别 `UseJVMCICompiler`，保留旧配置升级 JDK 时，需将上述三行的版本条件同步为 `21-26:`。
 

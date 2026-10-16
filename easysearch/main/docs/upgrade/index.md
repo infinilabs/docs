@@ -45,6 +45,8 @@ JDK 26、27 已通过发行包实际启动验证，可正常运行；切换 JDK 
 
    `21-:` 在 JDK 21 及以上生效。移除旧的重复引用，并检查 `jvm.options.d/` 和 `ES_JAVA_OPTS`，
    确保每次启动只加载一个安全 agent。保留随包提供的 bootstrap jar，避免混用旧版本文件。
+   Windows NIO Selector 临时 socket 清理权限修复还涉及核心程序和相关模块策略，需使用配套的完整发行包，
+   不能仅替换 agent jar 或修改 `jvm.options`。
 3. 保留新包的 `21-:--enable-preview`、`19-:--enable-native-access=ALL-UNNAMED` 等必要 JVM 参数，
    再迁移自定义堆大小、GC 日志路径等配置。不要直接用旧配置覆盖新包配置。
    JVMCI 编译器相关的解锁、禁用及重新锁定三行使用 `21-26:` 条件；JDK 27 不再识别 `UseJVMCICompiler`，

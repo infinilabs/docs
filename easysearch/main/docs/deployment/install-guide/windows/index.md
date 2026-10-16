@@ -132,6 +132,19 @@ curl -ku admin:YOUR_PASSWORD https://localhost:9200
 ```
 可能原因是本机系统自带的 curl.exe 与脚本生成证书的格式兼容问题。解决办法是下载最新版 [curl for Windows](https://curl.se/windows/) 并替换 Git Bash 自带的 curl.exe （自带 curl 程序路径通常位于：/mingw64/bin/curl.exe）
 
+### 启动时删除临时 socket 被拒绝
+
+如果启动时出现以下异常，且调用栈包含 `PipeImpl`、`WEPollSelectorImpl`：
+
+```text
+java.lang.SecurityException: permission denied [("java.io.FilePermission" "C:\Users\...\AppData\Local\Temp\socket_..." "delete")]
+```
+
+这是 JDK 创建 NIO Selector 时清理内部临时 socket 被安全 agent 拒绝，可能导致 AI HTTP 客户端等组件初始化失败。
+2.5.0 已加入修复，请使用包含该修复的完整发行包，保持核心程序、安全 agent、bootstrap jar 和模块策略文件配套，
+不要只替换单个 agent jar。该修复无需额外 JVM 参数，也无需给整个 `%TEMP%` 目录增加文件权限。
+升级时的配置迁移见[升级说明]({{< relref "/docs/upgrade/_index.md" >}})。
+
 ### 端口被占用
 
 如果 9200 端口被占用，可修改 `config\easysearch.yml`：

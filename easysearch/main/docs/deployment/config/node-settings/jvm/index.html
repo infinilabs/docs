@@ -13,6 +13,7 @@ const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{co
       }
     `;shadow.appendChild(style);});</script><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
+<option value=v2.5.0>v2.5.0</option>
 <option value=v2.4.0>v2.4.0</option>
 <option value=v2.3.1>v2.3.1</option>
 <option value=v2.3.0>v2.3.0</option>
@@ -279,9 +280,12 @@ JDK 21 仅用于兼容已部署且暂不方便升级 JDK 的客户环境。安�
 
 <span style=color:#6272a4># JDK 20+：加载 Vector API 孵化模块</span>
 20-:--add-modules<span style=color:#ff79c6>=</span>jdk.incubator.vector
-</code></pre></div><p>Vector API 可以加速向量计算。当前 Lucene 默认仅在 JDK 20～25 范围内尝试启用 Vector API，
-还需满足 JVM 类型、模块可用性等条件；此范围是向量化实现的版本条件，不是 Easysearch 的运行时支持范围。
-JDK 26、27 超出当前上限时会回退到默认实现，搜索功能保留，但不启用该 Vector API 加速路径。
+</code></pre></div><p>Vector API 可以加速向量计算。启动器会自动将 <code>org.apache.lucene.vectorization.upperJavaFeatureVersion</code>
+设置为实际运行 JDK 的主版本，使 Lucene 在 JDK 26、27 上也会尝试启用 Vector API；还需满足 JVM 类型、模块可用性等条件。
+满足启用条件时，JDK 25 及以上使用发行包中的 JDK 25 向量化实现，该实现已在 JDK 26、27 上验证向量计算及 HNSW 持久化重开查询。
+该参数由启动器生成，无须写入 <code>jvm.options</code>；这些启用条件不等于任意未来 JDK 的兼容保证。
+如需覆盖自动值，可在 <code>jvm.options.d/*.options</code> 或 <code>ES_JAVA_OPTS</code> 中设置同名 <code>-D</code> 参数，后者优先；
+Lucene 对该值与内置默认上限 25 取较大值，因此设为 25 可在 JDK 26、27 上恢复按版本回退的行为。
 <code>--add-modules</code> 只负责加载模块，不能单独保证 Lucene 启用向量化；<code>Using incubator modules</code> 提示仍可能出现。
 JDK 27 已不再识别 <code>UseJVMCICompiler</code>，保留旧配置升级 JDK 时，需将上述三行的版本条件同步为 <code>21-26:</code>。</p><hr><h2 id=oom-保护旧语法>OOM 保护（旧语法）
 <a class=anchor href=#oom-%e4%bf%9d%e6%8a%a4%e6%97%a7%e8%af%ad%e6%b3%95>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># 发生 OutOfMemoryError 时生成堆转储文件</span>
