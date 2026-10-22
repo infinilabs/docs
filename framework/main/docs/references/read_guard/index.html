@@ -96,7 +96,11 @@ The selected directories below that prefix do not need to exist at construction.
 System locations such as <code>/etc</code> and <code>/usr/bin</code>, the Unix root, and Windows drive roots are rejected.
 Cleanup cannot bypass these restrictions: <code>/srv/node-*/..</code> becomes <code>/srv</code> and fails the scope restriction.</p><p>Literal roots resolve symbolic links during construction.
 Patterns preserve their cleaned expression paths and do not map symbolic-link aliases to their targets.
-Every actual request path resolves symbolic links before matching, including the final file in <code>ResolveUnder</code>.</p><p>For example, suppose <code>/srv/current</code> links to <code>/srv/easysearch</code>.
+Every actual request path resolves symbolic links before matching, including the final file in <code>ResolveUnder</code>.
+On Windows, literal roots and actual request paths also resolve directory junctions through Windows file handles.
+For example, a request through <code>assets/easysearch/logs</code> can match <code>assets/easysearch-*/logs</code> when the junction targets <code>assets/easysearch-2.5.0-windows-amd64</code>.
+Junctions inside a permitted log directory cannot authorize targets outside the allowed roots.</p><p>Read and deletion guards share path canonicalization and follow both symbolic links and Windows junctions.
+<code>SafeRemoveAll</code> removes the resolved target, which must pass the dangerous-path and allowed-root checks.</p><p>For example, suppose <code>/srv/current</code> links to <code>/srv/easysearch</code>.
 The pattern <code>/srv/current/node-*/logs</code> does not authorize a target that resolves to <code>/srv/easysearch/node-a/logs</code>.
 Use the target path in a pattern, or a literal root such as <code>/srv/current/node-a/logs</code>.
 A link that resolves outside all allowed roots fails authorization.
