@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.5.0 (2026-10-16) #  Breaking changes #   JVM 安全检查改用随发行包提供的安全 agent，停止使用 JDK 自身的 SecurityManager。启动时必须保留 -Djava.security.manager=disallow 和 21-:-javaagent 参数；缺少必要配置或已安装 JDK SecurityManager 时拒绝启动。 升级时保留旧 jvm.options 或自定义配置目录的用户，需同步新包的必要参数和 agent 文件名，详见 2.5.0 升级说明。 安全 agent 的检查范围与旧 SecurityManager 不完全相同，第三方插件需按新的运行时检查范围验证； security.enabled: false 不会关闭安全 agent 或取消 SecurityManager 禁用校验，详见 JVM 安全检查。  Features #   默认运行时升级至 JDK 25，Bundle 包默认内置 JDK 25，新部署与 no-JDK 包推荐使用 JDK 25。 为已部署 JDK 21 且暂不方便升级 JDK 的客户环境保留兼容能力；JDK 21 同样使用安全 agent，并禁用 JDK SecurityManager。 新增 ingest-pattern-tagger 插件：写入时为日志文档识别 LogPilot Pattern 并打标（pattern_tagger 摄取处理器，写入 @pattern_id / @pattern_hash / @pattern_severity / @pattern_status 等字段），可选变量抽取与高置信度丢弃原始消息以节省存储，并配套 pattern_restore 搜索管道处理器在查询时从模板 + 变量还原原始消息。  Bug fix #   修复 Easysearch UI 插件概览页错误显示“获取集群准入凭据”入口的问题，该入口仅在 Agent 托管的 external 模式下显示。 修复 UI 插件登录时，用户名或密码包含中文等非 Latin-1 字符导致 btoa 编码异常、无法登录的问题。 修复 JDK 27 不再识别 UseJVMCICompiler 导致 JVM 启动失败的问题，将相关 JVM 参数限定为 JDK 21～26。 修复 Windows 下安全 agent 拒绝 NIO Selector 内部临时 socket 清理、导致 AI HTTP 客户端等组件初始化失败的问题； 仅对该 JDK 内部清理路径校验 Unix Domain Socket 权限，普通文件删除仍执行文件权限检查。 修复审计日志列表为空时，点击导出显示翻译 key 的问题，现在按界面语言显示无数据提示。 修复关闭 HTTP TLS 且仅配置 transport PEM 材料时，POST /_cluster/enroll/node 因要求 HTTP 证书而返回 500 的问题。 关闭 HTTP TLS 时，成功响应省略 HTTP CA、证书和私钥三个材料字段；开启时仍严格校验，详见 节点 enrollment 响应说明。 修复启动失败后，残留的非守护线程可能导致进程持续运行的问题；现在启动失败会以非零状态退出，并执行正常的 JVM shutdown hooks。  Improvements #   启动器根据实际运行 JDK 自动设置 Lucene 向量化版本上限，使 JDK 26、27 也可尝试启用 Vector API， 保留用户 JVM 参数覆盖能力；向量化实现已通过 JDK 26、27 的计算及 HNSW 持久化重开验证。 安全 agent 改为通过 21-: 在 JDK 21 及以上统一加载，修复 JDK 26 等版本未加载 agent 而无法启动的问题； Byte Buddy 升级至 1."
+Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.5.1 (2026-10-27) #  Features #   新增系统索引迁移 API：GET /_migration/system_features 检查状态，POST /_migration/system_features 启动迁移。 全部节点升级到 2.5.1 后，可在进入 3.0.0 前迁移 1.15.x 创建的安全配置、ILM 配置和调度锁索引。 后台由持久任务协调，支持普通集群管理身份调用，无需额外迁移开关或外部工具。 详见从 1.15.x 迁移到 3.0.0。  Bug fix #   修复通过链接目录启动时，核心 JAR 路径匹配不一致导致安全策略授权失效的问题；该问题可能导致 Windows 节点启动时报 accessUnixDomainSocket 权限错误。 修复从 1.15.x 滚动升级到 2.x 时，新版本节点在混部阶段误用只读的旧 ZSTD codec 写入历史索引而报错的问题。 2."
 ---
 
 
@@ -15,6 +15,37 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 ### Features
 ### Bug fix
 ### Improvements
+
+## 2.5.1 (2026-10-27)
+
+### Features
+
+- 新增系统索引迁移 API：`GET /_migration/system_features` 检查状态，`POST /_migration/system_features` 启动迁移。
+  全部节点升级到 2.5.1 后，可在进入 3.0.0 前迁移 1.15.x 创建的安全配置、ILM 配置和调度锁索引。
+  后台由持久任务协调，支持普通集群管理身份调用，无需额外迁移开关或外部工具。
+  详见[从 1.15.x 迁移到 3.0.0]({{< relref "/docs/upgrade/migrate-1.15-to-3.0.md" >}})。
+
+### Bug fix
+
+- 修复通过链接目录启动时，核心 JAR 路径匹配不一致导致安全策略授权失效的问题；该问题可能导致 Windows 节点启动时报 accessUnixDomainSocket 权限错误。
+- 修复从 1.15.x 滚动升级到 2.x 时，新版本节点在混部阶段误用只读的旧 ZSTD codec 写入历史索引而报错的问题。
+  2.5.1 保留旧段读取能力，新段使用 ZSTD V2 格式写入，支持从 1.15.x 直接滚动升级到 2.5.1，无需先安装 2.5.0。
+- 修复系统索引迁移为新实体并通过 alias 保留逻辑名称后，安全配置加载、访问保护及 ILM/调度器仍依赖旧物理名称的问题。
+- 修复调度索引物理身份变化时，旧索引清理可能取消新实体已调度任务的问题。
+- 修复内存压力下，仅有删除操作时索引缓冲未及时回收的问题。
+
+### Improvements
+
+- 发行包中的安全 agent 改用固定文件名 `easysearch-security-agent.jar`，后续升级无需再因 agent 版本号修改 JVM 配置。
+- 迁移前自动暂停并排空已支持模块的后台任务，校验文档内容、版本、routing 和副本后原子切换 alias，并恢复调度。
+- 持久化迁移进度和结果；可安全清理的失败通过相同 POST 重试，快照恢复不会自动重演运行中的迁移任务。
+
+### Breaking changes
+
+- 迁移任务创建后，低于 2.5.1 的节点不能再加入集群，任务结束后该限制仍保留。
+  POST 会在迁移成功切换时删除旧物理源索引，请先完成并验证备份；升级程序本身不会自动启动迁移。
+- 保留旧 JVM 配置时，须将带版本号的 agent 引用替换为 `21-:-javaagent:lib/easysearch-security-agent.jar`；仅需替换一次。
+  其余配置要求见[2.5.1 升级说明]({{< relref "/docs/upgrade/_index.md#升级到-251系统索引迁移" >}})。
 
 ## 2.5.0 (2026-10-16)
 ### Breaking changes

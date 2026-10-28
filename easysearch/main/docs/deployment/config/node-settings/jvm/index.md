@@ -3,8 +3,8 @@ title: "JVM 配置"
 date: 0001-01-01
 summary: "JVM 配置 #  本页介绍 config/jvm.options 文件中的 JVM 启动参数。这些参数在 Easysearch 启动时由 JVM 读取，修改后需要重启节点生效。
 Easysearch 2.5.0 默认使用并推荐 JDK 25，Bundle 包默认内置 JDK 25。 JDK 21 仅用于兼容已部署且暂不方便升级 JDK 的客户环境。安全 agent 在 JDK 21 及以上统一加载，并要求禁用 JDK SecurityManager。 其他 JDK 的验证范围见安装指南。 请以目标发行包的默认配置为基础调整参数。下文保留的旧 JDK 版本条件仅用于解释配置语法和历史配置，不代表当前版本支持这些运行时。
- 堆内存设置 #  堆内存是 JVM 配置中最重要的参数。
-# 堆大小设为物理内存的 50%，但不超过 31 GB # -Xms 和 -Xmx 必须相同，避免运行时堆调整 -Xms16g -Xmx16g    参数 说明     -Xms JVM 初始堆大小   -Xmx JVM 最大堆大小    设置原则 #   -Xms 和 -Xmx 设为相同值：避免运行时堆大小调整带来的性能波动。 不超过物理内存的 50%：剩余内存留给操作系统文件缓存（Lucene 严重依赖 OS 页面缓存）。 不超过 31 GB（建议设为 31g 或 30g）：超过约 32 GB 后 JVM 无法使用压缩对象指针（Compressed OOPs），实际可用内存反而减少。 不低于 1 GB：过小的堆会导致频繁 GC。  验证压缩指针 #  GET _nodes/stats/jvm?"
+ 升级时的 JVM 配置对照 #  保留旧配置升级时，按目标 Easysearch 版本选择下面的 agent 配置；表中的 21-: 表示 JDK 21 及以上，并非 Easysearch 版本号。
+   目标 Easysearch 版本 JDK SecurityManager 参数 agent 参数     2."
 ---
 
 
@@ -16,6 +16,28 @@ Easysearch 2.5.0 默认使用并推荐 **JDK 25**，Bundle 包默认内置 JDK 2
 JDK 21 仅用于兼容已部署且暂不方便升级 JDK 的客户环境。安全 agent 在 JDK 21 及以上统一加载，并要求禁用 JDK SecurityManager。
 其他 JDK 的验证范围见[安装指南]({{< relref "../../install-guide/_index.md" >}})。
 请以目标发行包的默认配置为基础调整参数。下文保留的旧 JDK 版本条件仅用于解释配置语法和历史配置，不代表当前版本支持这些运行时。
+
+---
+
+## 升级时的 JVM 配置对照
+
+保留旧配置升级时，按**目标 Easysearch 版本**选择下面的 agent 配置；表中的 `21-:` 表示 JDK 21 及以上，并非 Easysearch 版本号。
+
+| 目标 Easysearch 版本 | JDK SecurityManager 参数 | agent 参数 |
+| --- | --- | --- |
+| 2.5.0 | `-Djava.security.manager=disallow` | `21-:-javaagent:lib/easysearch-security-agent-2.5.0.jar` |
+| 2.5.1 | `-Djava.security.manager=disallow` | `21-:-javaagent:lib/easysearch-security-agent.jar` |
+
+- **从 2.4.x 或更早版本升级到 2.5.0/2.5.1：** 移除旧的 `-Djava.security.manager=allow` 或启用 SecurityManager 的参数，
+  改用上表配置，并保留新包的 `21-:--enable-preview`、`19-:--enable-native-access=ALL-UNNAMED` 等必需参数。
+- **从 2.5.0 升级到 2.5.1：** 将带版本号的 agent 行替换为固定名称，保留 `disallow` 及其它必需参数。
+  替换旧行，不要额外追加；同时检查 `jvm.options.d/` 和 `ES_JAVA_OPTS`，确保每次启动只加载一次 agent。
+- **同时升级 JDK：** 还需检查参数的 JDK 版本条件。例如 JVMCI 的解锁、禁用和重新锁定三行必须使用 `21-26:`；
+  JDK 27 不再识别 `UseJVMCICompiler`，不能保留旧的 `21-:` 条件。
+
+后续沿用固定文件名的发行包无需再因 agent 版本号修改该行，但仍须对照目标包检查其它参数。
+使用完整新发行包及配套 bootstrap JAR，不混用旧 JAR；以新包配置为基础迁入自定义堆大小、GC 和日志路径，避免用旧配置整体覆盖新配置。
+节点重启后，通过 `GET /_nodes/jvm` 核对实际 JDK 及 `input_arguments` 中的 agent 参数。
 
 ---
 
@@ -201,9 +223,9 @@ Easysearch 默认启用 GC 日志，不同 JDK 版本的配置方式不同：
 ### 安全检查（JDK 21 及以上统一加载 agent）
 
 ```bash
-# Easysearch 2.5.0；其他发行版本使用对应包内的实际文件名
+# Easysearch 2.5.1 起，agent 使用固定文件名
 -Djava.security.manager=disallow
-21-:-javaagent:lib/easysearch-security-agent-2.5.0.jar
+21-:-javaagent:lib/easysearch-security-agent.jar
 ```
 
 `21-:` 表示 JDK 21 及以上加载同一个 Java agent 执行安全检查，每次启动只应加载一次。
@@ -211,7 +233,7 @@ Easysearch 默认启用 GC 日志，不同 JDK 版本的配置方式不同：
 启动时会显式校验没有安装 JDK SecurityManager，且 `java.security.manager` 的值严格为 `disallow`。
 缺少该参数、将其改为其他值，或已安装 JDK SecurityManager，都会拒绝启动；JDK 25 也必须保留该参数。
 请保留发行包生成的 agent 参数及相邻的 bootstrap jar；缺少 agent 时服务会拒绝启动。
-升级并保留旧 `jvm.options` 时，必须同步新发行包的 agent 文件名和必要参数，同时保留自己的堆大小等设置。
+不同目标版本的文件名及升级操作见本页“升级时的 JVM 配置对照”。
 还应保留发行配置中的 `21-:--enable-preview` 和 `19-:--enable-native-access=ALL-UNNAMED`；
 JDK 21 需要这些参数来加载相应的 Lucene 和 custom-codecs 实现。
 安全 agent 已在 JDK 21、25、26 上完成运行验证；Easysearch 2.5.0 发行包也已在 JDK 26、27 上通过实际启动验证，
