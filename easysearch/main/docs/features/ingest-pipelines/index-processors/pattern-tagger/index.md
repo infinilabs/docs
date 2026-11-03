@@ -194,9 +194,9 @@ PUT _ingest/pipeline/log_pattern_tag
     {
       "pattern_tagger": {
         "field": "message",
-        "stream_id": "app-logs"
-      },
-      "if": "ctx.message != null && ctx.message.toLowerCase().contains('error')"
+        "stream_id": "app-logs",
+        "if": "ctx.message != null && ctx.message.toLowerCase().contains('error')"
+      }
     }
   ]
 }
