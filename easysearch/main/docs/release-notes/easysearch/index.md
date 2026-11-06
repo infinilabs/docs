@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvements #  2.5.1 (2026-10-27) #  Features #   新增系统索引迁移 API：GET /_migration/system_features 检查状态，POST /_migration/system_features 启动迁移。 全部节点升级到 2.5.1 后，可在进入 3.0.0 前迁移 1.15.x 创建的安全配置、ILM 配置和调度锁索引。 后台由持久任务协调，支持普通集群管理身份调用，无需额外迁移开关或外部工具。 详见从 1.15.x 迁移到 3.0.0。  Bug fix #   修复通过链接目录启动时，核心 JAR 路径匹配不一致导致安全策略授权失效的问题；该问题可能导致 Windows 节点启动时报 accessUnixDomainSocket 权限错误。 修复从 1.15.x 滚动升级到 2.x 时，新版本节点在混部阶段误用只读的旧 ZSTD codec 写入历史索引而报错的问题。 2."
+3.0.0 #  Breaking changes #   基于 Lucene 8 创建且符合兼容条件的历史索引在 3.0.0 中以只读方式打开，包括普通及 ZSTD 索引； 不支持继续写入、强制合并或 clone/split/shrink。升级前须在 2.5.1 版本中完成停写、写保护、 flush 和分片副本一致性检查，并保留备份；需要继续写入时，应通过 Reindex 迁移到新建索引。 该兼容能力不代表支持 1.15.x 集群直接滚动升级到 3.0.0，也不包含旧 k-NN 插件的 Lucene 7.x／Easysearch 1.x 历史向量格式。 1.15.x 集群的操作顺序见从 1.15.x 迁移到 3.0.0。 新建 OSQ HNSW 索引默认开启 index.mapping.exclude_source_vectors：物理 _source 不再重复保存向量， 搜索和 GET 等读取默认省略向量。Lucene 仍保留原精度向量供重排和恢复，需返回时显式设置 _source.exclude_vectors: false 或 URL 参数 _source_exclude_vectors=false。 历史索引不会因升级自动切换这一存储语义，详见OSQ HNSW 向量存储与取回。 移除 Java High Level REST Client，不再发布原 com."
 ---
 
 
@@ -10,13 +10,80 @@ Latest (In development) #  Breaking changes #  Features #  Bug fix #  Improvemen
 
 这里是 INFINI Easysearch 历史版本发布的相关说明。
 
-## Latest (In development)
+## 3.0.0
+
 ### Breaking changes
+
+- 基于 Lucene 8 创建且符合兼容条件的历史索引在 3.0.0 中以只读方式打开，包括普通及 ZSTD 索引；
+  不支持继续写入、强制合并或 clone/split/shrink。升级前须在 2.5.1 版本中完成停写、写保护、
+  flush 和分片副本一致性检查，并保留备份；需要继续写入时，应通过 Reindex 迁移到新建索引。
+  该兼容能力不代表支持 1.15.x 集群直接滚动升级到 3.0.0，也不包含旧 k-NN 插件的 Lucene 7.x／Easysearch 1.x 历史向量格式。
+  1.15.x 集群的操作顺序见[从 1.15.x 迁移到 3.0.0]({{< relref "/docs/upgrade/migrate-1.15-to-3.0.md" >}})。
+- 新建 OSQ HNSW 索引默认开启 `index.mapping.exclude_source_vectors`：物理 `_source` 不再重复保存向量，
+  搜索和 GET 等读取默认省略向量。Lucene 仍保留原精度向量供重排和恢复，需返回时显式设置
+  `_source.exclude_vectors: false` 或 URL 参数 `_source_exclude_vectors=false`。
+  历史索引不会因升级自动切换这一存储语义，详见[OSQ HNSW 向量存储与取回]({{< relref "/docs/features/vector-search/osq-hnsw.md#向量存储与取回" >}})。
+- 移除 Java High Level REST Client，不再发布原 `com.infinilabs:easysearch-client`；低层 REST client 和 sniffer 继续保留。
+  使用 `RestHighLevelClient` 的应用需要迁移，详见[升级手册]({{< relref "/docs/upgrade/_index.md" >}})。
+- 分词组件及 ICU 升级可能改变词项、位置和排序键；移除 `Kp`、`Lovins`、`German2` 等旧词干算法名称，
+  修正 Jieba 重叠词的位置语义。使用相关分析器或 ICU 排序键的索引，应按业务数据评估重新索引，
+  详见[分词与 ICU 排序键升级说明]({{< relref "/docs/upgrade/_index.md" >}})。
+- `hybrid` 查询必须选择包含有效 `hybrid_ranker_processor` 的搜索管道；不支持的字段排序、`search_after`、
+  `collapse`、scroll 和 rescore 组合会明确报错，详见[混合搜索排序处理器]({{< relref "/docs/features/query-dsl/search-pipelines/hybrid-ranker-processor.md" >}})。
+
 ### Features
+
+- 搜索内核升级至 **Lucene 10.5.2**，同步适配查询、聚合、索引读写、分片恢复及相关插件；ICU 升级至 **77.1**。
+- 支持从 **2.4.0、2.5.0 或 2.5.1 升级到 3.0.0**，覆盖滚动升级、全量停机升级及快照恢复到新集群；
+  符合条件的历史 Lucene 8 索引保持只读查询，Lucene 9 索引继续支持读写。升级完成后不支持旧版本节点重新加入集群。
+- **1.15.x 的推荐升级路径为 1.15.x → 2.5.1 → 3.0.0**。2.5.1 是升级适配版本：修复旧 ZSTD 索引在
+  1.15.x／2.x 混部期间的写入问题，并提供系统索引迁移 API，将旧安全配置、ILM 配置及调度锁迁到可写的新实体。
+  全部节点到 2.5.1 后，完成所需系统迁移、历史业务索引准备与备份，再进入 3.0.0；无需先安装 2.5.0。
+  仅升级程序不会自动完成系统索引迁移，也不会让旧 Lucene 8 索引在 3.0 中继续原地写入，详见上述迁移指南。
+- 新增 `GET /_migration/system_features` 和 `POST /_migration/system_features` 系统索引迁移 API，
+  替代旧迁移开关和调度器状态入口；支持读取 2.5.1 迁移持久状态，保留后台任务排空、受限内部权限及原子 alias 切换。
+- [语义搜索]({{< relref "/docs/integrations/ai/search-text-embedding.md" >}})接入原生 `dense_vector` HNSW，
+  支持自动选择匹配字段的查询后端，`candidates` 参数参与候选搜索，查询过滤条件在原生向量检索阶段生效。
+- 新增 [Easysearch OSQ HNSW]({{< relref "/docs/features/vector-search/osq-hnsw.md" >}})，基于 Lucene 的
+  Optimized Scalar Quantization（优化的标量量化），使用 1-bit 索引向量与 4-bit 查询向量生成候选，
+  并支持以保留的原精度向量重排。对外沿用 ES 兼容的 `index_options.type: "bbq_hnsw"`，须显式配置；
+  省略 `index_options` 时仍使用未量化的普通 HNSW。
+  - 支持 64–4096 维 `float`／`bfloat16`、`m`、`ef_construction`、`on_disk_rescore`、`flat_index_threshold`
+    及 mapping／查询级 `rescore_vector.oversample`；新 OSQ 字段默认重排倍率为 3，0 表示关闭重排。
+  - 顶层 `knn` 与 DSL `query.knn` 支持预过滤、nested／inner_hits 和 `query_vector_builder.lookup`；
+    支持向量字段读取、脚本访问，以及 Update、Reindex 所需的向量恢复。
+  - REST API 兼容 Elasticsearch 9.5.6 普通索引的显式配置，不代表底层 segment 或快照可跨产品互读；
+    本次不包含 OSQ Disk 或 `bbq_disk` API，也不承诺固定召回率或整个索引的 32 倍压缩。
+
 ### Bug fix
+
+- 修复 Remote Reindex 读取 Elasticsearch 9 等远端不含 `_type` 的搜索命中时失败的问题；
+  保留旧远端显式类型，并支持迁移自动省略 `_source` 向量的 Elasticsearch 9 量化向量索引数据。
+- 修复原生 HNSW 在合法配置 `ef_construction=1` 下构图时可能出现队列容量异常的问题。
+- 修复原生 kNN 在选出 topK 后才执行文档级权限过滤、导致合法次近文档无法进入结果的问题；现在先应用权限过滤再选择候选。
+- 修复 Lucene 10 下字段级权限过滤对 stored fields、term vectors 及延迟词项定位接口的覆盖问题，避免受限字段通过这些读取路径暴露。
+- 修复语义查询通过别名、通配符或多个索引解析向量字段时的后端与维度检查问题；
+  对模型未配置、Embedding 响应为空、向量维度不符或包含非有限值的情况明确返回错误。
+- 修复混合搜索的候选并集计数、零分匹配、单分片分页和跨分片 RRF 排名问题，保持融合结果与评分解释一致；
+  分批结果归并时保留排序处理器需要的各路候选。
+- 修复搜索管道未校验各节点 rerank 处理器能力，以及新配置加载失败后可能继续使用旧配置的问题；失败配置可在恢复条件后重试加载。
+- 修复 IK 词典尚未就绪时查询错误状态被改写的问题；需要分词的查询返回 HTTP 503，词典加载完成后可重试，
+  历史索引的物理恢复及无需分词的 term 查询不受该就绪门禁影响。
+- 修复 Jieba 自定义词典刷新任务的跨节点共享及关闭清理问题；节点独立维护词典，新增文件加载失败时保留已有词典并重试。
+- 修复 SQL 请求在网络线程上执行规划及异常结束时上下文、内存资源清理不完整的问题，保留认证与字段权限约束。
+- 修复插件加载时向量格式 SPI 与 codec 的注册顺序问题，避免已安装插件的向量格式无法被识别。
+
 ### Improvements
 
+- Lucene core 改用统一的 Java 21 字节码产物，可在 JDK 21、25、26 上使用同一 JAR；保留原生 HNSW 批量评分、访问预算及小段省图策略。
+- 修正时间范围合并策略的跨度溢出、评分精度及候选段大小计算，完善合并失败后的异常与统计清理；
+  合并调度器默认线程数正确采用节点 CPU 配置，并支持动态配置更新与重置。
+- 完成 ZSTD、自定义分词器、表达式、Percolator、Fast Terms、SQL、规则引擎等相关模块和插件的 Lucene 10 API 适配。
+
 ## 2.5.1 (2026-10-27)
+
+2.5.1 是从 1.15.x 升级到 3.0.0 的升级适配版本，可从 1.15.x 直接升级，兼顾第一跳的旧索引持续读写和第二跳前的系统索引迁移。
+尚不计划升级 3.0.0 的集群，无需仅因安装 2.5.1 就执行系统迁移；完整路径见[迁移指南]({{< relref "/docs/upgrade/migrate-1.15-to-3.0.md" >}})。
 
 ### Features
 

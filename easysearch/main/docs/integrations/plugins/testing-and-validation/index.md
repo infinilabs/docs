@@ -92,7 +92,7 @@ Easysearch 提供了多个测试基类，适用于不同的测试场景。
 - `internalClusterTest` 会在 `easysearch.internal-cluster-test` 里自动挂到 `check`。
 - `integTest` 会在 `easysearch.rest-test` 里自动挂到 `check`。
 - `yamlRestTest` 会在 `easysearch.yaml-rest-test` 里自动挂到 `check`。
-- 某些项目还会额外挂接自定义任务，例如 `client/rest-high-level` 会把 `asyncIntegTest` 也挂到 `check`。
+- 项目也可以把自定义测试任务挂到 `check`；应以当前模块的构建配置为准。
 
 因此：
 

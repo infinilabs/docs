@@ -85,3 +85,46 @@ curl -ku 'admin:YOUR_PASSWORD' 'https://localhost:9200/_cat/nodes?h=name,jdk&v'
 升级时保留原有数据目录、认证与 TLS 配置；上述 JVM 安全配置不要求重新生成证书或管理员密码。
 `security.enabled: false` 也不会关闭安全 agent 或取消 SecurityManager 禁用校验。
 详细参数与安全检查范围见[JVM 配置]({{< relref "../deployment/config/node-settings/jvm.md" >}})。
+
+## 升级到 3.0.0：Java 客户端
+
+3.0.0 源码和发布构建移除了 `client/rest-high-level`，不再从该模块生成
+`com.infinilabs:easysearch-client`。使用 `org.easysearch.client.RestHighLevelClient` 的应用需要迁移。
+低层 REST client 和 sniffer 继续保留，分别为 `com.infinilabs.easysearch.client:easysearch-rest-client`
+和 `com.infinilabs.easysearch.client:easysearch-rest-client-sniffer`；低层客户端由调用方构造 HTTP 请求并解析响应。
+SQL 插件继续使用节点内部客户端；原来依赖 High Level REST Client、没有产品调用入口的 SQL standalone 适配器随之移除。
+这项移除不改变服务端 REST API；已有独立客户端与 3.0.0 的兼容性仍需按其实际请求验证。
+
+## 升级到 3.0.0：分词与 ICU 排序键
+
+3.0.0 使用 Lucene 10.5.2 和 ICU 77.1。升级前应使用业务样本核对分词结果、短语位置和排序结果。
+
+IK 在后台预加载词典。词典尚未就绪时，需要分词的查询返回 HTTP 503，应在词典加载完成后重试。
+历史只读索引的物理恢复和无需分词的 term 查询可以正常进行；这不表示其查询分析器已经就绪。
+配置 `custom_dict_enable: true`、`dict_key: default` 时，需要在配置的词典索引中准备对应的 `default` 词条。
+1.15.3 的这一配置曾走本地默认词典分支，升级前须检查实际词典来源，不能继续依赖该回退行为。
+仅需本地词典的新分析链应显式关闭 `custom_dict_enable`；使用索引词典时应备份并准备所需词典数据，
+核对加载后的实际词项与历史索引中的词项一致，再恢复业务查询。
+
+Jieba 保留原有切分词项，并修正前后空白、CharFilter 和分析器复用时的偏移。
+`jieba_index` 的重叠词项改用一致的位置图：例如“中华”和“中华人民共和国”从同一位置开始，
+但跨越的位置长度不同。依赖旧 Jieba 短语或邻近查询结果的索引，应从原始文本重建到新索引，
+用实际查询核验后再切换；不要将旧索引可读取等同于新旧位置语义一致。
+
+Jieba 的自定义词典按节点独立加载，放在各节点的 `plugins/jieba/dic` 目录。
+后台仍只追加尚未加载过的新 `.dict` 文件；修改或删除已加载文件不会热更新或删除词项。
+新增词典时应先写完临时文件，再重命名为新的 `.dict` 文件名，避免扫描到尚未写完的内容。
+新增文件读取或解析失败时保留此前词典并在后续扫描重试；节点关闭时会停止本节点的刷新任务。
+
+`stemmer`、`snowball` 过滤器以及 `snowball` 分析器不再接受 `Kp`（包括 `kp`、`dutch_kp`、`dutchKp`）、
+`Lovins` 和 `German2`。这些名称会在配置分析链时明确报错，不会自动换成另一种算法。
+Lucene 已将 German2 合并到更新的 German 实现；Easysearch 要求显式选择迁移，避免旧索引的查询分词悄然变化。
+若索引或模板使用了这些名称，应在升级前选择经过业务验证的受支持算法，创建新索引并重新索引，再切换读写入口。
+只修改查询分词器或模板不会重写旧文档中的词元。
+
+ICU 升级可能改变 `icu_collation` 过滤器和 `icu_collation_keyword` 字段生成的排序键。
+即使 locale 和 strength 不变，新旧排序键也不能假定兼容；例如德语 primary 的 `a` 在 ICU 68.2 中为 `2a00`，
+在 77.1 中为 `2b00`。旧键与新查询键混用可能影响精确匹配、范围查询、聚合和排序。
+应保留原索引和备份，从原始文本在使用目标 ICU 版本的新索引中重新生成排序键，核验结果后切换；
+没有原始文本时，应先准备可重新导入的数据来源。不要只替换节点插件后继续混写新旧键。
+历史索引的物理可读性不代表其分词或排序键具有跨版本语义兼容性。

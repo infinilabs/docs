@@ -110,7 +110,11 @@ GET _search/pipeline/default_model_pipeline
 }
 ```
 
-`api_key` 会被遮掩，防止泄露
+`api_key` 返回带版本前缀的加密值。GET 返回的实际配置可以原样回 PUT；上方星号仅表示省略，不可作为有效密钥回写。
+
+使用 `api_key` 前，在所有安装 AI 插件的节点的 Easysearch keystore 中设置相同的 `search.pipeline.encryption_key`。值为32个随机字节的 Base64 编码，通过 `bin/easysearch-keystore add search.pipeline.encryption_key` 交互输入。该设置不能写入 `easysearch.yml`，修改后需要重启节点，密钥丢失将无法读取已保存的凭据。未使用 `api_key` 的 Ollama 配置不需要此设置。
+
+REST、Transport 和 NodeClient 写入使用同一保护入口。滚动升级期间仍可读取旧版明文或旧密文配置，并记录迁移提示；这些历史存储在迁移前仍有原保护缺陷。待全部相关节点升级并配置相同部署密钥后，将 GET 返回的旧配置原样 PUT 即可重新加密，也可以提交新的实际 `api_key`。带凭据的配置更新要求全部目标节点为3.0.0或更高版本，新格式不能由旧版节点解密。GET 返回的密文应按敏感配置管理。
 
 ## 设置默认搜索管道
 
@@ -134,7 +138,7 @@ GET /my-index/_search
       "text_vector": {
         "query_text": "这是另一个示例文本，这次使用 POST。",
         "candidates": 100,
-        "query_strategy": "LSH_COSINE"
+        "query_strategy": "HNSW"
       }
     }
   }
@@ -148,11 +152,14 @@ GET /my-index/_search
 | **`semantic`**       | `string`  | 是   | -          | 查询类型标识，表示这是一个将文本自动转成向量的查询。                          |
 | **`text_vector`**    | `string`  | 是   | -          | 目标向量字段名（需在 mapping 中定义为 `dense_vector` 类型）                   |
 | **`query_text`**     | `string`  | 是   | -          | 需要编码为向量的文本内容                                                      |
-| **`candidates`**     | `integer` | 否   | 100        | 召回阶段每个 segment 考虑的候选文档数量，值越大召回率越高，性能开销越大       |
-| **`query_strategy`** | `enum`    | 否   | LSH_COSINE | 近似最近邻算法策略，可选值：                                                  |
+| **`candidates`**     | `integer` | 否   | 100        | 正整数。原生 HNSW 同时映射为 `k` 和 `num_candidates`，最大10000；最终命中数仍受搜索窗口限制 |
+| **`query_strategy`** | `enum`    | 否   | AUTO      | 按字段类型选择后端。原生、已索引的 float `dense_vector` 使用 HNSW；显式 LSH 策略不能用于该字段 |
+|                      |           |      |            | - `AUTO`：自动选择；`HNSW`：显式选择原生向量查询 |
 |                      |           |      |            | - `LSH_COSINE`：局部敏感哈希 + 余弦相似度（`model: lsh, similarity: cosine`） |
 |                      |           |      |            | - `LSH_L2`：局部敏感哈希 + L2距离（`model: lsh, similarity: l2`）             |
 |                      |           |      |            | - `PERMUTATION_LSH`：排列局部敏感哈希（`model: permutation_lsh`）             |
+
+LSH 策略仅用于已有 `knn_dense_float_vector` 字段，其模型必须与策略相容。新向量索引建议使用原生 HNSW。相同默认搜索管道可通过索引别名、通配符和 data stream 选择；多个目标索引的默认管道不同（包括部分未配置）时，必须显式指定 `search_pipeline`。显式 `_none` 会跳过默认管道，Semantic 查询仍须获得模型配置。
 
 ### 查询结果
 

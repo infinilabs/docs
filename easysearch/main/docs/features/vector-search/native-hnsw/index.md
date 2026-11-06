@@ -1,9 +1,10 @@
 ---
 title: "原生 HNSW 搜索"
 date: 0001-01-01
-description: "使用 Easysearch 2.4.0 原生 dense_vector、knn query 和顶层 knn 执行 HNSW 向量搜索。"
+description: "使用原生 dense_vector、knn query 和顶层 knn 执行普通 HNSW 向量搜索，以及 3.0 OSQ HNSW 的使用入口。"
 summary: "原生 HNSW 搜索 #  Easysearch 2.4.0 内置基于 Lucene 的 HNSW 向量索引。新建原生 HNSW 索引不需要安装插件，使用 dense_vector mapping 和 标准 _search API 即可完成写入和检索。
- Elasticsearch 8.19 兼容范围： Easysearch 2.4.0 已验证 Elasticsearch 8.19.17 的显式 float HNSW mapping，以及省略 index_options 的 dense_vector mapping、Bulk、query-level kNN、顶层 kNN、单个顶层 query + knn 的 OR/加分语义。 Java 8.19.17 和 Python 8.19.3 官方客户端也已验证。这里的“兼容”指已验证的 API、wire 和查询行为。省略 index_options 时， Easysearch 使用 float HNSW，不表示支持 Elasticsearch 默认的 int8_hnsw，也不表示 Elasticsearch segment、索引目录或快照 可以与 Easysearch 直接互换。使用 Elasticsearch 8.19 官方客户端时，还必须开启本页 Elasticsearch 8."
+ 3.0 量化检索： 本页以 2.4.0 起的普通 HNSW 为基础。Easysearch 3.0 新增 OSQ HNSW，使用 ES 兼容的 index_options.type: &quot;bbq_hnsw&quot; 显式选择，支持原精度重排、nested 和向量 source 恢复。 其映射、默认存储和查询扩展见OSQ HNSW 搜索。 下文明确标为 2.4.0 的能力与限制，不代表 3.0 OSQ HNSW 的范围。
+  Elasticsearch 8.19 兼容范围： Easysearch 2.4.0 已验证 Elasticsearch 8.19.17 的显式 float HNSW mapping，以及省略 index_options 的 dense_vector mapping、Bulk、query-level kNN、顶层 kNN、单个顶层 query + knn 的 OR/加分语义。 Java 8."
 ---
 
 
@@ -11,6 +12,11 @@ summary: "原生 HNSW 搜索 #  Easysearch 2.4.0 内置基于 Lucene 的 HNSW �
 
 Easysearch 2.4.0 内置基于 Lucene 的 HNSW 向量索引。新建原生 HNSW 索引不需要安装插件，使用 `dense_vector` mapping 和
 标准 `_search` API 即可完成写入和检索。
+
+> **3.0 量化检索：** 本页以 2.4.0 起的普通 HNSW 为基础。Easysearch 3.0 新增 **OSQ HNSW**，使用
+> ES 兼容的 `index_options.type: "bbq_hnsw"` 显式选择，支持原精度重排、nested 和向量 source 恢复。
+> 其映射、默认存储和查询扩展见[OSQ HNSW 搜索]({{< relref "/docs/features/vector-search/osq-hnsw.md" >}})。
+> 下文明确标为 2.4.0 的能力与限制，不代表 3.0 OSQ HNSW 的范围。
 
 > **Elasticsearch 8.19 兼容范围：** Easysearch 2.4.0 已验证 Elasticsearch 8.19.17 的显式 float HNSW mapping，以及省略
 > `index_options` 的 `dense_vector` mapping、Bulk、query-level kNN、顶层 kNN、单个顶层 `query` + `knn` 的 OR/加分语义。
@@ -349,7 +355,7 @@ POST /native-hnsw-demo/_search
 HNSW 图按 segment 构建。查询需要访问 shard 中所有相关 segment，再合并各 segment 的候选结果。segment 数量会直接影响查询
 CPU 和延迟，后台 merge 则会消耗 CPU、I/O 和额外临时磁盘空间。
 
-Easysearch 2.4.0 尚未提供与 Elasticsearch 8.19 对齐的 shard 内 segment 并行搜索。自然多 segment 索引上的查询吞吐可能低于
+Easysearch 2.4.0 不支持 shard 内 segment 并行搜索。自然多 segment 索引上的查询吞吐可能低于
 单 segment 索引，也可能低于相同合同下的 Elasticsearch 8.19。上线前必须使用生产预期的 segment 拓扑进行压测，不能用
 force merge 后的单 segment 结果代表持续写入场景。
 

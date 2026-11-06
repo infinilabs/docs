@@ -6,8 +6,9 @@ summary: "混合搜索排序处理器（Hybrid Ranker Processor） #   需要 AI
 工作原理 #  在混合搜索中，多个子查询（如 BM25 关键词查询 + KNN 向量查询）各自返回独立的得分。这些得分的量纲和分布可能完全不同，无法直接比较。hybrid_ranker_processor 通过以下步骤解决这个问题：
  得分归一化：将各子查询的得分归一化到可比较的范围 得分融合：使用融合算法（如 RRF）将多路归一化后的得分合并为统一的最终得分 根据最终得分重新排序搜索结果  RRF 算法 #  默认使用 Reciprocal Rank Fusion (RRF) 算法，其核心思想是基于排名而非原始分数进行融合：
 $$\text{RRF}(d) = \sum_{i=1}^{n} \frac{1}{k + r_i(d)}$$
-其中 $k$ 为常数（默认 60），$r_i(d)$ 为文档 $d$ 在第 $i$ 个子查询结果中的排名。
-请求体字段 #     字段 类型 是否必填 说明     combination Object 否 得分融合配置   combination."
+其中 $k$ 为常数（默认 60），$r_i(d)$ 为文档 $d$ 在第 $i$ 路已返回候选中的跨分片全局排名。
+hybrid 查询必须选择包含一个有效 hybrid_ranker_processor 的搜索管道。未选择管道、选择 _none、空管道或重复配置排序处理器会被拒绝。普通非 hybrid 查询使用同一管道时不会自动执行 RRF。
+当前每路候选窗口与 from + size 相关，不支持独立 rank_window_size 或加权 RRF；改变分页窗口可能改变候选并集。hybrid 不支持字段排序、search_after、collapse、scroll 和 rescore，这些组合会明确报错。"
 ---
 
 
@@ -31,7 +32,11 @@ $$\text{RRF}(d) = \sum_{i=1}^{n} \frac{1}{k + r_i(d)}$$
 
 $$\text{RRF}(d) = \sum_{i=1}^{n} \frac{1}{k + r_i(d)}$$
 
-其中 $k$ 为常数（默认 60），$r_i(d)$ 为文档 $d$ 在第 $i$ 个子查询结果中的排名。
+其中 $k$ 为常数（默认 60），$r_i(d)$ 为文档 $d$ 在第 $i$ 路已返回候选中的跨分片全局排名。
+
+`hybrid` 查询必须选择包含一个有效 `hybrid_ranker_processor` 的搜索管道。未选择管道、选择 `_none`、空管道或重复配置排序处理器会被拒绝。普通非 `hybrid` 查询使用同一管道时不会自动执行 RRF。
+
+当前每路候选窗口与 `from + size` 相关，不支持独立 `rank_window_size` 或加权 RRF；改变分页窗口可能改变候选并集。`hybrid` 不支持字段排序、`search_after`、`collapse`、scroll 和 rescore，这些组合会明确报错。
 
 ## 请求体字段
 
@@ -40,9 +45,10 @@ $$\text{RRF}(d) = \sum_{i=1}^{n} \frac{1}{k + r_i(d)}$$
 | `combination`            | Object  | 否       | 得分融合配置                           |
 | `combination.technique`  | String  | 否       | 融合算法名称。默认 `rrf`               |
 | `combination.parameters` | Object  | 否       | 融合算法的参数                         |
+| `combination.parameters.rank_constant` | Integer | 否 | 默认60，范围1–10000。放在其他层级或拼错参数会报错 |
 | `tag`                    | String  | 否       | 处理器标识标签                         |
 | `description`            | String  | 否       | 处理器描述                             |
-| `ignore_failure`         | Boolean | 否       | 处理器失败时是否继续执行。默认 `false` |
+| `ignore_failure`         | Boolean | 否       | 此排序处理器失败会终止搜索，不能依赖忽略失败来返回未融合结果 |
 
 ## 示例
 
@@ -51,7 +57,7 @@ $$\text{RRF}(d) = \sum_{i=1}^{n} \frac{1}{k + r_i(d)}$$
 ```json
 PUT /_search/pipeline/my_hybrid_pipeline
 {
-  "phase_results_processors": [
+  "rerank_processors": [
     {
       "hybrid_ranker_processor": {
         "tag": "ranker",
@@ -72,25 +78,26 @@ PUT /_search/pipeline/full_hybrid_pipeline
   "rewrite_processors": [
     {
       "semantic_query_enricher": {
-        "url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+        "url": "https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings",
         "vendor": "openai",
         "api_key": "sk-xxxxxxxx",
         "default_model_id": "text-embedding-v3"
       }
     }
   ],
-  "phase_results_processors": [
+  "rerank_processors": [
     {
       "hybrid_ranker_processor": {
         "tag": "ranker",
         "description": "使用 RRF 进行混合排序",
         "combination": {
-          "technique": "rrf"
+          "technique": "rrf",
+          "parameters": { "rank_constant": 60 }
         }
       }
     }
   ],
-  "response_processors": [
+  "enrich_processors": [
     {
       "hybrid_score_explanation": {
         "tag": "explanation",
@@ -106,6 +113,7 @@ PUT /_search/pipeline/full_hybrid_pipeline
 ```json
 GET /my_index/_search?search_pipeline=full_hybrid_pipeline
 {
+  "explain": true,
   "query": {
     "hybrid": {
       "queries": [

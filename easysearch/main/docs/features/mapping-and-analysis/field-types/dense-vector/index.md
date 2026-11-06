@@ -1,8 +1,9 @@
 ---
 title: "dense_vector 字段类型"
 date: 0001-01-01
-description: "Easysearch 2.4.0 原生 HNSW dense_vector 字段的映射参数、约束和使用示例。"
+description: "dense_vector 普通 HNSW 与 Easysearch 3.0 OSQ HNSW 的映射参数、版本约束和使用示例。"
 summary: "dense_vector 字段类型 #  dense_vector 用于保存稠密浮点向量，并通过 Lucene 原生 HNSW 索引执行近似最近邻搜索。该能力从 Easysearch 2.4.0 开始内置，不需要安装 k-NN 插件。
+Easysearch 3.0 新增 OSQ HNSW（Optimized Scalar Quantization，优化的标量量化），通过 ES 兼容参数 index_options.type: &quot;bbq_hnsw&quot; 显式选择。省略 index_options 时仍使用普通 HNSW，不会自动选择量化类型。 本页先说明 2.4.0 起的普通 HNSW 配置；3.0 新增和变化的行为见下方OSQ HNSW 映射。
 旧 k-NN 插件的 knn_dense_float_vector 和 knn_sparse_bool_vector 字段仍然保留，参考 K-NN 向量字段类型。两套字段和查询语法不同， 新建原生 HNSW 索引时使用本页的 dense_vector。
 创建映射 #  Easysearch 2.4.0 要求显式指定 dims 和 index: true。以下示例省略 index_options：
 PUT /native-hnsw-demo { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;title&#34;: { &#34;type&#34;: &#34;text&#34; }, &#34;embedding&#34;: { &#34;type&#34;: &#34;dense_vector&#34;, &#34;dims&#34;: 4, &#34;element_type&#34;: &#34;float&#34;, &#34;index&#34;: true, &#34;similarity&#34;: &#34;cosine&#34; } } } }  重要：省略 index_options 后仍会建立 HNSW 索引。 Easysearch 2."
@@ -13,6 +14,10 @@ PUT /native-hnsw-demo { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;title
 
 `dense_vector` 用于保存稠密浮点向量，并通过 Lucene 原生 HNSW 索引执行近似最近邻搜索。该能力从 Easysearch 2.4.0
 开始内置，不需要安装 k-NN 插件。
+
+Easysearch 3.0 新增 **OSQ HNSW**（Optimized Scalar Quantization，优化的标量量化），通过 ES 兼容参数
+`index_options.type: "bbq_hnsw"` 显式选择。省略 `index_options` 时仍使用普通 HNSW，不会自动选择量化类型。
+本页先说明 2.4.0 起的普通 HNSW 配置；3.0 新增和变化的行为见下方[OSQ HNSW 映射](#30-osq-hnsw-映射)。
 
 旧 k-NN 插件的 `knn_dense_float_vector` 和 `knn_sparse_bool_vector` 字段仍然保留，参考
 [K-NN 向量字段类型]({{< relref "/docs/features/mapping-and-analysis/field-types/knn.md" >}})。两套字段和查询语法不同，
@@ -129,7 +134,7 @@ PUT /native-hnsw-demo/_doc/v01
 使用不同 HNSW 构建参数的 segment。需要让全部数据使用统一参数时，请创建新索引并 Reindex；不要依赖 mapping 更新或
 force merge 改写已有图。
 
-## 字段能力
+## 2.4.0 字段能力
 
 `dense_vector` 是单值、已索引但没有 doc values 的专用向量字段：
 
@@ -149,7 +154,7 @@ force merge 改写已有图。
 使用 `cosine` 时，Easysearch 会将用于 HNSW 索引的向量归一化，但 `_source` 仍保留客户端写入的原始向量。读取 `_source`
 得到的值不一定等于底层索引使用的归一化值。
 
-## 当前限制
+## 2.4.0 的限制
 
 Easysearch 2.4.0 的原生 HNSW 范围不包括：
 
@@ -160,4 +165,61 @@ Easysearch 2.4.0 的原生 HNSW 范围不包括：
 - nested kNN 查询。
 
 查询方法参考[原生 HNSW 搜索]({{< relref "/docs/features/vector-search/native-hnsw.md" >}})。
+
+## 3.0 OSQ HNSW 映射
+
+以下配置用于具备 OSQ 能力的 Easysearch 3.0 集群中新建的索引，不适用于 2.x：
+
+```json
+PUT /osq-vectors
+{
+  "settings": {
+    "index.mapping.exclude_source_vectors": true
+  },
+  "mappings": {
+    "properties": {
+      "vector": {
+        "type": "dense_vector",
+        "dims": 1024,
+        "index": true,
+        "similarity": "cosine",
+        "index_options": {
+          "type": "bbq_hnsw",
+          "m": 64,
+          "ef_construction": 512
+        }
+      }
+    }
+  }
+}
+```
+
+| 参数或能力 | 3.0 显式 OSQ HNSW 行为 |
+| --- | --- |
+| `dims` | 64–4096；可省略，由首个有效向量确定，生产环境建议显式指定 |
+| `element_type` | 默认 `float`，也支持 `bfloat16` |
+| `index` | 省略时为 `true`，不接受 `false` |
+| `similarity` | 默认 `cosine`；同时支持 `dot_product`、`l2_norm`、`max_inner_product` |
+| `index_options.type` | 使用兼容 API 值 `bbq_hnsw`；不接受 `osq_hnsw` |
+| `m` / `ef_construction` | 默认 16 / 100，范围与普通 HNSW 相同 |
+| `index_options.rescore_vector.oversample` | 新 OSQ 字段默认 3；可设 0 关闭原精度重排，非零范围为 [1,10] |
+| `index_options.on_disk_rescore` | 默认 `false`；控制 raw 读取策略，两种取值都保留 raw |
+| `index_options.flat_index_threshold` | 默认 300；负值回落到 300，0 禁用小段省图优化 |
+| nested | 支持 nested kNN 和 inner_hits |
+| 字段读取 | 支持 `fields`、`docvalue_fields` 及向量脚本访问，仍不支持排序和聚合 |
+| `_source` | 新 OSQ 索引默认自动排除向量，显式请求时从保留的原精度向量恢复 |
+
+上面的默认行为受新索引语义和节点能力约束，不能仅凭版本号套用到旧索引。普通 HNSW 仍要求显式 `dims` 和
+`index: true`；3.0 也接受显式 `index: false` 的非索引向量，但不能同时配置 `similarity` 或 `index_options`，不能执行 kNN 检索。
+
+更新 OSQ 字段时，维度、元素类型和相似度不能改变，`m` 只能保持或增大。普通 HNSW 可显式转换为 OSQ HNSW，
+反向转换不支持；mapping 更新只影响后续生成的段，不会立即将旧段全部改写为量化格式。
+
+新 OSQ 索引默认 `index.mapping.exclude_source_vectors: true`，该设置只能在建索引时确定。物理 `_source` 省略向量数组，
+Lucene 段内仍保留 raw，用于原精度重排、字段读取和 source 恢复；恢复不是从 1-bit 码反量化。
+搜索需要返回向量时指定 `_source: {"exclude_vectors": false}`，GET 等入口可用 URL 参数 `_source_exclude_vectors=false`。
+恢复值遵循保留的 float32／bfloat16 精度；需要在物理 `_source` 中保留输入数组时，应在建索引时关闭自动排除。
+
+完整的写入、两种查询入口、候选重排、向量取回和迁移边界见
+[OSQ HNSW 搜索]({{< relref "/docs/features/vector-search/osq-hnsw.md" >}})。
 
