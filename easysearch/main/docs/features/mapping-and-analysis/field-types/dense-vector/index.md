@@ -223,3 +223,10 @@ Lucene 段内仍保留 raw，用于原精度重排、字段读取和 source 恢�
 完整的写入、两种查询入口、候选重排、向量取回和迁移边界见
 [OSQ HNSW 搜索]({{< relref "/docs/features/vector-search/osq-hnsw.md" >}})。
 
+## 3.0 OSQ Disk 映射
+
+磁盘量化索引使用显式 `index_options.type: "bbq_disk"`，支持1–4096维 `float`／`bfloat16`。
+它使用 `cluster_size`、`default_visit_percentage` 和重排参数，不接受 HNSW 的 `m`、`ef_construction`。
+省略 `index_options` 不会自动选择 Disk；同一字段不能通过更新 mapping 在 Disk 与 HNSW 两族之间转换。
+完整参数、查询、向量读取和迁移规则见 [OSQ Disk 搜索]({{< relref "/docs/features/vector-search/osq-disk.md" >}})。
+

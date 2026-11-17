@@ -1,22 +1,22 @@
 ---
 title: "原生 HNSW 搜索"
 date: 0001-01-01
-description: "使用原生 dense_vector、knn query 和顶层 knn 执行普通 HNSW 向量搜索，以及 3.0 OSQ HNSW 的使用入口。"
-summary: "原生 HNSW 搜索 #  Easysearch 2.4.0 内置基于 Lucene 的 HNSW 向量索引。新建原生 HNSW 索引不需要安装插件，使用 dense_vector mapping 和 标准 _search API 即可完成写入和检索。
- 3.0 量化检索： 本页以 2.4.0 起的普通 HNSW 为基础。Easysearch 3.0 新增 OSQ HNSW，使用 ES 兼容的 index_options.type: &quot;bbq_hnsw&quot; 显式选择，支持原精度重排、nested 和向量 source 恢复。 其映射、默认存储和查询扩展见OSQ HNSW 搜索。 下文明确标为 2.4.0 的能力与限制，不代表 3.0 OSQ HNSW 的范围。
+description: "使用原生 dense_vector、两种 knn 入口及 Easysearch 3.0 nested/inner_hits 执行 HNSW 向量搜索。"
+summary: "原生 HNSW 搜索 #  Easysearch 自 2.4.0 起内置基于 Lucene 的 HNSW 向量索引。新建原生 HNSW 索引不需要安装插件，使用 dense_vector mapping 和 标准 _search API 即可完成写入和检索。
+ 3.0 能力： 原生 HNSW 也支持 nested kNN 和 inner_hits，示例见下文“Nested 与 inner_hits（3.0）”。3.0 新增 OSQ HNSW，使用 ES 兼容的 index_options.type: &quot;bbq_hnsw&quot; 显式选择，支持原精度重排、nested 和向量 source 恢复。 其映射、默认存储和查询扩展见OSQ HNSW 搜索。 下文明确标为 2.4.0 的能力与限制，不代表 3.0 原生 HNSW 或 OSQ 的完整范围。
   Elasticsearch 8.19 兼容范围： Easysearch 2.4.0 已验证 Elasticsearch 8.19.17 的显式 float HNSW mapping，以及省略 index_options 的 dense_vector mapping、Bulk、query-level kNN、顶层 kNN、单个顶层 query + knn 的 OR/加分语义。 Java 8."
 ---
 
 
 # 原生 HNSW 搜索
 
-Easysearch 2.4.0 内置基于 Lucene 的 HNSW 向量索引。新建原生 HNSW 索引不需要安装插件，使用 `dense_vector` mapping 和
+Easysearch 自 2.4.0 起内置基于 Lucene 的 HNSW 向量索引。新建原生 HNSW 索引不需要安装插件，使用 `dense_vector` mapping 和
 标准 `_search` API 即可完成写入和检索。
 
-> **3.0 量化检索：** 本页以 2.4.0 起的普通 HNSW 为基础。Easysearch 3.0 新增 **OSQ HNSW**，使用
+> **3.0 能力：** 原生 HNSW 也支持 nested kNN 和 `inner_hits`，示例见下文“Nested 与 inner_hits（3.0）”。3.0 新增 **OSQ HNSW**，使用
 > ES 兼容的 `index_options.type: "bbq_hnsw"` 显式选择，支持原精度重排、nested 和向量 source 恢复。
 > 其映射、默认存储和查询扩展见[OSQ HNSW 搜索]({{< relref "/docs/features/vector-search/osq-hnsw.md" >}})。
-> 下文明确标为 2.4.0 的能力与限制，不代表 3.0 OSQ HNSW 的范围。
+> 下文明确标为 2.4.0 的能力与限制，不代表 3.0 原生 HNSW 或 OSQ 的完整范围。
 
 > **Elasticsearch 8.19 兼容范围：** Easysearch 2.4.0 已验证 Elasticsearch 8.19.17 的显式 float HNSW mapping，以及省略
 > `index_options` 的 `dense_vector` mapping、Bulk、query-level kNN、顶层 kNN、单个顶层 `query` + `knn` 的 OR/加分语义。
@@ -62,6 +62,9 @@ PUT /native-hnsw-demo
 > **重要：本示例省略 `index_options`。** Easysearch 2.4.0 会默认建立 `hnsw(m=16, ef_construction=100)` 索引，
 > 并在 mapping 响应中回显这组参数。如果需要调整 `m` 或 `ef_construction`，再显式提供 `index_options`。
 
+3.0 中省略 `index_options` 也仍选择普通 HNSW；检索字段必须显式设置 `dims` 和 `index: true`。
+省略 `index_options` 不等于可以省略 `index: true`。
+
 完整的 mapping 参数参考
 [dense_vector 字段类型]({{< relref "/docs/features/mapping-and-analysis/field-types/dense-vector.md" >}})。
 
@@ -105,7 +108,8 @@ POST /native-hnsw-demo/_search
 | 参数 | 是否必填 | 说明 |
 | --- | --- | --- |
 | `field` | 是 | 已索引的 `dense_vector` 字段名 |
-| `query_vector` | 是 | 查询向量，维度必须与字段 mapping 一致 |
+| `query_vector` | 与builder二选一（3.0） | 查询向量，维度必须与字段 mapping 一致；2.4.0使用此参数直接传入数组 |
+| `query_vector_builder` | 与数组二选一（3.0） | 可使用lookup引用已刷新、可搜索的向量，不能与query_vector同时传入 |
 | `k` | 否 | 每个分片返回的最近邻数量，必须大于 0；省略时以请求的 `size` 为基准；仅在省略 `k` 时，如果同时设置了更小的 `num_candidates`，有效值会被限制为 `num_candidates` |
 | `num_candidates` | 否 | 每个分片搜索的候选数量，必须不小于 `k`，最大为 10000 |
 | `filter` | 否 | 在 HNSW 搜索过程中应用的预过滤查询，可传单个查询或查询数组 |
@@ -117,6 +121,18 @@ POST /native-hnsw-demo/_search
 
 query-level `k` 是每个分片的候选数量，最终响应条数仍由外层 `size` 控制。需要由协调节点从各分片候选中选出全局 `k` 个结果时，
 使用顶层 `knn`。HNSW 仍是近似最近邻搜索，这里的“全局”指跨分片协调选取，不表示 exact kNN。
+
+3.0也可以将示例中的 `query_vector` 替换为以下builder，引用同一索引中已refresh的向量；顶层和DSL入口均适用：
+
+```json
+{
+  "query_vector_builder": {
+    "lookup": { "index": "native-hnsw-demo", "id": "v01", "path": "embedding" }
+  }
+}
+```
+
+这是knn对象内的参数片段，不是独立搜索请求。lookup读取可搜索向量，不是realtime GET；需要routing的文档还应传入lookup.routing。
 
 ### 带过滤条件
 
@@ -330,6 +346,127 @@ POST /native-hnsw-demo/_search
 | 需要在 HNSW 搜索中预过滤 | 两种形式均可使用 `filter` |
 | 多路顶层 kNN | 2.4.0 暂不支持 |
 
+## Nested 与 inner_hits（3.0）
+
+Easysearch 3.0 原生 HNSW 支持 nested 向量。搜索返回按父文档去重的结果，父文档得分取符合过滤条件的最佳子向量得分。
+顶层入口在 `knn.inner_hits` 配置子命中；DSL 入口在外层 `nested.inner_hits` 配置，不能放进 `query.knn` 对象。
+
+下面使用4维 L2 向量，创建独立示例索引：
+
+```json
+PUT /native-hnsw-nested
+{
+  "mappings": {
+    "properties": {
+      "tenant": { "type": "keyword" },
+      "children": {
+        "type": "nested",
+        "properties": {
+          "tag": { "type": "keyword" },
+          "vector": {
+            "type": "dense_vector",
+            "dims": 4,
+            "index": true,
+            "similarity": "l2_norm",
+            "index_options": { "type": "hnsw" }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+```json
+PUT /native-hnsw-nested/_doc/article-1?refresh=true
+{
+  "tenant": "allowed",
+  "children": [
+    { "tag": "keep", "vector": [0.25, 0.0, 0.0, 0.0] },
+    { "tag": "keep", "vector": [2.0, 0.0, 0.0, 0.0] },
+    { "tag": "drop", "vector": [0.0, 0.0, 0.0, 0.0] },
+    { "tag": "keep" }
+  ]
+}
+```
+
+顶层 `knn` 同时过滤父字段 `tenant` 和子字段 `children.tag`：
+
+```json
+POST /native-hnsw-nested/_search
+{
+  "size": 2,
+  "_source": { "exclude_vectors": false },
+  "knn": {
+    "field": "children.vector",
+    "query_vector": [0.0, 0.0, 0.0, 0.0],
+    "k": 2,
+    "num_candidates": 10,
+    "filter": [
+      { "term": { "tenant": "allowed" } },
+      { "term": { "children.tag": "keep" } }
+    ],
+    "inner_hits": {
+      "name": "selected",
+      "size": 2,
+      "sort": [{ "_score": "desc" }],
+      "_source": { "exclude_vectors": false }
+    }
+  }
+}
+```
+
+同一查询使用 DSL 入口写为：
+
+```json
+POST /native-hnsw-nested/_search
+{
+  "size": 2,
+  "_source": { "exclude_vectors": false },
+  "query": {
+    "nested": {
+      "path": "children",
+      "score_mode": "max",
+      "query": {
+        "knn": {
+          "field": "children.vector",
+          "query_vector": [0.0, 0.0, 0.0, 0.0],
+          "k": 2,
+          "num_candidates": 10,
+          "filter": [
+            { "term": { "tenant": "allowed" } },
+            { "term": { "children.tag": "keep" } }
+          ]
+        }
+      },
+      "inner_hits": {
+        "name": "selected",
+        "size": 2,
+        "sort": [{ "_score": "desc" }],
+        "_source": { "exclude_vectors": false }
+      }
+    }
+  }
+}
+```
+
+两个请求都只返回一个父命中 `article-1`，父 `_score` 约为 `0.9411765`。`inner_hits.selected.hits.total.value` 为2，
+子命中按分数递减，原数组 `_nested.offset` 分别为0、1，分数约为 `0.9411765`、`0.2`。
+`tag=drop` 的更近向量不参与评分；缺少向量的最后一个子文档不参与向量命中。
+
+`inner_hits.from` 和 `inner_hits.size` 只控制每个父命中的子分页，不改变父命中的 `k`。
+例如设置 `from: 1, size: 1` 时只返回 offset=1 的子文档，子命中总数仍为2。
+子响应的 `_source` 是对应的子对象，offset 指原数组位置，不是排序后的位置。inner_hits 对符合条件的子向量评分，不再执行一次独立的 ANN 候选检索。
+
+### 3.0 向量取回与持久化
+
+搜索需要返回向量时，可显式使用上例的 `_source: {"exclude_vectors": false}`；需要子响应也包含向量时，父、子两处都设置。
+GET 对应为 `GET /native-hnsw-nested/_doc/article-1?_source_exclude_vectors=false`。
+此取回选项不能恢复已经通过永久 source 过滤丢弃且没有可恢复存储的内容，也不能重建显式禁用的完整 `_source`。
+
+向量、图和nested关系随索引持久化，可使用正常的 flush、close/open 和同产品快照恢复流程。
+恢复后应检查实际查询、子offset和source内容，不只检查集群健康；相同REST参数不表示可跨产品恢复Elasticsearch快照。
+
 ## 生产调优
 
 原生 HNSW 的召回率、查询成本、写入成本和存储占用由 mapping 参数、查询参数和 segment 拓扑共同决定。先使用代表真实业务的
@@ -527,7 +664,7 @@ try (RestClientTransport transport = new RestClientTransport(
 客户端会发送 Elasticsearch 8.x vendor media type。不要手工删除或改写兼容请求头；连接失败时先检查节点兼容配置、TLS 信任、
 认证信息和响应中的产品标识。
 
-## 当前不支持的接口
+## 2.4.0 不支持的接口
 
 Easysearch 2.4.0 原生 HNSW 不提供以下 Elasticsearch 向量接口：
 
@@ -542,5 +679,7 @@ Easysearch 2.4.0 原生 HNSW 不提供以下 Elasticsearch 向量接口：
 一个普通顶层 `query` 与一个顶层 `knn` 并列使用属于支持范围；上面的“多个顶层 `knn` 子句”限制不应理解为禁止单 kNN
 加权复合检索。
 
-这些限制只针对本页的原生 HNSW。旧 k-NN 插件能力和语法继续按旧插件文档使用。
+这些是2.4.0原生 HNSW 的版本限制。3.0原生已支持上文的nested kNN、inner_hits和向量取回选项；
+量化索引须按 [OSQ HNSW](./osq-hnsw.md) 或 [OSQ Disk](./osq-disk.md) 显式选择，不能将普通 `hnsw` 字段解释为量化字段。
+旧 k-NN 插件能力和语法继续按旧插件文档使用。
 

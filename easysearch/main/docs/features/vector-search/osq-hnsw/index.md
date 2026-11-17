@@ -6,7 +6,7 @@ summary: "OSQ HNSW 搜索 #  Easysearch 3.0 内置 OSQ HNSW 向量搜索，无�
 此功能属于 Easysearch OSQ 技术族。OSQ 指 Lucene 的 Optimized Scalar Quantization（优化的标量量化）；当前编码为索引 1-bit、查询 4-bit。量化降低候选检索数据的内存需求，同时带来近似误差，需要结合候选数量和原精度重排评估召回率。
 对外沿用 ES 的兼容 API 名称。 mapping 使用 index_options.type: &quot;bbq_hnsw&quot;，不引入 osq_hnsw 类型或 API 别名；相关 settings、查询、写入和返回字段沿用兼容接口。
 OSQ HNSW 对索引向量作 1-bit 量化，用量化分数搜索 HNSW 候选，再按配置使用保留的原精度向量重排。底层使用 Apache Lucene 10.5.2；REST API 兼容范围为 Elasticsearch 9.5.6 普通索引中的显式 bbq_hnsw 配置。
-必须显式选择 bbq_hnsw。 省略 index_options 保留 Easysearch 原有普通 HNSW 选型，不按向量维度自动切换为 OSQ HNSW 或其它量化类型。本文不要求设置 index."
+必须显式选择 bbq_hnsw。 省略 index_options 保留 Easysearch 原有普通 HNSW 选型；普通 HNSW 仍需显式 dims 和 index: true，不会按向量维度自动切换为 OSQ HNSW 或其它量化类型。本文不要求设置 index."
 ---
 
 
@@ -20,7 +20,7 @@ Easysearch 3.0 内置 **OSQ HNSW** 向量搜索，无需安装 k-NN 插件。本
 
 OSQ HNSW 对索引向量作 1-bit 量化，用量化分数搜索 HNSW 候选，再按配置使用保留的原精度向量重排。底层使用 Apache Lucene 10.5.2；REST API 兼容范围为 Elasticsearch 9.5.6 普通索引中的显式 `bbq_hnsw` 配置。
 
-**必须显式选择 `bbq_hnsw`。** 省略 `index_options` 保留 Easysearch 原有普通 HNSW 选型，不按向量维度自动切换为 OSQ HNSW 或其它量化类型。本文不要求设置 `index.mode`，也不表示 Easysearch 支持 ES 的其它索引模式。
+**必须显式选择 `bbq_hnsw`。** 省略 `index_options` 保留 Easysearch 原有普通 HNSW 选型；普通 HNSW 仍需显式 `dims` 和 `index: true`，不会按向量维度自动切换为 OSQ HNSW 或其它量化类型。本文不要求设置 `index.mode`，也不表示 Easysearch 支持 ES 的其它索引模式。
 
 使用前应将集群全部节点升级到具备 OSQ 能力的 3.0 版本；含不具备相应能力的节点时，创建或更新 OSQ 映射会被拒绝。历史索引不会因节点升级而自动变为 OSQ 索引；建议新建目标索引并 Reindex。
 
@@ -176,7 +176,133 @@ C = max(num_candidates, R)
 
 预过滤放在 `knn.filter` 中。外层 bool 过滤不能一概当成候选预过滤；普通请求不自动启用其它 semantic pipeline 的过滤规则。`similarity` 阈值在对应评分域应用，开启重排时按raw分数处理。查询取消、超时和权限限制继续生效。
 
-nested 向量先按父文档去重。顶层 `knn.inner_hits` 用于nested子文档；DSL 入口在外层 `nested` 声明 `inner_hits`。inner hits 在匹配的子文档范围精确评分，不再执行一次ANN。非nested字段上的合法顶层inner_hits对象会被忽略。
+nested 向量先按父文档去重。顶层 `knn.inner_hits` 用于nested子文档；DSL 入口在外层 `nested` 声明 `inner_hits`。inner hits在匹配子文档范围按当前量化或raw模式评分，不再执行一次ANN。非nested字段上的合法顶层inner_hits对象会被忽略。
+
+## Nested 与 inner_hits 示例
+
+OSQ HNSW 至少64维，不能直接套用4维的普通 HNSW 示例。创建64维 L2 nested 字段：
+
+```json
+PUT /osq-hnsw-nested
+{
+  "mappings": {
+    "properties": {
+      "tenant": { "type": "keyword" },
+      "children": {
+        "type": "nested",
+        "properties": {
+          "tag": { "type": "keyword" },
+          "vector": {
+            "type": "dense_vector",
+            "dims": 64,
+            "index": true,
+            "similarity": "l2_norm",
+            "index_options": { "type": "bbq_hnsw" }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+生成64维子向量并写入父文档。以下curl沿用本文本地HTTP示例约定，TLS环境需使用实际地址与认证：
+
+```bash
+python3 - <<'PY' | curl -sS -X PUT \
+  'http://localhost:9200/osq-hnsw-nested/_doc/article-1?refresh=true' \
+  -H 'Content-Type: application/json' --data-binary @-
+import json
+def vector(first):
+    return [first] + [0.0] * 63
+print(json.dumps({
+    "tenant": "allowed",
+    "children": [
+        {"tag": "keep", "vector": vector(0.25)},
+        {"tag": "keep", "vector": vector(2.0)},
+        {"tag": "drop", "vector": vector(0.0)},
+        {"tag": "keep"}
+    ]
+}))
+PY
+```
+
+顶层入口在 `knn` 内配置 `inner_hits`，并显式开启原精度重排：
+
+```json
+POST /osq-hnsw-nested/_search
+{
+  "size": 2,
+  "_source": { "exclude_vectors": false },
+  "knn": {
+    "field": "children.vector",
+    "query_vector": [
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    ],
+    "k": 2,
+    "num_candidates": 10,
+    "rescore_vector": { "oversample": 3 },
+    "filter": [
+      { "term": { "tenant": "allowed" } },
+      { "term": { "children.tag": "keep" } }
+    ],
+    "inner_hits": {
+      "name": "selected",
+      "size": 2,
+      "sort": [{ "_score": "desc" }],
+      "_source": { "exclude_vectors": false }
+    }
+  }
+}
+```
+
+DSL 入口将 `inner_hits` 放在外层 `nested`：
+
+```json
+POST /osq-hnsw-nested/_search
+{
+  "size": 2,
+  "_source": { "exclude_vectors": false },
+  "query": {
+    "nested": {
+      "path": "children",
+      "score_mode": "max",
+      "query": {
+        "knn": {
+          "field": "children.vector",
+          "query_vector": [
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+          ],
+          "k": 2,
+          "num_candidates": 10,
+          "rescore_vector": { "oversample": 3 },
+          "filter": [
+            { "term": { "tenant": "allowed" } },
+            { "term": { "children.tag": "keep" } }
+          ]
+        }
+      },
+      "inner_hits": {
+        "name": "selected",
+        "size": 2,
+        "sort": [{ "_score": "desc" }],
+        "_source": { "exclude_vectors": false }
+      }
+    }
+  }
+}
+```
+
+示例只返回父文档 `article-1`，父分数约为 `0.9411765`；子命中总数为2，`_nested.offset` 为0、1，分数约为 `0.9411765`、`0.2`。
+根字段与子字段的过滤都在候选选择时生效，`tag=drop` 及没有向量的子文档不进入子命中。
+父命中按最佳匹配子向量得分排序；子 `from/size` 独立分页，例如 `from: 1, size: 1` 返回offset=1，总数仍为2。
+关闭重排时使用量化评分，不能继续要求本例的raw分数。父、子响应恢复向量时，两处 `_source.exclude_vectors` 都需设为false；只设置子选项不能补回已经在父source读取阶段省略的向量。
 
 ## 向量存储与取回
 
@@ -230,6 +356,10 @@ POST /osq-demo/_search
 
 恢复值取决于保留的向量精度。float32通常不能保留原JSON所有双精度小数；bfloat16还会进一步舍入。显式关闭 `_source` 时，不能用 `exclude_vectors: false` 重新生成完整文档。若关闭自动省略并依赖mapping永久排除向量，也不能承诺source取回会补回被永久丢弃的内容。
 
+cosine向量还可能在写入时归一化、取回时乘回模长，因此即使字段为float，恢复值也可能与输入存在浮点舍入差异；需要保留输入数组精度时，应在创建索引时关闭自动source排除。
+
+同产品内可使用正常的flush、close/open和快照恢复流程；恢复后核对实际查询、inner_hits及向量内容。快照或mapping成功响应不能替代恢复后的结果检查。
+
 ## 索引级查询设置
 
 除 mapping 中的构图和重排配置外，还支持以下动态索引设置：
@@ -261,5 +391,6 @@ PUT /osq-demo/_settings
 
 OSQ 是有损量化，召回率取决于数据分布、候选数量和重排配置，应使用业务数据评估。1-bit 是量化码的位宽，实际还包括校正数据、HNSW 图、raw、其它字段和副本，不能将其解释为整个索引体积缩小 32 倍。
 
-Easysearch 与 ES 的 codec 身份、量化实现及 segment 文件布局不同；相同 REST mapping 不代表可以直接互读 segment 或跨产品恢复快照。OSQ HNSW 暂不支持 `bbq_disk` API，其它量化索引类型和旧插件查询语法不在本页范围内。
+Easysearch 与 ES 的 codec 身份、量化实现及 segment 文件布局不同；相同 REST mapping 不代表可以直接互读 segment 或跨产品恢复快照。
+`bbq_disk` 对应独立的 [OSQ Disk 索引](./osq-disk.md)，不使用本页的 HNSW 构图参数；其它量化索引类型和旧插件查询语法不在本页范围内。
 

@@ -2,7 +2,7 @@
 title: "Easysearch"
 date: 0001-01-01
 summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布的相关说明。
-3.0.0 #  Breaking changes #   基于 Lucene 8 创建且符合兼容条件的历史索引在 3.0.0 中以只读方式打开，包括普通及 ZSTD 索引； 不支持继续写入、强制合并或 clone/split/shrink。升级前须在 2.5.1 版本中完成停写、写保护、 flush 和分片副本一致性检查，并保留备份；需要继续写入时，应通过 Reindex 迁移到新建索引。 该兼容能力不代表支持 1.15.x 集群直接滚动升级到 3.0.0，也不包含旧 k-NN 插件的 Lucene 7.x／Easysearch 1.x 历史向量格式。 1.15.x 集群的操作顺序见从 1.15.x 迁移到 3.0.0。 新建 OSQ HNSW 索引默认开启 index.mapping.exclude_source_vectors：物理 _source 不再重复保存向量， 搜索和 GET 等读取默认省略向量。Lucene 仍保留原精度向量供重排和恢复，需返回时显式设置 _source.exclude_vectors: false 或 URL 参数 _source_exclude_vectors=false。 历史索引不会因升级自动切换这一存储语义，详见OSQ HNSW 向量存储与取回。 移除 Java High Level REST Client，不再发布原 com."
+3.0.0 #  Breaking changes #   基于 Lucene 8 创建且符合兼容条件的历史索引在 3.0.0 中以只读方式打开，包括普通及 ZSTD 索引； 不支持继续写入、强制合并或 clone/split/shrink。升级前须在 2.5.1 版本中完成停写、写保护、 flush 和分片副本一致性检查，并保留备份；需要继续写入时，应通过 Reindex 迁移到新建索引。 该兼容能力不代表支持 1.15.x 集群直接滚动升级到 3.0.0，也不包含旧 k-NN 插件的 Lucene 7.x／Easysearch 1.x 历史向量格式。 1.15.x 集群的操作顺序见从 1.15.x 迁移到 3.0.0。 新建 OSQ HNSW 或 OSQ Disk 索引默认开启 index.mapping.exclude_source_vectors：物理 _source 不再重复保存向量， 搜索和 GET 等读取默认省略向量。Lucene 仍保留原精度向量供重排和恢复，需返回时显式设置 _source.exclude_vectors: false 或 URL 参数 _source_exclude_vectors=false。 历史索引不会因升级自动切换这一存储语义，详见OSQ HNSW 向量存储与取回 和OSQ Disk 向量读取。 移除 Java High Level REST Client，不再发布原 com."
 ---
 
 
@@ -19,10 +19,11 @@ summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布�
   flush 和分片副本一致性检查，并保留备份；需要继续写入时，应通过 Reindex 迁移到新建索引。
   该兼容能力不代表支持 1.15.x 集群直接滚动升级到 3.0.0，也不包含旧 k-NN 插件的 Lucene 7.x／Easysearch 1.x 历史向量格式。
   1.15.x 集群的操作顺序见[从 1.15.x 迁移到 3.0.0]({{< relref "/docs/upgrade/migrate-1.15-to-3.0.md" >}})。
-- 新建 OSQ HNSW 索引默认开启 `index.mapping.exclude_source_vectors`：物理 `_source` 不再重复保存向量，
+- 新建 OSQ HNSW 或 OSQ Disk 索引默认开启 `index.mapping.exclude_source_vectors`：物理 `_source` 不再重复保存向量，
   搜索和 GET 等读取默认省略向量。Lucene 仍保留原精度向量供重排和恢复，需返回时显式设置
   `_source.exclude_vectors: false` 或 URL 参数 `_source_exclude_vectors=false`。
-  历史索引不会因升级自动切换这一存储语义，详见[OSQ HNSW 向量存储与取回]({{< relref "/docs/features/vector-search/osq-hnsw.md#向量存储与取回" >}})。
+  历史索引不会因升级自动切换这一存储语义，详见[OSQ HNSW 向量存储与取回]({{< relref "/docs/features/vector-search/osq-hnsw.md#向量存储与取回" >}})
+  和[OSQ Disk 向量读取]({{< relref "/docs/features/vector-search/osq-disk.md#nested-与向量读取" >}})。
 - 移除 Java High Level REST Client，不再发布原 `com.infinilabs:easysearch-client`；低层 REST client 和 sniffer 继续保留。
   使用 `RestHighLevelClient` 的应用需要迁移，详见[升级手册]({{< relref "/docs/upgrade/_index.md" >}})。
 - 分词组件及 ICU 升级可能改变词项、位置和排序键；移除 `Kp`、`Lovins`、`German2` 等旧词干算法名称，
@@ -49,11 +50,15 @@ summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布�
   并支持以保留的原精度向量重排。对外沿用 ES 兼容的 `index_options.type: "bbq_hnsw"`，须显式配置；
   省略 `index_options` 时仍使用未量化的普通 HNSW。
   - 支持 64–4096 维 `float`／`bfloat16`、`m`、`ef_construction`、`on_disk_rescore`、`flat_index_threshold`
-    及 mapping／查询级 `rescore_vector.oversample`；新 OSQ 字段默认重排倍率为 3，0 表示关闭重排。
+    及 mapping／查询级 `rescore_vector.oversample`；新 OSQ HNSW 字段默认重排倍率为 3，0 表示关闭重排。
   - 顶层 `knn` 与 DSL `query.knn` 支持预过滤、nested／inner_hits 和 `query_vector_builder.lookup`；
     支持向量字段读取、脚本访问，以及 Update、Reindex 所需的向量恢复。
-  - REST API 兼容 Elasticsearch 9.5.6 普通索引的显式配置，不代表底层 segment 或快照可跨产品互读；
-    本次不包含 OSQ Disk 或 `bbq_disk` API，也不承诺固定召回率或整个索引的 32 倍压缩。
+  - 上述 `bbq_hnsw` 映射参数和查询行为对齐 Elasticsearch 9.5.6 普通索引的对应接口，底层 segment 和快照不能跨产品直接互读。
+    量化码用于候选检索，原精度向量仍保留用于重排与恢复；召回率取决于数据和查询配置。
+- 新增 [Easysearch OSQ Disk]({{< relref "/docs/features/vector-search/osq-disk.md" >}})，使用显式
+  `index_options.type: "bbq_disk"` 创建磁盘量化向量索引，支持 1–4096 维 `float`／`bfloat16`、
+  簇大小、查询访问目标及原精度重排配置。支持顶层 `knn` 和 DSL `query.knn`、过滤、nested／inner_hits、向量读取与 `_source` 恢复；
+  Disk 与 HNSW 两族之间转换需要创建目标索引并 Reindex。
 
 ### Bug fix
 
