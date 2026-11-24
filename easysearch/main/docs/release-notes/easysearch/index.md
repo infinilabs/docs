@@ -62,6 +62,9 @@ summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布�
   `index_options.type: "bbq_disk"` 创建磁盘量化向量索引，支持 1–4096 维 `float`／`bfloat16`、
   簇大小、查询访问目标及原精度重排配置。支持顶层 `knn` 和 DSL `query.knn`、过滤、nested／inner_hits、向量读取与 `_source` 恢复；
   Disk 与 HNSW 两族之间转换需要创建目标索引并 Reindex。
+  - `index.osq_disk.parent_scoring` 默认开启。搜索符合条件的 L2 段时，同一父中心下的多个向量簇可以复用查询量化结果。
+    仅为兼容早期实验版本，创建索引时才需要设为 `false`。恢复已开启父中心评分的索引时，显式设为 `false` 会被拒绝。
+    后续版本将强制开启父中心评分，并移除这个配置项。
 
 ### Bug fix
 
@@ -87,6 +90,9 @@ summary: "版本发布日志 #  这里是 INFINI Easysearch 历史版本发布�
 
 ### Improvements
 
+- **OSQ Disk 查询。** 减少评分时的重复校验开销，并且只在启用查询分析时统计重排耗时。JDK 25 下，macOS ARM64 在原生库可用时自动使用 C++ 批量评分；
+  Linux x86_64 和 ARM64 默认使用 Java，可通过 JVM 启动参数启用 C++ 批量评分。详见
+  [OSQ Disk 原生批量评分]({{< relref "/docs/features/vector-search/osq-disk.md#原生批量评分" >}})。
 - Lucene core 改用统一的 Java 21 字节码产物，可在 JDK 21、25、26 上使用同一 JAR；保留原生 HNSW 批量评分、访问预算及小段省图策略。
 - 修正时间范围合并策略的跨度溢出、评分精度及候选段大小计算，完善合并失败后的异常与统计清理；
   合并调度器默认线程数正确采用节点 CPU 配置，并支持动态配置更新与重置。

@@ -9,6 +9,7 @@ const host=document.querySelector('#searchbox');waitForShadow(host,(shadow)=>{co
       }
     `;shadow.appendChild(style);});</script><div class=heading><select class=version-selector>
 <option value>main (latest)</option>
+<option value=v2.5.2>v2.5.2</option>
 <option value=v2.5.1>v2.5.1</option>
 <option value=v2.5.0>v2.5.0</option>
 <option value=v2.4.0>v2.4.0</option>
@@ -266,14 +267,18 @@ Optimized Scalar Quantization（优化的标量量化），使用 1-bit 索引�
 量化码用于候选检索，原精度向量仍保留用于重排与恢复；召回率取决于数据和查询配置。</li></ul></li><li>新增 <a href=/easysearch/main/docs/features/vector-search/osq-disk/>Easysearch OSQ Disk</a>，使用显式
 <code>index_options.type: "bbq_disk"</code> 创建磁盘量化向量索引，支持 1–4096 维 <code>float</code>／<code>bfloat16</code>、
 簇大小、查询访问目标及原精度重排配置。支持顶层 <code>knn</code> 和 DSL <code>query.knn</code>、过滤、nested／inner_hits、向量读取与 <code>_source</code> 恢复；
-Disk 与 HNSW 两族之间转换需要创建目标索引并 Reindex。</li></ul><h3 id=bug-fix>Bug fix
+Disk 与 HNSW 两族之间转换需要创建目标索引并 Reindex。<ul><li><code>index.osq_disk.parent_scoring</code> 默认开启。搜索符合条件的 L2 段时，同一父中心下的多个向量簇可以复用查询量化结果。
+仅为兼容早期实验版本，创建索引时才需要设为 <code>false</code>。恢复已开启父中心评分的索引时，显式设为 <code>false</code> 会被拒绝。
+后续版本将强制开启父中心评分，并移除这个配置项。</li></ul></li></ul><h3 id=bug-fix>Bug fix
 <a class=anchor href=#bug-fix>#</a></h3><ul><li>修复 Remote Reindex 读取 Elasticsearch 9 等远端不含 <code>_type</code> 的搜索命中时失败的问题；
 保留旧远端显式类型，并支持迁移自动省略 <code>_source</code> 向量的 Elasticsearch 9 量化向量索引数据。</li><li>修复原生 HNSW 在合法配置 <code>ef_construction=1</code> 下构图时可能出现队列容量异常的问题。</li><li>修复原生 kNN 在选出 topK 后才执行文档级权限过滤、导致合法次近文档无法进入结果的问题；现在先应用权限过滤再选择候选。</li><li>修复 Lucene 10 下字段级权限过滤对 stored fields、term vectors 及延迟词项定位接口的覆盖问题，避免受限字段通过这些读取路径暴露。</li><li>修复语义查询通过别名、通配符或多个索引解析向量字段时的后端与维度检查问题；
 对模型未配置、Embedding 响应为空、向量维度不符或包含非有限值的情况明确返回错误。</li><li>修复混合搜索的候选并集计数、零分匹配、单分片分页和跨分片 RRF 排名问题，保持融合结果与评分解释一致；
 分批结果归并时保留排序处理器需要的各路候选。</li><li>修复搜索管道未校验各节点 rerank 处理器能力，以及新配置加载失败后可能继续使用旧配置的问题；失败配置可在恢复条件后重试加载。</li><li>修复 IK 词典尚未就绪时查询错误状态被改写的问题；需要分词的查询返回 HTTP 503，词典加载完成后可重试，
 历史索引的物理恢复及无需分词的 term 查询不受该就绪门禁影响。</li><li>修复 Jieba 自定义词典刷新任务的跨节点共享及关闭清理问题；节点独立维护词典，新增文件加载失败时保留已有词典并重试。</li><li>修复 SQL 请求在网络线程上执行规划及异常结束时上下文、内存资源清理不完整的问题，保留认证与字段权限约束。</li><li>修复插件加载时向量格式 SPI 与 codec 的注册顺序问题，避免已安装插件的向量格式无法被识别。</li><li><strong>分片恢复。</strong> 修复恢复即将完成时，因释放资源而卡住的问题。同一次恢复产生的重复通知会合并，主节点处理完状态更新后再应答。
 如果期间切换主节点，通知可以重发给新主节点。</li><li><strong>快照仓库。</strong> 修复多个请求同时读取仓库时可能收到重复应答的问题。节点关闭或仓库被标记为损坏时，仍在排队的读取请求会收到错误并结束等待。</li><li><strong>请求取消。</strong> 取消集群统计等支持取消的请求后，服务端会释放已收集的结果。查询索引信息时，客户端断开连接也会触发取消，减少后台资源占用。</li></ul><h3 id=improvements>Improvements
-<a class=anchor href=#improvements>#</a></h3><ul><li>Lucene core 改用统一的 Java 21 字节码产物，可在 JDK 21、25、26 上使用同一 JAR；保留原生 HNSW 批量评分、访问预算及小段省图策略。</li><li>修正时间范围合并策略的跨度溢出、评分精度及候选段大小计算，完善合并失败后的异常与统计清理；
+<a class=anchor href=#improvements>#</a></h3><ul><li><strong>OSQ Disk 查询。</strong> 减少评分时的重复校验开销，并且只在启用查询分析时统计重排耗时。JDK 25 下，macOS ARM64 在原生库可用时自动使用 C++ 批量评分；
+Linux x86_64 和 ARM64 默认使用 Java，可通过 JVM 启动参数启用 C++ 批量评分。详见
+<a href=/easysearch/main/docs/features/vector-search/osq-disk/#原生批量评分>OSQ Disk 原生批量评分</a>。</li><li>Lucene core 改用统一的 Java 21 字节码产物，可在 JDK 21、25、26 上使用同一 JAR；保留原生 HNSW 批量评分、访问预算及小段省图策略。</li><li>修正时间范围合并策略的跨度溢出、评分精度及候选段大小计算，完善合并失败后的异常与统计清理；
 合并调度器默认线程数正确采用节点 CPU 配置，并支持动态配置更新与重置。</li><li>完成 ZSTD、自定义分词器、表达式、Percolator、Fast Terms、SQL、规则引擎等相关模块和插件的 Lucene 10 API 适配。</li><li><strong>集中重启或扩容。</strong> 多个节点同时加入集群时，主节点可以把同一份校验数据压缩一次，再发给支持该格式的节点，减少重复准备数据的工作和传输量。</li><li><strong>索引管理。</strong> 修改索引设置、别名和读写限制，或关闭、删除索引时，主节点可以批量处理同时到达的同类操作，减少集群状态发布次数。
 任务积压时，新任务入队也会少做重复检查。更新集群状态时，会复用未变化的索引信息和分片分配信息。</li><li><strong>健康检查和统计。</strong> 集群健康检查和部分索引统计处理移到后台，减少对网络收发的影响。每个节点只汇总一次查询缓存统计，
 手动刷新（<code>_refresh</code>）和刷盘（<code>_flush</code>）收集分片结果时也少做重复工作。</li><li><strong>快照。</strong> 大量分片同时做快照时，排队任务占用更少内存。查看快照状态时减少重复扫描，同一轮仓库读取可以服务多个请求。

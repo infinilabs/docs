@@ -2,7 +2,7 @@
 title: "OSQ Disk 搜索"
 date: 0001-01-01
 description: "Easysearch 3.0 磁盘量化向量索引的映射、查询、重排和迁移说明。"
-summary: "OSQ Disk 搜索 #  Easysearch 3.0 内置 OSQ Disk，通过量化向量和磁盘簇检索生成候选，再按配置使用保留的原精度向量重排。无需安装 k-NN 插件。
+summary: "OSQ Disk 搜索 #  OSQ Disk 是 Easysearch 3.0 内置的磁盘向量索引。它使用 Lucene 的 Optimized Scalar Quantization（优化的标量量化，简称 OSQ）。搜索先用量化后的向量找出候选，再按配置用保留的原精度向量重新排序。无需安装 k-NN 插件。
 对外使用兼容 API 名称 index_options.type: &quot;bbq_disk&quot;，不接受 osq_disk 别名。 OSQ Disk 与 OSQ HNSW 是不同的索引类型；Disk 不使用 HNSW 的 m 和 ef_construction 参数。 省略 index_options 时仍使用普通 HNSW，不会自动选择 Disk；普通 HNSW 检索字段仍需显式 dims 和 index: true。
 创建索引与写入 #  集群所有节点应先升级到支持 OSQ Disk 的 Easysearch 3.0 版本，再创建 Disk 字段。
 PUT /disk-vectors { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;category&#34;: { &#34;type&#34;: &#34;keyword&#34; }, &#34;vector&#34;: { &#34;type&#34;: &#34;dense_vector&#34;, &#34;dims&#34;: 4, &#34;element_type&#34;: &#34;float&#34;, &#34;similarity&#34;: &#34;l2_norm&#34;, &#34;index_options&#34;: { &#34;type&#34;: &#34;bbq_disk&#34;, &#34;cluster_size&#34;: 384, &#34;rescore_vector&#34;: { &#34;oversample&#34;: 3 } } } } } } PUT /disk-vectors/_doc/1?"
@@ -11,7 +11,7 @@ PUT /disk-vectors { &#34;mappings&#34;: { &#34;properties&#34;: { &#34;category&
 
 # OSQ Disk 搜索
 
-Easysearch 3.0 内置 **OSQ Disk**，通过量化向量和磁盘簇检索生成候选，再按配置使用保留的原精度向量重排。无需安装 k-NN 插件。
+**OSQ Disk** 是 Easysearch 3.0 内置的磁盘向量索引。它使用 Lucene 的 Optimized Scalar Quantization（优化的标量量化，简称 OSQ）。搜索先用量化后的向量找出候选，再按配置用保留的原精度向量重新排序。无需安装 k-NN 插件。
 
 对外使用兼容 API 名称 `index_options.type: "bbq_disk"`，不接受 `osq_disk` 别名。
 OSQ Disk 与 [OSQ HNSW](./osq-hnsw.md) 是不同的索引类型；Disk 不使用 HNSW 的 `m` 和 `ef_construction` 参数。
@@ -52,6 +52,22 @@ PUT /disk-vectors/_doc/1?refresh=true
 ```
 
 向量必须为单值数组，分量为有限数，长度与字段维度一致。`bfloat16` 字段按所声明的精度保留原向量；需要保留输入数组的原始 JSON 精度时，应在建索引时显式关闭向量的自动 source 排除。
+
+### 父中心评分
+
+首次添加 OSQ Disk 字段时，`index.osq_disk.parent_scoring` 默认开启。使用 `l2_norm` 的分簇索引中，多个向量簇可以共享一个父中心。搜索访问这些簇时，可以复用查询向量的量化结果，减少重复计算。
+
+仅为兼容早期实验版本，创建索引时才需要设置 `index.osq_disk.parent_scoring: false`。如需兼容，在上面的建索引请求中加入以下 `settings`，与 `mappings` 放在同一级。
+
+```json
+{
+  "settings": {
+    "index.osq_disk.parent_scoring": false
+  }
+}
+```
+
+索引创建后不能通过更新设置切换评分模式。后续版本将强制开启父中心评分，并移除这个配置项。
 
 ## 映射参数
 
@@ -115,6 +131,8 @@ POST /disk-vectors/_search
 查询级 `rescore_vector.oversample` 覆盖 mapping 配置，接受 `0` 或不小于1的有限数；重排候选池受候选上限约束。
 开启重排时会按需要扩大有效候选预算，以容纳重排池。
 
+开启父中心评分后，`k=10` 的查询每个分片最多重排 50 个候选，`k=100` 最多重排 360 个。这个默认值适用于非 nested 的 `l2_norm` 字段，且查询使用字段的重排倍率 3、没有过滤条件或相似度阈值。实际重排数量还受候选预算和已找到的候选数限制。
+
 可在 `knn` 内指定 `visit_percentage` 覆盖字段的 `default_visit_percentage`，范围为0–100。
 `0` 表示自动确定访问目标；正值控制每段的访问目标比例。它是近似检索的访问目标，不保证只读取某个固定比例的文档；过滤、候选补足等条件可能增加访问工作。
 
@@ -134,6 +152,22 @@ POST /disk-vectors/_search
 `query_vector` 与 `query_vector_builder` 必须且只能提供一个。lookup不是realtime GET；未刷新或不可搜索的文档不能当作有效查询向量。
 `similarity` 阈值含义与字段相似度相关：cosine/dot_product为最小相似度，L2为最大距离，max_inner_product为最小内积。
 完整度量与分数转换见 [原生HNSW得分计算](./native-hnsw.md#得分计算)，量化候选分数与raw重排分数需分别理解。
+
+### 原生批量评分
+
+原生批量评分用 C++ 处理符合条件的一批候选。它由节点的运行环境决定，父中心评分则由索引设置决定。
+
+| 运行环境 | 如何启用 |
+| --- | --- |
+| macOS ARM64，JDK 25 | 发行包里的原生库加载成功后自动使用 |
+| Linux x86_64 或 ARM64，JDK 25 | 默认使用 Java。要启用原生评分，添加下面的 JVM 启动参数并重启节点 |
+| 其他运行环境 | 使用 Java |
+
+```text
+-Deasysearch.osq_disk.native.enabled=true
+```
+
+如果原生库不可用，或当前评分批次不符合条件，Easysearch 会继续用 Java 评分。
 
 ## Nested 与向量读取
 
@@ -279,6 +313,8 @@ cosine向量可能经历归一化及取回时的模长恢复，float恢复值也
 ### 持久化与恢复
 
 Disk向量和nested关系使用正常索引持久化及同产品快照流程。flush后可close/open，快照恢复后仍需核对实际向量查询、inner_hits分数/offset和向量内容。
+
+快照恢复会复用已有的段文件。源索引已开启父中心评分时，恢复请求可以省略 `index.osq_disk.parent_scoring`，或显式传入 `true`。传入 `false` 会报错，目标索引不会创建。
 对只读索引执行forceMerge后，如需通过 `_segments` 检查搜索使用的段，应先refresh；commit段数与当前搜索reader的段数可能暂时不同。
 不要仅凭健康状态或快照成功响应判定恢复内容正确。
 
