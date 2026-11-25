@@ -151,6 +151,7 @@ GET /_snapshot/upgrade_repo/before-2-5
    待节点全部加入后，执行下文“全 2.5.1 阶段验收”，通过后才恢复写入并进入系统索引迁移。
 
 2.5.1 推荐使用 JDK 25；安全 agent 使用固定文件名 `easysearch-security-agent.jar`，
+若准备使用 2.5.2 包，agent 路径须改为 `lib/security-agent.jar` 并使用该包配套的 bootstrap/policy JAR；
 其余 JVM 参数要求见[2.5.1 升级说明]({{< relref "./_index.md#升级到-251系统索引迁移" >}})。
 
 **已有集群升级不要重新运行 `bin/initialize.sh` 或 `bin/initialize-cluster.sh`。**

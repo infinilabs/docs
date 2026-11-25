@@ -3,8 +3,9 @@ title: "升级手册"
 date: 0001-01-01
 description: "版本升级说明与迁移指南。"
 summary: "升级手册 #  Easysearch 版本升级与迁移指南。
-升级文档 #   从 1.15.x 迁移到 3.0.0：直接升级到 2.5.1，完成系统索引迁移与业务准备，再升级到 3.0.0 K8s Operator 升级：使用 Operator 管理的集群升级 版本历史：各版本变更与不兼容调整  升级前建议 #   查阅目标版本的 发布日志，了解变更与破坏性更新 在测试环境验证升级流程 做好数据备份  升级到 2.5.1：系统索引迁移 #  2.5.1 增加升级到 3.0.0 前的系统索引迁移能力。先将全部节点升级到 2.5.1，保留原数据、安全配置与节点身份， 再通过 GET /_migration/system_features 检查、POST /_migration/system_features 启动、GET 轮询结果。 1.15.x 集群可直接升级到 2.5.1，无需先安装 2.5.0；已经运行 2.5.0 的集群更新到 2.5.1 即可。 2.5.1 同时修复旧 ZSTD 索引混部写入误选只读格式的问题，支持保留旧段并在滚动升级期间继续读写。 无需额外迁移配置项；完整操作与备份要求见迁移指南。
-沿用下文的 JDK 与安全 agent 配置要求，使用完整 2.5.1 包。2.5.1 起，发行包中的 agent 使用不带版本号的固定文件名； 保留旧 JVM 配置时，将原来带版本号的 agent 引用替换一次："
+升级文档 #   从 1.15.x 迁移到 3.0.0：直接升级到 2.5.1，完成系统索引迁移与业务准备，再升级到 3.0.0 K8s Operator 升级：使用 Operator 管理的集群升级 版本历史：各版本变更与不兼容调整  升级前建议 #   查阅目标版本的 发布日志，了解变更与破坏性更新 在测试环境验证升级流程 做好数据备份  升级到 2.5.2：安全 agent 文件名 #  2.5.2 去掉三个安全 agent JAR 文件名的 easysearch- 前缀。使用完整发行包；保留旧 JVM 配置时， 将原 agent 行替换为以下内容，不要保留旧行或重复加载：
+21-:-javaagent:lib/security-agent.jar 同时检查 jvm.options.d/、ES_JAVA_OPTS 及自定义启动脚本中的 agent 路径。 保留 -Djava.security.manager=disallow 和其它必要 JVM 参数。配套文件为 security-agent-bootstrap-2.5.2.jar、security-agent-policy-2.5.2.jar，不能混用旧文件或仅手工改名 bootstrap； agent manifest 的 Boot-Class-Path 必须指向同目录下的实际 bootstrap JAR。
+3.0.0 的滚动升级入群范围包括 2."
 ---
 
 
@@ -24,6 +25,24 @@ Easysearch 版本升级与迁移指南。
 2. 在测试环境验证升级流程
 3. 做好数据备份
 
+## 升级到 2.5.2：安全 agent 文件名
+
+2.5.2 去掉三个安全 agent JAR 文件名的 `easysearch-` 前缀。使用完整发行包；保留旧 JVM 配置时，
+将原 agent 行替换为以下内容，不要保留旧行或重复加载：
+
+```text
+21-:-javaagent:lib/security-agent.jar
+```
+
+同时检查 `jvm.options.d/`、`ES_JAVA_OPTS` 及自定义启动脚本中的 agent 路径。
+保留 `-Djava.security.manager=disallow` 和其它必要 JVM 参数。配套文件为
+`security-agent-bootstrap-2.5.2.jar`、`security-agent-policy-2.5.2.jar`，不能混用旧文件或仅手工改名 bootstrap；
+agent manifest 的 `Boot-Class-Path` 必须指向同目录下的实际 bootstrap JAR。
+
+3.0.0 的滚动升级入群范围包括 2.4.0 和所有 2.5.x 正式版本。已运行 2.5.2 的集群，可在
+所有节点运行 2.5.2 时完成升级所需的系统索引迁移，再逐节点升级到 3.0.0。进入 3.0.0 前仍需满足
+[历史索引与升级前检查要求]({{< relref "./migrate-1.15-to-3.0.md" >}})。
+
 ## 升级到 2.5.1：系统索引迁移
 
 2.5.1 增加升级到 3.0.0 前的系统索引迁移能力。先将全部节点升级到 2.5.1，保留原数据、安全配置与节点身份，
@@ -32,14 +51,14 @@ Easysearch 版本升级与迁移指南。
 2.5.1 同时修复旧 ZSTD 索引混部写入误选只读格式的问题，支持保留旧段并在滚动升级期间继续读写。
 无需额外迁移配置项；完整操作与备份要求见[迁移指南]({{< relref "./migrate-1.15-to-3.0.md#三在-251-中迁移系统索引" >}})。
 
-沿用下文的 JDK 与安全 agent 配置要求，使用完整 2.5.1 包。2.5.1 起，发行包中的 agent 使用不带版本号的固定文件名；
+沿用下文的 JDK 与安全 agent 配置要求，使用完整 2.5.1 包。2.5.1 发行包中的 agent 使用以下不带版本号的固定文件名；
 保留旧 JVM 配置时，将原来带版本号的 agent 引用替换一次：
 
 ```text
 21-:-javaagent:lib/easysearch-security-agent.jar
 ```
 
-后续升级无需再因 agent 文件名中的版本号修改该行；仍须使用新发行包配套的 agent 和 bootstrap JAR，并同步其它必要 JVM 参数。
+升级到 2.5.2 时改用上一节的新路径；仍须使用新发行包配套的 agent 和 bootstrap JAR，并同步其它必要 JVM 参数。
 
 只有迁移任务创建后才启用持久版本门槛，此后低于 2.5.1 的节点不能再加入，迁移结束也不会取消该限制。
 不准备升级 3.0.0 的集群，无需仅因更新到 2.5.1 就立即执行迁移；符合原版本兼容条件的旧业务索引仍按 2.5 系列行为读写。
@@ -63,7 +82,7 @@ JDK 26、27 已通过发行包实际启动验证，可正常运行；切换 JDK 
    21-:-javaagent:lib/easysearch-security-agent-2.5.0.jar
    ```
 
-   上例用于 2.5.0；2.5.1 起使用上一节的固定文件名 `easysearch-security-agent.jar`。
+   上例用于 2.5.0；2.5.1 使用 `easysearch-security-agent.jar`，2.5.2 起使用 `security-agent.jar`。
    `21-:` 在 JDK 21 及以上生效。移除旧的重复引用，并检查 `jvm.options.d/` 和 `ES_JAVA_OPTS`，
    确保每次启动只加载一个安全 agent。保留随包提供的 bootstrap jar，避免混用旧版本文件。
    Windows NIO Selector 临时 socket 清理权限修复还涉及核心程序和相关模块策略，需使用配套的完整发行包，

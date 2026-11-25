@@ -283,8 +283,9 @@ Linux/macOS 启动器的选择顺序为 <code>jdk/</code> > <code>ES_JAVA_HOME</
 将 JVMCI 编译器相关三行参数限定为 <code>21-26:</code>，详见<a href=/easysearch/main/docs/deployment/config/node-settings/jvm/>JVM 配置</a>。
 启动器会根据实际运行 JDK 自动设置 Lucene 的向量化版本上限；JDK 26、27 也会尝试启用 Vector API，
 仍需满足 JVM 类型及模块可用性等条件。发行包中的 JDK 25 向量化实现已在 JDK 26、27 上完成计算与索引重开验证。</p><p>2.5.0 启动时会显式检查 JDK SecurityManager 已禁用。请保留发行包的 <code>config/jvm.options</code> 中
-<code>-Djava.security.manager=disallow</code> 和 <code>21-:-javaagent</code> 参数。2.5.1 起，agent 使用固定路径 <code>lib/easysearch-security-agent.jar</code>；
-保留旧配置时，将原来带版本号的引用替换一次，后续无需再因 agent 版本号修改该行。其余必要 JVM 参数仍须按新包同步，
+<code>-Djava.security.manager=disallow</code> 和 <code>21-:-javaagent</code> 参数。2.5.2 起，agent 使用固定路径 <code>lib/security-agent.jar</code>；
+2.5.1 的路径为 <code>lib/easysearch-security-agent.jar</code>。升级到 2.5.2 并保留旧配置时，须替换旧 agent 行，
+保持每次启动只加载一次，并使用新包中的配套 bootstrap/policy JAR。其余必要 JVM 参数仍须按新包同步，
 详见 <a href=/easysearch/main/docs/deployment/config/node-settings/jvm/>JVM 安全检查</a>与<a href=/easysearch/main/docs/upgrade/>升级手册</a>。</p><p><code>bin/initialize.sh</code> 会优先解压随包提供的 <code>jdk.tar.gz</code> 或使用已有的 <code>jdk/</code>；没有内置 JDK 时，
 可复用 <code>JAVA_HOME</code> 指向的 JDK 25 或兼容运行时 JDK 21。需要下载时，Linux/macOS 的 x86_64、ARM64 及 Linux LoongArch
 平台默认从官网下载 JDK 25；交互模式需确认，<code>-s</code> 模式会自动确认。

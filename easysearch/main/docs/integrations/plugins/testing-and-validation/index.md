@@ -3,12 +3,10 @@ title: "测试与验证"
 date: 0001-01-01
 description: "插件测试框架、Gradle 任务、运行态验证与常见问题排查。"
 summary: "测试与验证 #  本文档聚焦 Easysearch 插件的测试与验证，包括测试基类的选择、Gradle 任务、运行态验证以及常见问题排查。插件初始化、打包安装和本地开发闭环请参考：插件开发入门。
-引入 test-framework 依赖 #  Easysearch 官方提供了 test-framework 包，内置随机化测试、嵌入式节点、Hamcrest 断言等工具，所有测试基类均来自这个包。
-在插件项目中添加依赖 #  若你的插件项目与 Easysearch 源码在同一 Gradle 多项目构建中，使用项目引用：
-dependencies { testImplementation project(&#39;:test:framework&#39;) } 若你的插件是独立项目（如从官方模板克隆），使用 Maven 坐标：
-dependencies { testImplementation &#34;com.infinilabs.easysearch.test:framework:${easysearch_version}&#34; }  同时确保 repositories 中包含 Easysearch 制品库，或将 test-framework 的 jar 发布到本地 Maven（./gradlew publishToMavenLocal）。
- 测试基类与选择指南 #  Easysearch 提供了多个测试基类，适用于不同的测试场景。
-测试基类概览 #     基类 适用场景 常见任务 启动开销     EasySearchTestCase 纯单元测试，无需启动节点 test 最低   ESSingleNodeTestCase 单节点节点内测试，验证插件加载和组件交互 通常是 test 中等   ESIntegTestCase 多节点集群级测试，验证分布式行为 通常是 internalClusterTest / icTest 较高   EasySearchRestTestCase 通过 REST API 测试 HTTP 行为 integTest / yamlRestTest 较高    如何选择测试类型？ #  单元测试是首选：大多数情况下，单元测试更易于理解、更容易复现，且不易受到与被测功能无关的代码变更影响。"
+使用 test-framework 和安全 agent #  Easysearch 官方提供了 test-framework 包，内置随机化测试、嵌入式节点、Hamcrest 断言等工具，所有测试基类均来自这个包。
+使用 easysearch.esplugin 的插件项目 #  外部项目使用带自动接线的 build-tools 时，easysearch.esplugin 会添加同版本的 test-framework，并为 test、REST 测试和自定义 Gradle Test 任务准备并挂载安全 agent。测试 JVM 要求 JDK 21 或更高版本。可直接编写继承 EasySearchTestCase 的测试并运行 ./gradlew test。
+请在项目的 repositories 中配置提供同版本 Easysearch、test-framework、agent 和 bootstrap 的 Maven 仓库。buildscript.repositories 用于解析 build-tools。REST 测试由 testClusters 拉起的 Easysearch 节点使用测试发行包自带的 agent。IDE 中可选择将测试委托给 Gradle。
+独立 Gradle 测试项目 #  独立 QA 项目可用 easysearch."
 ---
 
 
@@ -16,29 +14,32 @@ dependencies { testImplementation &#34;com.infinilabs.easysearch.test:framework:
 
 本文档聚焦 Easysearch 插件的测试与验证，包括测试基类的选择、Gradle 任务、运行态验证以及常见问题排查。插件初始化、打包安装和本地开发闭环请参考：[插件开发入门]({{< relref "./getting-started.md" >}})。
 
-## 引入 test-framework 依赖
+## 使用 test-framework 和安全 agent
 
 Easysearch 官方提供了 `test-framework` 包，内置随机化测试、嵌入式节点、Hamcrest 断言等工具，所有测试基类均来自这个包。
 
-### 在插件项目中添加依赖
+### 使用 `easysearch.esplugin` 的插件项目
 
-若你的插件项目与 Easysearch 源码在同一 Gradle 多项目构建中，使用项目引用：
+外部项目使用带自动接线的 build-tools 时，`easysearch.esplugin` 会添加同版本的 test-framework，并为 `test`、REST 测试和自定义 Gradle `Test` 任务准备并挂载安全 agent。测试 JVM 要求 JDK 21 或更高版本。可直接编写继承 `EasySearchTestCase` 的测试并运行 `./gradlew test`。
+
+请在项目的 `repositories` 中配置提供同版本 Easysearch、test-framework、agent 和 bootstrap 的 Maven 仓库。`buildscript.repositories` 用于解析 build-tools。REST 测试由 `testClusters` 拉起的 Easysearch 节点使用测试发行包自带的 agent。IDE 中可选择将测试委托给 Gradle。
+
+### 独立 Gradle 测试项目
+
+独立 QA 项目可用 `easysearch.java` 配置测试任务，显式应用 `easysearch.java-agent`，并声明 test-framework 依赖。下例的 `easysearchVersion` 与引入 build-tools 时所用的版本一致。
 
 ```groovy
+apply plugin: 'easysearch.java'
+apply plugin: 'easysearch.java-agent'
+
 dependencies {
-    testImplementation project(':test:framework')
+    testImplementation "com.infinilabs.easysearch.test:framework:${easysearchVersion}"
 }
 ```
 
-若你的插件是独立项目（如从官方模板克隆），使用 Maven 坐标：
+### 从手工接线升级
 
-```groovy
-dependencies {
-    testImplementation "com.infinilabs.easysearch.test:framework:${easysearch_version}"
-}
-```
-
-> 同时确保 `repositories` 中包含 Easysearch 制品库，或将 `test-framework` 的 jar 发布到本地 Maven（`./gradlew publishToMavenLocal`）。
+已经手工配置 Easysearch `-javaagent` 的项目，升级后应移除该 JVM 参数、复制任务和仅用于挂载 agent 的依赖。先保留旧脚本时，可在 `gradle.properties` 中设置 `easysearch.javaAgent.autoApply=false`，由旧脚本继续管理测试 JVM。普通插件无需在生产依赖中声明 agent 或 bootstrap。直接引用 bootstrap 类型的代码可按对应 source set 声明 `compileOnly` 或 `testCompileOnly`。
 
 ## 测试基类与选择指南
 

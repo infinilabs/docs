@@ -27,15 +27,18 @@ JDK 21 仅用于兼容已部署且暂不方便升级 JDK 的客户环境。安�
 | --- | --- | --- |
 | 2.5.0 | `-Djava.security.manager=disallow` | `21-:-javaagent:lib/easysearch-security-agent-2.5.0.jar` |
 | 2.5.1 | `-Djava.security.manager=disallow` | `21-:-javaagent:lib/easysearch-security-agent.jar` |
+| 2.5.2 起 | `-Djava.security.manager=disallow` | `21-:-javaagent:lib/security-agent.jar` |
 
-- **从 2.4.x 或更早版本升级到 2.5.0/2.5.1：** 移除旧的 `-Djava.security.manager=allow` 或启用 SecurityManager 的参数，
+- **从 2.4.x 或更早版本升级到 2.5.x：** 移除旧的 `-Djava.security.manager=allow` 或启用 SecurityManager 的参数，
   改用上表配置，并保留新包的 `21-:--enable-preview`、`19-:--enable-native-access=ALL-UNNAMED` 等必需参数。
 - **从 2.5.0 升级到 2.5.1：** 将带版本号的 agent 行替换为固定名称，保留 `disallow` 及其它必需参数。
   替换旧行，不要额外追加；同时检查 `jvm.options.d/` 和 `ES_JAVA_OPTS`，确保每次启动只加载一次 agent。
 - **同时升级 JDK：** 还需检查参数的 JDK 版本条件。例如 JVMCI 的解锁、禁用和重新锁定三行必须使用 `21-26:`；
   JDK 27 不再识别 `UseJVMCICompiler`，不能保留旧的 `21-:` 条件。
 
-后续沿用固定文件名的发行包无需再因 agent 版本号修改该行，但仍须对照目标包检查其它参数。
+**升级到 2.5.2：** 将旧 agent 行替换为 `21-:-javaagent:lib/security-agent.jar`，不要与旧行并存；
+同时检查 `jvm.options.d/` 和 `ES_JAVA_OPTS`。2.5.2 去掉了三个 agent JAR 文件名的 `easysearch-` 前缀，
+bootstrap 与 policy JAR 仍带版本号，必须使用新包中的配套文件。后续仍须对照目标包检查其它参数。
 使用完整新发行包及配套 bootstrap JAR，不混用旧 JAR；以新包配置为基础迁入自定义堆大小、GC 和日志路径，避免用旧配置整体覆盖新配置。
 节点重启后，通过 `GET /_nodes/jvm` 核对实际 JDK 及 `input_arguments` 中的 agent 参数。
 
@@ -223,9 +226,9 @@ Easysearch 默认启用 GC 日志，不同 JDK 版本的配置方式不同：
 ### 安全检查（JDK 21 及以上统一加载 agent）
 
 ```bash
-# Easysearch 2.5.1 起，agent 使用固定文件名
+# Easysearch 2.5.2 起，agent 使用以下固定文件名
 -Djava.security.manager=disallow
-21-:-javaagent:lib/easysearch-security-agent.jar
+21-:-javaagent:lib/security-agent.jar
 ```
 
 `21-:` 表示 JDK 21 及以上加载同一个 Java agent 执行安全检查，每次启动只应加载一次。

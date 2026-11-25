@@ -290,7 +290,8 @@ docker run -d --restart always -p 9200:9200 <span style=color:#f1fa8c>\
 而 <code>config</code> 目录被持久化，旧版本留下的 <code>jvm.options</code> 会让新版本容器起不来。
 以 <code>2.4.0</code>（内置 JDK 21）升到 <code>2.5.0</code>（内置 JDK 25）为例：</p><ul><li>旧配置里的 <code>-Djava.security.manager=allow</code> 在 JDK 25 上直接报
 <code>A command line option has attempted to allow or enable the Security Manager</code>，VM 初始化失败；</li><li>新版新增的 <code>-javaagent:lib/easysearch-security-agent-&lt;版本>.jar</code> 在旧配置里不存在，
-因此<strong>只改前一个参数也不够</strong>，会接着报 <code>java.lang.IllegalStateException: security agent is not loaded</code>。</li></ul><p>结论：<strong>不要只改单个参数，直接用新版本镜像同步整份 <code>jvm.options</code></strong>。</p></blockquote><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># 1. 先停止并删除正在运行的容器</span>
+因此<strong>只改前一个参数也不够</strong>，会接着报 <code>java.lang.IllegalStateException: security agent is not loaded</code>。</li><li>升级到 <strong>2.5.2</strong> 时，agent 路径改为 <code>lib/security-agent.jar</code>；保留旧配置须替换原 agent 行，并检查
+<code>jvm.options.d/</code> 和 <code>ES_JAVA_OPTS</code>，确保只加载一次，且使用新包配套的 bootstrap/policy JAR。</li></ul><p>结论：<strong>不要只改单个参数，直接用新版本镜像同步整份 <code>jvm.options</code></strong>。</p></blockquote><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># 1. 先停止并删除正在运行的容器</span>
 docker stop easysearch <span style=color:#ff79c6>&amp;&amp;</span> docker rm easysearch
 
 <span style=color:#6272a4># 2. 对比新旧 jvm.options 是否一致（容器内没有 diff/cmp，用 sha256sum 判断；哈希不同即需要同步）</span>

@@ -54,6 +54,7 @@ PUT _ilm/policy/{policyID}
 当前策略 DSL 的边界如下：
 
 - `_ilm/policy` 是 ES 兼容的策略写入入口。
+- 阶段按 `hot`、`warm`、`cold`、`delete` 排序，首个已定义阶段作为初始状态；其 `min_age` 不会形成执行前的等待条件。需要按年龄进入删除阶段时，应先定义一个较早的阶段，再通过 `delete.min_age` 控制迁移，参见[删除操作](#delete)。
 - 当前不支持在 action 中声明自定义 `retry` 配置，例如 `retry.count`、`retry.backoff`、`retry.delay`。
 - action 执行失败后的恢复语义由系统默认自动重试机制和手动 `POST /_ilm/retry/{index}` 共同提供。
 - `/_ilm/explain` 返回的 `state`、`action`、`step`、`retry_info`、`info` 等字段代表运行时 managed-index 状态，而不是策略 DSL 字段。
@@ -628,6 +629,8 @@ POST /_ilm/retry/{index}
 
 在 Easysearch 内部 `states` 视图中，每个状态可以定义转换条件。当条件满足时，索引自动进入下一个状态。对于 `_ilm/policy` 的 `phases` 写法，这些条件通常由后续 phase 的 `min_age` 推导而来。
 
+当前实现将后续阶段的 `min_age` 转换为前一状态上的迁移条件，不会保留为该阶段动作自身的等待条件。因此，只定义 `delete` 阶段时，即使设置 `min_age`，索引也会直接进入删除阶段。若要等待索引满足年龄条件后再删除，可先定义 `hot` 阶段并设置 `actions: {}`，再定义带 `min_age` 的 `delete` 阶段，如下方删除示例所示。
+
 | 条件                | 描述                       | 类型     | 示例        |
 | ------------------- | -------------------------- | -------- | ----------- |
 | `min_index_age`     | 索引的最小年龄。             | `string` | `"30d"`     |
@@ -939,11 +942,16 @@ PUT _ilm/policy/my_policy
 
 **基本用法**：
 
+先进入无动作的 `hot` 阶段，满足 `30d` 的迁移条件后再进入 `delete` 阶段。
+
 ```json
 PUT _ilm/policy/my_policy
 {
   "policy": {
     "phases": {
+      "hot": {
+        "actions": {}
+      },
       "delete": {
         "min_age": "30d",
         "actions": {
@@ -962,6 +970,9 @@ PUT _ilm/policy/conditional_delete_policy
 {
   "policy": {
     "phases": {
+      "hot": {
+        "actions": {}
+      },
       "delete": {
         "min_age": "30d",
         "actions": {

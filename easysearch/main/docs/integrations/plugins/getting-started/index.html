@@ -234,7 +234,7 @@ const observedEls=Array.from(idToLi.keys()).map(id=>document.getElementById(id))
 setActiveById(foundId);},{root:null,rootMargin:'-30% 0% -50% 0%',threshold:[0,0.1,0.25,0.5]});observedEls.forEach(el=>io.observe(el));}
 if(location.hash){const id=decodeURIComponent(location.hash.slice(1));if(idToLi.has(id))setTimeout(()=>setActiveById(id),120);}});</script><div class="toc-header flex justify-start align-center"><svg width="14" viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"><path d="M2.44434 12.6665H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 3.3335H13.5554" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.44434 8H7.33323" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="flex justify-start align-center">On this page</span></div><nav id=TableOfContents><ul><li><a href=#1-环境准备>1. 环境准备</a></li><li><a href=#2-从官方模板初始化项目>2. 从官方模板初始化项目</a></li><li><a href=#3-配置-buildgradle插件元信息>3. 配置 <code>build.gradle</code>（插件元信息）</a></li><li><a href=#4-编写插件入口类>4. 编写插件入口类</a></li><li><a href=#5-构建>5. 构建</a></li><li><a href=#6-安装并验证>6. 安装并验证</a></li><li><a href=#7-快速迭代循环>7. 快速迭代循环</a></li><li><a href=#下一步>下一步</a></li></ul></nav></aside></header><article class=markdown><h1 id=插件开发入门>插件开发入门
 <a class=anchor href=#%e6%8f%92%e4%bb%b6%e5%bc%80%e5%8f%91%e5%85%a5%e9%97%a8>#</a></h1><p>本页带你从克隆模板到本地验证，跑通第一个 Easysearch 插件。</p><h2 id=1-环境准备>1. 环境准备
-<a class=anchor href=#1-%e7%8e%af%e5%a2%83%e5%87%86%e5%a4%87>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># 检查 Java（需要 11+）</span>
+<a class=anchor href=#1-%e7%8e%af%e5%a2%83%e5%87%86%e5%a4%87>#</a></h2><p>Easysearch 2.5.2 的插件构建和测试要求 JDK 21 或更高版本。使用模板附带的 Gradle wrapper，最低版本为 8.10.2。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># 检查 Java</span>
 java -version
 
 <span style=color:#6272a4># 检查 Gradle</span>
@@ -243,9 +243,9 @@ java -version
 <a class=anchor href=#2-%e4%bb%8e%e5%ae%98%e6%96%b9%e6%a8%a1%e6%9d%bf%e5%88%9d%e5%a7%8b%e5%8c%96%e9%a1%b9%e7%9b%ae>#</a></h2><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>git clone https://github.com/infinilabs/easysearch-plugin-template.git my-plugin
 <span style=color:#8be9fd;font-style:italic>cd</span> my-plugin
 </code></pre></div><p>重命名包名和类名后即可开始开发。项目结构说明见：<a href=/easysearch/main/docs/integrations/plugins/architecture-and-types/>结构与类型</a>。</p><h2 id=3-配置-buildgradle插件元信息>3. 配置 <code>build.gradle</code>（插件元信息）
-<a class=anchor href=#3-%e9%85%8d%e7%bd%ae-buildgradle%e6%8f%92%e4%bb%b6%e5%85%83%e4%bf%a1%e6%81%af>#</a></h2><p><code>plugin-descriptor.properties</code> 由构建过程自动生成，通常不需要手写。你可以直接使用以下完整示例：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-groovy data-lang=groovy>buildscript <span style=color:#ff79c6>{</span>
+<a class=anchor href=#3-%e9%85%8d%e7%bd%ae-buildgradle%e6%8f%92%e4%bb%b6%e5%85%83%e4%bf%a1%e6%81%af>#</a></h2><p><code>plugin-descriptor.properties</code> 由构建过程自动生成。以下以 Easysearch 2.5.2 为例，请选择与目标 Easysearch 一致的 build-tools 版本，并确认 Maven 仓库提供同版本制品。使用自建制品库时，将其地址同时加入 <code>buildscript.repositories</code> 和项目的 <code>repositories</code>。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-groovy data-lang=groovy>buildscript <span style=color:#ff79c6>{</span>
     ext <span style=color:#ff79c6>{</span>
-        easysearchVersion <span style=color:#ff79c6>=</span> System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getProperty</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;easysearch.version&#34;</span><span style=color:#ff79c6>,</span> <span style=color:#f1fa8c>&#34;2.1.2&#34;</span><span style=color:#ff79c6>)</span>
+        easysearchVersion <span style=color:#ff79c6>=</span> System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getProperty</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;easysearch.version&#34;</span><span style=color:#ff79c6>,</span> <span style=color:#f1fa8c>&#34;2.5.2&#34;</span><span style=color:#ff79c6>)</span>
     <span style=color:#ff79c6>}</span>
     repositories <span style=color:#ff79c6>{</span>
         mavenCentral<span style=color:#ff79c6>()</span>
@@ -260,10 +260,16 @@ java -version
 
 apply <span style=color:#8be9fd;font-style:italic>plugin:</span> <span style=color:#f1fa8c>&#39;easysearch.esplugin&#39;</span>
 
+repositories <span style=color:#ff79c6>{</span>
+    mavenCentral<span style=color:#ff79c6>()</span>
+<span style=color:#ff79c6>}</span>
+
 esplugin <span style=color:#ff79c6>{</span>
     name <span style=color:#f1fa8c>&#39;my-plugin&#39;</span>
     description <span style=color:#f1fa8c>&#39;My Easysearch Plugin&#39;</span>
     classname <span style=color:#f1fa8c>&#39;com.example.myplugin.MyPlugin&#39;</span>
+    licenseFile rootProject<span style=color:#ff79c6>.</span><span style=color:#50fa7b>file</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#39;LICENSE.txt&#39;</span><span style=color:#ff79c6>)</span>
+    noticeFile rootProject<span style=color:#ff79c6>.</span><span style=color:#50fa7b>file</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#39;NOTICE.txt&#39;</span><span style=color:#ff79c6>)</span>
 <span style=color:#ff79c6>}</span>
 
 group <span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#39;com.example&#39;</span>
@@ -271,7 +277,7 @@ version <span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#39;0.1.0&
 
 <span style=color:#6272a4>// Skip POM validation - this plugin is not published to maven.
 </span><span style=color:#6272a4></span>tasks<span style=color:#ff79c6>.</span><span style=color:#50fa7b>named</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#39;validateNebulaPom&#39;</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span> enabled <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>false</span> <span style=color:#ff79c6>}</span>
-</code></pre></div><h2 id=4-编写插件入口类>4. 编写插件入口类
+</code></pre></div><p>使用带自动接线的 build-tools 时，<code>easysearch.esplugin</code> 会为 Gradle 测试加载同版本安全 agent。模板中的旧手工接线可在升级时移除。具体迁移步骤见 <a href=/easysearch/main/docs/integrations/plugins/testing-and-validation/>测试与验证</a>。</p><h2 id=4-编写插件入口类>4. 编写插件入口类
 <a class=anchor href=#4-%e7%bc%96%e5%86%99%e6%8f%92%e4%bb%b6%e5%85%a5%e5%8f%a3%e7%b1%bb>#</a></h2><p>最简单的插件只需继承 <code>Plugin</code>：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=color:#ff79c6>package</span> com.example.myplugin<span style=color:#ff79c6>;</span>
 
 <span style=color:#ff79c6>import</span> org.easysearch.plugins.Plugin<span style=color:#ff79c6>;</span>

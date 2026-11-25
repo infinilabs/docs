@@ -99,8 +99,9 @@ Easysearch 支持 Linux（x86_64 / ARM64 / LoongArch）、macOS 和 Windows。�
 仍需满足 JVM 类型及模块可用性等条件。发行包中的 JDK 25 向量化实现已在 JDK 26、27 上完成计算与索引重开验证。
 
 2.5.0 启动时会显式检查 JDK SecurityManager 已禁用。请保留发行包的 `config/jvm.options` 中
-`-Djava.security.manager=disallow` 和 `21-:-javaagent` 参数。2.5.1 起，agent 使用固定路径 `lib/easysearch-security-agent.jar`；
-保留旧配置时，将原来带版本号的引用替换一次，后续无需再因 agent 版本号修改该行。其余必要 JVM 参数仍须按新包同步，
+`-Djava.security.manager=disallow` 和 `21-:-javaagent` 参数。2.5.2 起，agent 使用固定路径 `lib/security-agent.jar`；
+2.5.1 的路径为 `lib/easysearch-security-agent.jar`。升级到 2.5.2 并保留旧配置时，须替换旧 agent 行，
+保持每次启动只加载一次，并使用新包中的配套 bootstrap/policy JAR。其余必要 JVM 参数仍须按新包同步，
 详见 [JVM 安全检查]({{< relref "../config/node-settings/jvm.md" >}})与[升级手册]({{< relref "../../upgrade/_index.md" >}})。
 
 `bin/initialize.sh` 会优先解压随包提供的 `jdk.tar.gz` 或使用已有的 `jdk/`；没有内置 JDK 时，

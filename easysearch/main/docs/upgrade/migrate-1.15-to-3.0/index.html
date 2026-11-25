@@ -285,6 +285,7 @@ GET /_snapshot/upgrade_repo/before-2-5
 且 <code>_shards.successful=_shards.total</code>，再按原部署方式正常停止全部节点，确认原进程已经退出。</li><li>在新安装目录准备完整的 2.5.1 发行包和配套插件，沿用原数据目录，无需安装 2.5.0。</li><li>保留原 <code>cluster.name</code>、节点身份、<code>path.data</code>、发现配置、安全索引名称和 TLS 材料。
 以新包的 JVM 配置为基础迁入堆大小等自定义项，不能用旧 <code>jvm.options</code> 整体覆盖新配置。</li><li>使用原服务账号和原部署方式启动 2.5.1：先启动具备 master 角色的节点，恢复选主，再启动其余节点。
 待节点全部加入后，执行下文“全 2.5.1 阶段验收”，通过后才恢复写入并进入系统索引迁移。</li></ol><p>2.5.1 推荐使用 JDK 25；安全 agent 使用固定文件名 <code>easysearch-security-agent.jar</code>，
+若准备使用 2.5.2 包，agent 路径须改为 <code>lib/security-agent.jar</code> 并使用该包配套的 bootstrap/policy JAR；
 其余 JVM 参数要求见<a href=/easysearch/main/docs/upgrade/#升级到-251系统索引迁移>2.5.1 升级说明</a>。</p><p><strong>已有集群升级不要重新运行 <code>bin/initialize.sh</code> 或 <code>bin/initialize-cluster.sh</code>。</strong>
 这两个入口用于新部署初始化，可能重新生成证书或更新初始配置；升级应保留已有安全数据和身份。</p><p><strong>更换安装目录时显式核对 <code>path.data</code>。</strong> 如果旧部署使用安装目录内默认的 <code>data/</code>，新安装必须指向原数据目录的绝对路径，
 否则可能启动成没有原节点身份和数据的新节点。保留原目录访问权限；不要在旧节点尚未退出时启动新进程访问同一目录。

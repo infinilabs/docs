@@ -104,6 +104,8 @@ docker run -d --restart always -p 9200:9200 \
 >   `A command line option has attempted to allow or enable the Security Manager`，VM 初始化失败；
 > - 新版新增的 `-javaagent:lib/easysearch-security-agent-<版本>.jar` 在旧配置里不存在，
 >   因此**只改前一个参数也不够**，会接着报 `java.lang.IllegalStateException: security agent is not loaded`。
+> - 升级到 **2.5.2** 时，agent 路径改为 `lib/security-agent.jar`；保留旧配置须替换原 agent 行，并检查
+>   `jvm.options.d/` 和 `ES_JAVA_OPTS`，确保只加载一次，且使用新包配套的 bootstrap/policy JAR。
 >
 > 结论：**不要只改单个参数，直接用新版本镜像同步整份 `jvm.options`**。
 
@@ -257,3 +259,4 @@ ls /app/easysearch/
 - [Docker Compose 集群]({{< relref "./docker-compose.md" >}})
 - [测试环境部署]({{< relref "./test-env.md" >}})
 - [系统调优]({{< relref "/docs/deployment/config/settings" >}})
+
